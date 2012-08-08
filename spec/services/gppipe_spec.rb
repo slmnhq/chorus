@@ -42,12 +42,12 @@ describe Gppipe, :database_integration => true do
 
   it "should create a tabledef from an information_schema query" do
     result = [{"column_name"=>"id", "data_type"=>"integer"}, {"column_name"=>"name", "data_type"=>"text"}]
-    gp_pipe.tabledef_from_query(result).should == "id integer, name text"
+    gp_pipe.tabledef_from_query(result).should == '"id" integer, "name" text'
   end
 
   it "should create a tabledef from an information_schema query with 1 column" do
     result = [{"column_name"=>"id", "data_type"=>"integer"}]
-    gp_pipe.tabledef_from_query(result).should == "id integer"
+    gp_pipe.tabledef_from_query(result).should == '"id" integer'
   end
 
   it "should create a tabledef from an information_schema query with 0 columns" do

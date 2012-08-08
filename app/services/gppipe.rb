@@ -3,7 +3,7 @@ require 'timeout'
 
 class Gppipe
   GPFDIST_PIPE_DIR = File.join(Rails.root, '/tmp/gpfdist/')
-  GPFDIST_TIMEOUT_SECONDS = 60
+  GPFDIST_TIMEOUT_SECONDS = 600
 
   def self.timeout_seconds
     GPFDIST_TIMEOUT_SECONDS
@@ -28,7 +28,7 @@ class Gppipe
   end
 
   def tabledef_from_query(arr)
-    arr.map { |col_def| "#{col_def["column_name"]} #{col_def["data_type"]}" }.join(", ")
+    arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
   end
 
   def pipe_name
@@ -47,7 +47,8 @@ class Gppipe
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
       empty_table = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0)
-      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}';")
+      # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
+      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
       table_definition = tabledef_from_query(table_def_rows)
 
       if empty_table
