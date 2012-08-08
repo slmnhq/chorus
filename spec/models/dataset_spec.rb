@@ -22,6 +22,14 @@ describe Dataset do
 
   describe "validations" do
     it { should validate_presence_of :name }
+
+    it "should validate uniqueness of name scoped to schema id" do
+      duplicate_dataset = Dataset.new
+      duplicate_dataset.schema = dataset.schema
+      duplicate_dataset.name = dataset.name
+      duplicate_dataset.should_not be_valid
+      duplicate_dataset.errors.count.should == 1
+    end
   end
 
   describe ".with_name_like" do
@@ -59,6 +67,29 @@ describe Dataset do
         new_table.master_table.should be_true
         new_view.should be_a GpdbView
         new_view.master_table.should be_false
+      end
+
+      context "when trying to create a duplicate record" do
+        let(:duped_dataset) { Dataset.new({:name => dataset.name, :schema_id => schema.id}, :without_protection => true) }
+        before do
+          stub.proxy(GpdbTable).find_or_initialize_by_name_and_schema_id(anything, anything) do |table|
+            table.persisted? ? duped_dataset : table
+          end
+        end
+
+        it "keeps going when caught by rails validations" do
+          expect { Dataset.refresh(account, schema) }.to change { GpdbTable.count }.by(1)
+          schema.datasets.find_by_name('new_table').should be_present
+          schema.datasets.find_by_name('new_view').should be_present
+        end
+
+        it "keeps going when not caught by rails validations" do
+          mock(duped_dataset).save { raise ActiveRecord::RecordNotUnique.new("boooo!", Exception.new) }
+
+          expect { Dataset.refresh(account, schema) }.to change { GpdbTable.count }.by(1)
+          schema.datasets.find_by_name('new_table').should be_present
+          schema.datasets.find_by_name('new_view').should be_present
+        end
       end
 
       it "does not re-create datasets that already exist in our database" do
