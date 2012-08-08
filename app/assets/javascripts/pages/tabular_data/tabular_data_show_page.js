@@ -88,7 +88,7 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar = new chorus.views.TabularDataSidebar(this.sidebarOptions);
+            this.sidebar = new chorus.views.TabularDataSidebar(_.extend(this.sidebarOptions, { defaultTab: "statistics"}));
             this.sidebar.setTabularData(this.tabularData);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);

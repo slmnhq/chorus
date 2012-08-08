@@ -26,7 +26,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 expect(this.view.$(".info")).not.toExist();
             });
         });
-
+        
         context("when a dataset is selected", function() {
             beforeEach(function() {
                 this.server.reset();
@@ -1138,6 +1138,29 @@ describe("chorus.views.TabularDataSidebar", function() {
                 it("removes the 'visualizing' class from sidebar_content", function() {
                     expect($(this.view.el)).not.toHaveClass("visualizing")
                 });
+            });
+        });
+    });
+
+    describe("tabControl", function () {
+        context("when sidebarOptions contains defaultTab", function () {
+            beforeEach(function () {
+                this.view = new chorus.views.TabularDataSidebar({ defaultTab: "statistics"});
+                this.dataset = newFixtures.dataset.sourceTable();
+                chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                this.view.render();
+            });
+            it("should display statistics/info tab by default", function () {
+                expect(this.view.$(".tabs .selected").text()).toContainTranslation("tabs.statistics");
+            });
+        });
+
+        context("when sidebarOptions does not contain defaultTab", function () {
+            it("should display activities tab by default", function () {
+                this.dataset = newFixtures.dataset.sourceTable();
+                chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                this.view.render();
+                expect(this.view.$(".tabs .selected").text()).toContainTranslation("tabs.activity");
             });
         });
     });

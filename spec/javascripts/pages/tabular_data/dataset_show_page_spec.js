@@ -144,6 +144,10 @@ describe("chorus.pages.DatasetShowPage", function() {
             it("sets workspace", function() {
                 expect(this.page.sidebar.options.workspace).toBeTruthy();
             })
+
+            it("set the default tab flag to statistics", function () {
+                expect(this.page.sidebar.options.defaultTab).toBe("statistics");
+            });
         })
 
         describe("breadcrumbs", function() {
