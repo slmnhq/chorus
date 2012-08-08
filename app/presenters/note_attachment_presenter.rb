@@ -5,7 +5,8 @@ class NoteAttachmentPresenter < Presenter
     {
         :id => id,
         :name => contents.original_filename,
-        :timestamp => created_at
+        :timestamp => created_at,
+        :entity_type => "file"
     }
   end
 end

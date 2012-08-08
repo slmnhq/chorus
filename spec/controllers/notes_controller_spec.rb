@@ -23,6 +23,17 @@ describe NotesController do
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
     end
 
+    context "with datasets" do
+      it "associates the datasets to the Note" do
+        workspace = workspaces(:bob_public)
+        associated_datasets = workspace.bound_datasets[0..1]
+        associated_dataset_ids = associated_datasets.map(&:id)
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :dataset_ids => associated_dataset_ids }
+        response.code.should == "201"
+        Events::NOTE_ON_WORKSPACE.first.datasets.should == associated_datasets
+      end
+    end
+
     context "with an exception" do
       it "responds with an error code" do
         workspace = workspaces(:archived)

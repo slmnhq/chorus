@@ -82,15 +82,24 @@ describe EventPresenter, :type => :view do
 
       context "with an attachment" do
         let(:attachment) { NoteAttachment.first }
+        let(:dataset) { datasets(:bobs_table) }
 
         it "contains the attachment" do
           stub(event).attachments do
             [
               attachment
             ]
+            end
+          stub(event).datasets do
+            [
+                dataset
+            ]
           end
           hash = subject.to_hash
           hash[:attachments].should be_present
+          hash[:attachments][0][:entity_type].should == 'file'
+          hash[:attachments][1][:entity_type].should == 'dataset'
+          hash[:attachments][1][:workspace].should == event.workspace
         end
       end
     end

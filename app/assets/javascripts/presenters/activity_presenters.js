@@ -35,7 +35,7 @@
         },
 
         attachments: function() {
-            return this.model.attachments();
+            return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
         },
 
         canEdit: function() {

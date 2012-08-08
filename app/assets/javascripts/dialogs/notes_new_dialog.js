@@ -11,16 +11,10 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
             workspaceId: this.options.workspaceId
         });
 
-        var subject = this.options.displayEntityType || this.options.entityType;
-
-        this.placeholder = t("notes.placeholder", {noteSubject: subject});
-
-        this.bindings.add(this.model, "saved", this.modelSaved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
-        this.bindings.add(this.model, "fileUploadSuccess", this.saved);
-        this.bindings.add(this.model, "fileUploadFailed", this.saveFailed);
-        this.bindings.add(this.model, "fileUploadDone", this.uploadDone);
         this.pageModel = this.options.pageModel;
+
+        var subject = this.options.displayEntityType || this.options.entityType;
+        this.placeholder = t("notes.placeholder", {noteSubject: subject});
+        this._super("makeModel", arguments);
     }
 });

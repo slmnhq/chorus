@@ -16,6 +16,7 @@ class Dataset < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :associated_datasets
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
+  has_and_belongs_to_many :events_notes, :class_name => 'Events::Note'
 
   scope :tables, where(:type => GpdbTable.name)
   scope :views, where(:type => GpdbView.name)

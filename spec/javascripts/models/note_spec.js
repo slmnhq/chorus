@@ -62,7 +62,21 @@ describe("chorus.models.Note", function() {
             it("adds the object from the list of files", function() {
                 expect(this.model.files.length).toBe(2);
             })
-        })
+        });
+
+        describe("saving the dataset attachments", function() {
+            it("assigns the 'datasetIds' field as a list of dataset ids", function() {
+                this.model.datasets = new chorus.collections.WorkspaceDatasetSet([
+                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_a", id: 'a'}),
+                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_b", id: 'b'}),
+                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_c", id: 'c'})
+                ]);
+
+                this.model.save();
+
+                expect(this.model.get("datasetIds")).toEqual(["a","b","c"]);
+            });
+        });
 
         describe("saveFiles", function() {
             var errorResponse = {

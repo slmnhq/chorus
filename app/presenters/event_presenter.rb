@@ -56,6 +56,13 @@ class EventPresenter < Presenter
       attachments.each_with_index do |model, index|
         hash[index] = present(model)
       end
+      datasets = model.datasets
+      datasets.each do |dataset|
+        model_hash = present(dataset)
+        model_hash.merge!({:entity_type => 'dataset'} )
+        model_hash.merge!({:workspace => model.workspace}) if model.workspace
+        hash << model_hash
+      end
     end
     return {:attachments => hash}
   end

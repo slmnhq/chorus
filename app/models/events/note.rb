@@ -9,6 +9,8 @@ module Events
       s.string :grouping_id
       s.string :type_name
     end
+    has_and_belongs_to_many :datasets
+    attr_accessible :dataset_ids, :datasets
 
     has_additional_data :body
 
@@ -22,7 +24,7 @@ module Events
 
       model = ModelMap.model_from_params(entity_type, entity_id)
       raise ActiveRecord::RecordNotFound unless model
-      event_params = {entity_type => model, "body" => body}
+      event_params = {entity_type => model, "body" => body, 'dataset_ids' => params[:dataset_ids]}
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
       event_class = event_class_for_model(model, workspace_id)
       event_class.by(creator).add(event_params)

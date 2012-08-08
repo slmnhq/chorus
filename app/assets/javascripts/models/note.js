@@ -67,5 +67,10 @@ chorus.models.Note = chorus.models.Activity.extend({
                 .done(_.bind(this.uploadSuccess, this, file))
                 .fail(_.bind(this.uploadFailed, this, file));
         }, this);
+    },
+    beforeSave:function () {
+        if (this.datasets) {
+            this.set({ datasetIds:this.datasets.pluck('id') }, { silent:true });
+        }
     }
 });

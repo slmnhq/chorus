@@ -3,14 +3,13 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         this.model = new chorus.models.Note({
             entityType: 'workfile',
             entityId: 1,
-            workspaceId: 22,
+            workspaceId: 22
         });
 
         this.dialog = new chorus.dialogs.MemoNew({
             allowWorkspaceAttachments: true,
             entityType: 'workfile',
             entityId: 1,
-            workspaceId: 22,
             pageModel : new chorus.models.Workfile(),
             model: this.model
         });
