@@ -7,6 +7,7 @@ describe Gppipe, :database_integration => true do
 
   # In the test, use gpfdist to move data between tables in the same schema and database
   let(:instance_account1) { instance_accounts(:chorus_gpdb42_gpadmin) }
+  let(:user) { instance_account1.owner }
   let(:schema) { GpdbSchema.find_by_name('test_schema') }
 
   let(:gpdb1) do
@@ -35,11 +36,9 @@ describe Gppipe, :database_integration => true do
   end
 
   let(:src_table) { "candy" }
-  let(:src_schema) { schema.name }
   let(:dst_table) { "dst_candy" }
-  let(:dst_schema) { schema.name }
   let(:table_def) { "(id integer, name text)" }
-  let(:gp_pipe) { Gppipe.new(src_schema, src_table, dst_schema, dst_table) }
+  let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
   it "should create a tabledef from an information_schema query" do
     result = [{"column_name"=>"id", "data_type"=>"integer"}, {"column_name"=>"name", "data_type"=>"text"}]
@@ -94,9 +93,9 @@ describe Gppipe, :database_integration => true do
 
       it "cleans up on an exception (in this case the dst table exists already)" do
         expect { gp_pipe.run }.to raise_exception
-        count_result = gpdb1.exec_query("select count(*) from pg_tables where schemaname = '#{src_schema}' and tablename = '#{gp_pipe.pipe_name}';")
+        count_result = gpdb1.exec_query("select count(*) from pg_tables where schemaname = '#{schema.name}' and tablename = '#{gp_pipe.pipe_name}';")
         count_result[0]['count'].should == 0
-        count_result = gpdb2.exec_query("select count(*) from pg_tables where schemaname = '#{dst_schema}' and tablename = '#{gp_pipe.pipe_name}';")
+        count_result = gpdb2.exec_query("select count(*) from pg_tables where schemaname = '#{schema.name}' and tablename = '#{gp_pipe.pipe_name}';")
         count_result[0]['count'].should == 0
       end
     end
@@ -129,14 +128,14 @@ describe Gppipe, :database_integration => true do
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do
       gp_pipe.run
 
-      gpdb2.exec_query("SELECT * FROM #{dst_schema}.#{dst_table}").length.should == 0
+      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 0
     end
   end
 
   it "has configurable gpfdist/gpfdists"
 
   it "does not use special characters in the pipe names" do
-    gppipe = Gppipe.new("#%)", "$%*@$", "$%*", "@@")
+    gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)
     gppipe.pipe_name.should_not match(/[^A-Za-z0-9_]/)
   end
 end

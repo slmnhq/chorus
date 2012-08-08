@@ -9,12 +9,13 @@ class Gppipe
     GPFDIST_TIMEOUT_SECONDS
   end
 
-  attr_reader :src_schema, :src_table, :dst_schema, :dst_table
+  attr_reader :src_schema_name, :src_table, :dst_schema_name, :dst_table
+  attr_reader :src_instance_account, :dst_instance_account
 
-  def initialize(src_schema, src_table, dst_schema, dst_table)
-    @src_schema = src_schema
+  def initialize(src_schema, src_table, dst_schema, dst_table, user)
+    @src_schema_name = src_schema.name
     @src_table = src_table
-    @dst_schema = dst_schema
+    @dst_schema_name = dst_schema.name
     @dst_table = dst_table
   end
 
@@ -27,18 +28,18 @@ class Gppipe
   end
 
   def dst_fullname
-    @dst_fullname ||= "\"#{dst_schema}\".\"#{dst_table}\""
+    @dst_fullname ||= "\"#{dst_schema_name}\".\"#{dst_table}\""
   end
 
   def src_fullname
-    @src_fullname ||= "\"#{src_schema}\".\"#{src_table}\""
+    @src_fullname ||= "\"#{src_schema_name}\".\"#{src_table}\""
   end
 
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
       empty_table = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0)
-      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema}';")
+      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}';")
       table_definition = tabledef_from_query(table_def_rows)
 
       if empty_table
@@ -49,17 +50,17 @@ class Gppipe
           dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
 
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
-            src_conn.exec_query("INSERT INTO \"#{src_schema}\".#{pipe_name}_w (SELECT * FROM #{src_fullname});")
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
+            src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname});")
           end
 
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
-          dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema}\".#{pipe_name}_r);")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema_name}\".#{pipe_name}_r);")
 
           thr.join
         ensure
-          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema}\".#{pipe_name};")
-          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema}\".#{pipe_name};")
+          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema_name}\".#{pipe_name};")
+          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema_name}\".#{pipe_name};")
           FileUtils.rm pipe_file if File.exists? pipe_file
         end
       end
