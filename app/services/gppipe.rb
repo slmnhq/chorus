@@ -10,12 +10,20 @@ class Gppipe
   end
 
   attr_reader :src_schema_name, :src_table, :dst_schema_name, :dst_table
-  attr_reader :src_instance_account, :dst_instance_account
+  attr_reader :src_account, :dst_account
+  attr_reader :src_instance, :dst_instance
+  attr_reader :src_database_name, :dst_database_name
 
   def initialize(src_schema, src_table, dst_schema, dst_table, user)
     @src_schema_name = src_schema.name
+    @src_database_name = src_schema.database.name
+    @src_instance = src_schema.instance
+    @src_account = src_instance.account_for_user!(user)
     @src_table = src_table
     @dst_schema_name = dst_schema.name
+    @dst_database_name = dst_schema.database.name
+    @dst_instance = dst_schema.instance
+    @dst_account = dst_instance.account_for_user!(user)
     @dst_table = dst_table
   end
 
@@ -82,22 +90,22 @@ class Gppipe
 
   def src_conn
     @raw_src_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb42",
-        :port => 5432,
-        :database => GpdbIntegration.database_name,
-        :username => "gpadmin",
-        :password => "secret",
+        :host => src_instance.host,
+        :port => src_instance.port,
+        :database => src_database_name,
+        :username => src_account.db_username,
+        :password => src_account.db_password,
         :adapter => "jdbcpostgresql"
     )
   end
 
   def dst_conn
     @raw_dst_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb42",
-        :port => 5432,
-        :database => GpdbIntegration.database_name,
-        :username => "gpadmin",
-        :password => "secret",
+        :host => dst_instance.host,
+        :port => dst_instance.port,
+        :database => dst_database_name,
+        :username => dst_account.db_username,
+        :password => dst_account.db_password,
         :adapter => "jdbcpostgresql"
     )
   end

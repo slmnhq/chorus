@@ -6,7 +6,7 @@ describe Gppipe, :database_integration => true do
   end
 
   # In the test, use gpfdist to move data between tables in the same schema and database
-  let(:instance_account1) { instance_accounts(:chorus_gpdb42_gpadmin) }
+  let(:instance_account1) { real_gpdb_account }
   let(:user) { instance_account1.owner }
   let(:schema) { GpdbSchema.find_by_name('test_schema') }
 
