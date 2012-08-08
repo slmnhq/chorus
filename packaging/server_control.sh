@@ -187,7 +187,7 @@ function stop_nginx () {
 
 function stop_postgres () {
   echo "Stopping postgres..."
-  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db stop
+  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -m fast stop
 }
 
 
