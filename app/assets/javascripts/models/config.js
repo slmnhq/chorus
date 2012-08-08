@@ -3,7 +3,7 @@ chorus.models.Config = chorus.models.Base.extend({
     urlTemplate:"config/",
 
     isExternalAuth: function() {
-        return this.get("externalAuthEnabled")
+        return this.get("externalAuthEnabled");
     },
 
     timezoneOffset: function() {
@@ -11,6 +11,14 @@ chorus.models.Config = chorus.models.Base.extend({
             var hours = parseInt(this.get("timezoneOffset"));
             return hours * 100;
         }
+    },
+
+    fileSizeMbWorkfiles: function() {
+        return this.get("fileSizesMbWorkfiles");
+    },
+
+    fileSizeMbCsvImports: function() {
+        return this.get("fileSizesMbCsvImports");
     }
  }, {
     instance:function () {

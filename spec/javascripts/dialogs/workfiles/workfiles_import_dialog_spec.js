@@ -113,10 +113,19 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden")
         });
 
-        context("when the file size exceeds the maximum file size", function() {
-            it("shows an error", function() {
-                this.fakeUpload.add([{ name: "foo.bar", size: 99999999999999 }]);
-                expect(this.dialog.$(".errors")).toContainText("file exceeds");
+        describe("validating file size", function(){
+            context("when it exceeds the maximum file size", function() {
+                it("shows an error", function() {
+                    this.fakeUpload.add([{ name: "foo.bar", size: 99999999999999 }]);
+                    expect(this.dialog.$(".errors")).toContainText("file exceeds");
+                });
+            });
+
+            context("when it is within the limit", function() {
+                it("doens't show an error", function() {
+                    this.fakeUpload.add([{ name: "foo.bar", size: 1 }]);
+                    expect(this.dialog.$(".errors")).not.toContainText("file exceeds");
+                });
             });
         });
 

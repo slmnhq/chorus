@@ -4,6 +4,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     templateName: "dataset_import",
     title: t("dataset.import.title"),
 
+    setup: function() {
+        this.config = chorus.models.Config.instance();
+        this._super("setup");
+    },
+
     events: {
         "change input:radio": "onRadioSelect",
         "submit form": "uploadFile",
@@ -194,9 +199,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.clearErrors();
         if (!this.model) return;
 
+        var maxFileSize = this.config.get("fileSizesMbWorkfiles");
+
         _.each( this.uploadObj.files, function(file) {
-            if (file.size > 1000000) {
-                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":1}}}}
+            if (file.size > maxFileSize) {
+                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
                 this.showErrors(this.model);
             }
         }, this);

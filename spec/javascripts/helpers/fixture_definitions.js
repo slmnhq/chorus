@@ -87,8 +87,8 @@ window.rspecFixtureDefinitions = {
 //    provisioningTemplate: {},
 //    provisioningTemplateSet: {},
 //
-//    config: {},
-//
+    config: {},
+
     hadoopInstance: {},
 
     image: {},

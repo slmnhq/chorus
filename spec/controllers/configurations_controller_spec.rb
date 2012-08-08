@@ -34,6 +34,17 @@ describe ConfigurationsController do
       decoded_response.gpfdist_port.should == 8181
       decoded_response.gpfdist_data_dir.should == "/tmp"
     end
+
+    it "includes the file size maximums" do
+      get :show
+      response.code.should == "200"
+      decoded_response.file_sizes_mb_workfiles.should == 10
+      decoded_response.file_sizes_mb_csv_imports.should == 1
+    end
+
+    generate_fixture "config.json" do
+      get :show
+    end
   end
 
   describe "#version" do

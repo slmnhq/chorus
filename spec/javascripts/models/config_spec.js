@@ -1,7 +1,10 @@
 describe("chorus.models.Config", function() {
+    var config;
+    beforeEach(function() {
+        config = rspecFixtures.config();
+    });
 
     it("has a valid url", function() {
-        var config = chorus.models.Config.instance();
         expect(config.url()).toBe("/config/");
     });
 
@@ -27,18 +30,26 @@ describe("chorus.models.Config", function() {
     });
 
     describe("#isExternalAuth", function() {
-        beforeEach(function() {
-            this.model = new chorus.models.Config({ externalAuthEnabled: true })
-        });
-
         it("returns externalAuthEnabled", function() {
-            expect(this.model.isExternalAuth()).toBeTruthy();
+            expect(config.isExternalAuth()).toBeTruthy();
         })
     })
 
+    describe("#fileSizeMbWorkfiles", function() {
+        it("returns the workfiles size limit", function() {
+            expect(config.fileSizeMbWorkfiles()).toBe(10);
+        });
+    });
+
+    describe("#fileSizeMbCsvImports", function() {
+        it("returns the csv import size limit", function() {
+            expect(config.fileSizeMbCsvImports()).toBe(1);
+        });
+    });
+
     describe("#timezoneOffset", function() {
         it("returns the server's timezone offset as an integer multiple of one hundred", function() {
-            var config = newFixtures.config({ timezoneOffset: "-8" });
+            var config = rspecFixtures.config({ timezoneOffset: "-8" });
             expect(config.timezoneOffset()).toBe(-800);
         });
 

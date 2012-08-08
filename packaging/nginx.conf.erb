@@ -29,7 +29,7 @@ http {
     #keepalive_timeout  0;
     keepalive_timeout  65;
 
-    client_max_body_size       <%= chorus_config['max_upload_size_megabytes'] %>m;
+    client_max_body_size       <%= chorus_config['file_sizes_mb'].values.max %>m;
 
     #gzip  on;
 

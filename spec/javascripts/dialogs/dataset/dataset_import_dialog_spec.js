@@ -104,23 +104,35 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
         });
 
-        describe("when the file size exceeds the maximum allowed size", function() {
+        describe("file size validation", function() {
             beforeEach(function() {
-                this.fileList = [
-                    {
-                    name: 'foo Bar Baz.csv',
-                    size: 999999999999999999
-                }
-                ];
                 expect($.fn.fileupload).toHaveBeenCalled();
+                this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
                 this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
                 this.request = jasmine.createSpyObj('request', ['abort']);
-                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+            });
+            describe("when the file size is within limits", function() {
+                beforeEach(function() {
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 }];
+                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                });
+
+                it("does not show a file size error", function() {
+                    chorus.modal.validateFileSize();
+                    expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
+                });
             });
 
-            it("shows an error", function() {
-                chorus.modal.validateFileSize();
-                expect(this.dialog.$('.errors')).toContainText("file exceeds");
+            describe("when the file size exceeds the maximum allowed size", function() {
+                beforeEach(function() {
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 999999999999999999 }];
+                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                });
+
+                it("shows an error", function() {
+                    chorus.modal.validateFileSize();
+                    expect(this.dialog.$('.errors')).toContainText("file exceeds");
+                });
             });
         });
 

@@ -10,7 +10,10 @@ class ConfigurationsController < ApplicationController
       :gpfdist_write_permissions => gpfdist_write_permissions,
       :gpfdist_url => Chorus::Application.config.chorus['gpfdist']['url'],
       :gpfdist_port => Chorus::Application.config.chorus['gpfdist']['port'],
-      :gpfdist_data_dir => Chorus::Application.config.chorus['gpfdist']['data_dir']
+      :gpfdist_data_dir => Chorus::Application.config.chorus['gpfdist']['data_dir'],
+      :file_sizes_mb_workfiles => Chorus::Application.config.chorus['file_sizes_mb']['workfiles'],
+      :file_sizes_mb_csv_imports => Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'],
+      :timezoneOffset => Chorus::Application.config.chorus['timezone_offset']
     } }
   end
 
