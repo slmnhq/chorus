@@ -67,8 +67,8 @@ class Gppipe
 
           thr.join
         ensure
-          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema_name}\".#{pipe_name};")
-          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema_name}\".#{pipe_name};")
+          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema_name}\".#{pipe_name}_w;")
+          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema_name}\".#{pipe_name}_r;")
           FileUtils.rm pipe_file if File.exists? pipe_file
         end
       end
