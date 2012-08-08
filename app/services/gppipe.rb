@@ -20,6 +20,14 @@ class Gppipe
     @pipe_name ||= "pipe_#{Process.pid}_#{Time.now.to_i}"
   end
 
+  def dst_fullname
+    @dst_fullname ||= "\"#{dst_schema}\".\"#{dst_table}\""
+  end
+
+  def src_fullname
+    @src_fullname ||= "\"#{src_schema}\".\"#{src_table}\""
+  end
+
   def run
     pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
 
@@ -27,36 +35,37 @@ class Gppipe
     empty_table = false
 
     gpdb1 do |conn|
-      empty_table = conn.exec_query("SELECT count(*) from #{src_schema}.#{src_table};")[0]['count'] == 0)
-      table_def_rows = conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name = '#{src_table}' and table_schema='new_schema';")
+      empty_table = (conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0)
+      table_def_rows = conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema}';")
       table_definition = tabledef_from_query(table_def_rows)
     end
 
     if empty_table
-      gpdb2 { |conn| conn.exec_query("CREATE TABLE #{dst_schema}.#{dst_table}(#{table_definition})") }
+      gpdb2 { |conn| conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})") }
     else
       begin
         system "mkfifo #{pipe_file}"
 
+        gpdb2 do |conn|
+          conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
+        end
+
         thr = Thread.new do
           gpdb1 do |conn|
-            conn.exec_query("DROP EXTERNAL TABLE IF EXISTS #{src_schema}.#{pipe_name};")
-            conn.exec_query("CREATE WRITABLE EXTERNAL TABLE #{src_schema}.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
-            conn.exec_query("INSERT INTO #{src_schema}.#{pipe_name} (SELECT * FROM #{src_schema}.#{src_table});")
-            conn.exec_query("DROP EXTERNAL TABLE #{src_schema}.#{pipe_name};")
+            conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema}\".#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
+            conn.exec_query("INSERT INTO \"#{src_schema}\".#{pipe_name} (SELECT * FROM #{src_fullname});")
           end
         end
 
         gpdb2 do |conn|
-          conn.exec_query("DROP EXTERNAL TABLE IF EXISTS #{dst_schema}.#{pipe_name};")
-          conn.exec_query("CREATE EXTERNAL TABLE #{dst_schema}.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
-          conn.exec_query("CREATE TABLE #{dst_schema}.#{dst_table}(#{table_definition})")
-          conn.exec_query("INSERT INTO #{dst_schema}.#{dst_table} (SELECT * FROM #{dst_schema}.#{pipe_name});")
-          conn.exec_query("DROP EXTERNAL TABLE #{dst_schema}.#{pipe_name};")
+          conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema}\".#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema}\".#{pipe_name});")
         end
 
         thr.join
       ensure
+        gpdb1 { |conn| conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema}\".#{pipe_name};") }
+        gpdb2 { |conn| conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema}\".#{pipe_name};") }
         FileUtils.rm pipe_file if File.exists? pipe_file
       end
     end
@@ -71,9 +80,7 @@ class Gppipe
         :password => "secret",
         :adapter => "jdbcpostgresql"
     )
-    yield connection if block_given?
-  rescue ActiveRecord::JDBCError => e
-    raise e, friendly_message
+    yield connection
   ensure
     connection.try(:disconnect!)
   end
@@ -87,9 +94,7 @@ class Gppipe
         :password => "secret",
         :adapter => "jdbcpostgresql"
     )
-    yield connection if block_given?
-  rescue ActiveRecord::JDBCError => e
-    raise e, friendly_message
+    yield connection
   ensure
     connection.try(:disconnect!)
   end
