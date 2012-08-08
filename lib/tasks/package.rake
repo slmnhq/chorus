@@ -79,8 +79,8 @@ module PackageMaker
     release_path = path + "/releases/" + release_name
 
     run "scp #{filename} #{host}:#{path}"
-    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
-
+    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"0
+.
     run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/log #{release_path}/'"
@@ -105,9 +105,10 @@ module PackageMaker
     run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh stop'"
 
     run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}'"
 
     run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
+    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path}/nginx_dist #{path}/nginx_dist'"
 
     run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh start'"
 
