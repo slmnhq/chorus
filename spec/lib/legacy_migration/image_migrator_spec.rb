@@ -1,18 +1,6 @@
 require 'spec_helper'
 require 'base64'
 
-class LegacyImage < ActiveRecord::Base
-  establish_connection :legacy_test
-
-  def self.table_name
-    "edc_image_instance"
-  end
-
-  def self.inheritance_column
-    nil
-  end
-end
-
 TYPE_MAP = {
   "image/png" => "PNG",
   "image/jpeg" => "JPEG",

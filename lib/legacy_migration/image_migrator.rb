@@ -1,7 +1,11 @@
 require "stringio"
 
 class LegacyImage < ActiveRecord::Base
-  establish_connection :legacy_test
+  if Rails.env.test?
+    establish_connection(:legacy_test)
+  else
+    establish_connection(:legacy)
+  end
 
   def self.table_name
     "edc_image_instance"
