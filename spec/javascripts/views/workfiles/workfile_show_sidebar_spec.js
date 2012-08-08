@@ -82,7 +82,11 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
         it("renders selected version", function() {
             expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
-        })
+        });
+
+        it("should show the data tab by default", function() {
+           expect(this.view.$(".tabs .selected").text()).toContainTranslation("tabs.datasets_and_columns");
+        });
 
         context("when a dataset is selected", function() {
             beforeEach(function() {

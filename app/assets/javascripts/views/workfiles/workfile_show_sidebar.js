@@ -32,7 +32,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
 
     resourcesLoaded:function () {
         if (this.model.isSql() && this.model.workspace().isActive()) {
-            this.tabs = new chorus.views.TabControl(["activity", "database_function_list", "datasets_and_columns"]);
+            this.tabs = new chorus.views.TabControl(["datasets_and_columns","database_function_list","activity"]);
             var schema = this.model.executionSchema();
             this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: schema });
             this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({ model: schema })
