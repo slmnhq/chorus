@@ -113,7 +113,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
             describe("when the file size is within limits", function() {
                 beforeEach(function() {
-                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 }];
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];
                     this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
                 });
 
@@ -132,6 +132,13 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("shows an error", function() {
                     chorus.modal.validateFileSize();
                     expect(this.dialog.$('.errors')).toContainText("file exceeds");
+                });
+
+                it("removes the error when a valid file is then selected", function() {
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];
+                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                    chorus.modal.validateFileSize();
+                    expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                 });
             });
         });

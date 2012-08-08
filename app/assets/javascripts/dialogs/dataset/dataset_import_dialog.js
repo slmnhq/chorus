@@ -199,10 +199,10 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.clearErrors();
         if (!this.model) return;
 
-        var maxFileSize = this.config.get("fileSizesMbWorkfiles");
+        var maxFileSize = this.config.get("fileSizesMbCsvImports");
 
         _.each( this.uploadObj.files, function(file) {
-            if (file.size > maxFileSize) {
+            if (file.size > (maxFileSize * 1024 * 1024) ) {
                 this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
                 this.showErrors(this.model);
             }

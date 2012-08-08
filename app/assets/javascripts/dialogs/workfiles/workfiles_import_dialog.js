@@ -21,11 +21,16 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
     setup: function() {
         var self = this;
+
+        this.config = chorus.models.Config.instance();
+
         $(document).one('close.facebox', function() {
             if (self.request) {
                 self.request.abort();
             }
         });
+
+        this._super("setup");
     },
 
     upload: function(e) {
@@ -91,9 +96,11 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             self.clearErrors();
             if (!self.model) return;
 
+            var maxFileSize = self.config.get("fileSizesMbWorkfiles");
+
             _.each(files, function(file) {
-                if (file.size > 100000) {
-                    self.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":1}}}}
+                if (file.size > (maxFileSize * 1024 * 1024)) {
+                    self.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":maxFileSize}}}}
                     self.showErrors(self.model);
                 }
             }, self);

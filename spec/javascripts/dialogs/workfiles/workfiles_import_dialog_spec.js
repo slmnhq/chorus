@@ -3,6 +3,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         this.model = rspecFixtures.workfile.sql({ workspace: { id: 4 } });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ workspaceId: 4, pageModel: this.model, pageCollection: workfileSet });
+        this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
     });
 
     it("does not re-render when the model changes", function() {
@@ -115,15 +116,25 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
         describe("validating file size", function(){
             context("when it exceeds the maximum file size", function() {
-                it("shows an error", function() {
+                beforeEach(function() {
                     this.fakeUpload.add([{ name: "foo.bar", size: 99999999999999 }]);
+                });
+
+                it("shows an error", function() {
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
+                });
+
+                describe("when the user tries again with a smaller file", function() {
+                    it("doesn't show an error", function() {
+                        this.fakeUpload.add([{ name: "foo.bar", size: 10 * 1024 * 1024 -1 }]);
+                        expect(this.dialog.$(".errors")).not.toContainText("file exceeds");
+                    });
                 });
             });
 
             context("when it is within the limit", function() {
-                it("doens't show an error", function() {
-                    this.fakeUpload.add([{ name: "foo.bar", size: 1 }]);
+                it("doesn't show an error", function() {
+                    this.fakeUpload.add([{ name: "foo.bar", size: 10 * 1024 * 1024 -1 }]);
                     expect(this.dialog.$(".errors")).not.toContainText("file exceeds");
                 });
             });
