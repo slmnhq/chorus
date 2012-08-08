@@ -75,7 +75,6 @@ FixtureBuilder.configure do |fbuilder|
     shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
     GpdbTable.create!({ :name => "bobsearch_shared_table", :schema => shared_search_schema }, :without_protection => true)
 
-
     other_schema = GpdbSchema.create!({ :name => "other_schema", :database => bob_database}, :without_protection => true)
     other_table = GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
     GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)

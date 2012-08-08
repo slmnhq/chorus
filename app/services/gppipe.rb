@@ -49,12 +49,12 @@ class Gppipe
           dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
 
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema}\".#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
-            src_conn.exec_query("INSERT INTO \"#{src_schema}\".#{pipe_name} (SELECT * FROM #{src_fullname});")
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
+            src_conn.exec_query("INSERT INTO \"#{src_schema}\".#{pipe_name}_w (SELECT * FROM #{src_fullname});")
           end
 
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema}\".#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
-          dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema}\".#{pipe_name});")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema}\".#{pipe_name}_r);")
 
           thr.join
         ensure
@@ -83,7 +83,7 @@ class Gppipe
     @raw_src_conn ||= ActiveRecord::Base.postgresql_connection(
         :host => "chorus-gpdb42",
         :port => 5432,
-        :database => "ChorusAnalytics",
+        :database => GpdbIntegration.database_name,
         :username => "gpadmin",
         :password => "secret",
         :adapter => "jdbcpostgresql"
@@ -92,9 +92,9 @@ class Gppipe
 
   def dst_conn
     @raw_dst_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb41",
+        :host => "chorus-gpdb42",
         :port => 5432,
-        :database => "ChorusAnalytics",
+        :database => GpdbIntegration.database_name,
         :username => "gpadmin",
         :password => "secret",
         :adapter => "jdbcpostgresql"

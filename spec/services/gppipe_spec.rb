@@ -1,23 +1,31 @@
 require 'spec_helper'
 
-describe Gppipe do
+describe Gppipe, :database_integration => true do
+  before do
+    refresh_chorus
+  end
+
+  # In the test, use gpfdist to move data between tables in the same schema and database
+  let(:instance_account1) { instance_accounts(:chorus_gpdb42_gpadmin) }
+  let(:schema) { GpdbSchema.find_by_name('test_schema') }
+
   let(:gpdb1) do
     ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb42",
-        :port => 5432,
-        :database => "ChorusAnalytics",
-        :username => "gpadmin",
-        :password => "secret",
+        :host => instance_account1.instance.host,
+        :port => instance_account1.instance.port,
+        :database => schema.database.name,
+        :username => instance_account1.db_username,
+        :password => instance_account1.db_password,
         :adapter => "jdbcpostgresql")
   end
 
   let(:gpdb2) do
     ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb41",
-        :port => 5432,
-        :database => "ChorusAnalytics",
-        :username => "gpadmin",
-        :password => "secret",
+        :host => instance_account1.instance.host,
+        :port => instance_account1.instance.port,
+        :database => schema.database.name,
+        :username => instance_account1.db_username,
+        :password => instance_account1.db_password,
         :adapter => "jdbcpostgresql")
   end
 
@@ -26,11 +34,10 @@ describe Gppipe do
     gpdb2.try(:disconnect!)
   end
 
-  let(:src_conn) {  }
   let(:src_table) { "candy" }
-  let(:src_schema) { "new_schema" }
+  let(:src_schema) { schema.name }
   let(:dst_table) { "dst_candy" }
-  let(:dst_schema) { "new_schema" }
+  let(:dst_schema) { schema.name }
   let(:table_def) { "(id integer, name text)" }
   let(:gp_pipe) { Gppipe.new(src_schema, src_table, dst_schema, dst_table) }
 
@@ -51,15 +58,10 @@ describe Gppipe do
 
   context "actually running the query" do
     before do
-      gpdb1.exec_query("drop schema if exists \"#{src_schema}\" cascade;")
-      gpdb1.exec_query("create schema \"#{src_schema}\";")
-
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
       gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
       gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
 
-      gpdb2.exec_query("drop schema if exists \"#{dst_schema}\" cascade;")
-      gpdb2.exec_query("create schema \"#{dst_schema}\";")
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
@@ -77,7 +79,7 @@ describe Gppipe do
     context "a sql query blocks forever" do
       before do
         stub(Gppipe).timeout_seconds { 1 }
-        stub(gp_pipe.src_conn).exec_query { puts "stub sleep"; sleep(10); raise Exception, "test failed - no timeout" }
+        stub(gp_pipe.src_conn).exec_query { sleep(10); raise Exception, "test failed - no timeout" }
       end
 
       it "times out the query and raises a Timeout exception" do
@@ -99,11 +101,9 @@ describe Gppipe do
       end
     end
 
-    context "tables and schemas have weird characters" do
+    context "tables have weird characters" do
       let(:src_table) { "2candy" }
-      let(:src_schema) { "2new_schema" }
       let(:dst_table) { "2dst_candy" }
-      let(:dst_schema) { "2new_schema" }
 
       it "single quotes table and schema names if they have weird chars" do
         gp_pipe.run
@@ -115,8 +115,8 @@ describe Gppipe do
 
   context "when the source table is empty" do
     before do
-      gpdb1.exec_query("drop table if exists new_schema.#{src_table};")
-      gpdb1.exec_query("create table new_schema.#{src_table}#{table_def};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
