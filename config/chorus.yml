@@ -12,7 +12,7 @@ server_port: 8080
 timezone_offset: -8
 file_sizes_mb:
   workfiles:  10
-  csv_imports:  1
+  csv_imports:  10
   max_upload_size_megabytes: 100
 
 gpfdist:
