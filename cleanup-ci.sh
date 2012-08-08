@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm $workspace/log/*
+rm $WORKSPACE/log/*
 
 for file_name in `ls $WORKSPACE/tmp/pids/*$RAILS_ENV*`
 do
