@@ -43,7 +43,7 @@ describe ChorusConfig do
               'data_dir' => '/tmp'
           }
       }
-      config.should be_gpfdist_configured
+      config.gpfdist_configured?.should == true
     end
 
     it "returns false if any of the gpfdist keys are missing" do

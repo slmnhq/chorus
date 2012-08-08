@@ -18,7 +18,7 @@ class ChorusConfig
   end
 
   def gpfdist_configured?
-    self['gpfdist.url'] && self['gpfdist.port'] && self['gpfdist.data_dir']
+    self['gpfdist.url'] && self['gpfdist.port'] && self['gpfdist.data_dir'] && true
   end
 
   def self.config_file_path
