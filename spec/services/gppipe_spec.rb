@@ -74,6 +74,17 @@ describe Gppipe do
       gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
     end
 
+    context "a sql query blocks forever" do
+      before do
+        stub(Gppipe).timeout_seconds { 1 }
+        stub(gp_pipe.src_conn).exec_query { puts "stub sleep"; sleep(10); raise Exception, "test failed - no timeout" }
+      end
+
+      it "times out the query and raises a Timeout exception" do
+        expect { gp_pipe.run }.to raise_exception(Timeout::Error)
+      end
+    end
+
     context "destination table already exists" do
       before do
         gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}#{table_def}")
@@ -128,6 +139,4 @@ describe Gppipe do
     gppipe = Gppipe.new("#%)", "$%*@$", "$%*", "@@")
     gppipe.pipe_name.should_not match(/[^A-Za-z0-9_]/)
   end
-
-  it "has a reasonable timeout on both insert and select sides of pipe"
 end
