@@ -13,7 +13,7 @@ gem 'jetpack', :github => "pivotal-leopold/jetpack", :require => false
 gem 'sunspot_solr', '2.0.0.pre.120417'
 gem 'quiet_assets'
 gem 'nokogiri'
-gem 'postgresql_cursor'
+gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

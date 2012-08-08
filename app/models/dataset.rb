@@ -8,6 +8,7 @@ class Dataset < ActiveRecord::Base
   delegate :instance, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :schema_id
 
   attr_accessor :statistics
 
@@ -63,7 +64,10 @@ class Dataset < ActiveRecord::Base
       found_datasets << dataset
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
-      dataset.save if dataset.changed?
+      begin
+        dataset.save if dataset.changed?
+      rescue ActiveRecord::RecordNotUnique
+      end
     end
 
     if options[:mark_stale]
