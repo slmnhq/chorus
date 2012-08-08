@@ -159,7 +159,33 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.isValidData()).toBeFalsy()
             })
         })
-    })
+    });
+
+    describe("#isSufficientDataForTimeseries", function () {
+        beforeEach(function() {
+            this.chartOptions["type"] = "timeseries";
+            this.dialog = new chorus.dialogs.Visualization({
+                model: this.dataset,
+                task: fixtures.timeseriesTaskWithResult(),
+                chartOptions: this.chartOptions,
+                filters: this.filters,
+                columnSet: this.columns
+            });
+        })
+
+        describe("has more than 1 row", function () {
+            it("should be valid", function () {
+                expect(this.dialog.isSufficientDataForTimeseries()).toBeTruthy();
+            });
+        });
+
+        describe("has 1 or less rows", function () {
+            it("should not be valid", function () {
+                this.dialog.options.task.set({ rows: [ { time: 1, value: '321' } ] });
+                expect(this.dialog.isSufficientDataForTimeseries()).toBeFalsy();
+            });
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -319,7 +345,33 @@ describe("chorus.dialogs.Visualization", function() {
             it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
                 expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
             });
-        })
+
+            it("displays the correct message", function () {
+                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.empty_data")
+            });
+
+        });
+
+        context("when the rows are valid, the type is time series and has only 1 row", function () {
+            beforeEach(function () {
+                this.dialog.launchModal();
+                spyOn(this.dialog, "isSufficientDataForTimeseries").andReturn(false);
+                this.dialog.type = "timeseries";
+                this.dialog.drawChart();
+            });
+            it("disables the 'Save' button", function() {
+                expect(this.dialog.$("button.save")).toBeDisabled();
+            });
+
+            it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
+                expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
+            });
+
+            it("displays the correct message", function () {
+                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.insufficient_data")
+            });
+
+        });
 
         context("when the rows are valid", function() {
             beforeEach(function() {

@@ -76,15 +76,21 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     drawChart: function() {
         if (this.isValidData()) {
-            this.$(".modal_controls a.hide").addClass("hidden");
-            this.$(".modal_controls a.show").removeClass("hidden");
-            this.$("button.save").prop("disabled", false);
-            this.$("button.save").prop("disabled", false);
-            this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
-            this.subviews[".chart_area"] = "chart";
-            this.renderSubview("chart");
+            if ((this.type == "timeseries") && !this.isSufficientDataForTimeseries()) {
+                this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning({message: t("visualization.insufficient_data")});
+                this.subviews[".chart_area"] = "emptyDataWarning";
+                this.renderSubview("emptyDataWarning");
+            } else {
+                this.$(".modal_controls a.hide").addClass("hidden");
+                this.$(".modal_controls a.show").removeClass("hidden");
+                this.$("button.save").prop("disabled", false);
+                this.$("button.save").prop("disabled", false);
+                this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
+                this.subviews[".chart_area"] = "chart";
+                this.renderSubview("chart");
+            }
         } else {
-            this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning()
+            this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning({message: t("visualization.empty_data")});
             this.subviews[".chart_area"] = "emptyDataWarning";
             this.renderSubview("emptyDataWarning");
         }
@@ -135,6 +141,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     isValidData: function() {
         return !_.isEmpty(this.task.get("rows"));
+    },
+
+    isSufficientDataForTimeseries: function() {
+        return this.task.get("rows").length > 1;
     },
 
     makeFilename: function() {
