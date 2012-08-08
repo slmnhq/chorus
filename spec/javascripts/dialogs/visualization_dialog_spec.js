@@ -571,7 +571,7 @@ describe("chorus.dialogs.Visualization", function() {
                         });
 
                         it("saves the workfile in the selected workspace", function() {
-                            var workfile = new chorus.models.Workfile({workspaceId: "543"});
+                            var workfile = new chorus.models.Workfile({workspace: { id: "543"}});
                             expect(this.server.lastCreate().url).toMatchUrl(workfile.url());
                         });
 

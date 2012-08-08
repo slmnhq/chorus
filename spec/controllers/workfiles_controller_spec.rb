@@ -202,6 +202,11 @@ describe WorkfilesController do
         event.workfile.description.should == @params[:workfile][:description]
         event.workspace.to_param.should == @params[:workspace_id]
       end
+
+      it "creates a workfile from an svg document" do
+        post :create, :workspace_id => workspace.to_param, :workfile => { :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>' }
+        Workfile.last.file_name.should == 'some_vis.png'
+      end
     end
   end
 

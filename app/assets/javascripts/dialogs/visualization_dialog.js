@@ -155,7 +155,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         var workspaceId = workspace ? workspace.get("id") : this.model.workspace().id;
 
         this.workfile = new chorus.models.Workfile({
-            workspaceId: workspaceId,
+            workspace: { id: workspaceId },
             source: "visualization",
             svgData: this.makeSvgData(),
             fileName: this.makeFilename()

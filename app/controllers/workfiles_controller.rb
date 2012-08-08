@@ -52,7 +52,11 @@ class WorkfilesController < ApplicationController
   def create_workfile(workspace)
     workfile = nil
     Workfile.transaction do
-      workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
+      if params[:workfile][:svg_data]
+        workfile = Workfile.create_from_svg(params[:workfile], workspace, current_user)
+      else
+        workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
+      end
 
       Events::WORKFILE_CREATED.by(current_user).add(
         :workfile => workfile,

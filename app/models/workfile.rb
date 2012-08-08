@@ -42,6 +42,15 @@ class Workfile < ActiveRecord::Base
     end
   end
 
+  def self.create_from_svg(attributes, workspace, owner)
+    transcoder = SvgToPng.new(attributes[:svg_data])
+    workfile = new(:versions_attributes => [{:contents => transcoder.fake_uploaded_file(attributes[:file_name]), :owner => owner, :modifier => owner}])
+    workfile.owner = owner
+    workfile.workspace = workspace
+    workfile.save!
+    workfile.reload
+  end
+
   def self.create_from_file_upload(attributes, workspace, owner)
     workfile = new(attributes)
     workfile.owner = owner
