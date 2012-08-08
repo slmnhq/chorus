@@ -230,6 +230,19 @@ describe Dataset do
       dataset.save!
     end
   end
+
+  describe "#all_rows_sql" do
+    context "with a limit" do
+      it "uses the limit" do
+        dataset = datasets(:bobs_table)
+        dataset.all_rows_sql(10).should match "LIMIT 10"
+      end
+    end
+    it "behaves as expected" do
+      dataset = datasets(:bobs_table)
+      dataset.all_rows_sql().should match dataset.name
+    end
+  end
 end
 
 describe Dataset::Query, :database_integration => true do

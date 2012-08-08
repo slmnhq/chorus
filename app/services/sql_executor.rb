@@ -1,7 +1,7 @@
 module SqlExecutor
   class << self
     def preview_dataset(dataset, account, check_id)
-      execute_sql(dataset.schema, account, check_id, preview_sql(dataset))
+      execute_sql(dataset.schema, account, check_id, dataset.preview_sql)
     end
 
     def execute_sql(schema, account, check_id, sql)
@@ -19,10 +19,6 @@ module SqlExecutor
     end
 
     private
-
-    def preview_sql(dataset)
-      Arel::Table.new(dataset.name).project('*').take(100).to_sql
-    end
 
     def build_result(pg_results)
       meta_data = pg_results.meta_data

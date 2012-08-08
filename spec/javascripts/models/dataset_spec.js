@@ -386,26 +386,20 @@ describe("chorus.models.Dataset", function() {
 
     describe("#download", function() {
         beforeEach(function() {
-            this.dataset.set({ id: '"foo"|"bar"|"baz"' });
             spyOn(jQuery, "download");
         });
 
         context("when no number of rows is passed", function() {
             it("includes the number of rows", function() {
                 this.dataset.download();
-                expect($.download).toHaveBeenCalledWith("/data/csvDownload", {
-                    datasetId: this.dataset.id
-                }, "get");
+                expect($.download).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", {}, "get");
             });
         });
 
         context("when a number of rows is passed", function() {
             it("makes a request to the tabular data download api", function() {
-                this.dataset.download({ rows: "345" });
-                expect($.download).toHaveBeenCalledWith("/data/csvDownload", {
-                    datasetId: this.dataset.id,
-                    numOfRows: "345"
-                }, "get");
+                this.dataset.download({ rowLimit: "345" });
+                expect($.download).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", { row_limit: "345" }, "get");
             });
         });
     });

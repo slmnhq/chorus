@@ -6,7 +6,7 @@ describe("chorus.models.DatasetDownloadConfiguration", function() {
 
     context("entering a valid positive number", function() {
         beforeEach(function() {
-            model.set({ numOfRows: "20" });
+            model.set({ rowLimit: "20" });
         });
 
         it("does not fail validation", function() {
@@ -17,23 +17,23 @@ describe("chorus.models.DatasetDownloadConfiguration", function() {
     describe("validations", function() {
         context("entering a negative number", function() {
             beforeEach(function() {
-                model.set({ numOfRows: "-100" });
+                model.set({ rowLimit: "-100" });
             });
 
             it("does fail validation", function() {
                 expect(model.performValidation()).toBeFalsy();
-                expect(model.errors.numOfRows).toMatchTranslation('import.validation.sampleCount.positive')
+                expect(model.errors.rowLimit).toMatchTranslation('import.validation.sampleCount.positive')
             });
         });
 
         context("entering a string", function() {
             beforeEach(function() {
-                model.set({ numOfRows: "testing12309i234" });
+                model.set({ rowLimit: "testing12309i234" });
             });
 
             it("does fail validation", function() {
                 expect(model.performValidation()).toBeFalsy();
-                expect(model.errors.numOfRows).toMatchTranslation('import.validation.sampleCount.positive')
+                expect(model.errors.rowLimit).toMatchTranslation('import.validation.sampleCount.positive')
             });
         });
     });

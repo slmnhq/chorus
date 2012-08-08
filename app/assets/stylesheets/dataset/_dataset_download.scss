@@ -7,7 +7,7 @@
         @include ellipsis;
     }
 
-    input[name=numOfRows] {
+    input[name=rowLimit] {
         display: inline-block;
         width: 50px;
     }

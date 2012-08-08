@@ -153,8 +153,12 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (>= 0.0.2)
       mime-types
+    pg (0.14.0)
     polyglot (0.3.3)
     posix-spawn (0.3.6)
+    postgresql_cursor (0.4.0)
+      activerecord
+      pg
     pr_geohash (1.0.0)
     quiet_assets (1.0.1)
       railties (~> 3.1)
@@ -289,6 +293,7 @@ DEPENDENCIES
   net-ldap
   nokogiri
   paperclip (= 3.0.4)
+  postgresql_cursor
   queue_classic!
   quiet_assets
   rails (= 3.2.5)

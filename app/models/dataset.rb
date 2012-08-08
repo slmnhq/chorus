@@ -130,6 +130,14 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+  def preview_sql
+    all_rows_sql(100)
+  end
+
+  def all_rows_sql(limit = nil)
+    Arel::Table.new(name).project('*').take(limit).to_sql
+  end
+
   class Query
     def initialize(schema)
       @schema = schema

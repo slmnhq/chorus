@@ -5,8 +5,14 @@ chorus.models.Dataset = chorus.models.Base.include(
     constructorName: "Dataset",
     entityType: "dataset",
 
-    urlTemplate: "datasets/{{id}}",
     showUrlTemplate: "datasets/{{id}}",
+    urlTemplate: function(options) {
+        if(options && options.download) {
+            return "datasets/{{id}}/download.csv"
+        } else {
+            return "datasets/{{id}}";
+        }
+    },
 
     initialize: function() {
         this.bind('invalidated', this.refetchAfterInvalidated, this);
@@ -160,12 +166,12 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     download: function(options) {
-        var data = { datasetId: this.id };
-        if (options && options.rows) {
-            data.numOfRows = options.rows;
+        var data = { };
+        if (options && options.rowLimit) {
+            data.row_limit = options.rowLimit;
         }
 
-        $.download("/data/csvDownload", data, "get");
+        $.download(this.url({download: true}), data, "get");
     },
 
     isChorusView: function() {

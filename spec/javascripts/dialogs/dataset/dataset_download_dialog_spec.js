@@ -10,7 +10,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
             radioButtonSpecify = this.dialog.$("input[type=radio][id=specify_rows]");
             radioButtonAll = this.dialog.$("input[type=radio][id=all_rows]");
-            this.rowsInput = this.dialog.$("input[name=numOfRows][type=text]");
+            this.rowsInput = this.dialog.$("input[name=rowLimit][type=text]");
             this.submitButton = this.dialog.$("button.submit");
         });
 
@@ -45,7 +45,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
             });
 
             it("starts a dataset download", function() {
-                expect(this.dataset.download).toHaveBeenCalledWith({ rows: "473" });
+                expect(this.dataset.download).toHaveBeenCalledWith({ rowLimit: "473" });
             });
         });
 

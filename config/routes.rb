@@ -46,6 +46,7 @@ Chorus::Application.routes.draw do
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
+    resource :download, :only => :show, :controller => 'dataset_downloads'
     member do
       post :import
     end

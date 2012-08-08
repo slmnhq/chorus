@@ -29,18 +29,18 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     },
 
     downloadSome: function() {
-        this.model.set({ numOfRows: this.numOfRows() }, { silent: true });
+        this.model.set({ rowLimit: this.rowLimit() }, { silent: true });
 
         if (this.model.performValidation()) {
-            this.dataset.download({ rows: this.numOfRows() });
+            this.dataset.download({ rowLimit: this.rowLimit() });
             this.closeModal();
         } else {
             this.showErrors();
         }
     },
 
-    numOfRows: function() {
-        return this.$("input[name=numOfRows]").val();
+    rowLimit: function() {
+        return this.$("input[name=rowLimit]").val();
     },
 
     specifyAll: function() {
