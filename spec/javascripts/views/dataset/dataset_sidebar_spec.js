@@ -969,12 +969,9 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".column_statistics .pair").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.type_category");
                 expect(this.view.$(".column_statistics .pair").eq(1).find(".key")).toContainTranslation("dataset.column_statistics.type");
                 expect(this.view.$(".column_statistics .pair").eq(2).find(".key")).toContainTranslation("dataset.column_statistics.min");
-                expect(this.view.$(".column_statistics .pair").eq(3).find(".key")).toContainTranslation("dataset.column_statistics.median");
-                expect(this.view.$(".column_statistics .pair").eq(4).find(".key")).toContainTranslation("dataset.column_statistics.avg");
-                expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.max");
-                expect(this.view.$(".column_statistics .pair").eq(6).find(".key")).toContainTranslation("dataset.column_statistics.stddev");
-                expect(this.view.$(".column_statistics .pair").eq(7).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
-                expect(this.view.$(".column_statistics .pair").eq(8).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+                expect(this.view.$(".column_statistics .pair").eq(3).find(".key")).toContainTranslation("dataset.column_statistics.max");
+                expect(this.view.$(".column_statistics .pair").eq(4).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
+                expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
 
                 expect(this.view.$(".column_statistics .multiline").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.common");
             });
@@ -1010,10 +1007,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     expect(this.view.$(".column_statistics .type_category .value").text()).toBe(this.column.get("typeClass"));
                     expect(this.view.$(".column_statistics .type .value").text()).toBe("int8");
                     expect(this.view.$(".column_statistics .min .value").text()).toBe("200075");
-                    expect(this.view.$(".column_statistics .median .value").text()).toBe("725197");
-                    expect(this.view.$(".column_statistics .avg .value").text()).toBe("719719.11");
                     expect(this.view.$(".column_statistics .max .value").text()).toBe("1199961");
-                    expect(this.view.$(".column_statistics .stddev .value").text()).toBe("309105");
                     expect(this.view.$(".column_statistics .distinct .value").text()).toBe("998710");
                     expect(this.view.$(".column_statistics .pctnull .value").text()).toBe("10.37%");
 

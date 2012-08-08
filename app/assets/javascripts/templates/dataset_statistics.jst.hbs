@@ -75,28 +75,10 @@
                 <div class="value" title="{{min}}">{{round min}}</div>
             </div>
             {{/if}}
-            {{#if median}}
-            <div class="pair median">
-                <div class="key">{{t "dataset.column_statistics.median"}}</div>
-                <div class="value" title="{{median}}">{{round median}}</div>
-            </div>
-            {{/if}}
-            {{#if avg}}
-            <div class="pair avg">
-                <div class="key">{{t "dataset.column_statistics.avg"}}</div>
-                <div class="value" title="{{avg}}">{{round avg}}</div>
-            </div>
-            {{/if}}
             {{#if max}}
             <div class="pair max">
                 <div class="key">{{t "dataset.column_statistics.max"}}</div>
                 <div class="value" title="{{max}}">{{round max}}</div>
-            </div>
-            {{/if}}
-            {{#if stdDeviation}}
-            <div class="pair stddev">
-                <div class="key">{{t "dataset.column_statistics.stddev"}}</div>
-                <div class="value" title="{{stdDeviation}}">{{round stdDeviation}}</div>
             </div>
             {{/if}}
             {{#if distinctValue}}
