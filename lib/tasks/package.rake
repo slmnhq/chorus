@@ -80,7 +80,7 @@ module PackageMaker
 
     run "scp #{filename} #{host}:#{path}"
     run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
-.
+
     run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/log #{release_path}/'"
@@ -165,8 +165,7 @@ module PackageMaker
     unless ENV['IGNORE_DIRTY']
       check_clean_working_tree
     end
-    rails_env = ENV['RAILS_ENV'] || 'development'
-    run "RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
+    run "bundle exec rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
       f.puts version_name
