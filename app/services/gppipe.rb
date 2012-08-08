@@ -92,32 +92,4 @@ class Gppipe
         :adapter => "jdbcpostgresql"
     )
   end
-
-  def gpdb1
-    connection = ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb42",
-        :port => 5432,
-        :database => "ChorusAnalytics",
-        :username => "gpadmin",
-        :password => "secret",
-        :adapter => "jdbcpostgresql"
-    )
-    yield connection
-  ensure
-    connection.try(:disconnect!)
-  end
-
-  def gpdb2
-    connection = ActiveRecord::Base.postgresql_connection(
-        :host => "chorus-gpdb41",
-        :port => 5432,
-        :database => "ChorusAnalytics",
-        :username => "gpadmin",
-        :password => "secret",
-        :adapter => "jdbcpostgresql"
-    )
-    yield connection
-  ensure
-    connection.try(:disconnect!)
-  end
 end

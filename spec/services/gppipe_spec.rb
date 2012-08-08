@@ -1,7 +1,32 @@
 require 'spec_helper'
 
 describe Gppipe do
+  let(:gpdb1) do
+    ActiveRecord::Base.postgresql_connection(
+        :host => "chorus-gpdb42",
+        :port => 5432,
+        :database => "ChorusAnalytics",
+        :username => "gpadmin",
+        :password => "secret",
+        :adapter => "jdbcpostgresql")
+  end
 
+  let(:gpdb2) do
+    ActiveRecord::Base.postgresql_connection(
+        :host => "chorus-gpdb41",
+        :port => 5432,
+        :database => "ChorusAnalytics",
+        :username => "gpadmin",
+        :password => "secret",
+        :adapter => "jdbcpostgresql")
+  end
+
+  after :each do
+    gpdb1.try(:disconnect!)
+    gpdb2.try(:disconnect!)
+  end
+
+  let(:src_conn) {  }
   let(:src_table) { "candy" }
   let(:src_schema) { "new_schema" }
   let(:dst_table) { "dst_candy" }
@@ -26,53 +51,40 @@ describe Gppipe do
 
   context "actually running the query" do
     before do
-      gp_pipe.gpdb1 do |conn|
-        conn.exec_query("drop schema if exists \"#{src_schema}\" cascade;")
-        conn.exec_query("create schema \"#{src_schema}\";")
+      gpdb1.exec_query("drop schema if exists \"#{src_schema}\" cascade;")
+      gpdb1.exec_query("create schema \"#{src_schema}\";")
 
-        conn.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-        conn.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
-        conn.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
 
-      end
-      gp_pipe.gpdb2 do |conn|
-        conn.exec_query("drop schema if exists \"#{dst_schema}\" cascade;")
-        conn.exec_query("create schema \"#{dst_schema}\";")
-
-        conn.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
-      end
+      gpdb2.exec_query("drop schema if exists \"#{dst_schema}\" cascade;")
+      gpdb2.exec_query("create schema \"#{dst_schema}\";")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
     after do
-      gp_pipe.gpdb1 { |conn| conn.exec_query("drop table if exists #{gp_pipe.src_fullname};") }
-      gp_pipe.gpdb2 { |conn| conn.exec_query("drop table if exists #{gp_pipe.dst_fullname};") }
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
     it "should move data from candy to dst_candy" do
       gp_pipe.run
 
-      gp_pipe.gpdb2 do |conn|
-        conn.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
-      end
+      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
     end
 
     context "destination table already exists" do
       before do
-        gp_pipe.gpdb2 do |conn|
-          conn.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}#{table_def}")
-        end
+        gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}#{table_def}")
       end
 
       it "cleans up on an exception (in this case the dst table exists already)" do
         expect { gp_pipe.run }.to raise_exception
-        gp_pipe.gpdb1 do |conn|
-          count_result = conn.exec_query("select count(*) from pg_tables where schemaname = '#{src_schema}' and tablename = '#{gp_pipe.pipe_name}';")
-          count_result[0]['count'].should == 0
-        end
-        gp_pipe.gpdb2 do |conn|
-          count_result = conn.exec_query("select count(*) from pg_tables where schemaname = '#{dst_schema}' and tablename = '#{gp_pipe.pipe_name}';")
-          count_result[0]['count'].should == 0
-        end
+        count_result = gpdb1.exec_query("select count(*) from pg_tables where schemaname = '#{src_schema}' and tablename = '#{gp_pipe.pipe_name}';")
+        count_result[0]['count'].should == 0
+        count_result = gpdb2.exec_query("select count(*) from pg_tables where schemaname = '#{dst_schema}' and tablename = '#{gp_pipe.pipe_name}';")
+        count_result[0]['count'].should == 0
       end
     end
 
@@ -85,34 +97,28 @@ describe Gppipe do
       it "single quotes table and schema names if they have weird chars" do
         gp_pipe.run
 
-        gp_pipe.gpdb2 do |conn|
-          conn.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
-        end
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
       end
     end
   end
 
   context "when the source table is empty" do
     before do
-      gp_pipe.gpdb1 do |conn|
-        conn.exec_query("drop table if exists new_schema.#{src_table};")
-        conn.exec_query("create table new_schema.#{src_table}#{table_def};")
-      end
-      gp_pipe.gpdb2 { |conn| conn.exec_query("drop table if exists #{gp_pipe.dst_fullname};") }
+      gpdb1.exec_query("drop table if exists new_schema.#{src_table};")
+      gpdb1.exec_query("create table new_schema.#{src_table}#{table_def};")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
     after do
-      gp_pipe.gpdb1 { |conn| conn.exec_query("drop table if exists #{gp_pipe.src_fullname};") }
-      gp_pipe.gpdb2 { |conn| conn.exec_query("drop table if exists #{gp_pipe.dst_fullname};") }
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
 
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do
       gp_pipe.run
 
-      gp_pipe.gpdb2 do |conn|
-        conn.exec_query("SELECT * FROM #{dst_schema}.#{dst_table}").length.should == 0
-      end
+      gpdb2.exec_query("SELECT * FROM #{dst_schema}.#{dst_table}").length.should == 0
     end
   end
 
