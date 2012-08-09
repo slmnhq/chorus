@@ -35,6 +35,13 @@ describe WorkspaceDatasetsController do
     it "passes the workspace to the presenter" do
       mock_present { |collection, _, options| options[:workspace].should be_true }
       get :index, :workspace_id => workspace.to_param
+      end
+
+    it "filter the list by the name_pattern value" do
+      get :index, :workspace_id => workspace.to_param, :name_pattern => "view"
+      decoded_response.each do |response|
+        response.object_name.should =~ /view/
+      end
     end
   end
 
