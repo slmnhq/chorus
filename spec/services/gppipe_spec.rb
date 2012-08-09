@@ -38,7 +38,7 @@ describe Gppipe, :database_integration => true do
 
   let(:src_table) { "candy" }
   let(:dst_table) { "dst_candy" }
-  let(:table_def) { "(id integer, name text)" }
+  let(:table_def) { '"id" integer, "name" text, PRIMARY KEY("id")' }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
 
@@ -52,28 +52,53 @@ describe Gppipe, :database_integration => true do
     pipe.limit_clause.should == 'LIMIT 500'
   end
 
-  it "should create a tabledef from an information_schema query" do
-    result = [{"column_name"=>"id", "data_type"=>"integer"}, {"column_name"=>"name", "data_type"=>"text"}]
-    gp_pipe.tabledef_from_query(result).should == '"id" integer, "name" text'
+  context "for a table with 0 columns" do
+    let(:table_def) { '' }
+    before do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
+    end
+
+    after do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+    end
+
+    it "should have the correct table definition" do
+      gp_pipe.table_definition.should == table_def
+    end
+
+    it "should have the correct table definition with keys" do
+      gp_pipe.table_definition_with_keys.should == table_def
+    end
   end
 
-  it "should create a tabledef from an information_schema query with 1 column" do
-    result = [{"column_name"=>"id", "data_type"=>"integer"}]
-    gp_pipe.tabledef_from_query(result).should == '"id" integer'
-  end
+  context "for a table with 1 column and no primary key" do
+    let(:table_def) { '"2id" integer' }
 
-  it "should create a tabledef from an information_schema query with 0 columns" do
-    result = []
-    gp_pipe.tabledef_from_query(result).should == ""
+    before do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
+    end
+
+    after do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+    end
+
+    it "should have the correct table definition" do
+      gp_pipe.table_definition.should == table_def
+    end
+
+    it "should have the correct table definition with keys" do
+      gp_pipe.table_definition_with_keys.should == table_def
+    end
   end
 
   context "actually running the query" do
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
       gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
       gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (2, 'kitkat');")
-
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
@@ -82,10 +107,28 @@ describe Gppipe, :database_integration => true do
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
-    it "should move data from candy to dst_candy" do
+    it "has the correct DDL for create table" do
+      gp_pipe.table_definition_with_keys.should == table_def
+    end
+
+    it "should move data from candy to dst_candy and have the correct primary key" do
       gp_pipe.run
 
       gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+
+      sql = <<-PRIMARYKEYSQL
+        SELECT
+          pg_attribute.attname
+        FROM pg_index, pg_class, pg_attribute
+        WHERE
+          pg_class.oid = '#{schema.name}.#{dst_table}'::regclass AND
+          indrelid = pg_class.oid AND
+          pg_attribute.attrelid = pg_class.oid AND
+          pg_attribute.attnum = any(pg_index.indkey)
+          AND indisprimary;
+      PRIMARYKEYSQL
+
+      gpdb2.exec_query(sql)[0]['attname'].should == 'id'
     end
 
     context "limiting the number of rows" do
@@ -126,7 +169,7 @@ describe Gppipe, :database_integration => true do
 
     context "destination table already exists" do
       before do
-        gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}#{table_def}")
+        gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}(#{table_def})")
       end
 
       it "cleans up on an exception (in this case the dst table exists already)" do
@@ -153,7 +196,7 @@ describe Gppipe, :database_integration => true do
   context "when the source table is empty" do
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 

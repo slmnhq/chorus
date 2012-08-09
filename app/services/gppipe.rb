@@ -33,8 +33,18 @@ class Gppipe
     @row_limit = row_limit
   end
 
-  def tabledef_from_query(arr)
-    arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
+  def table_definition
+    return @table_definition if @table_definition
+    # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
+    arr = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
+    @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
+  end
+
+  def table_definition_with_keys
+    return @table_definition_with_keys if @table_definition_with_keys
+    primary_key_row = src_conn.exec_query(primary_key_sql)[0]
+    primary_key_clause = primary_key_row.nil? ? '' : ", PRIMARY KEY(\"#{primary_key_row['attname']}\")"
+    @table_definition_with_keys = "#{table_definition}#{primary_key_clause}"
   end
 
   def limit_clause
@@ -57,11 +67,8 @@ class Gppipe
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
       no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
-      # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
-      table_definition = tabledef_from_query(table_def_rows)
 
-      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
+      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys})")
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
@@ -117,5 +124,21 @@ class Gppipe
         :password => dst_account.db_password,
         :adapter => "jdbcpostgresql"
     )
+  end
+
+  private
+
+  def primary_key_sql
+    <<-PRIMARYKEYSQL
+    SELECT
+      pg_attribute.attname
+    FROM pg_index, pg_class, pg_attribute
+    WHERE
+      pg_class.oid = '#{src_schema_name}.#{src_table}'::regclass AND
+      indrelid = pg_class.oid AND
+      pg_attribute.attrelid = pg_class.oid AND
+      pg_attribute.attnum = any(pg_index.indkey)
+      AND indisprimary;
+    PRIMARYKEYSQL
   end
 end
