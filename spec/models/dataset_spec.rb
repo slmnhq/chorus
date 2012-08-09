@@ -303,7 +303,7 @@ describe Dataset::Query, :database_integration => true do
 
     context "when 'public' schema does not exist" do
       let(:schema) { GpdbSchema.find_by_name('non_public_schema') }
-      let(:sql) { "SELECT * FROM base_table1" }
+      let(:sql) { "SELECT * FROM non_public_base_table1" }
 
       it "works" do
         lambda { rows }.should_not raise_error

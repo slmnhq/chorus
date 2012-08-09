@@ -128,10 +128,10 @@ class Dataset < ActiveRecord::Base
       copy_command += " LIMIT #{options['sample_count']}"
     end
     schema.with_gpdb_connection(account) do |connection|
-      connection.exec_query("START TRANSACTION")
-      connection.execute(create_command)
-      result = connection.execute(copy_command)
-      connection.exec_query("COMMIT")
+      connection.transaction do
+        connection.execute(create_command)
+        connection.execute(copy_command)
+      end
     end
   end
 

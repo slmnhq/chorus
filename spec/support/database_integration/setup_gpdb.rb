@@ -60,6 +60,7 @@ module GpdbIntegration
     GpdbSchema.refresh(account, database)
     gpdb_schema = GpdbSchema.find_by_name('non_public_schema')
     Dataset.refresh(account, gpdb_schema)
+
     account
   end
 

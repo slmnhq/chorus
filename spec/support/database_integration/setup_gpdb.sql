@@ -189,9 +189,9 @@ CREATE DATABASE "gpdb_test_database_no_public_schema" OWNER gpadmin;
   CREATE SCHEMA non_public_schema;
     SET search_path TO 'non_public_schema';
 
-    CREATE TABLE base_table1
+    CREATE TABLE non_public_base_table1
       (id integer, column1 integer, column2 integer)
       DISTRIBUTED BY (id);
-    INSERT INTO base_table1 VALUES ( 0,0,0 );
+    INSERT INTO non_public_base_table1 VALUES ( 0,0,0 );
 
   \dtvs non_public_schema.*
