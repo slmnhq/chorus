@@ -42,6 +42,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
                 placeholder: t("workspace.search"),
                 onTextChange: onTextChangeFunction
             },
+            workspace: this.workspace,
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),

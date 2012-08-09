@@ -438,8 +438,9 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
     templateName: "default_content_header",
 
     context: function() {
-        var ctx = this.options
-        return _.extend({}, ctx, this.additionalContext());
+        var sandbox = this.options.workspace && this.options.workspace.sandbox();
+        var ctx = this.options;
+        return _.extend({}, ctx, this.additionalContext(), {sandbox : sandbox});
     },
 
     postRender: function() {
@@ -465,7 +466,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         var collection = this.collection;
         this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
 
-        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl})
+        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl, workspace: options.workspace})
 
         if (options.hasOwnProperty('persistent')) {
             this.persistent = options.persistent;

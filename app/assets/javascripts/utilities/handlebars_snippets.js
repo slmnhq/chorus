@@ -307,7 +307,8 @@
             }
         },
 
-        tabularDataLocation: function(tabularData) {
+        tabularDataLocation: function(tabularData, label) {
+            label = _.isString(label) ? label : "dataset.from";
             var highlightedTabularData = chorus.helpers.withSearchResults(tabularData)
             var instance = tabularData.instance();
             var schema = tabularData.schema();
@@ -327,8 +328,7 @@
                 schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
                 schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString())
             }
-
-            return new Handlebars.SafeString($("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml());
+            return new Handlebars.SafeString($("<span></span>").html(t(label, {location: schemaPieces.join('.')})).outerHtml());
         },
 
         displaySearchMatch: function(attributeName) {

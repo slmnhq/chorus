@@ -821,6 +821,10 @@ describe("chorus.views.Base", function() {
                 expect(this.view.$('.menus > .my_menu')).toExist();
             });
 
+            it("doesn't render the sandbox location", function () {
+                expect(this.view.$(".found_in")).not.toExist();
+            });
+
             context("when an imageUrl is provided", function() {
                 beforeEach(function() {
                     this.view.options.imageUrl = "edc/image/foo/bar.png";
@@ -840,6 +844,20 @@ describe("chorus.views.Base", function() {
                     it("sets the title on the image", function() {
                         expect(this.view.$(".icon")).toHaveAttr("title", "a title")
                     });
+                });
+            });
+
+            context("when sandbox is provided", function () {
+                beforeEach(function () {
+                    this.workspace = newFixtures.workspace();
+                    this.view.options.sandbox = this.workspace.sandbox();
+                    this.view.render();
+                });
+                it("shows the location of the sandbox", function () {
+                    expect(this.view.$(".found_in").text()).not.toBeEmpty();
+                    expect(this.view.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                    expect(this.view.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
+                    expect(this.view.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
                 });
             });
         })

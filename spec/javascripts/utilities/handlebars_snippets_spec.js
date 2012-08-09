@@ -849,6 +849,17 @@ describe("handlebars", function() {
                     expect($(this.result).find('a')).not.toExist();
                 });
             });
+
+            context("when user provided a label", function () {
+                beforeEach(function() {
+                    this.model = fixtures.tabularData()
+                    this.result = Handlebars.helpers.tabularDataLocation(this.model, 'workspace.sandbox_schema').toString();
+                });
+
+                it("includes the label text", function() {
+                    expect($(this.result)).toContainTranslation('workspace.sandbox_schema', {location: ''});
+                });
+            });
         });
 
         describe("humanizedTabularDataType", function() {
