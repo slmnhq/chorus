@@ -61,9 +61,10 @@ RSpec.configure do |config|
 
   config.treat_symbols_as_metadata_keys_with_true_values = true
 
-  config.before(:suite) do
-    GpdbIntegration.drop_gpdb
-  end
+  # Temporarily commented out until this is fixed
+  #config.before(:suite) do
+  #  GpdbIntegration.drop_gpdb
+  #end
 
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
