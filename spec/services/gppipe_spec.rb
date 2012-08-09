@@ -38,7 +38,7 @@ describe Gppipe, :database_integration => true do
 
   let(:src_table) { "candy" }
   let(:dst_table) { "dst_candy" }
-  let(:table_def) { '"id" integer, "name" text, "id2" integer, PRIMARY KEY("id2", "id")' }
+  let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { "" }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
@@ -116,8 +116,8 @@ describe Gppipe, :database_integration => true do
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
       gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2) values (1, 'marsbar', 3);")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2) values (2, 'kitkat', 4);")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
@@ -131,7 +131,7 @@ describe Gppipe, :database_integration => true do
     end
 
     context "with distribution key" do
-      let(:distrib_def) { 'DISTRIBUTED BY("id2")' }
+      let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
 
       it "should move data from candy to dst_candy and have the correct primary key and distribution key" do
         gp_pipe.run
@@ -148,7 +148,8 @@ describe Gppipe, :database_integration => true do
         PRIMARYKEYSQL
 
         gpdb2.exec_query(primary_key_sql)[0]['attname'].should == 'id2'
-        gpdb2.exec_query(primary_key_sql)[1]['attname'].should == 'id'
+        gpdb2.exec_query(primary_key_sql)[1]['attname'].should == 'id3'
+        gpdb2.exec_query(primary_key_sql)[2]['attname'].should == 'id'
 
         distribution_key_sql = <<-DISTRIBUTION_KEY_SQL
           SELECT attname
@@ -161,6 +162,7 @@ describe Gppipe, :database_integration => true do
 
         # defaults to the first one
         gpdb2.exec_query(distribution_key_sql)[0]['attname'].should == 'id2'
+        gpdb2.exec_query(distribution_key_sql)[1]['attname'].should == 'id3'
       end
     end
 
@@ -248,8 +250,6 @@ describe Gppipe, :database_integration => true do
 
   it "has configurable gpfdist/gpfdists"
   it "only sets DISTRIBUTED RANDOMLY when there is no primary key"
-  it "multiple primary keys or distribution keys"
-  # When there is both a PRIMARY KEY, and a DISTRIBUTED BY clause, the DISTRIBUTED BY clause must be equal to or a left-subset of the PRIMARY KEY
 
   it "does not use special characters in the pipe names" do
     gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)
