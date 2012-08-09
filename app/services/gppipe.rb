@@ -2,7 +2,11 @@ require 'fileutils'
 require 'timeout'
 
 class Gppipe
-  GPFDIST_PIPE_DIR = File.join(Rails.root, '/tmp/gpfdist/')
+  GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
+  GPFDIST_URL = Chorus::Application.config.chorus['gpfdist.url']
+  GPFDIST_WRITE_PORT = Chorus::Application.config.chorus['gpfdist.write_port']
+  GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
+
   GPFDIST_TIMEOUT_SECONDS = 600
 
   def self.timeout_seconds
@@ -45,7 +49,7 @@ class Gppipe
 
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
-      pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
+      pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
       empty_table = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0)
       # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
       table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
@@ -59,11 +63,11 @@ class Gppipe
           dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
 
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://#{GPFDIST_URL}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
             src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname});")
           end
 
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://#{GPFDIST_URL}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema_name}\".#{pipe_name}_r);")
 
           thr.join

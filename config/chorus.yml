@@ -16,9 +16,9 @@ file_sizes_mb:
   max_upload_size_megabytes: 100
 
 gpfdist:
-  url: "localhost"
-  write_port: 8180
-  read_port: 8181
+  url: "gillette"
+  write_port: 8000
+  read_port: 8001
   data_dir: "/tmp"
 
 ldap:

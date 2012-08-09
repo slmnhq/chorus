@@ -70,7 +70,7 @@ describe Gppipe, :database_integration => true do
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
-    xit "should move data from candy to dst_candy" do
+    it "should move data from candy to dst_candy" do
       gp_pipe.run
 
       gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
@@ -82,7 +82,7 @@ describe Gppipe, :database_integration => true do
         stub(gp_pipe.src_conn).exec_query { sleep(10); raise Exception, "test failed - no timeout" }
       end
 
-      xit "times out the query and raises a Timeout exception" do
+      it "times out the query and raises a Timeout exception" do
         expect { gp_pipe.run }.to raise_exception(Timeout::Error)
       end
     end
@@ -92,7 +92,7 @@ describe Gppipe, :database_integration => true do
         gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}#{table_def}")
       end
 
-      xit "cleans up on an exception (in this case the dst table exists already)" do
+      it "cleans up on an exception (in this case the dst table exists already)" do
         expect { gp_pipe.run }.to raise_exception
         count_result = gpdb1.exec_query("select count(*) from pg_tables where schemaname = '#{schema.name}' and tablename = '#{gp_pipe.pipe_name}';")
         count_result[0]['count'].should == 0
@@ -105,7 +105,7 @@ describe Gppipe, :database_integration => true do
       let(:src_table) { "2candy" }
       let(:dst_table) { "2dst_candy" }
 
-      xit "single quotes table and schema names if they have weird chars" do
+      it "single quotes table and schema names if they have weird chars" do
         gp_pipe.run
 
         gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
