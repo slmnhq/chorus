@@ -263,22 +263,24 @@ describe Dataset do
   end
 
   describe "#all_rows_sql" do
+    it "returns the correct sql" do
+      dataset = datasets(:bobs_table)
+      dataset.all_rows_sql().strip.should == %Q{SELECT * FROM "#{dataset.name}"}
+    end
+
     context "with a limit" do
       it "uses the limit" do
         dataset = datasets(:bobs_table)
         dataset.all_rows_sql(10).should match "LIMIT 10"
       end
     end
-    it "behaves as expected" do
-      dataset = datasets(:bobs_table)
-      dataset.all_rows_sql().should match dataset.name
-    end
   end
 end
 
 describe Dataset::Query, :database_integration => true do
-  let(:account) { real_gpdb_account }
-  let(:schema) { GpdbSchema.find_by_name('test_schema') }
+  let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:schema) { database.schemas.find_by_name('test_schema') }
 
   before do
     refresh_chorus
@@ -302,7 +304,9 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "when 'public' schema does not exist" do
-      let(:schema) { GpdbSchema.find_by_name('non_public_schema') }
+      let(:database_name) { "#{GpdbIntegration.database_name}_no_public_schema" }
+      let(:database) { GpdbDatabase.find_by_name_and_instance_id(database_name, GpdbIntegration.real_gpdb_instance)}
+      let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 
       it "works" do
@@ -347,10 +351,7 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "with correct input" do
-      let(:account) { real_gpdb_account }
-      let(:user) { users(:carly) }
-      let(:schema) { GpdbSchema.find_by_name('test_schema') }
-      let(:src_table) { schema.datasets.find_by_name('base_table1') }
+      let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:sandbox) { schema } # For testing purposes, src schema = sandbox
       let(:options) {
         {
@@ -381,7 +382,7 @@ describe Dataset::Query, :database_integration => true do
         end
 
         it "creates the new table" do
-          GpdbTable.find_by_name(options["to_table"]).should be_a(GpdbTable)
+          database.find_dataset_in_schema(options["to_table"], schema.name).should be_a(GpdbTable)
         end
 
         it "copies the constraints" do
@@ -443,9 +444,7 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "#import with exception" do
-      let(:account) { real_gpdb_account }
-      let(:schema) { GpdbSchema.find_by_name('test_schema') }
-      let(:src_table) { GpdbTable.find_by_name('base_table1') }
+      let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:options) {
         {
             "to_table" => "the_new_table",

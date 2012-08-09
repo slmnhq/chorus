@@ -9,9 +9,16 @@ describe CsvImporter, :database_integration => true do
       any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { datasets(:bobs_table) } }
     end
 
-    let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    after do
+      schema.with_gpdb_connection(account) do |connection|
+        connection.exec_query("DROP TABLE IF EXISTS another_new_table_from_csv,new_table_from_csv,new_table_from_csv_2,table_to_append_to,table_to_replace,test_import_existing_2")
+      end
+    end
+
+    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
-    let(:account) { real_gpdb_account }
+    let(:account) { GpdbIntegration.real_gpdb_account }
     let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
 
     def fetch_from_gpdb(sql)

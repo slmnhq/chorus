@@ -187,7 +187,7 @@ describe Instance do
     context "with database integration", :database_integration => true do
       let(:instance) { account_with_access.instance }
       let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
-      let(:account_with_access) { real_gpdb_account }
+      let(:account_with_access) { GpdbIntegration.real_gpdb_account }
       before do
         refresh_chorus
       end
@@ -252,7 +252,7 @@ describe Instance do
   end
 
   describe "#databases", :database_integration => true do
-    let(:account) { real_gpdb_account }
+    let(:account) { GpdbIntegration.real_gpdb_account }
 
     subject { account.instance }
 

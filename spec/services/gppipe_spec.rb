@@ -6,9 +6,10 @@ describe Gppipe, :database_integration => true do
   end
 
   # In the test, use gpfdist to move data between tables in the same schema and database
-  let(:instance_account1) { real_gpdb_account }
+  let(:instance_account1) { GpdbIntegration.real_gpdb_account }
   let(:user) { instance_account1.owner }
-  let(:schema) { GpdbSchema.find_by_name('test_schema') }
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:schema) { database.schemas.find_by_name('test_schema') }
 
   let(:gpdb1) do
     ActiveRecord::Base.postgresql_connection(

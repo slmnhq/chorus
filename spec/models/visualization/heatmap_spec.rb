@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Visualization::Heatmap do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'public') }
-  let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '1000_songs_test_1', :schema => schema) }
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:dataset) { database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
   let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
   let(:relation) { %Q{"#{schema.name}"."#{dataset.name}"} }
 
@@ -18,7 +19,7 @@ describe Visualization::Heatmap do
 
   describe "#fetch!", :database_integration => true do
     let(:dataset) { GpdbTable.find_by_name!('heatmap_table') }
-    let(:instance_account) { real_gpdb_account }
+    let(:instance_account) { GpdbIntegration.real_gpdb_account }
 
     before do
       refresh_chorus

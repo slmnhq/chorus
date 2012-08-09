@@ -4,8 +4,9 @@ describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
   describe ".preview_dataset", :database_integration => true do
-    let(:account) { real_gpdb_account }
-    let(:table) { GpdbTable.find_by_name("pg_all_types") }
+    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
 
     before do
       refresh_chorus

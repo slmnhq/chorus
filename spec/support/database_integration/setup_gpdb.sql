@@ -158,8 +158,8 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
 
   \dtvs test_schema2.*
 
-  CREATE SCHEMA heatmap_test_schema;
-    SET search_path TO 'heatmap_test_schema';
+  CREATE SCHEMA test_schema3;
+    SET search_path TO 'test_schema3';
 
     CREATE TABLE heatmap_table
     (id integer, column1 integer, column2 integer, category text)
@@ -176,7 +176,17 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
     INSERT INTO heatmap_table VALUES ( 9, 6, 6, 'green');
     ANALYZE heatmap_table;
 
-  \dtvs heatmap_test_schema.*
+    CREATE TABLE stream_table_with_quotes
+    (id integer, col1 text, col2 text, col3 text)
+    DISTRIBUTED BY (id);
+    INSERT INTO stream_table_with_quotes VALUES ( 1, 'with"double"quotes', 'with''single''quotes', 'with,comma');
+    ANALYZE stream_table_with_quotes;
+
+    CREATE TABLE stream_empty_table
+    (id integer, col1 text, col2 text, col3 text)
+    DISTRIBUTED BY (id);
+
+  \dtvs test_schema3.*
 
 
 DROP DATABASE IF EXISTS "gpdb_test_database_no_public_schema";

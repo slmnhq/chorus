@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Visualization::Timeseries, :database_integration => true do
-  let(:account) { real_gpdb_account }
-  let(:dataset) { GpdbTable.find_by_name!('base_table1') }
+  let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
   let(:visualization) do
     Visualization::Timeseries.new(dataset, {
