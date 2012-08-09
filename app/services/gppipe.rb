@@ -56,17 +56,15 @@ class Gppipe
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
-      empty_table = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
+      no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
       # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
       table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
       table_definition = tabledef_from_query(table_def_rows)
 
-      if empty_table
-        dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
-      else
+      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
+      unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
-          dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
 
           thr = Thread.new do
             src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://#{GPFDIST_URL}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
