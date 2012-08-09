@@ -85,7 +85,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
+            this.sidebar = new chorus.views.DatasetSidebar(_.extend(this.sidebarOptions, { defaultTab: "statistics"}));
             this.sidebar.setDataset(this.dataset);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);

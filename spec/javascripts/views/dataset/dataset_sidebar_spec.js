@@ -1128,4 +1128,27 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
     });
+
+    describe("tabControl", function () {
+        context("when sidebarOptions contains defaultTab", function () {
+            beforeEach(function () {
+                this.view = new chorus.views.DatasetSidebar({ defaultTab: "statistics"});
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                this.view.render();
+            });
+            it("should display statistics/info tab by default", function () {
+                expect(this.view.$(".tabs .selected").text()).toContainTranslation("tabs.statistics");
+            });
+        });
+
+        context("when sidebarOptions does not contain defaultTab", function () {
+            it("should display activities tab by default", function () {
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                this.view.render();
+                expect(this.view.$(".tabs .selected").text()).toContainTranslation("tabs.activity");
+            });
+        });
+    });
 });

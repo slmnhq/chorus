@@ -24,8 +24,10 @@
         chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
         chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this)
         chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this)
-        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this)
-        this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
+        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this);
+
+        var tabs = this.options && this.options.defaultTab == 'statistics' ? ['statistics', 'activity'] : ['activity', 'statistics'];
+        this.tabs = new chorus.views.TabControl(tabs);
     },
 
     render: function() {

@@ -50,8 +50,12 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("sets the main content as persistent", function() {
                         expect(this.page.mainContent.persistent).toBeTruthy();
-                    })
-                })
+                    });
+
+                    it("set the default tab flag to statistics", function () {
+                        expect(this.page.sidebar.options.defaultTab).toBe("statistics");
+                    });
+                });
 
                 context("with errors", function() {
                     beforeEach(function() {

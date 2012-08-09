@@ -243,6 +243,13 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetImport);
                         });
                     });
+
+                    it("displays the sandbox location in the header", function () {
+                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
+                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
+                    });
+
                 });
 
                 context("when the account loads and is empty and the instance account maps are individual", function() {
