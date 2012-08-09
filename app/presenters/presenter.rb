@@ -16,8 +16,8 @@ class Presenter
     collection.map { |model| present_model(model, view_context, options) }
   end
 
-  def present(model)
-    self.class.present(model, @view_context)
+  def present(model, options={})
+    self.class.present(model, @view_context, options)
   end
 
   def initialize(model, view_context, options={})

@@ -81,25 +81,23 @@ describe EventPresenter, :type => :view do
       end
 
       context "with an attachment" do
+        let(:event) { FactoryGirl.create(:note_on_workspace_event) }
         let(:attachment) { NoteAttachment.first }
         let(:dataset) { datasets(:bobs_table) }
+        let(:current_user) { users(:bob) }
 
         it "contains the attachment" do
-          stub(event).attachments do
-            [
-              attachment
-            ]
-            end
-          stub(event).datasets do
-            [
-                dataset
-            ]
-          end
+          stub(view).current_user { current_user }
+          event.workspace.sandbox = dataset.schema
+          event.workspace.save
+          stub(event).attachments { [attachment] }
+          stub(event).datasets { [dataset] }
           hash = subject.to_hash
           hash[:attachments].should be_present
           hash[:attachments][0][:entity_type].should == 'file'
           hash[:attachments][1][:entity_type].should == 'dataset'
           hash[:attachments][1][:workspace].should == event.workspace
+          hash[:attachments][1][:type].should == "SANDBOX_TABLE"
         end
       end
     end

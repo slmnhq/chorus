@@ -58,9 +58,9 @@ class EventPresenter < Presenter
       end
       datasets = model.datasets
       datasets.each do |dataset|
-        model_hash = present(dataset)
-        model_hash.merge!({:entity_type => 'dataset'} )
+        model_hash = present(dataset, { :workspace => model.workspace })
         model_hash.merge!({:workspace => model.workspace}) if model.workspace
+        model_hash.merge!({:entity_type => 'dataset'} )
         hash << model_hash
       end
     end

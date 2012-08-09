@@ -24,6 +24,11 @@ describe Presenter, :type => :view do
     context "with a single model" do
       let(:object_to_present) { FactoryGirl.build(:user) }
 
+      it "passes its options on" do
+        mock(Presenter).present_model(object_to_present, { view: true }, { test: true })
+        Presenter.new(object_to_present, { view: true }).present(object_to_present, { test: true })
+      end
+
       it "presents a hash of the model" do
         json[:username].should == object_to_present.username
       end
