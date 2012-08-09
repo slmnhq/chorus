@@ -6,8 +6,7 @@ describe GpdbDatabase do
     let(:account) { FactoryGirl.create(:instance_account, :instance => instance) }
 
     before(:each) do
-      stub_git (account,
-                GpdbDatabase::DATABASE_NAMES_SQL => [
+      stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
                     {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
                 ]
       )

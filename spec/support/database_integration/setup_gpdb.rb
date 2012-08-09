@@ -1,10 +1,6 @@
 require "tempfile"
 
 module GpdbIntegration
-  #CONFIG          = YAML.load_file(File.expand_path("../#{config_file}", __FILE__))
-  #INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == host_name }
-  #ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
-
   def self.execute_sql(sql_file)
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 
