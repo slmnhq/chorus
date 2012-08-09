@@ -139,31 +139,23 @@ class Gppipe
     )
   end
 
-    #SELECT attname FROM
-    #(SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn FROM pg_constraint where conrelid = 'public.candyprimkey5'::regclass and contype='p') y,
-    #pg_attribute WHERE attrelid = 'public.candyprimkey5'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
-
   private
 
   def primary_key_sql
     <<-PRIMARYKEYSQL
       SELECT attname
-      FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
-      FROM  (SELECT conkey AS a
+      FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
       FROM   pg_constraint where conrelid = '#{src_schema_name}.#{src_table}'::regclass and contype='p'
-      ) x
-      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
     PRIMARYKEYSQL
   end
 
   def distribution_key_sql
     <<-DISTRIBUTION_KEY_SQL
       SELECT attname
-      FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
-      FROM  (SELECT attrnums AS a
+      FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
       FROM   gp_distribution_policy where localoid = '#{src_schema_name}.#{src_table}'::regclass
-      ) x
-      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
     DISTRIBUTION_KEY_SQL
   end
 end
