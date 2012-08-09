@@ -6,6 +6,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.workspace.fetch();
+        this.bindings.add(this.workspace, "loaded", this.entriesFetched);
         this.dependOn(this.workspace, this.workspaceLoaded);
 
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
@@ -42,7 +43,6 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
                 placeholder: t("workspace.search"),
                 onTextChange: onTextChangeFunction
             },
-            workspace: this.workspace,
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
@@ -72,6 +72,11 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         }, this)
 
         this.sidebar = new chorus.views.TabularDataSidebar({ workspace: this.workspace, listMode: true });
+    },
+
+    entriesFetched: function() {
+        this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
+        this.render();
     },
 
     crumbs: function() {
