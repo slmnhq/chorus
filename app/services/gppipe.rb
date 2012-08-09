@@ -3,7 +3,6 @@ require 'timeout'
 
 class Gppipe
   GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
-  GPFDIST_URL = Chorus::Application.config.chorus['gpfdist.url']
   GPFDIST_WRITE_PORT = Chorus::Application.config.chorus['gpfdist.write_port']
   GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
 
@@ -11,6 +10,10 @@ class Gppipe
 
   def self.timeout_seconds
     GPFDIST_TIMEOUT_SECONDS
+  end
+
+  def self.gpfdist_url
+    Chorus::Application.config.chorus['gpfdist.url']
   end
 
   attr_reader :src_schema_name, :src_table, :dst_schema_name, :dst_table
@@ -95,11 +98,13 @@ class Gppipe
           system "mkfifo #{pipe_file}"
 
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://#{GPFDIST_URL}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition})
+                                 LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
             src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname} #{limit_clause});")
           end
 
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://#{GPFDIST_URL}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition})
+                               LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema_name}\".#{pipe_name}_r);")
 
           thr.join

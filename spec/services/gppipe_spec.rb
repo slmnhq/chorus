@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Gppipe, :database_integration => true do
   before do
     refresh_chorus
+    stub(Gppipe).gpfdist_url { Socket.gethostname }
   end
 
   # In the test, use gpfdist to move data between tables in the same schema and database
@@ -258,8 +259,6 @@ describe Gppipe, :database_integration => true do
       gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 0
     end
   end
-
-  it "has configurable gpfdist/gpfdists"
 
   it "does not use special characters in the pipe names" do
     gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)
