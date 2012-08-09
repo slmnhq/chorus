@@ -3,11 +3,7 @@ class NoteAttachmentsController < ApplicationController
     event = Events::Base.find(params[:note_id])
     authorize! :create, NoteAttachment, event
 
-    file_to_upload = params[:fileToUpload][:contents]
-    filename = file_to_upload.original_filename
-    contents = params[:fileToUpload][:contents]
-    file = build_new_file(filename, contents)
-    event.create_attachments(file)
+    event.create_attachments(params[:fileToUpload][:contents])
     event.reload
     present event
   end

@@ -3,12 +3,12 @@ require "spec_helper"
 describe Events::NoteAccess do
   let(:fake_controller) { ApplicationController.new }
   let(:access) { Events::NoteAccess.new(fake_controller) }
-  let(:note) { Events::NOTE_ON_GREENPLUM_INSTANCE.first }
+  let(:note) { events(:note_on_greenplum) }
 
   describe "#destroy?" do
     context " when the current user is the note's actor" do
       it "returns true" do
-        stub(fake_controller).current_user { note.actor }
+        stub(fake_controller).current_user { users(:bob) }
         access.destroy?(note).should be_true
       end
     end
