@@ -1,4 +1,4 @@
-web:	rails s
+web:	bundle exec mizuno -p 3000
 worker: script/rails runner script/start_worker.rb
 clock:  script/start_clock.rb
 jasmine: bundle exec rake jasmine
