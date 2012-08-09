@@ -365,7 +365,7 @@ describe Dataset::Query, :database_integration => true do
         let(:user) { account.owner }
 
         it "creates a correct gppipe" do
-          mock(Gppipe).run_new(schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id)
+          mock(QC).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id)
           src_table.gpfdist_import(options, sandbox, user)
         end
       end

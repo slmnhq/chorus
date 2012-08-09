@@ -136,7 +136,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def gpfdist_import(options, dst_schema, user)
-    Gppipe.run_new(schema.id, name, dst_schema.id, options['to_table'], user.id)
+    QC.enqueue('Gppipe.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id)
   end
 
   def preview_sql
