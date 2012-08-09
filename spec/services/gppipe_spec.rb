@@ -134,6 +134,13 @@ describe Gppipe, :database_integration => true do
       gp_pipe.table_definition_with_keys.should == table_def
     end
 
+    context ".run_new" do
+      it "creates a new pipe and runs it" do
+        Gppipe.run_new(schema.id, src_table, schema.id, dst_table, user.id)
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+      end
+    end
+
     context "with distribution key" do
       let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
 

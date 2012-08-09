@@ -19,6 +19,14 @@ class Gppipe
   attr_reader :src_database_name, :dst_database_name
   attr_reader :row_limit
 
+  def self.run_new(src_schema_id, src_table, dst_schema_id, dst_table, user_id, row_limit = nil)
+    src_schema = GpdbSchema.find(src_schema_id)
+    dst_schema = GpdbSchema.find(dst_schema_id)
+    user = User.find(user_id)
+    pipe = Gppipe.new(src_schema, src_table, dst_schema, dst_table, user, row_limit)
+    pipe.run
+  end
+
   def initialize(src_schema, src_table, dst_schema, dst_table, user, row_limit = nil)
     @src_schema_name = src_schema.name
     @src_database_name = src_schema.database.name
