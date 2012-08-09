@@ -38,7 +38,8 @@ describe Gppipe, :database_integration => true do
 
   let(:src_table) { "candy" }
   let(:dst_table) { "dst_candy" }
-  let(:table_def) { '"id" integer, "name" text, PRIMARY KEY("id")' }
+  let(:table_def) { '"id" integer, "name" text, "id2" integer, PRIMARY KEY("id2", "id")' }
+  let(:distrib_def) { "" }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
 
@@ -56,7 +57,7 @@ describe Gppipe, :database_integration => true do
     let(:table_def) { '' }
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def}) #{distrib_def};")
     end
 
     after do
@@ -93,12 +94,30 @@ describe Gppipe, :database_integration => true do
     end
   end
 
+  context "for a table with a composite primary key" do
+    let(:table_def) { '"id" integer, "id2" integer, PRIMARY KEY("id", "id2")' }
+
+    before do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
+    end
+
+    after do
+      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+    end
+
+    it "should have the correct table definition with keys" do
+      gp_pipe.table_definition_with_keys.should == table_def
+    end
+  end
+
+
   context "actually running the query" do
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
       gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (2, 'kitkat');")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2) values (1, 'marsbar', 3);")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2) values (2, 'kitkat', 4);")
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
 
@@ -111,24 +130,38 @@ describe Gppipe, :database_integration => true do
       gp_pipe.table_definition_with_keys.should == table_def
     end
 
-    it "should move data from candy to dst_candy and have the correct primary key" do
-      gp_pipe.run
+    context "with distribution key" do
+      let(:distrib_def) { 'DISTRIBUTED BY("id2")' }
 
-      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+      it "should move data from candy to dst_candy and have the correct primary key and distribution key" do
+        gp_pipe.run
 
-      sql = <<-PRIMARYKEYSQL
-        SELECT
-          pg_attribute.attname
-        FROM pg_index, pg_class, pg_attribute
-        WHERE
-          pg_class.oid = '#{schema.name}.#{dst_table}'::regclass AND
-          indrelid = pg_class.oid AND
-          pg_attribute.attrelid = pg_class.oid AND
-          pg_attribute.attnum = any(pg_index.indkey)
-          AND indisprimary;
-      PRIMARYKEYSQL
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
 
-      gpdb2.exec_query(sql)[0]['attname'].should == 'id'
+        primary_key_sql = <<-PRIMARYKEYSQL
+          SELECT attname
+          FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
+          FROM  (SELECT conkey AS a
+          FROM   pg_constraint where conrelid = '#{schema.name}.#{dst_table}'::regclass and contype='p'
+          ) x
+          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{dst_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+        PRIMARYKEYSQL
+
+        gpdb2.exec_query(primary_key_sql)[0]['attname'].should == 'id2'
+        gpdb2.exec_query(primary_key_sql)[1]['attname'].should == 'id'
+
+        distribution_key_sql = <<-DISTRIBUTION_KEY_SQL
+          SELECT attname
+          FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
+          FROM  (SELECT attrnums AS a
+          FROM   gp_distribution_policy where localoid = '#{schema.name}.#{dst_table}'::regclass
+          ) x
+          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{dst_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+        DISTRIBUTION_KEY_SQL
+
+        # defaults to the first one
+        gpdb2.exec_query(distribution_key_sql)[0]['attname'].should == 'id2'
+      end
     end
 
     context "limiting the number of rows" do
@@ -214,6 +247,9 @@ describe Gppipe, :database_integration => true do
   end
 
   it "has configurable gpfdist/gpfdists"
+  it "only sets DISTRIBUTED RANDOMLY when there is no primary key"
+  it "multiple primary keys or distribution keys"
+  # When there is both a PRIMARY KEY, and a DISTRIBUTED BY clause, the DISTRIBUTED BY clause must be equal to or a left-subset of the PRIMARY KEY
 
   it "does not use special characters in the pipe names" do
     gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)

@@ -42,9 +42,15 @@ class Gppipe
 
   def table_definition_with_keys
     return @table_definition_with_keys if @table_definition_with_keys
-    primary_key_row = src_conn.exec_query(primary_key_sql)[0]
-    primary_key_clause = primary_key_row.nil? ? '' : ", PRIMARY KEY(\"#{primary_key_row['attname']}\")"
+    primary_key_rows = src_conn.exec_query(primary_key_sql)
+    primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
     @table_definition_with_keys = "#{table_definition}#{primary_key_clause}"
+  end
+
+  def quote_and_join(collection)
+    collection.map do |element|
+      "\"#{element['attname']}\""
+    end.join(', ')
   end
 
   def limit_clause
@@ -63,12 +69,19 @@ class Gppipe
     @src_fullname ||= "\"#{src_schema_name}\".\"#{src_table}\""
   end
 
+  def distribution_key_clause
+    return @distribution_key_clause if @distribution_key_clause
+    rows = src_conn.exec_query(distribution_key_sql)
+    clause = rows.empty? ? '' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
+    @distribution_key_clause = clause
+  end
+
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
       no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
 
-      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys})")
+      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
@@ -126,19 +139,31 @@ class Gppipe
     )
   end
 
+    #SELECT attname FROM
+    #(SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn FROM pg_constraint where conrelid = 'public.candyprimkey5'::regclass and contype='p') y,
+    #pg_attribute WHERE attrelid = 'public.candyprimkey5'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
+
   private
 
   def primary_key_sql
     <<-PRIMARYKEYSQL
-    SELECT
-      pg_attribute.attname
-    FROM pg_index, pg_class, pg_attribute
-    WHERE
-      pg_class.oid = '#{src_schema_name}.#{src_table}'::regclass AND
-      indrelid = pg_class.oid AND
-      pg_attribute.attrelid = pg_class.oid AND
-      pg_attribute.attnum = any(pg_index.indkey)
-      AND indisprimary;
+      SELECT attname
+      FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
+      FROM  (SELECT conkey AS a
+      FROM   pg_constraint where conrelid = '#{src_schema_name}.#{src_table}'::regclass and contype='p'
+      ) x
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
     PRIMARYKEYSQL
+  end
+
+  def distribution_key_sql
+    <<-DISTRIBUTION_KEY_SQL
+      SELECT attname
+      FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
+      FROM  (SELECT attrnums AS a
+      FROM   gp_distribution_policy where localoid = '#{src_schema_name}.#{src_table}'::regclass
+      ) x
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+    DISTRIBUTION_KEY_SQL
   end
 end
