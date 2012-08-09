@@ -41,6 +41,17 @@ describe Gppipe, :database_integration => true do
   let(:table_def) { "(id integer, name text)" }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
+
+  it "has an empty limit clause for no limit passed" do
+    pipe = Gppipe.new(schema, src_table, schema, dst_table, user)
+    pipe.limit_clause.should == ''
+  end
+
+  it "has a LIMIT 500 for row_limit = 500" do
+    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, 500)
+    pipe.limit_clause.should == 'LIMIT 500'
+  end
+
   it "should create a tabledef from an information_schema query" do
     result = [{"column_name"=>"id", "data_type"=>"integer"}, {"column_name"=>"name", "data_type"=>"text"}]
     gp_pipe.tabledef_from_query(result).should == '"id" integer, "name" text'
@@ -61,6 +72,7 @@ describe Gppipe, :database_integration => true do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
       gpdb1.exec_query("create table #{gp_pipe.src_fullname}#{table_def};")
       gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (1, 'marsbar');")
+      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name) values (2, 'kitkat');")
 
       gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
     end
@@ -73,7 +85,32 @@ describe Gppipe, :database_integration => true do
     it "should move data from candy to dst_candy" do
       gp_pipe.run
 
-      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
+      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+    end
+
+    context "limiting the number of rows" do
+      let(:row_limit) { 1 }
+      let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, row_limit) }
+
+      it "should only have the first row" do
+        gp_pipe.run
+
+        rows = gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")
+        rows.length.should == 1
+      end
+
+      context "with a row limit of 0" do
+        let(:row_limit) { 0 }
+
+        it "doesn't hang gpfdist, by treating the source like an empty table" do
+          stub(Gppipe).timeout_seconds { 10 }
+          Timeout::timeout(5) do
+            gp_pipe.run
+          end
+
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 0
+        end
+      end
     end
 
     context "a sql query blocks forever" do
@@ -108,7 +145,7 @@ describe Gppipe, :database_integration => true do
       it "single quotes table and schema names if they have weird chars" do
         gp_pipe.run
 
-        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 1
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
       end
     end
   end
