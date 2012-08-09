@@ -1,4 +1,4 @@
-require_relative "base"
+require File.join(File.dirname(__FILE__), "base")
 
 module Events
   class GREENPLUM_INSTANCE_CREATED < Base

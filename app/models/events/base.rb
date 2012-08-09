@@ -112,5 +112,5 @@ module Events
   end
 end
 
-require_relative 'note'
-require_relative 'types'
+require File.join(File.dirname(__FILE__), 'note')
+require File.join(File.dirname(__FILE__), 'types')
