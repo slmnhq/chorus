@@ -8,9 +8,9 @@ gem 'paperclip', '3.0.4'
 gem 'queue_classic', :github => "pivotal-leopold/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
-gem 'sunspot_rails', '2.0.0.pre.120417'
+gem 'sunspot_rails', '2.0.0.pre.120720'
 gem 'jetpack', :github => "pivotal-leopold/jetpack", :require => false
-gem 'sunspot_solr', '2.0.0.pre.120417'
+gem 'sunspot_solr', '2.0.0.pre.120720'
 gem 'quiet_assets'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
