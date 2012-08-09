@@ -39,7 +39,8 @@ describe ChorusConfig do
       config.config = {
           'gpfdist' => {
               'url' => 'localhost',
-              'port' => 8181,
+              'write_port' => 8181,
+              'read_port' => 8180,
               'data_dir' => '/tmp'
           }
       }
@@ -47,11 +48,12 @@ describe ChorusConfig do
     end
 
     it "returns false if any of the gpfdist keys are missing" do
-      ['url', 'port', 'data_dir'].each do |gpfdist_key|
+      ['url', 'write_port', 'read_port', 'data_dir'].each do |gpfdist_key|
         config.config = {
             'gpfdist' => {
                 'url' => 'localhost',
-                'port' => 8181,
+                'write_port' => 8181,
+                'read_port' => 8180,
                 'data_dir' => '/tmp'
             }
         }

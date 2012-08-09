@@ -17,7 +17,8 @@ file_sizes_mb:
 
 gpfdist:
   url: "localhost"
-  port: 8181
+  write_port: 8180
+  read_port: 8181
   data_dir: "/tmp"
 
 ldap:
