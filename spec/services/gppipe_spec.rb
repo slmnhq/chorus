@@ -73,12 +73,12 @@ describe Gppipe, :database_integration => true do
     end
   end
 
-  context "for a table with 1 column and no primary key" do
+  context "for a table with 1 column and no primary key, distributed randomly" do
     let(:table_def) { '"2id" integer' }
 
     before do
       gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
+      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def}) DISTRIBUTED RANDOMLY;")
     end
 
     after do
@@ -91,6 +91,10 @@ describe Gppipe, :database_integration => true do
 
     it "should have the correct table definition with keys" do
       gp_pipe.table_definition_with_keys.should == table_def
+    end
+
+    it "should have DISTRIBUTED RANDOMLY for its distribution key clause" do
+      gp_pipe.distribution_key_clause.should == "DISTRIBUTED RANDOMLY"
     end
   end
 
@@ -249,7 +253,6 @@ describe Gppipe, :database_integration => true do
   end
 
   it "has configurable gpfdist/gpfdists"
-  it "only sets DISTRIBUTED RANDOMLY when there is no primary key"
 
   it "does not use special characters in the pipe names" do
     gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)

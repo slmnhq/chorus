@@ -72,7 +72,7 @@ class Gppipe
   def distribution_key_clause
     return @distribution_key_clause if @distribution_key_clause
     rows = src_conn.exec_query(distribution_key_sql)
-    clause = rows.empty? ? '' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
+    clause = rows.empty? ? 'DISTRIBUTED RANDOMLY' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
     @distribution_key_clause = clause
   end
 
