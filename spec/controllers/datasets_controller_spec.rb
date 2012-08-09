@@ -109,7 +109,8 @@ describe DatasetsController do
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
-        response.code.should == "201"
+        # We haven't implemented the import status yet - this is just to make the UI happy (BL and CH)
+        response.code.should == "200"
       end
 
       it "should return error for archived workspaces" do
@@ -156,7 +157,7 @@ describe DatasetsController do
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
-        response.code.should == "201"
+        response.code.should == "200"
       end
     end
   end

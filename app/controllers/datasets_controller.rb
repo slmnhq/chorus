@@ -32,7 +32,7 @@ class DatasetsController < GpdbController
       end
 
       create_success_event(params[:dataset_import]["to_table"], src_table, workspace)
-      head :created
+      render :json => { :status => "UNIMPLEMENTED" }
     rescue Exception => e
       create_failed_event(params[:dataset_import]["to_table"], src_table, workspace, e.message)
       raise e
