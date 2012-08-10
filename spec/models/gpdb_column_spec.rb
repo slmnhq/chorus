@@ -47,7 +47,12 @@ describe GpdbColumn do
     it "gets the column stats for table users" do
       id = subject.first
 
-      id.statistics.should be_a GpdbColumnStatistics
+      stats = id.statistics
+      stats.should be_a GpdbColumnStatistics
+      stats.null_fraction.should be_present
+      stats.number_distinct.should be_present
+      stats.min.should be_present
+      stats.max.should be_present
     end
 
     describe "with fake data" do

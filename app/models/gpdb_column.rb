@@ -7,15 +7,15 @@ class GpdbColumn
       LEFT JOIN pg_description des
         ON a.attrelid = des.objoid AND a.attnum = des.objsubid
       LEFT JOIN pg_namespace n
-        ON n.nspname = '%s'
+        ON n.nspname = %s
       LEFT JOIN pg_class c
         ON c.relnamespace = n.oid
-       AND c.relname = '%s'
+       AND c.relname = %s
       LEFT JOIN pg_stats s
         ON s.attname = a.attname
        AND s.schemaname = n.nspname
        AND s.tablename = c.relname
-      WHERE a.attrelid = '%s'::regclass
+      WHERE a.attrelid = %s::regclass
       AND a.attnum > 0 AND NOT a.attisdropped
     ORDER BY a.attnum;
   SQL
@@ -24,7 +24,7 @@ class GpdbColumn
 
   def self.columns_for(account, table)
     columns_with_stats = table.with_gpdb_connection(account) do |conn|
-      conn.exec_query(COLUMN_METADATA_QUERY % [conn.quote_column_name(table.schema.name), conn.quote_column_name(table.name), conn.quote_column_name(table.name)])
+      conn.exec_query(COLUMN_METADATA_QUERY % [conn.quote(table.schema.name), conn.quote(table.name), conn.quote(table.name)])
     end
 
     columns_with_stats.map.with_index do |raw_row_data, i|
