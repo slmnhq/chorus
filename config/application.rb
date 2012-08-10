@@ -79,5 +79,7 @@ module Chorus
 
     config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
     config.middleware.use Rack::Sendfile
+    config.middleware.delete(::ActionDispatch::RemoteIp)
+    config.middleware.insert_before(::Rails::Rack::Logger, ::ActionDispatch::RemoteIp)
   end
 end
