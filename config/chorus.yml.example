@@ -15,6 +15,7 @@ file_sizes_mb:
   csv_imports:  1
 
 gpfdist:
+  ssl: false
   url: "localhost"
   write_port: 8180
   read_port: 8181

@@ -16,6 +16,10 @@ class Gppipe
     Chorus::Application.config.chorus['gpfdist.url']
   end
 
+  def self.protocol
+    Chorus::Application.config.chorus['gpfdist.ssl'] ? 'gpfdists' : 'gpfdist'
+  end
+
   attr_reader :src_schema_name, :src_table, :dst_schema_name, :dst_table
   attr_reader :src_account, :dst_account
   attr_reader :src_instance, :dst_instance
@@ -99,12 +103,12 @@ class Gppipe
 
           thr = Thread.new do
             src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition})
-                                 LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+                                 LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
             src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname} #{limit_clause});")
           end
 
           dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition})
-                               LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+                               LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema_name}\".#{pipe_name}_r);")
 
           thr.join

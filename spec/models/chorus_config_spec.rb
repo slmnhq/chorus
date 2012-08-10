@@ -41,20 +41,22 @@ describe ChorusConfig do
               'url' => 'localhost',
               'write_port' => 8181,
               'read_port' => 8180,
-              'data_dir' => '/tmp'
+              'data_dir' => '/tmp',
+              'ssl' => false
           }
       }
       config.gpfdist_configured?.should == true
     end
 
     it "returns false if any of the gpfdist keys are missing" do
-      ['url', 'write_port', 'read_port', 'data_dir'].each do |gpfdist_key|
+      ['url', 'write_port', 'read_port', 'data_dir', 'ssl'].each do |gpfdist_key|
         config.config = {
             'gpfdist' => {
                 'url' => 'localhost',
                 'write_port' => 8181,
                 'read_port' => 8180,
-                'data_dir' => '/tmp'
+                'data_dir' => '/tmp',
+                'ssl' => false
             }
         }
         config.config['gpfdist'].delete(gpfdist_key)

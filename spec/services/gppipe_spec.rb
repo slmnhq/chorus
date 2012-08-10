@@ -46,6 +46,9 @@ describe Gppipe, :database_integration => true do
   let(:distrib_def) { "" }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
 
+  it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
+    Gppipe.protocol.should == 'gpfdist'
+  end
 
   it "has an empty limit clause for no limit passed" do
     pipe = Gppipe.new(schema, src_table, schema, dst_table, user)
