@@ -14,8 +14,8 @@ b/rake assets:precompile
 
 echo "starting gpfdist (Linux RHEL5 only)"
 export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
-./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp
-./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp
+./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
+./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp &
 
 # start jasmine
 b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
