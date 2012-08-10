@@ -79,6 +79,11 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.render();
     },
 
+    entriesFetched: function() {
+        this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
+        this.render();
+    },
+
     crumbs: function() {
         return [
             {label: t("breadcrumbs.home"), url: "#/"},

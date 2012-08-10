@@ -16,7 +16,7 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     resourcesLoaded: function() {
-        this.tabs = new chorus.views.TabControl(["activity", "database_function_list", "datasets_and_columns"]);
+        this.tabs = new chorus.views.TabControl(["datasets_and_columns", "database_function_list", "activity"]);
         this.schema = this.model.schema();
 
         this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});

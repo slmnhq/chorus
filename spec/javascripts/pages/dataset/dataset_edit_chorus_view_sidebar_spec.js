@@ -31,5 +31,9 @@ describe("chorus.views.DatasetEditChorusViewSidebar", function() {
             expect(this.view.$('.tab_control .dataset_and_column_list')).toExist();
             expect(this.view.tabs.datasets_and_columns).toBeA(chorus.views.DatasetAndColumnList);
         });
+
+        it("sets the default tab to data tab", function () {
+            expect(this.view.$(".tab_control .selected")).toContainTranslation("tabs.datasets_and_columns");
+        });
     });
 });
