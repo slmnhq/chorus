@@ -1,25 +1,39 @@
 require_relative '../../version'
 
+namespace :package do
+  task :check_clean_working_tree do
+    unless ENV['IGNORE_DIRTY'] || system('git diff-files --quiet')
+      puts "You have a dirty working tree. You must stash or commit your changes before packaging. Or run with IGNORE_DIRTY=true"
+      exit(1)
+    end
+  end
+
+  task :prepare_app => :check_clean_working_tree do
+    system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
+    system "bundle exec jetpack ."
+    PackageMaker.write_version
+  end
+
+  desc 'Generate binary installer'
+  task :installer => :prepare_app do
+    PackageMaker.make_installer
+  end
+
+  task :stage => :prepare_app do
+    deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
+    PackageMaker.deploy(deploy_configuration)
+  end
+
+  task :prepare_remote do
+    deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
+    PackageMaker.prepare_remote(deploy_configuration)
+  end
+end
+
 desc 'Generate new package'
-task :package do
+task :package => 'package:prepare_app' do
   PackageMaker.make
 end
-
-desc 'Generate binary installer'
-task :installer do
-  PackageMaker.make_installer
-end
-
-task :stage do
-  deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
-  PackageMaker.deploy(deploy_configuration)
-end
-
-task :prepare_remote do
-  deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
-  PackageMaker.prepare_remote(deploy_configuration)
-end
-
 
 module PackageMaker
   PATHS_TO_PACKAGE = [
@@ -53,8 +67,6 @@ module PackageMaker
 
     FileUtils.rm_rf(install_root)
     FileUtils.mkdir_p(installer_path)
-
-    prepare_app
 
     PATHS_TO_PACKAGE.each do |path|
       FileUtils.ln_s File.join(rails_root, path), File.join(installer_path, path)
@@ -120,7 +132,7 @@ module PackageMaker
     check_existing_version(config)
 
     filename = make
-    upload(filename, config)
+    #upload(filename, config)
   end
 
   def make(options = {})
@@ -154,26 +166,7 @@ module PackageMaker
     end
   end
 
-  def check_clean_working_tree
-    unless system('git diff-files --quiet')
-      puts "You have a dirty working tree. You must stash or commit your changes before packaging. Or run with IGNORE_DIRTY=true"
-      exit
-    end
-  end
-
-  def prepare_app
-    unless ENV['IGNORE_DIRTY']
-      check_clean_working_tree
-    end
-    run "bundle exec rake assets:precompile"
-    run "bundle exec jetpack ."
-    File.open('version_build', 'w') do |f|
-      f.puts version_name
-    end
-  end
-
   def archive_app(filename)
-    prepare_app
     run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{PATHS_TO_PACKAGE.join(" ")}"
   end
 
@@ -183,6 +176,12 @@ module PackageMaker
 
   def head_sha
     `git rev-parse HEAD`.strip[0..8]
+  end
+
+  def write_version
+    File.open('version_build', 'w') do |f|
+      f.puts version_name
+    end
   end
 
   def run(cmd)
