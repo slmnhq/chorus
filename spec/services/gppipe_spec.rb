@@ -35,6 +35,9 @@ describe Gppipe, :database_integration => true do
   after :each do
     gpdb1.try(:disconnect!)
     gpdb2.try(:disconnect!)
+    # We call src_schema from the test, although it is only called from run outside of tests, so we need to clean up
+    gp_pipe.src_conn.try(:disconnect!)
+    gp_pipe.dst_conn.try(:disconnect!)
   end
 
   let(:src_table) { "candy" }

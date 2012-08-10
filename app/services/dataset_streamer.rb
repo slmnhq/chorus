@@ -21,7 +21,7 @@ class DatasetStreamer
     Enumerator.new do |y|
       begin
         dataset.schema.with_gpdb_connection(account) do |conn|
-          ActiveRecord::Base.each_row_by_sql(dataset.all_rows_sql(row_limit), connection: conn) do |row|
+          ActiveRecord::Base.each_row_by_sql(dataset.all_rows_sql(row_limit), :connection => conn) do |row|
             row_number += 1
             y << format(row, row_number)
           end
@@ -33,6 +33,8 @@ class DatasetStreamer
       rescue Exception => e
         y << e.message
       end
+
+      ActiveRecord::Base.connection.close
     end
   end
 end

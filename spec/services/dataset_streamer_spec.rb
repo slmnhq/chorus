@@ -91,5 +91,15 @@ describe DatasetStreamer, :database_integration => true do
         enumerator.next.should == "The requested dataset contains no rows"
       end
     end
+
+    context "testing checking in connections" do
+      let(:dataset) { database.find_dataset_in_schema("stream_empty_table", "test_schema3") }
+
+      it "does not leak connections" do
+        conn_size = ActiveRecord::Base.connection_pool.send(:active_connections).size
+        streamer.enum
+        ActiveRecord::Base.connection_pool.send(:active_connections).size.should == conn_size
+      end
+    end
   end
 end
