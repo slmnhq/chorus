@@ -8,9 +8,6 @@ module Hdfs
   FileNotFoundError = Class.new(StandardError)
 
   JavaHdfs = com.emc.greenplum.hadoop.Hdfs
-
-  # NOTE: If we have 3 versions and 6 seconds timeout,
-  #       we're going to wait 2 seconds for each one
   JavaHdfs.timeout = 5
 
   class QueryService
@@ -26,7 +23,7 @@ module Hdfs
     end
 
     def version
-      version = JavaHdfs.get_server_version(@host, @port, @username)
+      version = JavaHdfs.new(@host, @port, @username).version
       unless version
         Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
         raise ApiValidationError.new(:connection, :generic, {:message => "Unable to determine HDFS server version or unable to reach server at #{@host}:#{@port}. Check connection parameters."})

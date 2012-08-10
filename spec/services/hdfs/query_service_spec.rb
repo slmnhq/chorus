@@ -2,18 +2,9 @@ require 'spec_helper'
 require 'java'
 
 describe Hdfs::QueryService do
-  before :all do
-    # silence the HDFS log output from failed version connections
-    @java_stdout = java.lang.System.out
-    @java_stderr = java.lang.System.err
-    devnull = java.io.PrintStream.new(java.io.FileOutputStream.new("/dev/null"))
-    java.lang.System.setOut(devnull)
-    java.lang.System.setErr(devnull)
-  end
-
-  after :all do
-    java.lang.System.setOut(@java_stdout)
-    java.lang.System.setErr(@java_stderr)
+  before do
+    devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
+    com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull
   end
 
   describe ".instance_version" do
