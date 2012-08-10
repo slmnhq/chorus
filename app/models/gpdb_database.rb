@@ -32,6 +32,10 @@ class GpdbDatabase < ActiveRecord::Base
     Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
   end
 
+  def find_dataset_in_schema(dataset_name, schema_name)
+    schemas.find_by_name(schema_name).datasets.find_by_name(dataset_name)
+  end
+
   private
 
   def mark_schemas_as_stale

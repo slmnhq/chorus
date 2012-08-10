@@ -45,12 +45,6 @@ describe Hdfs::QueryService do
         Timecop.return
       end
     end
-
-    context "timeout" do
-      let(:slow_instance) do
-        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => port, :username => username
-      end
-    end
   end
 
   describe "#list" do

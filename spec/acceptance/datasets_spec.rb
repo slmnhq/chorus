@@ -82,4 +82,14 @@ resource "Greenplum Tables / Views" do
       status.should == 200
     end
   end
+
+  get "/datasets/:dataset_id/download" do
+    parameter :row_limit, "Optional number of rows"
+
+    let(:row_limit) { 100 }
+
+    example_request "Download a dataset as CSV file" do
+      status.should == 200
+    end
+  end
 end

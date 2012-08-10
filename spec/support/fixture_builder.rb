@@ -1,3 +1,5 @@
+require_relative "./database_integration/setup_gpdb"
+
 def FixtureBuilder.password
   'password'
 end
@@ -46,8 +48,9 @@ FixtureBuilder.configure do |fbuilder|
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    chorus_gpdb41_instance = Instance.create!({ :name => "chorus_gpdb41", :host => "chorus-gpdb41.sf.pivotallabs.com", :port => "5432", :maintenance_db => "postgres", :owner => admin}, :without_protection => true)
-    chorus_gpdb42_instance = Instance.create!({ :name => "chorus_gpdb42", :host => "chorus-gpdb42.sf.pivotallabs.com", :port => "5432", :maintenance_db => "postgres", :owner => admin}, :without_protection => true)
+    chorus_gpdb40_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
+    chorus_gpdb41_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
+    chorus_gpdb42_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb42").merge({:name => "chorus_gpdb42", :owner => admin}), :without_protection => true)
 
     # Instance Accounts
     shared_instance_account = InstanceAccount.create!({:owner => admin, :instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
@@ -56,10 +59,13 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:iamcarly, carly_bobs_instance_account)
     bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:bobo, bob_bobs_instance_account)
-    chorus_gpdb41_instance_account = InstanceAccount.create!({:owner => admin, :instance => chorus_gpdb41_instance, :db_username => 'gpadmin', :db_password => 'secret'}, :without_protection => true)
-    fbuilder.name(:chorus_gpdb41_gpadmin, chorus_gpdb41_instance_account)
-    chorus_gpdb42_instance_account = InstanceAccount.create!({:owner => admin, :instance => chorus_gpdb42_instance, :db_username => 'gpadmin', :db_password => 'secret'}, :without_protection => true)
-    fbuilder.name(:chorus_gpdb42_gpadmin, chorus_gpdb42_instance_account)
+
+    chorus_gpdb40_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :instance => chorus_gpdb40_instance}), :without_protection => true)
+    fbuilder.name(:chorus_gpdb40_test_superuser, chorus_gpdb40_instance_account)
+    chorus_gpdb41_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :instance => chorus_gpdb41_instance}), :without_protection => true)
+    fbuilder.name(:chorus_gpdb41_test_superuser, chorus_gpdb41_instance_account)
+    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :instance => chorus_gpdb42_instance}), :without_protection => true)
+    fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
 
     # Datasets
     bob_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)

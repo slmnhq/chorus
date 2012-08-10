@@ -2,19 +2,35 @@ require 'fileutils'
 require 'timeout'
 
 class Gppipe
-  GPFDIST_PIPE_DIR = File.join(Rails.root, '/tmp/gpfdist/')
+  GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
+  GPFDIST_WRITE_PORT = Chorus::Application.config.chorus['gpfdist.write_port']
+  GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
+
   GPFDIST_TIMEOUT_SECONDS = 600
 
   def self.timeout_seconds
     GPFDIST_TIMEOUT_SECONDS
   end
 
+  def self.gpfdist_url
+    Chorus::Application.config.chorus['gpfdist.url']
+  end
+
   attr_reader :src_schema_name, :src_table, :dst_schema_name, :dst_table
   attr_reader :src_account, :dst_account
   attr_reader :src_instance, :dst_instance
   attr_reader :src_database_name, :dst_database_name
+  attr_reader :row_limit
 
-  def initialize(src_schema, src_table, dst_schema, dst_table, user)
+  def self.run_new(src_schema_id, src_table, dst_schema_id, dst_table, user_id, row_limit = nil)
+    src_schema = GpdbSchema.find(src_schema_id)
+    dst_schema = GpdbSchema.find(dst_schema_id)
+    user = User.find(user_id)
+    pipe = Gppipe.new(src_schema, src_table, dst_schema, dst_table, user, row_limit)
+    pipe.run
+  end
+
+  def initialize(src_schema, src_table, dst_schema, dst_table, user, row_limit = nil)
     @src_schema_name = src_schema.name
     @src_database_name = src_schema.database.name
     @src_instance = src_schema.instance
@@ -25,10 +41,31 @@ class Gppipe
     @dst_instance = dst_schema.instance
     @dst_account = dst_instance.account_for_user!(user)
     @dst_table = dst_table
+    @row_limit = row_limit
   end
 
-  def tabledef_from_query(arr)
-    arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
+  def table_definition
+    return @table_definition if @table_definition
+    # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
+    arr = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
+    @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
+  end
+
+  def table_definition_with_keys
+    return @table_definition_with_keys if @table_definition_with_keys
+    primary_key_rows = src_conn.exec_query(primary_key_sql)
+    primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
+    @table_definition_with_keys = "#{table_definition}#{primary_key_clause}"
+  end
+
+  def quote_and_join(collection)
+    collection.map do |element|
+      "\"#{element['attname']}\""
+    end.join(', ')
+  end
+
+  def limit_clause
+    row_limit.nil? ? '' : "LIMIT #{row_limit}"
   end
 
   def pipe_name
@@ -43,27 +80,31 @@ class Gppipe
     @src_fullname ||= "\"#{src_schema_name}\".\"#{src_table}\""
   end
 
+  def distribution_key_clause
+    return @distribution_key_clause if @distribution_key_clause
+    rows = src_conn.exec_query(distribution_key_sql)
+    clause = rows.empty? ? 'DISTRIBUTED RANDOMLY' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
+    @distribution_key_clause = clause
+  end
+
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
-      pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
-      empty_table = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0)
-      # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-      table_def_rows = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table}' and table_schema='#{src_schema_name}' order by ordinal_position;")
-      table_definition = tabledef_from_query(table_def_rows)
+      pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
+      no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
 
-      if empty_table
-        dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
-      else
+      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+      unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
-          dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition})")
 
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
-            src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname});")
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema_name}\".#{pipe_name}_w (#{table_definition})
+                                 LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+            src_conn.exec_query("INSERT INTO \"#{src_schema_name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname} #{limit_clause});")
           end
 
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema_name}\".#{pipe_name}_r (#{table_definition})
+                               LOCATION ('gpfdist://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema_name}\".#{pipe_name}_r);")
 
           thr.join
@@ -109,5 +150,25 @@ class Gppipe
         :password => dst_account.db_password,
         :adapter => "jdbcpostgresql"
     )
+  end
+
+  private
+
+  def primary_key_sql
+    <<-PRIMARYKEYSQL
+      SELECT attname
+      FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
+      FROM   pg_constraint where conrelid = '#{src_schema_name}.#{src_table}'::regclass and contype='p'
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
+    PRIMARYKEYSQL
+  end
+
+  def distribution_key_sql
+    <<-DISTRIBUTION_KEY_SQL
+      SELECT attname
+      FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
+      FROM   gp_distribution_policy where localoid = '#{src_schema_name}.#{src_table}'::regclass
+      ) y, pg_attribute WHERE attrelid = '#{src_schema_name}.#{src_table}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
+    DISTRIBUTION_KEY_SQL
   end
 end

@@ -76,12 +76,12 @@ describe DatasetsController do
   end
 
   describe "#import", :database_integration => true do
-    let(:account) { real_gpdb_account }
-    let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:schema) { database.schemas.find_by_name('test_schema') }
+    let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
+    let(:destination_table) { database.find_dataset_in_schema('the_new_table', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
-
-    let(:src_table) { GpdbTable.find_by_name('base_table1') }
-    let(:destination_table) { GpdbTable.find_by_name('the_new_table') }
 
     let(:options) {
       {
@@ -109,7 +109,8 @@ describe DatasetsController do
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
-        response.code.should == "201"
+        # We haven't implemented the import status yet - this is just to make the UI happy (BL and CH)
+        response.code.should == "200"
       end
 
       it "should return error for archived workspaces" do
@@ -156,7 +157,7 @@ describe DatasetsController do
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
-        response.code.should == "201"
+        response.code.should == "200"
       end
     end
   end

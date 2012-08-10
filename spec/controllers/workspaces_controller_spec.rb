@@ -256,7 +256,7 @@ describe WorkspacesController do
         }
 
         workspace.reload
-        schema = GpdbSchema.find_by_name("create_new_schema")
+        schema = database.schemas.find_by_name("create_new_schema")
         workspace.sandbox.id.should == schema.id
         schema.name.should == "create_new_schema"
         schema.database.should == database
