@@ -75,7 +75,7 @@ module PackageMaker
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
 
     version = Chorus::VERSION::STRING
-    `#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} chorus-#{version}.sh 'Chorus #{version} installer' ./chorus_installation/bin/ruby ../install.rb`
+    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} chorus-#{version}.sh 'Chorus #{version} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
   def upload(filename, config)
@@ -132,7 +132,7 @@ module PackageMaker
     check_existing_version(config)
 
     filename = make
-    #upload(filename, config)
+    upload(filename, config)
   end
 
   def make(options = {})
