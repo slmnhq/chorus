@@ -16,9 +16,6 @@ ${HOME}/workspace/chorusrails/script/init_db.sh bootstrap
 
 $SCRIPT_DIR/bootstrap-queue.sh
 
-echo "***** installing hadoop"
-${HOME}/workspace/chorusrails/script/install_hdfs_service.sh
-
 echo "***** setting up project"
 bundle
 ${HOME}/workspace/chorusrails/script/test
