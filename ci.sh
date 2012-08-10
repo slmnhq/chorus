@@ -12,6 +12,11 @@ bundle install --binstubs=b/
 b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
 b/rake assets:precompile
 
+echo "starting gpfdist (Linux RHEL5 only)"
+export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
+./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp
+./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp
+
 # start jasmine
 b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
@@ -32,6 +37,9 @@ JS_TESTS_RESULT=$?
 
 echo "Cleaning up jasmine process $jasmine_pid"
 kill -s SIGTERM $jasmine_pid
+
+echo "Cleaning up gpfdist"
+killall gpfdist
 
 SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT`
 echo "RSpec exit code: $RUBY_TESTS_RESULT"
