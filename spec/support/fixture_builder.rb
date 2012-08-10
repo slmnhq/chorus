@@ -37,6 +37,9 @@ FixtureBuilder.configure do |fbuilder|
     not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
     Events::USER_ADDED.by(admin).add(:new_user => not_a_member)
 
+    user_with_restricted_access = User.create!(:first_name => 'Restricted', :last_name => 'User', :username => 'restricted_user', :email => 'restricted@example.com', :password => FixtureBuilder.password)
+    Events::USER_ADDED.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
+
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
     Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
@@ -66,6 +69,10 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:chorus_gpdb41_test_superuser, chorus_gpdb41_instance_account)
     chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :instance => chorus_gpdb42_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
+
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb40_instance}, :without_protection => true)
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb41_instance}, :without_protection => true)
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb42_instance}, :without_protection => true)
 
     # Datasets
     bob_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)

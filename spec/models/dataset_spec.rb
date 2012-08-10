@@ -33,7 +33,7 @@ describe Dataset do
   end
 
   describe ".find_and_verify_in_source", :database_integration => true do
-    let(:account) { real_gpdb_account }
+    let(:account) { GpdbIntegration.real_gpdb_account }
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table')}
     let(:dataset) { GpdbTable.find_by_name('base_table1') }

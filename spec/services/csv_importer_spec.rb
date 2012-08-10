@@ -183,6 +183,46 @@ describe CsvImporter, :database_integration => true do
         result[2].should == {"id" => 3, "dog" => "baz"}
       end
     end
+
+    context "when import fails" do
+      it "removes import table when new_table is true" do
+        csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
+                                   :column_names => [:id, :name],
+                                   :types => [:integer, :varchar],
+                                   :file_contains_header => false,
+                                   :new_table => true)
+        table_name = csv_file.to_table
+        CsvImporter.import_file(csv_file.id)
+        schema.with_gpdb_connection(account) do |connection|
+          expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
+        end
+      end
+
+      it "does not remove import table when new_table is false" do
+        table_name = "test_import_existing_2"
+
+        first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi"),
+                                         :column_names => [:id, :name],
+                                         :types => [:integer, :varchar],
+                                         :file_contains_header => false,
+                                         :new_table => true,
+                                         :to_table => table_name)
+
+        CsvImporter.import_file(first_csv_file.id)
+
+        second_csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
+                                          :column_names => [:id, :name],
+                                          :types => [:integer, :varchar],
+                                          :file_contains_header => false,
+                                          :new_table => false,
+                                          :to_table => table_name)
+
+        CsvImporter.import_file(second_csv_file.id)
+        schema.with_gpdb_connection(account) do |connection|
+          expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
+        end
+      end
+    end
   end
 
   describe "without connecting to GPDB" do

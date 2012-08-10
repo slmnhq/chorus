@@ -18,17 +18,22 @@ class CsvImporter
 
   def import
     schema.with_gpdb_connection(account) do |connection|
-      if csv_file.new_table
-        connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
-      end
+      begin
+        if csv_file.new_table
+          connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
+        end
 
-      if csv_file.truncate
-        connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
-      end
+        if csv_file.truncate
+          connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
+        end
 
-      copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
-      sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
-      copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+        copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
+        sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
+        copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+      rescue
+        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table
+        raise
+      end
     end
     create_success_event
   rescue => e

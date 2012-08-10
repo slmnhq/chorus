@@ -88,8 +88,8 @@ describe GpdbSchema do
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:rails_only_schema) { GpdbSchema.find_by_name('rails_only_schema') }
     let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
-    let(:user) { real_gpdb_account.owner }
-    let(:restricted_user) { account_for_user_with_restricted_access.owner }
+    let(:user) { GpdbIntegration.real_gpdb_account.owner }
+    let(:restricted_user) { users(:restricted_user) }
 
     before do
       refresh_chorus

@@ -1,5 +1,5 @@
 DROP ROLE IF EXISTS "user_with_restricted_access";
-CREATE ROLE "user_with_restricted_access";
+CREATE ROLE "user_with_restricted_access" PASSWORD 'secret';
 
 DROP DATABASE IF EXISTS "gpdb_test_database";
 CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
