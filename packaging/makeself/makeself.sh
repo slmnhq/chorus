@@ -132,7 +132,7 @@ if [ -x /usr/bin/gnutar ]
 then
     TAR_EXEC=/usr/bin/gnutar
 else
-    TAR_EXEC=/usr/bin/tar
+    TAR_EXEC=`which tar`
 fi
 
 # LSM file stuff
