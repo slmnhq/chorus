@@ -4,6 +4,7 @@ class GpdbDatabase < ActiveRecord::Base
   belongs_to :instance
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
   has_and_belongs_to_many :instance_accounts
+  delegate :account_for_user!, :to => :instance
 
   before_save :mark_schemas_as_stale
 

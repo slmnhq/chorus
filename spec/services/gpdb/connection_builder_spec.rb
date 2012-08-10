@@ -72,5 +72,23 @@ describe Gpdb::ConnectionBuilder do
         Timecop.return
       end
     end
+
+    context "when the sql command fails" do
+      let(:exception1) { ActiveRecord::StatementInvalid.new }
+      let(:raised_message) { "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid" }
+      let(:sql_command) { "SELECT * FROM BOGUS_TABLE;" }
+
+      it "does not catch the error" do
+        Timecop.freeze(DateTime.now)
+        mock(Rails.logger).info("#{raised_message} - #{exception1.message}")
+        mock(fake_connection_adapter).query.with_any_args { raise ActiveRecord::StatementInvalid }
+        expect {
+          Gpdb::ConnectionBuilder.connect!(instance, instance_account) do |conn|
+            conn.query sql_command
+          end
+        }.to raise_error(ActiveRecord::StatementInvalid, raised_message)
+        Timecop.return
+      end
+    end
   end
 end

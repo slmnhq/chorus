@@ -12,7 +12,7 @@ class DatasetsController < GpdbController
   end
 
   def show
-    table = Dataset.find(params[:id])
+    table = Dataset.find_and_verify_in_source(params[:id], current_user)
     present table
   end
 

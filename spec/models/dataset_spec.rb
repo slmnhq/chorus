@@ -32,6 +32,37 @@ describe Dataset do
     end
   end
 
+  describe ".find_and_verify_in_source", :database_integration => true do
+    let(:account) { real_gpdb_account }
+    let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table')}
+    let(:dataset) { GpdbTable.find_by_name('base_table1') }
+
+    before do
+      refresh_chorus
+    end
+
+    context "when it exists in the source database" do
+      it "should return the dataset" do
+          described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
+      end
+    end
+
+    context "when it does not exist in the source database" do
+      before do
+        GpdbTable.create!({:name => 'rails_only_table', :schema => schema}, :without_protection => true)
+      end
+
+      it "should raise ActiveRecord::RecordNotFound exception" do
+        expect { described_class.find_and_verify_in_source(rails_only_table.id, account.owner)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      after do
+        GpdbTable.find_by_name(rails_only_table.name).destroy
+      end
+    end
+  end
+
   describe ".with_name_like" do
     it "scopes objects by name" do
       Dataset.with_name_like(dataset.name).count.should == 1

@@ -33,7 +33,7 @@ class GpdbSchema < ActiveRecord::Base
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id
   delegate :with_gpdb_connection, :to => :database
-  delegate :instance, :to => :database
+  delegate :instance, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
 
@@ -73,6 +73,19 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
+  def self.find_and_verify_in_source(schema_id, user)
+    schema = GpdbSchema.find(schema_id)
+    schema.verify_in_source(user)
+    schema
+  rescue
+    raise ActiveRecord::RecordNotFound
+  end
+
+  def verify_in_source(user)
+    account = account_for_user!(user)
+    with_gpdb_connection(account) { |conn| }
+  end
+
   def stored_functions(account)
     results = database.with_gpdb_connection(account) do |conn|
       conn.exec_query(SCHEMA_FUNCTION_QUERY % [name])
@@ -92,6 +105,7 @@ class GpdbSchema < ActiveRecord::Base
       yield conn
     end
   end
+
   private
 
   def add_schema_to_search_path(conn)

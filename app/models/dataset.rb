@@ -5,7 +5,7 @@ class Dataset < ActiveRecord::Base
   include Stale
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
-  delegate :instance, :to => :schema
+  delegate :instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :schema_id
@@ -74,6 +74,23 @@ class Dataset < ActiveRecord::Base
     if options[:mark_stale]
       (schema.datasets.not_stale - found_datasets).each do |dataset|
         dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+      end
+    end
+  end
+
+  def self.find_and_verify_in_source(dataset_id, user)
+    dataset = Dataset.find(dataset_id)
+    dataset.verify_in_source(user)
+    dataset
+  end
+
+  def verify_in_source(user)
+    account = account_for_user!(user)
+    with_gpdb_connection(account) do |conn|
+      begin
+        conn.exec_query("SELECT 1 FROM #{schema.name}.#{name}")
+      rescue ActiveRecord::StatementInvalid
+        raise ActiveRecord::RecordNotFound
       end
     end
   end

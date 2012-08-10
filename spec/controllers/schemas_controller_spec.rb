@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SchemasController do
   ignore_authorization!
 
-  let(:user) { FactoryGirl.create :user}
+  let(:user) { FactoryGirl.create :user }
 
   before do
     log_in user
@@ -55,7 +55,10 @@ describe SchemasController do
   end
 
   context "#show" do
-    let(:schema) { FactoryGirl.create(:gpdb_schema)}
+    let(:schema) { FactoryGirl.create(:gpdb_schema) }
+    before do
+      any_instance_of(GpdbSchema) { |schema| stub(schema).verify_in_source }
+    end
 
     it "uses authorization" do
       mock(subject).authorize!(:show_contents, schema.instance)
@@ -68,6 +71,12 @@ describe SchemasController do
       decoded_response.id.should == schema.id
     end
 
+    it "verifies the schema exists" do
+      mock.proxy(GpdbSchema).find_and_verify_in_source(schema.id.to_s, user)
+      get :show, :id => schema.to_param
+      response.code.should == "200"
+    end
+
     context "when the schema can't be found" do
       it "returns 404" do
         get :show, :id => "-1"
@@ -77,6 +86,16 @@ describe SchemasController do
 
     generate_fixture "schema.json" do
       get :show, :id => schema.to_param
+    end
+
+    context "when the schema is not in GPDB" do
+      it "should raise an error" do
+        stub(GpdbSchema).find_and_verify_in_source(schema.id.to_s, user) { raise ActiveRecord::RecordNotFound.new }
+
+        get :show, :id => schema.to_param
+
+        response.code.should == "404"
+      end
     end
   end
 end

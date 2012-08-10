@@ -14,6 +14,10 @@ module Gpdb
       friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{instance.host}:#{instance.port}"
       Rails.logger.error(friendly_message + " - " + e.message)
       raise e, friendly_message
+    rescue ActiveRecord::StatementInvalid => e
+      friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
+      Rails.logger.info(friendly_message + " - " + e.message)
+      raise e, friendly_message
     ensure
       connection.try(:disconnect!)
     end

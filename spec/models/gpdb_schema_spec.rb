@@ -6,7 +6,7 @@ describe GpdbSchema do
     it { should belong_to(:workspace) }
   end
 
-  context "#refresh" do
+  context ".refresh" do
     let(:instance) { instances(:bobs_instance) }
     let(:account) { instance.owner_account }
     let(:database) { gpdb_databases(:bobs_database) }
@@ -81,6 +81,42 @@ describe GpdbSchema do
       schema.update_attributes({:stale_at => Time.now}, :without_protection => true)
       GpdbSchema.refresh(account, database)
       schema.reload.should_not be_stale
+    end
+  end
+
+  describe ".find_and_verify_in_source", :database_integration => true do
+    let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:rails_only_schema) { GpdbSchema.find_by_name('rails_only_schema') }
+    let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
+    let(:user) { real_gpdb_account.owner }
+    let(:restricted_user) { account_for_user_with_restricted_access.owner }
+
+    before do
+      refresh_chorus
+    end
+
+    context "when it exists in the source database" do
+      context "when the user has access" do
+        it "should return the schema" do
+          described_class.find_and_verify_in_source(schema.id, user).should == schema
+        end
+      end
+
+      context "when the user does not have access to the schema" do
+        it "should raise ActiveRecord::RecordNotFound exception" do
+          expect { described_class.find_and_verify_in_source(schema.id, restricted_user) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    context "when it does not exist in the source database" do
+      before do
+        GpdbSchema.create!({:name => 'rails_only_schema', :database => database}, :without_protection => true)
+      end
+
+      it "should raise ActiveRecord::RecordNotFound exception" do
+        expect { described_class.find_and_verify_in_source(rails_only_schema.id, user) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 

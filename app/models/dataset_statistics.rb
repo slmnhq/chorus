@@ -7,6 +7,8 @@ class DatasetStatistics
   end
 
   def initialize(row)
+    return unless row
+
     @definition   = row["definition"]
     @description  = row["description"]
     @column_count = row["column_count"].to_i

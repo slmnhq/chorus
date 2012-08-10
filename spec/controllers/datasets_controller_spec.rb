@@ -56,16 +56,34 @@ describe DatasetsController do
   end
 
   describe "#show" do
-    it "should retrieve the db object for a schema" do
-      get :show, :id => table.to_param
-
-      response.code.should == "200"
-      decoded_response.object_name.should == table.name
-      decoded_response.object_type.should == "TABLE"
+    before do
+      any_instance_of(Dataset) { |dataset| stub(dataset).verify_in_source }
     end
 
-    generate_fixture "dataset.json" do
-      get :show, :id => table.to_param
+    context "when dataset is valid in GPDB" do
+      it "should retrieve the db object for a schema" do
+        mock.proxy(Dataset).find_and_verify_in_source(table.id.to_s, user)
+
+        get :show, :id => table.to_param
+
+        response.code.should == "200"
+        decoded_response.object_name.should == table.name
+        decoded_response.object_type.should == "TABLE"
+      end
+
+      generate_fixture "dataset.json" do
+        get :show, :id => table.to_param
+      end
+    end
+
+    context "when dataset is not valid in GPDB" do
+      it "should raise an error" do
+        stub(Dataset).find_and_verify_in_source(table.id.to_s, user) { raise ActiveRecord::RecordNotFound.new }
+
+        get :show, :id => table.to_param
+
+        response.code.should == "404"
+      end
     end
   end
 

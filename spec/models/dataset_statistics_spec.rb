@@ -23,5 +23,9 @@ describe DatasetStatistics do
       statistics.disk_size.should == '230 kB'
       statistics.partition_count.should == 2
     end
+
+    it "doesn't crash when it is being initialized with nil" do
+      fail = DatasetStatistics.new(nil)
+    end
   end
 end
