@@ -26,171 +26,149 @@ describe GpTableCopier, :database_integration => true do
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
   let(:copier) { GpTableCopier.new(schema, src_table_name, sandbox, dst_table_name, user) }
+  let(:add_rows) { true }
 
   before do
     refresh_chorus
-    call_sql("drop table if exists \"#{src_table_name}\";")
-    call_sql("create table \"#{src_table_name}\"(#{table_def}) #{distrib_def};")
-    call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
-    call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
   end
 
-  after do
-    call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{src_table_name}\";")
-    call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{dst_table_name}\";")
-  end
 
-  context "with standard input" do
+  context "actually running the query" do
     before do
-      copier.run
-      GpdbTable.refresh(account, schema)
-    end
-
-    it "creates the new table" do
-      database.find_dataset_in_schema(dst_table_name, sandbox.name).should be_a(GpdbTable)
-    end
-
-    it "copies the constraints" do
-      dest_constraints = call_sql("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{dst_table_name}'", sandbox)
-      src_constraints = call_sql("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table_name}'")
-
-      dest_constraints.count.should == src_constraints.count
-      dest_constraints.each_with_index do |constraint, i|
-        constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
-        constraint["table_name"].should == dst_table_name
+      call_sql("drop table if exists \"#{src_table_name}\";")
+      call_sql("drop table if exists \"#{dst_table_name}\";")
+      call_sql("create table \"#{src_table_name}\"(#{table_def}) #{distrib_def};")
+      if add_rows
+        call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+        call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
       end
     end
 
-    it "copies the distribution keys" do
-      dest_distribution_keys = call_sql(distribution_key_sql(sandbox.name, dst_table_name), sandbox)
-      src_distribution_keys = call_sql(distribution_key_sql(schema.name, src_table_name))
-
-      dest_distribution_keys.should == src_distribution_keys
+    after do
+      call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{src_table_name}\";")
+      call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{dst_table_name}\";")
     end
 
+    context "with standard input" do
+      before do
+        copier.run
+        GpdbTable.refresh(account, schema)
+      end
 
-    it "copies the rows" do
-      dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
-      dest_rows.count.should == 2
-    end
-  end
+      it "creates the new table" do
+        database.find_dataset_in_schema(dst_table_name, sandbox.name).should be_a(GpdbTable)
+      end
 
-  context "when the rows are limited" do
-    let(:copier) { GpTableCopier.new(schema, src_table_name, sandbox, dst_table_name, user, 1) }
-    before do
-      copier.run
-      GpdbTable.refresh(account, schema)
-    end
+      it "copies the constraints" do
+        dest_constraints = call_sql("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{dst_table_name}'", sandbox)
+        src_constraints = call_sql("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table_name}'")
 
-    it "copies the rows up to limit" do
-      dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
-      dest_rows.count.should == 1
-    end
+        dest_constraints.count.should == src_constraints.count
+        dest_constraints.each_with_index do |constraint, i|
+          constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
+          constraint["table_name"].should == dst_table_name
+        end
+      end
 
-    context "when the row limit value is 0" do
-      let(:copier) { GpTableCopier.new(schema, src_table_name, sandbox, dst_table_name, user, 0) }
+      it "copies the distribution keys" do
+        dest_distribution_keys = call_sql(distribution_key_sql(sandbox.name, dst_table_name), sandbox)
+        src_distribution_keys = call_sql(distribution_key_sql(schema.name, src_table_name))
 
-      it "creates the table and copies 0 rows" do
+        dest_distribution_keys.should == src_distribution_keys
+      end
+
+
+      it "copies the rows" do
         dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
-        dest_rows.count.should == 0
+        dest_rows.count.should == 2
       end
     end
-  end
 
-  context "when the sandbox and src schema are not the same" do
-    let(:sandbox) { database.schemas.find_by_name('test_schema2')}
+    context "when the rows are limited" do
+      let(:copier) { GpTableCopier.new(schema, src_table_name, sandbox, dst_table_name, user, 1) }
 
-    it "creates a new table in the correct schema" do
-      copier.run
-      GpdbTable.refresh(account, sandbox)
+      before do
+        copier.run
+        GpdbTable.refresh(account, schema)
+      end
 
-      database.find_dataset_in_schema(dst_table_name, sandbox.name).should be_a(GpdbTable)
-      dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
-      dest_rows.count.should == 2
+      it "copies the rows up to limit" do
+        dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
+        dest_rows.count.should == 1
+      end
+
+      context "when the row limit value is 0" do
+        let(:copier) { GpTableCopier.new(schema, src_table_name, sandbox, dst_table_name, user, 0) }
+
+        it "creates the table and copies 0 rows" do
+          dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
+          dest_rows.count.should == 0
+        end
+      end
     end
 
-    context "when the destination table already exists" do
-      let(:dst_table_name) {"other_base_table"}
+    context "when the sandbox and src schema are not the same" do
+      let(:sandbox) { database.schemas.find_by_name('test_schema2') }
 
-      it "does not import the table raises an exception" do
-        original_columns = call_sql("select column_name,* from information_schema.columns where table_name = '#{dst_table_name}';", sandbox)
+      it "creates a new table in the correct schema" do
+        copier.run
+        GpdbTable.refresh(account, sandbox)
 
+        database.find_dataset_in_schema(dst_table_name, sandbox.name).should be_a(GpdbTable)
+        dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
+        dest_rows.count.should == 2
+      end
+
+      context "when the destination table already exists" do
+        let(:dst_table_name) { "other_base_table" }
+
+        it "does not import the table raises an exception" do
+          original_columns = call_sql("select column_name,* from information_schema.columns where table_name = '#{dst_table_name}';", sandbox)
+
+          expect { copier.run }.to raise_exception
+          columns = call_sql("select column_name,* from information_schema.columns where table_name = '#{dst_table_name}';", sandbox)
+          columns.should == original_columns
+          columns.count.should_not == 4
+        end
+      end
+    end
+
+    context "when the src and dst tables are the same" do
+      let(:dst_table_name) { src_table_name }
+
+      it "raises an exception" do
         expect { copier.run }.to raise_exception
-        columns = call_sql("select column_name,* from information_schema.columns where table_name = '#{dst_table_name}';", sandbox)
-        columns.should == original_columns
-        columns.count.should_not == 4
+      end
+    end
+
+    context "tables have weird characters" do
+      let(:src_table_name) { "2candy" }
+      let(:dst_table_name) { "2dst_candy" }
+
+      it "single quotes table and schema names if they have weird chars" do
+        copier.run
+
+        call_sql("SELECT * FROM #{copier.dst_fullname}").length.should == 2
+      end
+    end
+
+    context "when the source table is empty" do
+      let(:add_rows) { false }
+
+      it "creates an empty destination table" do
+        copier.run
+        call_sql("SELECT * FROM #{copier.dst_fullname}").length.should == 0
+      end
+    end
+
+    context "for a table with 1 column and no primary key, distributed randomly" do
+      let(:add_rows) { false }
+      let(:table_def) { '"2id" integer' }
+      let(:distrib_def) { 'DISTRIBUTED RANDOMLY' }
+
+      it "should have DISTRIBUTED RANDOMLY for its distribution key clause" do
+        copier.distribution_key_clause.should == "DISTRIBUTED RANDOMLY"
       end
     end
   end
-
-  context "when the src and dst tables are the same" do
-    let(:dst_table_name) {src_table_name}
-
-    it "raises an exception" do
-      expect { copier.run }.to raise_exception
-    end
-  end
-
-  context "tables have weird characters" do
-    let(:src_table) { "2candy" }
-    let(:dst_table) { "2dst_candy" }
-
-    it "single quotes table and schema names if they have weird chars" do
-      copier.run
-
-      call_sql("SELECT * FROM #{copier.dst_fullname}").length.should == 2
-    end
-  end
-
-  context "when the source table is empty" do
-    before do
-      call_sql("drop table if exists #{copier.src_fullname};")
-      call_sql("create table #{copier.src_fullname}(#{table_def});")
-      call_sql("drop table if exists #{copier.dst_fullname};")
-    end
-    it "creates an empty destination table" do
-      copier.run
-      call_sql("SELECT * FROM #{copier.dst_fullname}").length.should == 0
-    end
-  end
-
-  context "for a table with 0 columns" do
-
-  end
-
-  context "for a table with 1 column and no primary key, distributed randomly" do
-
-  end
-
-  context "when the sql hangs" do
-
-  end
-
-  context "with invalid input" do
-
-  end
-
-#context "#import with exception" do
-#  let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-#  let(:options) {
-#    {
-#        "to_table" => "the_new_table",
-#        "use_limit_rows" => "true",
-#        "sample_count" => -5
-#    }
-#  }
-#
-#  after do
-#    call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
-#  end
-#
-#  context "when the limit is -5" do
-#    it "raises an exception" do
-#      expect {
-#        src_table.import(options, schema.instance.owner)
-#      }.to raise_error(SqlCommandFailed)
-#      GpdbTable.refresh(account, schema)
-#    end
-#  end
-#end
 end
