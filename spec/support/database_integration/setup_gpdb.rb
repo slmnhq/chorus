@@ -1,4 +1,5 @@
 require "tempfile"
+require 'digest/md5'
 
 module GpdbIntegration
   config_file = "test_gpdb_connection_config.yml"
@@ -32,10 +33,30 @@ module GpdbIntegration
 
   def self.setup_gpdb
     execute_sql("setup_gpdb.sql")
+    record_sql_changes
   end
 
   def self.drop_gpdb
-    execute_sql("drop_gpdb.sql")
+    execute_sql("drop_gpdb.sql") if sql_changed?
+  end
+
+  def self.record_sql_changes
+    File.open(sql_file_hash_path, 'w') do |f|
+      f << sql_file_hash
+    end
+  end
+
+  def self.sql_changed?
+    return true unless File.exists?(sql_file_hash_path)
+    File.read(sql_file_hash_path) != sql_file_hash
+  end
+
+  def self.sql_file_hash_path
+    Rails.root + 'tmp/setup_gpdb_hash'
+  end
+
+  def self.sql_file_hash
+    Digest::MD5.hexdigest(File.read(Rails.root + 'spec/support/database_integration/setup_gpdb.sql'))
   end
 
   def self.database_name
@@ -66,10 +87,11 @@ module GpdbIntegration
     GpdbSchema.refresh(account, database)
     gpdb_schema = database.schemas.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
-    database = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_public_schema")
-    GpdbSchema.refresh(account, database)
-    gpdb_schema = database.schemas.find_by_name('non_public_schema')
-    Dataset.refresh(account, gpdb_schema)
+
+    database_without_public_schema = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_public_schema")
+    GpdbSchema.refresh(account, database_without_public_schema)
+    gpdb_schema_without_public_schema = database_without_public_schema.schemas.find_by_name('non_public_schema')
+    Dataset.refresh(account, gpdb_schema_without_public_schema)
 
     account
   end
