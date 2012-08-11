@@ -49,6 +49,14 @@ describe GpTableCopier, :database_integration => true do
       call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{dst_table_name}\";")
     end
 
+    context ".run_new" do
+      it "creates a new table copier and runs it" do
+        GpTableCopier.run_new(schema.id, src_table_name, sandbox.id, dst_table_name, user.id)
+        dest_rows = call_sql("SELECT * FROM #{dst_table_name}", sandbox)
+        dest_rows.count.should == 2
+      end
+    end
+
     context "with standard input" do
       before do
         copier.run

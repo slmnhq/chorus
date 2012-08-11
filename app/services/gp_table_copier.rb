@@ -5,6 +5,14 @@ class GpTableCopier
   attr_reader :src_database_name, :dst_database_name
   attr_reader :row_limit
 
+  def self.run_new(src_schema_id, src_table_name, dst_schema_id, dst_table_name, user_id, row_limit = nil)
+    src_schema = GpdbSchema.find(src_schema_id)
+    dst_schema = GpdbSchema.find(dst_schema_id)
+    user = User.find(user_id)
+    instance = self.new(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit)
+    instance.run
+  end
+
   def initialize(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit = nil)
     @src_schema = src_schema
     @src_database_name = src_schema.database.name
