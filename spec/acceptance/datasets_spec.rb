@@ -25,9 +25,10 @@ resource "Greenplum Tables / Views" do
     log_in owner
     stub(SqlExecutor).preview_dataset { result }
     stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
-    any_instance_of(Dataset) do |u|
-      stub(u).add_metadata!.with_any_args { statistics }
-      stub(u).statistics.with_any_args { statistics }
+    any_instance_of(Dataset) do |dataset|
+      stub(dataset).verify_in_source
+      stub(dataset).add_metadata!.with_any_args { statistics }
+      stub(dataset).statistics.with_any_args { statistics }
     end
 
     stub(SqlExecutor).cancel_query.with_any_args { status }
