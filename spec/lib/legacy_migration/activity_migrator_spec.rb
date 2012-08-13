@@ -3,11 +3,11 @@ require 'spec_helper'
 describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration do
   describe ".migrate" do
     before do
-      UserMigrator.new.migrate
-      WorkspaceMigrator.new.migrate
-      InstanceMigrator.new.migrate
-      HadoopInstanceMigrator.new.migrate
-      WorkfileMigrator.new.migrate
+        UserMigrator.new.migrate
+        WorkspaceMigrator.new.migrate
+        InstanceMigrator.new.migrate
+        HadoopInstanceMigrator.new.migrate
+        WorkfileMigrator.new.migrate
     end
 
     context "migrating activities that reference datasets" do

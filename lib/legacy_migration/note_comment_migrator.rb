@@ -4,7 +4,7 @@ class NoteCommentMigrator
       Legacy.connection.add_column :edc_comment, :chorus_rails_event_id, :integer
     end
 
-    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp, updated_timestamp, is_deleted, legacy_user|
+    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp, updated_timestamp, is_deleted, legacy_user, comment_workspace_id, entity_id|
       actor = User.find_with_destroyed(legacy_user)
       case comment_type
         when 'instance'
@@ -29,6 +29,15 @@ class NoteCommentMigrator
           workspace = Workspace.find_with_destroyed(comment_workspace_id(comment_id))
           workfile = Workfile.find_with_destroyed(workfile_id(comment_id))
           event = Events::NOTE_ON_WORKFILE.create(:workspace => workspace, :workfile => workfile, :body => comment_body, :actor => actor)
+        when 'databaseObject'
+          if comment_workspace_id
+            workspace = Workspace.find_with_destroyed(find_rails_workspace_id(comment_workspace_id))
+            dataset = Dataset.find(rails_dataset_id(entity_id))
+            event = Events::NOTE_ON_WORKSPACE_DATASET.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
+          else
+            dataset = Dataset.find(rails_dataset_id(entity_id))
+            event = Events::NOTE_ON_DATASET.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
+          end
         else
           next
       end
@@ -44,11 +53,11 @@ class NoteCommentMigrator
   private
 
   def get_all_comments
-    sql = "SELECT chorus_rails_user_id, ec.id, entity_type, body, ec.created_stamp, ec.last_updated_stamp, ec.is_deleted FROM edc_comment ec, edc_user eu where user_name = author_name"
+    sql = "SELECT chorus_rails_user_id, ec.id, ec.workspace_id, ec.entity_id, entity_type, body, ec.created_stamp, ec.last_updated_stamp, ec.is_deleted FROM edc_comment ec, edc_user eu where user_name = author_name"
 
     comment_table_data = Legacy.connection.exec_query(sql)
     comment_table_data.map do |comment_data|
-      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"], comment_data["last_updated_stamp"], comment_data["is_deleted"], comment_data["chorus_rails_user_id"]
+      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"], comment_data["last_updated_stamp"], comment_data["is_deleted"], comment_data["chorus_rails_user_id"], comment_data["workspace_id"], comment_data["entity_id"]
     end
   end
 
@@ -72,6 +81,23 @@ class NoteCommentMigrator
 
     extract_result("chorus_rails_workspace_id", result)
   end
+
+  def find_rails_workspace_id(comment_id)
+    sql = "SELECT chorus_rails_workspace_id FROM edc_workspace ew
+                                               WHERE ew.id = '#{comment_id}'"
+    result = Legacy.connection.exec_query(sql)
+    extract_result("chorus_rails_workspace_id", result)
+  end
+
+  #def dataset_id(dataset_id, workspace_id)
+  #  sql = "SELECT chorus_rails_dataset_id FROM edc_dataset ew
+  #                                             WHERE ew.composite_id = '#{dataset_id}'
+  #                                              AND workspace_id = #{workspace_id}"
+  #
+  #  result = Legacy.connection.exec_query(sql)
+  #
+  #  extract_result("chorus_rails_dataset_id", result)
+  #end
 
   def comment_workspace_id(comment_id)
     sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_comment ec
@@ -99,5 +125,24 @@ class NoteCommentMigrator
   def extract_result(result_key, sql)
     instance_data = Array(sql)[0]
     instance_data && instance_data[result_key]
+  end
+
+  def rails_dataset_id(old_dataset_id)
+
+    ids = old_dataset_id.delete("\"").split("|")
+    legacy_instance_id = ids[0]
+    database_name = ids[1]
+    schema_name = ids[2]
+    dataset_name = ids[4]
+
+    sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_instance_id}'"
+    rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    instance = Instance.find_by_id(rails_instance_id)
+    raise Exception, "Instance for activity could not be found" unless instance
+
+    database = instance.databases.find_or_create_by_name(database_name)
+    schema = database.schemas.find_or_create_by_name(schema_name)
+    dataset = schema.datasets.find_or_create_by_name(dataset_name)
+    dataset.id
   end
 end

@@ -78,5 +78,19 @@ describe NoteCommentMigrator, :legacy_migration => true, :type => :legacy_migrat
         note.deleted_at.should == legacy_comment["last_updated_stamp"] if legacy_comment["is_deleted"] == 't'
       end
     end
+
+    it "should migrate the Notes on Workspace Dataset" do
+      expect { NoteCommentMigrator.new.migrate }.to change(Events::NOTE_ON_WORKSPACE_DATASET.unscoped, :count).by(18)
+      Legacy.connection.select_all("SELECT ec.*, chorus_rails_user_id, chorus_rails_workspace_id FROM edc_comment ec,edc_user eu, edc_workspace ew, edc_dataset ed where entity_type = 'databaseObject' and ec.is_deleted = false and ec.author_name = eu.user_name and ed.composite_id = ec.entity_id and ec.workspace_id != '' and ew.id = ec.workspace_id").each do |legacy_comment|
+        note = Events::NOTE_ON_WORKSPACE_DATASET.find(legacy_comment["chorus_rails_event_id"])
+        note.body.should == legacy_comment["body"]
+        note.workspace.should == Workspace.find_with_destroyed(legacy_comment["chorus_rails_workspace_id"])
+        #note.dataset.should == Dataset.find_with_destroyed(legacy_comment["chorus_rails_dataset_id"])
+        note.created_at.should == legacy_comment["created_stamp"]
+        note.updated_at.should == legacy_comment["last_updated_stamp"]
+        note.actor_id.should == User.find_with_destroyed(legacy_comment["chorus_rails_user_id"]).id
+        note.deleted_at.should == legacy_comment["last_updated_stamp"] if legacy_comment["is_deleted"] == 't'
+      end
+    end
   end
 end
