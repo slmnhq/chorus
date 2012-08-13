@@ -32,12 +32,14 @@ class GpdbColumnStatistics
 
   def min
     return nil unless histogram_enumerable?
-    histogram_bounds.first
+    bounds = histogram_bounds
+    bounds.first if bounds
   end
 
   def max
     return nil unless histogram_enumerable?
-    histogram_bounds.last
+    bounds = histogram_bounds
+    bounds.last if bounds
   end
 
   private

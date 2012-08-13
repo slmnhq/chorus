@@ -16,6 +16,13 @@ describe GpdbColumnStatistics do
     its(:number_distinct) { should be_nil }
     its(:min) { should be_nil }
     its(:max) { should be_nil }
+
+    context "pseudo nil histogram bounds, but the column should be treated as enumerable" do
+      let(:histogram_bounds) { "{}" }
+      let(:treat_as_enumerable) { true }
+      its(:min) { should be_nil }
+      its(:max) { should be_nil }
+    end
   end
 
   describe "#null_fraction" do
