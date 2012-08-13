@@ -26,7 +26,7 @@ class DatasetsController < GpdbController
 
     begin
       if workspace.sandbox.database == src_table.schema.database
-        src_table.import(params[:dataset_import], current_user)
+        src_table.import(params[:dataset_import], workspace.sandbox, current_user)
       else
         src_table.gpfdist_import(params[:dataset_import], workspace.sandbox, current_user)
       end

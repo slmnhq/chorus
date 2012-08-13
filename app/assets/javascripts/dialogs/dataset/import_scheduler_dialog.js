@@ -200,6 +200,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             saveOptions.method = "create";
         }
 
+        this.model.unset("sampleCount", {silent: true});
         this.model.save(this.getNewModelAttrs(), saveOptions);
     },
 
@@ -235,9 +236,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             updates.truncate = $truncateCheckbox.prop("checked") + "";
         }
 
-        updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
-        if (!updates.useLimitRows) {
-            updates.sampleCount = 0;
+        var useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
+
+        if (!useLimitRows) {
+            delete updates.sampleCount;
         }
 
         updates.activateSchedule = !!($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked"));

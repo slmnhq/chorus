@@ -222,7 +222,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should put the values in the correct API form fields", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import[truncate]"]).toBe("false");
-                    expect(params["dataset_import[sample_count]"]).toBe('0');
+                    expect(params["dataset_import[sample_count]"]).toBeUndefined();
                     expect(params["dataset_import[schedule_start_time]"]).toBe("2012-02-29 12:09:00.0");
                     expect(params["dataset_import[schedule_end_time]"]).toBe("2012-03-21");
                 });
@@ -380,8 +380,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
                 });
 
-                it("pre-populates the row limit to 500 when row limit is 0", function() {
-                    this.dialog.model.set({sampleCount: '0'});
+                it("pre-populates the row limit to 500 when row limit is undefined", function() {
+                    this.dialog.model.unset("sampleCount");
                     this.dialog.render();
                     expect(this.dialog.$("input[name='sampleCount']").val()).toBe("500");
                 });
@@ -409,8 +409,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(this.server.lastUpdate().params()["dataset_import[activate_schedule]"]).toBe("true");
                     });
 
-                    it('correctly sets sampleCount to 0 when limit_num_rows is unchecked', function() {
-                        expect(this.server.lastUpdate().params()["dataset_import[sample_count]"]).toBe('0');
+                    it('correctly sets sampleCount to undefined when limit_num_rows is unchecked', function() {
+                        expect(this.server.lastUpdate().params()["dataset_import[sample_count]"]).toBeUndefined();
                     });
 
                     context("when the save completes", function() {

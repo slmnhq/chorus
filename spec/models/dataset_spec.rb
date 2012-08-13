@@ -370,129 +370,40 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#import", :database_integration do
-    def call_sql(schema, account, sql_command)
-      schema.with_gpdb_connection(account) do |connection|
-        connection.exec_query(sql_command)
-      end
-    end
-
-    before do
-      refresh_chorus
-    end
+  describe "#import" do
+    let(:user) { account.owner }
 
     context "with correct input" do
       let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:sandbox) { schema } # For testing purposes, src schema = sandbox
       let(:options) {
         {
-            "to_table" => "the_new_table",
-            "use_limit_rows" => "false",
-            "sample_count" => 0
+            "to_table" => "the_new_table"
         }
       }
 
       context "into a table in another db using gpfdist" do
-        let(:user) { account.owner }
 
         it "creates a correct gppipe" do
-          mock(QC).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id)
+          mock(QC).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, nil)
           src_table.gpfdist_import(options, sandbox, user)
         end
       end
 
       context "into a table in the same db" do
-        before do
-          src_table.import(options, schema.instance.owner)
-          GpdbTable.refresh(account, schema)
-        end
-
-        after do
-          call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
-        end
-
-        it "creates the new table" do
-          database.find_dataset_in_schema(options["to_table"], schema.name).should be_a(GpdbTable)
-        end
-
-        it "copies the constraints" do
-          schema.with_gpdb_connection(account) do |connection|
-            dest_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{options["to_table"]}'")
-            src_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table.name}'")
-
-            dest_constraints.count.should == src_constraints.count
-            dest_constraints.each_with_index do |constraint, i|
-              constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
-              constraint["table_name"].should == options["to_table"]
-            end
-          end
-        end
-
-        it "copies the rows" do
-          schema.with_gpdb_connection(account) do |connection|
-            dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-            src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-
-            dest_rows.count.should == src_rows.count
-          end
-        end
-
-        context "when the rows are limited" do
-          let(:options) {
-            {
-                "to_table" => "the_new_table",
-                "use_limit_rows" => "true",
-                "sample_count" => 5
-            }
+        let(:src_table) { datasets(:bobs_table) }
+        let(:schema) { gpdb_schemas(:bobs_schema)}
+        let(:sandbox) { schema } # For testing purposes, src schema = sandbox
+        let(:options) {
+          {
+              "to_table" => "the_new_table",
+              "sample_count" => 50
           }
-          it "copies the rows up to limit" do
-            schema.with_gpdb_connection(account) do |connection|
-              dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-              dest_rows.count.should == 5
-            end
-          end
-
-          context "when the row limit value is 0" do
-            let(:options) {
-              {
-                  "to_table" => "the_new_table",
-                  "use_limit_rows" => "true",
-                  "sample_count" => 0
-              }
-            }
-
-            it "creates the table and copies 0 rows" do
-              schema.with_gpdb_connection(account) do |connection|
-                dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-                src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-                dest_rows.count.should == 0
-              end
-            end
-          end
-        end
-      end
-    end
-
-    context "#import with exception" do
-      let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-      let(:options) {
-        {
-            "to_table" => "the_new_table",
-            "use_limit_rows" => "true",
-            "sample_count" => -5
         }
-      }
 
-      after do
-        call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
-      end
-
-      context "when the limit is -5" do
-        it "raises an exception" do
-          expect {
-            src_table.import(options, schema.instance.owner)
-          }.to raise_error(SqlCommandFailed)
-          GpdbTable.refresh(account, schema)
+        it "creates a correct gp table copier" do
+          mock(QC).enqueue.with("GpTableCopier.run_new", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, 50)
+          src_table.import(options, sandbox, user)
         end
       end
     end

@@ -133,27 +133,12 @@ class Dataset < ActiveRecord::Base
     'Dataset'
   end
 
-  def import(options, user)
-    account = schema.instance.account_for_user!(user)
-    dest_table_name = options["to_table"]
-    create_command = "CREATE TABLE \"#{schema.name}\".\"#{dest_table_name}\" (LIKE \"#{schema.name}\".\"#{name}\" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES);"
-    copy_command = "INSERT INTO #{dest_table_name} (SELECT * FROM #{name})"
-    if options["use_limit_rows"] == "true"
-      if options['sample_count'].to_i < 0
-        raise SqlCommandFailed, "Limit can not be Negative"
-      end
-      copy_command += " LIMIT #{options['sample_count']}"
-    end
-    schema.with_gpdb_connection(account) do |connection|
-      connection.transaction do
-        connection.execute(create_command)
-        connection.execute(copy_command)
-      end
-    end
+  def import(options, dst_schema, user)
+    QC.enqueue('GpTableCopier.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id, options["sample_count"])
   end
 
   def gpfdist_import(options, dst_schema, user)
-    QC.enqueue('Gppipe.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id)
+    QC.enqueue('Gppipe.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id, options["sample_count"])
   end
 
   def preview_sql

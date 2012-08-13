@@ -123,7 +123,7 @@ describe DatasetsController do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        any_instance_of(Dataset) { |c| mock(c).import(options, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).import(options, schema, account.owner) }
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
