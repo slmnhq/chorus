@@ -17,6 +17,10 @@ module Aurora
       @aurora_service.all_databases
     end
 
+    def provider_status
+      "install_succeed"
+    end
+
     def create_database(options)
       @aurora_service.create_database(
         options[:template],
