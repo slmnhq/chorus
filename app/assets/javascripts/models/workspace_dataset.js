@@ -1,6 +1,7 @@
 chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     constructorName: "WorkspaceDataset",
 
+    urlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
     showUrlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
 
     isChorusView: function() {
