@@ -2,74 +2,55 @@ require 'spec_helper'
 
 describe GpdbColumn do
   describe ".columns_for" do
-    let(:db_config) do
-      Rails.configuration.database_configuration['test']
-    end
+    subject { GpdbColumn.columns_for(account, dataset) }
 
-    let(:account) do
-      FactoryGirl.create(:instance_account, {
-        :db_username => db_config['username'],
-        :db_password => 'something',
-        :instance => instance
-      })
-    end
+    context "with real data", :database_integration do
+      before do
+        refresh_chorus
+      end
+      let(:instance) { GpdbIntegration.real_gpdb_instance }
+      let(:account) { GpdbIntegration.real_gpdb_account }
+      let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
+      let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
-    let(:instance) do
-      FactoryGirl.create(:instance, {
-        :host => db_config['host'],
-        :port => db_config['port']
-      })
-    end
+      it "gets the column information for table users" do
+        id = subject.first
 
-    let(:database) { FactoryGirl.create(:gpdb_database, :name => "chorus_rails_test", :instance => instance) }
-    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database) }
-    let(:dataset) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
+        id.name.should eq('id')
+        id.data_type.should eq('integer')
+        id.description.should be_blank
+        id.ordinal_position.should eq(1)
+      end
 
-    subject do
+      it "gets the column stats for table users" do
+        column1 = subject[2]
 
-      GpdbColumn.columns_for(account, dataset)
-    end
-
-    # XXX Local databases usually don't have password so bypass validation
-    before do
-      account.update_attribute :db_password, db_config['password']
-    end
-
-    it "gets the column information for table users" do
-      id = subject.first
-
-      id.name.should eq('id')
-      id.data_type.should eq('integer')
-      id.description.should be_blank
-      id.ordinal_position.should eq(1)
-    end
-
-    it "gets the column stats for table users" do
-      id = subject.first
-
-      stats = id.statistics
-      stats.should be_a GpdbColumnStatistics
-      stats.null_fraction.should be_present
-      stats.number_distinct.should be_present
-      stats.min.should be_present
-      stats.max.should be_present
+        stats = column1.statistics
+        stats.should be_a GpdbColumnStatistics
+        stats.null_fraction.should be_present
+        stats.number_distinct.should be_present
+        stats.common_values.should be_present
+      end
     end
 
     describe "with fake data" do
       before do
         #{"attname"=>"notes", "format_type"=>"text", "description"=>nil, "attnum"=>11, "null_frac"=>nil, "n_distinct"=>nil,
         #"most_common_vals"=>nil, "most_common_freqs"=>nil, "histogram_bounds"=>nil, "reltuples"=>0.0}
-        mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'chorus_rails_test') do
+        mock(Gpdb::ConnectionBuilder).connect!(instance, account, dataset.schema.database.name) do
           [
-            {"attname" => 'email', "format_type" => 'varchar(255)', "description" => 'it must be present',
-             "attnum" => 1, "null_frac" => '1stats1', "n_distinct" => '1stats2', "most_common_vals" => '1stats3',
-             "most_common_freqs" => '1stats4', "histogram_bounds" => '1stats5', "reltuples" => '1rows1'},
-            {"attname" => 'age', "format_type" => 'integer', "description" => 'nothing awesome',
-             "attnum" => 2, "null_frac" => '2stats1', "n_distinct" => '2stats2', "most_common_vals" => '2stats3',
-             "most_common_freqs" => '2stats4', "histogram_bounds" => '2stats5', "reltuples" => '2rows1'}
+              {"attname" => 'email', "format_type" => 'varchar(255)', "description" => 'it must be present',
+               "attnum" => 1, "null_frac" => '1stats1', "n_distinct" => '1stats2', "most_common_vals" => '1stats3',
+               "most_common_freqs" => '1stats4', "histogram_bounds" => '1stats5', "reltuples" => '1rows1'},
+              {"attname" => 'age', "format_type" => 'integer', "description" => 'nothing awesome',
+               "attnum" => 2, "null_frac" => '2stats1', "n_distinct" => '2stats2', "most_common_vals" => '2stats3',
+               "most_common_freqs" => '2stats4', "histogram_bounds" => '2stats5', "reltuples" => '2rows1'}
           ]
         end
       end
+      let(:instance) { instances(:bobs_instance) }
+      let(:account) { instance_accounts(:bobo) }
+      let(:dataset) { datasets(:bobs_table) }
 
       it "returns a collections of columns" do
         subject.should have(2).columns
@@ -82,8 +63,8 @@ describe GpdbColumn do
       end
 
       it "initializes column stats with correct parameters" do
-        mock(GpdbColumnStatistics).new('1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1', false) { }
-        mock(GpdbColumnStatistics).new('2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1', true) { }
+        mock(GpdbColumnStatistics).new('1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1', false) {}
+        mock(GpdbColumnStatistics).new('2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1', true) {}
         subject
       end
 
