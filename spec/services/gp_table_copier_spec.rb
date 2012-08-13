@@ -32,6 +32,11 @@ describe GpTableCopier, :database_integration => true do
     refresh_chorus
   end
 
+  after do
+    call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{src_table_name}\";")
+    call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{dst_table_name}\";") unless (
+      (dst_table_name ==  src_table_name) || dst_table_name == "other_base_table")
+  end
 
   context "actually running the query" do
     before do
@@ -42,11 +47,6 @@ describe GpTableCopier, :database_integration => true do
         call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
         call_sql("insert into \"#{src_table_name}\"(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
       end
-    end
-
-    after do
-      call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{src_table_name}\";")
-      call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{dst_table_name}\";")
     end
 
     context ".run_new" do
