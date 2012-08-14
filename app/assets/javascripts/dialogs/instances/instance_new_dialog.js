@@ -12,25 +12,26 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.aurora = chorus.models.GreenplumInstance.aurora();
-        this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
 
         this.requiredResources.add(chorus.models.Config.instance());
         this.requiredResources.add(this.aurora);
     },
 
-    fetchTemplates: function() {
+    postRender: function() {
         if (this.aurora.isInstalled()) {
-            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
-            this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
-            this.templates.fetch();
+            this.loadTemplates();
         }
     },
 
-    templatesLoaded: function() {
-        var $select = $("<select name='template' class='instance_size'></select>");
-        _.each(this.templates.models, function(template) {
-            var $option = $("<option></option>").val(template.name()).text(template.toText());
+    loadTemplates: function() {
+        var templates = this.aurora.getTemplates();
+
+        var $select = $("<select/>").attr('name', 'template').
+                                     addClass('instance_size');
+
+        _.each(templates, function(template) {
+            var $option = $("<option/>").val(template.name()).text(template.toText());
             $select.append($option);
         });
 

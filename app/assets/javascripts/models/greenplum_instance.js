@@ -124,15 +124,8 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
 }, {
     aurora: function() {
         if (!this._aurora) {
-            this._aurora = new chorus.models.Provisioning({provisionerPluginName: "A4CProvisioner", type: "install"});
+            this._aurora = new chorus.models.Provisioning();
         }
         return this._aurora;
-    },
-
-    auroraTemplates: function() {
-        if (!this._templates) {
-            this._templates = new chorus.collections.ProvisioningTemplateSet([], {provisionerPluginName: "A4CProvisioner"});
-        }
-        return this._templates;
     }
 });

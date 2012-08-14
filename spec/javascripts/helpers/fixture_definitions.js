@@ -3,9 +3,6 @@ window.fixtureDefinitions = {
 
     csvImport: { model: "CSVImport" },
 
-    provisioningTemplate: {},
-    provisioningTemplateSet: {},
-
     config: {},
 
     activity: {
@@ -79,6 +76,7 @@ window.rspecFixtureDefinitions = {
     workfileSet: {},
     workfileVersion: {},
     draft: {},
+    provisioning: {},
 
 //    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 //

@@ -15,8 +15,9 @@ describe("chorus.dialogs.InstancesNew", function() {
     context("when aurora is installed", function() {
         beforeEach(function() {
             chorus.models.Config.instance().set({ provisionMaxSizeInGB: "101GB" });
-            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "install_succeed" });
+            chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
             this.dialog = new chorus.dialogs.InstancesNew();
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
         });
 
@@ -24,50 +25,30 @@ describe("chorus.dialogs.InstancesNew", function() {
             expect(this.dialog.$(".create_new_greenplum input[type=radio]")).toExist();
         });
 
-        context("when the aurora status fetch completes", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
-            });
+        it("shows the correct text", function() {
+            expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum");
+        });
 
-            it("shows the correct text", function() {
-                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum");
-            });
+        it("defaults the schema name to 'public'", function() {
+            expect(this.dialog.$(".create_new_greenplum input[name='schemaName']").val()).toBe("public");
+        });
 
-            it("defaults the schema name to 'public'", function() {
-                expect(this.dialog.$(".create_new_greenplum input[name='schemaName']").val()).toBe("public");
-            });
+        it("doesn't have class disabled", function() {
+            expect(this.dialog.$("label[for=create_new_greenplum]")).not.toHaveClass("disabled");
+        });
 
-            it("doesn't have class disabled", function() {
-                expect(this.dialog.$("label[for=create_new_greenplum]")).not.toHaveClass("disabled");
-            });
+        it("displays the maximum allowable size", function() {
+            expect(this.dialog.$(".create_new_greenplum ")).toContainTranslation("instances.new_dialog.max_size", { max: "101GB" });
+        });
 
-            it("displays the maximum allowable size", function() {
-                expect(this.dialog.$(".create_new_greenplum ")).toContainTranslation("instances.new_dialog.max_size", { max: "101GB" });
-            });
-
-            it("fetches the aurora templates", function() {
-                expect(chorus.models.GreenplumInstance.auroraTemplates()).toHaveBeenFetched();
-            });
-
-            context("when the aurora template fetch completes", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
-                        newFixtures.provisioningTemplate({name: "Small"}),
-                        newFixtures.provisioningTemplate({name: "Medium"}),
-                        newFixtures.provisioningTemplate({name: "Large"})
-                    ]);
-                });
-
-                it("populates the template select box", function() {
-                    expect(this.dialog.$("select option").length).toBe(3);
-                });
-            });
+        it("populates the template select box", function() {
+            expect(this.dialog.$("select option").length).toBe(1);
         });
     });
 
     context("when aurora is not installed", function() {
         beforeEach(function() {
-            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "not_installed" });
+            chorus.models.GreenplumInstance.aurora().set({ installSucceed: false });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
         });
@@ -193,14 +174,9 @@ describe("chorus.dialogs.InstancesNew", function() {
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "install_succeed" });
+            chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
             this.server.completeFetchFor(chorus.models.Config.instance());
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
-                newFixtures.provisioningTemplate({name: "small"}),
-                newFixtures.provisioningTemplate({name: "median"}),
-                newFixtures.provisioningTemplate({name: "large"})
-            ]);
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
         });
 
         context("when registering a hadoop instance", function() {
@@ -275,7 +251,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$(".create_new_greenplum input[name=schemaName]").val("schemaTest");
                 this.dialog.$(".create_new_greenplum input[name=dbUsername]").val("edcadmin");
                 this.dialog.$(".create_new_greenplum input[name=dbPassword]").val("supersecret");
-                this.dialog.$(".create_new_greenplum select").val("large");
+                this.dialog.$(".create_new_greenplum select").val("small");
 
                 spyOn(chorus.models.GreenplumInstance.prototype, "save").andCallThrough();
                 spyOn(chorus, "toast");
@@ -291,6 +267,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     expect(this.dialog.model.save).toHaveBeenCalled();
 
                     var attrs = this.dialog.model.save.calls[0].args[0];
+                    debugger
 
                     expect(attrs.size).toBe("1");
                     expect(attrs.name).toBe("new_greenplum_instance");
@@ -300,7 +277,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     expect(attrs.schemaName).toBe("schemaTest");
                     expect(attrs.dbUsername).toBe("edcadmin");
                     expect(attrs.dbPassword).toBe("supersecret");
-                    expect(attrs.template).toBe("large");
+                    expect(attrs.template).toBe("small");
 
                     expect(chorus.toast).not.toHaveBeenCalledWith("instances.new_dialog.provisioning");
                 });

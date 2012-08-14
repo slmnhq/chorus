@@ -2,8 +2,8 @@ describe("chorus.models.ProvisioningTemplate", function() {
     beforeEach(function() {
         this.model = new chorus.models.ProvisioningTemplate({
             name: "small",
-            memorySize: 4,
-            cpuNumber: 1
+            memorySizeInMb: 4,
+            vcpuNumber: 1
         });
     });
 

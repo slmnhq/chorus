@@ -24,27 +24,8 @@ describe("chorus.models.GreenplumInstance", function() {
             expect(this.aurora).toBeA(chorus.models.Provisioning);
         });
 
-        it("sets the 'provisionerPluginName' and 'type'", function() {
-            expect(this.aurora.get("provisionerPluginName")).toBe("A4CProvisioner");
-            expect(this.aurora.get("type")).toBe("install");
-        });
-
         it("memoizes", function() {
             expect(this.aurora).toBe(chorus.models.GreenplumInstance.aurora());
-        });
-    });
-
-    describe(".auroraTemplates", function() {
-        beforeEach(function() {
-            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
-        });
-
-        it("returns a template set object", function() {
-            expect(this.templates).toBeA(chorus.collections.ProvisioningTemplateSet);
-        });
-
-        it("memoizes", function() {
-            expect(this.templates).toBe(chorus.models.GreenplumInstance.auroraTemplates());
         });
     });
 
