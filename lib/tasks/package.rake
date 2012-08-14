@@ -74,8 +74,7 @@ module PackageMaker
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
 
-    version = Chorus::VERSION::STRING
-    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} chorus-#{version}.sh 'Chorus #{version} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
+    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
   def upload(filename, config)
