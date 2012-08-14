@@ -3,15 +3,15 @@ class DataMigrator
 
   def initialize
     @migrators = [ConfigMigrator.new,
-                  UserMigrator.new,
-                  InstanceMigrator.new,
-                  InstanceAccountMigrator.new,
-                  WorkspaceMigrator.new,
-                  MembershipMigrator.new,
+                  UserMigrator.new, #done
+                  InstanceMigrator.new, #done
+                  InstanceAccountMigrator.new, # done
+                  WorkspaceMigrator.new, #done
+                  MembershipMigrator.new, #done
                   ImageMigrator.new,
                   WorkfileMigrator.new,
                   SandboxMigrator.new,
-                  HadoopInstanceMigrator.new,
+                  HadoopInstanceMigrator.new, # done
                   #ActivityMigrator.new,
                   AssociatedDatasetMigrator.new
                  ]

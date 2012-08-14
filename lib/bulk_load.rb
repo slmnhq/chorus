@@ -14,10 +14,10 @@ system "psql -p 8543 tmp_migrate -c 'alter schema public rename to legacy_migrat
 # Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
 system "pg_dump -p 8543 tmp_migrate | psql -p 8543 #{rails_db}"
 
-
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.users ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_user ADD COLUMN chorus_rails_user_id INTEGER;'"
 
+system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.hadoop_instances ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.instances ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_instance ADD COLUMN chorus_rails_instance_id INTEGER;'"
 

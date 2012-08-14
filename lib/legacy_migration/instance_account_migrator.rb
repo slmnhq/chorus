@@ -27,6 +27,7 @@ class InstanceAccountMigrator
                             INNER JOIN instances i
                               ON map.instance_id = i.legacy_id
                             WHERE map.id NOT IN (SELECT legacy_id FROM instance_accounts)
+                            AND i.instance_provider = 'Greenplum Database'
                             AND NOT (map.shared = 'no' AND i.shared = true);")
 
     unless inserted == 0
