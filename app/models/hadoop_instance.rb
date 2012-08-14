@@ -3,6 +3,7 @@ class HadoopInstance < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
+  has_many :hdfs_entries
   validates_presence_of :name, :host, :port
 
   def url

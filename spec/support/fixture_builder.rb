@@ -51,6 +51,8 @@ FixtureBuilder.configure do |fbuilder|
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
 
+    HdfsEntry.create!({:path => "/hdfs_entry", :size => 10, :is_directory => true, :modified_at => Time.parse("2010-10-20 22:00:00"), :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
+
     chorus_gpdb40_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
     chorus_gpdb41_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
     chorus_gpdb42_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb42").merge({:name => "chorus_gpdb42", :owner => admin}), :without_protection => true)
