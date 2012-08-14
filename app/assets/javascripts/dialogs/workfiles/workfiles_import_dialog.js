@@ -7,9 +7,6 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     persistent: true,
 
     events: {
-        "change input[name=workfile[description]]": "descriptionChanged",
-        "paste input[name=workfile[description]]": "descriptionChanged",
-        "keyup input[name=workfile[description]]": "descriptionChanged",
         "click button.submit": "upload",
         "submit form": "upload",
         "click button.choose": "chooseFile"
@@ -58,10 +55,6 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this.$("input").click();
     },
 
-    descriptionChanged: function(e) {
-        this.$("button.submit").prop("disabled", false);
-    },
-
     postRender: function() {
         var self = this;
 
@@ -101,7 +94,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             _.each(files, function(file) {
                 if (file.size > (maxFileSize * 1024 * 1024)) {
                     self.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":maxFileSize}}}}
-                    self.showErrors(self.model);
+                    self.showErrorAndDisableButton();
                 }
             }, self);
         }
@@ -117,20 +110,24 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
         function uploadFailed(e, json) {
             e.preventDefault();
-            try {
+            if (json.jqXHR.status == '413') {
+                self.displayNginxError();
+            } else {
                 self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
-            } catch(error) {
-                var status = json.jqXHR.status;
-                var statusText = json.jqXHR.statusText;
-                self.displayNginxError(status, statusText);
             }
-            self.$("button.submit").stopLoading();
-            self.$("button.submit").prop("disabled", true);
-            self.resource.trigger("saveFailed");
+
+            self.showErrorAndDisableButton();
         }
     },
 
-    displayNginxError: function(status, statusText) {
-        this.model.serverErrors = {"fields":{"base":{GENERIC:{message: status + ": " + statusText }}}}
+    showErrorAndDisableButton: function() {
+        this.$("button.submit").stopLoading();
+        this.$("button.submit").prop("disabled", true);
+        this.resource.trigger("saveFailed");
+    },
+
+    displayNginxError: function() {
+        var maxFileSize = this.config.get("fileSizesMbWorkfiles");
+        this.resource.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":maxFileSize}}}};
     }
 });

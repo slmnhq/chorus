@@ -124,6 +124,10 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
                 });
 
+                it("disables the upload button", function() {
+                    expect(this.dialog.$("button.submit")).toHaveAttr("disabled");
+                });
+
                 describe("when the user tries again with a smaller file", function() {
                     it("doesn't show an error", function() {
                         this.fakeUpload.add([{ name: "foo.bar", size: 10 * 1024 * 1024 -1 }]);
@@ -140,11 +144,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             });
 
             context("when nginx returns a 413 (body too large) error", function() {
-                it("shows that error", function() {
+                it("shows the file too large error message", function() {
                     this.fakeUpload.add([{ name: "invalid.bar", size: 10 * 1024 * 1024 - 1 }]);
                     html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
                     this.fakeUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large");
-                    expect(this.dialog.$(".errors")).toContainText("413: Request Entity Too Large");
+                    expect(this.dialog.$(".errors")).toContainText("file exceeds");
                 });
             });
         });
@@ -219,16 +223,6 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
                 it("sets the button text back to 'Upload File'", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
-                });
-
-                context("when the user changes the description text", function() {
-                    beforeEach(function() {
-                        this.dialog.$("input[name='workfile[description]']").change();
-                    });
-
-                    it("re-enables the button", function() {
-                        expect(this.dialog.$("button.submit").prop("disabled")).toBeFalsy();
-                    });
                 });
             });
         });
