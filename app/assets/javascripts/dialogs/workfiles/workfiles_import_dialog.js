@@ -119,7 +119,9 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             if (json.jqXHR.status == '413') {
                 self.displayNginxError();
             } else {
-                self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
+                if (json.jqXHR.responseText)  {
+                    self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
+                }
             }
 
             self.showErrorAndDisableButton();
