@@ -149,6 +149,9 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
                     this.fakeUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large");
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
+                    expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
+                    expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
+                    expect(this.dialog.$("input[type=file]")).toHaveAttr("style", "");
                 });
             });
         });
@@ -168,6 +171,8 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
             it("disables the upload button", function() {
                 expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
+                expect(this.dialog.$("button.choose").prop("disabled")).toBeTruthy();
+                expect(this.dialog.$("input")).toBeHidden();
             });
 
             it("changes the text on the upload button to 'uploading'", function() {
@@ -211,6 +216,8 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
                 it("disables the upload button", function() {
                     expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
+                    expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
+                    expect(this.dialog.$("input[type=file]")).toHaveAttr("style", "");
                 });
 
                 it("takes the upload button out of the loading state", function() {

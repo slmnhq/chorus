@@ -37,6 +37,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         if (this.uploadObj) {
             this.request = this.uploadObj.submit();
             this.$("button.submit").startLoading("workfiles.import_dialog.uploading");
+            this.$("button.choose").prop("disabled", true);
+            this.$("input").toggle(false);
         }
     },
 
@@ -51,8 +53,12 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     },
 
     chooseFile: function(e) {
-        e.preventDefault();
-        this.$("input").click();
+        if (!this.$("button.choose").disabled) {
+            e.preventDefault();
+            this.$("input").click();
+        } else {
+            this.$("input").toggle(false);
+        }
     },
 
     postRender: function() {
@@ -123,6 +129,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     showErrorAndDisableButton: function() {
         this.$("button.submit").stopLoading();
         this.$("button.submit").prop("disabled", true);
+        this.$("button.choose").prop("disabled", false);
+        this.$("input").toggle(true);
         this.resource.trigger("saveFailed");
     },
 
