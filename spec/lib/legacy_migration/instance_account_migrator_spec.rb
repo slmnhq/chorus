@@ -2,20 +2,16 @@ require 'spec_helper_no_transactions'
 
 describe InstanceAccountMigrator do
   describe ".migrate" do
-    before :all do
-      UserMigrator.new.migrate if User.unscoped.count == 0
-      InstanceMigrator.new.migrate if Instance.count == 0
-      InstanceAccountMigrator.new.migrate if InstanceAccount.count == 0
-    end
-
     describe "validate the number of entries migrated" do
-      it "creates new InstanceAccounts from old AccountMap" do
+      it "creates new InstanceAccounts from old AccountMap and is idempotent" do
+        InstanceAccountMigrator.new.migrate
+        InstanceAccount.count.should == 4
+        InstanceAccountMigrator.new.migrate
         InstanceAccount.count.should == 4
       end
     end
 
     describe "copying the data" do
-
       it "adds the new foreign key column" do
         Legacy.connection.column_exists?(:edc_account_map, :chorus_rails_instance_account_id).should be_true
       end
@@ -44,7 +40,7 @@ describe InstanceAccountMigrator do
       end
 
       it "marks instances as shared when shared accounts exist" do
-        Instance.find(Legacy.connection.select_one("SELECT chorus_rails_instance_id AS id FROM edc_instance WHERE id = '10020'")["id"]).should be_shared
+        Instance.find_by_legacy_id('10020').should be_shared
       end
     end
   end

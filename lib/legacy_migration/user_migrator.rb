@@ -32,9 +32,11 @@ class UserMigrator
                                   ELSE null
                                 END,
                               substring(password, 6)
-                            FROM legacy_migrate.edc_user;")
+                            FROM legacy_migrate.edc_user
+                            WHERE edc_user.id NOT IN (SELECT legacy_id FROM users);")
 
     # populate old table with new primary keys for lookup
+    #TODO REMOVE ME
     Legacy.connection.exec_query("UPDATE legacy_migrate.edc_user
                             SET chorus_rails_user_id = users.id
                             FROM public.users

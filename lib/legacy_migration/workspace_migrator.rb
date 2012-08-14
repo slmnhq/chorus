@@ -15,7 +15,7 @@ class WorkspaceMigrator
         created_at,
         updated_at)
       SELECT
-        edc_workspace.id::integer,
+        edc_workspace.id,
         name,
         CASE is_public
           WHEN 'f' THEN false

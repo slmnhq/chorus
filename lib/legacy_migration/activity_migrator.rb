@@ -2,9 +2,31 @@ require 'legacy_migration/legacy_activity_stream'
 
 class ActivityMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_activity_stream, :chorus_rails_event_id)
-      Legacy.connection.add_column :edc_activity_stream, :chorus_rails_event_id, :integer
-    end
+
+    "
+    INSERT INTO events(
+      action,
+      target1_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      ('Events::' || type),
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE type = 'SOURCE_TABLE_CREATED';
+    "
 
     Legacy::ActivityStream.all.each do |activity_stream|
       mapper = ActivityStreamEventMapper.new(activity_stream)
@@ -32,6 +54,7 @@ class ActivityMigrator
     user_id = activity_stream.user_id
     actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
 
+    # ?????????? wat is this
     if actor.nil? && activity_stream.type == 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
       user_id = activity_stream.author_id
       actor = user_id.present? ? User.find_with_destroyed(user_id) : nil

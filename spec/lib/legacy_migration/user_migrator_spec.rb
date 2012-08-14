@@ -2,12 +2,14 @@ require 'spec_helper_no_transactions'
 
 describe UserMigrator do
   describe ".migrate" do
-    before :all do
-      UserMigrator.new.migrate if User.count == 0
+    before do
+      UserMigrator.new.migrate
     end
 
     describe "copying the data" do
-      it "creates new users for legacy users" do
+      it "creates new users for legacy users and is idempotent" do
+        User.unscoped.count.should == 8
+        UserMigrator.new.migrate
         User.unscoped.count.should == 8
       end
 

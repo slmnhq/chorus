@@ -2,13 +2,14 @@ require 'spec_helper_no_transactions'
 
 describe InstanceMigrator do
   describe ".migrate" do
-    describe "copying the data" do
-      before do
-        UserMigrator.new.migrate if User.unscoped.count == 0
-        InstanceMigrator.new.migrate if Instance.count == 0
-      end
+    before do
+      InstanceMigrator.new.migrate
+    end
 
-      it "creates new instances for legacy GPDB instances" do
+    describe "copying the data" do
+      it "creates new instances for legacy GPDB instances and is idempotent" do
+        Instance.count.should == 3
+        InstanceMigrator.new.migrate
         Instance.count.should == 3
       end
 
