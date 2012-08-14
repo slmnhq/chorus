@@ -101,7 +101,6 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
         } else {
             this.csv.set({
-                type: this.importTarget + "Table",
                 toTable: this.importDestination(),
                 truncate: this.$(".existing_table input#truncate").is(':checked')
             }, {silent: true});
