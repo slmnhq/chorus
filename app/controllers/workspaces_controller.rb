@@ -28,7 +28,6 @@ class WorkspacesController < ApplicationController
   end
 
   def update
-    p params
     workspace = Workspace.find(params[:id])
     params[:workspace][:archiver] = current_user if params[:workspace][:archived] == 'true'
     workspace.attributes = params[:workspace]
