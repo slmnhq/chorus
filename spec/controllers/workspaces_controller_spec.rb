@@ -184,17 +184,25 @@ describe WorkspacesController do
 
       it "makes the right event when making the workspace public" do
         workspace = workspaces(:alice_private)
-        parameters = {:id => workspace.id, :workspace => {:public => true}}
+        parameters = {:id => workspace.id, :workspace => {:public => true, :archived => workspace.archived?.to_s}}
         lambda {
-          put :update, parameters
-        }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
+          lambda {
+            lambda {
+              put :update, parameters
+            }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
+          }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
+        }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
       end
 
       it "makes the right event when making the workspace private" do
-        parameters = {:id => workspace.id, :workspace => {:public => false}}
+        parameters = {:id => workspace.id, :workspace => {:public => false, :archived => workspace.archived?.to_s}}
         lambda {
-          put :update, parameters
-        }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
+          lambda {
+            lambda {
+              put :update, parameters
+            }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
+          }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
+        }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
       end
 
       it "allows archiving the workspace" do
