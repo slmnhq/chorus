@@ -2,7 +2,7 @@ require 'aurora/service'
 
 class ProvisioningController < ApplicationController
   def show
-    aurora = AuroraProvider.new(Aurora::Service.new(Rails.root.join('config', 'aurora.properties')))
+    aurora = AuroraProvider.create_from_aurora_service
     present aurora
   end
 end

@@ -1,9 +1,10 @@
 class AuroraProviderPresenter < Presenter
-  delegate :install_succeed? ,to: :model
+  delegate :valid?, :templates, to: :model
 
   def to_hash
     {
-        :install_succeed => install_succeed?
+        :install_succeed => valid?,
+        :templates => present(templates)
     }
   end
 end

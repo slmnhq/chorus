@@ -6,10 +6,10 @@ describe AuroraProvider do
 
     it "returns the aurora provider status" do
       aurora_service = Object.new
-      mock(aurora_service).provider_status { "install_succeed" }
+      mock(aurora_service).valid? { true }
 
       provider = AuroraProvider.new(aurora_service)
-      provider.install_succeed?.should be_true
+      provider.valid?.should be_true
     end
   end
 end

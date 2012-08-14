@@ -1,6 +1,8 @@
 require_relative 'java_modules'
 
 module Aurora
+  InvalidService = Class.new(StandardError)
+
   DB_SIZE = {
     :small =>  Java::AuroraDBTemplate.small,
     :medium => Java::AuroraDBTemplate.medium,
@@ -11,17 +13,32 @@ module Aurora
     def initialize(aurora_properties_path)
       config_path = aurora_properties_path.to_s
       @aurora_service = Java::AuroraService.get_instance(Java::AuroraConfig.load_config(config_path))
+      @valid = true
+    rescue StandardError
+      @valid = false
     end
 
     def all_databases
+      raise InvalidService unless @valid
+
       @aurora_service.all_databases
     end
 
-    def provider_status
-      "install_succeed"
+    def valid?
+      @valid
+    end
+
+    def templates
+      return [] unless @valid
+
+      @aurora_service.get_template_for_chorus.map do |java_template|
+        Template.new(java_template)
+      end
     end
 
     def create_database(options)
+      raise InvalidService unless @valid
+
       @aurora_service.create_database(
         options[:template],
         options[:db_name],

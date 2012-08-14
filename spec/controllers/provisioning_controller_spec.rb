@@ -9,7 +9,7 @@ describe ProvisioningController do
   describe "#show" do
     before do
       any_instance_of(Aurora::Service) do |aurora_service|
-        stub(aurora_service).provider_status { "install_succeed" }
+        stub(aurora_service).valid? { true }
       end
     end
 
