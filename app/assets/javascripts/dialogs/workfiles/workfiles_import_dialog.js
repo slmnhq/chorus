@@ -38,7 +38,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             this.request = this.uploadObj.submit();
             this.$("button.submit").startLoading("workfiles.import_dialog.uploading");
             this.$("button.choose").prop("disabled", true);
-            this.$("input").toggle(false);
+            this.$("input").addClass("hidden");
         }
     },
 
@@ -57,7 +57,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             e.preventDefault();
             this.$("input").click();
         } else {
-            this.$("input").toggle(false);
+            this.$("input").removeClass("hidden");
         }
     },
 
@@ -130,7 +130,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this.$("button.submit").stopLoading();
         this.$("button.submit").prop("disabled", true);
         this.$("button.choose").prop("disabled", false);
-        this.$("input").toggle(true);
+        this.$("input").addClass("hidden");
         this.resource.trigger("saveFailed");
     },
 

@@ -126,12 +126,17 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
                 it("disables the upload button", function() {
                     expect(this.dialog.$("button.submit")).toHaveAttr("disabled");
+                    expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
+                    expect(this.dialog.$("input[type=file]")).not.toHaveClass("Hidden");
                 });
 
                 describe("when the user tries again with a smaller file", function() {
                     it("doesn't show an error", function() {
                         this.fakeUpload.add([{ name: "foo.bar", size: 10 * 1024 * 1024 -1 }]);
                         expect(this.dialog.$(".errors")).not.toContainText("file exceeds");
+                        expect(this.dialog.$("button.submit").prop("disabled")).toBeFalsy();
+                        expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
+                        expect(this.dialog.$("input[type=file]")).not.toHaveClass("Hidden");
                     });
                 });
             });
@@ -151,7 +156,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
                     expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
                     expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
-                    expect(this.dialog.$("input[type=file]")).toHaveAttr("style", "");
+                    expect(this.dialog.$("input[type=file]")).not.toHaveClass("Hidden");
                 });
             });
         });
@@ -217,7 +222,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 it("disables the upload button", function() {
                     expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
                     expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
-                    expect(this.dialog.$("input[type=file]")).toHaveAttr("style", "");
+                    expect(this.dialog.$("input[type=file]")).not.toHaveClass("Hidden");
                 });
 
                 it("takes the upload button out of the loading state", function() {

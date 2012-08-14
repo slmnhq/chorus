@@ -91,7 +91,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFile: function(e) {
         e && e.preventDefault();
-
+        this.$("button.choose").prop("disabled", true);
+        this.$(".file-wrapper a").addClass("hidden");
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/workspace/" + this.options.workspaceId + "/workfile";
@@ -114,6 +115,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 this.clearErrors();
                 this.request = this.uploadObj.submit();
             } else {
+                this.$("button.choose").prop("disabled", false);
+                this.$(".file-wrapper a").removeClass("hidden");
                 this.showErrors(this.model);
             }
         }
@@ -129,6 +132,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFailed: function(e, response) {
         e && e.preventDefault();
+        this.$(".file-wrapper a").removeClass("hidden");
         try {
             this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
         } catch(error) {
@@ -215,6 +219,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         _.each( this.uploadObj.files, function(file) {
             if (file.size > (maxFileSize * 1024 * 1024) ) {
                 this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
+                this.$("button.submit").prop("disabled", true);
                 this.showErrors(this.model);
             }
         }, this);

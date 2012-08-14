@@ -132,6 +132,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("shows an error", function() {
                     chorus.modal.validateFileSize();
                     expect(this.dialog.$('.errors')).toContainText("file exceeds");
+                    expect(this.dialog.$('button.submit')).not.toBeEnabled();
                 });
 
                 it("removes the error when a valid file is then selected", function() {
@@ -139,14 +140,21 @@ describe("chorus.dialogs.DatasetImport", function() {
                     this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
                     chorus.modal.validateFileSize();
                     expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
+                    expect(this.dialog.$('button.submit')).toBeEnabled();
                 });
             });
 
             describe("when nginx returns a 413 (body too large) error", function() {
-                xit("shows that error", function() {
+                it("shows that error", function() {
                     this.fileList = [{ name: 'finefile.bar', size: 1 * 1024 * 1024 - 1 }];
-                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
                     html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
+                    var errorResponse = {
+                        jqXHR: {
+                            status: 413,
+                            statusText: '413: Request Entity Too Large'
+                        }
+                    };
+                    this.fileUploadOptions.fail(null, errorResponse);
                     expect(this.dialog.$(".errors")).toContainText("413: Request Entity Too Large");
                 });
             });
@@ -306,6 +314,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                         this.dialog.$("button.submit").click();
                     });
 
+                    it("Should disable the change file link", function() {
+                        expect(this.dialog.$(".file-wrapper a")).toHaveClass("hidden");
+                    });
+
                     context("when upload succeeds", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
@@ -381,6 +393,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("should display a loading spinner", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
                     expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                    expect(this.dialog.$("button.choose")).toBeDisabled();
                 });
 
                 it("uploads the specified file", function() {
