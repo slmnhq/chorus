@@ -9,6 +9,7 @@ describe Visualization::Boxplot, :database_integration => true do
     Visualization::Boxplot.new(dataset, {
         :x_axis => "category",
         :y_axis => "column2",
+        :bins => 20,
         :filters => filters
     })
   end

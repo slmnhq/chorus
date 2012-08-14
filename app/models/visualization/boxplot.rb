@@ -24,9 +24,12 @@ module Visualization
     def build_row_sql
       filters = @filters.present? ? "WHERE #{@filters.join(" AND ")}" : ""
 
-      "select innerQuery.\"#{@category}\", innerQuery.ntile, min(innerQuery.\"#{@values}\"), max(innerQuery.\"#{@values}\"), count(*) cnt from
+      innerQuery = "select innerQuery.\"#{@category}\", innerQuery.ntile, min(innerQuery.\"#{@values}\"), max(innerQuery.\"#{@values}\"), count(*) cnt from
         (select \"#{@category}\", \"#{@values}\", ntile(4) OVER (t) AS ntile FROM \"#{@schema.name}\".\"#{@dataset.name}\" #{filters} WINDOW t AS (PARTITION BY \"#{@category}\" ORDER BY \"#{@values}\")) as innerQuery
-        GROUP BY innerQuery.\"#{@category}\", innerQuery.ntile ORDER BY innerQuery.\"#{@category}\", innerQuery.ntile;"
+        GROUP BY innerQuery.\"#{@category}\", innerQuery.ntile ORDER BY innerQuery.\"#{@category}\", innerQuery.ntile "
+
+      "SELECT #{@category}, ntile, min, max, cnt, sum(cnt) OVER(w) AS total FROM (#{innerQuery}) AS outerQuery " +
+          " WINDOW w AS (PARTITION BY #{@category}) ORDER BY total desc, #{@category}, ntile LIMIT #{(@bins * 4).to_s}"
     end
   end
 end
