@@ -2,24 +2,12 @@ require 'stringio'
 
 class WorkfileMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_work_file, :chorus_rails_workfile_id)
-      Legacy.connection.add_column :edc_work_file, :chorus_rails_workfile_id, :integer
-    end
-
-    unless Legacy.connection.column_exists?(:edc_workfile_version, :chorus_rails_workfile_version_id)
-      Legacy.connection.add_column :edc_workfile_version, :chorus_rails_workfile_version_id, :integer
-    end
-
-    unless Legacy.connection.column_exists?(:edc_workfile_draft, :chorus_rails_workfile_draft_id)
-      Legacy.connection.add_column :edc_workfile_draft, :chorus_rails_workfile_draft_id, :integer
-    end
-
     legacy_workfiles = Legacy.connection.select_all("SELECT * from edc_work_file")
     legacy_workfiles.each do |legacy_workfile|
-      legacy_workspace = Legacy.connection.select_one("SELECT * from edc_workspace WHERE id = '#{legacy_workfile["workspace_id"]}'")
       legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_workfile["owner"]}'")
       new_workfile = Workfile.new
-      new_workfile.workspace_id = legacy_workspace["chorus_rails_workspace_id"]
+      new_workfile.workspace = Workspace.find_by_legacy_id(legacy_workfile["workspace_id"])
+
       new_workfile.owner_id = legacy_owner["chorus_rails_user_id"]
       new_workfile.description = legacy_workfile["description"]
       new_workfile.created_at = legacy_workfile["created_stamp"]

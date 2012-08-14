@@ -12,7 +12,7 @@ class DataMigrator
                   WorkfileMigrator.new,
                   SandboxMigrator.new,
                   HadoopInstanceMigrator.new,
-                  ActivityMigrator.new,
+                  #ActivityMigrator.new,
                   AssociatedDatasetMigrator.new
                  ]
   end

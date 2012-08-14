@@ -16,7 +16,7 @@ FixtureBuilder.configure do |fbuilder|
   fbuilder.factory do
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
 
-    (ActiveRecord::Base.direct_descendants - [Legacy]).each do |klass|
+    (ActiveRecord::Base.direct_descendants).each do |klass|
       ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{klass.table_name}_id_seq RESTART WITH 1000000;")
     end
 

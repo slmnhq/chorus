@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
 PROPERTIES = <<EOF
 # Enable/disable LDAP

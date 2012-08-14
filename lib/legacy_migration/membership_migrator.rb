@@ -1,25 +1,27 @@
 class MembershipMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_member, :chorus_rails_membership_id)
-      Legacy.connection.add_column :edc_member, :chorus_rails_membership_id, :integer
-    end
+    Legacy.connection.exec_query("INSERT INTO public.memberships(
+                              legacy_id,
+                              user_id,
+                              workspace_id)
+                            SELECT
+                              edc_member.id::integer,
+                              users.id,
+                              workspaces.id
+                              FROM legacy_migrate.edc_member
+                              JOIN users
+                              ON users.username = edc_member.member_name
+                              JOIN workspaces
+                              ON workspaces.legacy_id = edc_member.workspace_id::integer;")
 
-    legacy_members.each do |member|
-      new_membership = Membership.new
-      new_membership.user = User.unscoped.find_by_username(member["member_name"])
-      legacy_workspace_row = Legacy.connection.select_one("select * from edc_workspace where id = '#{member["workspace_id"]}'")
-      new_membership.workspace = Workspace.find(legacy_workspace_row["chorus_rails_workspace_id"])
-      new_membership.save!
+    Legacy.connection.exec_query("UPDATE edc_member SET chorus_rails_membership_id = memberships.id FROM memberships WHERE edc_member.id::integer = memberships.legacy_id;")
 
-      id = member["id"]
-      Legacy.connection.update("Update edc_member SET chorus_rails_membership_id = #{new_membership.id} WHERE id = '#{id}'")
-    end
-  end
-
-  def legacy_members
-    Legacy.connection.select_all(<<SQL)
-      SELECT edc_member.*
-      FROM edc_member
-SQL
+    Legacy.connection.exec_query("INSERT INTO memberships(workspace_id, user_id)
+                                    SELECT workspaces.id, workspaces.owner_id
+                                    FROM workspaces
+                                    LEFT OUTER JOIN memberships
+                                      ON workspaces.owner_id = memberships.user_id
+                                      AND workspaces.id = memberships.workspace_id
+                                    WHERE memberships.id IS NULL;")
   end
 end

@@ -40,12 +40,3 @@ production:
   <<: *default
   username: pivotal
   # port: 5432
-
-legacy:
-  database: chorus
-  <<: *default
-
-legacy_test:
-  database: chorus_legacy_test
-  <<: *default
-

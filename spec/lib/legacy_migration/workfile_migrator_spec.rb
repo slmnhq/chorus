@@ -1,33 +1,34 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
-describe WorkfileMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe WorkfileMigrator do
   describe ".migrate" do
-    before do
-      UserMigrator.new.migrate
-      WorkspaceMigrator.new.migrate
-      MembershipMigrator.new.migrate
+    before :all do
+      Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+      UserMigrator.new.migrate if User.count == 0
+      WorkspaceMigrator.new.migrate if Workspace.count == 0
+      MembershipMigrator.new.migrate if Membership.count == 0
+      WorkfileMigrator.new.migrate if Workfile.count == 0
     end
 
     describe "validate the number of entries copied" do
       it "creates a workfile for every legacy workfile, including deleted ones" do
         legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
-        expect { WorkfileMigrator.new.migrate }.to change(Workfile.unscoped, :count).by(legacy_workfiles.length)
+        Workfile.unscoped.count.should == legacy_workfiles.length
       end
 
       it "creates a workfile draft for every legacy draft, including deleted ones" do
         legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
-        expect { WorkfileMigrator.new.migrate }.to change(WorkfileDraft, :count).by(legacy_drafts.length)
+        WorkfileDraft.count.should == legacy_drafts.length
       end
 
       it "creates a workfile version for every legacy version, including deleted ones" do
         legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
-        expect { WorkfileMigrator.new.migrate }.to change(WorkfileVersion.unscoped, :count).by(legacy_versions.length)
+        WorkfileVersion.unscoped.count.should == legacy_versions.length
       end
     end
 
     describe "copying the data" do
-      before do
-        WorkfileMigrator.new.migrate
+      before :each do
         @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
         @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
         @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
@@ -45,7 +46,7 @@ describe WorkfileMigrator, :legacy_migration => true, :type => :legacy_migration
         @legacy_workfiles.each do |legacy_workfile|
           legacy_workspace = Legacy.connection.select_one("select * from edc_workspace where id = '#{legacy_workfile["workspace_id"]}'")
           new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
-          new_workfile.workspace.id.should == legacy_workspace["chorus_rails_workspace_id"].to_i
+          new_workfile.workspace.legacy_id.should == legacy_workspace["id"].to_i
         end
       end
 
@@ -110,8 +111,8 @@ describe WorkfileMigrator, :legacy_migration => true, :type => :legacy_migration
             legacy_owner = Legacy.connection.select_one("select * from edc_user where user_name = '#{legacy_version["version_owner"]}'")
             legacy_modifier = Legacy.connection.select_one("select * from edc_user where user_name = '#{legacy_version["modified_by"]}'")
 
-            new_owner = User.find(legacy_owner["chorus_rails_user_id"])
-            new_modifier = User.find(legacy_modifier["chorus_rails_user_id"])
+            new_owner = User.unscoped.find(legacy_owner["chorus_rails_user_id"])
+            new_modifier = User.unscoped.find(legacy_modifier["chorus_rails_user_id"])
 
             new_version = WorkfileVersion.find(legacy_version["chorus_rails_workfile_version_id"])
 
@@ -165,7 +166,7 @@ describe WorkfileMigrator, :legacy_migration => true, :type => :legacy_migration
         it "associates the new draft with the appropriate owner" do
           @legacy_drafts.each do |legacy_draft|
             legacy_owner = Legacy.connection.select_one("select * from edc_user where user_name = '#{legacy_draft["draft_owner"]}'")
-            new_owner = User.find(legacy_owner["chorus_rails_user_id"])
+            new_owner = User.unscoped.find(legacy_owner["chorus_rails_user_id"])
             new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
             new_draft.owner_id.should == new_owner.id
           end

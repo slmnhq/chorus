@@ -1,14 +1,8 @@
 require "stringio"
 
 class LegacyImage < ActiveRecord::Base
-  if Rails.env.test?
-    establish_connection(:legacy_test)
-  else
-    establish_connection(:legacy)
-  end
-
   def self.table_name
-    "edc_image_instance"
+    "legacy_migrate.edc_image_instance"
   end
 
   def self.inheritance_column
@@ -18,6 +12,9 @@ end
 
 class ImageMigrator
   def migrate
+    ActiveRecord::Base.record_timestamps = false
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+
     legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")
     legacy_users_with_images.each do |legacy_user|
       new_user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
@@ -32,7 +29,7 @@ class ImageMigrator
 
     legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
     legacy_workspaces_with_images.each do |legacy_workspace|
-      new_workspace = Workspace.find(legacy_workspace["chorus_rails_workspace_id"])
+      new_workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])
       icon_id = legacy_workspace["icon_id"]
       icon = LegacyImage.where("image_id = '#{icon_id}' and type = 'original'").first
 
@@ -41,6 +38,8 @@ class ImageMigrator
       new_workspace.image = file
       new_workspace.save!
     end
+
+    ActiveRecord::Base.record_timestamps = true
   end
 end
 

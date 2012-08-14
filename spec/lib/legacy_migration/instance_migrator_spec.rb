@@ -1,33 +1,18 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
-describe InstanceMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe InstanceMigrator do
   describe ".migrate" do
-    describe "the new foreign key column" do
-      before(:each) do
-        Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id).should be_false
-      end
-
-      it "adds the new foreign key column" do
-        UserMigrator.new.migrate
-        InstanceMigrator.new.migrate
-        Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id).should be_true
-      end
-    end
-
     describe "copying the data" do
       before do
-        UserMigrator.new.migrate
+        UserMigrator.new.migrate if User.unscoped.count == 0
+        InstanceMigrator.new.migrate if Instance.count == 0
       end
 
       it "creates new instances for legacy GPDB instances" do
-        expect {
-          InstanceMigrator.new.migrate
-        }.to change(Instance, :count).by(3)
+        Instance.count.should == 3
       end
 
       it "copies the correct data fields from the legacy instance" do
-        InstanceMigrator.new.migrate
-
         Legacy.connection.select_all("SELECT * FROM edc_instance WHERE instance_provider = 'Greenplum Database'").each do |legacy_instance|
           instance = Instance.find(legacy_instance["chorus_rails_instance_id"])
           #p instance

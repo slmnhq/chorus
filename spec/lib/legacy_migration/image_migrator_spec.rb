@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 require 'base64'
 
 TYPE_MAP = {
@@ -7,22 +7,20 @@ TYPE_MAP = {
   "image/gif" => "GIF"
 }
 
-describe ImageMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe ImageMigrator do
   describe ".migrate" do
-    describe "copying the data" do
-      before do
-        UserMigrator.new.migrate
-        WorkspaceMigrator.new.migrate
-        MembershipMigrator.new.migrate
-      end
+    before :all do
+      UserMigrator.new.migrate if User.unscoped.count == 0
+      WorkspaceMigrator.new.migrate if Workspace.count == 0
+      MembershipMigrator.new.migrate if Membership.count == 0
+      ImageMigrator.new.migrate if User.where("image_file_name is not null").count == 0
+    end
 
+    describe "copying the data" do
       it "gives an image attachment to all users who had profile images" do
         legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")
         legacy_users_with_images.length.should == 3
-
-        expect {
-          ImageMigrator.new.migrate
-        }.to change(User.where("image_file_name is not null"), :count).by(3)
+        User.where("image_file_name is not null").count.should == 3
 
         legacy_users_with_images.each do |legacy_user|
           new_user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
@@ -43,15 +41,11 @@ describe ImageMigrator, :legacy_migration => true, :type => :legacy_migration do
 
       it "gives an image attachment to all workspaces which had icons" do
         legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
-
         legacy_workspaces_with_images.length.should == 1
-
-        expect {
-          ImageMigrator.new.migrate
-        }.to change(Workspace.where("image_file_name is not null"), :count).by(1)
+        Workspace.where("image_file_name is not null").count.should == 1
 
         legacy_workspaces_with_images.each do |legacy_workspace|
-          new_workspace = Workspace.find(legacy_workspace["chorus_rails_workspace_id"])
+          new_workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])
 
           icon_id = legacy_workspace["icon_id"]
           image_instance_row = Legacy.connection.select_one("select * from edc_image_instance where image_id = '#{icon_id}' and type = 'original'")

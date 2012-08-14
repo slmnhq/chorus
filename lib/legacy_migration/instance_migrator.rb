@@ -1,9 +1,5 @@
 class InstanceMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id)
-      Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
-    end
-
     legacy_instances.each do |instance|
       new_instance = Instance.new
 

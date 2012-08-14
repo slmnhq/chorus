@@ -1,29 +1,18 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
-describe UserMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe UserMigrator do
   describe ".migrate" do
-    describe "the new foreign key column" do
-      before(:each) do
-        Legacy.connection.column_exists?(:edc_user, :chorus_rails_user_id).should be_false
-      end
-
-      it "adds the new foreign key column" do
-        UserMigrator.new.migrate
-        Legacy.connection.column_exists?(:edc_user, :chorus_rails_user_id).should be_true
-      end
+    before :all do
+      UserMigrator.new.migrate if User.count == 0
     end
 
     describe "copying the data" do
       it "creates new users for legacy users" do
-        expect {
-          UserMigrator.new.migrate
-        }.to change(User.unscoped, :count).by(8)
+        User.unscoped.count.should == 8
       end
 
       it "copies the correct data fields from the legacy user" do
-        UserMigrator.new.migrate
-
-        Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
+        Legacy.connection.exec_query("SELECT * FROM edc_user").each do |legacy_user|
           user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
           user.should be_present
           user.username.should == legacy_user["user_name"]
@@ -45,8 +34,11 @@ describe UserMigrator, :legacy_migration => true, :type => :legacy_migration do
       end
 
       it "sets the correct password" do
-        UserMigrator.new.migrate
         User.authenticate("edcadmin", "secret").should be_true
+      end
+
+      it "creates all valid user objects" do
+        User.unscoped.all.reject { |user| user.valid? }.should be_empty
       end
     end
   end

@@ -1,34 +1,18 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
-describe HadoopInstanceMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe HadoopInstanceMigrator do
   describe ".migrate" do
-    describe "the new foreign key column" do
-      before(:each) do
-        Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id).should be_false
-      end
-
-      it "adds the new foreign key column" do
-        UserMigrator.new.migrate
-        HadoopInstanceMigrator.new.migrate
-        Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id).should be_true
-      end
+    before :all do
+      UserMigrator.new.migrate if User.count == 0
+      HadoopInstanceMigrator.new.migrate if HadoopInstance.count == 0
     end
 
     describe "copying the data" do
-      before do
-        UserMigrator.new.migrate
-        HadoopInstanceMigrator.new.migrate
-      end
-
       it "creates new instances for legacy hadoop instances" do
-        expect {
-          HadoopInstanceMigrator.new.migrate
-        }.to change(HadoopInstance, :count).by(2)
+        HadoopInstance.count.should == 2
       end
 
       it "copies the correct data fields from the legacy instance" do
-        HadoopInstanceMigrator.new.migrate
-
         HadoopInstanceMigrator.new.legacy_instances.each do |legacy_instance|
           instance = HadoopInstance.find(legacy_instance["chorus_rails_instance_id"])
           instance.name.should == legacy_instance["name"]

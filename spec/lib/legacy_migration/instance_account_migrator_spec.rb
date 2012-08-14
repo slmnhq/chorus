@@ -1,23 +1,20 @@
-require 'spec_helper'
+require 'spec_helper_no_transactions'
 
-describe InstanceAccountMigrator, :legacy_migration => true, :type => :legacy_migration do
+describe InstanceAccountMigrator do
   describe ".migrate" do
+    before :all do
+      UserMigrator.new.migrate if User.unscoped.count == 0
+      InstanceMigrator.new.migrate if Instance.count == 0
+      InstanceAccountMigrator.new.migrate if InstanceAccount.count == 0
+    end
+
     describe "validate the number of entries migrated" do
       it "creates new InstanceAccounts from old AccountMap" do
-        UserMigrator.new.migrate
-        InstanceMigrator.new.migrate
-        expect {
-          InstanceAccountMigrator.new.migrate
-        }.to change(InstanceAccount, :count).by(4)
+        InstanceAccount.count.should == 4
       end
     end
 
     describe "copying the data" do
-      before do
-        UserMigrator.new.migrate
-        InstanceMigrator.new.migrate
-        InstanceAccountMigrator.new.migrate
-      end
 
       it "adds the new foreign key column" do
         Legacy.connection.column_exists?(:edc_account_map, :chorus_rails_instance_account_id).should be_true

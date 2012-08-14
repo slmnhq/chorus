@@ -1,9 +1,6 @@
 class InstanceAccountMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_account_map, :chorus_rails_instance_account_id)
-      Legacy.connection.add_column :edc_account_map, :chorus_rails_instance_account_id, :integer
-    end
-
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
     legacy_instance_ids = Legacy.connection.select_values("SELECT DISTINCT(instance_id) from edc_account_map")
 
     legacy_instance_ids.each do |legacy_instance_id|

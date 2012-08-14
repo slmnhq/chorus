@@ -1,33 +1,38 @@
 class WorkspaceMigrator
   def migrate
-    unless Legacy.connection.column_exists?(:edc_workspace, :chorus_rails_workspace_id)
-      Legacy.connection.add_column :edc_workspace, :chorus_rails_workspace_id, :integer
-    end
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
 
-    legacy_workspaces.each do |workspace|
-      new_workspace = Workspace.new
-      new_workspace.name = workspace["name"]
-      new_workspace.public = WorkspaceMigrator.str_to_bool(workspace["is_public"])
-      new_workspace.archived_at = workspace["archived_timestamp"]
-      new_workspace.archiver = workspace["archiver"] ? User.unscoped.find_by_username!(workspace["archiver"]) : nil
-      new_workspace.summary = workspace["summary"]
-      new_workspace.owner = User.unscoped.find_by_username!(workspace["owner"])
-      new_workspace.deleted_at = workspace["last_updated_tx_stamp"] if workspace["is_deleted"] == "t"
-      new_workspace.save!
-
-      id = workspace["id"]
-      Legacy.connection.update("Update edc_workspace SET chorus_rails_workspace_id = #{new_workspace.id} WHERE id = '#{id}'")
-    end
-  end
-
-  def legacy_workspaces
-    Legacy.connection.select_all(<<SQL)
-      SELECT edc_workspace.*
-      FROM edc_workspace
-SQL
-  end
-
-  def self.str_to_bool(str)
-    str == 'f' ? false : true
+    Legacy.connection.exec_query("
+      INSERT INTO public.workspaces(
+        legacy_id,
+        name,
+        public,
+        archived_at,
+        archiver_id,
+        summary,
+        owner_id,
+        deleted_at,
+        created_at,
+        updated_at)
+      SELECT
+        edc_workspace.id::integer,
+        name,
+        CASE is_public
+          WHEN 'f' THEN false
+          ELSE true
+        END,
+        archived_timestamp,
+        archivers.id,
+        summary,
+        owners.id,
+        CASE is_deleted
+          WHEN 't' THEN last_updated_tx_stamp
+          ELSE null
+        END,
+        created_tx_stamp,
+        last_updated_tx_stamp
+      FROM legacy_migrate.edc_workspace
+        LEFT JOIN users archivers ON archivers.username = archiver
+        LEFT JOIN users owners ON owners.username = owner;")
   end
 end
