@@ -23,6 +23,10 @@ describe("chorus.models.WorkspaceDataset", function() {
         expect(this.dataset.url()).toMatchUrl('/workspaces/44/datasets/1011');
     });
 
+    it("has the right download url", function() {
+        expect(this.dataset.url({ download: true })).toMatchUrl('/datasets/1011/download.csv');
+    });
+
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {

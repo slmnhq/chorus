@@ -1,7 +1,14 @@
 chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     constructorName: "WorkspaceDataset",
 
-    urlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
+    urlTemplate: function(options) {
+        if(options && options.download) {
+            return this._super("urlTemplate", arguments);
+        } else {
+            return "workspaces/{{workspace.id}}/datasets/{{id}}";
+        }
+    },
+
     showUrlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
 
     isChorusView: function() {
