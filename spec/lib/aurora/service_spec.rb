@@ -8,7 +8,7 @@ describe Aurora::Service do
   describe "constructor" do
     context "when aurora is configured" do
       before do
-        mock(Aurora::Java::AuroraService).get_instance(anything) { java_service_mock }
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
       end
 
       it "connects to the aurora service supplied" do
@@ -19,7 +19,7 @@ describe Aurora::Service do
 
     context "when aurora is not configured" do
       before do
-        mock(Aurora::Java::AuroraService).get_instance(anything) { raise StandardError }
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { raise StandardError }
       end
 
       it "sets valid as false" do
@@ -31,7 +31,7 @@ describe Aurora::Service do
 
   describe "#all_databases" do
     before do
-      mock(Aurora::Java::AuroraService).get_instance(anything) { java_service_mock }
+      mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
     end
 
     it "gets all databases from VDD" do
@@ -44,12 +44,12 @@ describe Aurora::Service do
 
   describe "create_database" do
     before do
-      mock(Aurora::Java::AuroraService).get_instance(anything) { java_service_mock }
+      mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
     end
 
     it "creates a new database with the small template" do
       mock(java_service_mock).create_database(
-        Aurora::Java::AuroraDBTemplate.small,
+        Aurora::JavaModules::AuroraDBTemplate.small,
         'testinstance',
         'instance_admin',
         'secret',
@@ -72,7 +72,7 @@ describe Aurora::Service do
 
     context "when @valid is true" do
       before do
-        mock(Aurora::Java::AuroraService).get_instance(anything) { java_service_mock }
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
         mock(java_service_mock).get_template_for_chorus {
           [ Aurora::DB_SIZE[:small]]
         }
@@ -88,7 +88,7 @@ describe Aurora::Service do
 
     context "when @valid is false" do
       before do
-        mock(Aurora::Java::AuroraService).get_instance(anything) { raise StandardError }
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { raise StandardError }
       end
 
       it "returns an empty array" do

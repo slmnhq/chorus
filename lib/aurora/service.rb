@@ -4,15 +4,15 @@ module Aurora
   InvalidService = Class.new(StandardError)
 
   DB_SIZE = {
-    :small =>  Java::AuroraDBTemplate.small,
-    :medium => Java::AuroraDBTemplate.medium,
-    :large =>  Java::AuroraDBTemplate.large,
+    :small =>  JavaModules::AuroraDBTemplate.small,
+    :medium => JavaModules::AuroraDBTemplate.medium,
+    :large =>  JavaModules::AuroraDBTemplate.large,
   }
 
   class Service
     def initialize(aurora_properties_path)
       config_path = aurora_properties_path.to_s
-      @aurora_service = Java::AuroraService.get_instance(Java::AuroraConfig.load_config(config_path))
+      @aurora_service = JavaModules::AuroraService.get_instance(JavaModules::AuroraConfig.load_config(config_path))
       @valid = true
     rescue StandardError
       @valid = false
