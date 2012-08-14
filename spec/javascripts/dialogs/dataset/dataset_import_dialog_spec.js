@@ -394,6 +394,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
                     expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
                     expect(this.dialog.$("button.choose")).toBeDisabled();
+                    expect(this.dialog.$(".import_controls input[type=radio]")).toBeDisabled();
                 });
 
                 it("uploads the specified file", function() {
@@ -534,6 +535,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+                        expect(this.dialog.$(".import_controls input[type=radio]")).toBeEnabled();
                     });
                 });
             });

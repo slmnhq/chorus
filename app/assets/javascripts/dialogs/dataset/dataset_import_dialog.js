@@ -93,6 +93,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         this.$("button.choose").prop("disabled", true);
         this.$(".file-wrapper a").addClass("hidden");
+        this.$(".import_controls input[type=radio]").prop("disabled", true);
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/workspace/" + this.options.workspaceId + "/workfile";
@@ -117,6 +118,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             } else {
                 this.$("button.choose").prop("disabled", false);
                 this.$(".file-wrapper a").removeClass("hidden");
+                this.$(".import_controls input[type=radio]").prop("disabled", false);
                 this.showErrors(this.model);
             }
         }
@@ -133,6 +135,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     uploadFailed: function(e, response) {
         e && e.preventDefault();
         this.$(".file-wrapper a").removeClass("hidden");
+        this.$(".import_controls input[type=radio]").prop("disabled", false);
         try {
             this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
         } catch(error) {
