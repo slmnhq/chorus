@@ -123,7 +123,7 @@ describe DatasetsController do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        any_instance_of(Dataset) { |c| mock(c).import(options, schema, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).import(options, active_workspace, account.owner) }
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
@@ -138,37 +138,13 @@ describe DatasetsController do
         GpdbTable.refresh(account, schema)
         response.code.should == "422"
       end
-
-      it "should create a success event for this whole importing business" do
-        post :import, :id => src_table.to_param, "dataset_import" => options
-        event = Events::DATASET_IMPORT_SUCCESS.first
-        event.actor.should == account.owner
-        event.dataset.should == destination_table
-        event.workspace.should == active_workspace
-        event.source_dataset.name.should == src_table.name
-      end
-
-      it "should create a fail event when there's an exception" do
-        any_instance_of(Dataset) { |c| stub(c).import { raise SqlCommandFailed, "Tiger uppercut!" } }
-
-        expect {
-          post :import, :id => src_table.to_param, "dataset_import" => options
-        }.to raise_error(SqlCommandFailed)
-
-        event = Events::DATASET_IMPORT_FAILED.first
-        event.actor.should == account.owner
-        event.destination_table.should == options["to_table"]
-        event.workspace.should == active_workspace
-        event.source_dataset.name.should == src_table.name
-        event.error_message.should == "Tiger uppercut!"
-      end
     end
 
     context "into a table in a different database" do
       let(:active_workspace) { workspaces(:bob_public) }
 
       before(:each) do
-        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace.sandbox, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace, account.owner) }
       end
 
       it "should return successfully for active workspaces" do

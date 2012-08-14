@@ -133,12 +133,12 @@ class Dataset < ActiveRecord::Base
     'Dataset'
   end
 
-  def import(options, dst_schema, user)
-    QC.enqueue('GpTableCopier.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id, options["sample_count"])
+  def import(options, dst_workspace, user)
+    QC.enqueue('GpTableCopier.run_new', schema.id, name, dst_workspace.id, options['to_table'], user.id, options["sample_count"])
   end
 
-  def gpfdist_import(options, dst_schema, user)
-    QC.enqueue('Gppipe.run_new', schema.id, name, dst_schema.id, options['to_table'], user.id, options["sample_count"])
+  def gpfdist_import(options, dst_workspace, user)
+    QC.enqueue('Gppipe.run_new', schema.id, name, dst_workspace.id, options['to_table'], user.id, options["sample_count"])
   end
 
   def preview_sql

@@ -5,12 +5,24 @@ class GpTableCopier
   attr_reader :src_database_name, :dst_database_name
   attr_reader :row_limit
 
-  def self.run_new(src_schema_id, src_table_name, dst_schema_id, dst_table_name, user_id, row_limit = nil)
-    src_schema = GpdbSchema.find(src_schema_id)
-    dst_schema = GpdbSchema.find(dst_schema_id)
+  def self.run_new(src_schema_id, src_table_name, dst_workspace_id, dst_table_name, user_id, row_limit = nil)
     user = User.find(user_id)
+    src_schema = GpdbSchema.find(src_schema_id)
+    src_table = src_schema.datasets.find_by_name(src_table_name)
+    dst_workspace = Workspace.find(dst_workspace_id)
+    dst_schema = dst_workspace.sandbox
     instance = self.new(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit)
     instance.run
+
+    Dataset.refresh(instance.dst_account, dst_schema)
+    dst_table = dst_schema.datasets.find_by_name(dst_table_name)
+    create_success_event(dst_table, src_table, dst_workspace, user)
+  rescue Exception => e
+    user  ||= User.find_by_id(user_id)
+    src_schema ||= GpdbSchema.find_by_id(src_schema_id)
+    src_table ||= src_schema && src_schema.datasets.find_by_name(src_table_name)
+    dst_workspace ||= Workspace.find_by_id(dst_workspace_id)
+    create_failed_event(dst_table_name, src_table, dst_workspace, e.message, user)
   end
 
   def initialize(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit = nil)
@@ -62,6 +74,23 @@ class GpTableCopier
         connection.execute(copy_command)
       end
     end
+  end
+
+  def self.create_success_event(dst_table, source_table, workspace, user)
+    Events::DATASET_IMPORT_SUCCESS.by(user).add(
+        :workspace => workspace,
+        :dataset => dst_table,
+        :source_dataset => source_table
+    )
+  end
+
+  def self.create_failed_event(to_table, source_table, workspace, error_message, user)
+    Events::DATASET_IMPORT_FAILED.by(user).add(
+        :workspace => workspace,
+        :destination_table => to_table,
+        :error_message => error_message,
+        :source_dataset => source_table
+    )
   end
 
   private

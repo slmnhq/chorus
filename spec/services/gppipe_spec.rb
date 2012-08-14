@@ -45,6 +45,7 @@ describe Gppipe, :database_integration => true do
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { "" }
   let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
+  let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
 
   it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
     Gppipe.protocol.should == 'gpfdist'
@@ -143,7 +144,7 @@ describe Gppipe, :database_integration => true do
 
     context ".run_new" do
       it "creates a new pipe and runs it" do
-        Gppipe.run_new(schema.id, src_table, schema.id, dst_table, user.id)
+        Gppipe.run_new(schema.id, src_table, workspace.id, dst_table, user.id)
         gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
       end
     end
