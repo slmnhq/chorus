@@ -186,6 +186,9 @@ describe CsvImporter, :database_integration => true do
 
     context "when import fails" do
       it "removes import table when new_table is true" do
+        any_instance_of(CsvImporter) { |importer|
+          stub(importer).check_if_table_exists.with_any_args { false }
+        }
         csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
                                    :column_names => [:id, :name],
                                    :types => [:integer, :varchar],
@@ -220,6 +223,22 @@ describe CsvImporter, :database_integration => true do
         CsvImporter.import_file(second_csv_file.id)
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
+        end
+      end
+
+      it "does not remove the table if new_table is true, but the table already existed" do
+        any_instance_of(CsvImporter) { |importer|
+          stub(importer).check_if_table_exists.with_any_args { true }
+        }
+        csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
+                                   :column_names => [:id, :name],
+                                   :types => [:integer, :varchar],
+                                   :file_contains_header => false,
+                                   :new_table => true)
+        table_name = csv_file.to_table
+        CsvImporter.import_file(csv_file.id)
+        schema.with_gpdb_connection(account) do |connection|
+          expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
         end
       end
     end

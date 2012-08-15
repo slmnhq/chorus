@@ -19,6 +19,7 @@ class CsvImporter
   def import
     schema.with_gpdb_connection(account) do |connection|
       begin
+        it_exists = check_if_table_exists(csv_file.to_table, connection)
         if csv_file.new_table
           connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
         end
@@ -31,13 +32,20 @@ class CsvImporter
         sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
       rescue
-        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table
+        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
         raise
       end
     end
     create_success_event
   rescue => e
     create_failure_event(e.message)
+  end
+
+  def check_if_table_exists(table_name, connection)
+    connection.exec_query("SELECT * FROM #{table_name}")
+    true
+  rescue
+    false
   end
 
   def create_success_event

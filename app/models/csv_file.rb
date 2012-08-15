@@ -27,4 +27,15 @@ class CsvFile < ActiveRecord::Base
     return unless age_limit
     CsvFile.where("created_at < '#{Time.now - age_limit.hours}'").destroy_all
   end
+
+  def table_already_exists(table_name)
+    schema = workspace.sandbox
+    account = schema.instance.account_for_user!(user)
+    schema.with_gpdb_connection(account) do |connection|
+      connection.exec_query("SELECT * FROM #{table_name}")
+    end
+    true
+  rescue
+    false
+  end
 end
