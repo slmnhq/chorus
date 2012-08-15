@@ -2,14 +2,14 @@ require 'spec_helper_no_transactions'
 
 describe MembershipMigrator do
   describe ".migrate" do
-    before do
-      UserMigrator.new.migrate if User.unscoped.count == 0
-      WorkspaceMigrator.new.migrate if Workspace.unscoped.count == 0
-      MembershipMigrator.new.migrate if Membership.count == 0
+    before :all do
+      MembershipMigrator.new.migrate
     end
 
     describe "copying the data" do
-      it "creates new membership for legacy GPDB instances, including new owner-workspaces associations that did not exist" do
+      it "creates new membership for legacy GPDB instances, including new owner-workspaces associations that did not exist and be idempotent" do
+        Membership.count.should == 75
+        MembershipMigrator.new.migrate
         Membership.count.should == 75
       end
 

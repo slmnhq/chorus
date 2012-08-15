@@ -1,5 +1,12 @@
 class WorkspaceMigrator
+  def prerequisites
+    UserMigrator.new.migrate
+    # for all Workspaces to be valid, depends on MembershipMigrator, but is circular
+  end
+
   def migrate
+    prerequisites
+
     Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
 
     Legacy.connection.exec_query("
@@ -33,6 +40,7 @@ class WorkspaceMigrator
         last_updated_tx_stamp
       FROM legacy_migrate.edc_workspace
         LEFT JOIN users archivers ON archivers.username = archiver
-        LEFT JOIN users owners ON owners.username = owner;")
+        LEFT JOIN users owners ON owners.username = owner
+      WHERE edc_workspace.id NOT IN (SELECT legacy_id FROM workspaces);")
   end
 end

@@ -3,13 +3,13 @@ require 'spec_helper_no_transactions'
 describe WorkspaceMigrator do
   describe ".migrate" do
     before :all do
-      UserMigrator.new.migrate if User.unscoped.count == 0
-      WorkspaceMigrator.new.migrate if Workspace.count == 0
-      MembershipMigrator.new.migrate if Membership.count == 0
+      WorkspaceMigrator.new.migrate
     end
 
     describe "copying the data" do
       it "creates new workspaces for legacy workspaces" do
+        Workspace.unscoped.count.should == 73
+        WorkspaceMigrator.new.migrate
         Workspace.unscoped.count.should == 73
       end
 
@@ -39,6 +39,7 @@ describe WorkspaceMigrator do
       end
 
       it "creates all valid workspaces" do
+        MembershipMigrator.new.migrate
         invalids = Workspace.all.reject { |workspace| workspace.valid? }
         invalids.should be_empty
       end

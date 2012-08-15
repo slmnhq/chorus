@@ -1,28 +1,23 @@
 class SandboxMigrator
-  def migrate
-    legacy_workspaces.each do |workspace|
-      new_workspace = Workspace.unscoped.find_by_legacy_id(workspace["id"])
-
-      legacy_sandbox = Legacy.connection.select_all("SELECT * FROM edc_sandbox where workspace_id = '#{workspace["id"]}'").first
-
-      if legacy_sandbox
-        legacy_instance = Legacy.connection.select_all("SELECT * FROM edc_instance where id = '#{legacy_sandbox["instance_id"]}'").first
-        rails_instance = Instance.find(legacy_instance["chorus_rails_instance_id"])
-
-        database = rails_instance.databases.find_or_create_by_name(legacy_sandbox["database_name"])
-        schema = database.schemas.find_or_create_by_name(legacy_sandbox["schema_name"])
-        new_workspace.sandbox_id = schema.id
-      end
-
-      new_workspace.save!(:validate => false)
-
-    end
+  def prerequisites
+    WorkspaceMigrator.new.migrate
+    DatabaseObjectMigrator.new.migrate
   end
 
-  def legacy_workspaces
-    Legacy.connection.select_all(<<SQL)
-      SELECT edc_workspace.*
-      FROM edc_workspace
-SQL
+  def migrate
+    prerequisites
+
+    Legacy.connection.exec_query(
+      "UPDATE public.workspaces SET sandbox_id = schema.id
+       FROM legacy_migrate.edc_sandbox sandbox
+        INNER JOIN gpdb_schemas schema
+          ON sandbox.schema_name = schema.name
+        INNER JOIN gpdb_databases database
+          ON sandbox.database_name = database.name
+          AND database.id = schema.database_id
+        INNER JOIN instances instance
+          ON instance.legacy_id = sandbox.instance_id
+          AND database.instance_id = instance.id
+      WHERE sandbox.workspace_id = workspaces.legacy_id;")
   end
 end

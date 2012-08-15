@@ -1,5 +1,11 @@
 class MembershipMigrator
+  def prerequisites
+    WorkspaceMigrator.new.migrate
+  end
+
   def migrate
+    prerequisites
+
     Legacy.connection.exec_query("INSERT INTO public.memberships(
                               legacy_id,
                               user_id,
@@ -12,8 +18,10 @@ class MembershipMigrator
                               JOIN users
                               ON users.username = edc_member.member_name
                               JOIN workspaces
-                              ON workspaces.legacy_id = edc_member.workspace_id;")
+                              ON workspaces.legacy_id = edc_member.workspace_id
+                            WHERE edc_member.id NOT IN (SELECT legacy_id FROM memberships);")
 
+    #TODO remove me
     Legacy.connection.exec_query("UPDATE edc_member SET chorus_rails_membership_id = memberships.id FROM memberships WHERE edc_member.id = memberships.legacy_id;")
 
     Legacy.connection.exec_query("INSERT INTO memberships(workspace_id, user_id)
