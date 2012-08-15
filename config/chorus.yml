@@ -9,6 +9,7 @@ workfile_storage_path : ":rails_root/system/"
 image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
 server_port: 8080
+provision_max_size_in_gb: 100
 timezone_offset: -8
 file_sizes_mb:
   workfiles:  10

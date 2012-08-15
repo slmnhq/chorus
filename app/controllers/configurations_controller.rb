@@ -10,7 +10,8 @@ class ConfigurationsController < ApplicationController
       :gpfdist_configured => Chorus::Application.config.chorus.gpfdist_configured?,
       :file_sizes_mb_workfiles => Chorus::Application.config.chorus['file_sizes_mb.workfiles'],
       :file_sizes_mb_csv_imports => Chorus::Application.config.chorus['file_sizes_mb.csv_imports'],
-      :timezone_offset => Chorus::Application.config.chorus['timezone_offset']
+      :timezone_offset => Chorus::Application.config.chorus['timezone_offset'],
+      :provision_max_size_in_gb => Chorus::Application.config.chorus['provision_max_size_in_gb']
     } }
   end
 

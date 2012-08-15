@@ -46,7 +46,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             auroraInstalled: chorus.models.GreenplumInstance.aurora().isInstalled(),
-            provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGB")
+            provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGb")
         }
     },
 
