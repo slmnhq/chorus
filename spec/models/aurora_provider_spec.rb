@@ -19,12 +19,12 @@ describe AuroraProvider do
     let(:database) { Object.new }
     let(:attributes) do
       {
-          :instance_name => 'instance_name',
+          :name => 'instance_name',
           :template => 'small',
-          :db_name => 'database',
-          :db_user => 'edcadmin',
+          :database_name => 'database',
+          :db_username => 'edcadmin',
           :db_password => 'secret',
-          :storage_size_in_gb => 1,
+          :size => 1,
           :schema_name => 'schema',
           :description => 'A description'
       }
@@ -34,12 +34,13 @@ describe AuroraProvider do
       stub(database).public_ip { '123.321.12.34' }
       stub(Gpdb::ConnectionChecker).check!(anything, anything)
 
+      mock(service_mock).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
       mock(service_mock).create_database({
-        :template => 'small',
-        :db_name => 'database',
-        :db_user => 'edcadmin',
+        :template => Aurora::DB_SIZE[:small],
+        :database_name => 'database',
+        :db_username => 'edcadmin',
         :db_password => 'secret',
-        :storage_size_in_gb => 1
+        :size => 1
       }) { database }
     end
 

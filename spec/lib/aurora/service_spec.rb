@@ -42,7 +42,7 @@ describe Aurora::Service do
     end
   end
 
-  describe "create_database" do
+  describe "#create_database" do
     before do
       mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
     end
@@ -59,15 +59,15 @@ describe Aurora::Service do
       service = Aurora::Service.new(config)
       service.create_database({
         :template => Aurora::DB_SIZE[:small],
-        :db_name => "testinstance",
-        :db_user => "instance_admin",
+        :database_name => "testinstance",
+        :db_username => "instance_admin",
         :db_password => "secret",
-        :storage_size_in_gb => 4
+        :size => 4
       })
     end
   end
 
-  describe "templates" do
+  describe "#templates" do
     let(:service) {Aurora::Service.new(config) }
 
     context "when @valid is true" do
@@ -94,6 +94,23 @@ describe Aurora::Service do
       it "returns an empty array" do
         service.templates.should be_empty
       end
+    end
+  end
+
+  describe "#find_template_by_name" do
+    let(:service) {Aurora::Service.new(config) }
+
+    before do
+      mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
+      mock(java_service_mock).get_template_for_chorus {
+        [ Aurora::DB_SIZE[:small]]
+      }
+    end
+
+    it "returns the template matching the given name" do
+      small_template = service.find_template_by_name("small")
+      small_template.name.should == "small"
+      small_template.should be_a_kind_of(com.vmware.aurora.model.DBTemplate)
     end
   end
 end

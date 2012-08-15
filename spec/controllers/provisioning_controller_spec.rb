@@ -32,41 +32,4 @@ describe ProvisioningController do
       response.code.should == '200'
     end
   end
-
-  describe "#create" do
-    let(:service_mock) { Object.new }
-    let(:database) { Object.new }
-
-    before do
-      stub(database).public_ip { "127.0.0.1" }
-      stub(Gpdb::InstanceRegistrar).create!(anything, anything)
-
-      mock(Aurora::Service).new(anything) { service_mock }
-      mock(service_mock).create_database(HashWithIndifferentAccess.new({
-        :template => 'small',
-        :db_name => 'database',
-        :db_user => 'edcadmin',
-        :db_password => 'secret',
-        :storage_size_in_gb => "1"
-      })) { database }
-    end
-
-    it "responds with a success" do
-      post :create, {
-        :provision =>
-          {
-            :instance_name => "instance",
-            :description => "description",
-            :storage_size_in_gb => "1",
-            :template => "small",
-            :db_name => "database",
-            :schema_name => "schema",
-            :db_user => "edcadmin",
-            :db_password => "secret"
-          }
-        }
-
-      response.code.should == "201"
-    end
-  end
 end

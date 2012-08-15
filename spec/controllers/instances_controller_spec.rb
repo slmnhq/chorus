@@ -4,7 +4,7 @@ describe InstancesController do
   ignore_authorization!
 
   before do
-    @user = FactoryGirl.create(:user)
+    @user = users(:bob)
     log_in @user
   end
 
@@ -91,12 +91,33 @@ describe InstancesController do
   describe "#create" do
     it_behaves_like "an action that requires authentication", :put, :update
 
-    context "with valid attributes" do
+    context "with register provision type" do
       let(:valid_attributes) { Hash.new }
 
       before do
         instance = FactoryGirl.build(:instance, :name => "new")
-        stub(Gpdb::InstanceRegistrar).create!(valid_attributes, @user) { instance }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, @user) { instance }
+      end
+
+      it "reports that the instance was created" do
+        post :create, :instance => valid_attributes
+        response.code.should == "201"
+      end
+
+      it "renders the newly created instance" do
+        post :create, :instance => valid_attributes
+        decoded_response.name.should == "new"
+      end
+    end
+
+    context "with create provision type" do
+      let(:valid_attributes) { HashWithIndifferentAccess.new({:provision_type => 'create'}) }
+      let(:provider_mock) { Object.new }
+
+      before do
+        instance = FactoryGirl.build(:instance, :name => "new")
+        mock(AuroraProvider).create_from_aurora_service { provider_mock }
+        mock(provider_mock).provide!(valid_attributes, @user) { instance }
       end
 
       it "reports that the instance was created" do

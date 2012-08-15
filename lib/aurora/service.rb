@@ -36,15 +36,21 @@ module Aurora
       end
     end
 
+    def find_template_by_name(name)
+      @aurora_service.get_template_for_chorus.find do |template|
+        template.name == name
+      end
+    end
+
     def create_database(options)
       raise InvalidService unless @valid
 
       @aurora_service.create_database(
         options[:template],
-        options[:db_name],
-        options[:db_user],
+        options[:database_name],
+        options[:db_username],
         options[:db_password],
-        options[:storage_size_in_gb]
+        options[:size].to_i
       )
     end
   end

@@ -22,18 +22,19 @@ class AuroraProvider
   end
 
   def provide!(attributes, owner)
-    aurora_attributes = attributes.slice(:template,
-                                         :storage_size_in_gb,
-                                         :db_name,
-                                         :db_user,
+    aurora_attributes = attributes.slice(:size,
+                                         :database_name,
+                                         :db_username,
                                          :db_password)
+
+    aurora_attributes[:template] = @aurora_service.find_template_by_name(attributes[:template])
 
     aurora_db = @aurora_service.create_database(aurora_attributes)
 
     instance_attributes = {
-      :name => attributes[:instance_name],
+      :name => attributes[:name],
       :description => attributes[:description],
-      :db_username => attributes[:db_user],
+      :db_username => attributes[:db_username],
       :db_password => attributes[:db_password],
       :port => DEFAULT_PORT,
       :host => aurora_db.public_ip,
