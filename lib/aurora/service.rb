@@ -1,4 +1,5 @@
 require_relative 'java_modules'
+require_relative 'config'
 
 module Aurora
   InvalidService = Class.new(StandardError)
@@ -10,9 +11,8 @@ module Aurora
   }
 
   class Service
-    def initialize(aurora_properties_path)
-      config_path = aurora_properties_path.to_s
-      @aurora_service = JavaModules::AuroraService.get_instance(JavaModules::AuroraConfig.load_config(config_path))
+    def initialize(config)
+      @aurora_service = JavaModules::AuroraService.get_instance(config)
       @valid = true
     rescue StandardError
       @valid = false

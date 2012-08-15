@@ -3,14 +3,21 @@ require 'spec_helper'
 describe AuroraProvider do
   let(:user) { users(:bob) }
 
-  describe "#status" do
+  describe(".create_from_aurora_service") do
+    it "returns a valid provider" do
+      provider = AuroraProvider.create_from_aurora_service
+      provider.should be_valid
+    end
+  end
+
+  describe "#valid?" do
 
     it "returns the aurora provider status" do
       aurora_service = Object.new
       mock(aurora_service).valid? { true }
 
       provider = AuroraProvider.new(aurora_service)
-      provider.valid?.should be_true
+      provider.should be_valid
     end
   end
 

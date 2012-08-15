@@ -2,7 +2,15 @@ require 'aurora/service'
 require 'spec_helper'
 
 describe Aurora::Service do
-  let(:config) { File.expand_path(File.dirname(__FILE__) + '/../../../config/aurora.properties')}
+  let(:config) do
+    {
+      :aurora_admin_user => 'bliu@pivotallabs.com',
+      :target_rb_name => 'RB',
+      :aurora_initialized => true,
+      :aurora_service_url => 'https://10.80.129.96/datadirector/services/datacloudWS',
+      :gpfdist_port => '8081'
+    }
+  end
   let(:java_service_mock) { Object.new }
 
   describe "constructor" do
@@ -49,32 +57,32 @@ describe Aurora::Service do
 
     it "creates a new database with the small template" do
       mock(java_service_mock).create_database(
-        Aurora::JavaModules::AuroraDBTemplate.small,
-        'testinstance',
-        'instance_admin',
-        'secret',
-        4
+          Aurora::JavaModules::AuroraDBTemplate.small,
+          'testinstance',
+          'instance_admin',
+          'secret',
+          4
       )
 
       service = Aurora::Service.new(config)
       service.create_database({
-        :template => Aurora::DB_SIZE[:small],
-        :database_name => "testinstance",
-        :db_username => "instance_admin",
-        :db_password => "secret",
-        :size => 4
-      })
+                                  :template => Aurora::DB_SIZE[:small],
+                                  :database_name => "testinstance",
+                                  :db_username => "instance_admin",
+                                  :db_password => "secret",
+                                  :size => 4
+                              })
     end
   end
 
   describe "#templates" do
-    let(:service) {Aurora::Service.new(config) }
+    let(:service) { Aurora::Service.new(config) }
 
     context "when @valid is true" do
       before do
         mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
         mock(java_service_mock).get_template_for_chorus {
-          [ Aurora::DB_SIZE[:small]]
+          [Aurora::DB_SIZE[:small]]
         }
       end
 
@@ -98,12 +106,12 @@ describe Aurora::Service do
   end
 
   describe "#find_template_by_name" do
-    let(:service) {Aurora::Service.new(config) }
+    let(:service) { Aurora::Service.new(config) }
 
     before do
       mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
       mock(java_service_mock).get_template_for_chorus {
-        [ Aurora::DB_SIZE[:small]]
+        [Aurora::DB_SIZE[:small]]
       }
     end
 

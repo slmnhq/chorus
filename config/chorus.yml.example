@@ -43,3 +43,42 @@ ldap:
     mail: mail
     title: title
 
+aurora:
+# Aurora CMS Admin
+  aurora_admin_user: pivotal@pivotallabs.com
+  # please set the password before Aurora deployment
+  # if you want to use a specific password. Otherwise, an internal password is set.
+  aurora_admin_password: secret
+  aurora_admin_first_name: Pivotal
+  aurora_admin_last_name: Labs
+  aurora_admin_phone_number: (415) 555-1234
+  aurora_admin_email: admin@aurora.com
+
+  # default resource bundle will be created in CMS
+  target_rb_name: RB
+
+  # default organization will be created in CMS
+  target_org_name: ORG
+
+  # default database group will be created in CMS
+  target_dbg_name: DBG
+
+  # indicate that if aurora initialized or not
+  aurora_initialized: true
+
+  # Aurora's service URL
+  aurora_service_url: https://12.34.56.78/datadirector/services/datacloudWS
+
+  # gpfdist settings
+  gpfdist_port: 8081
+  gpfdist_data_dir: /opt/chorus/gpdata/gpfdist/
+
+  # Connection mgmt
+  # Connection timeout in milliseconds
+  connection_timeout: 60000
+
+  # Max concurrent connection #
+  max_connection: 100
+
+  # Time in milliseconds to get a connection from pool
+  connection_pool_timeout: 60000
