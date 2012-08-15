@@ -75,6 +75,7 @@ describe Hdfs::QueryService do
 
     context "show an existing file" do
       it "should return part of the content" do
+        pending
         response = service.show("/data/test.csv")
         response.should_not be_empty
         response.should include("a, b, c")
