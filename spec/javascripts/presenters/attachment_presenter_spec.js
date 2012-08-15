@@ -22,14 +22,20 @@ describe("chorus.presenters.Attachment", function() {
             var model = newFixtures.workspaceDataset.sandboxTable();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBe(model.get('objectName'));
-        })
+        });
+
+        it("uses name if available", function() {
+            var model = new chorus.models.Attachment({name: "attachment name"});
+            var presenter = new chorus.presenters.Attachment(model);
+            expect(presenter.name()).toBe(model.get('name'));
+        });
 
         it("uses nothing otherwise", function() {
             var model = rspecFixtures.workfile.text();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBeUndefined();
-        })
-    })
+        });
+    });
 
     describe("iconSrc", function() {
         context("when the model is an image", function() {

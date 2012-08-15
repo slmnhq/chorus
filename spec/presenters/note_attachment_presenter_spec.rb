@@ -13,7 +13,11 @@ describe NoteAttachmentPresenter, :type => :view do
     end
 
     it "includes the right keys" do
+      @hash.should have_key(:id)
       @hash.should have_key(:name)
+      @hash.should have_key(:timestamp)
+      @hash.should have_key(:entity_type)
+      @hash.should have_key(:type)
     end
   end
 end
