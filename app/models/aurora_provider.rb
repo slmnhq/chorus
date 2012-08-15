@@ -6,7 +6,7 @@ class AuroraProvider
 
   def self.create_from_aurora_service
     config = Aurora::Config.new
-    config.load(Chorus::Application.config.chorus['aurora'])
+    config.load(Chorus::Application.config.chorus['aurora'] || {})
     new(Aurora::Service.new(config))
   end
 

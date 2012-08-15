@@ -14,7 +14,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
     context("when aurora is installed", function() {
         beforeEach(function() {
-            chorus.models.Config.instance().set({ provisionMaxSizeInGB: "101GB" });
+            chorus.models.Config.instance().set({ provisionMaxSizeInGb: "101GB" });
             chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);

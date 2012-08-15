@@ -4,9 +4,37 @@ describe AuroraProvider do
   let(:user) { users(:bob) }
 
   describe(".create_from_aurora_service") do
-    it "returns a valid provider" do
-      provider = AuroraProvider.create_from_aurora_service
-      provider.should be_valid
+    before do
+      @previous_config = Chorus::Application.config.chorus
+    end
+
+    after do
+      Chorus::Application.config.chorus = @previous_config
+    end
+
+    context "aurora is configured" do
+      before do
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { Object.new }
+
+        aurora_config = YAML.load_file(Rails.root.join('config', 'chorus.yml.example'))['aurora']
+        Chorus::Application.config.chorus = {'aurora' => aurora_config}
+      end
+
+      it "returns a valid provider" do
+        provider = AuroraProvider.create_from_aurora_service
+        provider.should be_valid
+      end
+    end
+
+    context "aurora is not configured" do
+      before do
+        Chorus::Application.config.chorus = {'aurora' => nil}
+      end
+
+      it "returns an invalid provider" do
+        provider = AuroraProvider.create_from_aurora_service
+        provider.should_not be_valid
+      end
     end
   end
 
@@ -43,12 +71,12 @@ describe AuroraProvider do
 
       mock(service_mock).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
       mock(service_mock).create_database({
-        :template => Aurora::DB_SIZE[:small],
-        :database_name => 'database',
-        :db_username => 'edcadmin',
-        :db_password => 'secret',
-        :size => 1
-      }) { database }
+                                             :template => Aurora::DB_SIZE[:small],
+                                             :database_name => 'database',
+                                             :db_username => 'edcadmin',
+                                             :db_password => 'secret',
+                                             :size => 1
+                                         }) { database }
     end
 
     it "creates a database" do
