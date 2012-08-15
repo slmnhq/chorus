@@ -39,7 +39,7 @@ class CsvFile < ActiveRecord::Base
 
   def check_table(table_name, account, schema)
     schema.with_gpdb_connection(account) do |connection|
-      connection.exec_query("SELECT * FROM #{table_name}")
+      connection.exec_query("SELECT * FROM #{table_name} LIMIT 1")
     end
   end
 end

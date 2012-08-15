@@ -10,7 +10,7 @@
 
         <div class="inputs">
             <input type="hidden" name="truncate" value="false"/>
-            <input type="hidden" name="isNewTable" value="true"/>
+            <input type="hidden" name="newTable" value="true"/>
             {{#if allowNewTruncate}}
                 <div class="row">
                     <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_new"/>
@@ -46,7 +46,7 @@
         </legend>
 
         <div class="inputs">
-            <input type="hidden" name="isNewTable" value="false"/>
+            <input type="hidden" name="newTable" value="false"/>
             <div class="row">
                 <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_existing"/>
                 <label for="import_scheduler_truncate_existing">{{t "import.truncate"}}</label>

@@ -24,9 +24,15 @@ class DatasetsController < GpdbController
       return
     end
 
+    new_table_boolean = to_bool(params[:dataset_import]["new_table"])
+    dest_table = Dataset.find_by_name(params[:dataset_import]["to_table"])
+    if !new_table_boolean
+      raise ApiValidationError.new(:base, :table_not_exists, { :table_name => params[:dataset_import][:to_table] }) unless dest_table
+    end
+
     begin
       if workspace.sandbox.database == src_table.schema.database
-        src_table.import(params[:dataset_import], workspace, current_user)
+        src_table.import(params[:dataset_import], workspace, current_user, new_table_boolean)
       else
         src_table.gpfdist_import(params[:dataset_import], workspace, current_user)
       end
@@ -35,5 +41,9 @@ class DatasetsController < GpdbController
     rescue Exception => e
       raise e
     end
+  end
+
+  def to_bool(str)
+    str == "false" ? false : true
   end
 end

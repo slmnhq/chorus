@@ -3,15 +3,15 @@ class GpTableCopier
   attr_reader :src_account, :dst_account
   attr_reader :src_instance, :dst_instance
   attr_reader :src_database_name, :dst_database_name
-  attr_reader :row_limit
+  attr_reader :row_limit, :create_new_table
 
-  def self.run_new(src_schema_id, src_table_name, dst_workspace_id, dst_table_name, user_id, row_limit = nil)
+  def self.run_import(src_schema_id, src_table_name, dst_workspace_id, dst_table_name, user_id, new_table_boolean, row_limit = nil)
     user = User.find(user_id)
     src_schema = GpdbSchema.find(src_schema_id)
     src_table = src_schema.datasets.find_by_name(src_table_name)
     dst_workspace = Workspace.find(dst_workspace_id)
     dst_schema = dst_workspace.sandbox
-    instance = self.new(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit)
+    instance = self.new(src_schema, src_table_name, dst_schema, dst_table_name, user, new_table_boolean, row_limit)
     instance.run
 
     Dataset.refresh(instance.dst_account, dst_schema)
@@ -25,7 +25,7 @@ class GpTableCopier
     create_failed_event(dst_table_name, src_table, dst_workspace, e.message, user)
   end
 
-  def initialize(src_schema, src_table_name, dst_schema, dst_table_name, user, row_limit = nil)
+  def initialize(src_schema, src_table_name, dst_schema, dst_table_name, user, new_table_boolean, row_limit = nil)
     @src_schema = src_schema
     @src_database_name = src_schema.database.name
     @src_instance = src_schema.instance
@@ -37,6 +37,7 @@ class GpTableCopier
     @dst_table_name = dst_table_name
     @row_limit = row_limit
     @dst_schema = dst_schema
+    @create_new_table = new_table_boolean
   end
 
   def distribution_key_clause
@@ -70,7 +71,9 @@ class GpTableCopier
     copy_command = "INSERT INTO #{dst_fullname} (SELECT * FROM #{src_fullname} #{limit_clause});"
     dst_schema.with_gpdb_connection(dst_account) do |connection|
       connection.transaction do
-        connection.execute(create_command)
+        if create_new_table
+          connection.execute(create_command)
+        end
         connection.execute(copy_command)
       end
     end

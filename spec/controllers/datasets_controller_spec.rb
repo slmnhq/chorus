@@ -106,7 +106,8 @@ describe DatasetsController do
               "to_table" => "the_new_table",
               "use_limit_rows" => "false",
               "sample_count" => "0",
-              "workspace_id" => active_workspace.id.to_s
+              "workspace_id" => active_workspace.id.to_s,
+              "new_table" => "true"
       }
     }
 
@@ -123,7 +124,7 @@ describe DatasetsController do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        any_instance_of(Dataset) { |c| mock(c).import(options, active_workspace, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).import(options, active_workspace, account.owner, true) }
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
@@ -154,5 +155,15 @@ describe DatasetsController do
         response.code.should == "200"
       end
     end
+
+    context " existing table" do
+      let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
+      it " throws an error if table does not exist" do
+        options["new_table"] = "false";
+        post :import, :id => src_table.to_param, "dataset_import" => options
+        response.code.should == "422"
+      end
+    end
+
   end
 end

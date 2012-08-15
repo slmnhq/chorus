@@ -42,7 +42,7 @@ class CsvImporter
   end
 
   def check_if_table_exists(table_name, connection)
-    connection.exec_query("SELECT * FROM #{table_name}")
+    connection.exec_query("SELECT * FROM #{table_name} LIMIT 1")
     true
   rescue
     false

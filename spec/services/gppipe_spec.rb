@@ -44,7 +44,7 @@ describe Gppipe, :database_integration => true do
   let(:dst_table) { "dst_candy" }
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { "" }
-  let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user) }
+  let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, true) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
 
   it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
@@ -52,12 +52,12 @@ describe Gppipe, :database_integration => true do
   end
 
   it "has an empty limit clause for no limit passed" do
-    pipe = Gppipe.new(schema, src_table, schema, dst_table, user)
+    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, true)
     pipe.limit_clause.should == ''
   end
 
   it "has a LIMIT 500 for row_limit = 500" do
-    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, 500)
+    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, true, 500)
     pipe.limit_clause.should == 'LIMIT 500'
   end
 
@@ -142,9 +142,9 @@ describe Gppipe, :database_integration => true do
       gp_pipe.table_definition_with_keys.should == table_def
     end
 
-    context ".run_new" do
+    context ".run_import" do
       it "creates a new pipe and runs it" do
-        Gppipe.run_new(schema.id, src_table, workspace.id, dst_table, user.id)
+        Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
         gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
       end
     end
@@ -187,7 +187,7 @@ describe Gppipe, :database_integration => true do
 
     context "limiting the number of rows" do
       let(:row_limit) { 1 }
-      let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, row_limit) }
+      let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, true, row_limit) }
 
       it "should only have the first row" do
         gp_pipe.run
@@ -268,7 +268,7 @@ describe Gppipe, :database_integration => true do
   end
 
   it "does not use special characters in the pipe names" do
-    gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user)
+    gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user, true)
     gppipe.pipe_name.should_not match(/[^A-Za-z0-9_]/)
   end
 end

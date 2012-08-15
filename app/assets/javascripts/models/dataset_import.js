@@ -3,12 +3,12 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     urlTemplate: "datasets/{{datasetId}}/import",
 
     declareValidations: function(newAttrs) {
-        if (newAttrs.isNewTable == "true") {
+        if (newAttrs.newTable == "true") {
             this.requirePattern("toTable", chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, 'import.validation.toTable.required');
         }
 
         this.requirePattern("truncate", chorus.ValidationRegexes.Boolean(), newAttrs);
-        this.requirePattern("isNewTable", chorus.ValidationRegexes.Boolean(), newAttrs);
+        this.requirePattern("newTable", chorus.ValidationRegexes.Boolean(), newAttrs);
 
         if (newAttrs.useLimitRows) {
             this.requirePositiveInteger("sampleCount", newAttrs, 'import.validation.sampleCount.positive');

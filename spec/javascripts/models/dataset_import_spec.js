@@ -115,7 +115,7 @@ describe("chorus.models.DatasetImport", function() {
         context("when the model has a 'sampleCount'", function() {
             beforeEach(function() {
                 this.model.set({
-                    isNewTable: 'true',
+                    newTable: 'true',
                     truncate: 'true',
                     useLimitRows: true,
                     sampleCount: 477
@@ -138,11 +138,11 @@ describe("chorus.models.DatasetImport", function() {
                     toTable: "Foo",
                     sampleCount: "23",
                     truncate: "true",
-                    isNewTable: "true"
+                    newTable: "true"
                 };
             });
 
-            _.each(["toTable", "truncate", "isNewTable"], function(attr) {
+            _.each(["toTable", "truncate", "newTable"], function(attr) {
                 it("should require " + attr, function() {
                     this.attrs[attr] = "";
                     expect(this.model.performValidation(this.attrs)).toBeFalsy();
@@ -194,7 +194,7 @@ describe("chorus.models.DatasetImport", function() {
                     toTable: "Foo",
                     sampleCount: "23",
                     truncate: "true",
-                    isNewTable: "false"
+                    newTable: "false"
                 };
             });
 
@@ -225,7 +225,7 @@ describe("chorus.models.DatasetImport", function() {
             toTable: "Foo",
             sampleCount: "23",
             truncate: "true",
-            isNewTable: "false"
+            newTable: "false"
         };
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
     });

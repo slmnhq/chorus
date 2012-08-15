@@ -378,7 +378,8 @@ describe Dataset::Query, :database_integration => true do
       let(:sandbox) { schema } # For testing purposes, src schema = sandbox
       let(:options) {
         {
-            "to_table" => "the_new_table"
+            "to_table" => "the_new_table",
+            "new_table" => true
         }
       }
 
@@ -392,18 +393,28 @@ describe Dataset::Query, :database_integration => true do
 
       context "into a table in the same db" do
         let(:src_table) { datasets(:bobs_table) }
-        let(:schema) { gpdb_schemas(:bobs_schema)}
+        let(:schema) { gpdb_schemas(:bobs_schema) }
         let(:sandbox) { schema } # For testing purposes, src schema = sandbox
         let(:options) {
           {
               "to_table" => "the_new_table",
-              "sample_count" => 50
+              "sample_count" => 50,
+              "new_table" => true
           }
         }
+        context "importing into new table" do
+          it "creates a correct gp table copier" do
+            mock(QC).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, true, 50)
+            src_table.import(options, sandbox, user, true)
+          end
+        end
 
-        it "creates a correct gp table copier" do
-          mock(QC.default_queue).enqueue.with("GpTableCopier.run_new", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, 50)
-          src_table.import(options, sandbox, user)
+        context "into a existing table" do
+          it "creates a correct gp table copier" do
+            options["new_table"] = false;
+            mock(QC).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, false, 50)
+            src_table.import(options, sandbox, user, false)
+          end
         end
       end
     end
