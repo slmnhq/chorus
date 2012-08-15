@@ -2,25 +2,14 @@ require 'spec_helper_no_transactions'
 
 describe ActivityMigrator do
   describe ".migrate" do
-    before do
-        UserMigrator.new.migrate if User.count == 0
-        WorkspaceMigrator.new.migrate if Workspace.count == 0
-        InstanceMigrator.new.migrate if Instance.count == 0
-        HadoopInstanceMigrator.new.migrate if HadoopInstance.count == 0
-        WorkfileMigrator.new.migrate if Workfile.count == 0
-        InstanceAccountMigrator.new.migrate if InstanceAccount.count == 0
-        ActivityMigrator.new.migrate if Activity.count == 0
+    before :all do
+        ActivityMigrator.new.migrate
     end
 
     context "migrating activities that reference datasets" do
-
       it "copies SOURCE TABLE CREATED data fields from the legacy activity" do
-        #expect {
-        #  ActivityMigrator.new.migrate
-        #}.to change(Events::SOURCE_TABLE_CREATED, :count).by(12)
-
-        event = Events::SOURCE_TABLE_CREATED.find(event_id_for('10002'))
-
+        Events::SOURCE_TABLE_CREATED.count.should == 12
+        event = Events::SOURCE_TABLE_CREATED.find_by_legacy_id('10002')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
         event.dataset.should be_a(Dataset)

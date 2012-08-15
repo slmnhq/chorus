@@ -4,6 +4,8 @@ class DatabaseObjectMigrator
   end
 
   def migrate
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+
     prerequisites
 
     # Result should be a all dataset identifiers across the entire Chorus 2.1 app

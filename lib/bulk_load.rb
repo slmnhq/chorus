@@ -43,4 +43,6 @@ system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.associated_dataset
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_dataset ADD COLUMN chorus_rails_associated_dataset_id INTEGER;'"
 
 
+system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.events ADD COLUMN legacy_id VARCHAR;'"
+
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.datasets ADD COLUMN legacy_id VARCHAR;'"
