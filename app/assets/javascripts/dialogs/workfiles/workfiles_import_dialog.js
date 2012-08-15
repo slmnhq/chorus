@@ -35,6 +35,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         if (this.uploadObj) {
             this.request = this.uploadObj.submit();
             this.$("button.submit").startLoading("workfiles.import_dialog.uploading");
+            this.$("button.choose").prop("disabled", true);
+            this.$("input[type=file]").addClass("hidden");
         }
     },
 
@@ -85,6 +87,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
 
         function uploadFinished(e, data) {
+            self.$("button.choose").prop("disabled", false);
+            self.$("input[type=file]").removeClass("hidden");
             var json = $.parseJSON(data.result)
             if (json.status == "ok") {
                 self.model = new chorus.models.Workfile(json.resource[0]);

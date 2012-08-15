@@ -339,11 +339,17 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("should display a loading spinner", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
                     expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                    expect(this.dialog.$("button.choose")).toBeDisabled();
+                    expect(this.dialog.$(".import_controls input[type=radio]")).toBeDisabled();
                 });
 
                 it("uploads the specified file", function() {
                     expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/242/csv/sample")
                     expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                });
+
+                it("Should disable the change file link", function () {
+                    expect(this.dialog.$(".file-wrapper a")).toHaveClass("hidden");
                 });
 
                 context("when upload succeeds", function() {
@@ -477,6 +483,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+                        expect(this.dialog.$(".import_controls input[type=radio]")).toBeEnabled();
                     });
                 });
             });

@@ -92,6 +92,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFile: function(e) {
         e && e.preventDefault();
+        this.$("button.choose").prop("disabled", true);
+        this.$(".file-wrapper a").addClass("hidden");
+        this.$(".import_controls input[type=radio]").prop("disabled", true);
 
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
@@ -112,6 +115,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 this.clearErrors();
                 this.request = this.uploadObj.submit();
             } else {
+                this.$("button.choose").prop("disabled", false);
+                this.$(".file-wrapper a").removeClass("hidden");
+                this.$(".import_controls input[type=radio]").prop("disabled", false);
                 this.showErrors(this.model);
             }
         }
@@ -168,6 +174,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 var workfile = new chorus.models.Workfile();
                 workfile.set(workfile.parse(data.result), {silent: true});
                 if (workfile.serverErrors) {
+                    self.$(".file-wrapper a").removeClass("hidden");
+                    self.$(".import_controls input[type=radio]").prop("disabled", false);
                     self.showErrors(workfile);
                 } else {
                     chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
@@ -177,6 +185,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 var workingCsv = self.csv.clone();
                 workingCsv.set(workingCsv.parse(data.result), {silent: true});
                 if (workingCsv.serverErrors) {
+                    self.$(".file-wrapper a").removeClass("hidden");
+                    self.$(".import_controls input[type=radio]").prop("disabled", false);
                     self.csv.serverErrors = workingCsv.serverErrors;
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
