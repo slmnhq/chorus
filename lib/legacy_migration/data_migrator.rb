@@ -8,9 +8,9 @@ class DataMigrator
                   InstanceAccountMigrator.new, # done
                   WorkspaceMigrator.new, #done
                   MembershipMigrator.new, #done
-                  ImageMigrator.new,
+                  ImageMigrator.new, # done
                   WorkfileMigrator.new,
-                  SandboxMigrator.new,
+                  SandboxMigrator.new, #done
                   HadoopInstanceMigrator.new, # done
                   #ActivityMigrator.new,
                   AssociatedDatasetMigrator.new

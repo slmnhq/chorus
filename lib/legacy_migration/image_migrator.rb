@@ -1,45 +1,55 @@
 require "stringio"
 
-class LegacyImage < ActiveRecord::Base
-  def self.table_name
-    "legacy_migrate.edc_image_instance"
-  end
-
-  def self.inheritance_column
-    nil
-  end
-end
-
 class ImageMigrator
-  def migrate
+  def prerequisites
+    UserMigrator.new.migrate
+    WorkspaceMigrator.new.migrate
+    MembershipMigrator.new.migrate
+  end
+
+  def silence_activerecord
     ActiveRecord::Base.record_timestamps = false
     Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
-
-    legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")
-    legacy_users_with_images.each do |legacy_user|
-      new_user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
-      image_id = legacy_user["image_id"]
-      image = LegacyImage.where("image_id = '#{image_id}' and type = 'original'").first
-
-      file = StringIO.new(image.image.force_encoding("UTF-8"))
-
-      new_user.image = file
-      new_user.save!
-    end
-
-    legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
-    legacy_workspaces_with_images.each do |legacy_workspace|
-      new_workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])
-      icon_id = legacy_workspace["icon_id"]
-      icon = LegacyImage.where("image_id = '#{icon_id}' and type = 'original'").first
-
-      file = StringIO.new(icon.image.force_encoding("UTF-8"))
-
-      new_workspace.image = file
-      new_workspace.save!
-    end
-
+    yield
     ActiveRecord::Base.record_timestamps = true
+  end
+
+  def migrate
+    prerequisites
+
+    silence_activerecord do
+      user_image_rows = Legacy.connection.exec_query(
+      "SELECT
+        edc_user.id AS user_id,
+        edc_image_instance.image AS image
+      FROM legacy_migrate.edc_user
+      INNER JOIN legacy_migrate.edc_image_instance
+        ON edc_user.image_id = edc_image_instance.image_id
+        AND type = 'original';"
+      )
+
+      user_image_rows.each do |row|
+        user = User.unscoped.find_by_legacy_id(row['user_id'])
+        user.image = StringIO.new(row['image'].force_encoding("UTF-8"))
+        user.save!
+      end
+
+      workspace_image_rows = Legacy.connection.exec_query(
+      "SELECT
+        edc_workspace.id AS workspace_id,
+        edc_image_instance.image AS image
+      FROM legacy_migrate.edc_workspace
+      INNER JOIN legacy_migrate.edc_image_instance
+        ON edc_workspace.icon_id = edc_image_instance.image_id
+        AND type = 'original';"
+      )
+
+      workspace_image_rows.each do |row|
+        workspace = Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
+        workspace.image = StringIO.new(row['image'].force_encoding("UTF-8"))
+        workspace.save!
+      end
+    end
   end
 end
 

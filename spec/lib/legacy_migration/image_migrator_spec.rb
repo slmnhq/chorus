@@ -10,10 +10,7 @@ TYPE_MAP = {
 describe ImageMigrator do
   describe ".migrate" do
     before :all do
-      UserMigrator.new.migrate if User.unscoped.count == 0
-      WorkspaceMigrator.new.migrate if Workspace.count == 0
-      MembershipMigrator.new.migrate if Membership.count == 0
-      ImageMigrator.new.migrate if User.where("image_file_name is not null").count == 0
+      ImageMigrator.new.migrate
     end
 
     describe "copying the data" do
