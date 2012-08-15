@@ -402,6 +402,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
                 });
 
+                it("Should disable the change file link", function() {
+                    expect(this.dialog.$(".file-wrapper a")).toHaveClass("hidden");
+                });
+
                 context("when upload succeeds", function() {
                     beforeEach(function() {
                         spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough();

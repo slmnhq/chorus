@@ -139,7 +139,6 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         try {
             this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
         } catch(error) {
-            // TODO: this in untested. If you know how to test fileUploadOptions, plz fix and add the pending test
             var status = response.jqXHR.status;
             var statusText = response.jqXHR.statusText;
             this.displayNginxError(status, statusText);
