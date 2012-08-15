@@ -1,66 +1,144 @@
 require 'stringio'
 
 class WorkfileMigrator
+  class FakeFileUpload < StringIO
+    attr_accessor :content_type, :original_filename
+  end
+
+  def prerequisites
+    UserMigrator.new.migrate
+    WorkspaceMigrator.new.migrate
+    MembershipMigrator.new.migrate
+  end
+
+  def silence_activerecord
+    ActiveRecord::Base.record_timestamps = false
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+    yield
+    ActiveRecord::Base.record_timestamps = true
+  end
+
   def migrate
-    legacy_workfiles = Legacy.connection.select_all("SELECT * from edc_work_file")
-    legacy_workfiles.each do |legacy_workfile|
-      legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_workfile["owner"]}'")
-      new_workfile = Workfile.new
-      new_workfile.workspace = Workspace.find_by_legacy_id(legacy_workfile["workspace_id"])
+    prerequisites
 
-      new_workfile.owner_id = legacy_owner["chorus_rails_user_id"]
-      new_workfile.description = legacy_workfile["description"]
-      new_workfile.created_at = legacy_workfile["created_stamp"]
-      new_workfile.file_name  = legacy_workfile["file_name"]
-      new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
-      new_workfile.deleted_at = legacy_workfile["last_updated_stamp"] if legacy_workfile["is_deleted"] == "t"
-      new_workfile.save!
+    #TODO deal with latest_workfile_version_id, content_type
+    Legacy.connection.exec_query("
+      INSERT INTO public.workfiles(
+        legacy_id,
+        workspace_id,
+        owner_id,
+        description,
+        created_at,
+        file_name,
+        updated_at,
+        deleted_at
+      )
+      SELECT
+        edc_work_file.id,
+        workspace.id,
+        owner.id,
+        description,
+        created_tx_stamp,
+        file_name,
+        last_updated_tx_stamp,
+        CASE is_deleted
+          WHEN 't' THEN last_updated_tx_stamp
+          ELSE null
+        END
+      FROM legacy_migrate.edc_work_file
+      INNER JOIN users owner
+        ON owner.username = edc_work_file.owner
+      INNER JOIN workspaces workspace
+        ON workspace.legacy_id = edc_work_file.workspace_id
+      WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);")
 
-      legacy_versions = Legacy.connection.select_all("SELECT * from edc_workfile_version WHERE workfile_id = '#{legacy_workfile["id"]}'")
-      legacy_versions.each do |legacy_version|
-        legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_version["version_owner"]}'")
-        legacy_modifier = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_version["modified_by"]}'")
-        new_version = WorkfileVersion.new
-        new_version.workfile_id = new_workfile.id
-        new_version.version_num = legacy_version["version_num"]
-        new_version.owner_id = legacy_owner["chorus_rails_user_id"]
-        new_version.modifier_id = legacy_modifier["chorus_rails_user_id"]
-        new_version.created_at = legacy_version["created_stamp"]
-        new_version.updated_at = legacy_version["last_updated_stamp"]
+    Legacy.connection.exec_query("
+      INSERT INTO public.workfile_versions(
+        legacy_id,
+        workfile_id,
+        version_num,
+        owner_id,
+        modifier_id,
+        created_at,
+        updated_at
+      )
+      SELECT
+        edc_workfile_version.id,
+        workfiles.id,
+        version_num,
+        owner.id,
+        modifier.id,
+        created_tx_stamp,
+        last_updated_tx_stamp
+      FROM legacy_migrate.edc_workfile_version
+      INNER JOIN users owner
+        ON owner.username = edc_workfile_version.version_owner
+      INNER JOIN users modifier
+        ON modifier.username = edc_workfile_version.modified_by
+      INNER JOIN workfiles
+        ON edc_workfile_version.workfile_id = workfiles.legacy_id
+      WHERE edc_workfile_version.id NOT IN (SELECT legacy_id FROM workfile_versions);")
 
-        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", legacy_workfile["workspace_id"], legacy_version["version_file_id"])
-        new_version.contents = StringIO.new(File.read(path))
+    Legacy.connection.exec_query("
+      INSERT INTO public.workfile_drafts(
+        legacy_id,
+        workfile_id,
+        base_version,
+        owner_id,
+        created_at,
+        updated_at
+      )
+      SELECT
+        edc_workfile_draft.id,
+        workfiles.id,
+        base_version_num,
+        owner.id,
+        created_tx_stamp,
+        last_updated_tx_stamp
+      FROM legacy_migrate.edc_workfile_draft
+      INNER JOIN users owner
+        ON owner.username = edc_workfile_draft.draft_owner
+      INNER JOIN workfiles
+        ON edc_workfile_draft.workfile_id = workfiles.legacy_id
+      WHERE is_deleted = 'f'
+      AND edc_workfile_draft.id NOT IN (SELECT legacy_id FROM workfile_drafts);")
 
-        new_version.save!
-
-        id = legacy_version["id"]
-        Legacy.connection.update("Update edc_workfile_version SET chorus_rails_workfile_version_id = #{new_version.id} WHERE id = '#{id}'")
-
-        new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
-        new_workfile.save!
+    silence_activerecord do
+      #TODO Optimize this to one query
+      WorkfileVersion.where("contents_file_name IS NULL").each do |workfile_version|
+        row = Legacy.connection.exec_query("
+          SELECT
+            version_file_id,
+            workspace_id,
+            file_name,
+            mime_type
+          FROM legacy_migrate.edc_workfile_version
+          INNER JOIN
+            legacy_migrate.edc_work_file
+            ON edc_workfile_version.workfile_id = edc_work_file.id;
+        ").first
+        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["version_file_id"])
+        fake_file = FakeFileUpload.new(File.read(path))
+        fake_file.original_filename = row['file_name']
+        fake_file.content_type = row['mime_type']
+        workfile_version.contents = fake_file
+        workfile_version.save!
       end
 
-      legacy_drafts = Legacy.connection.select_all("SELECT * from edc_workfile_draft WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")
-      legacy_drafts.each do |legacy_draft|
-        legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_draft["draft_owner"]}'")
-        new_draft = WorkfileDraft.new
-        new_draft.workfile_id = new_workfile.id
-        new_draft.base_version = legacy_draft["base_version_num"]
-        new_draft.owner_id = legacy_owner["chorus_rails_user_id"]
-        new_draft.created_at = legacy_draft["created_stamp"]
-        new_draft.updated_at = legacy_draft["last_updated_stamp"]
-
-        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", legacy_workfile["workspace_id"], legacy_draft["draft_file_id"])
-        new_draft.content = StringIO.new(File.read(path))
-
-        new_draft.save!
-
-        id = legacy_draft["id"]
-        Legacy.connection.update("Update edc_workfile_draft SET chorus_rails_workfile_draft_id = #{new_draft.id} WHERE id = '#{id}'")
+      WorkfileDraft.where("content IS NULL").each do |workfile_draft|
+        row = Legacy.connection.exec_query("
+          SELECT
+            draft_file_id,
+            workspace_id
+          FROM legacy_migrate.edc_workfile_draft
+          INNER JOIN
+            legacy_migrate.edc_work_file
+            ON edc_workfile_draft.workfile_id = edc_work_file.id;
+        ").first
+        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["draft_file_id"])
+        workfile_draft.content = StringIO.new(File.read(path))
+        workfile_draft.save!
       end
-
-      id = legacy_workfile["id"]
-      Legacy.connection.update("Update edc_work_file SET chorus_rails_workfile_id = #{new_workfile.id} WHERE id = '#{id}'")
     end
   end
 end

@@ -2,7 +2,6 @@ require_relative 'legacy'
 
 class UserMigrator
   def migrate
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
     Legacy.connection.exec_query("INSERT INTO public.users(
                               legacy_id,
                               username,

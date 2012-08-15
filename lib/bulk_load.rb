@@ -30,8 +30,13 @@ system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_worksp
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.memberships ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_member ADD COLUMN chorus_rails_membership_id INTEGER;'"
 
+system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.workfiles ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_work_file ADD COLUMN chorus_rails_workfile_id INTEGER;'"
+
+system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.workfile_versions ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_workfile_version ADD COLUMN chorus_rails_workfile_version_id INTEGER;'"
+
+system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.workfile_drafts ADD COLUMN legacy_id VARCHAR;'"
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE legacy_migrate.edc_workfile_draft ADD COLUMN chorus_rails_workfile_draft_id INTEGER;'"
 
 system "psql -p 8543 chorus_rails_test -c 'ALTER TABLE public.associated_datasets ADD COLUMN legacy_id VARCHAR;'"

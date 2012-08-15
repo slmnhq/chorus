@@ -9,12 +9,14 @@ class DataMigrator
                   WorkspaceMigrator.new, #done
                   MembershipMigrator.new, #done
                   ImageMigrator.new, # done
-                  WorkfileMigrator.new,
+                  WorkfileMigrator.new, # done
                   SandboxMigrator.new, #done
                   HadoopInstanceMigrator.new, # done
                   #ActivityMigrator.new,
-                  AssociatedDatasetMigrator.new
+                  AssociatedDatasetMigrator.new # done
                  ]
+    # note_attachment_migrator
+    # note_comment_migrator
   end
 
   def migrate
