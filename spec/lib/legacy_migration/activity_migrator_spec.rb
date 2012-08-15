@@ -44,11 +44,8 @@ describe ActivityMigrator do
       end
 
       it "copies FILE IMPORT FAILED activities" do
-        #expect {
-        #  ActivityMigrator.new.migrate
-        #}.to change(Events::FILE_IMPORT_FAILED, :count).by(7)
-
-        event = Events::FILE_IMPORT_FAILED.find(event_id_for('10368'))
+        Events::FILE_IMPORT_FAILED.count.should == 7
+        event = Events::FILE_IMPORT_FAILED.find_by_legacy_id('10368')
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "active_public"
         event.actor.should be_a(User)
