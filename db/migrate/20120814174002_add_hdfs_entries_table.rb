@@ -3,6 +3,10 @@ class AddHdfsEntriesTable < ActiveRecord::Migration
     create_table :hdfs_entries do |t|
       t.string :path
       t.integer :hadoop_instance_id
+      t.datetime :modified_at
+      t.integer :size
+      t.boolean :is_directory
+      t.integer :content_count
       t.timestamps
     end
   end

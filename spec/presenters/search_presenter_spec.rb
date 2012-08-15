@@ -80,5 +80,15 @@ describe SearchPresenter, :type => :view do
       datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:schema_name)
       datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:column_name)
     end
+
+    it "includes the hdfs entries" do
+      @hash.should have_key(:hdfs)
+      hdfs_hash = @hash[:hdfs]
+      hdfs_hash.should have_key(:numFound)
+      hdfs_hash.should have_key(:results)
+      first_result = hdfs_hash[:results][0]
+      first_result.should have_key(:path)
+      first_result.should have_key(:highlighted_attributes)
+    end
   end
 end

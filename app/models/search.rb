@@ -4,7 +4,7 @@ class Search
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, Instance, Workspace, Workfile, Dataset]
+    @models_to_search = [User, Instance, Workspace, Workfile, Dataset, HdfsEntry]
     self.query = params[:query]
     self.per_type = params[:per_type]
     if per_type
@@ -77,6 +77,10 @@ class Search
     models[:datasets] ||  []
   end
 
+  def hdfs_entries
+    models[:hdfs_entries] || []
+  end
+
   def num_found
     return @num_found if @num_found
 
@@ -109,7 +113,7 @@ class Search
   private
 
   def class_name_to_key(name)
-    name.to_s.downcase.pluralize.to_sym
+    name.to_s.underscore.pluralize.to_sym
   end
 
   def populate_missing_records

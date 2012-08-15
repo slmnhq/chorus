@@ -20,6 +20,7 @@ describe Search do
         Sunspot.session.should be_a_search_for(Instance)
         Sunspot.session.should be_a_search_for(Workspace)
         Sunspot.session.should be_a_search_for(Dataset)
+        Sunspot.session.should be_a_search_for(HdfsEntry)
         Sunspot.session.should have_search_params(:fulltext, 'bob')
         Sunspot.session.should have_search_params(:facet, :type_name)
         Sunspot.session.should have_search_params(:group, Proc.new {
@@ -44,7 +45,7 @@ describe Search do
           search = Search.new(user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
-            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100})
+            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100})
           end
           stub(search.search).each_hit_with_result { [] }
           search.models
@@ -107,6 +108,7 @@ describe Search do
     let(:bob) { users(:bob) }
     let(:carly) { users(:carly) }
     let(:instance) { instances(:greenplum) }
+    let(:hdfs_entry) { HdfsEntry.first }
     let(:public_workspace) { workspaces(:alice_public) }
     let(:private_workspace) { workspaces(:bob_private) }
     let(:private_workspace_not_a_member) { workspaces(:alice_private) }
@@ -226,6 +228,26 @@ describe Search do
           search = Search.new(bob, :query => 'workspacedatasetnotesearch')
           dataset = search.datasets.first
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>workspacedatasetnotesearch</em>"
+        end
+      end
+    end
+
+    describe "hdfs_entries" do
+      it "includes the highlighted attributes" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          hdfs = search.hdfs_entries.first
+          hdfs.highlighted_attributes.length.should == 2
+          hdfs.highlighted_attributes[:parent_name][0].should == "<em>bobsearch</em>"
+          hdfs.highlighted_attributes[:path][0].should == "/<em>bobsearch</em>"
+        end
+      end
+
+      it "returns the Instance objects found" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          search.hdfs_entries.length.should == 1
+          search.hdfs_entries.first.should == hdfs_entry
         end
       end
     end

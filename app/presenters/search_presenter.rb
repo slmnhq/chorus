@@ -1,6 +1,6 @@
 class SearchPresenter < Presenter
 
-  delegate :users, :instances, :num_found, :workspaces, :workfiles, :datasets, to: :model
+  delegate :users, :instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, to: :model
 
   def to_hash
     {
@@ -27,6 +27,11 @@ class SearchPresenter < Presenter
       :datasets => {
         :results => present_datasets_with_nested_highlights(datasets),
         :numFound => num_found[:datasets]
+      },
+
+      :hdfs => {
+        :results => present_models_with_highlights(hdfs_entries),
+        :numFound => num_found[:hdfs_entries]
       }
     }
   end
