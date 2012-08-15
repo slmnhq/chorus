@@ -31,11 +31,8 @@ describe ActivityMigrator do
       end
 
       it "copies FILE IMPORT SUCCESS activities" do
-        #expect {
-        #  ActivityMigrator.new.migrate
-        #}.to change(Events::FILE_IMPORT_SUCCESS, :count).by(5)
-
-        event = Events::FILE_IMPORT_SUCCESS.find(event_id_for('10177'))
+        Events::FILE_IMPORT_SUCCESS.count.should == 5
+        event = Events::FILE_IMPORT_SUCCESS.find_by_legacy_id('10177')
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "ws"
         event.actor.should be_a(User)

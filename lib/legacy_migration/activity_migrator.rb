@@ -42,10 +42,61 @@ class ActivityMigrator
     ))
   end
 
+  def migrate_file_import_success
+    Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      action,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'Events::FILE_IMPORT_SUCCESS',
+      datasets.id,
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+        ON streams.id = target_dataset.activity_stream_id
+        AND target_dataset.entity_type = 'databaseObject'
+      INNER JOIN datasets
+        ON replace(target_dataset.object_id, '"', '') = datasets.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of file'
+    AND streams.id NOT IN (SELECT legacy_id from events);
+    ))
+  end
+
+  def backfill_file_import_success_additional_data
+    Events::FILE_IMPORT_SUCCESS.where('additional_data IS NULL').each do |event|
+      row = Legacy.connection.exec_query("SELECT object_name FROM edc_activity_stream_object
+                                      WHERE activity_stream_id = '#{event.legacy_id}'
+                                      AND entity_type = 'file';").first
+      event.additional_data = {:filename => row['object_name'], :import_type => 'file'}
+      event.save!
+    end
+  end
+
   def migrate
+    ActiveRecord::Base.record_timestamps = false
     prerequisites
 
     migrate_source_table_created
+    migrate_file_import_success
+    backfill_file_import_success_additional_data
+    ActiveRecord::Base.record_timestamps = true
 
     #
     #
