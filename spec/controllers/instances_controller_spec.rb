@@ -121,13 +121,6 @@ describe InstancesController do
         })
       end
 
-      let(:provider_mock) { Object.new }
-
-      before do
-        mock(AuroraProvider).create_from_aurora_service { provider_mock }
-        mock(provider_mock).provide!.with_any_args { true }
-      end
-
       it "reports that the instance was created" do
         post :create, :instance => valid_attributes
         response.code.should == "201"
@@ -138,20 +131,23 @@ describe InstancesController do
         decoded_response.name.should == "instance_name"
       end
 
-      #it "enqueues a request to provision a database" do
-      #  mock(QC).enqueue("AuroraProvider.provide")
-      #  post :create, :instance => valid_attributes
-      #end
-
       it "creates a greenplum instance" do
-        stub(Gpdb::ConnectionChecker).check!(anything, anything)
-
         post :create, :instance => valid_attributes
 
         instance = Instance.last
         instance.name.should == 'instance_name'
         instance.description.should == 'A description'
         instance.owner.should == @user
+      end
+
+      it "enqueues a request to provision a database for an instance" do
+        mock(Gpdb::InstanceRegistrar).create!.with_any_args do
+          instance = instances(:aurora)
+          instance.id = 123
+          instance
+        end
+        mock(QC.default_queue).enqueue("AuroraProvider.provide!", 123, valid_attributes)
+        post :create, :instance => valid_attributes
       end
     end
 

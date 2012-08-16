@@ -20,9 +20,7 @@ class InstancesController < GpdbController
                                                        :aurora => use_aurora)
 
     if use_aurora
-    # TODO QC.enqueue("AuroraProvider...")
-    #
-      AuroraProvider.create_from_aurora_service.provide!(created_instance, params[:instance])
+      QC.enqueue("AuroraProvider.provide!", created_instance.id, params[:instance])
     end
 
     present created_instance, :status => :created

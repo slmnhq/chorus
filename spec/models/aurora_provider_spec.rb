@@ -47,9 +47,8 @@ describe AuroraProvider do
     end
   end
 
-  describe "#provide!" do
+  describe ".provide!" do
     let(:instance) { instances(:aurora) }
-    let(:service_mock) { Object.new }
     let(:database) { Object.new }
     let(:attributes) { {:template => "small",
                         :size => 1,
@@ -57,25 +56,25 @@ describe AuroraProvider do
 
     before do
       stub(database).public_ip { '123.321.12.34' }
-
-      mock(service_mock).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
-      mock(service_mock).create_database({
-                                             :template => Aurora::DB_SIZE[:small],
-                                             :database_name => 'database',
-                                             :db_username => 'edcadmin',
-                                             :db_password => 'secret',
-                                             :size => 1
-                                         }) { database }
+      any_instance_of(Aurora::Service) do |service|
+        mock(service).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
+        mock(service).create_database({
+                                          :template => Aurora::DB_SIZE[:small],
+                                          :database_name => 'database',
+                                          :db_username => 'edcadmin',
+                                          :db_password => 'secret',
+                                          :size => 1
+                                      }) { database }
+      end
     end
 
     it "creates a database" do
-      provider = AuroraProvider.new(service_mock)
-      provider.provide!(instance, attributes)
+      AuroraProvider.provide!(instance.id, attributes)
     end
 
     it "updates the host of the instance with the correct ip address" do
-      provider = AuroraProvider.new(service_mock)
-      provider.provide!(instance, attributes)
+      AuroraProvider.provide!(instance.id, attributes)
+      instance.reload
       instance.host.should == "123.321.12.34"
     end
   end
