@@ -3,7 +3,6 @@ require 'hadoop_instance_access'
 
 class HadoopInstancesController < ApplicationController
   def create
-    p " in creat"
     cached_instance = Hdfs::InstanceRegistrar.create!(params[:hadoop_instance], current_user)
     present cached_instance, :status => :created
   end
