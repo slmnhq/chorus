@@ -94,4 +94,37 @@ describe Events::Base do
     event.destroy
     Activity.where(:event_id => event.id).size.should == 0
   end
+
+  describe "translating additional data" do
+    let(:event_class) { Events::DATASET_IMPORT_FAILED }
+    let(:event) { event_class.first }
+
+    describe "#additional_data_key" do
+      subject { event.additional_data_key(attr) }
+
+      context "when the attribute can be translated" do
+        let(:attr) { :source_dataset_id }
+        it { should == :source_dataset }
+      end
+
+      context "when the attribute can not be translated" do
+        let(:attr) { :destination_table }
+        it { should == :destination_table }
+      end
+    end
+
+    describe "#additional_data_value" do
+      subject { event.additional_data_value(attr) }
+
+      context "when the attribute can be translated" do
+        let(:attr) { :source_dataset_id }
+        it { should be_a(Dataset) }
+      end
+
+      context "when the attribute can not be translated" do
+        let(:attr) { :destination_table }
+        it { should be_a(String) }
+      end
+    end
+  end
 end

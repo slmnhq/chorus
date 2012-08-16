@@ -37,13 +37,18 @@ describe EventPresenter, :type => :view do
         stub(event).additional_data do
           {
               :some_key => "foo",
-              :some_other_key => "bar"
+              :some_other_key => "bar",
+              :some_id => 1
           }
         end
+        mock(event).additional_data_key(:some_id) { :some }
+        mock(event).additional_data_value(:some_id) { datasets(:bobs_table) }
 
         hash = subject.to_hash
         hash[:some_key].should == "foo"
         hash[:some_other_key].should == "bar"
+        hash.should_not have_key(:some_id)
+        hash[:some].should be_a(Hash)
       end
     end
 

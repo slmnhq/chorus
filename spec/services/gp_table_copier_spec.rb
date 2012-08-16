@@ -65,6 +65,7 @@ describe GpTableCopier, :database_integration => true do
         event.dataset.name.should == dst_table_name
         event.dataset.schema.should == sandbox
         event.workspace.should == workspace
+        event.source_dataset_id.should == source_dataset.id
         event.source_dataset.should == source_dataset
       end
 

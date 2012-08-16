@@ -34,7 +34,7 @@ class EventPresenter < Presenter
       if value.class == String
         [key, sanitize(value)]
       else
-        [key, present(value)]
+        [model.additional_data_key(key), present(model.additional_data_value(key))]
       end
 
     end

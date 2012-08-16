@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "spec_helper"
 require_relative "helpers"
 
@@ -104,13 +105,13 @@ describe "Notes" do
         :actor => actor,
         :workfile => workfile,
         :workspace => workspace,
-        :body => "This is the text of the note on the workfile"
+        :body => "This is the text’s of the note on the workfile"
       )
     end
 
     its(:workfile) { should == workfile }
     its(:targets) { should == {:workfile => workfile} }
-    its(:additional_data) { should == {:body => "This is the text of the note on the workfile"} }
+    its(:additional_data) { should == {:body => "This is the text’s of the note on the workfile"} }
 
     it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity

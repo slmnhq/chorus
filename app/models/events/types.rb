@@ -98,14 +98,17 @@ module Events
   class DATASET_IMPORT_SUCCESS < Base
     has_targets :workspace, :dataset
     has_activities :actor, :workspace, :dataset
-    has_additional_data :source_dataset
+    has_additional_data :source_dataset_id
+    translate_additional_data_ids :source_dataset => Dataset
   end
 
   class DATASET_IMPORT_FAILED < Base
     has_targets :workspace
     has_activities :actor, :workspace
-    has_additional_data :source_dataset, :destination_table, :error_message
+    has_additional_data :source_dataset_id, :destination_table, :error_message
+    translate_additional_data_ids :source_dataset => Dataset
   end
+
   class MEMBERS_ADDED < Base
     has_targets :member, :workspace
     has_activities :actor, :workspace

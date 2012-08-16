@@ -335,10 +335,10 @@ describe "Event types" do
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == { :source_dataset => source_dataset} }
+    its(:additional_data) { should == { :source_dataset_id => source_dataset.id} }
 
     it "has a workspace in the source_dataset" do
-      subject.additional_data[:source_dataset].bound_workspaces.should include(workspace)
+      subject.source_dataset.bound_workspaces.should include(workspace)
     end
 
     it_creates_activities_for { [actor, workspace, dataset] }
@@ -379,10 +379,10 @@ describe "Event types" do
     end
 
     its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {:source_dataset => source_dataset, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
+    its(:additional_data) { should == {:source_dataset_id => source_dataset.id, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
 
     it "has a workspace in the source_dataset" do
-      subject.additional_data[:source_dataset].bound_workspaces.should include(workspace)
+      subject.source_dataset.bound_workspaces.should include(workspace)
     end
 
     it_creates_activities_for { [actor, workspace] }
