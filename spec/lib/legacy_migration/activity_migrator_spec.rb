@@ -68,20 +68,20 @@ describe ActivityMigrator do
         # event.additional_data[:source_dataset].name.should == "clv_data_large"
       end
 
-      #it "copies DATASET IMPORT FAILED activities" do
-      #  #expect {
-      #  #  ActivityMigrator.new.migrate
-      #  #}.to change(Events::DATASET_IMPORT_FAILED, :count).by(20)
-      #
-      #  event = Events::DATASET_IMPORT_FAILED.find_by_legacy_id('10336')
-      #  event.workspace.should be_a(Workspace)
-      #  event.workspace.name.should == "New And Improved Title"
-      #  event.actor.should be_a(User)
-      #  event.actor.username.should == "notadmin"
-      #  event.additional_data[:destination_table].should == "import_try_2"
-      #  event.additional_data[:source_dataset].name.should == "clv_data_large"
-      #  event.additional_data[:error_message].should include( "ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
-      #end
+      it "copies DATASET IMPORT FAILED activities" do
+        Events::DATASET_IMPORT_FAILED.count.should == 20
+        event = Events::DATASET_IMPORT_FAILED.find_by_legacy_id('10336')
+        event.workspace.should be_a(Workspace)
+        event.workspace.name.should == "New And Improved Title"
+        event.actor.should be_a(User)
+        event.actor.username.should == "notadmin"
+        #event.additional_data[:destination_table].should == "import_try_2"
+        #event.additional_data[:source_dataset].name.should == "clv_data_large"
+        event.additional_data[:error_message].should include( "ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
+
+        event = Events::DATASET_IMPORT_FAILED.find_by_legacy_id('10174')
+        event.additional_data[:error_message].should == ''
+      end
     end
     #
     #context "migrating activities that do not reference datasets" do
