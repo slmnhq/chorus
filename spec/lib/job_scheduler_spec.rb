@@ -9,7 +9,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'InstanceStatus.check' job in QC" do
-      mock(QC).enqueue("InstanceStatus.check")
+      mock(QC.default_queue).enqueue("InstanceStatus.check")
       job_scheduler.job_named('InstanceStatus.check').run(Time.now)
     end
   end
@@ -20,7 +20,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'CsvFile.delete_old_files!' job in QC" do
-      mock(QC).enqueue("CsvFile.delete_old_files!")
+      mock(QC.default_queue).enqueue("CsvFile.delete_old_files!")
       job_scheduler.job_named('CsvFile.delete_old_files!').run(Time.now)
     end
   end
@@ -31,7 +31,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'SolrIndexer.refresh_and_index' job in QC" do
-      mock(QC).enqueue("SolrIndexer.refresh_and_index", ['Dataset'])
+      mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_index", ['Dataset'])
       job_scheduler.job_named('SolrIndexer.refresh_and_index').run(Time.now)
     end
   end

@@ -82,7 +82,7 @@ describe WorkspaceCsvController do
 
     context "when there's no table conflict" do
       before do
-        mock(QC).enqueue.with("CsvImporter.import_file", @csv_file.id)
+        mock(QC.default_queue).enqueue.with("CsvImporter.import_file", @csv_file.id)
       end
       it "updates the necessary import fields on the csv file model" do
         put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params

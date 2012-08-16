@@ -385,7 +385,7 @@ describe Dataset::Query, :database_integration => true do
       context "into a table in another db using gpfdist" do
 
         it "creates a correct gppipe" do
-          mock(QC).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, nil)
+          mock(QC.default_queue).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, nil)
           src_table.gpfdist_import(options, sandbox, user)
         end
       end
@@ -402,7 +402,7 @@ describe Dataset::Query, :database_integration => true do
         }
 
         it "creates a correct gp table copier" do
-          mock(QC).enqueue.with("GpTableCopier.run_new", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, 50)
+          mock(QC.default_queue).enqueue.with("GpTableCopier.run_new", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, 50)
           src_table.import(options, sandbox, user)
         end
       end
