@@ -469,7 +469,25 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.$("button.submit").click();
                 this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat");
-            })
+            });
+
+            context("when the table name is already taken", function () {
+                beforeEach(function () {
+                    this.dialog.$("input[name=tableName]").val("testisgreat").change();
+                    this.dialog.$("button.submit").click();
+                    this.server.lastCreate().failUnprocessableEntity({ fields:{ base:{ TABLE_EXISTS:{ table_name: "testisgreat", suggested_table_name: "testisgreat_1" }}}});
+                });
+
+                it("suggests the input field as the suggested table name", function () {
+                    expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat_1");
+                });
+
+                it("saves suggested name in the model attributes", function() {
+                    this.dialog.$("button.submit").click();
+                    expect(this.dialog.model.get("toTable")).toBe("testisgreat_1");
+                    expect(this.dialog.model.get("tableName")).toBe("testisgreat_1");
+                });
+            });
         })
     })
 })

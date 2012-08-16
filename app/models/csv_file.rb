@@ -31,11 +31,26 @@ class CsvFile < ActiveRecord::Base
   def table_already_exists(table_name)
     schema = workspace.sandbox
     account = schema.instance.account_for_user!(user)
+    check_table(table_name, account, schema)
+    true
+  rescue Exception => e
+    false
+  end
+
+  def check_table(table_name, account, schema)
     schema.with_gpdb_connection(account) do |connection|
       connection.exec_query("SELECT * FROM #{table_name}")
     end
-    true
-  rescue
-    false
+  end
+
+  def suggest_table_name(table_name)
+    counter = 0
+    suggestion = table_name
+    while (table_already_exists(suggestion)) do
+      counter += 1
+      suggestion = "#{table_name}_#{counter}"
+    end
+
+    suggestion
   end
 end

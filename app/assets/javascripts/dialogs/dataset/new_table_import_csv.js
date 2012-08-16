@@ -44,6 +44,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
+        this.showSuggestedTableName();
     },
 
     onSelectType: function(data, linkMenu) {
@@ -124,6 +125,17 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         }
     },
 
+    showSuggestedTableName: function() {
+        var suggestedTableName;
+        try {
+            suggestedTableName = this.model.serverErrors.fields.base.TABLE_EXISTS.suggested_table_name;
+        } catch(e){
+            if (e instanceof TypeError) return;
+            throw e;
+        }
+        this.$("input[name=tableName]").val(suggestedTableName);
+    },
+
     getColumnNames: function() {
         return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames
     },
@@ -178,10 +190,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     updateModel: function() {
+        var newTableName = chorus.utilities.CsvParser.normalizeForDatabase(this.$(".directions input:text").val());
         this.model.set({
             hasHeader: !!(this.$("#hasHeader").prop("checked")),
             delimiter: this.delimiter,
-            tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.$(".directions input:text").val()),
+            tableName: newTableName,
+            toTable: newTableName,
             columnNames: this.getColumnNames()
         });
     },

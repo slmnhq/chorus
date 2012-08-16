@@ -136,10 +136,21 @@ describe WorkspaceCsvController do
     end
 
     context "new table, but a table with that name already exists" do
-      it "returns an error" do
-        any_instance_of(CsvFile) { |csv| stub(csv).table_already_exists.with_any_args { true } }
+      before do
+        any_instance_of(CsvFile) { |csv|
+          stub(csv).table_already_exists("table_importing_into") { true }
+          stub(csv).table_already_exists("table_importing_into_1") { false }
+        }
         put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+      end
+
+      it "returns an error" do
         response.body.should include "TABLE_EXISTS"
+      end
+
+      it "passes a suggested table name" do
+        response.body.should include "suggested_table_name"
+        response.body.should include "table_importing_into_1"
       end
     end
   end

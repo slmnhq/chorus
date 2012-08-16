@@ -17,8 +17,9 @@ class WorkspaceCsvController < ApplicationController
       column_names = JSON.parse(params[:csvimport][:columns_map]).map { |column| column["targetOrder"] }
       params[:csvimport] = params[:csvimport].merge(:column_names => column_names)
     else
-      if csv_file.table_already_exists(params[:csvimport][:to_table])
-        raise ApiValidationError.new(:base, :table_exists, { :table_name => params[:csvimport][:to_table] })
+      table_name = params[:csvimport][:to_table]
+      if csv_file.table_already_exists(table_name)
+        raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name, :suggested_table_name => csv_file.suggest_table_name(table_name) })
       end
       csv_file.new_table = true
     end
