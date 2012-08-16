@@ -3,7 +3,7 @@ require 'spec_helper'
 describe HdfsEntryPresenter, :type => :view do
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:entry) do
-    HdfsEntry.new({
+    hadoop_instance.hdfs_entries.create!({
       :path => "/data",
       :modified_at => "2010-10-20 10:11:12",
       :size => '10',

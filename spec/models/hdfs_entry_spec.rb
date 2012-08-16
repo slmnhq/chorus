@@ -3,6 +3,8 @@ require "spec_helper"
 describe HdfsEntry do
   describe "associations" do
     it { should belong_to(:hadoop_instance) }
+    it { should belong_to(:parent) }
+    it { should have_many(:children) }
   end
 
   describe "validations" do
@@ -14,6 +16,8 @@ describe HdfsEntry do
       duplicate_entry.should_not be_valid
       duplicate_entry.errors.count.should == 1
     end
+
+    it { should validate_presence_of(:hadoop_instance)}
   end
 
   describe ".list" do
@@ -21,6 +25,7 @@ describe HdfsEntry do
       let(:hadoop_instance) { hadoop_instances(:hadoop) }
 
       before do
+        HdfsEntry.destroy_all # remove fixtures
         any_instance_of(Hdfs::QueryService) do |h|
           stub(h).list('/') do
             [{
@@ -47,6 +52,8 @@ describe HdfsEntry do
 
         first_result.is_directory.should be_true
         first_result.path.should == '/empty'
+        first_result.parent_path.should == '/'
+        first_result.parent.path.should == '/'
         first_result.size.should == 10
         first_result.content_count.should == 0
         first_result.modified_at.should == Time.parse("2010-10-20 22:00:00")
@@ -58,10 +65,12 @@ describe HdfsEntry do
       end
 
       it "saves the hdfs entries to the database" do
-        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(2)
+        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
 
         last_entry = HdfsEntry.last
         last_entry.path.should == '/empty.png'
+        last_entry.parent_path.should == '/'
+        last_entry.parent.path.should == '/'
         last_entry.hadoop_instance.should == hadoop_instance
         last_entry.modified_at.should == Time.parse("2010-10-20 22:00:00")
         last_entry.size.should == 10
@@ -70,7 +79,7 @@ describe HdfsEntry do
       end
 
       it "stores a unique hdfs entry in the database" do
-        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(2)
+        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
         list_again = nil
         expect { list_again = described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(0)
 
@@ -82,6 +91,84 @@ describe HdfsEntry do
         first_result.modified_at.should == Time.parse("2010-10-20 22:00:00")
         first_result.hadoop_instance.should == hadoop_instance
       end
+
+      it "removes hdfs entries that no longer exist" do
+        described_class.list('/', hadoop_instance)
+        hadoop_instance.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"}, :without_protection => true)
+        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(-2)
+        hadoop_instance.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_nil
+      end
+
+      context "the parent-child relationship" do
+        before do
+          any_instance_of(Hdfs::QueryService) do |h|
+            stub(h).list('/') do
+              [{
+                   "path" => "/parent",
+                   "size" => 10,
+                   "is_directory" => "true",
+                   "modified_at" => "2010-10-20 22:00:00",
+                   'content_count' => 0
+               }]
+            end
+
+            stub(h).list('/parent/') do
+              [{
+                   "path" => "/parent/child",
+                   "size" => 10,
+                   "is_directory" => "false",
+                   "modified_at" => "2010-10-20 22:00:00",
+                   'content_count' => 1
+               }]
+            end
+          end
+        end
+
+        let(:child) { described_class.list('/parent/', hadoop_instance).first }
+        let(:parent) { described_class.list('/', hadoop_instance).first }
+
+        context "when parent is created after the child" do
+          it "updates the parent-child relationship" do
+            child
+            parent
+            child.reload.parent.should == parent
+            parent.children.should include(child)
+          end
+        end
+
+        context "when parent is created before the child" do
+          it "updates the parent-child relationship" do
+            parent
+            child
+            child.parent.should == parent
+            parent.children.should include(child)
+          end
+        end
+      end
+    end
+  end
+
+  describe ".create" do
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:child) { hadoop_instance.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"},
+                                                       :without_protection => true) }
+    it "creates the parent" do
+      child.parent.should be_a(HdfsEntry)
+      child.parent.path.should == "/nonexistent_dir"
+      child.parent.is_directory.should be_true
+    end
+
+    it "sets the parent_path" do
+      child.parent_path.should == "/nonexistent_dir"
+    end
+
+    it "creates the root directory with nil parent" do
+      root = child.parent.parent
+      root.should be_a(HdfsEntry)
+      root.path.should == "/"
+      root.parent == nil
+      root.reload
+      root.is_directory.should be_true
     end
   end
 
@@ -128,7 +215,8 @@ describe HdfsEntry do
   end
 
   describe "search fields" do
-    let(:hdfs_entry) { HdfsEntry.new({:path => "/foo/bar/baz.txt"}, :without_protection => true) }
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!({:path => "/foo/bar/baz.txt"}, :without_protection => true) }
 
     it "returns the file name for name" do
       hdfs_entry.name.should == 'baz.txt'
@@ -149,7 +237,7 @@ describe HdfsEntry do
     end
 
     it "does not index directories" do
-      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :is_directory => true}, :without_protection => true)
+      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :is_directory => true}, :without_protection => true)
       dont_allow(hdfs_entry).solr_index
       hdfs_entry.save!
     end
@@ -167,14 +255,6 @@ describe HdfsEntry do
     #  dataset.stale_at = nil
     #  dataset.save!
     #end
-  end
-
-  describe "#parent_path" do
-    it "should not include the file name" do
-      HdfsEntry.new({:path => "/foo.txt"}, :without_protection => true).parent_path.should == '/'
-      HdfsEntry.new({:path => "/bar/foo.txt"}, :without_protection => true).parent_path.should == '/bar'
-      HdfsEntry.new({:path => "/baz/bar/foo.txt"}, :without_protection => true).parent_path.should == '/baz/bar'
-    end
   end
 
   describe "#highlighted_attributes" do

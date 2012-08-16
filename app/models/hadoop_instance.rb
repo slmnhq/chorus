@@ -9,4 +9,9 @@ class HadoopInstance < ActiveRecord::Base
   def url
     "gphdfs://#{host}:#{port}/"
   end
+
+  def refresh(path = "/")
+    entries = HdfsEntry.list(path, self)
+    entries.each { |entry| refresh(entry.path) if entry.is_directory? }
+  end
 end

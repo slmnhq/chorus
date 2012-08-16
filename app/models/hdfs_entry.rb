@@ -1,8 +1,11 @@
 class HdfsEntry < ActiveRecord::Base
 
   belongs_to :hadoop_instance
+  belongs_to :parent, :class_name => HdfsEntry, :foreign_key => 'parent_id'
+  has_many :children, :class_name => HdfsEntry, :foreign_key => 'parent_id', :dependent => :destroy
 
   validates_uniqueness_of :path, :scope => :hadoop_instance_id
+  validates_presence_of :hadoop_instance
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable :unless => :is_directory do
@@ -12,16 +15,14 @@ class HdfsEntry < ActiveRecord::Base
     string :type_name
   end
 
+  before_save :build_full_path, :on_create => true
+
   def name
     File.basename(path)
   end
 
   def parent_name
     File.basename(File.dirname(path))
-  end
-
-  def parent_path
-    File.dirname(path)
   end
 
   def highlighted_attributes
@@ -38,20 +39,40 @@ class HdfsEntry < ActiveRecord::Base
 
   def self.list(path, hadoop_instance)
     hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
-    hdfs_query.list(path).map do |result|
+    current_entries = hdfs_query.list(path).map do |result|
       result['modified_at'] = Time.parse(result['modified_at'])
       hdfs_entry = hadoop_instance.hdfs_entries.find_or_initialize_by_path(result["path"])
+      hdfs_entry.hadoop_instance = hadoop_instance
       hdfs_entry.assign_attributes(result, :without_protection => true)
       hdfs_entry.save!
       hdfs_entry
     end
+
+    parent = hadoop_instance.hdfs_entries.find_by_path(normalize_path(path))
+    parent.children.where(['id not in (?)', current_entries.map(&:id)]).destroy_all
+
+    current_entries
   end
 
   def file
     unless is_directory
       HdfsFile.new(path, hadoop_instance, {
-          :modified_at => modified_at
+        :modified_at => modified_at
       })
     end
+  end
+
+  private
+
+  def self.normalize_path(path)
+    Pathname.new(path).cleanpath.to_s
+  end
+
+  def build_full_path
+    return true if path == "/"
+    self.parent_path = File.dirname(path)
+    self.parent = hadoop_instance.hdfs_entries.find_or_create_by_path(parent_path)
+    self.parent.is_directory = true
+    self.parent.save!
   end
 end

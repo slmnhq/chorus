@@ -27,10 +27,10 @@ http_interactions:
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note)'',''type_name_s:(Dataset)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000001))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Dataset
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1691325.0,''docs''=>[{''id''=>''GpdbTable
-        1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>1691325.0}]}}]}},''highlighting''=>{''GpdbTable
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1752459.6,''docs''=>[{''id''=>''GpdbTable
+        1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>1752459.6}]}}]}},''highlighting''=>{''GpdbTable
         1000003''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_shared_table''],''column_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Wed, 01 Aug 2012 22:24:56 GMT
+  recorded_at: Thu, 16 Aug 2012 16:18:02 GMT
 recorded_with: VCR 2.1.1
 ...

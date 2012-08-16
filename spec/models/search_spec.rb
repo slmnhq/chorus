@@ -108,7 +108,7 @@ describe Search do
     let(:bob) { users(:bob) }
     let(:carly) { users(:carly) }
     let(:instance) { instances(:greenplum) }
-    let(:hdfs_entry) { HdfsEntry.first }
+    let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
     let(:public_workspace) { workspaces(:alice_public) }
     let(:private_workspace) { workspaces(:bob_private) }
     let(:private_workspace_not_a_member) { workspaces(:alice_private) }

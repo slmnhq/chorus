@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts parent_name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
@@ -38,8 +38,8 @@ http_interactions:
         1000002'',''name_texts''=>[''bobsearch_table''],''database_name_texts''=>[''bobsearch_database''],''schema_name_texts''=>[''bobsearch_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>1874681.5}]}},{''groupValue''=>''Dataset
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1499745.2,''docs''=>[{''id''=>''GpdbTable
         1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>1499745.2}]}},{''groupValue''=>''HdfsEntry
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3154.21,''docs''=>[{''id''=>''HdfsEntry
-        1000000'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''bobsearch''],''score''=>3154.21}]}},{''groupValue''=>''Workspace
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3154.21,''docs''=>[{''id''=>''HdfsEntry
+        1000002'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''bobsearch''],''score''=>3154.21}]}},{''groupValue''=>''Workspace
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1905.5076,''docs''=>[{''id''=>''Workspace
         1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1905.5076}]}},{''groupValue''=>''Workspace
         1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1905.5076,''docs''=>[{''id''=>''Workspace
@@ -58,7 +58,7 @@ http_interactions:
         1000003''=>{''first_name_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''GpdbTable
         1000002''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_table''],''database_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_schema''],''column_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''GpdbTable
         1000003''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_shared_table''],''column_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''HdfsEntry
-        1000000''=>{''parent_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''Workspace
+        1000002''=>{''parent_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000004''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
         1000002''=>{''description_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
@@ -68,6 +68,6 @@ http_interactions:
         love @@@hl@@@bobsearch@@@endhl@@@'']},''Workspace 1000000''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@
         can see I guess'']}}}'
     http_version:
-  recorded_at: Tue, 14 Aug 2012 23:44:23 GMT
+  recorded_at: Thu, 16 Aug 2012 16:18:08 GMT
 recorded_with: VCR 2.1.1
 ...
