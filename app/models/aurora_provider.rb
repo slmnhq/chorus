@@ -22,33 +22,18 @@ class AuroraProvider
     @aurora_service.templates
   end
 
-  def provide!(attributes, owner)
-    aurora_db = @aurora_service.create_database(aurora_attributes(attributes))
-    Gpdb::InstanceRegistrar.create!(instance_attributes(attributes, aurora_db), owner)
+  def provide!(instance, attributes = {})
+    db = @aurora_service.create_database(aurora_attributes(instance, attributes))
+    instance.host = db.public_ip
   end
 
   private
-  def aurora_attributes(attributes)
-    aurora_attributes = attributes.slice(:size,
-                                         :database_name,
-                                         :db_username,
-                                         :db_password)
 
-    aurora_attributes[:template] = @aurora_service.find_template_by_name(attributes[:template])
-
-    aurora_attributes
-  end
-
-  def instance_attributes(attributes, aurora_db)
-    {
-        :name => attributes[:name],
-        :description => attributes[:description],
-        :db_username => attributes[:db_username],
-        :db_password => attributes[:db_password],
-        :port => DEFAULT_PORT,
-        :host => aurora_db.public_ip,
-        :maintenance_db => MAINTENANCE_DB,
-        :provision_type => 'aurora'
-    }
+  def aurora_attributes(instance, extra_attributes = {})
+    extra_attributes.merge({
+        :template => @aurora_service.find_template_by_name(extra_attributes[:template]),
+        :db_username => instance.owner_account.db_username,
+        :db_password => instance.owner_account.db_password
+    })
   end
 end

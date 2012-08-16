@@ -96,7 +96,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => "new")
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, @user) { instance }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, @user, anything) { instance }
       end
 
       it "reports that the instance was created" do
@@ -111,13 +111,21 @@ describe InstancesController do
     end
 
     context "with create provision type" do
-      let(:valid_attributes) { HashWithIndifferentAccess.new({:provision_type => 'create'}) }
+      let(:valid_attributes) do
+        HashWithIndifferentAccess.new({
+          :provision_type => 'create',
+          :name => 'instance_name',
+          :description => 'A description',
+          :db_username => 'gpadmin',
+          :db_password => 'secret'
+        })
+      end
+
       let(:provider_mock) { Object.new }
 
       before do
-        instance = FactoryGirl.build(:instance, :name => "new")
         mock(AuroraProvider).create_from_aurora_service { provider_mock }
-        mock(provider_mock).provide!(valid_attributes, @user) { instance }
+        mock(provider_mock).provide!.with_any_args { true }
       end
 
       it "reports that the instance was created" do
@@ -127,7 +135,23 @@ describe InstancesController do
 
       it "renders the newly created instance" do
         post :create, :instance => valid_attributes
-        decoded_response.name.should == "new"
+        decoded_response.name.should == "instance_name"
+      end
+
+      #it "enqueues a request to provision a database" do
+      #  mock(QC).enqueue("AuroraProvider.provide")
+      #  post :create, :instance => valid_attributes
+      #end
+
+      it "creates a greenplum instance" do
+        stub(Gpdb::ConnectionChecker).check!(anything, anything)
+
+        post :create, :instance => valid_attributes
+
+        instance = Instance.last
+        instance.name.should == 'instance_name'
+        instance.description.should == 'A description'
+        instance.owner.should == @user
       end
     end
 
@@ -136,7 +160,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => nil)
-        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
+        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, @user, anything) { raise(ActiveRecord::RecordInvalid.new(instance)) }
       end
 
       it "responds with validation errors" do

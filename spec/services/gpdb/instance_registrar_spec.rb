@@ -4,20 +4,20 @@ describe Gpdb::InstanceRegistrar do
   let(:owner) { FactoryGirl.create(:user) }
   let(:valid_instance_attributes) do
     {
-      :name => old_name,
-      :port => 12345,
-      :host => "server.emc.com",
-      :maintenance_db => "postgres",
-      :provision_type => "register",
-      :description => "old description"
+        :name => old_name,
+        :port => 12345,
+        :host => "server.emc.com",
+        :maintenance_db => "postgres",
+        :provision_type => "register",
+        :description => "old description"
     }
   end
   let(:old_name) { "old_name" }
 
   let(:valid_account_attributes) do
     {
-      :db_username => "bob",
-      :db_password => "secret"
+        :db_username => "bob",
+        :db_password => "secret"
     }
   end
 
@@ -25,11 +25,11 @@ describe Gpdb::InstanceRegistrar do
     valid_instance_attributes.merge(valid_account_attributes)
   end
 
-  before do
-    stub(Gpdb::ConnectionChecker).check! { true }
-  end
-
   describe ".create!" do
+    before do
+      stub(Gpdb::ConnectionChecker).check! { true }
+    end
+
     it "requires name" do
       expect {
         Gpdb::InstanceRegistrar.create!(valid_input_attributes.merge(:name => nil), owner)
@@ -104,9 +104,42 @@ describe Gpdb::InstanceRegistrar do
       event.greenplum_instance.should == instance
       event.actor.should == owner
     end
+
+    context "creating an aurora instance" do
+      before do
+        stub(Gpdb::ConnectionChecker).check! { raise "cannot check connection immediately" }
+      end
+
+      let(:attributes) do
+        {
+            :name => "instance_name",
+            :description => "Provisioned Instance",
+            :db_username => "gpadmin",
+            :db_password => "secret"
+        }
+      end
+
+      it "creates an instance" do
+        instance = Gpdb::InstanceRegistrar.create!(attributes, owner, :aurora => true)
+        instance.should be_persisted
+        instance.name.should == "instance_name"
+      end
+
+      it "sets aurora-specific defaults" do
+        instance = Gpdb::InstanceRegistrar.create!(attributes, owner, :aurora => true)
+        instance.port.should == 5432
+        instance.host.should == "provisioning_ip"
+        instance.maintenance_db.should == "postgres"
+        instance.provision_type.should == "aurora"
+      end
+    end
   end
 
   describe ".update!" do
+    before do
+      stub(Gpdb::ConnectionChecker).check! { true }
+    end
+
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
     let(:cached_instance) { FactoryGirl.create(:instance, valid_instance_attributes.merge(:owner => owner)) }
     let!(:cached_instance_account) { FactoryGirl.create(:instance_account, :db_username => "bob", :owner => owner, :instance => cached_instance) }

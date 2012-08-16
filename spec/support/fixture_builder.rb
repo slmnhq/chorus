@@ -44,6 +44,9 @@ FixtureBuilder.configure do |fbuilder|
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
     Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
 
+    aurora_instance = Instance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "aurora" }, :without_protection => true)
+    Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => aurora_instance)
+
     purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
     fbuilder.name :bob_creates_greenplum_instance, Events::GREENPLUM_INSTANCE_CREATED.by(bob).add(:greenplum_instance => bobs_instance)
@@ -64,6 +67,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:iamcarly, carly_bobs_instance_account)
     bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:bobo, bob_bobs_instance_account)
+    aurora_instance_account = InstanceAccount.create!({:owner => admin, :instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true)
+    fbuilder.name(:aurora, aurora_instance_account)
 
     chorus_gpdb40_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :instance => chorus_gpdb40_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb40_test_superuser, chorus_gpdb40_instance_account)

@@ -1,18 +1,19 @@
 module Gpdb
   class InstanceRegistrar
-    class InvalidInstanceError < RuntimeError
-    end
+    InvalidInstanceError = Class.new(StandardError)
 
-    def self.create!(connection_config, owner)
-      instance = owner.instances.build(connection_config.merge(:instance_provider => "Greenplum Database"))
-      instance.shared = connection_config[:shared]
+    def self.create!(connection_config, owner, options = {})
+      config = connection_config.merge(:instance_provider => "Greenplum Database")
+      config.merge!(aurora_default_attributes) if options[:aurora]
+      instance = owner.instances.build(config)
+      instance.shared = config[:shared]
 
-      account = owner.instance_accounts.build(connection_config)
+      account = owner.instance_accounts.build(config)
 
       ActiveRecord::Base.transaction do
         instance.save!
         account.instance = instance
-        ConnectionChecker.check!(instance, account)
+        ConnectionChecker.check!(instance, account) unless options[:aurora]
         instance.save!
         account.save!
       end
@@ -39,5 +40,17 @@ module Gpdb
       instance.save!
       instance
     end
+
+    private
+
+    def self.aurora_default_attributes
+      {
+          :port => AuroraProvider::DEFAULT_PORT,
+          :host => "provisioning_ip",
+          :maintenance_db => AuroraProvider::MAINTENANCE_DB,
+          :provision_type => "aurora"
+      }
+    end
+
   end
 end

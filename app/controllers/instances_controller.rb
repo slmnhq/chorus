@@ -15,13 +15,14 @@ class InstancesController < GpdbController
   end
 
   def create
-    created_instance = nil
+    use_aurora = params[:instance][:provision_type] == "create"
+    created_instance = Gpdb::InstanceRegistrar.create!(params[:instance], current_user,
+                                                       :aurora => use_aurora)
 
-    if params[:instance][:provision_type] == "create"
-      provider = AuroraProvider.create_from_aurora_service
-      created_instance = provider.provide!(params[:instance], current_user)
-    else
-      created_instance = Gpdb::InstanceRegistrar.create!(params[:instance], current_user)
+    if use_aurora
+    # TODO QC.enqueue("AuroraProvider...")
+    #
+      AuroraProvider.create_from_aurora_service.provide!(created_instance, params[:instance])
     end
 
     present created_instance, :status => :created
