@@ -3,7 +3,7 @@ require 'spec_helper_no_transactions'
 describe ActivityMigrator do
   describe ".migrate" do
     before :all do
-        ActivityMigrator.new.migrate
+      ActivityMigrator.new.migrate
     end
 
     context "migrating activities that reference datasets" do
@@ -77,7 +77,7 @@ describe ActivityMigrator do
         event.actor.username.should == "notadmin"
         #event.additional_data[:destination_table].should == "import_try_2"
         #event.additional_data[:source_dataset].name.should == "clv_data_large"
-        event.additional_data[:error_message].should include( "ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
+        event.additional_data[:error_message].should include("ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
 
         event = Events::DATASET_IMPORT_FAILED.find_by_legacy_id('10174')
         event.additional_data[:error_message].should == ''
@@ -132,68 +132,56 @@ describe ActivityMigrator do
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
       end
-    #
-    #  it "copies WORKFILE CREATED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::WORKFILE_CREATED, :count).by(36)
-    #
-    #    event = Events::WORKFILE_CREATED.find(event_id_for('10010'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #    event.workfile.should be_instance_of(Workfile)
-    #  end
-    #
-    #  it "copies INSTANCE CREATED (greenplum) data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::GREENPLUM_INSTANCE_CREATED, :count).by(3)
-    #
-    #    event = Events::GREENPLUM_INSTANCE_CREATED.find(event_id_for('10036'))
-    #
-    #    event.workspace.should be_blank
-    #    event.actor.should be_instance_of(User)
-    #    event.greenplum_instance.should be_instance_of(Instance)
-    #  end
-    #
-    #  it "copies INSTANCE CREATED (hadoop) data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::HADOOP_INSTANCE_CREATED, :count).by(2)
-    #
-    #    event = Events::HADOOP_INSTANCE_CREATED.find(event_id_for('10006'))
-    #
-    #    event.workspace.should be_blank
-    #    event.actor.should be_instance_of(User)
-    #    event.hadoop_instance.should be_instance_of(HadoopInstance)
-    #  end
-    #
-    #  it "copies USER ADDED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::USER_ADDED, :count).by(7)
-    #
-    #    event = Events::USER_ADDED.find(event_id_for('10195'))
-    #
-    #    event.actor.should be_instance_of(User)
-    #    event.new_user.should be_instance_of(User)
-    #  end
-    #
-    #  it "copies MEMBERS ADDED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::MEMBERS_ADDED, :count).by(4)
-    #
-    #    event = Events::MEMBERS_ADDED.find(event_id_for('10261'))
-    #
-    #    event.actor.should be_instance_of(User)
-    #    event.member.should be_instance_of(User)
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.num_added.should == "2"
-    #  end
-    #end
-    #
+
+      it "copies WORKFILE CREATED data fields from the legacy activity" do
+        Events::WORKFILE_CREATED.count.should == 36
+
+        event = Events::WORKFILE_CREATED.find_by_legacy_id('10010')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+        event.workfile.should be_instance_of(Workfile)
+      end
+
+      it "copies INSTANCE CREATED (greenplum) data fields from the legacy activity" do
+        Events::GREENPLUM_INSTANCE_CREATED.count.should == 3
+
+        event = Events::GREENPLUM_INSTANCE_CREATED.find_by_legacy_id('10036')
+
+        event.workspace.should be_blank
+        event.actor.should be_instance_of(User)
+        event.greenplum_instance.should be_instance_of(Instance)
+      end
+
+      it "copies INSTANCE CREATED (hadoop) data fields from the legacy activity" do
+        Events::HADOOP_INSTANCE_CREATED.count.should == 2
+
+        event = Events::HADOOP_INSTANCE_CREATED.find_by_legacy_id('10006')
+
+        event.workspace.should be_blank
+        event.actor.should be_instance_of(User)
+        event.hadoop_instance.should be_instance_of(HadoopInstance)
+      end
+
+      it "copies USER ADDED data fields from the legacy activity" do
+        Events::USER_ADDED.count.should == 7
+
+        event = Events::USER_ADDED.find_by_legacy_id('10195')
+
+        event.actor.should be_instance_of(User)
+        event.new_user.should be_instance_of(User)
+      end
+
+      it "copies MEMBERS ADDED data fields from the legacy activity" do
+        Events::MEMBERS_ADDED.count.should == 4
+
+        event = Events::MEMBERS_ADDED.find_by_legacy_id('10261')
+
+        event.actor.should be_instance_of(User)
+        event.member.should be_instance_of(User)
+        event.workspace.should be_instance_of(Workspace)
+        event.num_added.should == "2"
+      end
     end
+    #
   end
 end

@@ -1,6 +1,7 @@
 class DatabaseObjectMigrator
   def prerequisites
     InstanceMigrator.new.migrate
+    HadoopInstanceMigrator.new.migrate
   end
 
   def self.normalize_key(str)

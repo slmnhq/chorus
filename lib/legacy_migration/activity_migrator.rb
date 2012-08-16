@@ -4,6 +4,7 @@ class ActivityMigrator
   def prerequisites
     DatabaseObjectMigrator.new.migrate
     WorkspaceMigrator.new.migrate
+    WorkfileMigrator.new.migrate
     SandboxMigrator.new.migrate #workaround for broken composite keys in DATASET_IMPORT activities
   end
 
@@ -419,6 +420,194 @@ class ActivityMigrator
       ))
   end
 
+  def migrate_workfile_created
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WORKFILE_CREATED',
+        workfiles.id,
+        'Workfile',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_workfile
+        ON streams.id = target_workfile.activity_stream_id AND target_workfile.entity_type = 'workfile'
+      INNER JOIN workfiles
+        ON target_workfile.object_id = workfiles.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKFILE_CREATED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_greenplum_instance_created
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::GREENPLUM_INSTANCE_CREATED',
+        instances.id,
+        'Instance',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
+      INNER JOIN instances
+        ON target_instance.object_id = instances.legacy_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'INSTANCE_CREATED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_hadoop_instance_created
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::HADOOP_INSTANCE_CREATED',
+        hadoop_instances.id,
+        'HadoopInstance',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
+      INNER JOIN hadoop_instances
+        ON target_instance.object_id = hadoop_instances.legacy_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'INSTANCE_CREATED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_user_added
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::USER_ADDED',
+        user_added.id,
+        'User',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        actor_user.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_user
+        ON streams.id = target_user.activity_stream_id AND target_user.entity_type = 'user'
+        AND target_user.object_type = 'object'
+      INNER JOIN users user_added
+        ON target_user.object_id = user_added.legacy_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users actor_user
+        ON actor_user.legacy_id = actor.object_id
+      WHERE streams.type = 'USER_ADDED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_member_added
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::MEMBERS_ADDED',
+        user_added.id,
+        'User',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        actor_user.id
+      FROM legacy_migrate.edc_activity_stream streams
+
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users actor_user
+        ON actor_user.legacy_id = actor.object_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_user
+        ON streams.id = target_user.activity_stream_id AND target_user.entity_type = 'user'
+        AND target_user.object_type = 'object'
+      INNER JOIN users user_added
+        ON target_user.object_id = user_added.legacy_id
+      WHERE streams.type = 'MEMBERS_ADDED' AND target_user.object_id IN (SELECT object_id from
+        legacy_migrate.edc_activity_stream_object where activity_stream_id = streams.id limit 1 )
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+
+    backfill_member_added_additional_data
+  end
+
+  def backfill_member_added_additional_data
+    Events::MEMBERS_ADDED.where('additional_data IS NULL').each do |event|
+      row = Legacy.connection.exec_query("
+        SELECT count(*) AS count
+        FROM legacy_migrate.edc_activity_stream_object aso
+        WHERE aso.activity_stream_id = '#{event.legacy_id}'
+        AND aso.object_type = 'object' AND aso.entity_type = 'user';
+      ").first
+
+      event.additional_data = {:num_added => "#{row['count']}".to_s}
+      event.save!
+    end
+  end
+
   def migrate
     ActiveRecord::Base.record_timestamps = false
 
@@ -435,6 +624,11 @@ class ActivityMigrator
     migrate_workspace_unarchived
     migrate_workspace_make_public
     migrate_workspace_make_private
+    migrate_workfile_created
+    migrate_greenplum_instance_created
+    migrate_hadoop_instance_created
+    migrate_user_added
+    migrate_member_added
 
     ActiveRecord::Base.record_timestamps = true
   end
