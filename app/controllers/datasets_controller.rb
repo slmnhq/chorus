@@ -38,7 +38,7 @@ class DatasetsController < GpdbController
         src_table.gpfdist_import(params[:dataset_import], workspace, current_user, new_table_boolean)
       end
 
-      head :ok
+      render :json => {}, :status => :created
     end
   end
 
