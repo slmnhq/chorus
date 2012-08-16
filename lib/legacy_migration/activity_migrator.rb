@@ -249,6 +249,64 @@ class ActivityMigrator
     end
   end
 
+  def migrate_public_workspace_created
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::PUBLIC_WORKSPACE_CREATED',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_CREATED'
+      AND workspaces.public = true
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_private_workspace_created
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::PRIVATE_WORKSPACE_CREATED',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_CREATED'
+      AND workspaces.public = false
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
   def migrate
     ActiveRecord::Base.record_timestamps = false
 
@@ -259,6 +317,8 @@ class ActivityMigrator
     migrate_file_import_failed
     migrate_dataset_import_success
     migrate_dataset_import_failed
+    migrate_public_workspace_created
+    migrate_private_workspace_created
 
     ActiveRecord::Base.record_timestamps = true
   end

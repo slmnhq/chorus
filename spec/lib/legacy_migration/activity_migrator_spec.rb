@@ -83,19 +83,24 @@ describe ActivityMigrator do
         event.additional_data[:error_message].should == ''
       end
     end
-    #
-    #context "migrating activities that do not reference datasets" do
-    #  it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(70)
-    #
-    #    event = Events::PUBLIC_WORKSPACE_CREATED.find(event_id_for('10158'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
-    #
+
+    context "migrating activities that do not reference datasets" do
+      it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
+        Events::PUBLIC_WORKSPACE_CREATED.count.should == 70
+
+        event = Events::PUBLIC_WORKSPACE_CREATED.find_by_legacy_id('10158')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
+      it "copies PRIVATE WORKSPACE CREATED data fields from the legacy activity" do
+        Events::PRIVATE_WORKSPACE_CREATED.count.should == 3
+
+        event = Events::PRIVATE_WORKSPACE_CREATED.find_by_legacy_id('10401')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
     #  it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
     #    #expect {
     #    #  ActivityMigrator.new.migrate
@@ -118,16 +123,7 @@ describe ActivityMigrator do
     #    event.actor.should be_instance_of(User)
     #  end
     #
-    #  it "copies PRIVATE WORKSPACE CREATED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(3)
-    #
-    #    event = Events::PRIVATE_WORKSPACE_CREATED.find(event_id_for('10401'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
+
     #
     #  it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
     #    #expect {
@@ -226,11 +222,6 @@ describe ActivityMigrator do
     #    count = Legacy.connection.exec_query("SELECT COUNT(1) FROM edc_activity_stream WHERE chorus_rails_event_id IS NOT NULL")
     #    count[0]['count'].to_i.should > 0
     #  end
-    #end
-  end
-
-  def event_id_for(id)
-    activity_stream = Legacy.connection.exec_query("SELECT chorus_rails_event_id FROM edc_activity_stream WHERE id = '#{id}'")
-    activity_stream[0]['chorus_rails_event_id']
+    end
   end
 end
