@@ -24,6 +24,7 @@ sleep 30
 set +e
 
 echo "Running unit tests"
+rm tmp/fixture_builder.yml
 script/test 2>&1
 RUBY_TESTS_RESULT=$?
 
