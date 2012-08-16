@@ -79,7 +79,7 @@ describe "Event types" do
     its(:new_name) { should == "brenda" }
 
     its(:targets) { should == {:greenplum_instance => greenplum_instance} }
-    its(:additional_data) { should == {:old_name => "brent", :new_name => "brenda"} }
+    its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
     it_creates_activities_for { [actor, greenplum_instance] }
     it_creates_a_global_activity
@@ -100,7 +100,7 @@ describe "Event types" do
     its(:new_name) { should == "brenda" }
 
     its(:targets) { should == {:hadoop_instance => hadoop_instance} }
-    its(:additional_data) { should == {:old_name => "brent", :new_name => "brenda"} }
+    its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
     it_creates_activities_for { [actor, hadoop_instance] }
     it_creates_a_global_activity
@@ -315,7 +315,7 @@ describe "Event types" do
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == {:file_name => "import.csv", :import_type => "file"} }
+    its(:additional_data) { should == {'file_name' => "import.csv", 'import_type' => "file"} }
 
     it_creates_activities_for { [actor, workspace, dataset] }
     it_does_not_create_a_global_activity
@@ -335,7 +335,7 @@ describe "Event types" do
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == { :source_dataset_id => source_dataset.id} }
+    its(:additional_data) { should == { 'source_dataset_id' => source_dataset.id} }
 
     it "has a workspace in the source_dataset" do
       subject.source_dataset.bound_workspaces.should include(workspace)
@@ -359,7 +359,7 @@ describe "Event types" do
     end
 
     its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {:file_name => "import.csv", :import_type => "file", :destination_table => 'test', :error_message => 'Flying Monkey Attack'} }
+    its(:additional_data) { should == {'file_name' => "import.csv", 'import_type' => "file", 'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack'} }
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
@@ -379,7 +379,7 @@ describe "Event types" do
     end
 
     its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {:source_dataset_id => source_dataset.id, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
+    its(:additional_data) { should == {'source_dataset_id' => source_dataset.id, 'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack again'} }
 
     it "has a workspace in the source_dataset" do
       subject.source_dataset.bound_workspaces.should include(workspace)
@@ -401,7 +401,7 @@ describe "Event types" do
 
     its(:member) { should == user }
     its(:targets) { should == {:member => user, :workspace => workspace} }
-    its(:additional_data) { should == {:num_added => 3} }
+    its(:additional_data) { should == {'num_added' => 3} }
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity

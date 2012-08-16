@@ -33,7 +33,7 @@ describe "Notes" do
 
     its(:greenplum_instance) { should == greenplum_instance }
     its(:targets) { should == {:greenplum_instance => greenplum_instance} }
-    its(:additional_data) { should == {:body => "This is the body"} }
+    its(:additional_data) { should == {'body' => "This is the body"} }
 
     it_creates_activities_for { [actor, greenplum_instance] }
     it_creates_a_global_activity
@@ -75,7 +75,7 @@ describe "Notes" do
 
     its(:hdfs_file) { should == hdfs_file_reference }
     its(:targets) { should == {:hdfs_file => hdfs_file_reference} }
-    its(:additional_data) { should == {:body => "This is the text of the note"} }
+    its(:additional_data) { should == {'body' => "This is the text of the note"} }
 
     it_creates_activities_for { [actor, hdfs_file_reference] }
     it_creates_a_global_activity
@@ -92,7 +92,7 @@ describe "Notes" do
 
     its(:workspace) { should == workspace }
     its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {:body => "This is the text of the note on the workspace"} }
+    its(:additional_data) { should == {'body' => "This is the text of the note on the workspace"} }
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
@@ -111,7 +111,7 @@ describe "Notes" do
 
     its(:workfile) { should == workfile }
     its(:targets) { should == {:workfile => workfile} }
-    its(:additional_data) { should == {:body => "This is the text’s of the note on the workfile"} }
+    its(:additional_data) { should == {'body' => "This is the text’s of the note on the workfile"} }
 
     it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity
@@ -129,7 +129,7 @@ describe "Notes" do
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:dataset => dataset} }
-    its(:additional_data) { should == { :body => "<3 <3 <3" } }
+    its(:additional_data) { should == { 'body' => "<3 <3 <3" } }
 
     it_creates_activities_for { [actor, dataset] }
     it_creates_a_global_activity
@@ -147,7 +147,7 @@ describe "Notes" do
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:dataset => dataset, :workspace => workspace} }
-    its(:additional_data) { should == { :body => "<3 <3 <3" } }
+    its(:additional_data) { should == { 'body' => "<3 <3 <3" } }
 
     it_creates_activities_for { [actor, dataset, workspace] }
     it_does_not_create_a_global_activity

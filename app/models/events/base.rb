@@ -4,7 +4,7 @@ module Events
 
     self.table_name = :events
     self.inheritance_column = :action
-    serialize :additional_data, UnicodeSafeHash
+    serialize :additional_data, JsonHashSerializer
 
     class_attribute :entities_that_get_activities, :target_names, :object_translations
     attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
@@ -63,7 +63,7 @@ module Events
     end
 
     def additional_data_key(additional_data_key)
-      self.class.object_translations.fetch(additional_data_key, additional_data_key)
+      self.class.object_translations.fetch(additional_data_key.to_s, additional_data_key)
     end
 
     def additional_data_value(additional_data_key)
@@ -113,8 +113,8 @@ module Events
     def self.has_additional_data(*names)
       attr_accessible(*names)
       names.each do |name|
-        define_method(name) { additional_data[name] }
-        define_method("#{name}=") { |value| additional_data[name] = value }
+        define_method(name) { additional_data[name.to_s] }
+        define_method("#{name}=") { |value| additional_data[name.to_s] = value }
       end
     end
 
@@ -123,9 +123,9 @@ module Events
       args.each do |key_value|
         wrapper_name = key_value.first
         wrapper_type = key_value.last
-        wrapped_id = "#{wrapper_name}_id".to_sym
+        wrapped_id = "#{wrapper_name}_id"
 
-        object_translations[wrapped_id] = wrapper_name
+        object_translations[wrapped_id.to_s] = wrapper_name
 
         attr_accessible wrapper_name
 
