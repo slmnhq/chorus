@@ -273,6 +273,15 @@ describe Gppipe, :database_integration => true do
         gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
       end
     end
+
+    context "when #run failed" do
+      it "drops newly created the table when there's an exception" do
+        any_instance_of(Thread) do |thread|
+          stub(thread).join { raise Exception, "Internal Error"}
+        end
+        lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed, "Internal Error")
+      end
+    end
   end
 
   context "when the source table is empty" do

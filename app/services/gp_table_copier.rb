@@ -1,4 +1,6 @@
 class GpTableCopier
+  ImportFailed = Class.new(StandardError)
+
   attr_reader :src_schema, :src_table_name, :dst_schema, :dst_table_name
   attr_reader :src_account, :dst_account
   attr_reader :src_instance, :dst_instance
@@ -18,7 +20,7 @@ class GpTableCopier
     dst_table = dst_schema.datasets.find_by_name(dst_table_name)
     create_success_event(dst_table, src_table, dst_workspace, user)
   rescue Exception => e
-    user  ||= User.find_by_id(user_id)
+    user ||= User.find_by_id(user_id)
     src_schema ||= GpdbSchema.find_by_id(src_schema_id)
     src_table ||= src_schema && src_schema.datasets.find_by_name(src_table_name)
     dst_workspace ||= Workspace.find_by_id(dst_workspace_id)
@@ -69,14 +71,33 @@ class GpTableCopier
   def run
     create_command = "CREATE TABLE #{dst_fullname} (LIKE #{src_fullname} INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES) #{distribution_key_clause};"
     copy_command = "INSERT INTO #{dst_fullname} (SELECT * FROM #{src_fullname} #{limit_clause});"
-    dst_schema.with_gpdb_connection(dst_account) do |connection|
-      connection.transaction do
-        if create_new_table
-          connection.execute(create_command)
+    internal_error_message = nil
+
+    begin
+      dst_schema.with_gpdb_connection(dst_account) do |connection|
+        connection.transaction do
+          begin
+            if create_new_table
+              execute_sql(connection, create_command)
+            end
+            execute_sql(connection, copy_command)
+          rescue => e
+            internal_error_message = e.message
+            raise
+          end
         end
-        connection.execute(copy_command)
+      end
+    rescue => e
+      if internal_error_message.present?
+        raise ImportFailed, internal_error_message
+      else
+        raise e
       end
     end
+  end
+
+  def execute_sql(connection, sql)
+    connection.execute(sql)
   end
 
   def self.create_success_event(dst_table, source_table, workspace, user)

@@ -2,6 +2,8 @@ require 'fileutils'
 require 'timeout'
 
 class Gppipe<GpTableCopier
+  ImportFailed = Class.new(StandardError)
+
   GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
   GPFDIST_WRITE_PORT = Chorus::Application.config.chorus['gpfdist.write_port']
   GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
@@ -62,7 +64,7 @@ class Gppipe<GpTableCopier
           if create_new_table
             dst_conn.exec_query("DROP TABLE IF EXISTS #{dst_fullname}")
           end
-          raise e
+          raise ImportFailed, e.message
         ensure
           src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema.name}\".#{pipe_name}_w;")
           dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema.name}\".#{pipe_name}_r;")

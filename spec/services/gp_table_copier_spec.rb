@@ -249,5 +249,15 @@ describe GpTableCopier, :database_integration => true do
         copier.distribution_key_clause.should == "DISTRIBUTED RANDOMLY"
       end
     end
+
+    context "when the import failed" do
+      before do
+        mock(copier).execute_sql(anything, anything) { raise StandardError, 'Internal Error' }
+      end
+
+      it "display the sql error message" do
+        lambda { copier.run }.should raise_error(GpTableCopier::ImportFailed, "Internal Error")
+      end
+    end
   end
 end
