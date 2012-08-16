@@ -74,8 +74,7 @@ describe Hdfs::QueryService do
     let(:service) { Hdfs::QueryService.new(HADOOP_TEST_INSTANCE, "8020", "pivotal", "0.20.1gp") }
 
     context "show an existing file" do
-      it "should return part of the content" do
-        pending
+      it "returns part of the content" do
         response = service.show("/data/test.csv")
         response.should_not be_empty
         response.should include("a, b, c")
