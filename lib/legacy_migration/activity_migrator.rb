@@ -307,6 +307,118 @@ class ActivityMigrator
       ))
   end
 
+  def migrate_workspace_archived
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WORKSPACE_ARCHIVED',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_ARCHIVED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_workspace_unarchived
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WORKSPACE_UNARCHIVED',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_UNARCHIVED'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_workspace_make_public
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WORKSPACE_MAKE_PUBLIC',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_MAKE_PUBLIC'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
+  def migrate_workspace_make_private
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WORKSPACE_MAKE_PRIVATE',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKSPACE_MAKE_PRIVATE'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+  end
+
   def migrate
     ActiveRecord::Base.record_timestamps = false
 
@@ -319,6 +431,10 @@ class ActivityMigrator
     migrate_dataset_import_failed
     migrate_public_workspace_created
     migrate_private_workspace_created
+    migrate_workspace_archived
+    migrate_workspace_unarchived
+    migrate_workspace_make_public
+    migrate_workspace_make_private
 
     ActiveRecord::Base.record_timestamps = true
   end

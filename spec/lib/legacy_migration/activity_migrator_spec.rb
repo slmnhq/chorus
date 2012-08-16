@@ -101,51 +101,37 @@ describe ActivityMigrator do
         event.actor.should be_instance_of(User)
       end
 
-    #  it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::WORKSPACE_ARCHIVED, :count).by(4)
-    #
-    #    event = Events::WORKSPACE_ARCHIVED.find(event_id_for('10304'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
-    #
-    #  it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::WORKSPACE_UNARCHIVED, :count).by(1)
-    #
-    #    event = Events::WORKSPACE_UNARCHIVED.find(event_id_for('10721'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
-    #
+      it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
+        Events::WORKSPACE_ARCHIVED.count.should == 4
 
-    #
-    #  it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
-    #
-    #    event = Events::WORKSPACE_MAKE_PUBLIC.find(event_id_for('10719'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
-    #
-    #  it "copies WORKSPACE MAKE PRIVATE data fields from the legacy activity" do
-    #    #expect {
-    #    #  ActivityMigrator.new.migrate
-    #    #}.to change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
-    #
-    #    event = Events::WORKSPACE_MAKE_PRIVATE.find(event_id_for('10720'))
-    #
-    #    event.workspace.should be_instance_of(Workspace)
-    #    event.actor.should be_instance_of(User)
-    #  end
+        event = Events::WORKSPACE_ARCHIVED.find_by_legacy_id('10304')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
+      it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
+        Events::WORKSPACE_UNARCHIVED.count.should == 1
+
+        event = Events::WORKSPACE_UNARCHIVED.find_by_legacy_id('10721')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
+      it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
+        Events::WORKSPACE_MAKE_PUBLIC.count.should == 1
+
+        event = Events::WORKSPACE_MAKE_PUBLIC.find_by_legacy_id('10719')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
+      it "copies WORKSPACE MAKE PRIVATE data fields from the legacy activity" do
+        Events::WORKSPACE_MAKE_PRIVATE.count.should == 1
+
+        event = Events::WORKSPACE_MAKE_PRIVATE.find_by_legacy_id('10720')
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
     #
     #  it "copies WORKFILE CREATED data fields from the legacy activity" do
     #    #expect {
@@ -208,20 +194,6 @@ describe ActivityMigrator do
     #  end
     #end
     #
-    #context "foreign key" do
-    #  #before(:each) do
-    #  #  Legacy.connection.column_exists?(:edc_activity_stream, :chorus_rails_event_id).should be_false
-    #  #  ActivityMigrator.new.migrate
-    #  #end
-    #
-    #  it "adds the new foreign key column to legacy table" do
-    #    Legacy.connection.column_exists?(:edc_activity_stream, :chorus_rails_event_id).should be_true
-    #  end
-    #
-    #  it "sets the Event id when successfully imported" do
-    #    count = Legacy.connection.exec_query("SELECT COUNT(1) FROM edc_activity_stream WHERE chorus_rails_event_id IS NOT NULL")
-    #    count[0]['count'].to_i.should > 0
-    #  end
     end
   end
 end
