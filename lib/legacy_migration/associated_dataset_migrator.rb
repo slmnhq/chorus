@@ -24,7 +24,7 @@ class AssociatedDatasetMigrator
       last_updated_tx_stamp
     FROM legacy_migrate.edc_dataset
     INNER JOIN datasets
-      ON datasets.legacy_id = replace(edc_dataset.composite_id, '\"', '')
+      ON datasets.legacy_id = normalize_key(edc_dataset.composite_id)
     INNER JOIN workspaces
       ON edc_dataset.workspace_id = workspaces.legacy_id
     WHERE edc_dataset.type = 'SOURCE_TABLE'

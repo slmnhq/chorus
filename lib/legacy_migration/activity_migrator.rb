@@ -31,7 +31,7 @@ class ActivityMigrator
       INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
         ON streams.id = target_dataset.activity_stream_id AND target_dataset.object_type = 'object'
       INNER JOIN datasets
-        ON replace(target_dataset.object_id, '"', '') = datasets.legacy_id
+        ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
       INNER JOIN legacy_migrate.edc_activity_stream_object actor
@@ -68,7 +68,7 @@ class ActivityMigrator
         ON streams.id = target_dataset.activity_stream_id
         AND target_dataset.entity_type = 'databaseObject'
       INNER JOIN datasets
-        ON replace(target_dataset.object_id, '"', '') = datasets.legacy_id
+        ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
       INNER JOIN legacy_migrate.edc_activity_stream_object actor
