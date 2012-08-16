@@ -6,7 +6,7 @@ describe SolrIndexer do
       mock(SolrIndexer).index('some stuff to index')
     end
 
-    it "refreshes all instances, then refreshes all their databases with the instance accounts" do
+    it "refreshes all instances,  all their databases, and all hadoop instances" do
       instance_count = 0
       any_instance_of(Instance) do |instance|
         stub(instance).refresh_databases { instance_count += 1 }
@@ -18,9 +18,15 @@ describe SolrIndexer do
         end
       end
 
+      hadoop_instance_count = 0
+      any_instance_of(HadoopInstance) do |hadoop_instance|
+        stub(hadoop_instance).refresh { hadoop_instance_count += 1 }
+      end
+
       SolrIndexer.refresh_and_index('some stuff to index')
 
       instance_count.should == Instance.count
+      hadoop_instance_count.should == HadoopInstance.count
     end
   end
 
