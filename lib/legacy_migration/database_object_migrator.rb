@@ -3,30 +3,54 @@ class DatabaseObjectMigrator
     InstanceMigrator.new.migrate
   end
 
+  def self.normalize_key(str)
+    str.gsub(/^"|"$/, '').gsub('"|"', '|')
+  end
+
+
   def migrate
     Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+    ActiveRecord::Base.record_timestamps = true
 
     prerequisites
 
+    Legacy.connection.exec_query(%Q(
+      CREATE OR REPLACE FUNCTION strip_outside_quotes(s1 varchar) RETURNS varchar AS $$
+        BEGIN
+          RETURN regexp_replace(s1, '(^")|("$)', '', 'g');
+        END;
+      $$ LANGUAGE plpgsql;
+    ))
+
+    Legacy.connection.exec_query(%Q(
+      CREATE OR REPLACE FUNCTION normalize_key(s1 varchar) RETURNS varchar AS $$
+        BEGIN
+          RETURN regexp_replace(strip_outside_quotes(s1), '"\\\\|"', '|', 'g');
+        END;
+      $$ LANGUAGE plpgsql;
+    ))
+
     # Result should be a all dataset identifiers across the entire Chorus 2.1 app
     # We have to resolve different quoting (inconsistency in chorus 2.1)
-    dataset_rows = Legacy.connection.exec_query("
+
+    dataset_rows = Legacy.connection.exec_query(
+      %Q(
       SELECT DISTINCT dataset_string FROM
         (
           (
-            SELECT replace(object_id, '\"', '') AS dataset_string
+            SELECT normalize_key(object_id) AS dataset_string
             FROM legacy_migrate.edc_activity_stream_object
-            WHERE entity_type = 'databaseObject'
+            WHERE entity_type IN ('databaseObject', 'table') AND object_id LIKE '%|%|%|%|%'
           )
           UNION
           (
-            SELECT replace(composite_id, '\"', '') AS dataset_string
+            SELECT normalize_key(composite_id) AS dataset_string
             FROM legacy_migrate.edc_dataset
             WHERE type = 'SOURCE_TABLE'
           )
         ) a
       WHERE dataset_string NOT IN (select legacy_id from datasets);
-    ")
+    ))
     dataset_rows.each do |row_hash|
       dataset_string = row_hash['dataset_string']
       ids = dataset_string.split("|")
