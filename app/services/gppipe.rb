@@ -43,22 +43,26 @@ class Gppipe<GpTableCopier
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
       no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
 
-      dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+      if create_new_table
+        dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+      end
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
-
           thr = Thread.new do
             src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema.name}\".#{pipe_name}_w (#{table_definition})
                                  LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
             src_conn.exec_query("INSERT INTO \"#{src_schema.name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname} #{limit_clause});")
           end
-
           dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema.name}\".#{pipe_name}_r (#{table_definition})
                                LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema.name}\".#{pipe_name}_r);")
-
           thr.join
+        rescue Exception => e
+          if create_new_table
+            dst_conn.exec_query("DROP TABLE IF EXISTS #{dst_fullname}")
+          end
+          raise e
         ensure
           src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema.name}\".#{pipe_name}_w;")
           dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema.name}\".#{pipe_name}_r;")

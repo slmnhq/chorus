@@ -145,7 +145,7 @@ describe DatasetsController do
       let(:active_workspace) { workspaces(:bob_public) }
 
       before(:each) do
-        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace, account.owner, true) }
       end
 
       it "should return successfully for active workspaces" do
@@ -158,10 +158,20 @@ describe DatasetsController do
 
     context " existing table" do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
-      it " throws an error if table does not exist" do
-        options["new_table"] = "false";
+      before do
+        options["new_table"] = "false"
+      end
+
+      it "throws an error if table does not exist" do
         post :import, :id => src_table.to_param, "dataset_import" => options
         response.code.should == "422"
+      end
+
+      it "throws an error if table structure is not consistent" do
+        options["to_table"] = "master_table1"
+        post :import, :id => src_table.to_param, "dataset_import" => options
+        response.code.should == "422"
+        decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
       end
     end
 

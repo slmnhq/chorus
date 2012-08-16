@@ -123,9 +123,25 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_name
-    columns = GpdbColumn.columns_for(schema.database.instance.owner_account, self);
-    columns.map do |column|
-      column.name
+    column_data(&:name)
+  end
+
+  def column_data
+    GpdbColumn.columns_for(schema.database.instance.owner_account, self)
+  end
+
+  def dataset_consistent?(another_dataset)
+    another_column_data = another_dataset.column_data
+    my_column_data = column_data
+
+    consistent_size = my_column_data.size == another_column_data.size
+
+    consistent_size && my_column_data.all? do |column|
+      another_column = another_column_data.find do |another_column|
+        another_column.name == column.name
+      end
+
+      another_column && another_column.data_type == column.data_type
     end
   end
 
@@ -137,8 +153,8 @@ class Dataset < ActiveRecord::Base
       QC.enqueue('GpTableCopier.run_import', schema.id, name, dst_workspace.id, options['to_table'], user.id, new_table_boolean, options["sample_count"])
   end
 
-  def gpfdist_import(options, dst_workspace, user)
-    QC.enqueue('Gppipe.run_new', schema.id, name, dst_workspace.id, options['to_table'], user.id, options["sample_count"])
+  def gpfdist_import(options, dst_workspace, user, new_table_boolean)
+    QC.enqueue('Gppipe.run_import', schema.id, name, dst_workspace.id, options['to_table'], user.id, new_table_boolean, options["sample_count"])
   end
 
   def preview_sql

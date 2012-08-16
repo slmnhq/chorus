@@ -143,9 +143,37 @@ describe Gppipe, :database_integration => true do
     end
 
     context ".run_import" do
-      it "creates a new pipe and runs it" do
-        Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
-        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+      context "into a new table" do
+        it "creates a new pipe and runs it" do
+          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, true)
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+        end
+
+        it "drops newly created the table when there's an exception" do
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should raise_error
+          any_instance_of(Thread) do |thread|
+            stub(thread).join { raise Exception }
+          end
+          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, true)
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should raise_error
+        end
+      end
+
+      context "into an existing table" do
+        it "creates a new pipe and runs it" do
+          gpdb1.exec_query("create table #{gp_pipe.dst_fullname}(#{table_def});")
+          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+        end
+
+        it "does not drop newly created the table when there's an exception" do
+          gpdb1.exec_query("create table #{gp_pipe.dst_fullname}(#{table_def});")
+          any_instance_of(Thread) do |thread|
+            stub(thread).join { raise Exception }
+          end
+          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should_not raise_error
+        end
       end
     end
 

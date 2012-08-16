@@ -352,21 +352,21 @@ describe Dataset::Query, :database_integration => true do
     it "returns a query whose result includes the names of all tables and views in the schema," +
            "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
-      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types"]
+      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table"]
     end
 
     it "includes the relations' types ('r' for table, 'v' for view)" do
       view_row = rows.find { |row| row['name'] == "view1" }
       view_row["type"].should == "v"
 
-      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r"]
+      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r", "r", "r"]
     end
 
     it "includes whether or not each relation is a master table" do
       master_row = rows.find { |row| row['name'] == "master_table1" }
       master_row["master_table"].should == "t"
 
-      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f"]
+      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f", "f", "f"]
     end
   end
 
@@ -384,12 +384,20 @@ describe Dataset::Query, :database_integration => true do
       }
 
       context "into a table in another db using gpfdist" do
-
-        it "creates a correct gppipe" do
-          mock(QC.default_queue).enqueue.with("Gppipe.run_new", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, nil)
-          src_table.gpfdist_import(options, sandbox, user)
+        context "new table" do
+          it "creates a correct gppipe" do
+            mock(QC).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, true, nil)
+            src_table.gpfdist_import(options, sandbox, user, true)
+          end
+        end
+        context "existing table" do
+          it "creates a correct gppipe" do
+            mock(QC).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, false, nil)
+            src_table.gpfdist_import(options, sandbox, user, false)
+          end
         end
       end
+
 
       context "into a table in the same db" do
         let(:src_table) { datasets(:bobs_table) }
@@ -487,6 +495,43 @@ describe Dataset::Query, :database_integration => true do
         row['row_count'].should == 0
         row['disk_size'].should == '0 bytes'
         row['partition_count'].should == 0
+      end
+    end
+  end
+
+  describe "#dataset_consistent?", :database_integration => true do
+    let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:dataset) { schema.datasets.find_by_name('base_table1') }
+
+    context "when tables have same column number, names and types" do
+      let(:another_dataset) { schema.datasets.find_by_name('view1') }
+
+      it "says tables are consistent" do
+        dataset.dataset_consistent?(another_dataset).should be_true
+      end
+    end
+
+    context "when tables have same column number and types, but different names" do
+      let(:another_dataset) { schema.datasets.find_by_name('different_names_table') }
+
+      it "says tables are not consistent" do
+        dataset.dataset_consistent?(another_dataset).should be_false
+      end
+    end
+
+    context "when tables have same column number and names, but different types" do
+      let(:another_dataset) { schema.datasets.find_by_name('different_types_table') }
+
+      it "says tables are not consistent" do
+        dataset.dataset_consistent?(another_dataset).should be_false
+      end
+    end
+
+    context "when tables have different number of columns" do
+      let(:another_dataset) { schema.datasets.find_by_name('master_table1') }
+
+      it "says tables are not consistent" do
+        dataset.dataset_consistent?(another_dataset).should be_false
       end
     end
   end

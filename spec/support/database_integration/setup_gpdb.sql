@@ -11,6 +11,8 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
   CREATE SCHEMA test_schema;
     SET search_path TO 'test_schema';
 
+    -- if you change the number of column of this table, please update different_names_table and different_types_table.
+    -- They must have the same number of columns.
     CREATE TABLE base_table1
       (id integer PRIMARY KEY, column1 integer, column2 integer, category text, time_value timestamp )
       DISTRIBUTED BY (id);
@@ -29,6 +31,12 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
     CREATE VIEW view1 AS
       SELECT * FROM base_table1;
     COMMENT ON VIEW view1 IS 'comment on view1';
+
+    CREATE TABLE different_names_table
+      (id integer PRIMARY KEY, column3 integer, column2 integer, category text, time_value timestamp );
+
+    CREATE TABLE different_types_table
+      (id integer PRIMARY KEY, column1 text, column2 integer, category text, time_value timestamp );
 
     CREATE EXTERNAL WEB TABLE external_web_table1
       (name text, date date, amount float4, category text, description text)
