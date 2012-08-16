@@ -15,7 +15,7 @@ describe MembershipMigrator do
 
       it "copies the correct data fields from the legacy member" do
         Legacy.connection.select_all("SELECT * FROM edc_member").each do |legacy_member|
-          membership = Membership.find(legacy_member["chorus_rails_membership_id"])
+          membership = Membership.find_by_legacy_id(legacy_member["id"])
           membership.user.should == User.unscoped.find_by_username(legacy_member["member_name"])
           legacy_workspace_row = Legacy.connection.select_one("select * from edc_workspace where id = '#{membership.workspace.legacy_id}'")
           membership.workspace.name.should == legacy_workspace_row["name"]

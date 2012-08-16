@@ -21,9 +21,6 @@ class MembershipMigrator
                               ON workspaces.legacy_id = edc_member.workspace_id
                             WHERE edc_member.id NOT IN (SELECT legacy_id FROM memberships);")
 
-    #TODO remove me
-    Legacy.connection.exec_query("UPDATE edc_member SET chorus_rails_membership_id = memberships.id FROM memberships WHERE edc_member.id = memberships.legacy_id;")
-
     Legacy.connection.exec_query("INSERT INTO memberships(workspace_id, user_id)
                                     SELECT workspaces.id, workspaces.owner_id
                                     FROM workspaces

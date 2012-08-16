@@ -38,12 +38,6 @@ class HadoopInstanceMigrator
       WHERE instance_provider = 'Hadoop'
       AND is_deleted = 'f'
       AND i.id NOT IN (SELECT legacy_id FROM hadoop_instances);")
-
-    #TODO remove me
-    Legacy.connection.update("
-      Update legacy_migrate.edc_instance SET chorus_rails_instance_id = hadoop_instances.id
-        FROM public.hadoop_instances
-        WHERE hadoop_instances.legacy_id = legacy_migrate.edc_instance.id")
   end
 end
 

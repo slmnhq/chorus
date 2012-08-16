@@ -31,13 +31,6 @@ class InstanceAccountMigrator
                             AND NOT (map.shared = 'no' AND i.shared = true);")
 
     unless inserted == 0
-      # populate old table with new primary keys for lookup
-      #TODO REMOVE ME
-      Legacy.connection.exec_query("UPDATE legacy_migrate.edc_account_map
-                              SET chorus_rails_instance_account_id = instance_accounts.id
-                              FROM public.instance_accounts
-                              WHERE instance_accounts.legacy_id = legacy_migrate.edc_account_map.id;")
-
       InstanceAccount.where("legacy_id is not null").each do |instance_account|
         result = Legacy.connection.exec_query("SELECT db_password, secret_key
                                                FROM legacy_migrate.edc_account_map

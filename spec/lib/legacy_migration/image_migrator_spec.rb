@@ -20,7 +20,7 @@ describe ImageMigrator do
         User.where("image_file_name is not null").count.should == 3
 
         legacy_users_with_images.each do |legacy_user|
-          new_user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
+          new_user = User.find_by_legacy_id(legacy_user["id"])
 
           image_id = legacy_user["image_id"]
           image_instance_row = Legacy.connection.select_one("select * from edc_image_instance where image_id = '#{image_id}' and type = 'original'")

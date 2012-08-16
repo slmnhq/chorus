@@ -36,11 +36,5 @@ class InstanceMigrator
                           WHERE instance_provider = 'Greenplum Database'
                           AND i.id NOT IN (SELECT legacy_id FROM instances);")
 
-    # populate old table with new primary keys for lookup
-    #TODO REMOVE ME
-    Legacy.connection.exec_query("UPDATE legacy_migrate.edc_instance
-                          SET chorus_rails_instance_id = instances.id
-                          FROM public.instances
-                          WHERE instances.legacy_id = legacy_migrate.edc_instance.id;")
   end
 end

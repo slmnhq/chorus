@@ -15,7 +15,7 @@ describe UserMigrator do
 
       it "copies the correct data fields from the legacy user" do
         Legacy.connection.exec_query("SELECT * FROM edc_user").each do |legacy_user|
-          user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
+          user = User.unscoped.find_by_legacy_id(legacy_user["id"])
           user.should be_present
           user.username.should == legacy_user["user_name"]
           user.first_name.should == legacy_user["first_name"]
