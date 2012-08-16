@@ -19,7 +19,7 @@ class WorkspaceCsvController < ApplicationController
     else
       table_name = params[:csvimport][:to_table]
       if csv_file.table_already_exists(table_name)
-        raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name, :suggested_table_name => csv_file.suggest_table_name(table_name) })
+        raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name })
       end
       csv_file.new_table = true
     end

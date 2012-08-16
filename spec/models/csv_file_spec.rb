@@ -76,36 +76,4 @@ describe CsvFile do
       end
     end
   end
-
-  describe "#suggest_table_name" do
-    let(:csv_file) { CsvFile.first }
-
-    it "adds _1 to an existing table" do
-      stub(csv_file).table_already_exists("foo") { true }
-      stub(csv_file).table_already_exists("foo_1") { false }
-      csv_file.suggest_table_name("foo").should == "foo_1"
-    end
-
-    it "adds _2 on an existing table where a _1 already exists" do
-      stub(csv_file).table_already_exists("foo") { true }
-      stub(csv_file).table_already_exists("foo_1") { true }
-      stub(csv_file).table_already_exists("foo_2") { false }
-      csv_file.suggest_table_name("foo").should == "foo_2"
-    end
-
-    it "replaces _1 with _9 on an existing table when _1.._8 already exist" do
-      stub(csv_file).table_already_exists("foo") { true }
-      stub(csv_file).table_already_exists("foo_1") { true }
-      stub(csv_file).table_already_exists("foo_2") { true }
-      stub(csv_file).table_already_exists("foo_3") { true }
-      stub(csv_file).table_already_exists("foo_4") { true }
-      stub(csv_file).table_already_exists("foo_5") { true }
-      stub(csv_file).table_already_exists("foo_6") { true }
-      stub(csv_file).table_already_exists("foo_7") { true }
-      stub(csv_file).table_already_exists("foo_8") { true }
-      stub(csv_file).table_already_exists("foo_9") { false }
-
-      csv_file.suggest_table_name("foo").should == "foo_9"
-    end
-  end
 end

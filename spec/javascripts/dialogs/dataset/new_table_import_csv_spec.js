@@ -478,14 +478,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                     this.server.lastCreate().failUnprocessableEntity({ fields:{ base:{ TABLE_EXISTS:{ table_name: "testisgreat", suggested_table_name: "testisgreat_1" }}}});
                 });
 
-                it("suggests the input field as the suggested table name", function () {
-                    expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat_1");
-                });
-
-                it("saves suggested name in the model attributes", function() {
+                it("saves new name in the model attributes", function() {
+                    this.dialog.$("input[name=tableName]").val("the_wizard_of_oz").change();
                     this.dialog.$("button.submit").click();
-                    expect(this.dialog.model.get("toTable")).toBe("testisgreat_1");
-                    expect(this.dialog.model.get("tableName")).toBe("testisgreat_1");
+                    expect(this.dialog.model.get("toTable")).toBe("the_wizard_of_oz");
+                    expect(this.dialog.model.get("tableName")).toBe("the_wizard_of_oz");
                 });
             });
         })

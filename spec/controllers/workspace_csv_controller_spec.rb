@@ -147,11 +147,6 @@ describe WorkspaceCsvController do
       it "returns an error" do
         response.body.should include "TABLE_EXISTS"
       end
-
-      it "passes a suggested table name" do
-        response.body.should include "suggested_table_name"
-        response.body.should include "table_importing_into_1"
-      end
     end
   end
 end

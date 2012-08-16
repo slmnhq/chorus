@@ -42,15 +42,4 @@ class CsvFile < ActiveRecord::Base
       connection.exec_query("SELECT * FROM #{table_name}")
     end
   end
-
-  def suggest_table_name(table_name)
-    counter = 0
-    suggestion = table_name
-    while (table_already_exists(suggestion)) do
-      counter += 1
-      suggestion = "#{table_name}_#{counter}"
-    end
-
-    suggestion
-  end
 end
