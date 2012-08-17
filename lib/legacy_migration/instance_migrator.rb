@@ -1,6 +1,7 @@
-class InstanceMigrator
+class InstanceMigrator < AbstractMigrator
   def prerequisites
     UserMigrator.new.migrate
+    ensure_legacy_id :instances
   end
 
   def migrate

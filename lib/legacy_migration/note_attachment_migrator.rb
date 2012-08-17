@@ -1,4 +1,4 @@
-class NoteAttachmentMigrator
+class NoteAttachmentMigrator < AbstractMigrator
   def migrate
     get_file do |chorus_rails_event_id, file_name , file|
       event = Events::Base.find_by_id(chorus_rails_event_id)

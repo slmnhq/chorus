@@ -1,9 +1,10 @@
-class AssociatedDatasetMigrator
+class AssociatedDatasetMigrator < AbstractMigrator
   #TODO chorus views
 
   def prerequisites
     WorkspaceMigrator.new.migrate
     DatabaseObjectMigrator.new.migrate
+    ensure_legacy_id :associated_datasets
   end
 
   def migrate

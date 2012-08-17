@@ -1,9 +1,11 @@
-class ActivityMigrator
+class ActivityMigrator < AbstractMigrator
+
   def prerequisites
     DatabaseObjectMigrator.new.migrate
     WorkspaceMigrator.new.migrate
     WorkfileMigrator.new.migrate
     SandboxMigrator.new.migrate #workaround for broken composite keys in DATASET_IMPORT activities
+    ensure_legacy_id :events
   end
 
   def migrate_source_table_created

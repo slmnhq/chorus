@@ -1,4 +1,4 @@
-class NoteCommentMigrator
+class NoteCommentMigrator < AbstractMigrator
   def migrate
     unless Legacy.connection.column_exists?(:edc_comment, :chorus_rails_event_id)
       Legacy.connection.add_column :edc_comment, :chorus_rails_event_id, :integer

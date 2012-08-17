@@ -1,7 +1,8 @@
-class DatabaseObjectMigrator
+class DatabaseObjectMigrator < AbstractMigrator
   def prerequisites
     InstanceMigrator.new.migrate
     HadoopInstanceMigrator.new.migrate
+    ensure_legacy_id :datasets
   end
 
   def self.normalize_key(str)

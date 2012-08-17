@@ -1,7 +1,12 @@
 require_relative 'legacy'
 
-class UserMigrator
+class UserMigrator < AbstractMigrator
+  def prerequisites
+    ensure_legacy_id :users
+  end
+
   def migrate
+    prerequisites
     Legacy.connection.exec_query("INSERT INTO public.users(
                               legacy_id,
                               username,

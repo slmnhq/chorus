@@ -1,6 +1,6 @@
 require "stringio"
 
-class ImageMigrator
+class ImageMigrator < AbstractMigrator
   def prerequisites
     UserMigrator.new.migrate
     WorkspaceMigrator.new.migrate

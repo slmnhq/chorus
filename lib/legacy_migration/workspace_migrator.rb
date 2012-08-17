@@ -1,6 +1,7 @@
-class WorkspaceMigrator
+class WorkspaceMigrator < AbstractMigrator
   def prerequisites
     UserMigrator.new.migrate
+    ensure_legacy_id :workspaces
     # for all Workspaces to be valid, depends on MembershipMigrator, but is circular
   end
 

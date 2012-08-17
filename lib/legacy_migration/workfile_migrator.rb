@@ -1,6 +1,6 @@
 require 'stringio'
 
-class WorkfileMigrator
+class WorkfileMigrator < AbstractMigrator
   class FakeFileUpload < StringIO
     attr_accessor :content_type, :original_filename
   end
@@ -19,6 +19,9 @@ class WorkfileMigrator
     UserMigrator.new.migrate
     WorkspaceMigrator.new.migrate
     MembershipMigrator.new.migrate
+    ensure_legacy_id :workfiles
+    ensure_legacy_id :workfile_versions
+    ensure_legacy_id :workfile_drafts
   end
 
   def silence_activerecord

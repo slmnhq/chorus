@@ -1,7 +1,8 @@
-class InstanceAccountMigrator
+class InstanceAccountMigrator < AbstractMigrator
   def prerequisites
     InstanceMigrator.new.migrate
     HadoopInstanceMigrator.new.migrate
+    ensure_legacy_id :instance_accounts
   end
 
   def migrate

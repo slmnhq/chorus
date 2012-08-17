@@ -1,4 +1,4 @@
-class ConfigMigrator
+class ConfigMigrator < AbstractMigrator
 
   attr_accessor :properties_path, :output_path, :example_path
 

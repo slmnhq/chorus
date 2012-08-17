@@ -1,6 +1,7 @@
-class MembershipMigrator
+class MembershipMigrator < AbstractMigrator
   def prerequisites
     WorkspaceMigrator.new.migrate
+    ensure_legacy_id :memberships
   end
 
   def migrate

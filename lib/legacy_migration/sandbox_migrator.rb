@@ -1,4 +1,4 @@
-class SandboxMigrator
+class SandboxMigrator < AbstractMigrator
   def prerequisites
     WorkspaceMigrator.new.migrate
     DatabaseObjectMigrator.new.migrate
