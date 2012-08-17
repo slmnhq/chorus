@@ -123,7 +123,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_name
-    column_data(&:name)
+    column_data.map(&:name)
   end
 
   def column_data
