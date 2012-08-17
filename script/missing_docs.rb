@@ -22,9 +22,6 @@ routes = `bundle exec rake routes`.split("\n").map { |line|
   match && Route.new(match[1].downcase, match[2])
 }.compact
 
-header "Routes"
-routes.each { |r| puts r }
-
 existing_docs = `egrep -Rh "^\\W*(post|put|get|delete)" spec/acceptance`.split("\n").map { |line|
   match = line.match(/(\w+) +['"](\S+)['"]/)
   path = match[2]
@@ -32,9 +29,8 @@ existing_docs = `egrep -Rh "^\\W*(post|put|get|delete)" spec/acceptance`.split("
   match && Route.new(match[1].downcase, path)
 }.compact
 
-header "Existing docs"
-existing_docs.each { |r| puts r }
-
 header "Missing docs"
 missing = routes - existing_docs
 missing.sort.each { |r| puts r }
+
+raise Exception unless missing.count == 0
