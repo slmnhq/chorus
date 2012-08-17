@@ -27,11 +27,12 @@ describe AuroraProvider do
     context "aurora is not configured" do
       before do
         Chorus::Application.config.chorus = {'aurora' => nil}
+
+        # stub out exception because java library caches service returned from get_instance
+        mock(Aurora::JavaModules::AuroraService).get_instance(anything) { raise StandardError }
       end
 
-      it "returns an invalid provider" do
-        pending "need to figure out why aurora can't be unconfigured"
-        #fails if run after provioning_controller_spec
+      it "handles an exception" do
         provider = AuroraProvider.create_from_aurora_service
         provider.should_not be_valid
       end
