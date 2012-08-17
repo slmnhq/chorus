@@ -1,5 +1,3 @@
-require 'legacy_migration/legacy_activity_stream'
-
 class ActivityMigrator
   def prerequisites
     DatabaseObjectMigrator.new.migrate
