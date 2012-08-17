@@ -1,34 +1,14 @@
 class DataMigrator
-  attr_accessor :migrators
 
-  def initialize
-    @migrators = [ConfigMigrator.new,
-                  UserMigrator.new, #done
-                  InstanceMigrator.new, #done
-                  InstanceAccountMigrator.new, # done
-                  WorkspaceMigrator.new, #done
-                  MembershipMigrator.new, #done
-                  ImageMigrator.new, # done
-                  WorkfileMigrator.new, # done
-                  SandboxMigrator.new, #done
-                  HadoopInstanceMigrator.new, # done
-                  #ActivityMigrator.new,
-                  AssociatedDatasetMigrator.new # done
-                 ]
-    # note_attachment_migrator
-    # note_comment_migrator
-  end
+  # Only need to call the leaf nodes
+  def self.migrate_all
+    InstanceAccountMigrator.new.migrate
+    ImageMigrator.new.migrate
+    SandboxMigrator.new.migrate
+    AssociatedDatasetMigrator.new.migrate
+    ActivityMigrator.new.migrate
 
-  def migrate
-    disable_solr
-    ActiveRecord::Base.transaction do
-      @migrators.each do |migrator|
-        migrator.migrate
-      end
-    end
-  end
-
-  def disable_solr
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+    # Note attachments
+    # Note comments
   end
 end
