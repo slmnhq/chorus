@@ -38,7 +38,14 @@ kill -s SIGTERM $jasmine_pid
 echo "Cleaning up gpfdist"
 killall gpfdist
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT`
+echo "Running legacy migration tests"
+b/rake db:test:prepare
+RAILS_ENV=test packaging/chorus_migrate.sh db/legacy/legacy.sql
+rspec spec/legacy_migration
+LEGACY_MIGRATION_TESTS_RESULT=$?
+
+SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT`
 echo "RSpec exit code: $RUBY_TESTS_RESULT"
 echo "Jasmine exit code: $JS_TESTS_RESULT"
+echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
 exit $SUCCESS
