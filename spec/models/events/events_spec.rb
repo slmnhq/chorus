@@ -337,7 +337,7 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "FileImportSuccess" do
+  describe "FILE_IMPORT_SUCCESS" do
     subject do
       Events::FileImportSuccess.add(
           :actor => actor,

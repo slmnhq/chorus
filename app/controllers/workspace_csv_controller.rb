@@ -26,7 +26,21 @@ class WorkspaceCsvController < ApplicationController
 
     params[:csvimport][:file_contains_header] = params[:csvimport].delete(:has_header)
     csv_file.update_attributes(params[:csvimport])
+
+    create_import_event(csv_file)
     QC.enqueue("CsvImporter.import_file", csv_file.id)
     present csv_file
   end
+
+  def create_import_event(csv_file)
+    schema = csv_file.workspace.sandbox
+    Events::FILE_IMPORT_CREATED.by(csv_file.user).add(
+        :workspace => csv_file.workspace,
+        :dataset => schema.datasets.find_by_name(csv_file.to_table),
+        :file_name => csv_file.contents_file_name,
+        :import_type => 'file',
+        :destination_table => csv_file.to_table
+    )
+  end
+
 end

@@ -4,7 +4,7 @@ describe WorkspaceCsvController do
   ignore_authorization!
 
   let(:user) { users(:bob) }
-  let(:non_auth_user) { users(:alice)}
+  let(:non_auth_user) { users(:alice) }
   let(:file) { test_file("test.csv", "text/csv") }
   let(:workspace) { workspaces(:bob_public) }
   let(:csv_file_params) do
@@ -84,6 +84,7 @@ describe WorkspaceCsvController do
       before do
         mock(QC.default_queue).enqueue.with("CsvImporter.import_file", @csv_file.id)
       end
+
       it "updates the necessary import fields on the csv file model" do
         put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
         @csv_file.reload
@@ -116,6 +117,18 @@ describe WorkspaceCsvController do
             put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
             @csv_file.reload.new_table.should be_true
           end
+
+          it "makes a FILE_IMPORT_CREATED event with no associated dataset" do
+            put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+
+            event = Events::FILE_IMPORT_CREATED.first
+            event.actor.should == user
+            event.dataset.should be_nil
+            event.workspace.should == workspace
+            event.file_name.should == @csv_file.contents_file_name
+            event.import_type.should == 'file'
+            event.destination_table.should == 'table_importing_into'
+          end
         end
 
         context "existing table" do
@@ -131,6 +144,21 @@ describe WorkspaceCsvController do
             put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
             @csv_file.reload.column_names.should == ['name', 'id']
           end
+
+          it "makes a FILE_IMPORT_CREATED event with associated dataset" do
+            dataset = datasets(:bobs_table)
+
+            put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params.merge(:to_table => dataset.name)
+
+            event = Events::FILE_IMPORT_CREATED.first
+            event.actor.should == user
+            event.dataset.should == dataset
+            event.workspace.should == workspace
+            event.file_name.should == @csv_file.contents_file_name
+            event.import_type.should == 'file'
+            event.destination_table.should == 'bobs_table'
+          end
+
         end
       end
     end
@@ -141,11 +169,18 @@ describe WorkspaceCsvController do
           stub(csv).table_already_exists("table_importing_into") { true }
           stub(csv).table_already_exists("table_importing_into_1") { false }
         }
-        put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
       end
 
       it "returns an error" do
+        put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+
         response.body.should include "TABLE_EXISTS"
+      end
+
+      it "does not create an FILE_IMPORT_CREATED event" do
+        expect do
+          put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+        end.to_not change(Events::FILE_IMPORT_CREATED, :count)
       end
     end
   end
