@@ -20,5 +20,5 @@ alias l='ls'
 alias ll='ls -la'
 
 alias st='script/test'
-alias rage='bundle exec rake db:migrate db:test:prepare db:test:prepare:legacy'
-alias run_all_tests='st && rake phantom && rspec spec/integration && rake legacy_migration && rake api_docs'
+alias rage='bundle exec rake db:migrate db:test:prepare'
+alias run_all_tests='st && rake phantom && rspec spec/integration && rake api_docs'
