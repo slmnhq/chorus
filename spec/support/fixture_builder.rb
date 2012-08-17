@@ -187,8 +187,7 @@ FixtureBuilder.configure do |fbuilder|
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
     #NotesAttachment
-    File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
-      note_on_greenplum.attachments.create!(:contents => file)
-    end
+    fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
+    fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
   end
 end

@@ -3,17 +3,13 @@ class NoteAttachmentsController < ApplicationController
     event = Events::Base.find(params[:note_id])
     authorize! :create, NoteAttachment, event
 
-    event.create_attachments(params[:fileToUpload][:contents])
+    event.attachments.create!(:contents => params[:fileToUpload][:contents])
     event.reload
     present event
   end
 
-  private
-  def build_new_file(file_name, content)
-    tempfile = Tempfile.new(file_name)
-    tempfile.write(content)
-    tempfile.close
-
-    ActionDispatch::Http::UploadedFile.new(:filename => file_name, :tempfile => tempfile)
+  def show
+    attachment = NoteAttachment.find(params[:id])
+    send_file(attachment.contents.path(params[:style]), :type => attachment.contents_content_type, :disposition => 'inline')
   end
 end

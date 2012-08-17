@@ -73,3 +73,7 @@ module Paperclip
     end
   end
 end
+
+Paperclip.interpolates :note_id do |attachment, style|
+  attachment.instance.note.id
+end

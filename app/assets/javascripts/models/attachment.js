@@ -22,6 +22,9 @@ chorus.models.Attachment = chorus.models.Base.extend({
     },
 
     iconUrl: function(options) {
+        if (this.get('iconUrl')) {
+            return this.get('iconUrl');
+        }
         return chorus.urlHelpers.fileIconUrl(this.get("type") || this.get("fileType"), options && options.size);
     },
 

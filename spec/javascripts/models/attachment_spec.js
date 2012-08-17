@@ -9,16 +9,22 @@ describe("chorus.models.Attachment", function() {
             expect(this.model.downloadUrl()).toBe("/attachments/123/download/");
         });
     });
+    describe("#iconUrl", function () {
+        it("uses type for the iconUrl", function () {
+            this.model.set({type:'csv'});
+            expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('csv'));
+        });
 
-    it("uses type for the iconUrl", function() {
-        this.model.set({type: 'csv'});
-        expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('csv'));
-    });
+        it("uses fileType for the iconUrl", function () {
+            this.model.set({fileType:'jpg'});
+            expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('jpg'));
+        });
 
-    it("uses fileType for the iconUrl", function() {
-        this.model.set({fileType: 'jpg'});
-        expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('jpg'));
-    });
+        it("uses the IconUrl value if the attachment is image", function () {
+            this.model.set({iconUrl:'note/2/attachments?style=icon'});
+            expect(this.model.iconUrl()).toBe('note/2/attachments?style=icon');
+        });
+    })
 
     it("returns its name", function () {
         expect(this.model.name()).toBe("helmut");

@@ -78,7 +78,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :notes, :only => [:create, :update, :destroy] do
-    resource :attachments, :only => [:create] , :controller => 'note_attachments'
+    resources :attachments, :only => [:create, :show], :controller => 'note_attachments'
   end
 
   resources :attachments, :only => [] do

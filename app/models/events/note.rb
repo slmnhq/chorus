@@ -42,10 +42,6 @@ module Events
       result
     end
 
-    def create_attachments(source_file)
-      attachments.create!(:contents => source_file)
-    end
-
     class << self
       private
 
