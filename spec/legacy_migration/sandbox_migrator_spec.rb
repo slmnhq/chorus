@@ -1,4 +1,4 @@
-require 'spec_helper_no_transactions'
+require 'legacy_migration_spec_helper'
 
 describe SandboxMigrator do
   it "stores the schema id that corresponds to the associated legacy sandbox in the respective migrated workspace" do

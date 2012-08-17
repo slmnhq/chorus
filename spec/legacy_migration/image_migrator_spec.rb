@@ -1,4 +1,4 @@
-require 'spec_helper_no_transactions'
+require 'legacy_migration_spec_helper'
 require 'base64'
 
 TYPE_MAP = {
