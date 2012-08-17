@@ -28,12 +28,24 @@ namespace :package do
     deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
     PackageMaker.prepare_remote(deploy_configuration)
   end
+
+  task :cleanup do
+    PackageMaker.clean_workspace
+  end
 end
 
 desc 'Generate new package'
 task :package => 'package:prepare_app' do
   PackageMaker.make
 end
+
+packaging_tasks = Rake.application.top_level_tasks.select { |task| task.to_s.match(/^package:/) }
+
+last_packaging_task = packaging_tasks.last
+Rake::Task[last_packaging_task].enhance do
+  Rake::Task[:'package:cleanup'].invoke
+end
+
 
 module PackageMaker
   PATHS_TO_PACKAGE = [
@@ -138,7 +150,6 @@ module PackageMaker
     filename = "greenplum-chorus-#{timestamp}-#{version_name}.tar.gz"
     archive_app(filename)
 
-    clean_workspace
     filename
   end
 
