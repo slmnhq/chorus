@@ -5,6 +5,16 @@ class WorkfileMigrator
     attr_accessor :content_type, :original_filename
   end
 
+  class LegacyFilePath
+    def initialize(*args)
+      @args = args
+    end
+
+    def path
+      File.join(@args)
+    end
+  end
+
   def prerequisites
     UserMigrator.new.migrate
     WorkspaceMigrator.new.migrate
@@ -60,7 +70,8 @@ class WorkfileMigrator
         owner_id,
         modifier_id,
         created_at,
-        updated_at
+        updated_at,
+        commit_message
       )
       SELECT
         edc_workfile_version.id,
@@ -69,7 +80,8 @@ class WorkfileMigrator
         owner.id,
         modifier.id,
         created_tx_stamp,
-        last_updated_tx_stamp
+        last_updated_tx_stamp,
+        commit_message
       FROM legacy_migrate.edc_workfile_version
       INNER JOIN users owner
         ON owner.username = edc_workfile_version.version_owner
@@ -115,10 +127,11 @@ class WorkfileMigrator
           FROM legacy_migrate.edc_workfile_version
           INNER JOIN
             legacy_migrate.edc_work_file
-            ON edc_workfile_version.workfile_id = edc_work_file.id;
+            ON edc_workfile_version.workfile_id = edc_work_file.id
+          WHERE edc_workfile_version.id = '#{workfile_version.legacy_id}';
         ").first
-        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["version_file_id"])
-        fake_file = FakeFileUpload.new(File.read(path))
+        path =  LegacyFilePath.new(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["version_file_id"])
+        fake_file = FakeFileUpload.new(File.read(path.path))
         fake_file.original_filename = row['file_name']
         fake_file.content_type = row['mime_type']
         workfile_version.contents = fake_file
@@ -133,10 +146,11 @@ class WorkfileMigrator
           FROM legacy_migrate.edc_workfile_draft
           INNER JOIN
             legacy_migrate.edc_work_file
-            ON edc_workfile_draft.workfile_id = edc_work_file.id;
+            ON edc_workfile_draft.workfile_id = edc_work_file.id
+          WHERE edc_workfile_draft.id = '#{workfile_draft.legacy_id}';
         ").first
-        path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["draft_file_id"])
-        workfile_draft.content = StringIO.new(File.read(path))
+        path = LegacyFilePath.new(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["draft_file_id"])
+        workfile_draft.content = StringIO.new(File.read(path.path))
         workfile_draft.save!
       end
     end

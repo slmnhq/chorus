@@ -3,11 +3,16 @@ require 'spec_helper_no_transactions'
 describe WorkfileMigrator do
   describe ".migrate" do
     before :all do
+      any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
+        # Stub everything with a PNG so paperclip doesn't blow up
+        stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
+      end
+
       WorkfileMigrator.new.migrate
     end
 
     def should_be_equal_dates(date1, date2_str)
-      date1.to_date.should == DateTime.parse(date2_str).to_date
+      date1.should == DateTime.parse(date2_str)
     end
 
     describe "validate the number of entries copied" do
@@ -29,7 +34,7 @@ describe WorkfileMigrator do
 
     describe "copying the data" do
       before :each do
-        @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
+        @legacy_workfiles = Legacy.connection.select_all("select wf.* from edc_work_file wf, edc_workspace ws where wf.workspace_id = ws.id AND ws.is_deleted = 'f';")
         @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
         @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
       end
@@ -38,7 +43,7 @@ describe WorkfileMigrator do
         @legacy_workfiles.each do |legacy_workfile|
           legacy_workspace = Legacy.connection.select_one("select * from edc_workspace where id = '#{legacy_workfile["workspace_id"]}'")
           new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])
-          new_workfile.workspace.legacy_id.should == legacy_workspace["id"]
+          Workspace.unscoped.find_by_id(new_workfile.workspace_id).legacy_id.should == legacy_workspace["id"]
         end
       end
 
@@ -89,7 +94,7 @@ describe WorkfileMigrator do
             legacy_workfile = Legacy.connection.select_one("select * from edc_work_file where id = '#{legacy_version["workfile_id"]}'")
             new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])
             new_version = WorkfileVersion.find_by_legacy_id(legacy_version["id"])
-            new_version.workfile.legacy_id.should == legacy_workfile["id"]
+            new_workfile.legacy_id.should == legacy_workfile["id"]
           end
         end
 
@@ -121,7 +126,7 @@ describe WorkfileMigrator do
         it "attaches the legacy workfile version content to the new workfile version model" do
           @legacy_versions.each do |legacy_version|
             new_version = WorkfileVersion.find_by_legacy_id(legacy_version["id"])
-            new_version.contents_file_name.should == new_version.workfile.file_name
+            new_version.contents_file_name.should == Workfile.unscoped.find(new_version.workfile_id).file_name
           end
         end
       end

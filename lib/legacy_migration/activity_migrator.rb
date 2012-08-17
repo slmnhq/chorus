@@ -177,17 +177,15 @@ class ActivityMigrator
   AND streams.id NOT IN (SELECT legacy_id from events);
   ))
 
-    #backfill_dataset_import_success_additional_data
+    backfill_dataset_import_success_additional_data
   end
 
-  # TODO fixme
   def backfill_dataset_import_success_additional_data
     Events::DATASET_IMPORT_SUCCESS.where('additional_data IS NULL').each do |event|
-      row = Legacy.connection.exec_query("SELECT object_name, id FROM edc_activity_stream_object
-                                    WHERE activity_stream_id = '#{event.legacy_id}'
-                                    AND entity_type = 'table';").first
-      event.additional_data = {:source_dataset => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id']))}
-      event.additional_data = {:dataset => Dataset.find_by_id(event.target2_id)}
+      row = Legacy.connection.exec_query("SELECT object_name, object_id FROM legacy_migrate.edc_activity_stream_object aso
+                                    WHERE aso.activity_stream_id = '#{event.legacy_id}'
+                                    AND aso.entity_type = 'table';").first
+      event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id}
       event.save!
     end
   end
@@ -242,10 +240,17 @@ class ActivityMigrator
         WHERE aso.activity_stream_id = '#{event.legacy_id}';
       ").first
       if row.present?
-        event.additional_data = {:error_message => row['error_message']}
+        event.additional_data[:error_message] = row['error_message']
       else
-        event.additional_data = {:error_message => ''}
+        event.additional_data[:error_message] = ''
       end
+
+      additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table, aso2.object_id as source_dataset FROM legacy_migrate.edc_activity_stream_object aso1,
+                                      legacy_migrate.edc_activity_stream_object aso2
+                                      WHERE aso1.activity_stream_id = '#{event.legacy_id}' and aso2.activity_stream_id = '#{event.legacy_id}'
+                                      AND aso1.entity_type = 'table' AND aso2.entity_type = 'databaseObject';").first
+      event.additional_data[:source_dataset_id] = Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(additional_data['source_dataset'])).id
+      event.additional_data[:destination_table] = additional_data['destination_table']
       event.save!
     end
   end
