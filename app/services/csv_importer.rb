@@ -49,6 +49,9 @@ class CsvImporter
   end
 
   def create_success_event
+    file_import_created_event = Events::FileImportSuccess.find(import_created_event_id)
+    file_import_created_event.dataset = destination_dataset
+    file_import_created_event.save!
     Events::FileImportSuccess.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :dataset => destination_dataset,
@@ -65,6 +68,10 @@ class CsvImporter
         :destination_table => csv_file.to_table,
         :error_message => error_message
     )
+  end
+
+  def destination_dataset
+    @destination_dataset ||= get_destination_dataset
   end
 
   def destination_dataset

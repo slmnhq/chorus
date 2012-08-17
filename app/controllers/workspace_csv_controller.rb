@@ -27,8 +27,8 @@ class WorkspaceCsvController < ApplicationController
     params[:csvimport][:file_contains_header] = params[:csvimport].delete(:has_header)
     csv_file.update_attributes(params[:csvimport])
 
-    create_import_event(csv_file)
-    QC.enqueue("CsvImporter.import_file", csv_file.id)
+    import_created_event = create_import_event(csv_file)
+    QC.enqueue("CsvImporter.import_file", csv_file.id, import_created_event.id)
     present csv_file
   end
 

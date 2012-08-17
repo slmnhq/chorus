@@ -20,6 +20,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { account.owner }
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
+    let(:file_import_created_event) { Events::FILE_IMPORT_CREATED.first }
 
     def fetch_from_gpdb(sql)
       schema.with_gpdb_connection(account) do |connection|
@@ -55,7 +56,7 @@ describe CsvImporter, :database_integration => true do
 
     it "imports a basic csv file as a new table" do
       csv_file = create_csv_file
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       schema.with_gpdb_connection(account) do |connection|
         result = connection.exec_query("select * from new_table_from_csv order by ID asc;")
@@ -67,10 +68,10 @@ describe CsvImporter, :database_integration => true do
 
     it "import a basic csv file into an existing table" do
       csv_file = create_csv_file(:new_table => true, :to_table => "table_to_append_to")
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       csv_file = create_csv_file(:new_table => false, :to_table => "table_to_append_to")
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       fetch_from_gpdb("select count(*) from table_to_append_to;") do |result|
         result[0]["count"].should == 6
@@ -79,13 +80,13 @@ describe CsvImporter, :database_integration => true do
 
     it "should truncate the existing table when truncate=true" do
       csv_file = create_csv_file(:new_table => true, :to_table => "table_to_replace")
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       csv_file = create_csv_file(:new_table => false,
                                  :truncate => true,
                                  :to_table => "table_to_replace",
                                  :contents => tempfile_with_contents("1,larry\n2,barry\n"))
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       fetch_from_gpdb("select * from table_to_replace order by id asc;") do |result|
         result[0]["name"].should == "larry"
@@ -102,7 +103,7 @@ describe CsvImporter, :database_integration => true do
                              :new_table => true,
                              :to_table => "new_table_from_csv_2")
 
-      CsvImporter.import_file(first_csv_file.id)
+      CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
 
       second_csv_file = create_csv_file(:contents => tempfile_with_contents("dig,4\ndug,5\ndag,6\n"),
                              :column_names => [:name, :id],
@@ -111,7 +112,7 @@ describe CsvImporter, :database_integration => true do
                              :new_table => false,
                              :to_table => "new_table_from_csv_2")
 
-      CsvImporter.import_file(second_csv_file.id)
+      CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
 
       fetch_from_gpdb("select * from new_table_from_csv_2 order by id asc;") do |result|
         result[0]["id"].should == 1
@@ -139,7 +140,7 @@ describe CsvImporter, :database_integration => true do
                                    :new_table => true,
                                    :to_table => tablename)
 
-      CsvImporter.import_file(first_csv_file.id)
+      CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
 
       second_csv_file = create_csv_file(:contents => tempfile_with_contents("marsbar,3\nhersheys,4\n"),
                                     :column_names => [:candy_type, :id],
@@ -148,7 +149,7 @@ describe CsvImporter, :database_integration => true do
                                     :new_table => false,
                                     :to_table => tablename)
 
-      CsvImporter.import_file(second_csv_file.id)
+      CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
 
       fetch_from_gpdb("select * from #{tablename} order by id asc;") do |result|
         result[0]["id"].should == 1
@@ -175,7 +176,7 @@ describe CsvImporter, :database_integration => true do
                                 :new_table => true,
                                 :to_table => "another_new_table_from_csv")
 
-      CsvImporter.import_file(csv_file.id)
+      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
       fetch_from_gpdb("select * from another_new_table_from_csv order by ID asc;") do |result|
         result[0].should == {"id" => 1, "dog" => "foo"}
@@ -195,7 +196,7 @@ describe CsvImporter, :database_integration => true do
                                    :file_contains_header => false,
                                    :new_table => true)
         table_name = csv_file.to_table
-        CsvImporter.import_file(csv_file.id)
+        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
         end
@@ -211,7 +212,7 @@ describe CsvImporter, :database_integration => true do
                                          :new_table => true,
                                          :to_table => table_name)
 
-        CsvImporter.import_file(first_csv_file.id)
+        CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
 
         second_csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
                                           :column_names => [:id, :name],
@@ -220,7 +221,7 @@ describe CsvImporter, :database_integration => true do
                                           :new_table => false,
                                           :to_table => table_name)
 
-        CsvImporter.import_file(second_csv_file.id)
+        CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
         end
@@ -236,7 +237,7 @@ describe CsvImporter, :database_integration => true do
                                    :file_contains_header => false,
                                    :new_table => true)
         table_name = csv_file.to_table
-        CsvImporter.import_file(csv_file.id)
+        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
         end
@@ -249,6 +250,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { csv_file.user }
     let(:dataset) { datasets(:bobs_table) }
     let(:instance_account) { csv_file.workspace.sandbox.instance.account_for_user!(csv_file.user) }
+    let(:file_import_created_event) { Events::FILE_IMPORT_CREATED.first }
 
     describe "destination_dataset" do
       before do
@@ -256,7 +258,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "performs a refresh and returns the dataset matching the import table name" do
-        importer = CsvImporter.new(csv_file.id)
+        importer = CsvImporter.new(csv_file.id,  file_import_created_event.id)
         importer.destination_dataset.name.should == csv_file.to_table
       end
     end
@@ -265,7 +267,7 @@ describe CsvImporter, :database_integration => true do
       before do
         any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection }
         any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { dataset } }
-        CsvImporter.import_file(csv_file.id)
+        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
       end
 
       it "makes a IMPORT_SUCCESS event" do
@@ -275,6 +277,14 @@ describe CsvImporter, :database_integration => true do
         event.workspace.should == csv_file.workspace
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
+      end
+
+      it "makes sure the FILE_IMPORT_CREATED event object is linked to the dataset" do
+        dataset = datasets(:bobs_table)
+        file_import_created_event.reload
+        file_import_created_event.dataset.should == dataset
+        file_import_created_event.target2_type.should == "Dataset"
+        file_import_created_event.target2_id.should == dataset.id
       end
 
       it "deletes the file" do
@@ -287,7 +297,7 @@ describe CsvImporter, :database_integration => true do
         @error = 'ActiveRecord::JDBCError: ERROR: relation "test" already exists: CREATE TABLE test(a float, b float, c float);'
         exception = ActiveRecord::StatementInvalid.new(@error)
         any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection { raise exception } }
-        CsvImporter.import_file(csv_file.id)
+        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
       end
 
       it "makes a IMPORT_FAILED event" do
