@@ -386,13 +386,13 @@ describe Dataset::Query, :database_integration => true do
       context "into a table in another db using gpfdist" do
         context "new table" do
           it "creates a correct gppipe" do
-            mock(QC).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, true, nil)
+            mock(QC.default_queue).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, true, nil)
             src_table.gpfdist_import(options, sandbox, user, true)
           end
         end
         context "existing table" do
           it "creates a correct gppipe" do
-            mock(QC).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, false, nil)
+            mock(QC.default_queue).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, false, nil)
             src_table.gpfdist_import(options, sandbox, user, false)
           end
         end
@@ -412,7 +412,7 @@ describe Dataset::Query, :database_integration => true do
         }
         context "importing into new table" do
           it "creates a correct gp table copier" do
-            mock(QC).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, true, 50)
+            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, true, 50)
             src_table.import(options, sandbox, user, true)
           end
         end
@@ -420,7 +420,7 @@ describe Dataset::Query, :database_integration => true do
         context "into a existing table" do
           it "creates a correct gp table copier" do
             options["new_table"] = false;
-            mock(QC).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, false, 50)
+            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, false, 50)
             src_table.import(options, sandbox, user, false)
           end
         end
