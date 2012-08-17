@@ -62,9 +62,9 @@ describe WorkfileVersion do
 
       it "cleans the message" do
         workfile_version = described_class.new({
-                                                 :contents => test_file('not_an_image.jpg'),
-                                                 :owner => user,
-                                                 :modifier => user
+                                                   :contents => test_file('not_an_image.jpg'),
+                                                   :owner => user,
+                                                   :modifier => user
                                                })
 
         workfile_version.should_not be_valid
@@ -80,13 +80,13 @@ describe WorkfileVersion do
       let(:user) { FactoryGirl.create(:user) }
 
       it "gives an error when file is too big" do
-         stub(version.contents).size { 9999999999999999999999999999999999999 }
-         version.should_not be_valid
+        stub(version.contents).size { 9999999999999999999999999999999999999 }
+        version.should_not be_valid
       end
 
       it "is ok with reasonable file sizes" do
-         stub(version.contents).size { 1 }
-         version.should be_valid
+        stub(version.contents).size { 1 }
+        version.should be_valid
       end
     end
   end
@@ -121,6 +121,30 @@ describe WorkfileVersion do
         it "raise an error " do
           expect { version.update_content("this is new content") }.to raise_error(ActiveRecord::RecordInvalid)
         end
+      end
+    end
+  end
+
+  describe "#get_content" do
+    let(:expected_contents) { File.read(workfile_version.contents.path) }
+    context "when the file is a text file" do
+      let(:workfile_version) { workfiles(:'text.txt').versions.first }
+      it "returns the file contents" do
+        workfile_version.get_content.should == expected_contents
+      end
+    end
+
+    context "when the file is a sql file" do
+      let(:workfile_version) { workfiles(:'sql.sql').versions.first }
+      it "returns the file contents" do
+        workfile_version.get_content.should == expected_contents
+      end
+    end
+
+    context "when the file is NOT a text or sql file" do
+      let(:workfile_version) { workfiles(:'image.png').versions.first }
+      it "returns nil" do
+        workfile_version.get_content.should be_nil
       end
     end
   end

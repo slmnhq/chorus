@@ -1,5 +1,6 @@
 class SqlResult
   attr_reader :columns, :rows
+  attr_accessor :schema, :warnings
 
   def add_column(name, type)
     @columns << GpdbColumn.new(:name => name, :data_type => type)
@@ -10,11 +11,12 @@ class SqlResult
   end
 
   def add_rows(rows)
-    rows.each { |row| add_row(row) }
+    @rows.concat(rows)
   end
 
   def initialize
     @columns = []
     @rows = []
+    @warnings = []
   end
 end

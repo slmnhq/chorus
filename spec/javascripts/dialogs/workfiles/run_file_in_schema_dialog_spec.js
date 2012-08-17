@@ -157,9 +157,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                         it("broadcasts the file:runInSchema event", function () {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runInSchema",
                                 {
-                                    instance:44,
-                                    database:55,
-                                    schema:66
+                                    schemaId:66
                                 }
                             );
                         })

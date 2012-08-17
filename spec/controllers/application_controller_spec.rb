@@ -54,6 +54,15 @@ describe ApplicationController do
       response.code.should == "422"
     end
 
+    it "returns error 422 when a QueryError occurs" do
+      stub(controller).index { raise CancelableQuery::QueryError.new("broken!") }
+
+      get :index
+
+      response.code.should == "422"
+      decoded_errors.fields.query.INVALID.message.should == "broken!"
+    end
+
     describe "when an access denied error is raised" do
       let(:object_to_present) { instances(:greenplum) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }

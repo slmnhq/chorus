@@ -94,6 +94,10 @@ class WorkfileVersion < ActiveRecord::Base
     end
   end
 
+  def get_content
+    File.read(contents.path) if text? || sql?
+  end
+
   private
 
   def latest_version?

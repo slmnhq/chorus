@@ -666,7 +666,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             describe("showError", function() {
                 beforeEach(function() {
-                    this.taskWithErrors = fixtures.taskWithErrors();
+                    this.taskWithErrors = rspecFixtures.dataPreviewTaskResults();
                     this.alertClass = chorus.alerts.VisualizationError;
                     this.view.showError(this.taskWithErrors, this.alertClass);
                 });

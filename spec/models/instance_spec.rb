@@ -207,7 +207,7 @@ describe Instance do
       let(:account_without_access) { instance_accounts(:iamcarly) }
 
       before do
-        stub_gpdb(instance.owner_account, instance.maintenance_db, instance.send(:database_and_role_sql) => [
+        stub_gpdb(instance.owner_account, instance.send(:database_and_role_sql) => [
             {'database_name' => database.name, 'db_username' => account_with_access.db_username},
             {'database_name' => 'something_new', 'db_username' => account_with_access.db_username}
         ])

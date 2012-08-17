@@ -259,9 +259,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("broadcast the event", function() {
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:editorSelectionStatus")
                 });
-
             });
-        })
+        });
     });
 
     describe("event handling", function() {
@@ -269,20 +268,13 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             beforeEach(function() {
                 spyOn(this.view, "render");
                 spyOnEvent(this.view.model, "change");
-                this.executionInfo = {
-                    instanceId: '51',
-                    instanceName: "ned",
-                    databaseId: '52',
-                    databaseName: "rob",
-                    schemaId: '53',
-                    schemaName: "louis"
-                };
+                this.executionSchema = rspecFixtures.schema();
 
-                chorus.PageEvents.broadcast("workfile:executed", this.model, this.executionInfo);
+                chorus.PageEvents.broadcast("workfile:executed", this.model, this.executionSchema);
             });
 
-            it("updates the execution info in the workfile", function() {
-                expect(this.view.model.get("executionInfo")).toBe(this.executionInfo);
+            it("updates the execution schema in the workfile", function() {
+                expect(this.view.model.get("executionSchema")).toBe(this.executionSchema);
             });
 
             it("re-renders", function() {
@@ -316,7 +308,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             context("there is no sandbox nor executionSchema", function() {
                 it("disables the Chorus View creation menu", function() {
-                    this.view.model.executionInfo = null;
+                    this.view.model.attributes.executionSchema = null;
                     spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
                     this.view.render();
 
@@ -342,7 +334,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             context("there is no sandbox nor executionSchema", function() {
                 it("disables the Chorus View creation menu", function() {
-                    this.view.model.executionInfo = null;
+                    this.view.model.attributes.executionSchema = null;
                     spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
                     this.view.render();
 

@@ -152,7 +152,6 @@ chorus.models.Dataset = chorus.models.Base.include(
     preview: function() {
         if (this.isChorusView()) {
             return new chorus.models.ChorusViewPreviewTask({
-                taskType: "getDatasetPreview",
                 query: this.query(),
                 workspaceId: this.get("workspace").id,
                 instanceId: this.instance().id,

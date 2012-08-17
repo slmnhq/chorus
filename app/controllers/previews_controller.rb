@@ -5,8 +5,6 @@ class PreviewsController < GpdbController
 
     result = SqlExecutor.preview_dataset(dataset, instance_account, params[:task][:check_id])
     present(result, :status => :created)
-  rescue CancelableQuery::QueryError => e
-    present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :bad_request)
   end
 
   def destroy

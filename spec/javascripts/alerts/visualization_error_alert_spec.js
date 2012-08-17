@@ -1,6 +1,6 @@
 describe("chorus.alerts.VisualizationError", function() {
     beforeEach(function() {
-        this.task = fixtures.taskWithErrors();
+        this.task = rspecFixtures.frequencyTaskWithErrors();
         this.alert = new chorus.alerts.VisualizationError({ model: this.task });
     });
     

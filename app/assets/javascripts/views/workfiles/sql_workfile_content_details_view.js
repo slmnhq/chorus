@@ -110,8 +110,8 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         this.dialog.launchModal();
     },
 
-    workfileExecuted: function(workfile, executionInfo) {
-        this.model.set({executionInfo: executionInfo}, {silent: true});
+    workfileExecuted: function(workfile, executionSchema) {
+        this.model.set({executionSchema: executionSchema}, {silent: true});
         this.render();
     }
 });

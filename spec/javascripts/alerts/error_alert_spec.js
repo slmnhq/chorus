@@ -4,8 +4,8 @@ describe("chorus.alerts.Error", function() {
         text: 'i am text'
     });
     beforeEach(function() {
-        this.task = fixtures.taskWithErrors();
-        this.alert = new FakeAlert({model: this.task});
+        this.modelWithError = rspecFixtures.userWithErrors();
+        this.alert = new FakeAlert({model: this.modelWithError});
     });
 
     describe("#makeModel", function() {
@@ -19,7 +19,7 @@ describe("chorus.alerts.Error", function() {
             });
 
             it("gets the error message from the model's errorMessage function", function() {
-                expect(this.alert.body).toBe(this.task.serverErrorMessage());
+                expect(this.alert.body).toBe(this.modelWithError.serverErrorMessage());
             });
         });
 

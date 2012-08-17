@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
-  describe ".preview_dataset", :database_integration => true do
+  describe "#preview_dataset", :database_integration => true do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
     let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
@@ -14,7 +14,7 @@ describe SqlExecutor do
 
     subject { SqlExecutor.preview_dataset(table, account, check_id) }
 
-    it "returns a sql result object with the correct rows" do
+    it "returns a SqlResult object with the correct rows" do
       subject.rows.should == [[
           "(1,2)",
           "1.2",
@@ -54,85 +54,115 @@ describe SqlExecutor do
     end
 
     it "gives each column the right 'name' attribute" do
-      subject.columns.map(&:name).should == [
-        "t_composite",
-        "t_decimal",
-        "t_array",
-        "t_bigint",
-        "t_bigserial",
-        "t_bit",
-        "t_varbit",
-        "t_bool",
-        "t_box",
-        "t_bytea",
-        "t_varchar",
-        "t_char",
-        "t_cidr",
-        "t_circle",
-        "t_date",
-        "t_double",
-        "t_inet",
-        "t_integer",
-        "t_interval",
-        "t_lseg",
-        "t_macaddr",
-        "t_money",
-        "t_numeric",
-        "t_path",
-        "t_point",
-        "t_polygon",
-        "t_real",
-        "t_smallint",
-        "t_serial",
-        "t_text",
-        "t_time_without_time_zone",
-        "t_time_with_time_zone",
-        "t_timestamp_without_time_zone",
-        "t_timestamp_with_time_zone"
-      ]
+      subject.columns.map(&:name).should == %w{
+        t_composite
+        t_decimal
+        t_array
+        t_bigint
+        t_bigserial
+        t_bit
+        t_varbit
+        t_bool
+        t_box
+        t_bytea
+        t_varchar
+        t_char
+        t_cidr
+        t_circle
+        t_date
+        t_double
+        t_inet
+        t_integer
+        t_interval
+        t_lseg
+        t_macaddr
+        t_money
+        t_numeric
+        t_path
+        t_point
+        t_polygon
+        t_real
+        t_smallint
+        t_serial
+        t_text
+        t_time_without_time_zone
+        t_time_with_time_zone
+        t_timestamp_without_time_zone
+        t_timestamp_with_time_zone
+      }
     end
 
     it "gives each column the right 'data_type' attribute" do
-      subject.columns.map(&:data_type).should == [
-          "complex",
-          "numeric",
-          "_int4",
-          "int8",
-          "bigserial",
-          "bit",
-          "varbit",
-          "bool",
-          "box",
-          "bytea",
-          "varchar",
-          "bpchar",
-          "cidr",
-          "circle",
-          "date",
-          "float8",
-          "inet",
-          "int4",
-          "interval",
-          "lseg",
-          "macaddr",
-          "money",
-          "numeric",
-          "path",
-          "point",
-          "polygon",
-          "float4",
-          "int2",
-          "serial",
-          "text",
-          "time",
-          "timetz",
-          "timestamp",
-          "timestamptz"
-      ]
+      subject.columns.map(&:data_type).should == %w{
+          complex
+          numeric
+          _int4
+          int8
+          bigserial
+          bit
+          varbit
+          bool
+          box
+          bytea
+          varchar
+          bpchar
+          cidr
+          circle
+          date
+          float8
+          inet
+          int4
+          interval
+          lseg
+          macaddr
+          money
+          numeric
+          path
+          point
+          polygon
+          float4
+          int2
+          serial
+          text
+          time
+          timetz
+          timestamp
+          timestamptz
+      }
     end
   end
 
-  describe ".cancel_query" do
+  describe "#execute_sql", :database_integration do
+    let(:account) { instance_accounts(:chorus_gpdb42_test_superuser) }
+    let(:schema) { GpdbSchema.find_by_name!('test_schema') }
+    let(:sql) { 'select 1' }
+    let(:check_id) { '42' }
+
+    before do
+      refresh_chorus
+    end
+
+    it "returns a SqlResult" do
+      result = SqlExecutor.execute_sql(schema, account, check_id, sql)
+      result.should be_a SqlResult
+    end
+
+    it "sets the schema on the SqlResult" do
+      result = SqlExecutor.execute_sql(schema, account, check_id, sql)
+      result.schema.should == schema
+    end
+
+    it "passes the limit to CancelableQuery" do
+      called = false
+      any_instance_of(CancelableQuery) do |query|
+        called = true
+        mock.proxy(query).execute(sql, :limit => 42)
+      end
+      result = SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
+    end
+  end
+
+  describe "#cancel_query" do
     it "cancels the query" do
       fake_connection = Object.new
       fake_query = Object.new

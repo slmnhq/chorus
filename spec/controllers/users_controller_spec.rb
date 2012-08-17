@@ -122,6 +122,10 @@ describe UsersController do
         event.new_user.should == User.find_by_username(@values[:username])
         event.actor.should == admin
       end
+
+      generate_fixture "userWithErrors.json" do
+        post :create, :user => {}
+      end
     end
   end
 

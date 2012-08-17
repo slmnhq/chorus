@@ -5,8 +5,14 @@ chorus.alerts.ExecutionMessage = chorus.alerts.Base.extend({
     cancel:t("actions.close_window"),
     additionalClass: "info",
 
-    makeModel: function() {
-        this.body = this.model.get("result").message;
+    preRender: function() {
+        this._super("preRender", arguments);
+        var warnings = this.model.get("warnings");
+        if(warnings && warnings.length) {
+            this.body = warnings.join(" ");
+        } else {
+            this.body = t('sql_execution.success');
+        }
     },
 
     postRender: function() {

@@ -1,5 +1,5 @@
 class WorkfileVersionPresenter < Presenter
-  delegate :id, :version_num, :commit_message, :owner, :modifier, :contents, :created_at, :updated_at,
+  delegate :id, :version_num, :commit_message, :owner, :modifier, :contents, :created_at, :updated_at, :get_content,
            :workfile, to: :model
 
   def to_hash
@@ -14,16 +14,12 @@ class WorkfileVersionPresenter < Presenter
         :updated_at => updated_at,
         :content_url => contents.url,
         :icon_url => icon_url,
-        :content => file_content
+        :content => get_content
       }
     })
   end
 
   def icon_url
     contents.url(:icon) if model.image?
-  end
-
-  def file_content
-    File.read(contents.path) if model.text? || model.sql?
   end
 end

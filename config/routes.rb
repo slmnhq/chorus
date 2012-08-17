@@ -71,6 +71,7 @@ Chorus::Application.routes.draw do
     resources :versions, :only => [:update, :create, :show, :index], :controller => 'workfile_versions'
     resource :copy, :only => [:create], :controller => 'workfile_copy'
     resource :download, :only => [:show], :controller => 'workfile_download'
+    resource :executions, :only => [:create], :controller => 'workfile_executions'
   end
 
   resources :workfile_versions, :only => [:show] do

@@ -75,18 +75,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("running in another schema", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("file:runInSchema", {
-                        instance: '4',
-                        database: '5',
-                        schema: '6'
+                        schemaId: '6'
                     })
-                })
+                });
 
                 it("creates a task with the right parameters", function() {
                     expect(this.view.task.get("sql")).toBe("select * from foos");
-                    expect(this.view.task.get("instanceId")).toBe("4");
-                    expect(this.view.task.get("databaseId")).toBe("5");
                     expect(this.view.task.get("schemaId")).toBe("6");
-                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                    expect(this.view.task.get("workfile")).toBe(this.workfile);
                     expect(this.view.task.has("checkId")).toBeTruthy();
                 });
             });
@@ -108,10 +104,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     it("creates a task with the right parameters", function() {
                         expect(this.view.task.get("sql")).toBe("select * from foos");
-                        expect(this.view.task.get("instanceId")).toBe("2");
-                        expect(this.view.task.get("databaseId")).toBe("3");
                         expect(this.view.task.get("schemaId")).toBe("4");
-                        expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                        expect(this.view.task.get("workfile")).toBe(this.workfile);
                         expect(this.view.task.has("checkId")).toBeTruthy();
                     });
 
@@ -121,23 +115,16 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     });
 
                     it("broadcasts file:executionStarted", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionStarted", jasmine.any(chorus.models.SqlExecutionTask));
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionStarted", jasmine.any(chorus.models.WorkfileExecutionTask));
                     });
 
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
-                            this.server.lastCreate().succeed({
-                                id: "10100",
-                                state: "success",
-                                result: {
-                                    message: "hi there"
-                                },
-                                executionInfo: this.executionInfo
-                            });
-                        })
+                            this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults());
+                        });
 
                         it("broadcasts file:executionSucceeded", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionSucceeded", jasmine.any(chorus.models.SqlExecutionTask));
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionSucceeded", jasmine.any(chorus.models.WorkfileExecutionTask));
                         });
 
                         it("sets the executing property to false", function() {
@@ -145,18 +132,28 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("broadcasts workfile:executed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
-                        })
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.view.task.executionSchema());
+                        });
 
                         describe("executing again", function() {
                             beforeEach(function() {
+                                this.originalSchema = this.view.task.executionSchema();
                                 chorus.PageEvents.broadcast("file:runCurrent");
-                            })
+                            });
 
                             it("executes the task again", function() {
                                 expect(this.server.creates().length).toBe(2);
-                            })
-                        })
+                            });
+
+                            it("saves the new executionSchema", function() {
+                                this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults({
+                                    executionSchema: {
+                                        id: 42
+                                    }
+                                }));
+                                expect(this.view.task.executionSchema().id).toEqual(42);
+                            });
+                        });
                     });
 
                     describe("when the task completion fails", function() {
@@ -167,7 +164,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         })
 
                         it("broadcasts file:executionFailed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.WorkfileExecutionTask));
                         });
 
                         it("sets the executing property to false", function() {
@@ -186,7 +183,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         })
 
                         it("broadcasts file:executionFailed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.WorkfileExecutionTask));
                         });
 
                         it("sets the executing property to false", function() {
@@ -219,10 +216,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     it("creates a task with the right parameters", function() {
                         expect(this.view.task.get("sql")).toBe("select 1 from table");
-                        expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                        expect(this.view.task.get("workfile")).toBe(this.workfile);
                         expect(this.view.task.has("checkId")).toBeTruthy();
-                        expect(this.view.task.get("instanceId")).toBe("99");
-                        expect(this.view.task.get("databaseId")).toBe("88");
                         expect(this.view.task.get("schemaId")).toBe("77");
                     });
 
@@ -239,11 +234,11 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     this.startedSpy = jasmine.createSpy();
                     chorus.PageEvents.subscribe("file:executionStarted", this.startedSpy);
                     chorus.PageEvents.broadcast("file:runCurrent");
-                })
+                });
 
                 it('does not start a new execution', function() {
                     expect(this.startedSpy).not.toHaveBeenCalled();
-                })
+                });
             });
         });
     });

@@ -61,7 +61,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }
             });
 
-            return new chorus.models.SqlExecutionTask({
+            return new chorus.models.WorkfileExecutionTask({
                 columns: columns,
                 rows: rows
             });
@@ -122,7 +122,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }),
 
             "Data Table": new chorus.views.TaskDataTable({
-                model: new chorus.models.SqlExecutionTask({ result: {
+                model: new chorus.models.WorkfileExecutionTask({ result: {
                     columns: [
                         { name: "id" },
                         { name: "city" },

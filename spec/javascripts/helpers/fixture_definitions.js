@@ -48,6 +48,7 @@ window.fixtureDefinitions = {
 window.rspecFixtureDefinitions = {
     csvImport: {  model: "CSVImport" },
     user:    { unique: [ "id" ] },
+    userWithErrors: { model:'User' },
     userSet: { unique: [ "id" ] },
 
     workspaceDataset: {
@@ -140,6 +141,9 @@ window.rspecFixtureDefinitions = {
     },
 
     frequencyTask: {},
+    frequencyTaskWithErrors: {
+        model: 'FrequencyTask'
+    },
     heatmapTask: {},
     boxplotTask: {},
     timeseriesTask: {},
@@ -175,11 +179,29 @@ window.rspecFixtureDefinitions = {
 //    },
 //
     dataset: { unique: [ "id" ] },
+    dataPreviewTaskResults: {
+        model: "DataPreviewTask"
+    },
 
     schemaFunctionSet: {},
 
-    hdfsFile: { model: "HdfsFile"}
+    hdfsFile: { model: "HdfsFile" },
 
+    workfileExecutionResults: {
+        model: "WorkfileExecutionTask"
+    },
+
+    workfileExecutionResultsWithWarning: {
+        model: "WorkfileExecutionTask"
+    },
+
+    workfileExecutionResultsEmpty: {
+        model: "WorkfileExecutionTask"
+    },
+
+    workfileExecutionError: {
+        model: "WorkfileExecutionTask"
+    }
 //
 //    test: {
 //        model:   "User",

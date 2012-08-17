@@ -1,21 +1,21 @@
 chorus.Mixins.SQLResults = {
-    getRows : function() {
-        return this.get("rows");
+    getRows: function() {
+        return this.get("rows") || [];
     },
 
-    getColumns : function() {
+    getColumns: function() {
         return this.get("columns");
     },
 
-    getErrors : function() {
+    getErrors: function() {
         return this.attributes;
     },
 
-    getColumnLabel : function(columnName) {
+    getColumnLabel: function(columnName) {
         return columnName;
     },
 
-    getSortedRows : function(rows) {
+    getSortedRows: function(rows) {
         return rows;
     },
 
@@ -24,13 +24,17 @@ chorus.Mixins.SQLResults = {
         var rows = this.getSortedRows(this.getRows());
 
         var self = this;
-        return _.map(columns, function (column) {
+        return _.map(columns, function(column) {
             var name = column.name;
             return {
                 name: self.getColumnLabel(name),
                 type: column.typeCategory,
-                values:_.pluck(rows, name)
+                values: _.pluck(rows, name)
             };
         });
+    },
+
+    hasResults: function() {
+        return !!this.getRows().length
     }
 };

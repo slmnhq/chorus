@@ -287,7 +287,7 @@ describe Workspace do
         end
 
         it "does not set it if passed an invalid sandbox_id" do
-          workspace.sandbox_id = 867, 5309
+          workspace.sandbox_id = 8675309
           workspace.save
           workspace.should_not have_added_sandbox
         end

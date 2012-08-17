@@ -133,10 +133,14 @@ FixtureBuilder.configure do |fbuilder|
       bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
       bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
+      sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+      fbuilder.name :sql, sql_workfile
+
       WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => sql_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
 
       fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
       fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
@@ -145,6 +149,19 @@ FixtureBuilder.configure do |fbuilder|
 
       fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
       fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
+
+    end
+
+    text_workfile = Workfile.create!({:file_name => "text.txt", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+    fbuilder.name :text, text_workfile
+    image_workfile = Workfile.create!({:file_name => "image.png", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+    fbuilder.name :image, image_workfile
+
+    File.open Rails.root + 'spec/fixtures/some.txt' do |file|
+      WorkfileVersion.create!({:workfile => text_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+    end
+    File.open Rails.root + 'spec/fixtures/small1.gif' do |file|
+      WorkfileVersion.create!({:workfile => image_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
     end
 
     #CSV File

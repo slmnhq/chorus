@@ -145,16 +145,15 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     workfileExecuted: function(workfile, executionSchema) {
-        if (!this.schema || (executionSchema.schemaName != this.schema.name())) {
-            this.setSchema(new chorus.models.Schema(_.extend(executionSchema, {
-                name: executionSchema.schemaName
-            })))
+        if (!this.schema || (executionSchema.id != this.schema.id)) {
+            this.setSchema(new chorus.models.Schema(executionSchema))
         }
     },
 
     setSchema: function(schema) {
+        var oldSchema = this.schema;
         this.schema = schema;
-        if (this.schema) {
+        if (this.schema && (!oldSchema || oldSchema.database().id != this.schema.database().id)) {
             this.schemas = this.schema.database().schemas();
             this.requiredResources.add(this.schemas);
             this.schemas.fetch();

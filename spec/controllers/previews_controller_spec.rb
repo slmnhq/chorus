@@ -3,10 +3,10 @@ require 'spec_helper'
 describe PreviewsController do
   ignore_authorization!
 
-  let(:gpdb_table) { FactoryGirl.create(:gpdb_table, :name => "new_table") }
+  let(:gpdb_table) { datasets(:bobs_table) }
   let(:instance) { gpdb_table.instance }
-  let(:account) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { users(:carly) }
+  let(:account) { instance.account_for_user!(user) }
 
   before do
     log_in user
@@ -34,6 +34,11 @@ describe PreviewsController do
         decoded_response.columns.should_not be_nil
         decoded_response.rows.should_not be_nil
       end
+
+      generate_fixture "dataPreviewTaskResults.json" do
+        post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => "0.43214321"}
+        response.should be_success
+      end
     end
 
     context "when there's an error'" do
@@ -43,7 +48,7 @@ describe PreviewsController do
       it "returns an error if the query fails" do
         post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
 
-        response.code.should == "400"
+        response.code.should == "422"
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
     end

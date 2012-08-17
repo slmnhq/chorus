@@ -5,25 +5,25 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 templateName: "database_function_sidebar_list"
             });
             this.view = new subclass({schema: undefined});
-        })
+        });
 
         describe("#setup", function() {
             it("should not crash", function() {
                 expect(this.view).toBeDefined()
-            })
-        })
+            });
+        });
 
         describe("render", function() {
             beforeEach(function() {
                 chorus.page = new chorus.pages.WorkspaceDatasetShowPage(1, 2);
                 this.view.render();
-            })
+            });
 
             it("should not crash", function() {
                 expect($(this.view.el)).toHaveClass("database_function_sidebar_list");
-            })
-        })
-    })
+            });
+        });
+    });
 
     context("when there is a schema", function() {
         beforeEach(function() {
@@ -83,7 +83,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 it("shows a check mark next to the current schema", function() {
                     expect(this.view.$("li:contains('righteous_tables')")).toContain('.check')
                     expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check')
-                })
+                });
 
                 it("shows the names of all of the workspace's database's schemas", function() {
                     var $lis = this.qtip.find("li a");
@@ -112,30 +112,27 @@ describe("chorus.views.DatabaseSidebarList", function() {
                         this.server.reset();
                     });
 
-                    context("when the execution schema is the same as the view's schema", function() {
+                    context("when the execution schema is in the same database as the view's schema", function() {
                         beforeEach(function() {
-                            this.executionSchema = _.clone(this.schema.attributes);
-                            this.executionSchema.databaseName = this.schema.database().name();
-                            this.executionSchema.databaseId = this.schema.database().id;
-                            this.executionSchema.schemaName = this.executionSchema.name;
-                            delete this.executionSchema.name;
-                            delete this.executionSchema.id;
+                            this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
                             chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.sql(), this.executionSchema)
                         });
 
                         it("does not fetch anything", function() {
                             expect(this.server.fetches().length).toBe(0);
+                            expect(this.view.schema.id).toEqual(this.executionSchema.id);
                         });
                     });
 
-                    context("when the execution schema is not the same as the view's schema", function() {
+                    context("when the execution schema is not in the same database as the view's schema", function() {
                         beforeEach(function() {
-                            this.executionSchema = rspecFixtures.schema();
+                            this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
                             chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.sql(), this.executionSchema)
                         });
 
                         it("fetches the execution schema", function() {
-                            expect(this.server.lastFetchFor(this.executionSchema.database().schemas())).toBeDefined();
+                            expect(this.executionSchema.database().schemas()).toHaveBeenFetched();
+                            expect(this.view.schema.id).toEqual(this.executionSchema.id);
                         });
                     });
                 });
@@ -149,7 +146,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             this.collection = new chorus.collections.Base([]);
             this.collection.serverErrors = [
                 {message: "Account map needed"}
-            ]
+            ];
 
             var subclass = chorus.views.DatabaseSidebarList.extend({
                 templateName: "database_dataset_sidebar_list"
@@ -163,13 +160,13 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
                 rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
             ]);
-        })
+        });
 
         it("should show the missing credentials error messages", function() {
             expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                 linkText: t("dataset.credentials.missing.linkText"),
                 instanceName: this.schema.database().instance().name()
             });
-        })
+        });
     });
 });

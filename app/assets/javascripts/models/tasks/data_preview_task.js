@@ -1,6 +1,5 @@
 chorus.models.DataPreviewTask = chorus.models.Task.extend({
     nameAttribute: "objectName",
-    taskType: "previews",
 
     urlTemplateBase: "datasets/{{dataset.id}}/previews",
 

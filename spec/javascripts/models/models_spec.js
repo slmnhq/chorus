@@ -843,6 +843,21 @@ describe("chorus.models.Abstract", function() {
                     expect(params.foo.first_name).toBe("Lenny");
                 });
             });
+
+            context("when paramsToSave are defined", function() {
+                beforeEach(function () {
+                    this.model.paramsToSave = ['firstName', 'lastName'];
+                    this.model.set({lastName: 'sandwich'})
+                });
+
+                it("only returns the specified parameters", function() {
+                    var params = this.model.toJSON();
+                    expect(params.first_name).toBe("Lenny");
+                    expect(params.last_name).toBe("sandwich");
+                    expect(params.id).not.toBeDefined();
+                    expect(_.keys(params).length).toBe(2);
+                });
+            });
         });
     });
 

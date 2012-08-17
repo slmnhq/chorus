@@ -1,10 +1,7 @@
 describe("chorus.views.ResultsConsoleView", function() {
     beforeEach(function() {
-        this.task = fixtures.task({
-            checkId: "foo",
-            result: {
-                message: "hi there"
-            }
+        this.task = new chorus.models.DataPreviewTask({
+            checkId: "foo"
         });
         this.view = new chorus.views.ResultsConsole({ model: this.task });
     });
@@ -117,6 +114,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 spyOn(window, "clearInterval");
                 spyOn(this.view, "closeError").andCallThrough();
 
+                this.task.save();
                 chorus.PageEvents.broadcast("file:executionStarted");
             });
 
@@ -155,52 +153,67 @@ describe("chorus.views.ResultsConsoleView", function() {
                     beforeEach(function() {
                         this.view.$(".cancel").click();
                         chorus.PageEvents.broadcast("file:executionFailed");
-                    })
+                    });
 
                     it("cancels the execution", function() {
                         var destroy = this.server.lastDestroy();
                         expect(destroy).toBeDefined();
-                    })
+                    });
 
                     itRemovesExecutionUI(true);
-                })
+                });
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
                         chorus.PageEvents.broadcast("file:executionFailed");
-                    })
+                    });
 
                     it("cancels the execution", function() {
                         var destroy = this.server.lastDestroy();
                         expect(destroy).toBeDefined();
-                    })
+                    });
 
                     itRemovesExecutionUI(false);
-                })
-            })
+                });
+            });
 
             describe("when the execution is completed", function() {
                 context("and the task does not have a result message", function() {
                     beforeEach(function() {
-                        this.task = fixtures.task({ result: null });
+                        this.task = rspecFixtures.task({ result: null });
                         this.view = new chorus.views.ResultsConsole({ model: this.task });
                         this.view.execute(this.task);
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                     });
+                });
 
-                    it("does not show the 'view details' link", function() {
-                        expect(this.view.$(".execution a.view_details")).not.toExist();
+                context("and there are results", function() {
+                    beforeEach(function() {
+                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                    });
+
+                    it("has a link to display the execution message", function() {
+                        expect(this.view.$(".execution .view_details").text()).toMatchTranslation("actions.view_details");
+                    });
+
+                    describe("clicking the execution view details link", function() {
+                        it("launches an execution message alert", function() {
+                            var fakeModal = stubModals();
+                            this.view.$(".execution a.view_details").click();
+
+                            var alert = fakeModal.lastModal();
+                            expect(alert).toBeA(chorus.alerts.ExecutionMessage);
+                            expect($(alert.el)).toContainTranslation('sql_execution.success');
+                        });
                     });
                 });
 
                 context("and the task does not have results", function() {
                     beforeEach(function() {
-                        this.task = fixtures.taskWithoutResults();
-                        this.view = new chorus.views.ResultsConsole({ model: this.task });
-                        this.view.render();
-                        this.view.execute(this.task);
+                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResultsEmpty());
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                     });
 
@@ -215,9 +228,9 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
-                        this.task = fixtures.taskWithResult();
+                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                    })
+                    });
 
                     itRemovesExecutionUI(true);
                     itShowsExecutionResults();
@@ -226,43 +239,28 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
-                        this.task = fixtures.taskWithResult();
+                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                    })
+                    });
 
                     itRemovesExecutionUI(false);
                     itShowsExecutionResults();
-                })
-
-                it("has a link to display the execution message", function() {
-                    expect(this.view.$(".execution .view_details").text()).toMatchTranslation("actions.view_details");
-                });
-
-                describe("clicking the execution message link", function() {
-                    it("launches an execution message alert", function() {
-                        var fakeModal = stubModals();
-                        this.view.$(".execution a.view_details").click();
-
-                        var alert = fakeModal.lastModal();
-                        expect(alert).toBeA(chorus.alerts.ExecutionMessage);
-                        expect($(alert.el)).toContainText("hi there");
-                    });
                 });
 
                 context("and there was an execution error", function() {
                     beforeEach(function() {
-                        this.task = fixtures.taskWithErrors();
+                        this.server.lastCreateFor(this.task).failUnprocessableEntity(rspecFixtures.workfileExecutionErrorJson()['errors']);
                         chorus.PageEvents.broadcast("file:executionFailed", this.task);
                     });
 
                     it("should show the error header", function() {
                         expect(this.view.$('.sql_errors')).not.toHaveClass('hidden');
-                    })
+                    });
 
                     it("should show 'View Details' and 'Close' links", function() {
                         expect(this.view.$('.sql_errors .view_details')).toExist();
                         expect(this.view.$('.sql_errors .close_errors')).toExist();
-                    })
+                    });
 
                     it("should hide the execution content area", function() {
                         expect(this.view.$(".result_table")).toHaveClass("hidden");
@@ -273,7 +271,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     describe("clicking on the close button", function() {
                         beforeEach(function() {
                             this.view.$(".close_errors").click();
-                        })
+                        });
 
                         it("should hide the sql_errors content", function() {
                             expect(this.view.$(".sql_errors")).toHaveClass("hidden");
@@ -286,28 +284,28 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
-                            this.task = fixtures.taskWithResult();
+                            this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
                             chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                        })
+                        });
 
                         it("should show the data table", function() {
                             expect(this.view.$(".result_table")).not.toHaveClass("hidden");
                             expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
                         });
-                    })
+                    });
 
                     describe("clicking on view details", function() {
                         it("should open an execution message alert", function() {
                             this.modalSpy = stubModals();
                             this.view.$(".view_details").click();
-                            expect(this.modalSpy).toHaveModal(chorus.alerts.ExecutionMessage);
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.ExecutionError);
                         });
                     });
                 });
 
                 describe("starting another execution", function() {
                     beforeEach(function() {
-                        this.task = fixtures.task();
+                        this.task = new chorus.models.DataPreviewTask({});
                         this.view.execute(this.task);
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                         chorus.PageEvents.broadcast("file:executionStarted")
@@ -366,7 +364,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when another execution completed event occurs", function() {
                     beforeEach(function() {
-                        chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.taskWithResult());
+                        chorus.PageEvents.broadcast("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
                     });
 
                     it("still renders only one data table", function() {
@@ -504,9 +502,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                         it("starts the file download", function() {
                             expect($.download).toHaveBeenCalledWith("/data/cvsResultDownload",
                             {
-                                columnData: this.view.resource.getColumns(),
-                                rowsData: this.view.resource.getRows(),
-                                datasetName: this.view.resource.name()
+                                columnData: JSON.stringify(this.view.resource.getColumns()),
+                                rowsData: JSON.stringify(this.view.resource.getRows()),
+                                datasetName: this.view.resource.name(),
+                                workspaceId: this.view.resource.get("workspaceId")
                             }
                             , "post");
                         });
@@ -601,7 +600,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when the task was successfully executed previously", function() {
             beforeEach(function() {
-                this.task = fixtures.task();
+                this.task = rspecFixtures.workfileExecutionResults();
                 this.task.loaded = true;
                 this.view.execute(this.task);
             });

@@ -14,7 +14,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     setup: function() {
         this._super("setup");
 
-        this.task = new chorus.models.SqlExecutionTask({ });
+        this.task = new chorus.models.WorkfileExecutionTask({ });
 
         this.bindings.add(this.task, "saved", this.executionSucceeded);
         this.bindings.add(this.task, "saveFailed", this.executionFailed);
@@ -42,9 +42,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             var runOptions = {selection: selectedText};
             var schema = this.model.executionSchema();
             if (schema) {
-                runOptions.instance = schema.database().instance().id;
-                runOptions.database = schema.database().id;
-                runOptions.schema = schema.get("id");
+                runOptions.schemaId = schema.get("id");
             }
 
             this.run(runOptions);
@@ -54,9 +52,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     runInDefault: function() {
         if (!this.model.executionSchema()) return;
         this.run({
-            instance: this.model.executionSchema().database().instance().id,
-            database: this.model.executionSchema().database().id,
-            schema: this.model.executionSchema().get('id')
+            schemaId: this.model.executionSchema().get('id')
         })
     },
 
@@ -66,12 +62,9 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
             this.task.clear({ silent: true });
             this.task.set({
-                taskType: "workfileSQLExecution",
                 sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
-                entityId: this.model.get("id"),
-                schemaId: options.schema,
-                instanceId: options.instance,
-                databaseId: options.database,
+                workfile: this.model,
+                schemaId: options.schemaId,
                 checkId: (new Date().getTime().toString())
             }, { silent: true });
 
@@ -118,7 +111,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     executionSucceeded: function(task) {
         this.executing = false;
         chorus.PageEvents.broadcast("file:executionSucceeded", task);
-        chorus.PageEvents.broadcast("workfile:executed", this.model, task.get("executionInfo"))
+        chorus.PageEvents.broadcast("workfile:executed", this.model, task.executionSchema())
     },
 
     executionFailed: function(task) {

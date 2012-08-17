@@ -1,7 +1,7 @@
 describe("chorus.alerts.ExecutionError", function() {
     beforeEach(function() {
-        this.task = fixtures.taskWithErrors();
-        this.alert = new chorus.alerts.ExecutionError({ model: this.task });
+        this.modelWithErrors = rspecFixtures.userWithErrors();
+        this.alert = new chorus.alerts.ExecutionError({ model: this.modelWithErrors });
     });
     
     describe("#makeModel", function() {
@@ -14,4 +14,4 @@ describe("chorus.alerts.ExecutionError", function() {
         });
     });
 
-})
+});

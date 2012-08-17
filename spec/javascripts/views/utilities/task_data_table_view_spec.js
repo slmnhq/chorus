@@ -1,6 +1,6 @@
 describe("chorus.views.TaskDataTable", function() {
     beforeEach(function() {
-        this.task = fixtures.task({ result: {
+        this.task = rspecFixtures.dataPreviewTaskResults({
             columns: [
                 { name: "id", typeCategory: "WHOLE_NUMBER" },
                 { name: "city", typeCategory: "OTHER" },
@@ -8,21 +8,18 @@ describe("chorus.views.TaskDataTable", function() {
                 { name: "zip", typeCategory: "OTHER" }
             ],
             rows: [
-                { id: 1, city: "Oakland", state: "CA", zip: "94612" } ,
-                { id: 2, city: "Arcata", state: "CA", zip: "95521" } ,
-                { id: 3, city: "Lafayette", state: "IN", zip: null }
+                [1, "Oakland", "CA", "94612"],
+                [2, "Arcata", "CA", "95521"] ,
+                [3, "Lafayette", "IN", null]
             ]
-        }});
+        });
 
         this.view = new chorus.views.TaskDataTable({ model: this.task });
     });
 
     describe("falsy data", function() {
         beforeEach(function() {
-            var row = this.task.get("result").rows[0];
-            row.id = 0;
-            row.city = false;
-            row.state = null;
+            this.task.get("rows")[0] = [0, false, null];
 
             this.view.render();
         });

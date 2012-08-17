@@ -5,6 +5,38 @@ describe("chorus.Mixins.SQLResults", function() {
         HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults);
     });
 
+    describe("#getRows", function() {
+        beforeEach(function() {
+            this.host = new HostModel();
+        });
+        context("when rows exist", function() {
+            beforeEach(function() {
+                this.host.set({rows: [1, 2, 3]});
+            });
+
+            it("returns the rows", function() {
+                expect(this.host.getRows()).toEqual([1, 2, 3]);
+            });
+        });
+        context("when rows is not defined", function() {
+            it("returns an empty array", function() {
+                expect(this.host.getRows()).toEqual([]);
+            });
+        });
+    });
+
+    describe("#hasResults", function() {
+        beforeEach(function() {
+            this.host = new HostModel();
+        });
+
+        it("returns true when rows exist", function() {
+            expect(this.host.hasResults()).toBe(false);
+            this.host.set({rows: [1,2,3]});
+            expect(this.host.hasResults()).toBe(true);
+        });
+    });
+
     describe("#columnOrientedData", function() {
         context("when the host provides custom functions", function() {
             beforeEach(function() {
@@ -76,12 +108,10 @@ describe("chorus.Mixins.SQLResults", function() {
                 expect(val[1].values[0]).toBe(4);
                 expect(val[1].values[1]).toBe(3);
             })
-        })
+        });
 
         context("when the host does not provide custom functions", function() {
             beforeEach(function() {
-                HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults);
-
                 this.host = new HostModel({
                     columns: [
                         {

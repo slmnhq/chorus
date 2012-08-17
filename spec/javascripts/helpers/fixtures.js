@@ -444,64 +444,6 @@ beforeEach(function() {
             }, overrides)));
         },
 
-        task: function(overrides) {
-            var id = this.nextId().toString();
-            return new chorus.models.SqlExecutionTask(_.extend({
-                id: this.nextId().toString()
-            }, overrides));
-        },
-
-        taskWithResult: function(overrides) {
-            overrides = _.extend({ result: {
-                columns: [
-                    { name: "id" },
-                    { name: "city" },
-                    { name: "state" },
-                    { name: "zip" }
-                ],
-                rows: [
-                    { id: 1, city: "Oakland", state: "CA", zip: "94612" } ,
-                    { id: 2, city: "Arcata", state: "CA", zip: "95521" } ,
-                    { id: 3, city: "Lafayette", state: "IN", zip: "47909" }
-                ],
-                executeResult: "success",
-                hasResult: "true",
-                message: ""
-            }}, overrides);
-            return this.task(overrides);
-        },
-
-        taskWithoutResults: function(overrides) {
-            overrides = _.extend({ result: {
-                columns: [
-                    { name: "id" },
-                    { name: "city" },
-                    { name: "state" },
-                    { name: "zip" }
-                ],
-                rows: [
-                    { id: 1, city: "Oakland", state: "CA", zip: "94612" } ,
-                    { id: 2, city: "Arcata", state: "CA", zip: "95521" } ,
-                    { id: 3, city: "Lafayette", state: "IN", zip: "47909" }
-                ],
-                executeResult: "success",
-                hasResult: "false",
-                message: ""
-            }}, overrides);
-            return this.task(overrides);
-        },
-
-        taskWithErrors: function(overrides) {
-            var attributes = _.extend({ result: {
-                executeResult: "failed",
-                hasResult: "false",
-                message: 'ERROR: syntax error at or near "where 1=1; drop table users;"  Position: line 1 column 1'
-            }}, overrides);
-            var task = this.task(attributes);
-            task.serverErrors = task.result;
-            return task;
-        },
-
         notificationJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({

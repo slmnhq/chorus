@@ -44,7 +44,7 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                 describe("when the data preview succeeds", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.dialog.resultsConsole.model, fixtures.taskWithResult())
+                        this.server.completeSaveFor(this.dialog.resultsConsole.model, rspecFixtures.dataPreviewTaskResults())
                     });
 
                     it("shows the result table", function() {

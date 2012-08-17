@@ -82,7 +82,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.showResultTable(task);
         this.hideSpinner();
 
-        if (task.get("result") && task.get("result").hasResult == "false") {
+        if (!task.hasResults()) {
             this.collapseTable();
         }
     },
@@ -109,7 +109,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     cancelExecution: function(event) {
-        this.cancelTimers()
+        this.cancelTimers();
         event && event.preventDefault();
         this.model && this.model.cancel();
         this.clickClose();
@@ -218,7 +218,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
             enableResize: this.options.enableResize,
-            enableExpander: this.options.enableExpander
+            enableExpander: this.options.enableExpander,
+            hasResults: this.model && this.model.hasResults()
         }
     }
 });

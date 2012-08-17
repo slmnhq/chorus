@@ -3,7 +3,7 @@ describe("chorus.views.visualizations.Timeseries", function() {
         rightX  = chorus.svgHelpers.rightX;
 
     beforeEach(function() {
-        this.task = new chorus.models.SqlExecutionTask({
+        this.task = new chorus.models.WorkfileExecutionTask({
             objectName: "desk_surface_quality",
             yAxis: "gum_mass",
             xAxis: "observation_date",

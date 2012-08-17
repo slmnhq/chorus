@@ -45,6 +45,19 @@ describe VisualizationsController do
           response.should be_success
         end
 
+        generate_fixture "frequencyTaskWithErrors.json" do
+          dataset = Dataset.find_by_name!("base_table1")
+
+          post :create, :dataset_id => dataset.id, :chart_task => {
+              :type => "frequency",
+              :check_id => "43",
+              :bins => 4,
+              :y_axis => "hippopotamus"
+          }
+
+          response.status.should == 422
+        end
+
         generate_fixture "heatmapTask.json" do
           dataset = Dataset.find_by_name!("heatmap_table")
 
@@ -104,7 +117,7 @@ describe VisualizationsController do
 
       it "returns an error if the query fails" do
         post :create, :chart_task => {:type => "histogram", :check_id => '43'}, :dataset_id => dataset.id
-        response.code.should == "400"
+        response.code.should == "422"
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
     end
