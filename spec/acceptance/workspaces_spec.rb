@@ -146,4 +146,20 @@ resource "Workspaces" do
       status.should == 201
     end
   end
+
+  post "/workspaces/:workspace_id/csv" do
+    parameter :workspace_id, "ID of the workspace"
+    parameter :file_name, "Name of the csv file to be imported"
+    parameter :contents, "The csv file being imported"
+
+    scope_parameters :csv, [:contents]
+
+    let(:file_name) { "test.csv"}
+    let(:workspace_id) { workspace.id }
+    let(:contents) { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
+
+    example_request "Upload a CSV file for import" do
+      status.should == 200
+    end
+  end
 end
