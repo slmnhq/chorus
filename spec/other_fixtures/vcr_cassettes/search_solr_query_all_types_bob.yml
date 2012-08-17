@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3AWorkspace+AND+-member_ids_im%3A1000002+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000002+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000015%29%29&q=bobsearch&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+database_name_texts+schema_name_texts+column_name_texts+parent_name_texts+body_texts&defType=dismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
+      string: fq=type%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3AWorkspace+AND+-member_ids_im%3A1000002+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000002+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000%29%29&q=bobsearch&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+database_name_texts+schema_name_texts+column_name_texts+parent_name_texts+body_texts&defType=dismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
     headers:
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>110,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts parent_name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
@@ -31,13 +31,13 @@ http_interactions:
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry)'',''-(type_name_s:Workspace
         AND -member_ids_im:1000002 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000002 AND -public_b:true)'',''-(type_name_s:Dataset AND
-        -instance_account_ids_im:(1000015))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>10,''ngroups''=>9,''groups''=>[{''groupValue''=>''User
+        -instance_account_ids_im:(1000000))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>10,''ngroups''=>9,''groups''=>[{''groupValue''=>''User
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3249659.5,''docs''=>[{''id''=>''User
         1000003'',''first_name_texts''=>[''BobSearch''],''username_texts''=>[''bob''],''email_texts''=>[''bob@example.com''],''last_name_texts''=>[''Brockovich''],''score''=>3249659.5}]}},{''groupValue''=>''Dataset
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1510669.2,''docs''=>[{''id''=>''GpdbTable
         1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>1510669.2}]}},{''groupValue''=>''HdfsEntry
-        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3173.4956,''docs''=>[{''id''=>''HdfsEntry
-        1000005'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''bobsearch''],''score''=>3173.4956}]}},{''groupValue''=>''Workspace
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3173.4956,''docs''=>[{''id''=>''HdfsEntry
+        1000002'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''bobsearch''],''score''=>3173.4956}]}},{''groupValue''=>''Workspace
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1923.0028,''docs''=>[{''id''=>''Workspace
         1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1923.0028}]}},{''groupValue''=>''Workfile
         1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1923.0028,''docs''=>[{''id''=>''Workfile
@@ -55,7 +55,7 @@ http_interactions:
         bobsearch, ha ha''],''score''=>824.14404}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workspace'',3,''Workfile'',2,''Dataset'',1,''HdfsEntry'',1,''Instance'',1,''User'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000003''=>{''first_name_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''GpdbTable
         1000003''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_shared_table''],''column_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''HdfsEntry
-        1000005''=>{''parent_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''Workspace
+        1000002''=>{''parent_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']},''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
         1000000''=>{''description_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
         1000003''=>{''description_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Instance
@@ -65,6 +65,6 @@ http_interactions:
         can see I guess'']},''Workspace 1000001''=>{''summary_texts''=>[''Not for
         @@@hl@@@bobsearch@@@endhl@@@, ha ha'']}}}'
     http_version:
-  recorded_at: Fri, 17 Aug 2012 18:12:01 GMT
+  recorded_at: Fri, 17 Aug 2012 18:46:38 GMT
 recorded_with: VCR 2.1.1
 ...
