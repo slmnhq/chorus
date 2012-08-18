@@ -41,6 +41,12 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     });
 
+    it("sends schemaId when doing a destroy", function() {
+        this.model.cancel();
+        var params = this.server.lastDestroy().params();
+        expect(params.schema_id).toBe('7');
+    });
+
     describe("SQLResults support functions", function() {
         beforeEach(function() {
             this.columns = [ { name:"id" }, { name:"title"} ];

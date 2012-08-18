@@ -22,7 +22,10 @@ chorus.models.Task = chorus.models.Base.include(
             success: _.bind(function() {
                 this.trigger("canceled");
                 delete this._cancelInProgress;
-            }, this)
+            }, this),
+            data: this.underscoreKeys(this.destroyParams())
         });
-    }
+    },
+
+    destroyParams: $.noop
 });

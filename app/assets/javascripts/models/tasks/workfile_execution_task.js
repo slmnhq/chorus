@@ -32,5 +32,9 @@ chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
                 return memo;
             }, {});
         });
+    },
+
+    destroyParams: function() {
+        return {schemaId: this.get('schemaId')};
     }
 });

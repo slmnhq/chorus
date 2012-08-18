@@ -75,6 +75,17 @@ describe("chorus.models.Task", function() {
                 expect(this.server.requests.length).toBe(1);
             });
         }
+
+        it("respects sends destroyParams when set", function() {
+            task = new TaskSubclass();
+            task.destroyParams = function() {
+                return {fooSomething: 'bar'};
+            };
+            task.cancel();
+
+            params = this.server.lastDestroy().params();
+            expect(params.foo_something).toBe("bar");
+        });
     });
 
     it("won't cancel after the data has loaded", function() {

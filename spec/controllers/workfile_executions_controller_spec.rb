@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe WorkfileExecutionsController do
-  describe "#create" do
-    let(:workspace_with_sandbox) { workspaces(:bob_public) }
-    let(:workspace_member) { users(:carly) }
-    let(:workspace_non_member) { users(:alice) }
-    let(:workfile) { workfiles(:bob_public) }
-    let(:sql) { "Select something from somewhere" }
-    let(:check_id) { '12345' }
+  let(:workspace_with_sandbox) { workspaces(:bob_public) }
+  let(:workspace_member) { users(:carly) }
+  let(:workspace_non_member) { users(:alice) }
+  let(:workfile) { workfiles(:bob_public) }
+  let(:sql) { "Select something from somewhere" }
+  let(:check_id) { '12345' }
 
+  describe "#create" do
     it_behaves_like "an action that requires authentication", :post, :create
 
     context "as a member of the workspace" do
@@ -54,6 +54,16 @@ describe WorkfileExecutionsController do
         post :create, :id => workfile.id, :schema_id => schema.id, :sql => 'select hippopotamus', :check_id => check_id
         response.status.should == 422
       end
+    end
+  end
+
+  describe "#destroy" do
+    it "cancels the query for the given id" do
+      log_in workspace_member
+      sandbox = workspace_with_sandbox.sandbox
+      mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
+      delete :destroy, :id => check_id, :schema_id => sandbox.id
+      response.should be_success
     end
   end
 end
