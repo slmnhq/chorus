@@ -55,7 +55,7 @@ describe VisualizationsController do
               :y_axis => "hippopotamus"
           }
 
-          response.status.should == 422
+          response.code.should == "422"
         end
 
         generate_fixture "heatmapTask.json" do

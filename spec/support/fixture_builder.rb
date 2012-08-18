@@ -107,7 +107,7 @@ FixtureBuilder.configure do |fbuilder|
     workspaces = []
     workspaces << alice_public_workspace = alice.owned_workspaces.create!(:name => "Alice Public", :summary => 'BobSearch can see I guess')
     workspaces << alice_private_workspace = alice.owned_workspaces.create!(:name => "Alice Private", :summary => "Not for bobsearch, ha ha", :public => false)
-    workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :archived_at => '2010-01-01', :archiver => alice}, :without_protection => true)
+    workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => alice}, :without_protection => true)
     workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
     workspaces.each do |workspace|
@@ -133,6 +133,8 @@ FixtureBuilder.configure do |fbuilder|
       bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
       bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
+      archived_workfile = Workfile.create!({:file_name => "archived", :owner => alice, :workspace => alice_archived_workspace}, :without_protection => true)
+
       sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
       fbuilder.name :sql, sql_workfile
 
@@ -141,6 +143,7 @@ FixtureBuilder.configure do |fbuilder|
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => sql_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => archived_workfile, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
 
       fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
       fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)

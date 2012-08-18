@@ -1,5 +1,5 @@
 class WorkfileExecutionsController < ApplicationController
-  before_filter :find_schema
+  before_filter :find_schema, :verify_workspace
 
   def create
     account = @schema.account_for_user! current_user
@@ -16,5 +16,10 @@ class WorkfileExecutionsController < ApplicationController
 
   def find_schema
     @schema = GpdbSchema.find(params[:schema_id])
+  end
+
+  def verify_workspace
+    workfile = Workfile.find(params[:workfile_id] || params[:id])
+    present_errors({:fields => {:workspace => {:ARCHIVED => {}}}}, :status => :unprocessable_entity) if workfile.workspace.archived?
   end
 end

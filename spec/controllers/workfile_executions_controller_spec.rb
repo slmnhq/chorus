@@ -5,6 +5,8 @@ describe WorkfileExecutionsController do
   let(:workspace_member) { users(:carly) }
   let(:workspace_non_member) { users(:alice) }
   let(:workfile) { workfiles(:bob_public) }
+  let(:archived_workspace) { workspaces(:archived) }
+  let(:archived_workfile) { workfiles(:archived) }
   let(:sql) { "Select something from somewhere" }
   let(:check_id) { '12345' }
 
@@ -31,6 +33,17 @@ describe WorkfileExecutionsController do
       end
     end
 
+    context "with an archived workspace" do
+      it "responds with invalid record response" do
+        log_in workspace_member
+        post :create, :id => archived_workfile.id, :schema_id => archived_workspace.sandbox.id, :sql => sql, :check_id => check_id
+        response.code.should == "422"
+
+        decoded = JSON.parse(response.body)
+        decoded['errors']['fields']['workspace'].should have_key('ARCHIVED')
+      end
+    end
+
     describe "rspec fixtures", :database_integration do
       let(:schema) { GpdbSchema.find_by_name!('test_schema') }
       before do
@@ -52,7 +65,7 @@ describe WorkfileExecutionsController do
 
       generate_fixture "workfileExecutionError.json" do
         post :create, :id => workfile.id, :schema_id => schema.id, :sql => 'select hippopotamus', :check_id => check_id
-        response.status.should == 422
+        response.code.should == "422"
       end
     end
   end
@@ -62,8 +75,19 @@ describe WorkfileExecutionsController do
       log_in workspace_member
       sandbox = workspace_with_sandbox.sandbox
       mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
-      delete :destroy, :id => check_id, :schema_id => sandbox.id
+      delete :destroy, :workfile_id => workfile.id, :id => check_id, :schema_id => sandbox.id
       response.should be_success
+    end
+
+    context "with an archived workspace" do
+      it "responds with invalid record response" do
+        log_in workspace_member
+        delete :destroy, :workfile_id => archived_workfile.id, :id => check_id, :schema_id => archived_workspace.sandbox.id
+        response.code.should == "422"
+
+        decoded = JSON.parse(response.body)
+        decoded['errors']['fields']['workspace'].should have_key('ARCHIVED')
+      end
     end
   end
 end
