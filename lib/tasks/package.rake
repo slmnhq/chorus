@@ -44,7 +44,7 @@ packaging_tasks = Rake.application.top_level_tasks.select { |task| task.to_s.mat
 last_packaging_task = packaging_tasks.last
 Rake::Task[last_packaging_task].enhance do
   Rake::Task[:'package:cleanup'].invoke
-end
+end if last_packaging_task
 
 
 module PackageMaker
