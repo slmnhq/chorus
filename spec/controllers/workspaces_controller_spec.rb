@@ -217,6 +217,35 @@ describe WorkspacesController do
         workspace.archiver.should == owner
       end
 
+      context "with an archived workspace" do
+        it "makes the right event when making the workspace public" do
+          workspace = workspaces(:archived)
+          workspace.public = false
+          workspace.save!
+
+          parameters = {:id => workspace.id, :workspace => {:public => "true", :archived => workspace.archived?.to_s}}
+          lambda {
+            lambda {
+              lambda {
+                put :update, parameters
+              }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
+            }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
+          }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+        end
+
+        it "makes the right event when making the workspace private" do
+          workspace = workspaces(:archived)
+          parameters = {:id => workspace.id, :workspace => {:public => "false", :archived => workspace.archived?.to_s}}
+          lambda {
+            lambda {
+              lambda {
+                put :update, parameters
+              }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
+            }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
+          }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+        end
+      end
+
       it "allows unarchiving the workspace" do
         workspace = workspaces(:archived)
 
