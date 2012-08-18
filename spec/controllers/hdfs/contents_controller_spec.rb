@@ -17,8 +17,6 @@ describe Hdfs::ContentsController do
 
     it "shows file content" do
       get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
-
-      pending
       response.code.should == '200'
       decoded_response[:last_updated_stamp].should_not be_blank
       decoded_response[:contents].should include('a, b, c')
