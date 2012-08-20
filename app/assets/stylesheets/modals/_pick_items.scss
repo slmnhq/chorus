@@ -22,7 +22,11 @@
                 &.selected {
                     background-color: $picklist-selected-background-color;
 
-                    .name {
+                  a {
+                    color: white;
+                  }
+
+                  .name {
                         color: white;
                     }
                 }
