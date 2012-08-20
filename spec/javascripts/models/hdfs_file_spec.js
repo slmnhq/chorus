@@ -19,7 +19,7 @@ describe("chorus.models.HdfsFile", function() {
     });
 
     it("has the show url template", function(){
-        expect(this.file.showUrlTemplate()).toBe("hadoop_instances/1234/browseFile/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt")
+        expect(this.file.showUrlTemplate()).toBe("hadoop_instances/1234/browseFile/my/complicated/home/folder/my%20file.txt")
     });
 
     it("has the right entity type", function() {
