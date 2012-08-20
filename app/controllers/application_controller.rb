@@ -106,4 +106,17 @@ class ApplicationController < ActionController::Base
   def present_validation_errors(errors, options={})
     present_errors({:fields => ErrorPresenter.new(errors)}, options)
   end
+
+  def self.require_params(*params_to_check)
+    options = params_to_check.last.is_a?(Hash) ? params_to_check.pop : {}
+    before_filter options do
+      raise_unless_params(params_to_check, options)
+    end
+  end
+
+  def raise_unless_params(params_to_check, options)
+    params_to_check.each do |param|
+      raise ApiValidationError.new(options[:field_name] || param, :blank) if params[param].blank?
+    end
+  end
 end

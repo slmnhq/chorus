@@ -39,6 +39,14 @@ describe WorkfileExecutionsController do
       end
     end
 
+    it "returns an error if no check_id is given" do
+      log_in workspace_member
+      post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql
+      response.code.should == '422'
+      decoded = JSON.parse(response.body)
+      decoded['errors']['fields']['check_id'].should have_key('BLANK')
+    end
+
     context "with an archived workspace" do
       it "responds with invalid record response" do
         log_in workspace_member
@@ -77,17 +85,26 @@ describe WorkfileExecutionsController do
   end
 
   describe "#destroy" do
-    it "cancels the query for the given id" do
+    before do
       log_in workspace_member
+    end
+
+    it "cancels the query for the given id" do
       sandbox = workspace_with_sandbox.sandbox
       mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
       delete :destroy, :workfile_id => workfile.id, :id => check_id, :schema_id => sandbox.id
       response.should be_success
     end
 
+    it "returns an error if no check_id is given" do
+      delete :destroy, :workfile_id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id
+      response.code.should == '422'
+      decoded = JSON.parse(response.body)
+      decoded['errors']['fields']['check_id'].should have_key('BLANK')
+    end
+
     context "with an archived workspace" do
       it "responds with invalid record response" do
-        log_in workspace_member
         delete :destroy, :workfile_id => archived_workfile.id, :id => check_id, :schema_id => archived_workspace.sandbox.id
         response.code.should == "422"
 

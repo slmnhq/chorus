@@ -1,5 +1,7 @@
 class WorkfileExecutionsController < ApplicationController
   before_filter :find_schema, :find_workfile, :verify_workspace
+  require_params :check_id, :only => :create
+  require_params :id, :only => :destroy, :field_name => :check_id
 
   def create
     account = @schema.account_for_user! current_user

@@ -5,7 +5,7 @@ describe SqlExecutor do
 
   describe "#preview_dataset", :database_integration => true do
     let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
     let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
 
     before do
@@ -16,41 +16,41 @@ describe SqlExecutor do
 
     it "returns a SqlResult object with the correct rows" do
       subject.rows.should == [[
-          "(1,2)",
-          "1.2",
-          "{1,2,3}",
-          "1",
-          "1",
-          "10101",
-          "101",
-          "t",
-          "(2,2),(1,1)",
-          "xDEADBEEF",
-          "var char",
-          "char      ",
-          "192.168.100.128/25",
-          "<(1,2),3>",
-          "2011-01-01",
-          "10.01",
-          "192.168.100.128",
-          "10",
-          "3 days 04:05:06",
-          "[(1,1),(2,2)]",
-          "08:00:2b:01:02:03",
-          "$1,000.00",
-          "0.02000",
-          "[(1,1),(2,2),(3,3)]",
-          "(0,0)",
-          "((10,10),(20,20),(30,30))",
-          "1.1",
-          "1",
-          "2",
-          "text",
-          "04:05:06",
-          "01:02:03-08",
-          "1999-01-08 04:05:06",
-          "1999-01-08 04:05:06-08"
-      ]]
+                                  "(1,2)",
+                                  "1.2",
+                                  "{1,2,3}",
+                                  "1",
+                                  "1",
+                                  "10101",
+                                  "101",
+                                  "t",
+                                  "(2,2),(1,1)",
+                                  "xDEADBEEF",
+                                  "var char",
+                                  "char      ",
+                                  "192.168.100.128/25",
+                                  "<(1,2),3>",
+                                  "2011-01-01",
+                                  "10.01",
+                                  "192.168.100.128",
+                                  "10",
+                                  "3 days 04:05:06",
+                                  "[(1,1),(2,2)]",
+                                  "08:00:2b:01:02:03",
+                                  "$1,000.00",
+                                  "0.02000",
+                                  "[(1,1),(2,2),(3,3)]",
+                                  "(0,0)",
+                                  "((10,10),(20,20),(30,30))",
+                                  "1.1",
+                                  "1",
+                                  "2",
+                                  "text",
+                                  "04:05:06",
+                                  "01:02:03-08",
+                                  "1999-01-08 04:05:06",
+                                  "1999-01-08 04:05:06-08"
+                              ]]
     end
 
     it "gives each column the right 'name' attribute" do
