@@ -160,6 +160,11 @@
             return attrs;
         },
 
+        schemaId: function() {
+            var selectedSchema = this.getSelectedSchema();
+            return selectedSchema && selectedSchema.id;
+        },
+
         updateAllSectionsToReflectStates: function() {
             _.each(["instance", "database", "schema"], function(sectionName) {
                 this.updateSectionToReflectState(sectionName);

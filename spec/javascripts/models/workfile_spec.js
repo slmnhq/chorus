@@ -31,12 +31,12 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 this.model.clear();
                 delete this.model.loaded;
-            })
+            });
 
             it("returns undefined", function() {
                 expect(this.model.executionSchema()).toBeUndefined();
             });
-        })
+        });
 
         context("when the workfile's workspace has a sandbox", function() {
             beforeEach(function() {
@@ -46,7 +46,7 @@ describe("chorus.models.Workfile", function() {
                         database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
                     }
                 });
-            })
+            });
 
             context("when the workfile has never been executed", function() {
                 it("returns the sandbox's schema", function() {
@@ -58,61 +58,27 @@ describe("chorus.models.Workfile", function() {
                     expect(schema.get("id")).toBe(6);
                     expect(schema.get("name")).toBe('schema');
                 });
-            })
+            });
 
             context("when the workfile was last executed in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
-                    this.model.set({ executionInfo: {
-                        instanceId: '51',
-                        instanceName: "ned",
-                        databaseId: '52',
-                        databaseName: "rob",
-                        schemaId: '53',
-                        schemaName: "louis"
-                    }});
+                    this.schemaJson = rspecFixtures.schemaJson()['response']
+                    this.model.set({ executionSchema: this.schemaJson});
                 });
 
                 it("returns that schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.database().instance().id).toBe('51');
-                    expect(schema.database().instance().name()).toBe('ned');
-                    expect(schema.database().id).toBe('52');
-                    expect(schema.database().name()).toBe('rob');
-                    expect(schema.get("id")).toBe('53');
-                    expect(schema.get("name")).toBe('louis');
+                    expect(schema.get("id")).toBe(this.schemaJson.id);
+                    expect(schema.get("name")).toBe(this.schemaJson.name);
                 });
             });
-
-            context("when the workfile was last executed in a its sandbox schema", function() {
-                beforeEach(function() {
-                    this.model.set({ executionInfo: {
-                        databaseId: "4",
-                        databaseName: "db",
-                        instanceId: "5",
-                        instanceName: "instance",
-                        sandboxId: "10001",
-                        schemaId: "6",
-                        schemaName: "schema"
-                    }});
-                });
-
-                it("returns the sandbox's schema", function() {
-                    var schema = this.model.executionSchema();
-                    expect(schema.database().instance().id).toBe('5');
-                    expect(schema.database().instance().name()).toBe('instance');
-                    expect(schema.database().id).toBe('4');
-                    expect(schema.database().name()).toBe('db');
-                    expect(schema.get("id")).toBe('6');
-                    expect(schema.get("name")).toBe('schema');
-                });
-            })
-        })
+        });
 
         context("when the workfile's workspace does not have a sandbox", function() {
             it("returns undefined", function() {
                 expect(this.model.executionSchema()).toBeUndefined();
             });
-        })
+        });
     });
 
     describe("#sandbox", function() {

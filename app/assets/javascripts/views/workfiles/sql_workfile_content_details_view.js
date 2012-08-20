@@ -80,10 +80,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         var ctx = this._super("additionalContext");
 
         var executionSchema = this.model.executionSchema();
-        var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
+        var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema();
         return _.extend(ctx, {
             schemaName: executionSchema && executionSchema.canonicalName(),
-            executionSchemaIsSandbox: (executionSchema && sandboxSchema && executionSchema.isEqual(sandboxSchema))
+            executionSchemaIsSandbox: (executionSchema && sandboxSchema && executionSchema.isEqualToSchema(sandboxSchema))
         });
     },
 

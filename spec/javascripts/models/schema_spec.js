@@ -55,7 +55,7 @@ describe("chorus.models.Schema", function() {
         });
     });
 
-    describe("#isEqual", function() {
+    describe("#isEqualToSchema", function() {
         beforeEach(function() {
             this.model = rspecFixtures.schema({ id: '3' });
         });
@@ -63,11 +63,11 @@ describe("chorus.models.Schema", function() {
         it("checks that the ids of the schemas are equal", function() {
             var other = rspecFixtures.schema({ id: '3' });
 
-            expect(this.model.isEqual(other)).toBeTruthy();
+            expect(this.model.isEqualToSchema(other)).toBeTruthy();
 
             other.set({ id: '5' });
 
-            expect(this.model.isEqual(other)).toBeFalsy();
+            expect(this.model.isEqualToSchema(other)).toBeFalsy();
         });
     });
 

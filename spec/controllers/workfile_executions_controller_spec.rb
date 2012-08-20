@@ -27,6 +27,12 @@ describe WorkfileExecutionsController do
         post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id
       end
 
+      it "sets the exeuction schema of the workfile" do
+        workfile.execution_schema.should_not == workspace_with_sandbox.sandbox
+        post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id
+        workfile.reload.execution_schema.should == workspace_with_sandbox.sandbox
+      end
+
       it "uses the presenter for SqlResult" do
         mock_present { |model| model.should be_a SqlResult }
         post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id

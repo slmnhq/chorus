@@ -51,13 +51,13 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     },
 
     onClickSubmit:function () {
-        var options = {};
+        var options;
         if (this.$("#sandbox_schema").is(":checked")) {
             options = {
                 schemaId:this.workspace.sandbox().schema().id
             };
         } else {
-            options = this.schemaPicker.fieldValues();
+            options = { schemaId: this.schemaPicker.schemaId() };
         }
 
         chorus.PageEvents.broadcast("file:runInSchema", options);

@@ -4,6 +4,7 @@ class Workfile < ActiveRecord::Base
   attr_accessible :description, :file_name, :versions_attributes
 
   belongs_to :workspace
+  belongs_to :execution_schema, :class_name => 'GpdbSchema'
   belongs_to :owner, :class_name => 'User'
 
   has_many :versions, :class_name => 'WorkfileVersion'

@@ -96,11 +96,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             context("with a instance id, database id, and schema id", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, 'closeModal');
-                    spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
-                        instance: "4",
-                        database: "5",
-                        schema: "6"
-                    });
+                    spyOn(this.dialog.instanceMode, 'schemaId').andReturn("6");
                     this.dialog.instanceMode.trigger("change", "6");
                     this.dialog.$(".modal_controls button.submit").click();
                 });

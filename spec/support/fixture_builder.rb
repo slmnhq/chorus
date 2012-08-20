@@ -130,7 +130,7 @@ FixtureBuilder.configure do |fbuilder|
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       alice_private = Workfile.create!({:file_name => "Alice Private", :description => "BobSearch", :owner => alice, :workspace => alice_private_workspace}, :without_protection => true)
       alice_public = Workfile.create!({:file_name => "Alice Public", :description => "AliceSearch", :owner => alice, :workspace => alice_public_workspace}, :without_protection => true)
-      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
+      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace, :execution_schema => bob_schema}, :without_protection => true)
       bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
       archived_workfile = Workfile.create!({:file_name => "archived", :owner => alice, :workspace => alice_archived_workspace}, :without_protection => true)
@@ -156,15 +156,17 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     text_workfile = Workfile.create!({:file_name => "text.txt", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
-    fbuilder.name :text, text_workfile
     image_workfile = Workfile.create!({:file_name => "image.png", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
-    fbuilder.name :image, image_workfile
+    binary_workfile = Workfile.create!({:file_name => "binary.tar.gz", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
     File.open Rails.root + 'spec/fixtures/some.txt' do |file|
       WorkfileVersion.create!({:workfile => text_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
     end
     File.open Rails.root + 'spec/fixtures/small1.gif' do |file|
       WorkfileVersion.create!({:workfile => image_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+    end
+    File.open Rails.root + 'spec/fixtures/binary.tar.gz' do |file|
+      WorkfileVersion.create!({:workfile => binary_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
     end
 
     #CSV File

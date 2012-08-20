@@ -129,14 +129,10 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                                                  database: { id: 55, name: "database", instance: { id: 44, name: "instance" } } }
                     }));
 
-                    spyOn(this.dialog.schemaPicker, "fieldValues").andReturn({
-                        instance:5,
-                        database:6,
-                        schema:7
-                    })
+                    spyOn(this.dialog.schemaPicker, "schemaId").andReturn('7');
                     spyOn(this.dialog, "closeModal");
                     spyOnEvent(this.dialog, "run");
-                })
+                });
 
                 context("when 'within the workspace sandbox' is selected", function () {
                     beforeEach(function () {
@@ -166,53 +162,51 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                             expect(this.dialog.closeModal).toHaveBeenCalled();
                         })
                     })
-                })
+                });
 
                 context("when 'within another schema' is selected", function () {
                     context("and the schema picker is not ready", function () {
                         beforeEach(function () {
                             spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
                             this.dialog.$("input#another_schema").click();
-                        })
+                        });
 
                         it("disables the Run File button", function () {
                             expect(this.dialog.$("button.submit")).toBeDisabled();
-                        })
-                    })
+                        });
+                    });
 
                     context("and the schema picker is ready", function () {
                         beforeEach(function () {
                             spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                             spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
                             this.dialog.$("input#another_schema").click();
-                        })
+                        });
 
                         it("enables the Run File button", function () {
                             expect(this.dialog.$("button.submit")).toBeEnabled();
-                        })
+                        });
 
                         describe("and the Run File button is clicked", function () {
                             beforeEach(function () {
                                 this.dialog.$("button.submit").click();
-                            })
+                            });
 
                             it("broadcasts the file:runInSchema event", function () {
                                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runInSchema",
                                     {
-                                        instance:5,
-                                        database:6,
-                                        schema:7
+                                        schemaId: '7'
                                     }
                                 );
-                            })
+                            });
 
                             it("closes the dialog", function () {
                                 expect(this.dialog.closeModal).toHaveBeenCalled();
-                            })
-                        })
-                    })
-                })
-            })
+                            });
+                        });
+                    });
+                });
+            });
         });
 
         context("when the SchemaPicker triggers an error", function() {

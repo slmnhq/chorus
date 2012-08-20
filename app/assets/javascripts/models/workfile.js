@@ -58,20 +58,9 @@
         },
 
         executionSchema: function() {
-            var executionInfo = this.get("executionInfo");
-            if (executionInfo && executionInfo.schemaName) {
-                return new chorus.models.Schema({
-                    id: executionInfo.schemaId,
-                    name: executionInfo.schemaName,
-                    database: {
-                        id: executionInfo.databaseId,
-                        name: executionInfo.databaseName,
-                        instance: {
-                            id: executionInfo.instanceId,
-                            name: executionInfo.instanceName
-                        }
-                    }
-                });
+            var executionSchema = this.get("executionSchema");
+            if (executionSchema) {
+                return new chorus.models.Schema(executionSchema);
             } else {
                 return this.sandbox() && this.sandbox().schema();
             }

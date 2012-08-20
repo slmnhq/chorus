@@ -81,7 +81,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
-        var sandboxId  = this.activeForm.fieldValues().schema;
+        var sandboxId  = this.activeForm.schemaId();
         var summary = !!this.workspace.get("summary") ? this.workspace.get("summary") : ""; // Necessary because backend treats null as string "null"
         this.workspace.set({ summary: summary }, {silent: true})
 

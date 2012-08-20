@@ -3,7 +3,7 @@ class WorkfileVersionPresenter < Presenter
            :workfile, to: :model
 
   def to_hash
-    present(workfile).merge({
+    present(workfile, :include_execution_schema => true ).merge({
       :version_info => {
         :id => id,
         :version_num => version_num,

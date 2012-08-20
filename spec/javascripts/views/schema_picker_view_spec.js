@@ -516,8 +516,23 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 })
             });
-        })
+        });
 
+        describe("#schemaId", function() {
+            it("returns the selected schema id", function() {
+                this.view = new chorus.views.SchemaPicker({ allowCreate: true });
+                $('#jasmine_content').append(this.view.el);
+                this.view.render();
+                this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.greenplumInstance({ id: '4' }) ]);
+                this.view.$(".instance select").val("4").change();
+                this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
+                this.view.$(".database select").val("5").change();
+                this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
+                this.view.$(".schema select").val("6").change();
+
+                expect(this.view.schemaId()).toBe('6');
+            });
+        });
 
         describe("#fieldValues", function() {
             context("with an instance provided", function() {

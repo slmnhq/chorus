@@ -26,7 +26,7 @@ chorus.models.Schema = chorus.models.Base.extend({
         return [this.database().instance().name(), this.database().name(), this.name()].join(".");
     },
 
-    isEqual: function(other) {
+    isEqualToSchema: function(other) {
         return this.get("id") === other.get("id");
     }
 }, {
