@@ -374,54 +374,58 @@ describe Dataset::Query, :database_integration => true do
     let(:user) { account.owner }
 
     context "with correct input" do
-      let(:src_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
+      let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:sandbox) { schema } # For testing purposes, src schema = sandbox
       let(:options) {
         {
             "to_table" => "the_new_table",
-            "new_table" => true
+            "new_table" => "true",
+            "workspace_id" => "123"
         }
       }
 
       context "into a table in another db using gpfdist" do
         context "new table" do
           it "creates a correct gppipe" do
-            mock(QC.default_queue).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, true, nil)
-            src_table.gpfdist_import(options, sandbox, user, true)
+            mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+            source_table.gpfdist_import(options, user)
           end
         end
+
         context "existing table" do
           it "creates a correct gppipe" do
-            mock(QC.default_queue).enqueue.with("Gppipe.run_import", schema.id, 'base_table1', sandbox.id, 'the_new_table', user.id, false, nil)
-            src_table.gpfdist_import(options, sandbox, user, false)
+            options["new_table"] = 'false'
+            mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+            source_table.gpfdist_import(options, user)
           end
         end
       end
 
 
       context "into a table in the same db" do
-        let(:src_table) { datasets(:bobs_table) }
+        let(:source_table) { datasets(:bobs_table) }
         let(:schema) { gpdb_schemas(:bobs_schema) }
         let(:sandbox) { schema } # For testing purposes, src schema = sandbox
         let(:options) {
           {
               "to_table" => "the_new_table",
               "sample_count" => 50,
-              "new_table" => true
+              "new_table" => "true",
+              "workspace_id" => "123"
           }
         }
         context "importing into new table" do
           it "creates a correct gp table copier" do
-            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, true, 50)
-            src_table.import(options, sandbox, user, true)
+            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+            source_table.import(options, user)
           end
         end
 
         context "into a existing table" do
           it "creates a correct gp table copier" do
-            options["new_table"] = false;
-            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", schema.id, 'bobs_table', sandbox.id, 'the_new_table', user.id, false, 50)
-            src_table.import(options, sandbox, user, false)
+            options["new_table"] = 'false'
+            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+            source_table.import(options, user)
           end
         end
       end

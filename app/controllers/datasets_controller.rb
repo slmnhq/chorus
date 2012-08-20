@@ -24,18 +24,17 @@ class DatasetsController < GpdbController
       return
     end
 
-    new_table_boolean = to_bool(params[:dataset_import]["new_table"])
-    dest_table = Dataset.find_by_name(params[:dataset_import]["to_table"])
-    if !new_table_boolean
+    dest_table = workspace.sandbox.datasets.find_by_name(params[:dataset_import]["to_table"])
+    unless params[:dataset_import][:new_table] == 'true'
       raise ApiValidationError.new(:base, :table_not_exists, { :table_name => params[:dataset_import][:to_table] }) unless dest_table
-      raise ApiValidationError.new(:base, :table_not_consistent, { :src_table_name => src_table.name, :dest_table_name => params[:dataset_import][:to_table] }) unless src_table.dataset_consistent?(dest_table)
+      raise ApiValidationError.new(:base, :table_not_consistent, { :source_table_name => src_table.name, :dest_table_name => params[:dataset_import][:to_table] }) unless src_table.dataset_consistent?(dest_table)
     end
 
     begin
       if workspace.sandbox.database == src_table.schema.database
-        src_table.import(params[:dataset_import], workspace, current_user, new_table_boolean)
+        src_table.import(params[:dataset_import], current_user)
       else
-        src_table.gpfdist_import(params[:dataset_import], workspace, current_user, new_table_boolean)
+        src_table.gpfdist_import(params[:dataset_import], current_user)
       end
 
       render :json => {}, :status => :created

@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Gppipe, :database_integration => true do
   before do
     refresh_chorus
+    create_source_table
+    refresh_chorus
     stub(Gppipe).gpfdist_url { Socket.gethostname }
   end
 
@@ -10,13 +12,14 @@ describe Gppipe, :database_integration => true do
   let(:instance_account1) { GpdbIntegration.real_gpdb_account }
   let(:user) { instance_account1.owner }
   let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
-  let(:schema) { database.schemas.find_by_name('test_schema') }
+  let(:schema_name) { 'test_schema' }
+  let(:schema) { database.schemas.find_by_name(schema_name) }
 
   let(:gpdb1) do
     ActiveRecord::Base.postgresql_connection(
         :host => instance_account1.instance.host,
         :port => instance_account1.instance.port,
-        :database => schema.database.name,
+        :database => database.name,
         :username => instance_account1.db_username,
         :password => instance_account1.db_password,
         :adapter => "jdbcpostgresql")
@@ -26,7 +29,7 @@ describe Gppipe, :database_integration => true do
     ActiveRecord::Base.postgresql_connection(
         :host => instance_account1.instance.host,
         :port => instance_account1.instance.port,
-        :database => schema.database.name,
+        :database => database.name,
         :username => instance_account1.db_username,
         :password => instance_account1.db_password,
         :adapter => "jdbcpostgresql")
@@ -40,36 +43,31 @@ describe Gppipe, :database_integration => true do
     gp_pipe.dst_conn.try(:disconnect!)
   end
 
-  let(:src_table) { "candy" }
-  let(:dst_table) { "dst_candy" }
+  let(:source_table) { "candy" }
+  let(:source_table_name) { "\"#{schema_name}\".\"#{source_table}\"" }
+  let(:destination_table_name) { "dst_candy" }
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { "" }
-  let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, true) }
+  let(:source_dataset) { schema.datasets.find_by_name(source_table) }
+  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true" }.merge(extra_options) }
+  let(:extra_options) { {} }
+  let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
+
+  let(:create_source_table) do
+    gpdb1.exec_query("drop table if exists #{source_table_name};")
+    gpdb1.exec_query("create table #{source_table_name}(#{table_def}) #{distrib_def};")
+  end
 
   it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
     Gppipe.protocol.should == 'gpfdist'
   end
 
-  it "has an empty limit clause for no limit passed" do
-    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, true)
-    pipe.limit_clause.should == ''
-  end
-
-  it "has a LIMIT 500 for row_limit = 500" do
-    pipe = Gppipe.new(schema, src_table, schema, dst_table, user, true, 500)
-    pipe.limit_clause.should == 'LIMIT 500'
-  end
-
   context "for a table with 0 columns" do
     let(:table_def) { '' }
-    before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def}) #{distrib_def};")
-    end
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition" do
@@ -83,14 +81,10 @@ describe Gppipe, :database_integration => true do
 
   context "for a table with 1 column and no primary key, distributed randomly" do
     let(:table_def) { '"2id" integer' }
-
-    before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def}) DISTRIBUTED RANDOMLY;")
-    end
+    let(:distrib_def) { "DISTRIBUTED RANDOMLY" }
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition" do
@@ -109,13 +103,8 @@ describe Gppipe, :database_integration => true do
   context "for a table with a composite primary key" do
     let(:table_def) { '"id" integer, "id2" integer, PRIMARY KEY("id", "id2")' }
 
-    before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
-    end
-
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition with keys" do
@@ -126,16 +115,14 @@ describe Gppipe, :database_integration => true do
 
   context "actually running the query" do
     before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
-      gpdb1.exec_query("insert into #{gp_pipe.src_fullname}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
-      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
+      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
     it "has the correct DDL for create table" do
@@ -145,34 +132,57 @@ describe Gppipe, :database_integration => true do
     context ".run_import" do
       context "into a new table" do
         it "creates a new pipe and runs it" do
-          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, true)
-          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+          gp_pipe.run
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
         end
 
-        it "drops newly created the table when there's an exception" do
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should raise_error
+        it "drops the newly created table when there's an exception" do
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should raise_error
           any_instance_of(Thread) do |thread|
             stub(thread).join { raise Exception }
           end
-          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, true)
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should raise_error
+          expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should raise_error
         end
       end
 
       context "into an existing table" do
+        let(:extra_options) { { "new_table" => "false" } }
+        before do
+          gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
+        end
         it "creates a new pipe and runs it" do
-          gpdb1.exec_query("create table #{gp_pipe.dst_fullname}(#{table_def});")
-          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
-          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+
+          gp_pipe.run
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
         end
 
-        it "does not drop newly created the table when there's an exception" do
-          gpdb1.exec_query("create table #{gp_pipe.dst_fullname}(#{table_def});")
+        it "does not drop the table when there's an exception" do
           any_instance_of(Thread) do |thread|
             stub(thread).join { raise Exception }
           end
-          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, false)
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")}.should_not raise_error
+          expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should_not raise_error
+        end
+
+        context "when truncate => true" do
+          let(:extra_options) { {"new_table" => "false", "truncate" => 'true'} }
+          it "should truncate" do
+            gpdb1.exec_query("insert into #{gp_pipe.destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
+            gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 1
+            gp_pipe.run
+            gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
+          end
+        end
+
+        context "when truncate => false" do
+          let(:extra_options) { {"new_table" => "false", "truncate" => 'false'} }
+          it "does not truncate" do
+            gpdb1.exec_query("insert into #{gp_pipe.destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
+            gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 1
+            gp_pipe.run
+            gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 3
+          end
         end
       end
     end
@@ -183,15 +193,15 @@ describe Gppipe, :database_integration => true do
       it "should move data from candy to dst_candy and have the correct primary key and distribution key" do
         gp_pipe.run
 
-        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
 
         primary_key_sql = <<-PRIMARYKEYSQL
           SELECT attname
           FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
           FROM  (SELECT conkey AS a
-          FROM   pg_constraint where conrelid = '#{schema.name}.#{dst_table}'::regclass and contype='p'
+          FROM   pg_constraint where conrelid = '#{schema.name}.#{destination_table_name}'::regclass and contype='p'
           ) x
-          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{dst_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{destination_table_name}'::regclass::oid AND a[rn] = attnum ORDER by rn;
         PRIMARYKEYSQL
 
         gpdb2.exec_query(primary_key_sql)[0]['attname'].should == 'id2'
@@ -202,9 +212,9 @@ describe Gppipe, :database_integration => true do
           SELECT attname
           FROM   (SELECT *, generate_series(1, array_upper(a, 1)) AS rn
           FROM  (SELECT attrnums AS a
-          FROM   gp_distribution_policy where localoid = '#{schema.name}.#{dst_table}'::regclass
+          FROM   gp_distribution_policy where localoid = '#{schema.name}.#{destination_table_name}'::regclass
           ) x
-          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{dst_table}'::regclass::oid AND a[rn] = attnum ORDER by rn;
+          ) y, pg_attribute WHERE attrelid = '#{schema.name}.#{destination_table_name}'::regclass::oid AND a[rn] = attnum ORDER by rn;
         DISTRIBUTION_KEY_SQL
 
         # defaults to the first one
@@ -214,18 +224,17 @@ describe Gppipe, :database_integration => true do
     end
 
     context "limiting the number of rows" do
-      let(:row_limit) { 1 }
-      let(:gp_pipe) { Gppipe.new(schema, src_table, schema, dst_table, user, true, row_limit) }
+      let(:extra_options) { {"sample_count" => 1} }
 
       it "should only have the first row" do
         gp_pipe.run
 
-        rows = gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}")
+        rows = gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")
         rows.length.should == 1
       end
 
       context "with a row limit of 0" do
-        let(:row_limit) { 0 }
+        let(:extra_options) { {"sample_count" => 0} }
 
         it "doesn't hang gpfdist, by treating the source like an empty table" do
           stub(Gppipe).timeout_seconds { 10 }
@@ -233,7 +242,7 @@ describe Gppipe, :database_integration => true do
             gp_pipe.run
           end
 
-          gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 0
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 0
         end
       end
     end
@@ -251,7 +260,7 @@ describe Gppipe, :database_integration => true do
 
     context "destination table already exists" do
       before do
-        gpdb2.exec_query("CREATE TABLE #{gp_pipe.dst_fullname}(#{table_def})")
+        gpdb2.exec_query("CREATE TABLE #{gp_pipe.destination_table_fullname}(#{table_def})")
       end
 
       it "cleans up on an exception (in this case the dst table exists already)" do
@@ -264,13 +273,13 @@ describe Gppipe, :database_integration => true do
     end
 
     context "tables have weird characters" do
-      let(:src_table) { "2candy" }
-      let(:dst_table) { "2dst_candy" }
+      let(:source_table) { "2candy" }
+      let(:destination_table_name) { "2dst_candy" }
 
       it "single quotes table and schema names if they have weird chars" do
         gp_pipe.run
 
-        gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 2
+        gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
       end
     end
 
@@ -286,26 +295,25 @@ describe Gppipe, :database_integration => true do
 
   context "when the source table is empty" do
     before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.src_fullname}(#{table_def});")
-      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("create table #{gp_pipe.source_table_fullname}(#{table_def});")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.src_fullname};")
-      gpdb2.exec_query("drop table if exists #{gp_pipe.dst_fullname};")
+      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
 
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do
       gp_pipe.run
 
-      gpdb2.exec_query("SELECT * FROM #{gp_pipe.dst_fullname}").length.should == 0
+      gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 0
     end
   end
 
   it "does not use special characters in the pipe names" do
-    gppipe = Gppipe.new(schema, "$%*@$", schema, "@@", user, true)
-    gppipe.pipe_name.should_not match(/[^A-Za-z0-9_]/)
+    gp_pipe.pipe_name.should match(/^pipe_\d+_\d+$/)
   end
 end

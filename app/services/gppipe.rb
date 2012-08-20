@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'timeout'
 
-class Gppipe<GpTableCopier
+class Gppipe < GpTableCopier
   ImportFailed = Class.new(StandardError)
 
   GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
@@ -25,7 +25,7 @@ class Gppipe<GpTableCopier
   def table_definition
     return @table_definition if @table_definition
     # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-    arr = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{src_table_name}' and table_schema='#{src_schema.name}' order by ordinal_position;")
+    arr = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{source_table.name}' and table_schema='#{source_schema.name}' order by ordinal_position;")
     @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
   end
 
@@ -43,31 +43,33 @@ class Gppipe<GpTableCopier
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
-      no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{src_fullname};")[0]['count'] == 0) || row_limit == 0
+      no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count'] == 0) || row_limit == 0
 
-      if create_new_table
-        dst_conn.exec_query("CREATE TABLE #{dst_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+      if create_new_table?
+        dst_conn.exec_query("CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+      elsif truncate?
+        dst_conn.exec_query("TRUNCATE TABLE #{destination_table_fullname}")
       end
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{src_schema.name}\".#{pipe_name}_w (#{table_definition})
+            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition})
                                  LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
-            src_conn.exec_query("INSERT INTO \"#{src_schema.name}\".#{pipe_name}_w (SELECT * FROM #{src_fullname} #{limit_clause});")
+            src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
           end
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{dst_schema.name}\".#{pipe_name}_r (#{table_definition})
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
                                LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
-          dst_conn.exec_query("INSERT INTO #{dst_fullname} (SELECT * FROM \"#{dst_schema.name}\".#{pipe_name}_r);")
+          dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
           thr.join
         rescue Exception => e
-          if create_new_table
-            dst_conn.exec_query("DROP TABLE IF EXISTS #{dst_fullname}")
+          if create_new_table?
+            dst_conn.exec_query("DROP TABLE IF EXISTS #{destination_table_fullname}")
           end
           raise ImportFailed, e.message
         ensure
-          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{src_schema.name}\".#{pipe_name}_w;")
-          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{dst_schema.name}\".#{pipe_name}_r;")
+          src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{source_schema.name}\".#{pipe_name}_w;")
+          dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{destination_schema.name}\".#{pipe_name}_r;")
           FileUtils.rm pipe_file if File.exists? pipe_file
         end
       end
@@ -89,22 +91,22 @@ class Gppipe<GpTableCopier
 
   def src_conn
     @raw_src_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => src_instance.host,
-        :port => src_instance.port,
-        :database => src_database_name,
-        :username => src_account.db_username,
-        :password => src_account.db_password,
+        :host => source_schema.instance.host,
+        :port => source_schema.instance.port,
+        :database => source_schema.database.name,
+        :username => source_account.db_username,
+        :password => source_account.db_password,
         :adapter => "jdbcpostgresql"
     )
   end
 
   def dst_conn
     @raw_dst_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => dst_instance.host,
-        :port => dst_instance.port,
-        :database => dst_database_name,
-        :username => dst_account.db_username,
-        :password => dst_account.db_password,
+        :host => destination_schema.instance.host,
+        :port => destination_schema.instance.port,
+        :database => destination_schema.database.name,
+        :username => destination_account.db_username,
+        :password => destination_account.db_password,
         :adapter => "jdbcpostgresql"
     )
   end
@@ -115,8 +117,8 @@ class Gppipe<GpTableCopier
     <<-PRIMARYKEYSQL
       SELECT attname
       FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
-      FROM   pg_constraint where conrelid = '#{src_schema.name}.#{src_table_name}'::regclass and contype='p'
-      ) y, pg_attribute WHERE attrelid = '#{src_schema.name}.#{src_table_name}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
+      FROM   pg_constraint where conrelid = '#{source_schema.name}.#{source_table.name}'::regclass and contype='p'
+      ) y, pg_attribute WHERE attrelid = '#{source_schema.name}.#{source_table.name}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
     PRIMARYKEYSQL
   end
 

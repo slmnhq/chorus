@@ -107,7 +107,8 @@ describe DatasetsController do
               "use_limit_rows" => "false",
               "sample_count" => "0",
               "workspace_id" => active_workspace.id.to_s,
-              "new_table" => "true"
+              "new_table" => "true",
+              "truncate" => 'false'
       }
     }
 
@@ -124,7 +125,7 @@ describe DatasetsController do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        any_instance_of(Dataset) { |c| mock(c).import(options, active_workspace, account.owner, true) }
+        any_instance_of(Dataset) { |c| mock(c).import(options, account.owner ) }
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
@@ -146,7 +147,7 @@ describe DatasetsController do
       let(:active_workspace) { workspaces(:bob_public) }
 
       before(:each) do
-        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace, account.owner, true) }
+        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, account.owner) }
       end
 
       it "should return successfully for active workspaces" do
