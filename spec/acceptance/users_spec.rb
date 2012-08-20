@@ -113,4 +113,14 @@ resource "Users" do
       status.should == 200
     end
   end
+
+  get "/users/:user_id/image" do
+    let(:user_id) { users(:bob).to_param }
+
+    parameter :style, "Size of image ( original, icon )"
+
+    example_request "Show user's profile image" do
+      status.should == 200
+    end
+  end
 end

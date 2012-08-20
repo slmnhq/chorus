@@ -77,4 +77,16 @@ resource "Workfile versions" do
       status.should == 200
     end
   end
+
+  get "/workfile_versions/:workfile_version_id/image" do
+    parameter :workfile_version_id, "Workfile version id"
+    required_parameters :workfile_version_id
+
+    let!(:workfile_version_id) { workfile_version.to_param }
+    let!(:file) { test_file("small1.gif", "image/gif") }
+
+    example_request "Show a workfile version image" do
+      status.should == 200
+    end
+  end
 end
