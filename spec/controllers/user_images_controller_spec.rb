@@ -45,5 +45,12 @@ describe UserImagesController do
       response.code.should == "200"
       decoded_response.type == "image/gif"
     end
+
+    context "when no image exists for the user" do
+      it "responds with a 404" do
+        get :show, :user_id => users(:admin)
+        response.code.should == "404"
+      end
+    end
   end
 end
