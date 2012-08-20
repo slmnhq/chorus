@@ -53,32 +53,55 @@ describe AuroraProvider do
   describe ".provide!" do
     let(:instance) { instances(:aurora) }
     let(:database) { Object.new }
-    let(:attributes) { {:template => "small",
-                        :size => 1,
-                        :database_name => "database"} }
+    let(:attributes) { {"template" => "small",
+                        "size" => 1,
+                        "database_name" => "database"} }
 
-    before do
-      stub(database).public_ip { '123.321.12.34' }
-      any_instance_of(Aurora::Service) do |service|
-        mock(service).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
-        mock(service).create_database({
+    context "when provisioning succeeds" do
+      before do
+        stub(database).public_ip { '123.321.12.34' }
+        any_instance_of(Aurora::Service) do |service|
+          mock(service).find_template_by_name("small") { Aurora::DB_SIZE[:small] }
+          mock(service).create_database({
                                           :template => Aurora::DB_SIZE[:small],
                                           :database_name => 'database',
                                           :db_username => 'edcadmin',
                                           :db_password => 'secret',
                                           :size => 1
-                                      }) { database }
+                                        }) { database }
+        end
+      end
+
+      it "creates a database" do
+        AuroraProvider.provide!(instance.id, attributes)
+      end
+
+      it "updates the host of the instance with the correct ip address" do
+        AuroraProvider.provide!(instance.id, attributes)
+        instance.reload
+        instance.host.should == "123.321.12.34"
+      end
+
+      it "generates a PROVISIONING_SUCCESS event" do
+        AuroraProvider.provide!(instance.id, attributes)
+        event = Events::PROVISIONING_SUCCESS.find_by_actor_id(instance.owner)
+        event.greenplum_instance.should == instance
       end
     end
 
-    it "creates a database" do
-      AuroraProvider.provide!(instance.id, attributes)
-    end
+    context "when provisioning fails" do
+      before do
+        any_instance_of(Aurora::Service) do |service|
+          mock(service).create_database(anything) { raise StandardError.new("server cannot be reached") }
+        end
+      end
 
-    it "updates the host of the instance with the correct ip address" do
-      AuroraProvider.provide!(instance.id, attributes)
-      instance.reload
-      instance.host.should == "123.321.12.34"
+      it "generates a PROVISIONING_FAIL event" do
+        AuroraProvider.provide!(instance.id, attributes)
+        event = Events::PROVISIONING_FAIL.find_by_actor_id(instance.owner)
+        event.greenplum_instance.should == instance
+        event.additional_data['error_message'].should == "server cannot be reached"
+      end
     end
   end
 end

@@ -130,7 +130,7 @@ describe Gpdb::InstanceRegistrar do
         instance.port.should == 5432
         instance.host.should == "provisioning_ip"
         instance.maintenance_db.should == "postgres"
-        instance.provision_type.should == "aurora"
+        instance.provision_type.should == "create"
       end
     end
   end

@@ -82,13 +82,13 @@ describe Aurora::Service do
       before do
         mock(Aurora::JavaModules::AuroraService).get_instance(anything) { java_service_mock }
         mock(java_service_mock).get_template_for_chorus {
-          [Aurora::DB_SIZE[:small]]
+          [Aurora::DB_SIZE[:medium]]
         }
       end
 
       it "returns an array of templates" do
         templates = service.templates
-        templates.first.name.should == "small"
+        templates.first.name.should == "medium"
         templates.first.memory_size.should == 0
         templates.first.vcpu_number.should == 0
       end

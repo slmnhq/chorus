@@ -7,6 +7,7 @@ describe "Event types" do
 
   let(:actor) { FactoryGirl.create(:user) }
   let(:greenplum_instance) { FactoryGirl.create(:instance) }
+  let(:aurora_instance) { instances(:aurora) }
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
   let(:user) { FactoryGirl.create(:user) }
   let(:workfile) { FactoryGirl.create(:workfile) }
@@ -103,6 +104,40 @@ describe "Event types" do
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
     it_creates_activities_for { [actor, hadoop_instance] }
+    it_creates_a_global_activity
+  end
+
+  describe "PROVISIONING_SUCCESS" do
+    subject do
+      Events::PROVISIONING_SUCCESS.add(
+          :actor => actor,
+          :greenplum_instance => aurora_instance,
+      )
+    end
+
+    its(:action) { should == "PROVISIONING_SUCCESS" }
+    its(:greenplum_instance) { should == aurora_instance }
+    its(:targets) { should == {:greenplum_instance => aurora_instance} }
+
+    it_creates_activities_for { [actor, aurora_instance] }
+    it_creates_a_global_activity
+  end
+
+  describe "PROVISIONING_FAIL" do
+    subject do
+      Events::PROVISIONING_FAIL.add(
+          :actor => actor,
+          :greenplum_instance => aurora_instance,
+          :error_message => "provisioning has failed"
+      )
+    end
+
+    its(:action) { should == "PROVISIONING_FAIL" }
+    its(:greenplum_instance) { should == aurora_instance }
+    its(:targets) { should == {:greenplum_instance => aurora_instance} }
+    its(:additional_data) { should == {'error_message' => "provisioning has failed"} }
+
+    it_creates_activities_for { [actor, aurora_instance] }
     it_creates_a_global_activity
   end
 

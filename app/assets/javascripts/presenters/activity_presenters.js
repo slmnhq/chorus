@@ -82,6 +82,15 @@
                 links: [ "actor", "greenplumInstance" ]
             },
 
+            PROVISIONING_SUCCESS: {
+                links: ["greenplumInstance"],
+                computed: ["instanceAddress"]
+            },
+
+            PROVISIONING_FAIL: {
+                computed: ["greenplumInstanceName"]
+            },
+
             HADOOP_INSTANCE_CREATED: {
                 links: [ "actor", "hadoopInstance" ]
             },
@@ -282,6 +291,14 @@
 
         modelLink: function(model) {
             return chorus.helpers.linkTo(model.showUrl(), model.name());
+        },
+
+        instanceAddress: function(self) {
+            return self.model.greenplumInstance().get("host")
+        },
+
+        greenplumInstanceName: function(self) {
+            return self.model.greenplumInstance().get("name")
         }
     };
 })();

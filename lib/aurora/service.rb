@@ -3,6 +3,7 @@ require_relative 'config'
 
 module Aurora
   InvalidService = Class.new(StandardError)
+  InvalidArguments = Class.new(StandardError)
 
   DB_SIZE = {
     :small =>  JavaModules::AuroraDBTemplate.small,
@@ -44,13 +45,13 @@ module Aurora
 
     def create_database(options)
       raise InvalidService unless @valid
-
+      raise InvalidArguments unless options[:database_name]
       @aurora_service.create_database(
-        options[:template],
-        options[:database_name],
-        options[:db_username],
-        options[:db_password],
-        options[:size].to_i
+          options[:template],
+          options[:database_name],
+          options[:db_username],
+          options[:db_password],
+          options[:size].to_i
       )
     end
   end

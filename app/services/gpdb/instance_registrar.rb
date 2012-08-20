@@ -9,7 +9,6 @@ module Gpdb
       instance.shared = config[:shared]
 
       account = owner.instance_accounts.build(config)
-
       ActiveRecord::Base.transaction do
         instance.save!
         account.instance = instance
@@ -48,7 +47,7 @@ module Gpdb
           :port => AuroraProvider::DEFAULT_PORT,
           :host => "provisioning_ip",
           :maintenance_db => AuroraProvider::MAINTENANCE_DB,
-          :provision_type => "aurora"
+          :provision_type => "create"
       }
     end
 

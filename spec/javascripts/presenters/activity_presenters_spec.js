@@ -164,6 +164,49 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("aurora instance provisioned", function() {
+        var greenplumInstance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.auroraInstanceProvisioned();
+            presenter = new chorus.presenters.Activity(model);
+            greenplumInstance = model.greenplumInstance();
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.PROVISIONING_SUCCESS.default", {
+                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
+                    instanceAddress: greenplumInstance.get("host")
+                }
+            );
+        });
+    });
+
+    context("aurora instance provisioning fails", function() {
+        var greenplumInstance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.auroraInstanceProvisioningFailed();
+            presenter = new chorus.presenters.Activity(model);
+            greenplumInstance = model.greenplumInstance();
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.PROVISIONING_FAIL.default", {
+                    greenplumInstanceName: greenplumInstance.name()
+                }
+            );
+        });
+    });
+
     context("hadoop instance created", function() {
         var hadoopInstance
 

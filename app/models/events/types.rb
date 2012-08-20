@@ -28,6 +28,17 @@ module Events
     has_activities :actor, :hadoop_instance, :global
   end
 
+  class PROVISIONING_SUCCESS < Base
+    has_targets :greenplum_instance
+    has_activities :actor,:greenplum_instance, :global
+  end
+
+  class PROVISIONING_FAIL < Base
+    has_targets :greenplum_instance
+    has_activities :actor, :greenplum_instance, :global
+    has_additional_data :error_message
+  end
+
   class WORKFILE_CREATED < Base
     has_targets :workfile, :workspace
     has_activities :actor, :workfile, :workspace

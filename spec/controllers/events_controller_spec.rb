@@ -121,6 +121,8 @@ describe EventsController do
 
     FIXTURE_FILES = {
         "greenplumInstanceCreated" => Events::GREENPLUM_INSTANCE_CREATED,
+        "auroraInstanceProvisioned" => Events::PROVISIONING_SUCCESS,
+        "auroraInstanceProvisioningFailed" => Events::PROVISIONING_FAIL,
         "hadoopInstanceCreated" => Events::HADOOP_INSTANCE_CREATED,
         "greenplumInstanceChangedOwner" => Events::GREENPLUM_INSTANCE_CHANGED_OWNER,
         "greenplumInstanceChangedName" => Events::GREENPLUM_INSTANCE_CHANGED_NAME,
