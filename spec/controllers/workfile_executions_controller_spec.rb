@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe WorkfileExecutionsController do
-  let(:workspace_with_sandbox) { workspaces(:bob_public) }
+  let(:workspace) { workspaces(:bob_public) }
   let(:workspace_member) { users(:carly) }
-  let(:workspace_non_member) { users(:alice) }
   let(:workfile) { workfiles(:bob_public) }
   let(:archived_workspace) { workspaces(:archived) }
   let(:archived_workfile) { workfiles(:archived) }
@@ -17,31 +16,37 @@ describe WorkfileExecutionsController do
       before do
         log_in workspace_member
 
-        sandbox = workspace_with_sandbox.sandbox
+        sandbox = workspace.sandbox
         mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => 500) do
           SqlResult.new
         end
       end
 
       it "executes the sql, with the check_id, limiting to 500 rows" do
-        post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id
+        post :create, :id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
       end
 
       it "sets the exeuction schema of the workfile" do
-        workfile.execution_schema.should_not == workspace_with_sandbox.sandbox
-        post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id
-        workfile.reload.execution_schema.should == workspace_with_sandbox.sandbox
+        workfile.execution_schema.should_not == workspace.sandbox
+        post :create, :id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
+        workfile.reload.execution_schema.should == workspace.sandbox
       end
 
       it "uses the presenter for SqlResult" do
         mock_present { |model| model.should be_a SqlResult }
-        post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql, :check_id => check_id
+        post :create, :id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
       end
+    end
+
+    it "uses authorization" do
+      log_in workspace_member
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, :id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
     end
 
     it "returns an error if no check_id is given" do
       log_in workspace_member
-      post :create, :id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id, :sql => sql
+      post :create, :id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql
       response.code.should == '422'
       decoded = JSON.parse(response.body)
       decoded['errors']['fields']['check_id'].should have_key('BLANK')
@@ -90,14 +95,14 @@ describe WorkfileExecutionsController do
     end
 
     it "cancels the query for the given id" do
-      sandbox = workspace_with_sandbox.sandbox
+      sandbox = workspace.sandbox
       mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
       delete :destroy, :workfile_id => workfile.id, :id => check_id, :schema_id => sandbox.id
       response.should be_success
     end
 
     it "returns an error if no check_id is given" do
-      delete :destroy, :workfile_id => workfile.id, :schema_id => workspace_with_sandbox.sandbox.id
+      delete :destroy, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id
       response.code.should == '422'
       decoded = JSON.parse(response.body)
       decoded['errors']['fields']['check_id'].should have_key('BLANK')

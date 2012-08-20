@@ -1,5 +1,5 @@
 class WorkfileExecutionsController < ApplicationController
-  before_filter :find_schema, :find_workfile, :verify_workspace
+  before_filter :find_schema, :find_workfile, :verify_workspace, :check_authorization
   require_params :check_id, :only => :create
   require_params :id, :only => :destroy, :field_name => :check_id
 
@@ -28,5 +28,9 @@ class WorkfileExecutionsController < ApplicationController
 
   def verify_workspace
     present_errors({:fields => {:workspace => {:ARCHIVED => {}}}}, :status => :unprocessable_entity) if @workfile.workspace.archived?
+  end
+
+  def check_authorization
+    authorize! :can_edit_sub_objects, @workfile.workspace
   end
 end
