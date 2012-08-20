@@ -41,7 +41,7 @@
         }
 
         label.db_username, input.db_username,
-        label[name=databasename], input[name=databasename],
+        label[name=database_name], input[name=database_name],
         .username, .group_list
         {
             width: $account-width;
@@ -53,7 +53,7 @@
         }
 
         label.db_password, input.db_password,
-        label[name=schemaname], input[name=schemaname],
+        label[name=schema_name], input[name=schema_name],
         .group_list
         {
             width: $fieldset-width - $account_width - $dialog-padding - 4px;

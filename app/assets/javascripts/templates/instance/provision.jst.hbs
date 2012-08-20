@@ -20,16 +20,16 @@
 <div class="instance_size_container"/>
 <br/>
 
-<label name="databaseName" class="required">{{t "instances.dialog.database_name"}}</label>
-<label name="schemaName" class="required">{{t "instances.dialog.schema_name"}}</label>
+<label name="database_name" class="required">{{t "instances.dialog.database_name"}}</label>
+<label name="schema_name" class="required">{{t "instances.dialog.schema_name"}}</label>
 
-<input type="text" name="databaseName" maxlength="63"/>
-<input type="text" name="schemaName" value="public" maxlength="63"/>
+<input type="text" name="database_name" maxlength="63"/>
+<input type="text" name="schema_name" value="public" maxlength="63"/>
 
 <span class="instructions">{{t "instances.dialog.provisioning_instructions"}}</span>
 
-<label name="dbUsername" class="required">{{t "instances.dialog.database_account"}}</label>
-<label name="dbPassword" class="required">{{t "instances.dialog.database_password"}}</label>
+<label name="dbUsername" class="required db_username">{{t "instances.dialog.database_account"}}</label>
+<label name="dbPassword" class="required db_password">{{t "instances.dialog.database_password"}}</label>
 
-<input type="text" name="dbUsername" maxlength="256"/>
-<input type="password" name="dbPassword" maxlength="256"/>
+<input type="text" name="dbUsername" class="db_username" maxlength="256"/>
+<input type="password" name="dbPassword" class="db_password" maxlength="256"/>

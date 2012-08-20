@@ -89,8 +89,8 @@ describe Aurora::Service do
       it "returns an array of templates" do
         templates = service.templates
         templates.first.name.should == "medium"
-        templates.first.memory_size.should == 0
-        templates.first.vcpu_number.should == 0
+        templates.first.memory_size.should == Aurora::DB_SIZE[:medium].getMemoryInMb()
+        templates.first.vcpu_number.should == Aurora::DB_SIZE[:medium].getvCPUNumber()
       end
     end
 
