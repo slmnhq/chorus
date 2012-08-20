@@ -163,7 +163,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
 
                     this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
-                    this.dialog.$(".existing_table input.dataset_picked").text("a");
+                    this.dialog.$(".existing_table a.dataset_picked").text("a");
 
                     this.dialog.$("input[name='limit_num_rows']").prop("checked", true).change();
                     this.dialog.$("input[name='sampleCount']").val(123);
@@ -200,6 +200,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
 
+                    this.dialog.$(".existing_table a.dataset_picked").text("a");
+
                     this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
 
                     this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
@@ -214,6 +216,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.activeScheduleView.$("select.hours").val("12");
                     this.dialog.activeScheduleView.$("select.minutes").val("09");
 
+                    this.dialog.onInputFieldChanged();
                     expect(this.dialog.$("button.submit")).toBeEnabled();
 
                     this.dialog.$("button.submit").click();
@@ -523,6 +526,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("without an existing import", function() {
             beforeEach(function() {
+                this.datasetImport.unset("toTable");
                 this.server.completeFetchFor(this.datasetImport);
                 this.dialog.render();
             });
@@ -583,6 +587,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
             });
 
+            it("should have the import button disabled by default", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
+            });
+
+            it("should enable the import button when a name is typed into the toTable input", function() {
+                this.dialog.$(".new_table input.name").val("newTable").trigger("keyup");
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
             context("when 'Import into Existing Table' is checked", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table input:radio").prop("checked", false);
@@ -592,6 +605,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should enable the select", function() {
                     expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
                     expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
+                });
+
+                it("should disable the submit button by default", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
                 });
 
                 context("when clicking the dataset picker link", function() {
@@ -626,6 +643,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
                         });
 
+                        it("should re-enable the submit button", function() {
+                            expect(this.dialog.$("button.submit")).toBeEnabled();
+                        });
+
                         context("and then 'import into new table is checked", function() {
                             beforeEach(function() {
                                 this.dialog.$(".existing_table input:radio").prop("checked", false);
@@ -639,13 +660,12 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     });
                 });
 
-                it("should enable the submit button", function() {
-                    expect(this.dialog.$("button.submit")).toBeEnabled();
-                });
-
                 context("and the form is submitted", function() {
                     beforeEach(function() {
                         this.dialog.$(".existing_table .truncate").prop("checked", true).change();
+                        this.dialog.$(".existing_table a.dataset_picked").text("a");
+                        this.dialog.onInputFieldChanged();
+
                         this.dialog.$("button.submit").click();
                     });
 

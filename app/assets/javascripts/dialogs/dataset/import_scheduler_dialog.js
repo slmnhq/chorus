@@ -15,6 +15,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         "change input:checkbox": "onCheckboxClicked",
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
+        "cut input:text": "onInputFieldChanged",
         "click button.submit": "beginImport",
         "click button.cancel": "onClickCancel",
         "click .existing_table a.dataset_picked": "launchDatasetPickerDialog"
@@ -78,11 +79,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     datasetsChosen: function(datasets){
             this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name());
-        },
+    },
 
     changeSelectedDataset: function(name) {
         this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
         this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
+        this.onInputFieldChanged();
     },
 
     toggleExistingTableLink: function(asLink) {
@@ -148,8 +150,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             this.activeScheduleView.enable();
         }
 
-        this.onInputFieldChanged();
         this.toggleExistingTableLink(!disableExisting);
+        this.onInputFieldChanged();
         if (disableExisting && !this.existingTableSelected()) {
             this.$(".existing_table .dataset_picked").addClass("hidden");
         }
@@ -165,8 +167,25 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         };
     },
 
-    onInputFieldChanged: function() {
+    onInputFieldChanged: function(e) {
         this.showErrors(this.model);
+        var changeType = e && e.type;
+        if(changeType === "paste" || changeType === "cut") {
+            //paste and cut events fire before they actually update the input field
+            _.defer(_.bind(this.updateSubmitButton, this));
+        } else {
+            this.updateSubmitButton();
+        }
+    },
+
+    updateSubmitButton: function() {
+        var import_into_existing = this.$('.existing_table input:radio').attr("checked");
+        if ((this.$('input.name').val().trim().length > 0 && !import_into_existing )
+            || (this.existingTableSelected() && import_into_existing)) {
+            this.$('button.submit').removeAttr('disabled');
+        } else {
+            this.$('button.submit').attr('disabled', 'disabled');
+        }
     },
 
     onCheckboxClicked: function(e) {
