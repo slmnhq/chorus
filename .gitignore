@@ -49,6 +49,7 @@ tags
 
 # Ignore solr data
 /solr/data
+/vendor/solr/logging-*.properties
 
 # Ignore jetpack artifacts
 /vendor/jetty

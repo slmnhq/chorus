@@ -1,4 +1,6 @@
 #!/bin/bash
+bin=`dirname "$0"`
+bin=`cd "$bin"; pwd`
 
 test "$RAILS_ENV" = "" && RAILS_ENV=production
 
@@ -9,12 +11,11 @@ STARTING_DIR=$(pwd)
 SCRIPT_DIR=$(dirname $0)
 cd $STARTING_DIR/$SCRIPT_DIR
 
-export RAILS_ENV=$RAILS_ENV
-export CHORUS_HOME=$(pwd)
+RAILS_ENV=$RAILS_ENV
 
-CHORUS_CURRENT=$CHORUS_HOME/current
-CHORUS_LOG=$CHORUS_HOME/current/log
-CHORUS_PID=$CHORUS_HOME/current/tmp/pids
+CHORUS_LOG=$CHORUS_HOME/log
+CHORUS_PID=$CHORUS_HOME/tmp/pids
+mkdir -p $CHORUS_PID
 CHORUS_NGINX=$CHORUS_HOME/nginx_dist
 
 
@@ -33,7 +34,7 @@ function pid_is_running () {
 function start_postgres () {
   echo "Starting postgres..."
   cd $CHORUS_HOME
-  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -o "-p$POSTGRES_PORT -h127.0.0.1" start > /dev/null 2>&1
+  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -o "-p$POSTGRES_PORT -h127.0.0.1" --bytea_output=escape start > /dev/null 2>&1
 }
 
 function start_worker () {
@@ -45,7 +46,7 @@ function start_worker () {
   if [ $worker_pid_present -eq 1 ]
   then
     echo "Starting worker..."
-    cd $CHORUS_CURRENT
+    cd $CHORUS_HOME
     bin/ruby script/rails runner script/start_worker.rb > $CHORUS_LOG/queue_classic.$RAILS_ENV.log 2>&1 &
     echo $! > $WORKER_PID_FILE
   else
@@ -63,7 +64,7 @@ function start_clock () {
   if [ $clock_pid_present -eq 1 ]
   then
     echo "Starting clock..."
-    cd $CHORUS_CURRENT
+    cd $CHORUS_HOME
       bin/ruby script/clock.rb > $CHORUS_LOG/clock.$RAILS_ENV.log 2>&1 &
       echo $! > $CLOCK_PID_FILE
   else
@@ -74,7 +75,7 @@ function start_clock () {
 function start_nginx () {
   test ! -e $CHORUS_NGINX && echo "nginx not found, skipping." && return 0
 
-  cd $CHORUS_CURRENT
+  cd $CHORUS_HOME
   bin/ruby packaging/generate_nginx_conf.rb
 
   cd $CHORUS_NGINX
@@ -98,31 +99,7 @@ function start_nginx () {
 }
 
 function start_solr () {
-  ps x | grep "solr.*start" | grep -v grep > /dev/null
-  solr_pid_present=$?
-
-  if [ $solr_pid_present -eq 1 ]
-  then
-    echo "Starting solr..."
-    cd $CHORUS_CURRENT
-      bin/rake services:solr:run > $CHORUS_LOG/solr.$RAILS_ENV.log 2>&1 &
-
-      ps e | grep "solr.*start" | grep -v grep > /dev/null
-      child_solr_pid=$?
-      attempts=0
-
-      while [ $child_solr_pid -eq 1 -a $attempts -lt $SOLR_ATTEMPTS ]
-      do
-        sleep 1
-        ps aux | grep "solr.*start.jar" | grep -v grep > /dev/null
-        child_solr_pid=$?
-        let "attempts += 1"
-      done
-
-      test $attempts -ge $SOLR_ATTEMPTS && echo "WARNING: Solr didn't start in approx. $SOLR_ATTEMPTS seconds."
-  else
-    echo "Solr is still running..."
-  fi
+  $bin/start-solr.sh
 }
 
 function start_webserver () {
@@ -132,7 +109,7 @@ function start_webserver () {
   if [ $jetty_pid_present -eq 1 ]
   then
     echo "Starting webserver..."
-    cd $CHORUS_CURRENT
+    cd $CHORUS_HOME
     vendor/jetty/jetty-init start >/dev/null 2>/dev/null &
   else
     echo "Webserver is still running..."
@@ -140,7 +117,7 @@ function start_webserver () {
 }
 
 function stop_worker () {
-  cd $CHORUS_CURRENT
+  cd $CHORUS_HOME
 
   if [ -e $WORKER_PID_FILE ]
   then
@@ -157,7 +134,7 @@ function stop_worker () {
 }
 
 function stop_clock () {
-  cd $CHORUS_CURRENT
+  cd $CHORUS_HOME
 
   if [ -e $CLOCK_PID_FILE ]
   then
@@ -170,13 +147,12 @@ function stop_clock () {
 }
 
 function stop_solr () {
-  echo "Stopping solr..."
-  ps aux | grep solr | grep -v grep | awk '{print $2}' | xargs kill
+  $bin/stop-solr.sh
 }
 
 function stop_webserver () {
   echo "Stopping webserver..."
-  $CHORUS_CURRENT/vendor/jetty/jetty-init stop
+  $CHORUS_HOME/vendor/jetty/jetty-init stop
 }
 
 function stop_nginx () {
