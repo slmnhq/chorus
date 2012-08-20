@@ -8,6 +8,8 @@ class ImagesController < ApplicationController
   end
 
   def show
+    raise ActiveRecord::RecordNotFound unless @entity.image && @entity.image_content_type
+
     style = params[:style] ? params[:style] : 'original'
     send_file @entity.image.path(style), :type => @entity.image_content_type
   end

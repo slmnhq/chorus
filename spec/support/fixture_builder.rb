@@ -29,6 +29,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::USER_ADDED.by(admin).add(:new_user => alice)
 
     bob = User.create!(:first_name => 'BobSearch', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
+    bob.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
+    bob.save!
+
     Events::USER_ADDED.by(admin).add(:new_user => bob)
 
     carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)

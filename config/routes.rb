@@ -74,7 +74,7 @@ Chorus::Application.routes.draw do
     resources :executions, :only => [:create, :destroy], :controller => 'workfile_executions'
   end
 
-  resources :workfile_versions, :only => [:show] do
+  resources :workfile_versions, :only => [] do
     resource :image, :only => [:show], :controller => 'workfile_version_images'
   end
 
