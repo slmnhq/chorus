@@ -17,31 +17,39 @@ class DatasetsController < GpdbController
   end
 
   def import
-    src_table = Dataset.find(params[:id])
     workspace = Workspace.find(params[:dataset_import]["workspace_id"])
     if workspace.archived?
       head 422
       return
     end
 
-    dest_table = workspace.sandbox.datasets.find_by_name(params[:dataset_import]["to_table"])
-    unless params[:dataset_import][:new_table] == 'true'
-      raise ApiValidationError.new(:base, :table_not_exists, { :table_name => params[:dataset_import][:to_table] }) unless dest_table
-      raise ApiValidationError.new(:base, :table_not_consistent, { :source_table_name => src_table.name, :dest_table_name => params[:dataset_import][:to_table] }) unless src_table.dataset_consistent?(dest_table)
+    create_new_table = params[:dataset_import]["new_table"].to_s == "true"
+
+    src_table = Dataset.find(params[:id])
+    dst_table_name = params[:dataset_import]["to_table"]
+    dst_table = Dataset.find_by_name(dst_table_name)
+
+    unless create_new_table
+      raise ApiValidationError.new(:base, :table_not_exists,
+                                   { :table_name => dst_table_name }) unless dst_table
+      raise ApiValidationError.new(:base, :table_not_consistent,
+                                   { :src_table_name => src_table.name,
+                                     :dest_table_name => dst_table_name }) unless src_table.dataset_consistent?(dst_table)
     end
 
-    begin
-      if workspace.sandbox.database == src_table.schema.database
-        src_table.import(params[:dataset_import], current_user)
-      else
-        src_table.gpfdist_import(params[:dataset_import], current_user)
-      end
+    event = Events::DATASET_IMPORT_CREATED.by(current_user).add(
+        :workspace => workspace,
+        :source_dataset => src_table,
+        :dataset => dst_table,
+        :destination_table => dst_table_name
+    )
 
-      render :json => {}, :status => :created
-    end
-  end
+    attributes = params[:dataset_import].dup.merge(
+      :dataset_import_created_event_id => event.id.to_s
+    )
 
-  def to_bool(str)
-    str == "false" ? false : true
+    src_table.import(workspace, current_user, attributes)
+
+    render :json => {}, :status => :created
   end
 end

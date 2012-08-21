@@ -2,6 +2,13 @@ require "spec_helper"
 require 'timecop'
 
 describe Workspace do
+  describe "associations" do
+    it { should have_many(:members) }
+    it { should have_many(:activities) }
+    it { should have_many(:events) }
+    it { should belong_to(:sandbox) }
+  end
+
   describe "create" do
     it "creates a membership for the owner" do
       owner = users(:alice)
@@ -152,12 +159,6 @@ describe Workspace do
   end
 
   it { should have_attached_file(:image) }
-
-  describe "associations" do
-    it { should have_many(:members) }
-    it { should have_many(:activities) }
-    it { should have_many(:events) }
-  end
 
   describe "permissions_for" do
     it "should have the correct permissions per user" do

@@ -35,7 +35,7 @@ describe Dataset do
   describe ".find_and_verify_in_source", :database_integration => true do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
-    let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table')}
+    let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table') }
     let(:dataset) { GpdbTable.find_by_name('base_table1') }
 
     before do
@@ -44,7 +44,7 @@ describe Dataset do
 
     context "when it exists in the source database" do
       it "should return the dataset" do
-          described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
+        described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
       end
     end
 
@@ -62,7 +62,7 @@ describe Dataset do
       end
 
       it "should raise ActiveRecord::RecordNotFound exception" do
-        expect { described_class.find_and_verify_in_source(rails_only_table.id, account.owner)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect { described_class.find_and_verify_in_source(rails_only_table.id, account.owner) }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       after do
@@ -318,7 +318,7 @@ end
 
 describe Dataset::Query, :database_integration => true do
   let(:account) { GpdbIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   before do
@@ -344,7 +344,7 @@ describe Dataset::Query, :database_integration => true do
 
     context "when 'public' schema does not exist" do
       let(:database_name) { "#{GpdbIntegration.database_name}_no_public_schema" }
-      let(:database) { GpdbDatabase.find_by_name_and_instance_id(database_name, GpdbIntegration.real_gpdb_instance)}
+      let(:database) { GpdbDatabase.find_by_name_and_instance_id(database_name, GpdbIntegration.real_gpdb_instance) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 
@@ -383,12 +383,13 @@ describe Dataset::Query, :database_integration => true do
 
     context "with correct input" do
       let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-      let(:sandbox) { schema } # For testing purposes, src schema = sandbox
+      let(:workspace) { workspaces(:bob_public) }
+      let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+      let(:dst_table_name) { "the_new_table" }
       let(:options) {
         {
             "to_table" => "the_new_table",
-            "new_table" => "true",
-            "workspace_id" => "123"
+            "new_table" => true
         }
       }
 
@@ -413,7 +414,8 @@ describe Dataset::Query, :database_integration => true do
       context "into a table in the same db" do
         let(:source_table) { datasets(:bobs_table) }
         let(:schema) { gpdb_schemas(:bobs_schema) }
-        let(:sandbox) { schema } # For testing purposes, src schema = sandbox
+        let(:workspace) { workspaces(:bob_public) }
+        let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
         let(:options) {
           {
               "to_table" => "the_new_table",

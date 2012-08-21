@@ -3,7 +3,9 @@ require 'spec_helper'
 describe GpdbSchema do
 
   describe "associations" do
-    it { should belong_to(:workspace) }
+    it { should belong_to(:database) }
+    it { should have_many(:datasets) }
+    it { should have_many(:workspaces) }
   end
 
   context ".refresh" do
@@ -151,11 +153,6 @@ describe GpdbSchema do
       first_function.definition.should == "SELECT 'HI!'"
       first_function.description.should == "awesome!"
     end
-  end
-
-  context "associations" do
-    it { should belong_to(:database) }
-    it { should have_many(:datasets) }
   end
 
   describe "callbacks" do

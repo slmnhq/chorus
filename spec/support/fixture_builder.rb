@@ -214,7 +214,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
     Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => other_table)
     Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => other_table, :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
-
+    Events::FileImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'bobs_table')
+    Events::DatasetImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'bobs_table')
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
     #NotesAttachment

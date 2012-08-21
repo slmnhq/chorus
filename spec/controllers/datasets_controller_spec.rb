@@ -98,18 +98,17 @@ describe DatasetsController do
     let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
-    let(:destination_table) { database.find_dataset_in_schema('the_new_table', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
+    let(:active_workspace) { workspaces(:bob_public) }
 
     let(:options) {
-      {
-              "to_table" => "the_new_table",
-              "use_limit_rows" => "false",
-              "sample_count" => "0",
-              "workspace_id" => active_workspace.id.to_s,
-              "new_table" => "true",
-              "truncate" => 'false'
-      }
+      HashWithIndifferentAccess.new(
+        :to_table => "the_new_table",
+        :use_limit_rows => "false",
+        :sample_count => "0",
+        :workspace_id => active_workspace.id.to_s,
+        :new_table => true
+      )
     }
 
     before(:each) do
@@ -121,11 +120,29 @@ describe DatasetsController do
       call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
     end
 
+    context "Into a new destination dataset" do
+      before do
+        any_instance_of(Dataset) do |d|
+          stub(d).dataset_consistent? { true }
+        end
+        expect_import(active_workspace, account.owner, options)
+      end
+
+      it "makes a DATASET_IMPORT_CREATED event without associated dataset" do
+        post :import, :id => src_table.to_param, :dataset_import => options
+        event = Events::DATASET_IMPORT_CREATED.first
+        event.actor.should == account.owner
+        event.dataset.should == nil
+        event.workspace.id.should == options[:workspace_id].to_i
+        event.destination_table.should == 'the_new_table'
+      end
+    end
+
     context "into a table in the same database and instance" do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        any_instance_of(Dataset) { |c| mock(c).import(options, account.owner ) }
+        expect_import(active_workspace, account.owner, options)
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
@@ -141,17 +158,16 @@ describe DatasetsController do
         GpdbTable.refresh(account, schema)
         response.code.should == "422"
       end
+
     end
 
     context "into a table in a different database" do
-      let(:active_workspace) { workspaces(:bob_public) }
-
       before(:each) do
-        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, account.owner) }
+        expect_import(active_workspace, account.owner, options)
       end
 
       it "should return successfully for active workspaces" do
-        post :import, :id => src_table.to_param, "dataset_import" => options
+        post :import, :id => src_table.to_param, :dataset_import => options
 
         GpdbTable.refresh(account, schema)
         response.code.should == "201"
@@ -159,24 +175,50 @@ describe DatasetsController do
       end
     end
 
-    context " existing table" do
-      let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
+    context "when destination table exists" do
       before do
-        options["new_table"] = "false"
+        options[:new_table] = false
       end
 
       it "throws an error if table does not exist" do
-        post :import, :id => src_table.to_param, "dataset_import" => options
+        post :import, :id => src_table.to_param, :dataset_import => options
         response.code.should == "422"
       end
 
       it "throws an error if table structure is not consistent" do
-        options["to_table"] = "master_table1"
-        post :import, :id => src_table.to_param, "dataset_import" => options
+        options[:to_table] = "master_table1"
+        post :import, :id => src_table.to_param, :dataset_import => options
         response.code.should == "422"
         decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
       end
+
+      context "when destination dataset is consistent with source" do
+        before do
+          options[:to_table] = "master_table1"
+          any_instance_of(Dataset) do |d|
+            stub(d).dataset_consistent? { true }
+          end
+          expect_import(active_workspace, account.owner, options)
+        end
+
+        it "makes a DATASET_IMPORT_CREATED event with associated dataset" do
+          post :import, :id => src_table.to_param, :dataset_import => options
+          event = Events::DATASET_IMPORT_CREATED.first
+          event.actor.should == account.owner
+          event.dataset.should == Dataset.find_by_name("master_table1")
+          event.workspace.id.should == options[:workspace_id].to_i
+          event.destination_table.should == "master_table1"
+        end
+      end
     end
 
+    def expect_import(workspace, owner, options)
+      any_instance_of(Dataset) do |d|
+        mock(d).import(workspace, owner, anything) do |workspace, owner, attributes|
+          attributes.except(:dataset_import_created_event_id).should == options.except(:dataset_import_created_event_id)
+          Events::DATASET_IMPORT_CREATED.find(attributes[:dataset_import_created_event_id]).actor == account.owner
+        end
+      end
+    end
   end
 end

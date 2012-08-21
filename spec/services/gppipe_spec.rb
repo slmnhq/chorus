@@ -64,6 +64,8 @@ describe Gppipe, :database_integration => true do
   let(:extra_options) { {} }
   let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
+  let(:sandbox) { workspace.sandbox }
+  let(:attributes) { {} }
 
   let(:create_source_table) do
     gpdb1.exec_query("drop table if exists #{source_table_name};")
@@ -141,7 +143,20 @@ describe Gppipe, :database_integration => true do
     end
 
     context ".run_import" do
+      before do
+        dataset_import_created_event_id = Events::DATASET_IMPORT_CREATED.by(user).add(
+            :workspace => workspace,
+            :dataset => nil,
+            :destination_table => dst_table
+        )
+        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
+      end
+
       context "into a new table" do
+        before do
+          attributes.merge!(:new_table => true)
+        end
+
         it "creates a new pipe and runs it" do
           gp_pipe.run
           gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
@@ -154,6 +169,16 @@ describe Gppipe, :database_integration => true do
           end
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
           lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should raise_error
+        end
+
+        it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
+          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, attributes)
+          event = Events::DATASET_IMPORT_CREATED.first
+          event.id = attributes[:dataset_import_created_event_id]
+          event.actor.should == user
+          event.dataset.name.should == dst_table
+          event.dataset.schema.should == sandbox
+          event.workspace.should == workspace
         end
       end
 

@@ -1,18 +1,24 @@
 class GpTableCopier
   ImportFailed = Class.new(StandardError)
 
-  def self.run_import(source_table_id, user_id, options)
-    instance = new(source_table_id, user_id, options)
+  def self.run_import(src_schema_id, src_table_name, dst_workspace_id, dst_table_name, user_id, new_table_boolean, row_limit = nil)
+    user = User.find(user_id)
+    src_schema = GpdbSchema.find(src_schema_id)
+    src_table = src_schema.datasets.find_by_name(src_table_name)
+    dst_workspace = Workspace.find(dst_workspace_id)
+    dst_schema = dst_workspace.sandbox
+    instance = self.new(src_schema, src_table_name, dst_schema, dst_table_name, user, new_table_boolean, row_limit)
     instance.run
 
-    Dataset.refresh(instance.destination_account, instance.destination_schema)
-    dst_table = instance.destination_schema.datasets.find_by_name(instance.destination_table_name)
-    create_success_event(dst_table, instance.source_table, instance.destination_workspace, User.find(user_id))
+    Dataset.refresh(instance.dst_account, dst_schema)
+    dst_table = dst_schema.datasets.find_by_name(dst_table_name)
+    create_success_event(dst_table, src_table, dst_workspace, user)
   rescue Exception => e
-    user = User.find_by_id(user_id)
-    src_table = Dataset.find_by_id(source_table_id)
-    dst_workspace = Workspace.find_by_id(options["workspace_id"])
-    create_failed_event(options["to_table"], src_table, dst_workspace, e.message, user)
+    user ||= User.find_by_id(user_id)
+    src_schema ||= GpdbSchema.find_by_id(src_schema_id)
+    src_table ||= src_schema && src_schema.datasets.find_by_name(src_table_name)
+    dst_workspace ||= Workspace.find_by_id(dst_workspace_id)
+    create_failed_event(dst_table_name, src_table, dst_workspace, e.message, user)
   end
 
   def initialize(source_table_id, user_id, options)
@@ -75,8 +81,13 @@ class GpTableCopier
     connection.execute(sql)
   end
 
-  def self.create_success_event(dst_table, source_table, workspace, user)
-    Events::DatasetImportSuccess.by(user).add(
+  def self.create_success_event(dst_table, source_table, workspace, user, import_created_event_id)
+    Events::DATASET_IMPORT_CREATED.find(import_created_event_id).tap do |event|
+      event.dataset = dst_table
+      event.save!
+    end
+
+    Events::DATASET_IMPORT_SUCCESS.by(user).add(
         :workspace => workspace,
         :dataset => dst_table,
         :source_dataset => source_table

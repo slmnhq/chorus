@@ -31,6 +31,7 @@ describe GpTableCopier, :database_integration => true do
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, options) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
+  let(:attributes) { {} }
 
   before do
     refresh_chorus
@@ -55,6 +56,15 @@ describe GpTableCopier, :database_integration => true do
     end
 
     context ".run_import" do
+      before do
+        dataset_import_created_event_id = Events::DATASET_IMPORT_CREATED.by(user).add(
+            :workspace => workspace,
+            :dataset => nil,
+            :destination_table => dst_table_name
+        )
+        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
+      end
+
       context "in new table" do
 
         it "creates a new table copier and runs it" do
@@ -83,7 +93,18 @@ describe GpTableCopier, :database_integration => true do
           event.source_dataset.should == nil
           event.destination_table.should == destination_table_name
         end
+
+        it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
+          GpTableCopier.run_import(schema.id, src_table_name, workspace.id, dst_table_name, user.id, attributes)
+          event = Events::DATASET_IMPORT_CREATED.first
+          event.id = attributes[:dataset_import_created_event_id]
+          event.actor.should == user
+          event.dataset.name.should == dst_table_name
+          event.dataset.schema.should == sandbox
+          event.workspace.should == workspace
+        end
       end
+
       context "in existing table" do
         let(:extra_options) { {"new_table" => "false" } }
         before do
@@ -211,6 +232,8 @@ describe GpTableCopier, :database_integration => true do
 
     context "when the sandbox and src schema are not the same" do
       let(:sandbox) { database.schemas.find_by_name('test_schema2') }
+      before { attributes.merge!(:new_table => true) }
+
       it "creates a new table in the correct schema" do
         copier.run
         GpdbTable.refresh(account, sandbox)
@@ -222,6 +245,15 @@ describe GpTableCopier, :database_integration => true do
 
       it "populates the activity properly" do
         GpTableCopier.run_import(source_dataset.id, user.id, options)
+        event = Events::DatasetImportSuccess.first
+        dataset_import_created_event_id = Events::DatasetImportCreated.by(user).add(
+            :workspace => workspace,
+            :dataset => nil,
+            :destination_table => dst_table_name
+        )
+        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
+
+        GpTableCopier.run_import(schema.id, src_table_name, workspace.id, dst_table_name, user.id, attributes)
         event = Events::DatasetImportSuccess.first
         event.actor.should == user
         event.dataset.name.should == destination_table_name

@@ -149,12 +149,13 @@ class Dataset < ActiveRecord::Base
     'Dataset'
   end
 
-  def import(options, user)
-      QC.enqueue('GpTableCopier.run_import', id, user.id, options)
-  end
-
-  def gpfdist_import(options, user)
-    QC.enqueue('Gppipe.run_import', id, user.id, options)
+  def import(workspace, user, attributes = {})
+    if workspace.sandbox.database != schema.database
+      copy_method = "Gppipe.run_import"
+    else
+      copy_method = "GpTableCopier.run_import"
+    end
+    QC.enqueue(copy_method, schema.id, name, workspace.id, attributes[:to_table], user.id, attributes)
   end
 
   def preview_sql

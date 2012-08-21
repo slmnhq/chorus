@@ -158,7 +158,6 @@ describe WorkspaceCsvController do
             event.import_type.should == 'file'
             event.destination_table.should == 'bobs_table'
           end
-
         end
       end
     end

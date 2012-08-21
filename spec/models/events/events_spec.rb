@@ -337,6 +337,26 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
+  describe "FileImportCreated" do
+    subject do
+      Events::FileImportCreated.add(
+          :actor => actor,
+          :dataset => dataset,
+          :file_name => 'import.csv',
+          :import_type => 'file',
+          :workspace => workspace,
+          :destination_table => dataset.name
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
+    its(:additional_data) { should == {'file_name' => "import.csv", 'import_type' => "file", 'destination_table' => dataset.name } }
+
+    it_creates_activities_for { [actor, workspace, dataset] }
+    it_does_not_create_a_global_activity
+  end
+
   describe "FILE_IMPORT_SUCCESS" do
     subject do
       Events::FileImportSuccess.add(
@@ -351,6 +371,27 @@ describe "Event types" do
     its(:dataset) { should == dataset }
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
     its(:additional_data) { should == {'file_name' => "import.csv", 'import_type' => "file"} }
+
+    it_creates_activities_for { [actor, workspace, dataset] }
+    it_does_not_create_a_global_activity
+  end
+
+  describe "DATASET_IMPORT_CREATED" do
+    let(:source_dataset) { datasets(:bobs_table) }
+    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    subject do
+      Events::DATASET_IMPORT_CREATED.add(
+          :actor => actor,
+          :dataset => dataset,
+          :source_dataset => source_dataset,
+          :workspace => workspace,
+          :destination_table => dataset.name
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
+    its(:additional_data) { should == { 'source_dataset_id' => source_dataset.id, 'destination_table' => dataset.name } }
 
     it_creates_activities_for { [actor, workspace, dataset] }
     it_does_not_create_a_global_activity

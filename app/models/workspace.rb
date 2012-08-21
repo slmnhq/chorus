@@ -14,7 +14,7 @@ class Workspace < ActiveRecord::Base
   has_many :workfiles
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
-  belongs_to :sandbox, :class_name => 'GpdbSchema'
+  belongs_to :sandbox, :class_name => 'GpdbSchema', :foreign_key => "sandbox_id"
 
   has_many :csv_files
 
