@@ -78,7 +78,7 @@
                 attrs: [ "newName", "oldName" ]
             },
 
-            GREENPLUM_INSTANCE_CREATED: {
+            GreenplumInstanceCreated: {
                 links: [ "actor", "greenplumInstance" ]
             },
 

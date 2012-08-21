@@ -16,15 +16,15 @@ describe "Event types" do
   let(:hdfs_file) { HdfsFileReference.create({hadoop_instance_id: hadoop_instance.id,
                                               path: "/any/path/should/work.csv"}) }
 
-  describe "GREENPLUM_INSTANCE_CREATED" do
+  describe "GreenplumInstanceCreated" do
     subject do
-      Events::GREENPLUM_INSTANCE_CREATED.add(
+      Events::GreenplumInstanceCreated.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
       )
     end
 
-    its(:action) { should == "GREENPLUM_INSTANCE_CREATED" }
+    its(:action) { should == "GreenplumInstanceCreated" }
     its(:greenplum_instance) { should == greenplum_instance }
     its(:targets) { should == {:greenplum_instance => greenplum_instance} }
 

@@ -170,7 +170,7 @@ FactoryGirl.define do
   factory :event, :class => Events::Base do
     actor
 
-    factory :greenplum_instance_created_event, :class => Events::GREENPLUM_INSTANCE_CREATED do
+    factory :greenplum_instance_created_event, :class => Events::GreenplumInstanceCreated do
       greenplum_instance
     end
 

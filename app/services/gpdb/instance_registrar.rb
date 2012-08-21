@@ -17,7 +17,7 @@ module Gpdb
         account.save!
       end
 
-      Events::GREENPLUM_INSTANCE_CREATED.by(owner).add(:greenplum_instance => instance)
+      Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => instance)
 
       instance
     end

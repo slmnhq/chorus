@@ -147,9 +147,9 @@ describe ActivityMigrator do
       end
 
       it "copies INSTANCE CREATED (greenplum) data fields from the legacy activity" do
-        Events::GREENPLUM_INSTANCE_CREATED.count.should == 3
+        Events::GreenplumInstanceCreated.count.should == 3
 
-        event = Events::GREENPLUM_INSTANCE_CREATED.find_by_legacy_id('10036')
+        event = Events::GreenplumInstanceCreated.find_by_legacy_id('10036')
 
         event.workspace.should be_blank
         event.actor.should be_instance_of(User)

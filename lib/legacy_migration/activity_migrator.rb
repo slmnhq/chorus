@@ -473,7 +473,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::GREENPLUM_INSTANCE_CREATED',
+        'Events::GreenplumInstanceCreated',
         instances.id,
         'Instance',
         streams.created_tx_stamp,

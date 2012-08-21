@@ -45,16 +45,16 @@ FixtureBuilder.configure do |fbuilder|
 
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
-    Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
+    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     aurora_instance = Instance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
-    Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => aurora_instance)
+    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
     Events::PROVISIONING_SUCCESS.by(admin).add(:greenplum_instance => aurora_instance)
     Events::PROVISIONING_FAIL.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
 
     purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
-    fbuilder.name :bob_creates_greenplum_instance, Events::GREENPLUM_INSTANCE_CREATED.by(bob).add(:greenplum_instance => bobs_instance)
+    fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)

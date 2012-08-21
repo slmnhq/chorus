@@ -120,7 +120,7 @@ describe EventsController do
     end
 
     FIXTURE_FILES = {
-        "greenplumInstanceCreated" => Events::GREENPLUM_INSTANCE_CREATED,
+        "greenplumInstanceCreated" => Events::GreenplumInstanceCreated,
         "auroraInstanceProvisioned" => Events::PROVISIONING_SUCCESS,
         "auroraInstanceProvisioningFailed" => Events::PROVISIONING_FAIL,
         "hadoopInstanceCreated" => Events::HADOOP_INSTANCE_CREATED,

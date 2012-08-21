@@ -13,7 +13,7 @@ describe EventPresenter, :type => :view do
         hash = subject.to_hash
         hash[:id].should == event.id
         hash[:timestamp].should == event.created_at
-        hash[:action].should == "GREENPLUM_INSTANCE_CREATED"
+        hash[:action].should == "GreenplumInstanceCreated"
         hash[:actor].should  == Presenter.present(event.actor, view)
       end
 

@@ -12,11 +12,11 @@ describe Events::Base do
       hdfs_file = HdfsFileReference.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
       workspace = FactoryGirl.create(:workspace)
 
-      Events::GREENPLUM_INSTANCE_CREATED.by(user1).add(:greenplum_instance => instance1)
+      Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => instance1)
       Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
       Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace)
 
-      event1 = Events::GREENPLUM_INSTANCE_CREATED.first
+      event1 = Events::GreenplumInstanceCreated.first
       event2 = Events::GREENPLUM_INSTANCE_CHANGED_OWNER.first
       event3 = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.first
 

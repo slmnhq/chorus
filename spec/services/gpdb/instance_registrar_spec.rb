@@ -98,9 +98,9 @@ describe Gpdb::InstanceRegistrar do
       instance[:instance_provider].should == "Greenplum Database"
     end
 
-    it "makes a GREENPLUM_INSTANCE_CREATED event" do
+    it "makes a GreenplumInstanceCreated event" do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-      event = Events::GREENPLUM_INSTANCE_CREATED.first
+      event = Events::GreenplumInstanceCreated.first
       event.greenplum_instance.should == instance
       event.actor.should == owner
     end

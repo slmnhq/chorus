@@ -156,7 +156,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CREATED.default", {
+                "activity.header.GreenplumInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
                 }
