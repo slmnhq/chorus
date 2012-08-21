@@ -123,7 +123,7 @@
                 links: [ "actor", "workspace" ]
             },
 
-            WORKFILE_CREATED: {
+            WorkfileCreated: {
                 links: [ "actor", "workfile", "workspace" ]
             },
 

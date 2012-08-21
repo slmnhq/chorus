@@ -150,10 +150,10 @@ FixtureBuilder.configure do |fbuilder|
       WorkfileVersion.create!({:workfile => sql_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => archived_workfile, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
 
-      fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
-      fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
-      fbuilder.name :bob_creates_private_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
-      fbuilder.name :alice_creates_public_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
+      fbuilder.name :alice_creates_private_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
+      fbuilder.name :bob_creates_public_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
+      fbuilder.name :bob_creates_private_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
+      fbuilder.name :alice_creates_public_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
 
       fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
       fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')

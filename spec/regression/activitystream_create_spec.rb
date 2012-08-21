@@ -102,7 +102,7 @@ describe " system generated activities " do
   end
 
 
-  it "System generates activity stream for WORKFILE_CREATED" do
+  it "System generates activity stream for WorkfileCreated" do
 
     create_valid_workspace
     create_valid_workfile(:name => "aswf")

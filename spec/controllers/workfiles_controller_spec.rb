@@ -196,9 +196,9 @@ describe WorkfilesController do
         workspace.reload.has_added_workfile.should be_true
       end
 
-      it "makes a WORKFILE_CREATED event" do
+      it "makes a WorkfileCreated event" do
         post :create, @params
-        event = Events::WORKFILE_CREATED.by(user).first
+        event = Events::WorkfileCreated.by(user).first
         event.workfile.description.should == @params[:workfile][:description]
         event.workspace.to_param.should == @params[:workspace_id]
       end

@@ -20,7 +20,7 @@ describe("chorus.presenters.Activity", function() {
                 it("returns the translation for the first style that matches", function() {
                     presenter.options.displayStyle = ["without_object", "without_workspace"];
                     expect(presenter.headerHtml().toString()).toContainTranslation(
-                        "activity.header.WORKFILE_CREATED.without_workspace", {
+                        "activity.header.WorkfileCreated.without_workspace", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             workfileLink: linkTo(workfile.showUrl(), workfile.name())
                         }
@@ -31,7 +31,7 @@ describe("chorus.presenters.Activity", function() {
                     "and the model has a valid workspace", function() {
                     presenter.options.displayStyle = null
                     expect(presenter.headerHtml().toString()).toContainTranslation(
-                        "activity.header.WORKFILE_CREATED.default", {
+                        "activity.header.WorkfileCreated.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             workfileLink: linkTo(workfile.showUrl(), workfile.name()),
                             workspaceLink: linkTo(workspace.showUrl(), workspace.name())
@@ -449,7 +449,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKFILE_CREATED.default", {
+                "activity.header.WorkfileCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workfileLink: linkTo(workfile.showUrl(), workfile.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())

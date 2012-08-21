@@ -438,7 +438,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::WORKFILE_CREATED',
+        'Events::WorkfileCreated',
         workfiles.id,
         'Workfile',
         streams.created_tx_stamp,
