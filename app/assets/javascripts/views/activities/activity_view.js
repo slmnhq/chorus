@@ -24,6 +24,9 @@ chorus.views.Activity = chorus.views.Base.extend({
         if (this.model.isUserGenerated()) {
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
         }
+        if (this.model.hasCommitMessage()) {
+            this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "commitMessage", attributeIsHtmlSafe: true});
+        }
         if (this.model.isFailure()) {
             this.failureContent = new chorus.views.ErrorDetails({model: this.model});
         }

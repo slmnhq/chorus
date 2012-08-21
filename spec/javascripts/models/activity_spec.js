@@ -258,6 +258,20 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#hasCommitMessage", function() {
+        it("returns true for activity where action is Workfile_upgrade_version and commit message is not empty", function() {
+            expect(rspecFixtures.activity.workfileUpgradedVersion().hasCommitMessage()).toBeTruthy();
+        });
+
+        it("returns false for other activities", function() {
+            expect(rspecFixtures.activity.membersAdded().hasCommitMessage()).toBeFalsy();
+        });
+
+        it("returns false for activity where action is Workfile_upgrade_version and commit message is empty", function() {
+            expect(rspecFixtures.activity.workfileUpgradedVersion({commitMessage: ""}).hasCommitMessage()).toBeFalsy();
+        });
+    });
+
     describe("#isFailure", function() {
         it("returns true for IMPORT_FAILED", function() {
             expect(rspecFixtures.activity.fileImportFailed().isFailure()).toBeTruthy();

@@ -204,6 +204,10 @@
             return this.get("type") === "SUB_COMMENT";
         },
 
+        hasCommitMessage: function() {
+            return this.get("action") === "WorkfileUpgradedVersion"  && this.get("commitMessage")
+        },
+
         isUserGenerated: function () {
             return this.isNote() || this.isInsight() || this.isSubComment();
         },

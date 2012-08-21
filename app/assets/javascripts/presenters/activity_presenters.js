@@ -34,6 +34,10 @@
             return this.model.isUserGenerated();
         },
 
+        hasCommitMessage: function() {
+            return this.model.hasCommitMessage();
+        },
+
         attachments: function() {
             return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
         },
@@ -180,7 +184,6 @@
 
             WorkfileUpgradedVersion: {
                 links: [ "actor", "workfile", "workspace" ],
-                attrs: ["commitMessage"],
                 computed: ["versionLink"]
             }
         },
