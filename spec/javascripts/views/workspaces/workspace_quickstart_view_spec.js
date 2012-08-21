@@ -171,6 +171,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         beforeEach(function() {
             link = this.view.$(".edit_workspace_settings a")
         });
+
         it("has a link", function() {
             expect(link).toContainTranslation("workspace.quickstart.edit_workspace_settings.link");
         });

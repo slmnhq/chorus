@@ -191,7 +191,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/image" do
-    let(:workspace_id) { workspaces(:bob_public).to_param }
+    let(:workspace_id) { workspaces(:bob_api).to_param }
 
     parameter :style, "Size of image ( original, icon )"
 

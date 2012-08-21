@@ -181,8 +181,7 @@ describe("chorus.views.DatasetList", function() {
             });
 
             it("renders the no datasets in the this instance message", function() {
-                expect($(this.view.el)).toContainTranslation("dataset.browse_more_instance", {linkText: "browse your instances"});
-                expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more_instance");
             });
         });
     });
