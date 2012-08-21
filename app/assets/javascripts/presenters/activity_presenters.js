@@ -73,7 +73,7 @@
                 attrs: [ "newName", "oldName" ]
             },
 
-            HADOOP_INSTANCE_CHANGED_NAME: {
+            HadoopInstanceChangedName: {
                 links: [ "actor", "hadoopInstance" ],
                 attrs: [ "newName", "oldName" ]
             },
@@ -82,12 +82,12 @@
                 links: [ "actor", "greenplumInstance" ]
             },
 
-            PROVISIONING_SUCCESS: {
+            ProvisioningSuccess: {
                 links: ["greenplumInstance"],
                 computed: ["instanceAddress"]
             },
 
-            PROVISIONING_FAIL: {
+            ProvisioningFail: {
                 computed: ["greenplumInstanceName"]
             },
 
@@ -107,19 +107,19 @@
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_MAKE_PUBLIC: {
+            WorkspaceMakePublic: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_MAKE_PRIVATE: {
+            WorkspaceMakePrivate: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_ARCHIVED: {
+            WorkspaceArchived: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_UNARCHIVED: {
+            WorkspaceUnarchived: {
                 links: [ "actor", "workspace" ]
             },
 

@@ -96,12 +96,12 @@ describe Hdfs::InstanceRegistrar do
           instance_attributes[:name] = "new_instance_name"
         end
 
-        it "generates a HADOOP_INSTANCE_CHANGED_NAME event" do
+        it "generates a HadoopInstanceChangedName event" do
           old_name = hadoop_instance.name
 
           updated_instance = Hdfs::InstanceRegistrar.update!(hadoop_instance.id, instance_attributes, user)
 
-          event = Events::HADOOP_INSTANCE_CHANGED_NAME.find_by_actor_id(user.id)
+          event = Events::HadoopInstanceChangedName.find_by_actor_id(user.id)
           event.hadoop_instance.should == updated_instance
           event.old_name.should == old_name
           event.new_name.should == "new_instance_name"
@@ -111,7 +111,7 @@ describe Hdfs::InstanceRegistrar do
       context "when the name is not being changed" do
         it "does not generate an event" do
           Hdfs::InstanceRegistrar.update!(hadoop_instance.id, instance_attributes, user)
-          Events::HADOOP_INSTANCE_CHANGED_NAME.find_by_actor_id(owner).should be_nil
+          Events::HadoopInstanceChangedName.find_by_actor_id(owner).should be_nil
         end
       end
     end

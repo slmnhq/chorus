@@ -106,33 +106,33 @@ describe ActivityMigrator do
       end
 
       it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
-        Events::WORKSPACE_ARCHIVED.count.should == 4
+        Events::WorkspaceArchived.count.should == 4
 
-        event = Events::WORKSPACE_ARCHIVED.find_by_legacy_id('10304')
+        event = Events::WorkspaceArchived.find_by_legacy_id('10304')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
       end
 
       it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
-        Events::WORKSPACE_UNARCHIVED.count.should == 1
+        Events::WorkspaceUnarchived.count.should == 1
 
-        event = Events::WORKSPACE_UNARCHIVED.find_by_legacy_id('10721')
+        event = Events::WorkspaceUnarchived.find_by_legacy_id('10721')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
       end
 
       it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
-        Events::WORKSPACE_MAKE_PUBLIC.count.should == 1
+        Events::WorkspaceMakePublic.count.should == 1
 
-        event = Events::WORKSPACE_MAKE_PUBLIC.find_by_legacy_id('10719')
+        event = Events::WorkspaceMakePublic.find_by_legacy_id('10719')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
       end
 
       it "copies WORKSPACE MAKE PRIVATE data fields from the legacy activity" do
-        Events::WORKSPACE_MAKE_PRIVATE.count.should == 1
+        Events::WorkspaceMakePrivate.count.should == 1
 
-        event = Events::WORKSPACE_MAKE_PRIVATE.find_by_legacy_id('10720')
+        event = Events::WorkspaceMakePrivate.find_by_legacy_id('10720')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
       end
@@ -187,9 +187,9 @@ describe ActivityMigrator do
       end
 
       it "copies PROVISIONING_FAIL from legacy activity" do
-        Events::PROVISIONING_FAIL.count.should == 1
+        Events::ProvisioningFail.count.should == 1
 
-        event = Events::PROVISIONING_FAIL.find_by_legacy_id('10723')
+        event = Events::ProvisioningFail.find_by_legacy_id('10723')
 
         event.workspace.should be_blank
         event.actor.should be_instance_of(User)
@@ -199,9 +199,9 @@ describe ActivityMigrator do
 
 
       it "copies PROVISIONING_SUCCESS from legacy activity" do
-        Events::PROVISIONING_SUCCESS.count.should == 1
+        Events::ProvisioningSuccess.count.should == 1
 
-        event = Events::PROVISIONING_SUCCESS.find_by_legacy_id('10722')
+        event = Events::ProvisioningSuccess.find_by_legacy_id('10722')
 
         event.workspace.should be_blank
         event.actor.should be_instance_of(User)

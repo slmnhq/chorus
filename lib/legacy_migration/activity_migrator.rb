@@ -324,7 +324,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::WORKSPACE_ARCHIVED',
+        'Events::WorkspaceArchived',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -352,7 +352,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::WORKSPACE_UNARCHIVED',
+        'Events::WorkspaceUnarchived',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -380,7 +380,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::WORKSPACE_MAKE_PUBLIC',
+        'Events::WorkspaceMakePublic',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -408,7 +408,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::WORKSPACE_MAKE_PRIVATE',
+        'Events::WorkspaceMakePrivate',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -625,7 +625,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::PROVISIONING_FAIL',
+        'Events::ProvisioningFail',
         instances.id,
         'Instance',
         streams.created_tx_stamp,
@@ -658,7 +658,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::PROVISIONING_SUCCESS',
+        'Events::ProvisioningSuccess',
         instances.id,
         'Instance',
         streams.created_tx_stamp,

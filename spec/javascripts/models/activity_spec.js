@@ -373,7 +373,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns false for non-notes", function() {
-            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            this.model.set({ type: "WorkspaceMakePublic" });
             expect(this.model.isNote()).toBeFalsy();
         });
     });
@@ -385,7 +385,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns false for non-insights", function() {
-            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            this.model.set({ type: "WorkspaceMakePublic" });
             expect(this.model.isInsight()).toBeFalsy();
         });
     });

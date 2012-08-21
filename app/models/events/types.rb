@@ -1,44 +1,6 @@
 require File.join(File.dirname(__FILE__), "base")
 
 module Events
-  class HADOOP_INSTANCE_CHANGED_NAME < Base
-    has_targets :hadoop_instance
-    has_additional_data :old_name, :new_name
-    has_activities :actor, :hadoop_instance, :global
-  end
-
-  class PROVISIONING_SUCCESS < Base
-    has_targets :greenplum_instance
-    has_activities :actor,:greenplum_instance, :global
-  end
-
-  class PROVISIONING_FAIL < Base
-    has_targets :greenplum_instance
-    has_activities :actor, :greenplum_instance, :global
-    has_additional_data :error_message
-  end
-
-
-  class WORKSPACE_MAKE_PUBLIC < Base
-    has_targets :workspace
-    has_activities :actor, :workspace, :global
-  end
-
-  class WORKSPACE_MAKE_PRIVATE < Base
-    has_targets :workspace
-    has_activities :actor, :workspace
-  end
-
-  class WORKSPACE_ARCHIVED < Base
-    has_targets :workspace
-    has_activities :actor, :workspace, :global
-  end
-
-  class WORKSPACE_UNARCHIVED < Base
-    has_targets :workspace
-    has_activities :actor, :workspace, :global
-  end
-
   class PUBLIC_WORKSPACE_CREATED < Base
     has_targets :workspace
     has_activities :actor, :workspace, :global

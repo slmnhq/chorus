@@ -86,9 +86,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "HADOOP_INSTANCE_CHANGED_NAME" do
+  describe "HadoopInstanceChangedName" do
     subject do
-      Events::HADOOP_INSTANCE_CHANGED_NAME.add(
+      Events::HadoopInstanceChangedName.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
           :old_name => "brent",
@@ -107,15 +107,15 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "PROVISIONING_SUCCESS" do
+  describe "ProvisioningSuccess" do
     subject do
-      Events::PROVISIONING_SUCCESS.add(
+      Events::ProvisioningSuccess.add(
           :actor => actor,
           :greenplum_instance => aurora_instance,
       )
     end
 
-    its(:action) { should == "PROVISIONING_SUCCESS" }
+    its(:action) { should == "ProvisioningSuccess" }
     its(:greenplum_instance) { should == aurora_instance }
     its(:targets) { should == {:greenplum_instance => aurora_instance} }
 
@@ -123,16 +123,16 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "PROVISIONING_FAIL" do
+  describe "ProvisioningFail" do
     subject do
-      Events::PROVISIONING_FAIL.add(
+      Events::ProvisioningFail.add(
           :actor => actor,
           :greenplum_instance => aurora_instance,
           :error_message => "provisioning has failed"
       )
     end
 
-    its(:action) { should == "PROVISIONING_FAIL" }
+    its(:action) { should == "ProvisioningFail" }
     its(:greenplum_instance) { should == aurora_instance }
     its(:targets) { should == {:greenplum_instance => aurora_instance} }
     its(:additional_data) { should == {'error_message' => "provisioning has failed"} }
@@ -183,13 +183,13 @@ describe "Event types" do
     end
   end
 
-  describe "WORKSPACE_MAKE_PUBLIC" do
+  describe "WorkspaceMakePublic" do
     before do
       workspace.public = false
     end
 
     subject do
-      Events::WORKSPACE_MAKE_PUBLIC.add(
+      Events::WorkspaceMakePublic.add(
         :actor => actor,
         :workspace => workspace
       )
@@ -203,13 +203,13 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_MAKE_PRIVATE" do
+  describe "WorkspaceMakePrivate" do
     before do
       workspace.public = true
     end
 
     subject do
-      Events::WORKSPACE_MAKE_PRIVATE.add(
+      Events::WorkspaceMakePrivate.add(
         :actor => actor,
         :workspace => workspace
       )
@@ -223,9 +223,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "WORKSPACE_ARCHIVED" do
+  describe "WorkspaceArchived" do
     subject do
-      Events::WORKSPACE_ARCHIVED.add(
+      Events::WorkspaceArchived.add(
           :actor => actor,
           :workspace => workspace
       )
@@ -239,9 +239,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_UNARCHIVED" do
+  describe "WorkspaceUnarchived" do
     subject do
-      Events::WORKSPACE_UNARCHIVED.add(
+      Events::WorkspaceUnarchived.add(
           :actor => actor,
           :workspace => workspace
       )

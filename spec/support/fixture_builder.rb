@@ -49,8 +49,8 @@ FixtureBuilder.configure do |fbuilder|
 
     aurora_instance = Instance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::PROVISIONING_SUCCESS.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::PROVISIONING_FAIL.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
+    Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
+    Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
 
     purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
@@ -128,8 +128,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_creates_public_workspace, Events::PUBLIC_WORKSPACE_CREATED.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
     fbuilder.name :bob_creates_private_workspace, Events::PRIVATE_WORKSPACE_CREATED.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
-    fbuilder.name :bob_makes_workspace_public, Events::WORKSPACE_MAKE_PUBLIC.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
-    fbuilder.name :bob_makes_workspace_private, Events::WORKSPACE_MAKE_PRIVATE.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
+    fbuilder.name :bob_makes_workspace_public, Events::WorkspaceMakePublic.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
+    fbuilder.name :bob_makes_workspace_private, Events::WorkspaceMakePrivate.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
     #HDFS File References
     hdfs_file_reference = HdfsFileReference.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql'}, :without_protection => true)
@@ -202,11 +202,11 @@ FixtureBuilder.configure do |fbuilder|
     #Events
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
     Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
-    Events::HADOOP_INSTANCE_CHANGED_NAME.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
+    Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
     Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
-    Events::WORKSPACE_ARCHIVED.by(admin).add(:workspace => bob_public_workspace)
-    Events::WORKSPACE_UNARCHIVED.by(admin).add(:workspace => bob_public_workspace)
+    Events::WorkspaceArchived.by(admin).add(:workspace => bob_public_workspace)
+    Events::WorkspaceUnarchived.by(admin).add(:workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
     Events::FILE_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FILE_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")

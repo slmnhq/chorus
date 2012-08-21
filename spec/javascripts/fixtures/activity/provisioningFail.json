@@ -10,6 +10,6 @@
             "id": "10230",
             "name": "aurora_wrong"
         },
-        "type": "PROVISIONING_FAIL"
+        "type": "ProvisioningFail"
     }
 }

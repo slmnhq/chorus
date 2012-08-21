@@ -189,7 +189,7 @@ FactoryGirl.define do
       old_name "old_instance_name"
     end
 
-    factory :hadoop_instance_changed_name_event, :class => Events::HADOOP_INSTANCE_CHANGED_NAME do
+    factory :hadoop_instance_changed_name_event, :class => Events::HadoopInstanceChangedName do
       hadoop_instance
       new_name "new_instance_name"
       old_name "old_instance_name"

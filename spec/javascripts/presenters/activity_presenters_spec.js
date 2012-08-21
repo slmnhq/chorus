@@ -178,7 +178,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.PROVISIONING_SUCCESS.default", {
+                "activity.header.ProvisioningSuccess.default", {
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     instanceAddress: greenplumInstance.get("host")
                 }
@@ -200,7 +200,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.PROVISIONING_FAIL.default", {
+                "activity.header.ProvisioningFail.default", {
                     greenplumInstanceName: greenplumInstance.name()
                 }
             );
@@ -297,7 +297,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CHANGED_NAME.default", {
+                "activity.header.HadoopInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(instance.showUrl(), instance.name()),
                     newName: "jane",
@@ -362,7 +362,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_MAKE_PUBLIC.default", {
+                "activity.header.WorkspaceMakePublic.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -383,7 +383,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_MAKE_PRIVATE.default", {
+                "activity.header.WorkspaceMakePrivate.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -404,7 +404,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ARCHIVED.default", {
+                "activity.header.WorkspaceArchived.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -426,7 +426,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_UNARCHIVED.default", {
+                "activity.header.WorkspaceUnarchived.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }

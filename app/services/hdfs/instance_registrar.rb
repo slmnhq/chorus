@@ -15,7 +15,7 @@ module Hdfs
       instance.attributes = connection_config.except(:version)
 
       if instance.name_changed?
-        Events::HADOOP_INSTANCE_CHANGED_NAME.by(updater).add(
+        Events::HadoopInstanceChangedName.by(updater).add(
           :hadoop_instance => instance,
           :old_name => instance.name_was,
           :new_name => instance.name
