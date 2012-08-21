@@ -12,6 +12,14 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
+  def head(status, options = {})
+    if (status == :ok && request.accepts.first == 'application/json')
+      render :text => "{}"
+    else
+      super
+    end
+  end
+
   private
 
   def render_not_valid(e)
@@ -117,14 +125,6 @@ class ApplicationController < ActionController::Base
   def raise_unless_params(params_to_check, options)
     params_to_check.each do |param|
       raise ApiValidationError.new(options[:field_name] || param, :blank) if params[param].blank?
-    end
-  end
-
-  def head(status, options = {})
-    if (status == :ok && request.accepts.first == 'application/json')
-      render :text => "{}"
-    else
-      super
     end
   end
 end
