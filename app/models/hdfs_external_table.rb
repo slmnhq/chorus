@@ -60,7 +60,7 @@ class HdfsExternalTable
     hdfs_file_ref = HdfsFileReference.find_or_create_by_path({ :hadoop_instance_id => parameters[:hadoop_instance_id].to_i,
                                                            :path => parameters[:path] })
 
-    Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(creator).add(
+    Events::WorkspaceAddHdfsAsExtTable.by(creator).add(
         :workspace => workspace,
         :dataset => dataset,
         :hdfs_file => hdfs_file_ref

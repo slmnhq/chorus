@@ -99,11 +99,11 @@
                 links: [ "actor", "greenplumInstance", "newOwner" ]
             },
 
-            PUBLIC_WORKSPACE_CREATED: {
+            PublicWorkspaceCreated: {
                 links: [ "actor", "workspace" ]
             },
 
-            PRIVATE_WORKSPACE_CREATED: {
+            PrivateWorkspaceCreated: {
                 links: [ "actor", "workspace" ]
             },
 
@@ -127,20 +127,20 @@
                 links: [ "actor", "workfile", "workspace" ]
             },
 
-            WORKSPACE_ADD_SANDBOX: {
+            WorkspaceAddSandbox: {
                 links: [ "actor", "workspace" ]
             },
 
-            SOURCE_TABLE_CREATED: {
+            SourceTableCreated: {
                 links: [ "actor", "dataset", "workspace" ],
                 computed: [ "datasetType" ]
             },
 
-            USER_ADDED: {
+            UserAdded: {
                 links: [ "newUser"]
             },
 
-            WORKSPACE_ADD_HDFS_AS_EXT_TABLE: {
+            WorkspaceAddHdfsAsExtTable: {
                 links: [ "actor", "hdfsEntry", "workspace", "dataset"]
             },
 
@@ -149,30 +149,30 @@
                 computed: [ "noteObjectType" ]
             },
 
-            FILE_IMPORT_SUCCESS: {
+            FileImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
                 computed: ["importSourceLink", "datasetType"]
             },
 
-            FILE_IMPORT_FAILED: {
+            FileImportFailed: {
                 links: ["workspace"],
                 attrs: ["importType", "destinationTable"],
                 computed: ["importSourceLink", "datasetType", "datasetLink"]
             },
 
-            MEMBERS_ADDED: {
+            MembersAdded: {
                 links: ["actor", "workspace", "member"],
                 computed: ["count"]
             },
 
-            DATASET_IMPORT_SUCCESS: {
+            DatasetImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType"]
             },
 
-            DATASET_IMPORT_FAILED: {
+            DatasetImportFailed: {
                 links: ["workspace"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
@@ -203,7 +203,7 @@
         },
 
         defaultStyle: function(self) {
-            if (self.get("action") == "MEMBERS_ADDED") {
+            if (self.get("action") == "MembersAdded") {
                 switch(self.get("numAdded")) {
                     case "1":
                         return 'default.one';
@@ -220,7 +220,7 @@
         },
 
         displayStyle: function(self, style) {
-            if (self.get("action") == "MEMBERS_ADDED") {
+            if (self.get("action") == "MembersAdded") {
                 switch(self.get("numAdded")) {
                     case "1":
                         return (style + '.one');

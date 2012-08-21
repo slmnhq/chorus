@@ -117,8 +117,8 @@ describe UsersController do
         response.code.should == "422"
       end
 
-      it "makes a USER_ADDED event" do
-        event = Events::USER_ADDED.first
+      it "makes a UserAdded event" do
+        event = Events::UserAdded.first
         event.new_user.should == User.find_by_username(@values[:username])
         event.actor.should == admin
       end

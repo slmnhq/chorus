@@ -137,4 +137,3 @@ module Events
 end
 
 require File.join(File.dirname(__FILE__), 'note')
-require File.join(File.dirname(__FILE__), 'types')

@@ -49,7 +49,7 @@ class CsvImporter
   end
 
   def create_success_event
-    Events::FILE_IMPORT_SUCCESS.by(csv_file.user).add(
+    Events::FileImportSuccess.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :dataset => destination_dataset,
         :file_name => csv_file.contents_file_name,
@@ -58,7 +58,7 @@ class CsvImporter
   end
 
   def create_failure_event(error_message)
-    Events::FILE_IMPORT_FAILED.by(csv_file.user).add(
+    Events::FileImportFailed.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :file_name => csv_file.contents_file_name,
         :import_type => 'file',

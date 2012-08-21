@@ -57,7 +57,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
-      'Events::FILE_IMPORT_SUCCESS',
+      'Events::FileImportSuccess',
       datasets.id,
       'Dataset',
       streams.created_tx_stamp,
@@ -84,7 +84,7 @@ class ActivityMigrator < AbstractMigrator
   end
 
   def backfill_file_import_success_additional_data
-    Events::FILE_IMPORT_SUCCESS.where('additional_data IS NULL').each do |event|
+    Events::FileImportSuccess.where('additional_data IS NULL').each do |event|
       row = Legacy.connection.exec_query("SELECT object_name FROM edc_activity_stream_object
                                       WHERE activity_stream_id = '#{event.legacy_id}'
                                       AND entity_type = 'file';").first
@@ -104,7 +104,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
-      'Events::FILE_IMPORT_FAILED',
+      'Events::FileImportFailed',
       streams.created_tx_stamp,
       streams.last_updated_tx_stamp,
       workspaces.id,
@@ -124,7 +124,7 @@ class ActivityMigrator < AbstractMigrator
   end
 
   def backfill_file_import_failed_additional_data
-    Events::FILE_IMPORT_FAILED.where('additional_data IS NULL').each do |event|
+    Events::FileImportFailed.where('additional_data IS NULL').each do |event|
       rows = Legacy.connection.exec_query("SELECT object_name, entity_type FROM edc_activity_stream_object
                                       WHERE activity_stream_id = '#{event.legacy_id}';")
 
@@ -154,7 +154,7 @@ class ActivityMigrator < AbstractMigrator
     actor_id)
   SELECT
     streams.id,
-    'Events::DATASET_IMPORT_SUCCESS',
+    'Events::DatasetImportSuccess',
     datasets.id,
     'Dataset',
     streams.created_tx_stamp,
@@ -181,7 +181,7 @@ class ActivityMigrator < AbstractMigrator
   end
 
   def backfill_dataset_import_success_additional_data
-    Events::DATASET_IMPORT_SUCCESS.where('additional_data IS NULL').each do |event|
+    Events::DatasetImportSuccess.where('additional_data IS NULL').each do |event|
       row = Legacy.connection.exec_query("SELECT object_name, object_id FROM legacy_migrate.edc_activity_stream_object aso
                                     WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                     AND aso.entity_type = 'table';").first
@@ -203,7 +203,7 @@ class ActivityMigrator < AbstractMigrator
     actor_id)
   SELECT
     streams.id,
-    'Events::DATASET_IMPORT_FAILED',
+    'Events::DatasetImportFailed',
     datasets.id,
     'Dataset',
     streams.created_tx_stamp,
@@ -230,7 +230,7 @@ class ActivityMigrator < AbstractMigrator
   end
 
   def backfill_dataset_import_failed_additional_data
-    Events::DATASET_IMPORT_FAILED.where('additional_data IS NULL').each do |event|
+    Events::DatasetImportFailed.where('additional_data IS NULL').each do |event|
       row = Legacy.connection.exec_query("
         SELECT et.result AS error_message
         FROM legacy_migrate.edc_task et
@@ -266,7 +266,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::PUBLIC_WORKSPACE_CREATED',
+        'Events::PublicWorkspaceCreated',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -295,7 +295,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::PRIVATE_WORKSPACE_CREATED',
+        'Events::PrivateWorkspaceCreated',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
         workspaces.id,
@@ -537,7 +537,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::USER_ADDED',
+        'Events::UserAdded',
         user_added.id,
         'User',
         streams.created_tx_stamp,
@@ -571,7 +571,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::MEMBERS_ADDED',
+        'Events::MembersAdded',
         user_added.id,
         'User',
         streams.created_tx_stamp,
@@ -600,7 +600,7 @@ class ActivityMigrator < AbstractMigrator
   end
 
   def backfill_member_added_additional_data
-    Events::MEMBERS_ADDED.where('additional_data IS NULL').each do |event|
+    Events::MembersAdded.where('additional_data IS NULL').each do |event|
       row = Legacy.connection.exec_query("
         SELECT count(*) AS count
         FROM legacy_migrate.edc_activity_stream_object aso
@@ -711,7 +711,7 @@ class ActivityMigrator < AbstractMigrator
     actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
 
     # ?????????? wat is this
-    if actor.nil? && activity_stream.type == 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
+    if actor.nil? && activity_stream.type == 'WorkspaceAddHdfsAsExtTable'
       user_id = activity_stream.author_id
       actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
     end

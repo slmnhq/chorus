@@ -200,20 +200,20 @@ FactoryGirl.define do
       workspace
     end
 
-    factory :source_table_created_event, :class => Events::SOURCE_TABLE_CREATED do
+    factory :source_table_created_event, :class => Events::SourceTableCreated do
       association :dataset, :factory => :gpdb_table
       workspace
     end
 
-    factory :user_created_event, :class => Events::USER_ADDED do
+    factory :user_created_event, :class => Events::UserAdded do
       association :new_user, :factory => :user
     end
 
-    factory :sandbox_added_event, :class => Events::WORKSPACE_ADD_SANDBOX do
+    factory :sandbox_added_event, :class => Events::WorkspaceAddSandbox do
       workspace
     end
 
-    factory :hdfs_external_table_created_event, :class => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE do
+    factory :hdfs_external_table_created_event, :class => Events::WorkspaceAddHdfsAsExtTable do
       association :dataset, :factory => :gpdb_table
       association :hdfs_file, :factory => :hdfs_file_reference
       workspace

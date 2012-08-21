@@ -23,25 +23,25 @@ FixtureBuilder.configure do |fbuilder|
     #Users
     admin = User.create!({:first_name => 'Admin', :last_name => 'AlphaSearch', :username => 'admin', :email => 'admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
     evil_admin = User.create!({:first_name => 'Evil', :last_name => 'AlphaSearch', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
-    Events::USER_ADDED.by(admin).add(:new_user => evil_admin)
+    Events::UserAdded.by(admin).add(:new_user => evil_admin)
 
     alice = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'alice', :email => 'alice@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => alice)
+    Events::UserAdded.by(admin).add(:new_user => alice)
 
     bob = User.create!(:first_name => 'BobSearch', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
     bob.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
     bob.save!
 
-    Events::USER_ADDED.by(admin).add(:new_user => bob)
+    Events::UserAdded.by(admin).add(:new_user => bob)
 
     carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => carly)
+    Events::UserAdded.by(admin).add(:new_user => carly)
 
     not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => not_a_member)
+    Events::UserAdded.by(admin).add(:new_user => not_a_member)
 
     user_with_restricted_access = User.create!(:first_name => 'Restricted', :last_name => 'User', :username => 'restricted_user', :email => 'restricted@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
+    Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
@@ -125,8 +125,8 @@ FixtureBuilder.configure do |fbuilder|
     # Workspace / Dataset associations
     bob_public_workspace.bound_datasets << bobs_table
 
-    fbuilder.name :bob_creates_public_workspace, Events::PUBLIC_WORKSPACE_CREATED.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
-    fbuilder.name :bob_creates_private_workspace, Events::PRIVATE_WORKSPACE_CREATED.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
+    fbuilder.name :bob_creates_public_workspace, Events::PublicWorkspaceCreated.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
+    fbuilder.name :bob_creates_private_workspace, Events::PrivateWorkspaceCreated.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
     fbuilder.name :bob_makes_workspace_public, Events::WorkspaceMakePublic.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
     fbuilder.name :bob_makes_workspace_private, Events::WorkspaceMakePrivate.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
@@ -193,7 +193,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
     Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
-    Events::FILE_IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    Events::FileImportSuccess.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_workspace_dataset, Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
@@ -203,16 +203,16 @@ FixtureBuilder.configure do |fbuilder|
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
     Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
     Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
-    Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
-    Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
+    Events::SourceTableCreated.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    Events::WorkspaceAddSandbox.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
     Events::WorkspaceArchived.by(admin).add(:workspace => bob_public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => bob_public_workspace)
-    Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
-    Events::FILE_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
-    Events::FILE_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
-    Events::MEMBERS_ADDED.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
-    Events::DATASET_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => other_table)
-    Events::DATASET_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :source_dataset => other_table, :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
+    Events::WorkspaceAddHdfsAsExtTable.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
+    Events::FileImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
+    Events::FileImportFailed.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
+    Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
+    Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => other_table)
+    Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => other_table, :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 

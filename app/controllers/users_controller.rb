@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     User.transaction do
       user.save!
 
-      Events::USER_ADDED.by(current_user).add(:new_user => user)
+      Events::UserAdded.by(current_user).add(:new_user => user)
     end
 
     present user, :status => :created

@@ -320,7 +320,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                "activity.header.PublicWorkspaceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -341,7 +341,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                "activity.header.PublicWorkspaceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -472,7 +472,7 @@ describe("chorus.presenters.Activity", function() {
             workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.SOURCE_TABLE_CREATED.default", {
+                "activity.header.SourceTableCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
@@ -495,7 +495,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ADD_SANDBOX.default", {
+                "activity.header.WorkspaceAddSandbox.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -519,7 +519,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ADD_HDFS_AS_EXT_TABLE.default", {
+                "activity.header.WorkspaceAddHdfsAsExtTable.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
@@ -542,7 +542,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.FILE_IMPORT_SUCCESS.default", {
+                "activity.header.FileImportSuccess.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
@@ -567,7 +567,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DATASET_IMPORT_SUCCESS.default", {
+                "activity.header.DatasetImportSuccess.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
@@ -589,7 +589,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.FILE_IMPORT_FAILED.default", {
+                "activity.header.FileImportFailed.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
@@ -613,7 +613,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DATASET_IMPORT_FAILED.default", {
+                "activity.header.DatasetImportFailed.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
                     datasetLink: model.get('destinationTable'),
@@ -820,7 +820,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.one",
+                    "activity.header.MembersAdded.default.one",
                     activity_data
                 );
             });
@@ -829,7 +829,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.one",
+                    "activity.header.MembersAdded.without_workspace.one",
                     activity_without_workspace_data
                 );
             });
@@ -843,7 +843,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.two",
+                    "activity.header.MembersAdded.default.two",
                     activity_data
                 );
             });
@@ -852,7 +852,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.two",
+                    "activity.header.MembersAdded.without_workspace.two",
                     activity_without_workspace_data
                 );
             });
@@ -867,7 +867,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html for the default style", function() {
                 activity_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.many",
+                    "activity.header.MembersAdded.default.many",
                     activity_data
                 );
             });
@@ -876,7 +876,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
                 activity_without_workspace_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.many",
+                    "activity.header.MembersAdded.without_workspace.many",
                         activity_without_workspace_data
                 );
             });

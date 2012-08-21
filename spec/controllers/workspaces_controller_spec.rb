@@ -96,14 +96,14 @@ describe WorkspacesController do
         parameters = {:workspace => {:name => "foobar", :public => true}}
         lambda {
           post :create, parameters
-        }.should change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(1)
+        }.should change(Events::PublicWorkspaceCreated, :count).by(1)
       end
 
       it "creates an event for private workspace" do
         parameters = {:workspace => {:name => "foobar", :public => false}}
         lambda {
           post :create, parameters
-        }.should change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(1)
+        }.should change(Events::PrivateWorkspaceCreated, :count).by(1)
       end
 
       it "presents the workspace" do
@@ -268,7 +268,7 @@ describe WorkspacesController do
           }
 
           response.should be_success
-        }.should change(Events::WORKSPACE_ADD_SANDBOX.by(owner), :count).by(1)
+        }.should change(Events::WorkspaceAddSandbox.by(owner), :count).by(1)
 
         workspace.reload
         workspace.sandbox_id.should == sandbox.id

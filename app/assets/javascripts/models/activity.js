@@ -217,11 +217,11 @@
         },
 
         isFailure: function() {
-            return this.get("action") === "FILE_IMPORT_FAILED" ||  this.get("action") === "DATASET_IMPORT_FAILED" ;
+            return this.get("action") === "FileImportFailed" ||  this.get("action") === "DatasetImportFailed" ;
         },
 
         isSuccessfulImport: function() {
-            return this.get("action") === "FILE_IMPORT_SUCCESS" ||  this.get("action") === "DATASET_IMPORT_SUCCESS" ;
+            return this.get("action") === "FileImportSuccess" ||  this.get("action") === "DatasetImportSuccess" ;
         }
     });
 

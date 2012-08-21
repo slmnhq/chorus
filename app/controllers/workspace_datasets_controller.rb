@@ -35,7 +35,7 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def create_event_for_dataset(dataset, workspace)
-    Events::SOURCE_TABLE_CREATED.by(current_user).add(
+    Events::SourceTableCreated.by(current_user).add(
       :dataset => dataset,
       :workspace => workspace
     )

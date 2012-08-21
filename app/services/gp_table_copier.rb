@@ -76,7 +76,7 @@ class GpTableCopier
   end
 
   def self.create_success_event(dst_table, source_table, workspace, user)
-    Events::DATASET_IMPORT_SUCCESS.by(user).add(
+    Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
         :dataset => dst_table,
         :source_dataset => source_table
@@ -84,7 +84,7 @@ class GpTableCopier
   end
 
   def self.create_failed_event(to_table, source_table, workspace, error_message, user)
-    Events::DATASET_IMPORT_FAILED.by(user).add(
+    Events::DatasetImportFailed.by(user).add(
         :workspace => workspace,
         :destination_table => to_table,
         :error_message => error_message,

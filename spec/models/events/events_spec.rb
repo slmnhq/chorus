@@ -148,7 +148,7 @@ describe "Event types" do
       end
 
       subject do
-        Events::PUBLIC_WORKSPACE_CREATED.add(
+        Events::PublicWorkspaceCreated.add(
           :actor => actor,
           :workspace => workspace
         )
@@ -168,7 +168,7 @@ describe "Event types" do
       end
 
       subject do
-        Events::PRIVATE_WORKSPACE_CREATED.add(
+        Events::PrivateWorkspaceCreated.add(
           :actor => actor,
           :workspace => workspace
         )
@@ -273,9 +273,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "SOURCE_TABLE_CREATED" do
+  describe "SourceTableCreated" do
     subject do
-      Events::SOURCE_TABLE_CREATED.add(
+      Events::SourceTableCreated.add(
           :actor => actor,
           :dataset => dataset,
           :workspace => workspace
@@ -289,9 +289,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "USER_ADDED" do
+  describe "UserAdded" do
     subject do
-      Events::USER_ADDED.add(
+      Events::UserAdded.add(
           :actor => actor,
           :new_user => user
       )
@@ -304,9 +304,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_ADD_SANDBOX" do
+  describe "WorkspaceAddSandbox" do
     subject do
-      Events::WORKSPACE_ADD_SANDBOX.add(
+      Events::WorkspaceAddSandbox.add(
           :actor => actor,
           :workspace => workspace
       )
@@ -318,9 +318,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_ADD_HDFS_AS_EXT_TABLE" do
+  describe "WorkspaceAddHdfsAsExtTable" do
     subject do
-      Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.add(
+      Events::WorkspaceAddHdfsAsExtTable.add(
           :actor => actor,
           :workspace => workspace,
           :hdfs_file => hdfs_file,
@@ -337,9 +337,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "FILE_IMPORT_SUCCESS" do
+  describe "FileImportSuccess" do
     subject do
-      Events::FILE_IMPORT_SUCCESS.add(
+      Events::FileImportSuccess.add(
           :actor => actor,
           :dataset => dataset,
           :file_name => 'import.csv',
@@ -356,11 +356,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DATASET_IMPORT_SUCCESS" do
+  describe "DatasetImportSuccess" do
     let(:source_dataset) { datasets(:bobs_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DATASET_IMPORT_SUCCESS.add(
+      Events::DatasetImportSuccess.add(
           :actor => actor,
           :dataset => dataset,
           :source_dataset => source_dataset,
@@ -381,9 +381,9 @@ describe "Event types" do
 
   end
 
-  describe "FILE_IMPORT_FAILED" do
+  describe "FileImportFailed" do
     subject do
-      Events::FILE_IMPORT_FAILED.add(
+      Events::FileImportFailed.add(
           :actor => actor,
           :file_name => 'import.csv',
           :import_type => 'file',
@@ -400,11 +400,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DATASET_IMPORT_FAILED" do
+  describe "DatasetImportFailed" do
     let(:source_dataset) {datasets(:bobs_table)}
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DATASET_IMPORT_FAILED.add(
+      Events::DatasetImportFailed.add(
           :actor => actor,
           :source_dataset => source_dataset,
           :destination_table => 'test',
@@ -424,9 +424,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "MEMBERS_ADDED" do
+  describe "MembersAdded" do
     subject do
-      Events::MEMBERS_ADDED.add(
+      Events::MembersAdded.add(
           :actor => actor,
           :member => user,
           :workspace => workspace,
