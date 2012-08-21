@@ -14,4 +14,5 @@ if [ "$JENKINS_HOME" != "" ]; then
 fi
 
 args=("$@")
-RAILS_ENV=test $command $filename ${args[@]:1:100}
+test "$RAILS_ENV" = "" && RAILS_ENV=test
+RAILS_ENV=$RAILS_ENV $command $filename ${args[@]:1:100}
