@@ -43,7 +43,7 @@ describe "Create box plot" do
     click_link "ChorusAnalytics"
     sleep(2)
     click_link "analytics"
-    wait_for_ajax
+    wait_for_ajax(2)
     click_link "campaign_dim"
     wait_for_ajax
     click_button "Visualize"
@@ -75,14 +75,14 @@ describe "Create time series plot" do
     sleep(2)
     click_link "analytics"
     wait_for_ajax
-    click_link "campaign_dim"
+    click_link "campaign_dim_stage"
     wait_for_ajax
     click_button "Visualize"
     find(".chart_icon.timeseries").click
 
     click_button "Create Chart"
     within_modal do
-      page.should have_content "Visualization: campaign_dim"
+      page.should have_content "Visualization: campaign_dim_stage"
       click_link "Show Data Table"
       page.should have_content "Results Console"
       click_link "Hide Data Table"
@@ -105,7 +105,7 @@ describe "Create heat map plot" do
     click_link "ChorusAnalytics"
     sleep(2)
     click_link "analytics"
-    wait_for_ajax
+    wait_for_ajax(3)
     click_link "2009_sfo_customer_survey"
     wait_for_ajax
     click_button "Visualize"
