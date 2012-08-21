@@ -20,6 +20,7 @@ esac
 
 SOLR_PID_FILE=$CHORUS_HOME/tmp/pids/solr-$RAILS_ENV.pid
 NGINX_PID_FILE=$CHORUS_HOME/vendor/nginx/nginx_dist/nginx_data/logs/nginx.pid
+JETTY_PID_FILE=$CHORUS_HOME/vendor/jetty/run/jetty.pid
 
 
 ##### Determine which nginx binary to use for this platform #####

@@ -16,13 +16,9 @@ RAILS_ENV=$RAILS_ENV
 CHORUS_LOG=$CHORUS_HOME/log
 CHORUS_PID=$CHORUS_HOME/tmp/pids
 mkdir -p $CHORUS_PID
-CHORUS_NGINX=$CHORUS_HOME/nginx_dist
-
 
 CLOCK_PID_FILE=$CHORUS_PID/clock.$RAILS_ENV.pid
 WORKER_PID_FILE=$CHORUS_PID/queue_classic.$RAILS_ENV.pid
-NGINX_PID_FILE=$CHORUS_NGINX/nginx_data/logs/nginx.pid
-
 
 function pid_is_running () {
   test -z "$1" && return 1;
@@ -72,46 +68,12 @@ function start_clock () {
   fi
 }
 
-function start_nginx () {
-  cd $CHORUS_HOME
-  bin/ruby packaging/generate_nginx_conf.rb
-
-  cd $CHORUS_NGINX
-
-  pid_is_running "$(cat $NGINX_PID_FILE 2> /dev/null)"
-  nginx_pid_present=$?
-
-  if [ $nginx_pid_present -eq 1 ]
-  then
-    if [ -e ./nginx_data/logs/nginx.pid ]
-    then
-      echo "nginx already running, reloading config"
-      ./nginx -s reload
-    else
-      echo "starting nginx..."
-      ./nginx
-    fi
-  else
-    echo "nginx is still running..."
-  fi
-}
-
 function start_solr () {
   $bin/start-solr.sh
 }
 
 function start_webserver () {
-  ps x | grep vendor/jetty/start.jar | grep -v grep > /dev/null
-  jetty_pid_present=$?
-
-  if [ $jetty_pid_present -eq 1 ]
-  then
-    echo "Starting webserver..."
-    cd $CHORUS_HOME
-    vendor/jetty/jetty-init start >/dev/null 2>/dev/null &
-  else
-    echo "Webserver is still running..."
-  fi
+  $bin/start-webserver.sh
 }
 
 function stop_worker () {
@@ -149,8 +111,7 @@ function stop_solr () {
 }
 
 function stop_webserver () {
-  echo "Stopping webserver..."
-  $CHORUS_HOME/vendor/jetty/jetty-init stop
+  $bin/stop-webserver.sh
 }
 
 function stop_postgres () {
@@ -165,7 +126,6 @@ function start () {
   if [ "$1" = "clock" -o "$1" = "" ];      then start_clock;       fi
   if [ "$1" = "solr" -o "$1" = "" ];       then start_solr;        fi
   if [ "$1" = "webserver" -o "$1" = "" ];  then start_webserver;   fi
-  if [ "$1" = "nginx" -o "$1" = "" ];      then start_nginx;       fi
 }
 
 
@@ -174,7 +134,6 @@ function stop () {
   if [ "$1" = "clock" -o "$1" = "" ];      then stop_clock;       fi
   if [ "$1" = "solr" -o "$1" = "" ];       then stop_solr;        fi
   if [ "$1" = "webserver" -o "$1" = "" ];  then stop_webserver;   fi
-  if [ "$1" = "nginx" -o "$1" = "" ];      then stop_nginx;       fi
   if [ "$1" = "postgres" -o "$1" = "" ];   then stop_postgres;    fi
 }
 
