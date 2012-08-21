@@ -38,6 +38,7 @@ describe("chorus.models.Task", function() {
     describe("cancel", function() {
         beforeEach(function() {
             task = new TaskSubclass();
+            task.save();
             task.cancel();
         });
 
@@ -47,6 +48,7 @@ describe("chorus.models.Task", function() {
             beforeEach(function() {
                 spyOnEvent(task, 'canceled');
                 this.server.lastDestroy().succeed();
+                this.server.lastCreate().fail();
                 this.server.reset();
             });
 
@@ -56,6 +58,7 @@ describe("chorus.models.Task", function() {
 
             context("click on cancel again", function() {
                 beforeEach(function() {
+                    task.save();
                     task.cancel();
                 });
 
@@ -72,7 +75,7 @@ describe("chorus.models.Task", function() {
 
             it("ignores subsequent calls to cancel", function() {
                 task.cancel();
-                expect(this.server.requests.length).toBe(1);
+                expect(this.server.destroys().length).toBe(1);
             });
         }
 
@@ -85,6 +88,14 @@ describe("chorus.models.Task", function() {
 
             params = this.server.lastDestroy().params();
             expect(params.foo_something).toBe("bar");
+        });
+    });
+
+    describe("save", function() {
+        it("clears the loaded flag when a save begins", function() {
+            task.loaded = true;
+            task.save();
+            expect(task.loaded).toBeFalsy();
         });
     });
 

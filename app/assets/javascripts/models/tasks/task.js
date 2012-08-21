@@ -11,6 +11,10 @@ chorus.models.Task = chorus.models.Base.include(
         }
     },
 
+    beforeSave: function() {
+        delete this.loaded;
+    },
+
     initialize: function(attrs) {
         this.set({ checkId: Math.floor((Math.random()*1e8)+1).toString() });
     },
