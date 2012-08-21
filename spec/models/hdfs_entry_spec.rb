@@ -47,7 +47,7 @@ describe HdfsEntry do
       end
 
       it "converts hdfs query results into entries" do
-        list = described_class.list('/', hadoop_instance).sort_by(&:path)
+        list = HdfsEntry.list('/', hadoop_instance).sort_by(&:path)
         first_result = list.first
 
         first_result.is_directory.should be_true
@@ -56,7 +56,7 @@ describe HdfsEntry do
         first_result.parent.path.should == '/'
         first_result.size.should == 10
         first_result.content_count.should == 0
-        first_result.modified_at.should == Time.parse("2010-10-20 22:00:00")
+        first_result.modified_at.should == "2010-10-20 22:00:00"
         first_result.hadoop_instance.should == hadoop_instance
 
         last_result = list.last
@@ -65,38 +65,54 @@ describe HdfsEntry do
       end
 
       it "saves the hdfs entries to the database" do
-        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
+        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
 
         last_entry = HdfsEntry.last
         last_entry.path.should == '/empty.png'
         last_entry.parent_path.should == '/'
         last_entry.parent.path.should == '/'
         last_entry.hadoop_instance.should == hadoop_instance
-        last_entry.modified_at.should == Time.parse("2010-10-20 22:00:00")
+        last_entry.modified_at.should == "2010-10-20 22:00:00"
         last_entry.size.should == 10
         last_entry.is_directory.should == false
         last_entry.content_count.should == 0
       end
 
       it "stores a unique hdfs entry in the database" do
-        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
+        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
         list_again = nil
-        expect { list_again = described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(0)
+        expect { list_again = HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(0)
 
         first_result = list_again.first
         first_result.is_directory.should be_true
         first_result.path.should == '/empty'
         first_result.size.should == 10
         first_result.content_count.should == 0
-        first_result.modified_at.should == Time.parse("2010-10-20 22:00:00")
+        first_result.modified_at.should == "2010-10-20 22:00:00"
         first_result.hadoop_instance.should == hadoop_instance
       end
 
-      it "removes hdfs entries that no longer exist" do
-        described_class.list('/', hadoop_instance)
+      it "marks hdfs entries that no longer exist as stale" do
+        HdfsEntry.list('/', hadoop_instance)
         hadoop_instance.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"}, :without_protection => true)
-        expect { described_class.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(-2)
-        hadoop_instance.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_nil
+        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry.not_stale, :count).by(-2)
+        hadoop_instance.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_stale
+      end
+      
+      it "marks stale entries as not stale if they reappear" do
+        HdfsEntry.list('/', hadoop_instance)
+        hadoop_instance.hdfs_entries.where("parent_id IS NOT NULL").update_all(:stale_at => Time.now)
+        HdfsEntry.list('/', hadoop_instance)
+        hadoop_instance.hdfs_entries.where("stale_at IS NOT NULL").length.should == 0
+      end
+
+      it "does not update records if no changes have occurred" do
+        HdfsEntry.list('/', hadoop_instance)
+        update_time = 1.year.ago
+        hadoop_instance.hdfs_entries.update_all(:updated_at => update_time)
+        dont_allow(Sunspot.session).index
+        HdfsEntry.list('/', hadoop_instance)
+        hadoop_instance.hdfs_entries.where(:updated_at => update_time).count.should == hadoop_instance.hdfs_entries.count
       end
 
       context "the parent-child relationship" do
@@ -124,8 +140,8 @@ describe HdfsEntry do
           end
         end
 
-        let(:child) { described_class.list('/parent/', hadoop_instance).first }
-        let(:parent) { described_class.list('/', hadoop_instance).first }
+        let(:child) { HdfsEntry.list('/parent/', hadoop_instance).first }
+        let(:parent) { HdfsEntry.list('/', hadoop_instance).first }
 
         context "when parent is created after the child" do
           it "updates the parent-child relationship" do

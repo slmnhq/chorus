@@ -1,4 +1,5 @@
 class HdfsEntry < ActiveRecord::Base
+  include Stale
 
   belongs_to :hadoop_instance
   belongs_to :parent, :class_name => HdfsEntry, :foreign_key => 'parent_id'
@@ -37,19 +38,29 @@ class HdfsEntry < ActiveRecord::Base
     rest.join('/')
   end
 
+  def modified_at=(new_time)
+    if modified_at != new_time
+      super
+    end
+  end
+
   def self.list(path, hadoop_instance)
     hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
     current_entries = hdfs_query.list(path).map do |result|
-      result['modified_at'] = Time.parse(result['modified_at'])
       hdfs_entry = hadoop_instance.hdfs_entries.find_or_initialize_by_path(result["path"])
+      hdfs_entry.stale_at = nil if hdfs_entry.stale?
       hdfs_entry.hadoop_instance = hadoop_instance
       hdfs_entry.assign_attributes(result, :without_protection => true)
-      hdfs_entry.save!
+      hdfs_entry.save! if hdfs_entry.changed?
       hdfs_entry
     end
 
     parent = hadoop_instance.hdfs_entries.find_by_path(normalize_path(path))
-    parent.children.where(['id not in (?)', current_entries.map(&:id)]).destroy_all
+    parent.children.where(['id not in (?)', current_entries.map(&:id)]).each do |hdfs_entry|
+      hadoop_instance.hdfs_entries.where("stale_at IS NULL AND path LIKE ?", hdfs_entry.path + '%').find_each do |entry_to_mark_stale|
+        entry_to_mark_stale.mark_stale!
+      end
+    end
 
     current_entries
   end
@@ -57,7 +68,7 @@ class HdfsEntry < ActiveRecord::Base
   def file
     unless is_directory
       HdfsFile.new(path, hadoop_instance, {
-        :modified_at => modified_at
+          :modified_at => modified_at
       })
     end
   end
