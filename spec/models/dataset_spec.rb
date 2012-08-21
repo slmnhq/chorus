@@ -48,6 +48,14 @@ describe Dataset do
       end
     end
 
+    context "when the dataset has weird characters" do
+      let(:dataset) { GpdbTable.find_by_name(%q{7_`~!@#$%^&*()+=[]{}|\;:',<.>/?}) }
+
+      it "still works" do
+        described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
+      end
+    end
+
     context "when it does not exist in the source database" do
       before do
         GpdbTable.create!({:name => 'rails_only_table', :schema => schema}, :without_protection => true)
@@ -352,21 +360,21 @@ describe Dataset::Query, :database_integration => true do
     it "returns a query whose result includes the names of all tables and views in the schema," +
            "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
-      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table"]
+      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table", "7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?"]
     end
 
     it "includes the relations' types ('r' for table, 'v' for view)" do
       view_row = rows.find { |row| row['name'] == "view1" }
       view_row["type"].should == "v"
 
-      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r", "r", "r"]
+      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r", "r", "r", "r"]
     end
 
     it "includes whether or not each relation is a master table" do
       master_row = rows.find { |row| row['name'] == "master_table1" }
       master_row["master_table"].should == "t"
 
-      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f", "f", "f"]
+      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f", "f", "f", "f"]
     end
   end
 

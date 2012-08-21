@@ -38,6 +38,9 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
     CREATE TABLE different_types_table
       (id integer PRIMARY KEY, column1 text, column2 integer, category text, time_value timestamp );
 
+    CREATE TABLE "7_`~!@#$%^&*()+=[]{}|\;:',<.>/?"
+      (id integer PRIMARY KEY, column3 integer, column2 integer, category text, time_value timestamp );
+
     CREATE EXTERNAL WEB TABLE external_web_table1
       (name text, date date, amount float4, category text, description text)
       LOCATION ('http://intranet.company.com/expenses/sales/file.csv')

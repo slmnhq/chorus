@@ -88,7 +88,7 @@ class Dataset < ActiveRecord::Base
     account = account_for_user!(user)
     with_gpdb_connection(account) do |conn|
       begin
-        conn.exec_query("EXPLAIN SELECT 1 FROM #{schema.name}.#{name}")
+        conn.exec_query("EXPLAIN SELECT 1 FROM \"#{schema.name}\".\"#{name}\"")
       rescue ActiveRecord::StatementInvalid
         raise ActiveRecord::RecordNotFound
       end
