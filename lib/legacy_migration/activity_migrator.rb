@@ -505,7 +505,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
-        'Events::HADOOP_INSTANCE_CREATED',
+        'Events::HadoopInstanceCreated',
         hadoop_instances.id,
         'HadoopInstance',
         streams.created_tx_stamp,

@@ -13,11 +13,11 @@ describe Events::Base do
       workspace = FactoryGirl.create(:workspace)
 
       Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => instance1)
-      Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
+      Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
       Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace)
 
       event1 = Events::GreenplumInstanceCreated.first
-      event2 = Events::GREENPLUM_INSTANCE_CHANGED_OWNER.first
+      event2 = Events::GreenplumInstanceChangedOwner.first
       event3 = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.first
 
       event1.actor.should == user1

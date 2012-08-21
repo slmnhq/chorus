@@ -157,9 +157,9 @@ describe ActivityMigrator do
       end
 
       it "copies INSTANCE CREATED (hadoop) data fields from the legacy activity" do
-        Events::HADOOP_INSTANCE_CREATED.count.should == 2
+        Events::HadoopInstanceCreated.count.should == 2
 
-        event = Events::HADOOP_INSTANCE_CREATED.find_by_legacy_id('10006')
+        event = Events::HadoopInstanceCreated.find_by_legacy_id('10006')
 
         event.workspace.should be_blank
         event.actor.should be_instance_of(User)

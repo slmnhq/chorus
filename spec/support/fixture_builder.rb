@@ -57,7 +57,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
-    Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
+    Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => Time.parse("2010-10-20 22:00:00"), :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
@@ -200,8 +200,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_alice_private, Events::NOTE_ON_WORKSPACE.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
     #Events
-    Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
-    Events::GREENPLUM_INSTANCE_CHANGED_NAME.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
+    Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
+    Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
     Events::HADOOP_INSTANCE_CHANGED_NAME.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
     Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)

@@ -221,7 +221,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CREATED.default", {
+                "activity.header.HadoopInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
                 }
@@ -244,7 +244,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.default", {
+                "activity.header.GreenplumInstanceChangedOwner.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
@@ -270,7 +270,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_NAME.default", {
+                "activity.header.GreenplumInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newName: "jane",

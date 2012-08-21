@@ -32,15 +32,15 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "HADOOP_INSTANCE_CREATED" do
+  describe "HadoopInstanceCreated" do
     subject do
-      Events::HADOOP_INSTANCE_CREATED.add(
+      Events::HadoopInstanceCreated.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
       )
     end
 
-    its(:action) { should == "HADOOP_INSTANCE_CREATED" }
+    its(:action) { should == "HadoopInstanceCreated" }
     its(:hadoop_instance) { should == hadoop_instance }
     its(:targets) { should == {:hadoop_instance => hadoop_instance} }
 
@@ -48,9 +48,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GREENPLUM_INSTANCE_CHANGED_OWNER" do
+  describe "GreenplumInstanceChangedOwner" do
     subject do
-      Events::GREENPLUM_INSTANCE_CHANGED_OWNER.add(
+      Events::GreenplumInstanceChangedOwner.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :new_owner => user
@@ -65,9 +65,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GREENPLUM_INSTANCE_CHANGED_NAME" do
+  describe "GreenplumInstanceChangedName" do
     subject do
-      Events::GREENPLUM_INSTANCE_CHANGED_NAME.add(
+      Events::GreenplumInstanceChangedName.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :old_name => "brent",

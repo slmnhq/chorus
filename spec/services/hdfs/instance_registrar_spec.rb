@@ -48,10 +48,10 @@ describe Hdfs::InstanceRegistrar do
         cached_instance.group_list.should == instance_attributes[:group_list]
       end
 
-      it "makes a HADOOP_INSTANCE_CREATED event" do
+      it "makes a HadoopInstanceCreated event" do
         instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
 
-        event = Events::HADOOP_INSTANCE_CREATED.first
+        event = Events::HadoopInstanceCreated.first
         event.hadoop_instance.should == instance
         event.actor.should == owner
       end

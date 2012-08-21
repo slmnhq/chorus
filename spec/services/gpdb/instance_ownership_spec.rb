@@ -8,9 +8,9 @@ describe Gpdb::InstanceOwnership do
   describe ".change_owner(instance, new_owner)" do
     let(:instance) { FactoryGirl.create(:instance, :shared => true) }
 
-    it "creates a GREENPLUM_INSTANCE_CHANGED_OWNER event" do
+    it "creates a GreenplumInstanceChangedOwner event" do
       request_ownership_update
-      event = Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(old_owner).first
+      event = Events::GreenplumInstanceChangedOwner.by(old_owner).first
       event.greenplum_instance.should == instance
       event.new_owner.should == new_owner
     end

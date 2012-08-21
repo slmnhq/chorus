@@ -68,7 +68,7 @@
     var hidden = {
 
         headerParamOptions: {
-            GREENPLUM_INSTANCE_CHANGED_NAME: {
+            GreenplumInstanceChangedName: {
                 links: [ "actor", "greenplumInstance" ],
                 attrs: [ "newName", "oldName" ]
             },
@@ -91,11 +91,11 @@
                 computed: ["greenplumInstanceName"]
             },
 
-            HADOOP_INSTANCE_CREATED: {
+            HadoopInstanceCreated: {
                 links: [ "actor", "hadoopInstance" ]
             },
 
-            GREENPLUM_INSTANCE_CHANGED_OWNER: {
+            GreenplumInstanceChangedOwner: {
                 links: [ "actor", "greenplumInstance", "newOwner" ]
             },
 

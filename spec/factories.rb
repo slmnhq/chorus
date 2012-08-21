@@ -174,16 +174,16 @@ FactoryGirl.define do
       greenplum_instance
     end
 
-    factory :hadoop_instance_created_event, :class => Events::HADOOP_INSTANCE_CREATED do
+    factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do
       hadoop_instance
     end
 
-    factory :greenplum_instance_changed_owner_event, :class => Events::GREENPLUM_INSTANCE_CHANGED_OWNER do
+    factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
       greenplum_instance
       new_owner :factory => :user
     end
 
-    factory :greenplum_instance_changed_name_event, :class => Events::GREENPLUM_INSTANCE_CHANGED_NAME do
+    factory :greenplum_instance_changed_name_event, :class => Events::GreenplumInstanceChangedName do
       greenplum_instance
       new_name "new_instance_name"
       old_name "old_instance_name"
