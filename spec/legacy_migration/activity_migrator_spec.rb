@@ -185,6 +185,28 @@ describe ActivityMigrator do
         event.workspace.should be_instance_of(Workspace)
         event.num_added.should == "2"
       end
+
+      it "copies PROVISIONING_FAIL from legacy activity" do
+        Events::PROVISIONING_FAIL.count.should == 1
+
+        event = Events::PROVISIONING_FAIL.find_by_legacy_id('10723')
+
+        event.workspace.should be_blank
+        event.actor.should be_instance_of(User)
+        event.greenplum_instance.should be_instance_of(Instance)
+        event.additional_data['error_message'].should == nil
+      end
+
+
+      it "copies PROVISIONING_SUCCESS from legacy activity" do
+        Events::PROVISIONING_SUCCESS.count.should == 1
+
+        event = Events::PROVISIONING_SUCCESS.find_by_legacy_id('10722')
+
+        event.workspace.should be_blank
+        event.actor.should be_instance_of(User)
+        event.greenplum_instance.should be_instance_of(Instance)
+      end
     end
     #
   end

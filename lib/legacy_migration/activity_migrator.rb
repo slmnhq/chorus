@@ -613,6 +613,72 @@ class ActivityMigrator < AbstractMigrator
     end
   end
 
+  def migrate_provision_failed
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::PROVISIONING_FAIL',
+        instances.id,
+        'Instance',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
+      INNER JOIN instances
+        ON target_instance.object_id = instances.legacy_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'PROVISIONING_FAIL'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+
+  end
+
+  def migrate_provision_success
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::PROVISIONING_SUCCESS',
+        instances.id,
+        'Instance',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
+      INNER JOIN instances
+        ON target_instance.object_id = instances.legacy_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'PROVISIONING_SUCCESS'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+
+  end
+
   def migrate
     ActiveRecord::Base.record_timestamps = false
 
@@ -634,6 +700,8 @@ class ActivityMigrator < AbstractMigrator
     migrate_hadoop_instance_created
     migrate_user_added
     migrate_member_added
+    migrate_provision_failed
+    migrate_provision_success
 
     ActiveRecord::Base.record_timestamps = true
   end

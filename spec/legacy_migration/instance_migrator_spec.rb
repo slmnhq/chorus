@@ -8,9 +8,9 @@ describe InstanceMigrator do
 
     describe "copying the data" do
       it "creates new instances for legacy GPDB instances and is idempotent" do
-        Instance.count.should == 3
+        Instance.count.should == 5
         InstanceMigrator.new.migrate
-        Instance.count.should == 3
+        Instance.count.should == 5
       end
 
       it "copies the correct data fields from the legacy instance" do
