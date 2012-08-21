@@ -73,8 +73,6 @@ function start_clock () {
 }
 
 function start_nginx () {
-  test ! -e $CHORUS_NGINX && echo "nginx not found, skipping." && return 0
-
   cd $CHORUS_HOME
   bin/ruby packaging/generate_nginx_conf.rb
 
@@ -153,12 +151,6 @@ function stop_solr () {
 function stop_webserver () {
   echo "Stopping webserver..."
   $CHORUS_HOME/vendor/jetty/jetty-init stop
-}
-
-function stop_nginx () {
-  echo "Stopping nginx..."
-  cd $CHORUS_NGINX
-  ./nginx -s stop
 }
 
 function stop_postgres () {

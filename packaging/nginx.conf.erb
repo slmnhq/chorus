@@ -41,12 +41,14 @@ http {
 
         #access_log  logs/host.access.log  main;
 
+        <% if rails_env == 'production' %>
         location ~ ^/(assets)/ {
             root  ../../public/;
             gzip_static on;
             expires max;
             add_header Cache-Control public;
         }
+        <% end %>
 
         location / {
             root  ../../public/;
