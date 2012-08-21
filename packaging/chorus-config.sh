@@ -19,7 +19,7 @@ esac
 ##### PID file locations #####
 
 SOLR_PID_FILE=$CHORUS_HOME/tmp/pids/solr-$RAILS_ENV.pid
-NGINX_PID_FILE=$CHORUS_HOME/packaging/nginx_dist/nginx_data/logs/nginx.pid
+NGINX_PID_FILE=$CHORUS_HOME/vendor/nginx/nginx_dist/nginx_data/logs/nginx.pid
 
 
 ##### Determine which nginx binary to use for this platform #####

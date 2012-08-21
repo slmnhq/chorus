@@ -169,10 +169,6 @@ class Install
     FileUtils.ln_sf("#{release_path}", "#{destination_path}/current")
   end
 
-  def extract_nginx
-    chorus_exec("tar xzf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}/")
-  end
-
   def extract_postgres
     chorus_exec("tar xzf #{release_path}/packaging/postgres/#{@postgres_package} -C #{release_path}/")
   end
@@ -213,10 +209,6 @@ if __FILE__ == $0
     install.link_shared_files
     puts "Done"
 
-    print "Extracting NGINX..."
-    install.extract_nginx
-    puts "Done"
-
     print "Extracting postgres..."
     install.extract_postgres
     puts "Done"
@@ -244,4 +236,3 @@ if __FILE__ == $0
     puts Install::MESSAGES[:installation_failed_with_reason] % e.message
   end
 end
-

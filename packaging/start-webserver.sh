@@ -11,9 +11,9 @@ bin=`cd "$bin"; pwd`
 # depends on solr, workers, postgres
 
 log "Writing nginx config..."
-$RUBY packaging/generate_nginx_conf.rb
+$RUBY vendor/nginx/generate_nginx_conf.rb
 
-cd $CHORUS_HOME/packaging/nginx_dist/
+cd $CHORUS_HOME/vendor/nginx/nginx_dist/
 if [ -f $NGINX_PID_FILE ]; then
     if kill -0 `cat $NGINX_PID_FILE` > /dev/null 2>&1; then
         log "nginx already running as process `cat $NGINX_PID_FILE`. Reloading config..."

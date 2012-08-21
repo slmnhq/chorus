@@ -61,3 +61,10 @@ tags
 
 # Ignore file with build sha
 /version_build
+
+# Ignore generated nginx conf
+nginx.conf
+
+# Ignore nginx logs
+/vendor/nginx/nginx_dist/nginx_data/logs/*.log
+/vendor/nginx/nginx_dist/nginx_data/logs/*.pid

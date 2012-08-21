@@ -3,7 +3,7 @@ bin=`cd "$bin"; pwd`
 . "$bin"/chorus-config.sh
 
 log "stopping nginx"
-cd $CHORUS_HOME/packaging/nginx_dist/
+cd $CHORUS_HOME/vendor/nginx/nginx_dist/
 ./$NGINX -s stop &>/dev/null
 cd $CHORUS_HOME
 
