@@ -146,6 +146,7 @@ describe EventsController do
         "noteOnDatasetCreated" => Events::NoteOnDataset,
         "noteOnWorkspaceDatasetCreated" => Events::NoteOnWorkspaceDataset,
         "membersAdded" => Events::MembersAdded,
+        "fileImportCreated" => Events::FileImportCreated,
         "fileImportSuccess" => Events::FileImportSuccess,
         "fileImportFailed" => Events::FileImportFailed,
         "datasetImportSuccess" => Events::DatasetImportSuccess,

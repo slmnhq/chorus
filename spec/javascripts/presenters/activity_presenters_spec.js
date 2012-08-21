@@ -29,7 +29,7 @@ describe("chorus.presenters.Activity", function() {
 
                 it("returns the translation for the default style if no style is provided " +
                     "and the model has a valid workspace", function() {
-                    presenter.options.displayStyle = null
+                    presenter.options.displayStyle = null;
                     expect(presenter.headerHtml().toString()).toContainTranslation(
                         "activity.header.WorkfileCreated.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
@@ -46,6 +46,8 @@ describe("chorus.presenters.Activity", function() {
         });
 
         context("activity without a workspace", function() {
+            var noteObject;
+
             beforeEach(function() {
                 model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
                 noteObject = model.greenplumInstance();
@@ -208,7 +210,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("hadoop instance created", function() {
-        var hadoopInstance
+        var hadoopInstance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.hadoopInstanceCreated();
@@ -533,10 +535,10 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("add a hdfs file as external table", function() {
-        var hdfsFile;
+        var hdfsEntry;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.hdfsExternalTableCreated()
+            model = rspecFixtures.activity.hdfsExternalTableCreated();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -570,6 +572,7 @@ describe("chorus.presenters.Activity", function() {
         itHasTheImportIcon();
 
         it("has the right header html", function() {
+            presenter.options.displayStyle = ["without_workspace"];
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.FileImportSuccess.default", {
                     importType: model.get("importType"),
@@ -595,6 +598,7 @@ describe("chorus.presenters.Activity", function() {
         itHasTheImportIcon();
 
         it("has the right header html", function() {
+            presenter.options.displayStyle = ["without_workspace"];
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.DatasetImportSuccess.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
@@ -657,7 +661,7 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
-                hdfsFile: { hadoopInstance: {id: 1234}, path: "/random/path.csv" }
+                hdfsFile: { hadoopInstanceId: 1234, path: "/random/path.csv" }
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
@@ -709,8 +713,6 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("note on a workspace ", function() {
-        var instance;
-
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnWorkspaceCreated({
                 workspace: {
@@ -814,6 +816,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("members added event", function() {
+        var activity_data, activity_without_workspace_data;
         beforeEach(function() {
             model = rspecFixtures.activity.membersAdded({
                 workspace: { id: 55, name: "paleo_eaters" },
@@ -843,7 +846,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("a single member is added", function() {
             beforeEach(function () {
-                model.set({numAdded: "1"})
+                model.set({numAdded: "1"});
                 presenter = new chorus.presenters.Activity(model);
             });
 
@@ -866,7 +869,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("two members are added", function() {
             beforeEach(function () {
-                model.set({numAdded: "2"})
+                model.set({numAdded: "2"});
                 presenter = new chorus.presenters.Activity(model);
             });
 
@@ -908,6 +911,58 @@ describe("chorus.presenters.Activity", function() {
                     "activity.header.MembersAdded.without_workspace.many",
                         activity_without_workspace_data
                 );
+            });
+        });
+    });
+
+    context("file import created event", function() {
+        var activity_data;
+        beforeEach(function () {
+            model = rspecFixtures.activity.fileImportCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+
+            activity_data = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                importType: model.get("importType"),
+                importSourceLink: model.get("fileName"),
+                datasetType: t("dataset.types.table"),
+                destObjectOrName: "bobs_table"
+            };
+        });
+        context("when called with a FILE_IMPORT_CREATED event", function () {
+            it("blank out the without_workspace style and use default instead", function () {
+                presenter.options.displayStyle = ["without_workspace"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.FILE_IMPORT_CREATED.default",
+                    activity_data
+                );
+            });
+            context("when importing to a new table", function () {
+                it("displays the destination table name without link", function () {
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.FILE_IMPORT_CREATED.default",
+                        activity_data
+                    );
+                });
+            });
+            context("when importing to an existing table", function () {
+                var datasetModel;
+                beforeEach(function () {
+                    datasetModel = rspecFixtures.dataset();
+                    model = rspecFixtures.activity.fileImportCreated({dataset: datasetModel});
+                    dataset = model.dataset();
+                    activity_data["destObjectOrName"] = linkTo(dataset.showUrl(), dataset.name());
+                    presenter = new chorus.presenters.Activity(model);
+                });
+                it("displays the destination table name with dataset link", function () {
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.FILE_IMPORT_CREATED.default",
+                        activity_data
+                    );
+                });
             });
         });
     });

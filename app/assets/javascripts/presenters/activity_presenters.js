@@ -156,7 +156,7 @@
             FileImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
-                computed: ["importSourceLink", "datasetType"]
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
             },
 
             FileImportFailed: {
@@ -238,6 +238,9 @@
                     default:
                         return (style + '.many');
                 }
+            } else if (self.get("action").lastIndexOf("FileImport", 0) === 0 ||
+                       self.get("action").lastIndexOf("DatasetImport", 0) === 0) {
+                return "";
             } else {
                 return style;
             }
@@ -246,7 +249,6 @@
         headerTranslationKey: function(self) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
             var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle), hidden.defaultStyle(self.model), 'default']));
-
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {
                      key = [mainKey, possibleStyles[i]].join(".");
@@ -307,6 +309,14 @@
         },
 
         datasetLink: function(self) {
+            return self.model.get("destinationTable");
+        },
+
+        destObjectOrName: function(self) {
+            dataset = self.model["dataset"]();
+            if (dataset.get("id")){
+                return hidden.modelLink(dataset);
+            }
             return self.model.get("destinationTable");
         },
 
