@@ -6,11 +6,11 @@ bin=`cd "$bin"; pwd`
 
 case $RAILS_ENV in
     development )
-        SOLR_PORT=8981
+        SOLR_PORT=8982
         SOLR_LOG_LEVEL=INFO
         ;;
     test )
-        SOLR_PORT=8982
+        SOLR_PORT=8981
         SOLR_LOG_LEVEL=WARNING
         ;;
     production )
