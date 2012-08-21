@@ -114,6 +114,9 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << alice_private_workspace = alice.owned_workspaces.create!(:name => "Alice Private", :summary => "Not for bobsearch, ha ha", :public => false)
     workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => alice}, :without_protection => true)
     workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
+    bob_public_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
+    bob_public_workspace.save!
+
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
     workspaces.each do |workspace|
       workspace.members << carly
