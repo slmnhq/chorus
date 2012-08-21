@@ -117,3 +117,27 @@ describe "run analyze on a table" do
     page.should have_content("Analyze is running")
   end
 end
+
+
+describe "download a dataset" do
+
+  it "runs analyze on a table from instance browsing view" do
+    login('edcadmin', 'secret')
+    create_gpdb_instance(:name => "download_dataset")
+    wait_for_ajax
+    click_link("download_dataset")
+    wait_for_ajax
+    click_link("ChorusAnalytics")
+    sleep(2)
+    click_link("analytics")
+    sleep(1)
+    click_link("2009_sfo_customer_survey")
+    wait_for_ajax
+    click_button "Data Preview"
+    wait_for_ajax
+    click_link "Download"
+    within_modal do
+      click_submit_button
+    end
+  end
+end
