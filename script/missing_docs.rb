@@ -19,7 +19,7 @@ end
 
 routes = `bundle exec rake routes`.split("\n").map { |line|
   match = line.match(/(\w+) +(\/[^( ]+)/)
-  match && Route.new(match[1].downcase, match[2])
+  match && %w{POST GET PUT DELETE}.include?(match[1].upcase) ? Route.new(match[1].downcase, match[2]) : nil
 }.compact
 
 existing_docs = `egrep -Rh "^\\W*(post|put|get|delete)" spec/acceptance`.split("\n").map { |line|
