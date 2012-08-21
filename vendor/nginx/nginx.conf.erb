@@ -43,7 +43,7 @@ http {
 
         <% if rails_env == 'production' %>
         location ~ ^/(assets)/ {
-            root  ../../public/;
+            root  ../../../../public/;
             gzip_static on;
             expires max;
             add_header Cache-Control public;
@@ -51,7 +51,7 @@ http {
         <% end %>
 
         location / {
-            root  ../../public/;
+            root  ../../../../public/;
             try_files $uri @app;
         }
 

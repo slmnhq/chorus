@@ -1,5 +1,6 @@
 require_relative 'java_modules'
 require_relative 'config'
+require_relative 'template'
 
 module Aurora
   InvalidService = Class.new(StandardError)
@@ -33,7 +34,7 @@ module Aurora
       return [] unless @valid
 
       @aurora_service.get_template_for_chorus.map do |java_template|
-        Template.new(java_template)
+        Aurora::Template.new(java_template)
       end
     end
 
