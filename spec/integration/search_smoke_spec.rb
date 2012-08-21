@@ -9,7 +9,7 @@ describe "searches for instance name" do
     wait_for_ajax
     page.execute_script("$('.chorus_search_container>input').val('search_instance');")
     find('.chorus_search_container>input').native.send_keys(:return)
-    wait_for_ajax
+    wait_for_ajax(3)
     page.should have_content "Search for"
     page.should have_content "search_instance"
 
@@ -24,7 +24,7 @@ describe "searches for workspace name" do
     wait_for_ajax
     page.execute_script("$('.chorus_search_container>input').val('search_workspace');")
     find('.chorus_search_container>input').native.send_keys(:return)
-    wait_for_ajax
+    wait_for_ajax(3)
     page.should have_content "Search for"
     page.should have_content "search_workspace"
 
@@ -40,7 +40,7 @@ describe "searches for workfile name" do
     create_valid_workfile(:name => "search_workfile")
     page.execute_script("$('.chorus_search_container>input').val('search_workfile.sql');")
     find('.chorus_search_container>input').native.send_keys(:return)
-    wait_for_ajax
+    wait_for_ajax(3)
     page.should have_content "Search for"
     page.should have_content "search_workfile"
 

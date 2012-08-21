@@ -1,16 +1,15 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "add a workfile" do
-  before(:each) do
-    login('edcadmin', 'secret')
-  end
 
   it "creates a simple workfile" do
+    login('edcadmin', 'secret')
     create_valid_workspace
     create_valid_workfile
   end
 
   it "uploads a workfile from the local system" do
+    login('edcadmin', 'secret')
     create_valid_workspace
     click_link "Work Files"
     wait_for_ajax
@@ -27,9 +26,9 @@ describe "add a workfile" do
 end
 
 describe "Deleting workfiles" do
-  before(:each) { login('edcadmin', 'secret') }
 
   it "deletes an uploaded file from the show page" do
+    login('edcadmin', 'secret')
     create_valid_workspace(:name => "workfile_delete")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
