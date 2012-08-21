@@ -10,6 +10,11 @@ bin=`cd "$bin"; pwd`
 
 # depends on solr, workers, postgres
 
+if [ ! -f $SOLR_PID_FILE ]; then
+    log "Solr must be running to start the web server."
+    exit 1
+fi
+
 log "Writing nginx config..."
 $RUBY vendor/nginx/generate_nginx_conf.rb
 
