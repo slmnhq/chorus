@@ -39,10 +39,6 @@ module Events
     has_additional_data :error_message
   end
 
-  class WORKFILE_CREATED < Base
-    has_targets :workfile, :workspace
-    has_activities :actor, :workfile, :workspace
-  end
 
   class WORKSPACE_MAKE_PUBLIC < Base
     has_targets :workspace

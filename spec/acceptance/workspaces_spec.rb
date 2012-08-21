@@ -16,6 +16,7 @@ resource "Workspaces" do
   before do
     log_in user
     stub(HdfsExternalTable).execute_query.with_any_args { nil }
+    stub(File).readlines.with_any_args { ["The river was there."] }
   end
 
   get "/workspaces" do
@@ -152,6 +153,7 @@ resource "Workspaces" do
     parameter :file_name, "Name of the csv file to be imported"
     parameter :contents, "The csv file being imported"
 
+    required_parameters :workspace_id, :file_name, :contents
     scope_parameters :csv, [:contents]
 
     let(:file_name) { "test.csv"}
@@ -159,6 +161,31 @@ resource "Workspaces" do
     let(:contents) { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
 
     example_request "Upload a CSV file for import" do
+      status.should == 200
+    end
+  end
+
+  put "/workspaces/:workspace_id/csv/:id/import" do
+    parameter :workspace_id, "Workspace Id"
+    parameter :id, "CSV File Id"
+    parameter :type, "Table type ( existingTable, newTable )"
+    parameter :columns_map, "Mapping of columns from CSV to table ( only for existing table )"
+    parameter :to_table, "Target table name"
+    parameter :file_contains_header, "Does the CSV file contain a header row? ( true, false )"
+
+    required_parameters :workspace_id, :id, :type, :to_table, :file_contains_header
+    scope_parameters :csvimport, [:type, :columns_map, :to_table, :file_contains_header]
+
+    let(:csv_file) { CsvFile.last }
+
+    let(:workspace_id) { workspace.id }
+    let(:id)           { csv_file.id}
+    let(:type)         { "existingTable"}
+    let(:to_table)     { "a_fine_table" }
+    let(:file_contains_header) { "true" }
+    let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
+
+    example_request "Import a CSV file" do
       status.should == 200
     end
   end

@@ -58,7 +58,7 @@ class WorkfilesController < ApplicationController
         workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
       end
 
-      Events::WORKFILE_CREATED.by(current_user).add(
+      Events::WorkfileCreated.by(current_user).add(
         :workfile => workfile,
         :workspace => workspace
       )

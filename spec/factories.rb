@@ -195,7 +195,7 @@ FactoryGirl.define do
       old_name "old_instance_name"
     end
 
-    factory :workfile_created_event, :class => Events::WORKFILE_CREATED do
+    factory :workfile_created_event, :class => Events::WorkfileCreated do
       workfile { FactoryGirl.create(:workfile_version).workfile }
       workspace
     end

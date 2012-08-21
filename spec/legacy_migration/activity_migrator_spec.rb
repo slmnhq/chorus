@@ -138,9 +138,9 @@ describe ActivityMigrator do
       end
 
       it "copies WORKFILE CREATED data fields from the legacy activity" do
-        Events::WORKFILE_CREATED.count.should == 36
+        Events::WorkfileCreated.count.should == 36
 
-        event = Events::WORKFILE_CREATED.find_by_legacy_id('10010')
+        event = Events::WorkfileCreated.find_by_legacy_id('10010')
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
         event.workfile.should be_instance_of(Workfile)

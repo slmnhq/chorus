@@ -255,9 +255,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKFILE_CREATED" do
+  describe "WorkfileCreated" do
     subject do
-      Events::WORKFILE_CREATED.add(
+      Events::WorkfileCreated.add(
           :actor => actor,
           :workfile => workfile,
           :workspace => workspace

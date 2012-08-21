@@ -133,7 +133,7 @@ describe EventsController do
         "workspaceMakePrivate" => Events::WORKSPACE_MAKE_PRIVATE,
         "workspaceArchived" => Events::WORKSPACE_ARCHIVED,
         "workspaceUnarchived" => Events::WORKSPACE_UNARCHIVED,
-        "workfileCreated" => Events::WORKFILE_CREATED,
+        "workfileCreated" => Events::WorkfileCreated,
         "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
         "userCreated" => Events::USER_ADDED,
         "sandboxAdded" => Events::WORKSPACE_ADD_SANDBOX,
