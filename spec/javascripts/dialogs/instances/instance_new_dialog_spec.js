@@ -267,7 +267,6 @@ describe("chorus.dialogs.InstancesNew", function() {
                     expect(this.dialog.model.save).toHaveBeenCalled();
 
                     var attrs = this.dialog.model.save.calls[0].args[0];
-                    debugger
 
                     expect(attrs.size).toBe("1");
                     expect(attrs.name).toBe("new_greenplum_instance");

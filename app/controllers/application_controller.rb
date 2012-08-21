@@ -119,4 +119,12 @@ class ApplicationController < ActionController::Base
       raise ApiValidationError.new(options[:field_name] || param, :blank) if params[param].blank?
     end
   end
+
+  def head(status, options = {})
+    if (status == :ok && request.accepts.first == 'application/json')
+      render :text => "{}"
+    else
+      super
+    end
+  end
 end

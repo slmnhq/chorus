@@ -239,4 +239,31 @@ describe ApplicationController do
       end
     end
   end
+
+  describe "#head :ok" do
+    controller do
+      def index
+        head :ok
+      end
+    end
+
+    before do
+      log_in users(:alice)
+    end
+
+    context "when the request is for application/json" do
+      it "renders an empty hash" do
+        request.env['HTTP_ACCEPT'] = 'application/json, text/javascript, */*'
+        get :index
+        response.body.should == '{}'
+      end
+    end
+
+    context "when the request is not for application/json" do
+      it "renders an empty hash" do
+        get :index
+        response.body.should == ' '
+      end
+    end
+  end
 end
