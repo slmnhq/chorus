@@ -176,6 +176,12 @@
                 links: ["workspace"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
+            },
+
+            WorkfileUpgradedVersion: {
+                links: [ "actor", "workfile", "workspace" ],
+                attrs: ["commitMessage"],
+                computed: ["versionLink"]
             }
         },
 
@@ -283,6 +289,18 @@
             dataset.workspace = workspace;
             var dataset_model = new chorus.models.WorkspaceDataset(dataset);
             return dataset_model.showLink();
+        },
+
+        versionLink: function(self) {
+            var version_num = self.model.get("versionNum");
+            var version_id = self.model.get("versionId");
+            var workfile = self.model.get("workfile");
+            var workfile_version = new chorus.models.Workfile({
+                versionInfo: { id : version_id },
+                id : workfile.id,
+                workspace: workfile.workspace
+            });
+            return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
         },
 
         datasetLink: function(self) {

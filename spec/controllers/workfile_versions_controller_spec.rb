@@ -57,6 +57,15 @@ describe WorkfileVersionsController do
       post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
       WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 0
     end
+
+    it "creates the activity stream for upgrade" do
+      post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version -1'}
+      event = Events::WorkfileUpgradedVersion.by(user).first
+      event.workfile.should == workfile
+      event.workspace.to_param.should == workfile.workspace.id.to_s
+      event.additional_data["version_num"].should == "2"
+      event.additional_data["commit_message"].should == "A new version -1"
+    end
   end
 
   context "#show" do

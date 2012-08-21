@@ -458,6 +458,35 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("workfile upgrade version", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.workfileUpgradedVersion();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workfile = model.workfile();
+            var workspace = workfile.workspace();
+            var workfile_version = new chorus.models.Workfile({
+                versionInfo: { id : model.get("versionId") },
+                id : workfile.id,
+                workspace: workspace
+            });
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkfileUpgradedVersion.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    versionLink: linkTo(workfile_version.showUrl(), t("workfile.version_title", { versionNum: model.get("versionNum") }))
+                }
+            );
+        });
+    });
+
     context("source table created", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });

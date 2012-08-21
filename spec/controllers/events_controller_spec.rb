@@ -149,7 +149,8 @@ describe EventsController do
         "fileImportSuccess" => Events::FileImportSuccess,
         "fileImportFailed" => Events::FileImportFailed,
         "datasetImportSuccess" => Events::DatasetImportSuccess,
-        "datasetImportFailed" => Events::DatasetImportFailed
+        "datasetImportFailed" => Events::DatasetImportFailed,
+        "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion
     }
 
     FIXTURE_FILES.each do |filename, event_class_name|

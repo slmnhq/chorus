@@ -12,7 +12,7 @@ chorus.Mixins.Urls = {
         return prefix + encodedFragment;
     },
 
-    showLink: function() {
-        return Handlebars.helpers.linkTo(this.showUrl(), this.name());
+    showLink: function(text) {
+        return Handlebars.helpers.linkTo(this.showUrl(), text || this.name());
     }
 };

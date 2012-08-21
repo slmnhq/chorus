@@ -15,7 +15,10 @@ class WorkfileVersionsController < ApplicationController
     file = build_new_file(workfile.file_name, params[:workfile][:content])
     file.content_type = workfile.latest_workfile_version.contents_content_type
     Workfile.transaction do
-      workfile.build_new_version(current_user, file, params[:workfile][:commit_message]).save!
+      workfile_version = workfile.build_new_version(current_user, file, params[:workfile][:commit_message])
+      workfile_version.save!
+      create_event_for_upgrade(current_user, workfile, workfile.workspace,
+                               workfile_version.version_num, workfile_version.commit_message, workfile_version.id)
       remove_draft(workfile)
     end
 
@@ -51,5 +54,15 @@ class WorkfileVersionsController < ApplicationController
     tempfile.close
 
     ActionDispatch::Http::UploadedFile.new(:filename => file_name, :tempfile => tempfile)
+  end
+
+  def create_event_for_upgrade(current_user, workfile, workspace, version_num, commit_message, version_id)
+    Events::WorkfileUpgradedVersion.by(current_user).add(
+        :workfile => workfile,
+        :workspace => workspace,
+        :version_num => version_num.to_s,
+        :commit_message => commit_message,
+        :version_id => version_id.to_s
+    )
   end
 end

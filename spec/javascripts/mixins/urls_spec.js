@@ -51,5 +51,17 @@ describe("chorus.Mixins.Urls", function() {
                 expect(this.object.showUrl()).toBe("#/my_items/show/45")
             });
         });
+        
+        context("#showLink", function() {
+            it("shows the link with the model's name", function () {
+                expect(this.object.showLink().string).toBe('<a href="#/workspaces/45">Bob Public</a>')
+            });
+
+            it("shows the link with the given text", function () {
+                expect(this.object.showLink("HI").string).toBe('<a href="#/workspaces/45">HI</a>')
+            });
+
+
+        })
     });
 });

@@ -147,7 +147,7 @@ FixtureBuilder.configure do |fbuilder|
       sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
       fbuilder.name :sql, sql_workfile
 
-      WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      alice_workfile_version = WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
@@ -161,6 +161,7 @@ FixtureBuilder.configure do |fbuilder|
 
       fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
       fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
+      fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
 
     end
 

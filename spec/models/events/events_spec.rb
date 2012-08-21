@@ -441,4 +441,26 @@ describe "Event types" do
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
   end
+
+  describe "WorkfileUpgradedVersion" do
+    subject do
+      Events::WorkfileUpgradedVersion.add(
+          :actor => actor,
+          :workfile => workfile,
+          :workspace => workspace,
+          :version_num => 2,
+          :commit_message => "a nice commit message",
+          :version_id => 10
+      )
+    end
+
+    its(:workfile) { should == workfile }
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == {:workfile => workfile, :workspace => workspace} }
+    its(:additional_data) { should == {'version_num' => 2, 'commit_message' => "a nice commit message", 'version_id' => 10} }
+
+    it_creates_activities_for { [actor, workfile, workspace] }
+    it_does_not_create_a_global_activity
+  end
 end
