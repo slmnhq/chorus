@@ -6,9 +6,12 @@ resource "Workfiles" do
   let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
   let!(:file) { test_file("workfile.sql", "text/sql") }
   let!(:workfile_id) { workfile.to_param }
+  let(:result) { }
 
   before do
     log_in owner
+    stub(SqlExecutor).execute_sql.with_any_args { result }
+    stub(SqlExecutor).cancel_query.with_any_args { }
   end
 
   get "/workfiles/:id" do
@@ -85,6 +88,44 @@ resource "Workfiles" do
     let(:file_name) { workfile.file_name }
 
     example_request "Create a workfile on a workspace" do
+      status.should == 200
+    end
+  end
+
+  post "/workfiles/:workfile_id/executions" do
+    parameter :schema_id, "Schema Id"
+    parameter :workfile_id, "Workfile Id"
+    parameter :check_id, "Check Id to cancel the execution"
+    parameter :sql, "Sql to execute"
+
+    required_parameters :workfile_id, :schema_id, :check_id
+
+    let(:schema_id) { gpdb_schemas(:bobs_schema).id }
+    let(:check_id) { "12345" }
+
+    let(:result) do
+      SqlResult.new.tap do |r|
+        r.add_column("results_of", "your_sql")
+      end
+    end
+
+
+    example_request "Executes a workfile" do
+      status.should == 200
+    end
+  end
+
+  delete "/workfiles/:workfile_id/executions/:id" do
+    parameter :schema_id, "Schema ID"
+    parameter :workfile_id, "Workfile Id"
+    parameter :id, "Check Id (given when starting the execution)"
+
+    required_parameters :id, :workfile_id, :schema_id
+
+    let(:id) { 0 }
+    let(:schema_id) { gpdb_schemas(:bobs_schema).id }
+
+    example_request "Cancels execution of a workfile" do
       status.should == 200
     end
   end
