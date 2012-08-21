@@ -30,7 +30,6 @@ class AuroraProvider
 
     db_attributes = attributes.dup.symbolize_keys!
     db_attributes.merge!({
-      :database_name => attributes["database_name"],
       :template => provider.aurora_service.find_template_by_name(attributes["template"]),
       :db_username => instance.owner_account.db_username,
       :db_password => instance.owner_account.db_password
@@ -38,13 +37,23 @@ class AuroraProvider
     db = provider.aurora_service.create_database(db_attributes)
     instance.host = db.public_ip
     instance.save!
-
     Events::PROVISIONING_SUCCESS.by(instance.owner).add(:greenplum_instance => instance)
-
+    schema_name =  attributes["schema_name"]
+    if schema_name != 'public'
+      create_new_schema(instance.owner_account, attributes["database_name"], schema_name);
+    end
+    instance.refresh_databases
     instance
 
   rescue StandardError => e
     Events::PROVISIONING_FAIL.by(instance.owner).add(:greenplum_instance => instance,
                                                        :error_message => e.message)
+  end
+
+  private
+  def self.create_new_schema(account, database_name, schema_name)
+    Gpdb::ConnectionBuilder.connect!(account.instance, account, database_name ) do |conn|
+      conn.exec_query("CREATE SCHEMA #{schema_name}")
+    end
   end
 end

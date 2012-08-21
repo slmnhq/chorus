@@ -53,9 +53,12 @@ describe AuroraProvider do
   describe ".provide!" do
     let(:instance) { instances(:aurora) }
     let(:database) { Object.new }
+    let(:schema_name) {"schema_name"}
     let(:attributes) { {"template" => "small",
                         "size" => 1,
-                        "database_name" => "database"} }
+                        "database_name" => "database",
+                        "schema_name" => schema_name} }
+    let(:new_database) {GpdbDatabase.create({:name => 'database', :instance => instance}, :without_protection => true)}
 
     context "when provisioning succeeds" do
       before do
@@ -67,7 +70,8 @@ describe AuroraProvider do
                                           :database_name => 'database',
                                           :db_username => 'edcadmin',
                                           :db_password => 'secret',
-                                          :size => 1
+                                          :size => 1,
+                                          :schema_name => schema_name
                                         }) { database }
         end
       end
@@ -86,6 +90,33 @@ describe AuroraProvider do
         AuroraProvider.provide!(instance.id, attributes)
         event = Events::PROVISIONING_SUCCESS.find_by_actor_id(instance.owner)
         event.greenplum_instance.should == instance
+      end
+      context "when schema name is not public" do
+        before do
+          mock(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {
+          }
+          mock(instance).databases {
+            [new_database]
+          }
+        end
+        it "connects to the newly created database and creates new schema" do
+          AuroraProvider.provide!(instance.id, attributes)
+          instance.reload
+          instance.databases.map(&:name).should include("database")
+        end
+      end
+      context "when new schema name is public" do
+        let(:schema_name) { 'public' }
+        let(:create_new_schema_called) { false }
+        before do
+          stub(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {
+            create_new_schema_called = true
+          }
+        end
+        it "connects to the newly created database and does not create new schema if schema_name is public" do
+          AuroraProvider.provide!(instance.id, attributes)
+          create_new_schema_called.should == false
+        end
       end
     end
 
