@@ -11,13 +11,10 @@ STARTING_DIR=$(pwd)
 SCRIPT_DIR=$(dirname $0)
 cd $STARTING_DIR/$SCRIPT_DIR
 
-RAILS_ENV=$RAILS_ENV
-
 CHORUS_LOG=$CHORUS_HOME/log
 CHORUS_PID=$CHORUS_HOME/tmp/pids
 mkdir -p $CHORUS_PID
 
-CLOCK_PID_FILE=$CHORUS_PID/clock.$RAILS_ENV.pid
 WORKER_PID_FILE=$CHORUS_PID/queue_classic.$RAILS_ENV.pid
 
 function pid_is_running () {
@@ -50,22 +47,8 @@ function start_worker () {
   fi
 }
 
-function start_clock () {
-  test ! -e $CHORUS_PID && echo "PID FOLDER DOES NOT EXIST!! Skipping ..." && return 1
-
-  pid_is_running "$(cat $CLOCK_PID_FILE 2> /dev/null)"
-  clock_pid_present=$?
-
-  # Remember that 1 is FALSE in bash!
-  if [ $clock_pid_present -eq 1 ]
-  then
-    echo "Starting clock..."
-    cd $CHORUS_HOME
-      bin/ruby script/clock.rb > $CHORUS_LOG/clock.$RAILS_ENV.log 2>&1 &
-      echo $! > $CLOCK_PID_FILE
-  else
-    echo "Clock is still running..."
-  fi
+function start_scheduler () {
+  $bin/start-scheduler.sh
 }
 
 function start_solr () {
@@ -93,17 +76,8 @@ function stop_worker () {
   fi
 }
 
-function stop_clock () {
-  cd $CHORUS_HOME
-
-  if [ -e $CLOCK_PID_FILE ]
-  then
-    echo "Stopping clock..."
-    cat $CLOCK_PID_FILE | xargs kill
-    rm $CLOCK_PID_FILE
-  else
-    echo "clock PID file not found -- aborting."
-  fi
+function stop_scheduler () {
+  $bin/stop-scheduler.sh
 }
 
 function stop_solr () {
@@ -123,7 +97,7 @@ function stop_postgres () {
 function start () {
   if [ "$1" = "postgres" -o "$1" = "" ];   then start_postgres;    fi
   if [ "$1" = "worker" -o "$1" = "" ];     then start_worker;      fi
-  if [ "$1" = "clock" -o "$1" = "" ];      then start_clock;       fi
+  if [ "$1" = "scheduler" -o "$1" = "" ];  then start_scheduler;   fi
   if [ "$1" = "solr" -o "$1" = "" ];       then start_solr;        fi
   if [ "$1" = "webserver" -o "$1" = "" ];  then start_webserver;   fi
 }
@@ -131,7 +105,7 @@ function start () {
 
 function stop () {
   if [ "$1" = "worker" -o "$1" = "" ];     then stop_worker;      fi
-  if [ "$1" = "clock" -o "$1" = "" ];      then stop_clock;       fi
+  if [ "$1" = "scheduler" -o "$1" = "" ];  then stop_scheduler;   fi
   if [ "$1" = "solr" -o "$1" = "" ];       then stop_solr;        fi
   if [ "$1" = "webserver" -o "$1" = "" ];  then stop_webserver;   fi
   if [ "$1" = "postgres" -o "$1" = "" ];   then stop_postgres;    fi
