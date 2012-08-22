@@ -83,6 +83,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     changeSelectedDataset: function(name) {
         this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
+        this.$(".existing_table a.dataset_picked").data("dataset", name);
         this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
         this.onInputFieldChanged();
     },
@@ -247,7 +248,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
         var $existingTable = $enabledFieldSet.find("a.dataset_picked");
         if($existingTable.length) {
-            updates.toTable = $existingTable.text();
+            updates.toTable = $existingTable.data("dataset");
         }
 
         var $truncateCheckbox = $enabledFieldSet.find(".truncate");

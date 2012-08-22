@@ -19,7 +19,6 @@ describe("chorus.models.WorkfileExecutionTask", function() {
     it("posts the correct data on save", function() {
         this.model.save();
         var params = this.server.lastCreate().params();
-        console.debug(params);
         expect(params['schema_id']).toEqual('7');
         expect(params['check_id']).toEqual(this.model.get("checkId"));
         expect(params['sql']).toEqual('show tables');
