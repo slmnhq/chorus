@@ -18,7 +18,7 @@ file_sizes_mb:
 
 gpfdist:
   ssl: false
-  url: "chorus-staging"
+  url: "graystone"
   write_port: 8000
   read_port: 8001
   data_dir: "/tmp"

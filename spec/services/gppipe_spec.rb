@@ -46,7 +46,18 @@ describe Gppipe, :database_integration => true do
   let(:source_table) { "candy" }
   let(:source_table_name) { "\"#{schema_name}\".\"#{source_table}\"" }
   let(:destination_table_name) { "dst_candy" }
-  let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
+  let(:table_def) { '"id" numeric(4,0),
+                     "name" character varying(255),
+                      "id2" integer,
+                      "id3" integer,
+                      "date_test" date,
+                      "fraction" double precision,
+                      "numeric_with_scale" numeric(4,2),
+                      "time_test" time without time zone,
+                      "time_with_precision" time(3) without time zone,
+                      "time_with_zone" time(3) with time zone,
+                      "time_stamp_with_precision" timestamp(3) with time zone,
+                      PRIMARY KEY("id2", "id3", "id")'.tr("\n","").gsub(/\s+/, " ").strip }
   let(:distrib_def) { "" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true" }.merge(extra_options) }

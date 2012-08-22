@@ -25,7 +25,7 @@ class Gppipe < GpTableCopier
   def table_definition
     return @table_definition if @table_definition
     # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-    arr = src_conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name='#{source_table.name}' and table_schema='#{source_schema.name}' order by ordinal_position;")
+    arr = src_conn.exec_query(describe_table)
     @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
   end
 
@@ -120,6 +120,30 @@ class Gppipe < GpTableCopier
       FROM   pg_constraint where conrelid = '#{source_schema.name}.#{source_table.name}'::regclass and contype='p'
       ) y, pg_attribute WHERE attrelid = '#{source_schema.name}.#{source_table.name}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
     PRIMARYKEYSQL
+  end
+
+  def describe_table
+    <<-DESCRIBETABLESQL
+      SELECT a.attname as column_name,
+        pg_catalog.format_type(a.atttypid, a.atttypmod) as data_type,
+        (SELECT substring(pg_catalog.pg_get_expr(d.adbin, d.adrelid) for 128)
+         FROM pg_catalog.pg_attrdef d
+         WHERE d.adrelid = a.attrelid
+          AND d.adnum = a.attnum
+          AND a.atthasdef),
+        a.attnotnull, a.attnum,
+        NULL AS attcollation
+      FROM pg_catalog.pg_attribute a
+      WHERE a.attrelid =
+          (SELECT c.oid
+          FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+          WHERE c.relname ~ '^(#{source_table.name})$'
+            AND n.nspname ~ '^(#{source_schema.name})$')
+        AND a.attnum > 0
+        AND NOT a.attisdropped
+      ORDER BY a.attnum;
+    DESCRIBETABLESQL
   end
 
 end
