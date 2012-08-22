@@ -6,6 +6,7 @@
         &.extra_line {
             height: $summary-line-height * 3;
         }
+        word-wrap: break-word;
         overflow: hidden;
 
         .original {
