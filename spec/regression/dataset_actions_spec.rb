@@ -141,3 +141,42 @@ describe "download a dataset" do
     end
   end
 end
+
+describe "de-associating dataset to a workspace" do
+
+  it "de-Associates a dataset to a workspace" do
+
+    login('edcadmin','secret')
+    create_valid_workspace(:name => "deassociate_dataset")
+    wait_for_ajax
+    workspace_id = Workspace.find_by_name("deassociate_dataset").id
+    create_gpdb_instance(:name => "data_deassociate")
+    click_link"data_deassociate"
+    wait_for_ajax
+    click_link "gpdb_garcia"
+    wait_for_ajax
+    click_link "gpdb_test_schema"
+    wait_for_ajax
+    page.should have_content "external_web_table1"
+    click_link "Associate dataset with a workspace"
+
+    within(".collection_list") do
+      page.find("li[data-id='#{workspace_id}']").click
+    end
+    click_submit_button
+    wait_for_ajax
+    go_to_workspace_page
+    click_link "deassociate_dataset"
+    wait_for_ajax
+    click_link "Data"
+    wait_for_ajax
+    page.should have_content "external_web_table1"
+    click_link "Delete association"
+    click_submit_button
+    wait_for_ajax
+    page.should_not have_content "external_web_table1"
+
+
+  end
+
+end

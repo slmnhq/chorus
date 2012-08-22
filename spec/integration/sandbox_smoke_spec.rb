@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Create Sandbox" do
 
-  it "creates sandbox in a private workspace" do
+  xit "creates sandbox in a private workspace" do
     login('edcadmin', 'secret')
     inst_name = "Instance_gpdb40_sand"
     create_gpdb_instance(:name => inst_name)
@@ -28,7 +28,7 @@ describe "Create Sandbox" do
     click_submit_button
   end
 
-  it "creates sandbox in a public workspace" do
+  xit "creates sandbox in a public workspace" do
     login('edcadmin', 'secret')
     inst_name = "Instance_gpdb40_sand"
     #create_gpdb_instance(:name => inst_name, :host => "rh55-qavm89", :port =>"5432", :dbuser => "edcadmin", :dbpass => "secret")
