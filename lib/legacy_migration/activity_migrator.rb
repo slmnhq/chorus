@@ -21,7 +21,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
-      ('Events::' || streams.type),
+      'Events::SourceTableCreated',
       datasets.id,
       'Dataset',
       streams.created_tx_stamp,
@@ -679,6 +679,62 @@ class ActivityMigrator < AbstractMigrator
 
   end
 
+  def migrate_workfile_upgrade_success
+    Legacy.connection.exec_query(%Q(
+      INSERT INTO events(
+        legacy_id,
+        action,
+        target1_id,
+        target1_type,
+        created_at,
+        updated_at,
+        workspace_id,
+        actor_id)
+      SELECT
+        streams.id,
+        'Events::WorkfileUpgradedVersion',
+        workfiles.id,
+        'Workfile',
+        streams.created_tx_stamp,
+        streams.last_updated_tx_stamp,
+        workspaces.id,
+        users.id
+      FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_workfile
+        ON streams.id = target_workfile.activity_stream_id AND target_workfile.entity_type = 'workfile'
+      INNER JOIN workfiles
+        ON target_workfile.object_id = workfiles.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      WHERE streams.type = 'WORKFILE_UPGRADED_VERSION'
+      AND streams.id NOT IN (SELECT legacy_id from events);
+      ))
+
+    backfill_version_additional_data
+  end
+
+
+  def backfill_version_additional_data
+    Events::WorkfileUpgradedVersion.where('additional_data IS NULL').each do |event|
+      row = Legacy.connection.exec_query("
+        SELECT aso.object_id AS version_num, versions.id AS version_id, versions.commit_message
+        FROM legacy_migrate.edc_activity_stream_object aso
+        INNER JOIN workfile_versions versions ON workfile_id = #{event.target1_id} AND
+        versions.version_num = aso.object_id::integer
+        WHERE aso.activity_stream_id = '#{event.legacy_id}'
+        AND aso.object_type = 'object' AND aso.entity_type = 'version';
+      ").first
+      event.additional_data = {:version_num => "#{row['version_num']}".to_s,
+                               :version_id => "#{row['version_id']}".to_s,
+                               :commit_message => "#{row['commit_message']}"}
+      event.save!
+    end
+  end
+
   def migrate
     ActiveRecord::Base.record_timestamps = false
 
@@ -702,6 +758,7 @@ class ActivityMigrator < AbstractMigrator
     migrate_member_added
     migrate_provision_failed
     migrate_provision_success
+    migrate_workfile_upgrade_success
 
     ActiveRecord::Base.record_timestamps = true
   end

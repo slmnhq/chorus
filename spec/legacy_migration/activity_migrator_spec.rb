@@ -207,6 +207,18 @@ describe ActivityMigrator do
         event.actor.should be_instance_of(User)
         event.greenplum_instance.should be_instance_of(Instance)
       end
+
+      it "copies WORKFILE UPGRADED VERSION from legacy activity" do
+        Events::WorkfileUpgradedVersion.count.should == 8
+
+        event = Events::WorkfileUpgradedVersion.find_by_legacy_id('10611')
+
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+        event.workfile.should be_instance_of(Workfile)
+        event.additional_data['version_num'].should == "2"
+        event.additional_data['commit_message'].should == "j"
+      end
     end
     #
   end
