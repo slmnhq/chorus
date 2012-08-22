@@ -162,11 +162,6 @@ FactoryGirl.define do
     workspace
   end
 
-  factory :hdfs_file_reference do
-    hadoop_instance_id 25
-    path "/folder/subfolder/file.csv"
-  end
-
   factory :event, :class => Events::Base do
     actor
 

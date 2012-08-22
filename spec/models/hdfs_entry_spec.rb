@@ -17,7 +17,7 @@ describe HdfsEntry do
       duplicate_entry.errors.count.should == 1
     end
 
-    it { should validate_presence_of(:hadoop_instance)}
+    it { should validate_presence_of(:hadoop_instance) }
   end
 
   describe ".list" do
@@ -25,9 +25,7 @@ describe HdfsEntry do
       let(:hadoop_instance) { hadoop_instances(:hadoop) }
 
       before do
-        HdfsEntry.destroy_all # remove fixtures
-        any_instance_of(Hdfs::QueryService) do |h|
-          stub(h).list('/') do
+        @hdfs_results =
             [{
                  "path" => "/empty",
                  "size" => 10,
@@ -36,13 +34,15 @@ describe HdfsEntry do
                  'content_count' => 0
              },
              {
-                 "path" => "/empty.png",
+                 "path" => "/photo.png",
                  "size" => 10,
                  "is_directory" => "false",
                  "modified_at" => "2010-10-20 22:00:00",
                  'content_count' => 0
              }]
-          end
+        HdfsEntry.destroy_all # remove fixtures
+        any_instance_of(Hdfs::QueryService) do |h|
+          stub(h).list('/') { @hdfs_results }
         end
       end
 
@@ -60,7 +60,7 @@ describe HdfsEntry do
         first_result.hadoop_instance.should == hadoop_instance
 
         last_result = list.last
-        last_result.path.should == '/empty.png'
+        last_result.path.should == '/photo.png'
         last_result.is_directory.should be_false
       end
 
@@ -68,7 +68,7 @@ describe HdfsEntry do
         expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
 
         last_entry = HdfsEntry.last
-        last_entry.path.should == '/empty.png'
+        last_entry.path.should == '/photo.png'
         last_entry.parent_path.should == '/'
         last_entry.parent.path.should == '/'
         last_entry.hadoop_instance.should == hadoop_instance
@@ -98,7 +98,53 @@ describe HdfsEntry do
         expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry.not_stale, :count).by(-2)
         hadoop_instance.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_stale
       end
-      
+
+      context "when no results come back from query service for the given path" do
+        it "marks hdfs entries that no longer exist as stale" do
+          HdfsEntry.list('/', hadoop_instance)
+          @hdfs_results = []
+          HdfsEntry.list('/', hadoop_instance)
+          HdfsEntry.not_stale.count.should == 1
+        end
+      end
+
+      context "when a directory and file share the same prefix, and the directory becomes stale" do
+        it "should not mark the file as stale" do
+          @hdfs_results =
+              [{
+                   "path" => "/directory",
+                   "size" => 10,
+                   "is_directory" => "true",
+                   "modified_at" => "2010-10-20 22:00:00",
+                   'content_count' => 0
+               },
+               {
+                   "path" => "/directory.png",
+                   "size" => 10,
+                   "is_directory" => "false",
+                   "modified_at" => "2010-10-20 22:00:00",
+                   'content_count' => 0
+               }]
+          HdfsEntry.list('/', hadoop_instance)
+          directory_entry = HdfsEntry.find_by_path('/directory')
+          file_entry = HdfsEntry.find_by_path('/directory.png')
+          file_entry.should_not be_stale
+          directory_entry.should_not be_stale
+          @hdfs_results =
+              [{
+                   "path" => "/directory.png",
+                   "size" => 10,
+                   "is_directory" => "false",
+                   "modified_at" => "2010-10-20 22:00:00",
+                   'content_count' => 0
+               }]
+          HdfsEntry.list('/', hadoop_instance)
+
+          file_entry.reload.should_not be_stale
+          directory_entry.reload.should be_stale
+        end
+      end
+
       it "marks stale entries as not stale if they reappear" do
         HdfsEntry.list('/', hadoop_instance)
         hadoop_instance.hdfs_entries.where("parent_id IS NOT NULL").update_all(:stale_at => Time.now)
@@ -205,7 +251,6 @@ describe HdfsEntry do
     let(:file_entry) do
       HdfsEntry.new({
           :path => "/hello.sql",
-          :size => 10,
           :is_directory => false,
           :modified_at => Time.parse("2010-10-20 22:00:00"),
           :size => 4096,
@@ -258,25 +303,17 @@ describe HdfsEntry do
       hdfs_entry.save!
     end
 
-    #it "un-indexes the dataset when it becomes stale" do
-    #  mock(dataset).solr_remove_from_index
-    #  dataset.stale_at = Time.now
-    #  dataset.save!
-    #end
-    #
-    #it "re-indexes the dataset when it becomes un stale" do
-    #  dataset.stale_at = Time.now
-    #  dataset.save!
-    #  mock(dataset).solr_index
-    #  dataset.stale_at = nil
-    #  dataset.save!
-    #end
+    it "does not index stale records" do
+      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :stale_at => Time.now, :is_directory => false}, :without_protection => true)
+      dont_allow(hdfs_entry).solr_index
+      hdfs_entry.save!
+    end
   end
 
   describe "#highlighted_attributes" do
     it "includes path in the highlighted attributes" do
       hdfs_entry = HdfsEntry.new({:path => "/foo.txt"}, :without_protection => true)
-      hdfs_entry.highlighted_attributes = { :name => [""] }
+      hdfs_entry.highlighted_attributes = {:name => [""]}
       hdfs_entry.highlighted_attributes.should have_key(:path)
     end
   end
@@ -284,7 +321,7 @@ describe HdfsEntry do
   describe "#highlighted_path" do
     it "includes highlighted parent name and not file name" do
       hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz.txt"}, :without_protection => true)
-      hdfs_entry.highlighted_attributes = { :parent_name => ["BAD"] }
+      hdfs_entry.highlighted_attributes = {:parent_name => ["BAD"]}
       hdfs_entry.highlighted_path.should == "/foo/BAD"
     end
 
@@ -294,4 +331,17 @@ describe HdfsEntry do
       hdfs_entry.highlighted_path.should == "/foo/bar"
     end
   end
+
+  describe ".from_param(param)" do
+    it "uses the hadoop instance id and file-system path specified in the string" do
+      instance_id = hadoop_instances(:hadoop).id
+      path = "/foo/bar"
+      param = "#{instance_id}|#{path}"
+      hdfs_entry = HdfsEntry.from_param(param)
+
+      hdfs_entry.hadoop_instance_id.should == instance_id
+      hdfs_entry.path.should == path
+    end
+  end
+
 end

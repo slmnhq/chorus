@@ -9,12 +9,12 @@ describe Events::Base do
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
       dataset = FactoryGirl.create(:gpdb_table)
-      hdfs_file = HdfsFileReference.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
+      hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
       workspace = FactoryGirl.create(:workspace)
 
       Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => instance1)
       Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
-      Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace)
+      Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
       event1 = Events::GreenplumInstanceCreated.first
       event2 = Events::GreenplumInstanceChangedOwner.first

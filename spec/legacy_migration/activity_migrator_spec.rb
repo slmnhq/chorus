@@ -30,7 +30,7 @@ describe ActivityMigrator do
       #  event.workspace.should be_instance_of(Workspace)
       #  event.actor.should be_instance_of(User)
       #  event.dataset.should be_a(Dataset)
-      #  event.hdfs_file.should be_a(HdfsFileReference)
+      #  event.hdfs_file.should be_a(HdfsEntry)
       #  event.hdfs_file.hadoop_instance_id.should_not be_nil
       #  event.hdfs_file.path.should == "/data/Top_1_000_Songs_To_Hear_Before_You_Die.csv"
       #end

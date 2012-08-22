@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts parent_name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
@@ -32,20 +32,20 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>2,''groups''=>[{''groupValue''=>''Instance
-        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1360.0696,''docs''=>[{''id''=>''Instance
+        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1420.4131,''docs''=>[{''id''=>''Instance
         1000000'',''name_texts''=>[''Greenplum''],''description_texts''=>[''Just for
-        bobsearch and greenplumsearch''],''score''=>1360.0696},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000020'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>0.7668923}]}},{''groupValue''=>''Instance
-        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.2270277,''docs''=>[{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000023'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.2270277},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000022'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.0736492}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Instance
+        bobsearch and greenplumsearch''],''score''=>1420.4131},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
+        1000022'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>0.813002}]}},{''groupValue''=>''Instance
+        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.3008032,''docs''=>[{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
+        1000025'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.3008032},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
+        1000024'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.1382028}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Instance
         1000000''=>{''description_texts''=>[''Just for bobsearch and @@@hl@@@greenplumsearch@@@endhl@@@'']},''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000020''=>{''body_texts''=>[''i am a comment with @@@hl@@@greenplumsearch@@@endhl@@@
-        in me'']},''Events::NOTE_ON_GREENPLUM_INSTANCE 1000023''=>{''body_texts''=>[''no,
+        1000022''=>{''body_texts''=>[''i am a comment with @@@hl@@@greenplumsearch@@@endhl@@@
+        in me'']},''Events::NOTE_ON_GREENPLUM_INSTANCE 1000025''=>{''body_texts''=>[''no,
         not @@@hl@@@greenplumsearch@@@endhl@@@'']},''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000022''=>{''body_texts''=>[''is this a @@@hl@@@greenplumsearch@@@endhl@@@
+        1000024''=>{''body_texts''=>[''is this a @@@hl@@@greenplumsearch@@@endhl@@@
         instance?'']}}}'
     http_version:
-  recorded_at: Fri, 17 Aug 2012 18:48:03 GMT
+  recorded_at: Tue, 21 Aug 2012 22:28:41 GMT
 recorded_with: VCR 2.1.1
 ...

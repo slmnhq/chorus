@@ -11,9 +11,9 @@ describe "Notes" do
   let(:workspace) { workspaces(:alice_private) }
   let(:workfile) { workfiles(:bob_public)}
   let(:dataset) { datasets(:bobs_table) }
-  let(:hdfs_file_reference) do
-    HdfsFileReference.create({'path' => '/data/test.csv',
-                              'hadoop_instance_id' => 1234})
+  let(:hdfs_entry) do
+    HdfsEntry.create!({'path' => '/data/test.csv',
+                              'hadoop_instance_id' => hadoop_instance.id, 'modified_at' => "2010-10-24 22:00:00"})
   end
 
   it "requires an actor" do
@@ -68,16 +68,16 @@ describe "Notes" do
     subject do
       Events::NoteOnHdfsFile.add(
           :actor => actor,
-          :hdfs_file => hdfs_file_reference,
+          :hdfs_file => hdfs_entry,
           :body => "This is the text of the note"
       )
     end
 
-    its(:hdfs_file) { should == hdfs_file_reference }
-    its(:targets) { should == {:hdfs_file => hdfs_file_reference} }
+    its(:hdfs_file) { should == hdfs_entry }
+    its(:targets) { should == {:hdfs_file => hdfs_entry} }
     its(:additional_data) { should == {'body' => "This is the text of the note"} }
 
-    it_creates_activities_for { [actor, hdfs_file_reference] }
+    it_creates_activities_for { [actor, hdfs_entry] }
     it_creates_a_global_activity
   end
 
@@ -219,14 +219,14 @@ describe "Notes" do
     it "creates a note on an hdfs file" do
       Events::Note.create_from_params({
         :entity_type => "hdfs_file",
-        :entity_id => "1234|/data/test.csv",
+        :entity_id => "#{hadoop_instance.id}|/data/test.csv",
         :body => "Some crazy content",
       }, user)
 
       last_note = Events::Note.first
       last_note.action.should == "NoteOnHdfsFile"
       last_note.actor.should == user
-      last_note.hdfs_file.hadoop_instance_id.should == 1234
+      last_note.hdfs_file.hadoop_instance.should == hadoop_instance
       last_note.hdfs_file.path.should == "/data/test.csv"
       last_note.body.should == "Some crazy content"
     end

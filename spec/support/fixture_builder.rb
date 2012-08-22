@@ -59,7 +59,7 @@ FixtureBuilder.configure do |fbuilder|
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => Time.parse("2010-10-20 22:00:00"), :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
+    HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
     chorus_gpdb40_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
     chorus_gpdb41_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
@@ -131,8 +131,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_makes_workspace_public, Events::WorkspaceMakePublic.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
     fbuilder.name :bob_makes_workspace_private, Events::WorkspaceMakePrivate.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
-    #HDFS File References
-    hdfs_file_reference = HdfsFileReference.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql'}, :without_protection => true)
+    #HDFS Entry
+    hdfs_entry = HdfsEntry.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql', :modified_at => "2010-10-22 22:00:00"}, :without_protection => true)
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
@@ -190,7 +190,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
     Events::NoteOnHadoopInstance.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    Events::NoteOnHdfsFile.by(bob).add(:hdfs_file => hdfs_file_reference, :body => 'hhhhhhaaaadooooopppp')
+    Events::NoteOnHdfsFile.by(bob).add(:hdfs_file => hdfs_entry, :body => 'hhhhhhaaaadooooopppp')
     Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
     Events::NoteOnDataset.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
@@ -208,7 +208,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceAddSandbox.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
     Events::WorkspaceArchived.by(admin).add(:workspace => bob_public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => bob_public_workspace)
-    Events::WorkspaceAddHdfsAsExtTable.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
+    Events::WorkspaceAddHdfsAsExtTable.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_entry)
     Events::FileImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FileImportFailed.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
     Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')

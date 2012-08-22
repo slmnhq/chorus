@@ -28,7 +28,7 @@ describe ModelMap do
       ModelMap.model_from_params("dataset", model.id).should == model
     end
 
-    it "works for HdfsFileReference" do
+    it "works for HdfsEntry" do
       model = ModelMap.model_from_params("hdfs_file", "1234|/data/test.csv")
       model.hadoop_instance_id.should == 1234
       model.path.should == "/data/test.csv"

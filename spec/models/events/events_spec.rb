@@ -13,7 +13,7 @@ describe "Event types" do
   let(:workfile) { FactoryGirl.create(:workfile) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
-  let(:hdfs_file) { HdfsFileReference.create({hadoop_instance_id: hadoop_instance.id,
+  let(:hdfs_entry) { HdfsEntry.create!({hadoop_instance_id: hadoop_instance.id,
                                               path: "/any/path/should/work.csv"}) }
 
   describe "GreenplumInstanceCreated" do
@@ -323,17 +323,17 @@ describe "Event types" do
       Events::WorkspaceAddHdfsAsExtTable.add(
           :actor => actor,
           :workspace => workspace,
-          :hdfs_file => hdfs_file,
+          :hdfs_file => hdfs_entry,
           :dataset => dataset
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:hdfs_file) { should == hdfs_file }
+    its(:hdfs_file) { should == hdfs_entry }
 
-    its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace} }
+    its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace} }
 
-    it_creates_activities_for { [actor, dataset, workspace, hdfs_file] }
+    it_creates_activities_for { [actor, dataset, workspace, hdfs_entry] }
     it_creates_a_global_activity
   end
 

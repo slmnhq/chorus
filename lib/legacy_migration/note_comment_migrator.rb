@@ -20,7 +20,7 @@ class NoteCommentMigrator < AbstractMigrator
           end
         when 'hdfs'
           hadoop_id, path = comment_id.split('|')
-          hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
+          hdfs_file = HdfsEntry.find_or_create_by_hadoop_instance_id_and_path(hadoop_id, path)
           event = Events::NoteOnHdfsFile.create(:hdfs_file => hdfs_file, :body => comment_body, :actor => actor)
         when 'workspace'
           workspace = Workspace.find_with_destroyed(workspace_id(comment_id))

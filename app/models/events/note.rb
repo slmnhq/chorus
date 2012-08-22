@@ -60,7 +60,7 @@ module Events
             Events::NoteOnWorkspace
           when Workfile
             Events::NoteOnWorkfile
-          when HdfsFileReference
+          when HdfsEntry
             Events::NoteOnHdfsFile
           when Dataset
             workspace_id ? Events::NoteOnWorkspaceDataset : Events::NoteOnDataset

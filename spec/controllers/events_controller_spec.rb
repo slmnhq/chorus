@@ -76,7 +76,7 @@ describe EventsController do
     end
 
     context "when getting the activities for an hdfs file" do
-      let(:object) { HdfsFileReference.first }
+      let(:object) { HdfsEntry.first }
 
       let(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
       let(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }

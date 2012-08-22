@@ -49,7 +49,7 @@
             var path = _.first(pathArray, pathArray.length - 1).join('/');
             var name = _.last(pathArray);
             model.set({
-                hadoopInstance: { id : hdfsFile.hadoopInstanceId},
+                hadoopInstance: hdfsFile.hadoopInstance,
                 path : path,
                 name : name
             })
@@ -70,7 +70,7 @@
                 case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsFile();
                     model.set({
-                        hadoopInstance: new chorus.models.HadoopInstance({ id: this.get("hdfsFile").hadoopInstanceId }),
+                        hadoopInstance: new chorus.models.HadoopInstance(this.get("hdfsFile").hadoopInstance),
                         path: this.get("hdfsFile").path
                     });
                     break;

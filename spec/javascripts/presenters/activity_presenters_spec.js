@@ -657,8 +657,8 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
-                hdfsFile: { hadoopInstanceId: 1234, path: "/random/path.csv" }
-            })
+                hdfsFile: { hadoopInstance: {id: 1234}, path: "/random/path.csv" }
+            });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             hdfsFile = rspecFixtures.hdfsFile({
