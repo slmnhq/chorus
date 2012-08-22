@@ -45,6 +45,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.$(".existing_table input:radio").prop("checked", true).change();
                 this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.dialog.$(".dataset_picked").text("my_existing_table");
+                this.dialog.$(".dataset_picked").data("dataset", "my_existing_table");
                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
@@ -634,17 +635,31 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     describe("when a dataset is selected", function() {
                         var datasets;
                         beforeEach(function() {
-                            datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDataset" })];
+                            datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" })];
                             chorus.modal.trigger("datasets:selected", datasets);
                         });
 
-                        it("it should show the selected dataset in the link", function() {
+                        it("should show the selected dataset in the link, ellipsized", function() {
                             expect(this.dialog.datasetsChosen).toHaveBeenCalled()
-                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
+                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDatasetWithAReally...");
+                        });
+
+                        it("stores the un-ellipsized dataset name on the link item", function() {
+                            expect(this.dialog.$(".existing_table a.dataset_picked").data("dataset")).toBe("myDatasetWithAReallyReallyLongName");
                         });
 
                         it("should re-enable the submit button", function() {
                             expect(this.dialog.$("button.submit")).toBeEnabled();
+                        });
+
+                        describe("clicking the 'import' button", function() {
+                            beforeEach(function() {
+                                this.dialog.$("button.submit").click();
+                            });
+
+                            it("sends the correct dataset name", function() {
+                                expect(this.server.lastCreate().params()["dataset_import[to_table]"]).toBe("myDatasetWithAReallyReallyLongName");
+                            });
                         });
 
                         context("and then 'import into new table is checked", function() {
