@@ -3,7 +3,7 @@ require "spec_helper"
 describe NoteAttachmentAccess do
   let(:fake_controller) { ApplicationController.new }
   let(:access) { NoteAttachmentAccess.new(fake_controller) }
-  let(:note) { Events::NOTE_ON_GREENPLUM_INSTANCE.first }
+  let(:note) { Events::NoteOnGreenplumInstance.first }
 
 
   describe "#create?(params)" do

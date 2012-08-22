@@ -98,9 +98,9 @@ describe Gpdb::InstanceRegistrar do
       instance[:instance_provider].should == "Greenplum Database"
     end
 
-    it "makes a GREENPLUM_INSTANCE_CREATED event" do
+    it "makes a GreenplumInstanceCreated event" do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-      event = Events::GREENPLUM_INSTANCE_CREATED.first
+      event = Events::GreenplumInstanceCreated.first
       event.greenplum_instance.should == instance
       event.actor.should == owner
     end
@@ -192,9 +192,9 @@ describe Gpdb::InstanceRegistrar do
     end
 
     context "when the name is being changed" do
-      it "generates a GREENPLUM_INSTANCE_CHANGED_NAME event" do
+      it "generates a GreenplumInstanceChangedName event" do
         updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
-        event = Events::GREENPLUM_INSTANCE_CHANGED_NAME.find_by_actor_id(admin)
+        event = Events::GreenplumInstanceChangedName.find_by_actor_id(admin)
         event.greenplum_instance.should == updated_instance
         event.old_name.should == old_name
         event.new_name.should == new_name
@@ -206,7 +206,7 @@ describe Gpdb::InstanceRegistrar do
 
       it "does not generate an event" do
         Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
-        Events::GREENPLUM_INSTANCE_CHANGED_NAME.find_by_actor_id(admin).should be_nil
+        Events::GreenplumInstanceChangedName.find_by_actor_id(admin).should be_nil
       end
     end
   end

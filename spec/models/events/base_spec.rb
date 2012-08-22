@@ -9,16 +9,16 @@ describe Events::Base do
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
       dataset = FactoryGirl.create(:gpdb_table)
-      hdfs_file = HdfsFileReference.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
+      hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
       workspace = FactoryGirl.create(:workspace)
 
-      Events::GREENPLUM_INSTANCE_CREATED.by(user1).add(:greenplum_instance => instance1)
-      Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
-      Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace)
+      Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => instance1)
+      Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
+      Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
-      event1 = Events::GREENPLUM_INSTANCE_CREATED.first
-      event2 = Events::GREENPLUM_INSTANCE_CHANGED_OWNER.first
-      event3 = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.first
+      event1 = Events::GreenplumInstanceCreated.first
+      event2 = Events::GreenplumInstanceChangedOwner.first
+      event3 = Events::WorkspaceAddHdfsAsExtTable.first
 
       event1.actor.should == user1
       event1.greenplum_instance.should == instance1
@@ -89,14 +89,14 @@ describe Events::Base do
   end
 
   it "destroys all of its associated activities when it is destroyed" do
-    event = Events::SOURCE_TABLE_CREATED.first
+    event = Events::SourceTableCreated.first
     Activity.where(:event_id => event.id).size.should > 0
     event.destroy
     Activity.where(:event_id => event.id).size.should == 0
   end
 
   describe "translating additional data" do
-    let(:event_class) { Events::DATASET_IMPORT_FAILED }
+    let(:event_class) { Events::DatasetImportFailed }
     let(:event) { event_class.first }
 
     describe "#additional_data_key" do

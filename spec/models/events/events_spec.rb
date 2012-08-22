@@ -13,18 +13,18 @@ describe "Event types" do
   let(:workfile) { FactoryGirl.create(:workfile) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
-  let(:hdfs_file) { HdfsFileReference.create({hadoop_instance_id: hadoop_instance.id,
+  let(:hdfs_entry) { HdfsEntry.create!({hadoop_instance_id: hadoop_instance.id,
                                               path: "/any/path/should/work.csv"}) }
 
-  describe "GREENPLUM_INSTANCE_CREATED" do
+  describe "GreenplumInstanceCreated" do
     subject do
-      Events::GREENPLUM_INSTANCE_CREATED.add(
+      Events::GreenplumInstanceCreated.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
       )
     end
 
-    its(:action) { should == "GREENPLUM_INSTANCE_CREATED" }
+    its(:action) { should == "GreenplumInstanceCreated" }
     its(:greenplum_instance) { should == greenplum_instance }
     its(:targets) { should == {:greenplum_instance => greenplum_instance} }
 
@@ -32,15 +32,15 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "HADOOP_INSTANCE_CREATED" do
+  describe "HadoopInstanceCreated" do
     subject do
-      Events::HADOOP_INSTANCE_CREATED.add(
+      Events::HadoopInstanceCreated.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
       )
     end
 
-    its(:action) { should == "HADOOP_INSTANCE_CREATED" }
+    its(:action) { should == "HadoopInstanceCreated" }
     its(:hadoop_instance) { should == hadoop_instance }
     its(:targets) { should == {:hadoop_instance => hadoop_instance} }
 
@@ -48,9 +48,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GREENPLUM_INSTANCE_CHANGED_OWNER" do
+  describe "GreenplumInstanceChangedOwner" do
     subject do
-      Events::GREENPLUM_INSTANCE_CHANGED_OWNER.add(
+      Events::GreenplumInstanceChangedOwner.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :new_owner => user
@@ -65,9 +65,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GREENPLUM_INSTANCE_CHANGED_NAME" do
+  describe "GreenplumInstanceChangedName" do
     subject do
-      Events::GREENPLUM_INSTANCE_CHANGED_NAME.add(
+      Events::GreenplumInstanceChangedName.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :old_name => "brent",
@@ -86,9 +86,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "HADOOP_INSTANCE_CHANGED_NAME" do
+  describe "HadoopInstanceChangedName" do
     subject do
-      Events::HADOOP_INSTANCE_CHANGED_NAME.add(
+      Events::HadoopInstanceChangedName.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
           :old_name => "brent",
@@ -107,15 +107,15 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "PROVISIONING_SUCCESS" do
+  describe "ProvisioningSuccess" do
     subject do
-      Events::PROVISIONING_SUCCESS.add(
+      Events::ProvisioningSuccess.add(
           :actor => actor,
           :greenplum_instance => aurora_instance,
       )
     end
 
-    its(:action) { should == "PROVISIONING_SUCCESS" }
+    its(:action) { should == "ProvisioningSuccess" }
     its(:greenplum_instance) { should == aurora_instance }
     its(:targets) { should == {:greenplum_instance => aurora_instance} }
 
@@ -123,16 +123,16 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "PROVISIONING_FAIL" do
+  describe "ProvisioningFail" do
     subject do
-      Events::PROVISIONING_FAIL.add(
+      Events::ProvisioningFail.add(
           :actor => actor,
           :greenplum_instance => aurora_instance,
           :error_message => "provisioning has failed"
       )
     end
 
-    its(:action) { should == "PROVISIONING_FAIL" }
+    its(:action) { should == "ProvisioningFail" }
     its(:greenplum_instance) { should == aurora_instance }
     its(:targets) { should == {:greenplum_instance => aurora_instance} }
     its(:additional_data) { should == {'error_message' => "provisioning has failed"} }
@@ -148,7 +148,7 @@ describe "Event types" do
       end
 
       subject do
-        Events::PUBLIC_WORKSPACE_CREATED.add(
+        Events::PublicWorkspaceCreated.add(
           :actor => actor,
           :workspace => workspace
         )
@@ -168,7 +168,7 @@ describe "Event types" do
       end
 
       subject do
-        Events::PRIVATE_WORKSPACE_CREATED.add(
+        Events::PrivateWorkspaceCreated.add(
           :actor => actor,
           :workspace => workspace
         )
@@ -183,13 +183,13 @@ describe "Event types" do
     end
   end
 
-  describe "WORKSPACE_MAKE_PUBLIC" do
+  describe "WorkspaceMakePublic" do
     before do
       workspace.public = false
     end
 
     subject do
-      Events::WORKSPACE_MAKE_PUBLIC.add(
+      Events::WorkspaceMakePublic.add(
         :actor => actor,
         :workspace => workspace
       )
@@ -203,13 +203,13 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_MAKE_PRIVATE" do
+  describe "WorkspaceMakePrivate" do
     before do
       workspace.public = true
     end
 
     subject do
-      Events::WORKSPACE_MAKE_PRIVATE.add(
+      Events::WorkspaceMakePrivate.add(
         :actor => actor,
         :workspace => workspace
       )
@@ -223,9 +223,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "WORKSPACE_ARCHIVED" do
+  describe "WorkspaceArchived" do
     subject do
-      Events::WORKSPACE_ARCHIVED.add(
+      Events::WorkspaceArchived.add(
           :actor => actor,
           :workspace => workspace
       )
@@ -239,9 +239,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_UNARCHIVED" do
+  describe "WorkspaceUnarchived" do
     subject do
-      Events::WORKSPACE_UNARCHIVED.add(
+      Events::WorkspaceUnarchived.add(
           :actor => actor,
           :workspace => workspace
       )
@@ -273,9 +273,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "SOURCE_TABLE_CREATED" do
+  describe "SourceTableCreated" do
     subject do
-      Events::SOURCE_TABLE_CREATED.add(
+      Events::SourceTableCreated.add(
           :actor => actor,
           :dataset => dataset,
           :workspace => workspace
@@ -289,9 +289,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "USER_ADDED" do
+  describe "UserAdded" do
     subject do
-      Events::USER_ADDED.add(
+      Events::UserAdded.add(
           :actor => actor,
           :new_user => user
       )
@@ -304,9 +304,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_ADD_SANDBOX" do
+  describe "WorkspaceAddSandbox" do
     subject do
-      Events::WORKSPACE_ADD_SANDBOX.add(
+      Events::WorkspaceAddSandbox.add(
           :actor => actor,
           :workspace => workspace
       )
@@ -318,28 +318,28 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "WORKSPACE_ADD_HDFS_AS_EXT_TABLE" do
+  describe "WorkspaceAddHdfsAsExtTable" do
     subject do
-      Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.add(
+      Events::WorkspaceAddHdfsAsExtTable.add(
           :actor => actor,
           :workspace => workspace,
-          :hdfs_file => hdfs_file,
+          :hdfs_file => hdfs_entry,
           :dataset => dataset
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:hdfs_file) { should == hdfs_file }
+    its(:hdfs_file) { should == hdfs_entry }
 
-    its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace} }
+    its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace} }
 
-    it_creates_activities_for { [actor, dataset, workspace, hdfs_file] }
+    it_creates_activities_for { [actor, dataset, workspace, hdfs_entry] }
     it_creates_a_global_activity
   end
 
-  describe "FILE_IMPORT_SUCCESS" do
+  describe "FileImportSuccess" do
     subject do
-      Events::FILE_IMPORT_SUCCESS.add(
+      Events::FileImportSuccess.add(
           :actor => actor,
           :dataset => dataset,
           :file_name => 'import.csv',
@@ -356,11 +356,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DATASET_IMPORT_SUCCESS" do
+  describe "DatasetImportSuccess" do
     let(:source_dataset) { datasets(:bobs_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DATASET_IMPORT_SUCCESS.add(
+      Events::DatasetImportSuccess.add(
           :actor => actor,
           :dataset => dataset,
           :source_dataset => source_dataset,
@@ -381,9 +381,9 @@ describe "Event types" do
 
   end
 
-  describe "FILE_IMPORT_FAILED" do
+  describe "FileImportFailed" do
     subject do
-      Events::FILE_IMPORT_FAILED.add(
+      Events::FileImportFailed.add(
           :actor => actor,
           :file_name => 'import.csv',
           :import_type => 'file',
@@ -400,11 +400,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DATASET_IMPORT_FAILED" do
+  describe "DatasetImportFailed" do
     let(:source_dataset) {datasets(:bobs_table)}
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DATASET_IMPORT_FAILED.add(
+      Events::DatasetImportFailed.add(
           :actor => actor,
           :source_dataset => source_dataset,
           :destination_table => 'test',
@@ -424,9 +424,9 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "MEMBERS_ADDED" do
+  describe "MembersAdded" do
     subject do
-      Events::MEMBERS_ADDED.add(
+      Events::MembersAdded.add(
           :actor => actor,
           :member => user,
           :workspace => workspace,
@@ -439,6 +439,28 @@ describe "Event types" do
     its(:additional_data) { should == {'num_added' => 3} }
 
     it_creates_activities_for { [actor, workspace] }
+    it_does_not_create_a_global_activity
+  end
+
+  describe "WorkfileUpgradedVersion" do
+    subject do
+      Events::WorkfileUpgradedVersion.add(
+          :actor => actor,
+          :workfile => workfile,
+          :workspace => workspace,
+          :version_num => 2,
+          :commit_message => "a nice commit message",
+          :version_id => 10
+      )
+    end
+
+    its(:workfile) { should == workfile }
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == {:workfile => workfile, :workspace => workspace} }
+    its(:additional_data) { should == {'version_num' => 2, 'commit_message' => "a nice commit message", 'version_id' => 10} }
+
+    it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity
   end
 end

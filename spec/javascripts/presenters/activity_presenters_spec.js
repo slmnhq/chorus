@@ -156,7 +156,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CREATED.default", {
+                "activity.header.GreenplumInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
                 }
@@ -178,7 +178,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.PROVISIONING_SUCCESS.default", {
+                "activity.header.ProvisioningSuccess.default", {
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     instanceAddress: greenplumInstance.get("host")
                 }
@@ -200,7 +200,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.PROVISIONING_FAIL.default", {
+                "activity.header.ProvisioningFail.default", {
                     greenplumInstanceName: greenplumInstance.name()
                 }
             );
@@ -221,7 +221,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CREATED.default", {
+                "activity.header.HadoopInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
                 }
@@ -244,7 +244,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.default", {
+                "activity.header.GreenplumInstanceChangedOwner.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
@@ -270,7 +270,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_NAME.default", {
+                "activity.header.GreenplumInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newName: "jane",
@@ -297,7 +297,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CHANGED_NAME.default", {
+                "activity.header.HadoopInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(instance.showUrl(), instance.name()),
                     newName: "jane",
@@ -320,7 +320,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                "activity.header.PublicWorkspaceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -341,7 +341,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                "activity.header.PublicWorkspaceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -362,7 +362,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_MAKE_PUBLIC.default", {
+                "activity.header.WorkspaceMakePublic.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -383,7 +383,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_MAKE_PRIVATE.default", {
+                "activity.header.WorkspaceMakePrivate.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -404,7 +404,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ARCHIVED.default", {
+                "activity.header.WorkspaceArchived.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -426,7 +426,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_UNARCHIVED.default", {
+                "activity.header.WorkspaceUnarchived.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -458,6 +458,35 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("workfile upgrade version", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.workfileUpgradedVersion();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workfile = model.workfile();
+            var workspace = workfile.workspace();
+            var workfile_version = new chorus.models.Workfile({
+                versionInfo: { id : model.get("versionId") },
+                id : workfile.id,
+                workspace: workspace
+            });
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkfileUpgradedVersion.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    versionLink: linkTo(workfile_version.showUrl(), t("workfile.version_title", { versionNum: model.get("versionNum") }))
+                }
+            );
+        });
+    });
+
     context("source table created", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });
@@ -472,7 +501,7 @@ describe("chorus.presenters.Activity", function() {
             workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.SOURCE_TABLE_CREATED.default", {
+                "activity.header.SourceTableCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
@@ -495,7 +524,7 @@ describe("chorus.presenters.Activity", function() {
             var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ADD_SANDBOX.default", {
+                "activity.header.WorkspaceAddSandbox.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -519,7 +548,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKSPACE_ADD_HDFS_AS_EXT_TABLE.default", {
+                "activity.header.WorkspaceAddHdfsAsExtTable.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
@@ -542,7 +571,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.FILE_IMPORT_SUCCESS.default", {
+                "activity.header.FileImportSuccess.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
@@ -567,7 +596,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DATASET_IMPORT_SUCCESS.default", {
+                "activity.header.DatasetImportSuccess.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
@@ -589,7 +618,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.FILE_IMPORT_FAILED.default", {
+                "activity.header.FileImportFailed.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
@@ -613,7 +642,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DATASET_IMPORT_FAILED.default", {
+                "activity.header.DatasetImportFailed.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
                     datasetLink: model.get('destinationTable'),
@@ -628,8 +657,8 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
-                hdfsFile: { hadoopInstanceId: 1234, path: "/random/path.csv" }
-            })
+                hdfsFile: { hadoopInstance: {id: 1234}, path: "/random/path.csv" }
+            });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             hdfsFile = rspecFixtures.hdfsFile({
@@ -820,7 +849,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.one",
+                    "activity.header.MembersAdded.default.one",
                     activity_data
                 );
             });
@@ -829,7 +858,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.one",
+                    "activity.header.MembersAdded.without_workspace.one",
                     activity_without_workspace_data
                 );
             });
@@ -843,7 +872,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.two",
+                    "activity.header.MembersAdded.default.two",
                     activity_data
                 );
             });
@@ -852,7 +881,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.two",
+                    "activity.header.MembersAdded.without_workspace.two",
                     activity_without_workspace_data
                 );
             });
@@ -867,7 +896,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html for the default style", function() {
                 activity_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.default.many",
+                    "activity.header.MembersAdded.default.many",
                     activity_data
                 );
             });
@@ -876,7 +905,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
                 activity_without_workspace_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MEMBERS_ADDED.without_workspace.many",
+                    "activity.header.MembersAdded.without_workspace.many",
                         activity_without_workspace_data
                 );
             });

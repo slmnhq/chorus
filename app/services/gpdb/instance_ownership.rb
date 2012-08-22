@@ -11,7 +11,7 @@ module Gpdb
           change_owner_of_unshared(instance, new_owner)
         end
 
-        Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(updater).add(
+        Events::GreenplumInstanceChangedOwner.by(updater).add(
           :greenplum_instance => instance,
           :new_owner => new_owner
         )

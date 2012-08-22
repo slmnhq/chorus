@@ -31,4 +31,4 @@ chorus.models.HdfsFile = chorus.models.Base.extend({
     iconUrl: function() {
         return chorus.urlHelpers.fileIconUrl(_.last(this.fileNameFromPath().split(".")));
     }
-})
+});

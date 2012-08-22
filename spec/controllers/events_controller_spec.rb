@@ -76,7 +76,7 @@ describe EventsController do
     end
 
     context "when getting the activities for an hdfs file" do
-      let(:object) { HdfsFileReference.first }
+      let(:object) { HdfsEntry.first }
 
       let(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
       let(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
@@ -120,36 +120,37 @@ describe EventsController do
     end
 
     FIXTURE_FILES = {
-        "greenplumInstanceCreated" => Events::GREENPLUM_INSTANCE_CREATED,
-        "auroraInstanceProvisioned" => Events::PROVISIONING_SUCCESS,
-        "auroraInstanceProvisioningFailed" => Events::PROVISIONING_FAIL,
-        "hadoopInstanceCreated" => Events::HADOOP_INSTANCE_CREATED,
-        "greenplumInstanceChangedOwner" => Events::GREENPLUM_INSTANCE_CHANGED_OWNER,
-        "greenplumInstanceChangedName" => Events::GREENPLUM_INSTANCE_CHANGED_NAME,
-        "hadoopInstanceChangedName" => Events::HADOOP_INSTANCE_CHANGED_NAME,
-        "publicWorkspaceCreated" => Events::PUBLIC_WORKSPACE_CREATED,
-        "privateWorkspaceCreated" => Events::PRIVATE_WORKSPACE_CREATED,
-        "workspaceMakePublic" => Events::WORKSPACE_MAKE_PUBLIC,
-        "workspaceMakePrivate" => Events::WORKSPACE_MAKE_PRIVATE,
-        "workspaceArchived" => Events::WORKSPACE_ARCHIVED,
-        "workspaceUnarchived" => Events::WORKSPACE_UNARCHIVED,
+        "greenplumInstanceCreated" => Events::GreenplumInstanceCreated,
+        "auroraInstanceProvisioned" => Events::ProvisioningSuccess,
+        "auroraInstanceProvisioningFailed" => Events::ProvisioningFail,
+        "hadoopInstanceCreated" => Events::HadoopInstanceCreated,
+        "greenplumInstanceChangedOwner" => Events::GreenplumInstanceChangedOwner,
+        "greenplumInstanceChangedName" => Events::GreenplumInstanceChangedName,
+        "hadoopInstanceChangedName" => Events::HadoopInstanceChangedName,
+        "publicWorkspaceCreated" => Events::PublicWorkspaceCreated,
+        "privateWorkspaceCreated" => Events::PrivateWorkspaceCreated,
+        "workspaceMakePublic" => Events::WorkspaceMakePublic,
+        "workspaceMakePrivate" => Events::WorkspaceMakePrivate,
+        "workspaceArchived" => Events::WorkspaceArchived,
+        "workspaceUnarchived" => Events::WorkspaceUnarchived,
         "workfileCreated" => Events::WorkfileCreated,
-        "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
-        "userCreated" => Events::USER_ADDED,
-        "sandboxAdded" => Events::WORKSPACE_ADD_SANDBOX,
-        "noteOnGreenplumInstanceCreated" => Events::NOTE_ON_GREENPLUM_INSTANCE,
-        "noteOnHadoopInstanceCreated" => Events::NOTE_ON_HADOOP_INSTANCE,
-        "hdfsExternalTableCreated" => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE,
-        "noteOnHdfsFileCreated" => Events::NOTE_ON_HDFS_FILE,
-        "noteOnWorkspaceCreated" => Events::NOTE_ON_WORKSPACE,
-        "noteOnWorkfileCreated" => Events::NOTE_ON_WORKFILE,
-        "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
-        "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET,
-        "membersAdded" => Events::MEMBERS_ADDED,
-        "fileImportSuccess" => Events::FILE_IMPORT_SUCCESS,
-        "fileImportFailed" => Events::FILE_IMPORT_FAILED,
-        "datasetImportSuccess" => Events::DATASET_IMPORT_SUCCESS,
-        "datasetImportFailed" => Events::DATASET_IMPORT_FAILED
+        "sourceTableCreated" => Events::SourceTableCreated,
+        "userCreated" => Events::UserAdded,
+        "sandboxAdded" => Events::WorkspaceAddSandbox,
+        "noteOnGreenplumInstanceCreated" => Events::NoteOnGreenplumInstance,
+        "noteOnHadoopInstanceCreated" => Events::NoteOnHadoopInstance,
+        "hdfsExternalTableCreated" => Events::WorkspaceAddHdfsAsExtTable,
+        "noteOnHdfsFileCreated" => Events::NoteOnHdfsFile,
+        "noteOnWorkspaceCreated" => Events::NoteOnWorkspace,
+        "noteOnWorkfileCreated" => Events::NoteOnWorkfile,
+        "noteOnDatasetCreated" => Events::NoteOnDataset,
+        "noteOnWorkspaceDatasetCreated" => Events::NoteOnWorkspaceDataset,
+        "membersAdded" => Events::MembersAdded,
+        "fileImportSuccess" => Events::FileImportSuccess,
+        "fileImportFailed" => Events::FileImportFailed,
+        "datasetImportSuccess" => Events::DatasetImportSuccess,
+        "datasetImportFailed" => Events::DatasetImportFailed,
+        "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion
     }
 
     FIXTURE_FILES.each do |filename, event_class_name|

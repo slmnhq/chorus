@@ -12,11 +12,15 @@
         <div class="activity_header">
             {{headerHtml}}
         </div>
-        {{#if isUserGenerated}}
+        {{#if isUserGenerated }}
             <div class="truncated_text"></div>
         {{else}}
-            {{#if body}}
-                <div class="body">{{body}}</div>
+            {{#if hasCommitMessage }}
+                <div class="truncated_text"></div>
+            {{else}}
+                {{#if body}}
+                    <div class="body">{{body}}</div>
+                {{/if}}
             {{/if}}
         {{/if}}
         <ul class='attachments'>

@@ -31,7 +31,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'SolrIndexer.refresh_and_index' job in QC" do
-      mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_index", ['Dataset'])
+      mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_index", [])
       job_scheduler.job_named('SolrIndexer.refresh_and_index').run(Time.now)
     end
   end

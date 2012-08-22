@@ -21,7 +21,7 @@ class MembersController < ApplicationController
     unless added_members.empty?
       member = User.find(added_members.first)
       num_added = added_members.count
-      Events::MEMBERS_ADDED.by(current_user).add(:workspace => workspace, :member => member, :num_added => num_added.to_s)
+      Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => num_added.to_s)
     end
   end
 end

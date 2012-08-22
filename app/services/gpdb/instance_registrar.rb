@@ -17,7 +17,7 @@ module Gpdb
         account.save!
       end
 
-      Events::GREENPLUM_INSTANCE_CREATED.by(owner).add(:greenplum_instance => instance)
+      Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => instance)
 
       instance
     end
@@ -29,7 +29,7 @@ module Gpdb
       ConnectionChecker.check!(instance, instance.owner_account)
 
       if instance.name_changed?
-        Events::GREENPLUM_INSTANCE_CHANGED_NAME.by(updater).add(
+        Events::GreenplumInstanceChangedName.by(updater).add(
           :greenplum_instance => instance,
           :old_name => instance.name_was,
           :new_name => instance.name

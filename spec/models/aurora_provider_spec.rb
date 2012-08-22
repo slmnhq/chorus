@@ -86,9 +86,9 @@ describe AuroraProvider do
         instance.host.should == "123.321.12.34"
       end
 
-      it "generates a PROVISIONING_SUCCESS event" do
+      it "generates a ProvisioningSuccess event" do
         AuroraProvider.provide!(instance.id, attributes)
-        event = Events::PROVISIONING_SUCCESS.find_by_actor_id(instance.owner)
+        event = Events::ProvisioningSuccess.find_by_actor_id(instance.owner)
         event.greenplum_instance.should == instance
       end
       context "when schema name is not public" do
@@ -127,9 +127,9 @@ describe AuroraProvider do
         end
       end
 
-      it "generates a PROVISIONING_FAIL event" do
+      it "generates a ProvisioningFail event" do
         AuroraProvider.provide!(instance.id, attributes)
-        event = Events::PROVISIONING_FAIL.find_by_actor_id(instance.owner)
+        event = Events::ProvisioningFail.find_by_actor_id(instance.owner)
         event.greenplum_instance.should == instance
         event.additional_data['error_message'].should == "server cannot be reached"
       end

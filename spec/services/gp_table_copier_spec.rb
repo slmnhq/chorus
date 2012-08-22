@@ -63,9 +63,9 @@ describe GpTableCopier, :database_integration => true do
           dest_rows.count.should == 2
         end
 
-        it "creates a DATASET_IMPORT_SUCCESS on a successful import" do
+        it "creates a DatasetImportSuccess on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, options)
-          event = Events::DATASET_IMPORT_SUCCESS.first
+          event = Events::DatasetImportSuccess.first
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
@@ -74,9 +74,9 @@ describe GpTableCopier, :database_integration => true do
           event.source_dataset_id.should == source_dataset.id
         end
 
-        it "creates a DATASET_IMPORT_FAILED on a failed import" do
+        it "creates a DatasetImportFailed on a failed import" do
           GpTableCopier.run_import(-1, user.id, options)
-          event = Events::DATASET_IMPORT_FAILED.first
+          event = Events::DatasetImportFailed.first
           event.actor.should == user
           event.error_message.should == "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace
@@ -128,9 +128,9 @@ describe GpTableCopier, :database_integration => true do
 
         end
 
-        it "creates a DATASET_IMPORT_SUCCESS on a successful import" do
+        it "creates a DatasetImportSuccess on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, options)
-          event = Events::DATASET_IMPORT_SUCCESS.first
+          event = Events::DatasetImportSuccess.first
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
@@ -139,9 +139,9 @@ describe GpTableCopier, :database_integration => true do
           event.source_dataset_id.should == source_dataset.id
         end
 
-        it "creates a DATASET_IMPORT_FAILED on a failed import" do
+        it "creates a DatasetImportFailed on a failed import" do
           GpTableCopier.run_import(-1, user.id, options)
-          event = Events::DATASET_IMPORT_FAILED.first
+          event = Events::DatasetImportFailed.first
           event.actor.should == user
           event.error_message.should == "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace
@@ -222,7 +222,7 @@ describe GpTableCopier, :database_integration => true do
 
       it "populates the activity properly" do
         GpTableCopier.run_import(source_dataset.id, user.id, options)
-        event = Events::DATASET_IMPORT_SUCCESS.first
+        event = Events::DatasetImportSuccess.first
         event.actor.should == user
         event.dataset.name.should == destination_table_name
         event.dataset.schema.should == sandbox

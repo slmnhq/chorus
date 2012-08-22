@@ -162,34 +162,29 @@ FactoryGirl.define do
     workspace
   end
 
-  factory :hdfs_file_reference do
-    hadoop_instance_id 25
-    path "/folder/subfolder/file.csv"
-  end
-
   factory :event, :class => Events::Base do
     actor
 
-    factory :greenplum_instance_created_event, :class => Events::GREENPLUM_INSTANCE_CREATED do
+    factory :greenplum_instance_created_event, :class => Events::GreenplumInstanceCreated do
       greenplum_instance
     end
 
-    factory :hadoop_instance_created_event, :class => Events::HADOOP_INSTANCE_CREATED do
+    factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do
       hadoop_instance
     end
 
-    factory :greenplum_instance_changed_owner_event, :class => Events::GREENPLUM_INSTANCE_CHANGED_OWNER do
+    factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
       greenplum_instance
       new_owner :factory => :user
     end
 
-    factory :greenplum_instance_changed_name_event, :class => Events::GREENPLUM_INSTANCE_CHANGED_NAME do
+    factory :greenplum_instance_changed_name_event, :class => Events::GreenplumInstanceChangedName do
       greenplum_instance
       new_name "new_instance_name"
       old_name "old_instance_name"
     end
 
-    factory :hadoop_instance_changed_name_event, :class => Events::HADOOP_INSTANCE_CHANGED_NAME do
+    factory :hadoop_instance_changed_name_event, :class => Events::HadoopInstanceChangedName do
       hadoop_instance
       new_name "new_instance_name"
       old_name "old_instance_name"
@@ -200,41 +195,41 @@ FactoryGirl.define do
       workspace
     end
 
-    factory :source_table_created_event, :class => Events::SOURCE_TABLE_CREATED do
+    factory :source_table_created_event, :class => Events::SourceTableCreated do
       association :dataset, :factory => :gpdb_table
       workspace
     end
 
-    factory :user_created_event, :class => Events::USER_ADDED do
+    factory :user_created_event, :class => Events::UserAdded do
       association :new_user, :factory => :user
     end
 
-    factory :sandbox_added_event, :class => Events::WORKSPACE_ADD_SANDBOX do
+    factory :sandbox_added_event, :class => Events::WorkspaceAddSandbox do
       workspace
     end
 
-    factory :hdfs_external_table_created_event, :class => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE do
+    factory :hdfs_external_table_created_event, :class => Events::WorkspaceAddHdfsAsExtTable do
       association :dataset, :factory => :gpdb_table
       association :hdfs_file, :factory => :hdfs_file_reference
       workspace
     end
 
-    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
+    factory :note_on_greenplum_instance_event, :class => Events::NoteOnGreenplumInstance do
       greenplum_instance
       body "Note to self, add a body"
     end
 
-    factory :note_on_hadoop_instance_event, :class => Events::NOTE_ON_HADOOP_INSTANCE do
+    factory :note_on_hadoop_instance_event, :class => Events::NoteOnHadoopInstance do
       hadoop_instance
       body "Note to self, add a body"
     end
 
-    factory :note_on_hdfs_file_event, :class => Events::NOTE_ON_HDFS_FILE do
+    factory :note_on_hdfs_file_event, :class => Events::NoteOnHdfsFile do
       association :hdfs_file, :factory => :hdfs_file_reference
       body "This is a note on an hdfs file"
     end
 
-    factory :note_on_workspace_event, :class => Events::NOTE_ON_WORKSPACE do
+    factory :note_on_workspace_event, :class => Events::NoteOnWorkspace do
       association :workspace, :factory => :workspace
       body "This is a note on a workspace"
     end

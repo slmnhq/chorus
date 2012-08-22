@@ -96,14 +96,14 @@ describe WorkspacesController do
         parameters = {:workspace => {:name => "foobar", :public => true}}
         lambda {
           post :create, parameters
-        }.should change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(1)
+        }.should change(Events::PublicWorkspaceCreated, :count).by(1)
       end
 
       it "creates an event for private workspace" do
         parameters = {:workspace => {:name => "foobar", :public => false}}
         lambda {
           post :create, parameters
-        }.should change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(1)
+        }.should change(Events::PrivateWorkspaceCreated, :count).by(1)
       end
 
       it "presents the workspace" do
@@ -189,9 +189,9 @@ describe WorkspacesController do
           lambda {
             lambda {
               put :update, parameters
-            }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
-          }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
-        }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+            }.should change(Events::WorkspaceMakePublic, :count).by(1)
+          }.should_not change(Events::WorkspaceArchived, :count)
+        }.should_not change(Events::WorkspaceUnarchived, :count)
       end
 
       it "makes the right event when making the workspace private" do
@@ -200,9 +200,9 @@ describe WorkspacesController do
           lambda {
             lambda {
               put :update, parameters
-            }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
-          }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
-        }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+            }.should change(Events::WorkspaceMakePrivate, :count).by(1)
+          }.should_not change(Events::WorkspaceArchived, :count)
+        }.should_not change(Events::WorkspaceUnarchived, :count)
       end
 
       it "allows archiving the workspace" do
@@ -210,7 +210,7 @@ describe WorkspacesController do
           put :update, :id => workspace.id, :workspace => {
               :archived => "true"
           }
-        }.should change(Events::WORKSPACE_ARCHIVED.by(owner), :count).by(1)
+        }.should change(Events::WorkspaceArchived.by(owner), :count).by(1)
 
         workspace.reload
         workspace.archived_at.should_not be_nil
@@ -228,9 +228,9 @@ describe WorkspacesController do
             lambda {
               lambda {
                 put :update, parameters
-              }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
-            }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
-          }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+              }.should change(Events::WorkspaceMakePublic, :count).by(1)
+            }.should_not change(Events::WorkspaceArchived, :count)
+          }.should_not change(Events::WorkspaceUnarchived, :count)
         end
 
         it "makes the right event when making the workspace private" do
@@ -240,9 +240,9 @@ describe WorkspacesController do
             lambda {
               lambda {
                 put :update, parameters
-              }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
-            }.should_not change(Events::WORKSPACE_ARCHIVED, :count)
-          }.should_not change(Events::WORKSPACE_UNARCHIVED, :count)
+              }.should change(Events::WorkspaceMakePrivate, :count).by(1)
+            }.should_not change(Events::WorkspaceArchived, :count)
+          }.should_not change(Events::WorkspaceUnarchived, :count)
         end
       end
 
@@ -253,7 +253,7 @@ describe WorkspacesController do
           put :update, :id => workspace.id, :workspace => {
               :archived => "false"
           }
-        }.should change(Events::WORKSPACE_UNARCHIVED.by(owner), :count).by(1)
+        }.should change(Events::WorkspaceUnarchived.by(owner), :count).by(1)
 
         workspace.reload
         workspace.archived_at.should be_nil
@@ -268,7 +268,7 @@ describe WorkspacesController do
           }
 
           response.should be_success
-        }.should change(Events::WORKSPACE_ADD_SANDBOX.by(owner), :count).by(1)
+        }.should change(Events::WorkspaceAddSandbox.by(owner), :count).by(1)
 
         workspace.reload
         workspace.sandbox_id.should == sandbox.id

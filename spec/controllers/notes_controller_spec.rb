@@ -30,7 +30,7 @@ describe NotesController do
         associated_dataset_ids = associated_datasets.map(&:id)
         post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :dataset_ids => associated_dataset_ids }
         response.code.should == "201"
-        Events::NOTE_ON_WORKSPACE.first.datasets.should == associated_datasets
+        Events::NoteOnWorkspace.first.datasets.should == associated_datasets
       end
     end
 
@@ -76,7 +76,7 @@ describe NotesController do
   end
 
   describe "#destroy" do
-    let(:note) { Events::NOTE_ON_GREENPLUM_INSTANCE.first }
+    let(:note) { Events::NoteOnGreenplumInstance.first }
 
     before do
       log_in note.actor
@@ -84,7 +84,7 @@ describe NotesController do
 
     it "destroys the note with the given id" do
       delete :destroy, :id => note.id
-      Events::NOTE_ON_GREENPLUM_INSTANCE.find_by_id(note.id).should be_nil
+      Events::NoteOnGreenplumInstance.find_by_id(note.id).should be_nil
     end
 
     it "returns an empty JSON body" do

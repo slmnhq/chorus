@@ -14,7 +14,7 @@ class JobScheduler
     end
 
     every(Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours, 'SolrIndexer.refresh_and_index') do
-      QC.enqueue("SolrIndexer.refresh_and_index", ['Dataset'])
+      QC.enqueue("SolrIndexer.refresh_and_index", [])
     end
   end
 

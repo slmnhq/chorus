@@ -53,68 +53,19 @@ module Events
       def event_class_for_model(model, workspace_id)
         case model
           when Instance
-            NOTE_ON_GREENPLUM_INSTANCE
+            Events::NoteOnGreenplumInstance
           when HadoopInstance
-            NOTE_ON_HADOOP_INSTANCE
+            Events::NoteOnHadoopInstance
           when Workspace
-            NOTE_ON_WORKSPACE
+            Events::NoteOnWorkspace
           when Workfile
-            NOTE_ON_WORKFILE
-          when HdfsFileReference
-            NOTE_ON_HDFS_FILE
+            Events::NoteOnWorkfile
+          when HdfsEntry
+            Events::NoteOnHdfsFile
           when Dataset
-            workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
+            workspace_id ? Events::NoteOnWorkspaceDataset : Events::NoteOnDataset
         end
       end
     end
-  end
-
-  class NOTE_ON_GREENPLUM_INSTANCE < Note
-    has_targets :greenplum_instance
-    has_activities :actor, :greenplum_instance, :global
-  end
-
-  class NOTE_ON_HADOOP_INSTANCE < Note
-    has_targets :hadoop_instance
-    has_activities :actor, :hadoop_instance, :global
-  end
-
-  class NOTE_ON_HDFS_FILE < Note
-    has_targets :hdfs_file
-    has_activities :actor, :hdfs_file, :global
-  end
-
-  class NOTE_ON_WORKSPACE < Note
-    has_targets :workspace
-    has_activities :actor, :workspace
-
-    validate :no_note_on_archived_workspace
-
-    def no_note_on_archived_workspace
-      errors.add(:workspace, :generic, {:message => "Can not add a note on an archived workspace"}) if workspace.archived?
-    end
-
-    include_shared_search_fields(:workspace)
-  end
-
-  class NOTE_ON_WORKFILE < Note
-    has_targets :workfile
-    has_activities :actor, :workfile, :workspace
-
-    include_shared_search_fields(:workspace)
-  end
-
-  class NOTE_ON_DATASET < Note
-    has_targets :dataset
-    has_activities :actor, :dataset, :global
-
-    include_shared_search_fields(:dataset)
-  end
-
-  class NOTE_ON_WORKSPACE_DATASET < Note
-    has_targets :dataset, :workspace
-    has_activities :actor, :dataset, :workspace
-
-    include_shared_search_fields(:dataset)
   end
 end

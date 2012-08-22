@@ -37,6 +37,22 @@ describe("chorus.views.Activity", function() {
             });
         });
 
+        context("when the activity's action is workfile upgrade versionwith a commit message", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.activity.workfileUpgradedVersion();
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+            });
+
+            it("displays the body as html", function() {
+                expect(this.view.$(".activity_content .body")).not.toExist();
+                expect(this.view.$(".activity_content .truncated_text")).toExist();
+                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("commitMessage"));
+                expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
+                expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
+            });
+        });
+
         context("when the activity is a failure", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.activity.fileImportFailed();

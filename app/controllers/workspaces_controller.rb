@@ -15,8 +15,8 @@ class WorkspacesController < ApplicationController
     Workspace.transaction do
       workspace.save!
       workspace.public ?
-          Events::PUBLIC_WORKSPACE_CREATED.by(current_user).add(:workspace => workspace) :
-          Events::PRIVATE_WORKSPACE_CREATED.by(current_user).add(:workspace => workspace)
+          Events::PublicWorkspaceCreated.by(current_user).add(:workspace => workspace) :
+          Events::PrivateWorkspaceCreated.by(current_user).add(:workspace => workspace)
     end
     present workspace, :status => :created
   end
@@ -56,17 +56,17 @@ class WorkspacesController < ApplicationController
   def create_workspace_events(workspace, original_archived)
     if workspace.public_changed?
       workspace.public ?
-          Events::WORKSPACE_MAKE_PUBLIC.by(current_user).add(:workspace => workspace) :
-          Events::WORKSPACE_MAKE_PRIVATE.by(current_user).add(:workspace => workspace)
+          Events::WorkspaceMakePublic.by(current_user).add(:workspace => workspace) :
+          Events::WorkspaceMakePrivate.by(current_user).add(:workspace => workspace)
     end
     if params[:workspace][:archived] != original_archived
       workspace.archived? ?
-          Events::WORKSPACE_ARCHIVED.by(current_user).add(:workspace => workspace) :
-          Events::WORKSPACE_UNARCHIVED.by(current_user).add(:workspace => workspace)
+          Events::WorkspaceArchived.by(current_user).add(:workspace => workspace) :
+          Events::WorkspaceUnarchived.by(current_user).add(:workspace => workspace)
     end
 
     if workspace.sandbox_id_changed? && workspace.sandbox
-      Events::WORKSPACE_ADD_SANDBOX.by(current_user).add(
+      Events::WorkspaceAddSandbox.by(current_user).add(
           :sandbox_schema => workspace.sandbox,
           :workspace => workspace
       )

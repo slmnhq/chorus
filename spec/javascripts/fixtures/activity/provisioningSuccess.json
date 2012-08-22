@@ -6,6 +6,6 @@
             "id": "10220",
             "name": "aurora_test1"
         },
-        "type": "PROVISIONING_SUCCESS"
+        "type": "ProvisioningSuccess"
     }
 }

@@ -67,7 +67,7 @@ describe WorkspaceDatasetsController do
       table_ids = [gpdb_table.to_param, gpdb_view.to_param]
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
 
-      events = Events::SOURCE_TABLE_CREATED.by(user)
+      events = Events::SourceTableCreated.by(user)
       events.count.should == 2
     end
 

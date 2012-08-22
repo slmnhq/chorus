@@ -189,4 +189,14 @@ resource "Workspaces" do
       status.should == 200
     end
   end
+
+  get "/workspaces/:workspace_id/image" do
+    let(:workspace_id) { workspaces(:alice_api).to_param }
+
+    parameter :style, "Size of image ( original, icon )"
+
+    example_request "Show workspace image" do
+      status.should == 200
+    end
+  end
 end

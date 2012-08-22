@@ -5,7 +5,7 @@ module Hdfs
       instance.owner = owner
       instance.version = Hdfs::QueryService.instance_version(instance)
       instance.save!
-      Events::HADOOP_INSTANCE_CREATED.by(owner).add(:hadoop_instance => instance)
+      Events::HadoopInstanceCreated.by(owner).add(:hadoop_instance => instance)
       instance
     end
 
@@ -15,7 +15,7 @@ module Hdfs
       instance.attributes = connection_config.except(:version)
 
       if instance.name_changed?
-        Events::HADOOP_INSTANCE_CHANGED_NAME.by(updater).add(
+        Events::HadoopInstanceChangedName.by(updater).add(
           :hadoop_instance => instance,
           :old_name => instance.name_was,
           :new_name => instance.name

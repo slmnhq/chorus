@@ -152,7 +152,7 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#noteObject", function() {
-            context("for a NOTE_ON_GREENPLUM_INSTANCE", function() {
+            context("for a NoteOnGreenplumInstance", function() {
                 it("returns a greenplumInstance with the right data", function() {
                     activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
                         greenplumInstance: { id: 13 }
@@ -164,10 +164,10 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_HDFS_FILE", function() {
+            context("for a NoteOnHdfsFile", function() {
                 it("returns a hdfsFile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnHdfsFileCreated({
-                        hdfsFile: { path: "/happy/path.txt", hadoopInstanceId: 331 }
+                        hdfsFile: { path: "/happy/path.txt", hadoopInstance: {id: 331} }
                     });
                     var hdfsFile = activity.noteObject();
                     expect(hdfsFile).toBeA(chorus.models.HdfsFile);
@@ -176,7 +176,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKSPACE", function() {
+            context("for a NoteOnWorkspace", function() {
                 it("returns a workspace with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkspaceCreated({
                         workspace: { id: 123 }
@@ -187,7 +187,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_DATASET", function() {
+            context("for a NoteOnDataset", function() {
                 it("returns a dataset with the right data", function() {
                     activity = rspecFixtures.activity.noteOnDatasetCreated({
                         dataset: { id: 123 }
@@ -198,7 +198,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKSPACE_DATASET", function() {
+            context("for a NoteOnWorkspaceDataset", function() {
                 it("returns a workspace dataset with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkspaceDatasetCreated({
                         dataset: { id: 123 }
@@ -209,7 +209,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKFILE", function() {
+            context("for a NoteOnWorkfile", function() {
                 it("returns a workfile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkfileCreated({
                         workfile: { id: 123 }
@@ -225,7 +225,7 @@ describe("chorus.models.Activity", function() {
             it("returns hdfs entry with the right data", function() {
                 activity = rspecFixtures.activity.hdfsExternalTableCreated({
                     hdfsFile: {
-                        hadoopInstanceId: 1,
+                        hadoopInstance: {id: 1},
                         path : "/data/test/test.csv"
                     }
                 });
@@ -255,6 +255,20 @@ describe("chorus.models.Activity", function() {
 
         it("returns true for sub-comments", function() {
             expect(fixtures.activities.SUB_COMMENT().isUserGenerated()).toBeTruthy();
+        });
+    });
+
+    describe("#hasCommitMessage", function() {
+        it("returns true for activity where action is Workfile_upgrade_version and commit message is not empty", function() {
+            expect(rspecFixtures.activity.workfileUpgradedVersion().hasCommitMessage()).toBeTruthy();
+        });
+
+        it("returns false for other activities", function() {
+            expect(rspecFixtures.activity.membersAdded().hasCommitMessage()).toBeFalsy();
+        });
+
+        it("returns false for activity where action is Workfile_upgrade_version and commit message is empty", function() {
+            expect(rspecFixtures.activity.workfileUpgradedVersion({commitMessage: ""}).hasCommitMessage()).toBeFalsy();
         });
     });
 
@@ -373,7 +387,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns false for non-notes", function() {
-            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            this.model.set({ type: "WorkspaceMakePublic" });
             expect(this.model.isNote()).toBeFalsy();
         });
     });
@@ -385,7 +399,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns false for non-insights", function() {
-            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            this.model.set({ type: "WorkspaceMakePublic" });
             expect(this.model.isInsight()).toBeFalsy();
         });
     });

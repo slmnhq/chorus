@@ -3,7 +3,7 @@ describe("chorus.collections.NotificationSet", function() {
         this.collection = fixtures.notificationSet([
             fixtures.notification({ id: "101", type: "NOTE" }),
             fixtures.notification({ id: "102", type: "WORKSPACE_CREATED" }),
-            fixtures.notification({ id: "103", type: "MEMBERS_ADDED" }),
+            fixtures.notification({ id: "103", type: "MembersAdded" }),
             fixtures.notification({ id: "104", type: "INSTANCE_CREATED" })
         ]);
     });
@@ -53,7 +53,7 @@ describe("chorus.collections.NotificationSet", function() {
 
             expect(this.activities.models[0].get("type")).toBe("NOTE");
             expect(this.activities.models[1].get("type")).toBe("WORKSPACE_CREATED");
-            expect(this.activities.models[2].get("type")).toBe("MEMBERS_ADDED");
+            expect(this.activities.models[2].get("type")).toBe("MembersAdded");
             expect(this.activities.models[3].get("type")).toBe("INSTANCE_CREATED");
         });
     });

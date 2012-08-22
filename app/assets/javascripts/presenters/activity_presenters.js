@@ -34,6 +34,10 @@
             return this.model.isUserGenerated();
         },
 
+        hasCommitMessage: function() {
+            return this.model.hasCommitMessage();
+        },
+
         attachments: function() {
             return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
         },
@@ -68,58 +72,58 @@
     var hidden = {
 
         headerParamOptions: {
-            GREENPLUM_INSTANCE_CHANGED_NAME: {
+            GreenplumInstanceChangedName: {
                 links: [ "actor", "greenplumInstance" ],
                 attrs: [ "newName", "oldName" ]
             },
 
-            HADOOP_INSTANCE_CHANGED_NAME: {
+            HadoopInstanceChangedName: {
                 links: [ "actor", "hadoopInstance" ],
                 attrs: [ "newName", "oldName" ]
             },
 
-            GREENPLUM_INSTANCE_CREATED: {
+            GreenplumInstanceCreated: {
                 links: [ "actor", "greenplumInstance" ]
             },
 
-            PROVISIONING_SUCCESS: {
+            ProvisioningSuccess: {
                 links: ["greenplumInstance"],
                 computed: ["instanceAddress"]
             },
 
-            PROVISIONING_FAIL: {
+            ProvisioningFail: {
                 computed: ["greenplumInstanceName"]
             },
 
-            HADOOP_INSTANCE_CREATED: {
+            HadoopInstanceCreated: {
                 links: [ "actor", "hadoopInstance" ]
             },
 
-            GREENPLUM_INSTANCE_CHANGED_OWNER: {
+            GreenplumInstanceChangedOwner: {
                 links: [ "actor", "greenplumInstance", "newOwner" ]
             },
 
-            PUBLIC_WORKSPACE_CREATED: {
+            PublicWorkspaceCreated: {
                 links: [ "actor", "workspace" ]
             },
 
-            PRIVATE_WORKSPACE_CREATED: {
+            PrivateWorkspaceCreated: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_MAKE_PUBLIC: {
+            WorkspaceMakePublic: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_MAKE_PRIVATE: {
+            WorkspaceMakePrivate: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_ARCHIVED: {
+            WorkspaceArchived: {
                 links: [ "actor", "workspace" ]
             },
 
-            WORKSPACE_UNARCHIVED: {
+            WorkspaceUnarchived: {
                 links: [ "actor", "workspace" ]
             },
 
@@ -127,20 +131,20 @@
                 links: [ "actor", "workfile", "workspace" ]
             },
 
-            WORKSPACE_ADD_SANDBOX: {
+            WorkspaceAddSandbox: {
                 links: [ "actor", "workspace" ]
             },
 
-            SOURCE_TABLE_CREATED: {
+            SourceTableCreated: {
                 links: [ "actor", "dataset", "workspace" ],
                 computed: [ "datasetType" ]
             },
 
-            USER_ADDED: {
+            UserAdded: {
                 links: [ "newUser"]
             },
 
-            WORKSPACE_ADD_HDFS_AS_EXT_TABLE: {
+            WorkspaceAddHdfsAsExtTable: {
                 links: [ "actor", "hdfsEntry", "workspace", "dataset"]
             },
 
@@ -149,33 +153,38 @@
                 computed: [ "noteObjectType" ]
             },
 
-            FILE_IMPORT_SUCCESS: {
+            FileImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
                 computed: ["importSourceLink", "datasetType"]
             },
 
-            FILE_IMPORT_FAILED: {
+            FileImportFailed: {
                 links: ["workspace"],
                 attrs: ["importType", "destinationTable"],
                 computed: ["importSourceLink", "datasetType", "datasetLink"]
             },
 
-            MEMBERS_ADDED: {
+            MembersAdded: {
                 links: ["actor", "workspace", "member"],
                 computed: ["count"]
             },
 
-            DATASET_IMPORT_SUCCESS: {
+            DatasetImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType"]
             },
 
-            DATASET_IMPORT_FAILED: {
+            DatasetImportFailed: {
                 links: ["workspace"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
+            },
+
+            WorkfileUpgradedVersion: {
+                links: [ "actor", "workfile", "workspace" ],
+                computed: ["versionLink"]
             }
         },
 
@@ -203,7 +212,7 @@
         },
 
         defaultStyle: function(self) {
-            if (self.get("action") == "MEMBERS_ADDED") {
+            if (self.get("action") == "MembersAdded") {
                 switch(self.get("numAdded")) {
                     case "1":
                         return 'default.one';
@@ -212,7 +221,7 @@
                     default:
                         return 'default.many';
                 }
-            } else if (self.workspace().id && self.get("actionType") != "NOTE_ON_WORKSPACE") {
+            } else if (self.workspace().id && self.get("actionType") != "NoteOnWorkspace") {
                 return 'default';
             } else {
                 return 'without_workspace';
@@ -220,7 +229,7 @@
         },
 
         displayStyle: function(self, style) {
-            if (self.get("action") == "MEMBERS_ADDED") {
+            if (self.get("action") == "MembersAdded") {
                 switch(self.get("numAdded")) {
                     case "1":
                         return (style + '.one');
@@ -257,16 +266,16 @@
         noteObjectType: function(self) {
             var actionType = self.model.get("actionType");
             switch (actionType) {
-                case "NOTE_ON_GREENPLUM_INSTANCE":
+                case "NoteOnGreenplumInstance":
                     return "Greenplum instance";
-                case "NOTE_ON_HADOOP_INSTANCE":
+                case "NoteOnHadoopInstance":
                     return "Hadoop instance";
-                case "NOTE_ON_HDFS_FILE":
+                case "NoteOnHdfsFile":
                     return "file";
-                case "NOTE_ON_WORKSPACE":
+                case "NoteOnWorkspace":
                     return "workspace";
-                case "NOTE_ON_DATASET":
-                case "NOTE_ON_WORKSPACE_DATASET":
+                case "NoteOnDataset":
+                case "NoteOnWorkspaceDataset":
                     return hidden.datasetType(self);
                 default:
                     return "";
@@ -283,6 +292,18 @@
             dataset.workspace = workspace;
             var dataset_model = new chorus.models.WorkspaceDataset(dataset);
             return dataset_model.showLink();
+        },
+
+        versionLink: function(self) {
+            var version_num = self.model.get("versionNum");
+            var version_id = self.model.get("versionId");
+            var workfile = self.model.get("workfile");
+            var workfile_version = new chorus.models.Workfile({
+                versionInfo: { id : version_id },
+                id : workfile.id,
+                workspace: workfile.workspace
+            });
+            return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
         },
 
         datasetLink: function(self) {

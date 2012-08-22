@@ -97,14 +97,14 @@ describe MembersController do
         workspace.reload.has_added_member.should be_true
       end
 
-      it "creates a MEMBERS_ADDED event with the right num_added value" do
+      it "creates a MembersAdded event with the right num_added value" do
         parameters = {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, member3.id, member4.id]}
 
         expect {
           post :create, parameters
-        }.to change(Events::MEMBERS_ADDED, :count).by(1)
+        }.to change(Events::MembersAdded, :count).by(1)
 
-        Events::MEMBERS_ADDED.limit(1).order('id desc').first.num_added.should == "2"
+        Events::MembersAdded.limit(1).order('id desc').first.num_added.should == "2"
       end
     end
 

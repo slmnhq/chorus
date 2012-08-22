@@ -133,7 +133,8 @@ window.rspecFixtureDefinitions = {
             noteOnDatasetCreated: {},
             noteOnWorkspaceDatasetCreated: {},
             noteOnWorkfileCreated: {},
-            membersAdded: {}
+            membersAdded: {},
+            workfileUpgradedVersion: {}
         }
     },
 

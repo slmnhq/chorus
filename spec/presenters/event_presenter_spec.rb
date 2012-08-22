@@ -13,7 +13,7 @@ describe EventPresenter, :type => :view do
         hash = subject.to_hash
         hash[:id].should == event.id
         hash[:timestamp].should == event.created_at
-        hash[:action].should == "GREENPLUM_INSTANCE_CREATED"
+        hash[:action].should == "GreenplumInstanceCreated"
         hash[:actor].should  == Presenter.present(event.actor, view)
       end
 
@@ -58,7 +58,7 @@ describe EventPresenter, :type => :view do
       it "returns the correct hash for a note" do
         hash = subject.to_hash
         hash[:action].should == "NOTE"
-        hash[:action_type].should == "NOTE_ON_GREENPLUM_INSTANCE"
+        hash[:action_type].should == "NoteOnGreenplumInstance"
       end
 
       it "sanitizes notes' body" do

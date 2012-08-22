@@ -23,43 +23,43 @@ FixtureBuilder.configure do |fbuilder|
     #Users
     admin = User.create!({:first_name => 'Admin', :last_name => 'AlphaSearch', :username => 'admin', :email => 'admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
     evil_admin = User.create!({:first_name => 'Evil', :last_name => 'AlphaSearch', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
-    Events::USER_ADDED.by(admin).add(:new_user => evil_admin)
+    Events::UserAdded.by(admin).add(:new_user => evil_admin)
 
     alice = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'alice', :email => 'alice@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => alice)
+    Events::UserAdded.by(admin).add(:new_user => alice)
 
     bob = User.create!(:first_name => 'BobSearch', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
     bob.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
     bob.save!
 
-    Events::USER_ADDED.by(admin).add(:new_user => bob)
+    Events::UserAdded.by(admin).add(:new_user => bob)
 
     carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => carly)
+    Events::UserAdded.by(admin).add(:new_user => carly)
 
     not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(admin).add(:new_user => not_a_member)
+    Events::UserAdded.by(admin).add(:new_user => not_a_member)
 
     user_with_restricted_access = User.create!(:first_name => 'Restricted', :last_name => 'User', :username => 'restricted_user', :email => 'restricted@example.com', :password => FixtureBuilder.password)
-    Events::USER_ADDED.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
+    Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
-    Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
+    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     aurora_instance = Instance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
-    Events::GREENPLUM_INSTANCE_CREATED.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::PROVISIONING_SUCCESS.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::PROVISIONING_FAIL.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
+    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
+    Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
+    Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
 
     purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
-    fbuilder.name :bob_creates_greenplum_instance, Events::GREENPLUM_INSTANCE_CREATED.by(bob).add(:greenplum_instance => bobs_instance)
+    fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
-    Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
+    Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => Time.parse("2010-10-20 22:00:00"), :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
+    HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
     chorus_gpdb40_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
     chorus_gpdb41_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
@@ -115,6 +115,9 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => alice}, :without_protection => true)
     workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
+    workspaces << alice_api_workspace = bob.owned_workspaces.create!({:name => "Alice Api", :summary => "aliceIsCool", :sandbox => bob_schema}, :without_protection => true)
+    alice_api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
+    alice_api_workspace.save!
     workspaces.each do |workspace|
       workspace.members << carly
     end
@@ -122,14 +125,14 @@ FixtureBuilder.configure do |fbuilder|
     # Workspace / Dataset associations
     bob_public_workspace.bound_datasets << bobs_table
 
-    fbuilder.name :bob_creates_public_workspace, Events::PUBLIC_WORKSPACE_CREATED.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
-    fbuilder.name :bob_creates_private_workspace, Events::PRIVATE_WORKSPACE_CREATED.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
+    fbuilder.name :bob_creates_public_workspace, Events::PublicWorkspaceCreated.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
+    fbuilder.name :bob_creates_private_workspace, Events::PrivateWorkspaceCreated.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
-    fbuilder.name :bob_makes_workspace_public, Events::WORKSPACE_MAKE_PUBLIC.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
-    fbuilder.name :bob_makes_workspace_private, Events::WORKSPACE_MAKE_PRIVATE.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
+    fbuilder.name :bob_makes_workspace_public, Events::WorkspaceMakePublic.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
+    fbuilder.name :bob_makes_workspace_private, Events::WorkspaceMakePrivate.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
-    #HDFS File References
-    hdfs_file_reference = HdfsFileReference.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql'}, :without_protection => true)
+    #HDFS Entry
+    hdfs_entry = HdfsEntry.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql', :modified_at => "2010-10-22 22:00:00"}, :without_protection => true)
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
@@ -143,7 +146,7 @@ FixtureBuilder.configure do |fbuilder|
       sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
       fbuilder.name :sql, sql_workfile
 
-      WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      alice_workfile_version = WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
@@ -155,8 +158,9 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :bob_creates_private_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
       fbuilder.name :alice_creates_public_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
 
-      fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
-      fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
+      fbuilder.name :note_on_bob_public_workfile, Events::NoteOnWorkfile.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
+      fbuilder.name :note_on_alice_private_workfile, Events::NoteOnWorkfile.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
+      fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
 
     end
 
@@ -179,37 +183,37 @@ FixtureBuilder.configure do |fbuilder|
     csv_file.save!(:validate => false)
 
     #Notes
-    note_on_greenplum = Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
+    note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
     fbuilder.name :note_on_greenplum, note_on_greenplum
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
-    Events::NOTE_ON_HADOOP_INSTANCE.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    Events::NOTE_ON_HDFS_FILE.by(bob).add(:hdfs_file => hdfs_file_reference, :body => 'hhhhhhaaaadooooopppp')
-    Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
-    Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
-    Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
-    Events::FILE_IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
-    fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
-    fbuilder.name :note_on_workspace_dataset, Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
-    fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
-    fbuilder.name :note_on_alice_private, Events::NOTE_ON_WORKSPACE.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
+    Events::NoteOnHadoopInstance.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
+    Events::NoteOnHdfsFile.by(bob).add(:hdfs_file => hdfs_entry, :body => 'hhhhhhaaaadooooopppp')
+    Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
+    Events::NoteOnDataset.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
+    Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
+    Events::FileImportSuccess.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
+    fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
+    fbuilder.name :note_on_alice_private, Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
     #Events
-    Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
-    Events::GREENPLUM_INSTANCE_CHANGED_NAME.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
-    Events::HADOOP_INSTANCE_CHANGED_NAME.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
-    Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
-    Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
-    Events::WORKSPACE_ARCHIVED.by(admin).add(:workspace => bob_public_workspace)
-    Events::WORKSPACE_UNARCHIVED.by(admin).add(:workspace => bob_public_workspace)
-    Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
-    Events::FILE_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
-    Events::FILE_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
-    Events::MEMBERS_ADDED.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
-    Events::DATASET_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => other_table)
-    Events::DATASET_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :source_dataset => other_table, :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
+    Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
+    Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
+    Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
+    Events::SourceTableCreated.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    Events::WorkspaceAddSandbox.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
+    Events::WorkspaceArchived.by(admin).add(:workspace => bob_public_workspace)
+    Events::WorkspaceUnarchived.by(admin).add(:workspace => bob_public_workspace)
+    Events::WorkspaceAddHdfsAsExtTable.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_entry)
+    Events::FileImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
+    Events::FileImportFailed.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
+    Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
+    Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => other_table)
+    Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => other_table, :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
