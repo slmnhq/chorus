@@ -4,7 +4,8 @@ bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 . "$bin"/chorus-config.sh
 
-# depends on postgres
+STARTING="scheduler"
+depends_on postgres
 
 if [ -f $SCHEDULER_PID_FILE ]; then
   if kill -0 `cat $SCHEDULER_PID_FILE` > /dev/null 2>&1; then

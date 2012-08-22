@@ -133,6 +133,7 @@ class Install
     FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
 
+    FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr", "#{release_path}/solr")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")

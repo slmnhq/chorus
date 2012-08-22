@@ -2,32 +2,8 @@
 bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 
-test "$RAILS_ENV" = "" && RAILS_ENV=production
-
-POSTGRES_PORT=8543
-SOLR_ATTEMPTS=200
-
-STARTING_DIR=$(pwd)
-SCRIPT_DIR=$(dirname $0)
-cd $STARTING_DIR/$SCRIPT_DIR
-
-CHORUS_LOG=$CHORUS_HOME/log
-CHORUS_PID=$CHORUS_HOME/tmp/pids
-mkdir -p $CHORUS_PID
-
-WORKER_PID_FILE=$CHORUS_PID/queue_classic.$RAILS_ENV.pid
-
-function pid_is_running () {
-  test -z "$1" && return 1;
-
-  ps x | grep "^\s*$1\b" > /dev/null
-  return $?
-}
-
 function start_postgres () {
-  echo "Starting postgres..."
-  cd $CHORUS_HOME
-  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -o "-p$POSTGRES_PORT -h127.0.0.1" --bytea_output=escape start > /dev/null 2>&1
+  $bin/start-postgres.sh
 }
 
 function start_workers () {
@@ -63,8 +39,7 @@ function stop_webserver () {
 }
 
 function stop_postgres () {
-  echo "Stopping postgres..."
-  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -m fast stop
+  $bin/stop-postgres.sh
 }
 
 

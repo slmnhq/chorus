@@ -8,12 +8,8 @@ bin=`cd "$bin"; pwd`
 # in development, start mizuno in foreground
 # in production, start jetty in background
 
-# depends on solr, workers, postgres
-
-if [ ! -f $SOLR_PID_FILE ]; then
-    log "Solr must be running to start the web server."
-    exit 1
-fi
+STARTING="web server"
+depends_on postgres solr worker
 
 log "Writing nginx config..."
 $RUBY vendor/nginx/generate_nginx_conf.rb

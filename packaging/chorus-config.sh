@@ -24,6 +24,9 @@ JETTY_PID_FILE=$CHORUS_HOME/vendor/jetty/run/jetty.pid
 SCHEDULER_PID_FILE=$CHORUS_HOME/tmp/pids/scheduler.$RAILS_ENV.pid
 WORKER_PID_FILE=$CHORUS_HOME/tmp/pids/worker.$RAILS_ENV.pid
 
+POSTGRES_DIR=$CHORUS_HOME/postgres-db
+POSTGRES_PID_FILE=$POSTGRES_DIR/postmaster.pid
+
 ##### Determine which nginx binary to use for this platform #####
 
 unamestr=`uname`
@@ -36,9 +39,35 @@ fi
 ##### support functions #####
 
 function log () {
-    echo [$RAILS_ENV] $1
+    echo "[$RAILS_ENV] $1"
 }
 
 function log_inline () {
-    echo -n [$RAILS_ENV] $1
+    echo -n "[$RAILS_ENV] $1"
+}
+
+function depends_on () {
+    missing_dependencies=()
+    dependency_num=1
+    until [ -z "$1" ]  # Until all parameters used up . . .
+    do
+        pid_file=`echo $1 | tr '[:lower:]' '[:upper:]'`_PID_FILE
+        if [ ! -f ${!pid_file} ]; then
+            missing_dependencies[$dependency_num]=$1
+            dependency_num=$(($dependency_num + 1))
+        fi
+        shift
+    done
+
+    if [ ${#missing_dependencies[@]} -ne 0 ]; then
+        joiner=""
+        message=""
+        for missing_dependency in ${missing_dependencies[*]}
+        do
+            message=$message$joiner$missing_dependency
+            joiner=", "
+        done
+        log "$message must be running to start the $STARTING"
+        exit 1
+    fi
 }

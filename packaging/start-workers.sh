@@ -4,7 +4,8 @@ bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 . "$bin"/chorus-config.sh
 
-#depends on postgres
+STARTING="worker"
+depends_on postgres
 
 # only one worker for now
 
