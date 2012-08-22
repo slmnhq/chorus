@@ -324,5 +324,33 @@ describe " system generated activities " do
 
   end
 
+  it "creates system generated activity when a sandbox is added" do
+    create_gpdb_instance(:name => "sandboxas")
+    inst_name = "sandboxas"
+    instance_id = Instance.find_by_name(inst_name).id
+    go_to_workspace_page
+    create_valid_workspace(:name => "sandboxas")
+
+    click_link "Add a sandbox"
+    wait_for_ajax(5)
+    #instance
+    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
+    page.execute_script("$('.instance .select_container select').change();")
+    wait_for_ajax(5)
+    #database
+    page.execute_script("$('select[name=database]').selectmenu('value', '1')")
+    page.execute_script("$('.database .select_container select').change();")
+    wait_for_ajax(5)
+    #schema
+    page.execute_script("$('select[name=schema]').selectmenu('value', '1')")
+    page.execute_script("$('.schema .select_container select').change();")
+
+    click_submit_button
+    wait_for_ajax
+    page.should have_content " EDC Admin added a sandbox"
+    go_to_home_page
+    page.should have_content "EDC Admin added a sandbox to workspace sandboxas"
+
+  end
 
 end
