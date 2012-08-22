@@ -22,9 +22,9 @@ describe "Notes" do
     note.errors.messages[:actor_id].length.should == 1
   end
 
-  describe "NOTE_ON_GREENPLUM_INSTANCE" do
+  describe "NoteOnGreenplumInstance" do
     subject do
-      Events::NOTE_ON_GREENPLUM_INSTANCE.add(
+      Events::NoteOnGreenplumInstance.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :body => "This is the body"
@@ -39,9 +39,9 @@ describe "Notes" do
     it_creates_a_global_activity
   end
 
-  describe "NOTE_ON_HADOOP_INSTANCE" do
+  describe "NoteOnHadoopInstance" do
     subject do
-      Events::NOTE_ON_HADOOP_INSTANCE.add(
+      Events::NoteOnHadoopInstance.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
           :body => "This is the body"
@@ -64,9 +64,9 @@ describe "Notes" do
     it_creates_a_global_activity
   end
 
-  describe "NOTE_ON_HDFS_FILE" do
+  describe "NoteOnHdfsFile" do
     subject do
-      Events::NOTE_ON_HDFS_FILE.add(
+      Events::NoteOnHdfsFile.add(
           :actor => actor,
           :hdfs_file => hdfs_file_reference,
           :body => "This is the text of the note"
@@ -81,9 +81,9 @@ describe "Notes" do
     it_creates_a_global_activity
   end
 
-  describe "NOTE_ON_WORKSPACE" do
+  describe "NoteOnWorkspace" do
     subject do
-      Events::NOTE_ON_WORKSPACE.add(
+      Events::NoteOnWorkspace.add(
         :actor => actor,
         :workspace => workspace,
         :body => "This is the text of the note on the workspace"
@@ -99,9 +99,9 @@ describe "Notes" do
     it_behaves_like 'event associated with a workspace'
   end
 
-  describe "NOTE_ON_WORKFILE" do
+  describe "NoteOnWorkfile" do
     subject do
-      Events::NOTE_ON_WORKFILE.add(
+      Events::NoteOnWorkfile.add(
         :actor => actor,
         :workfile => workfile,
         :workspace => workspace,
@@ -118,9 +118,9 @@ describe "Notes" do
     it_behaves_like 'event associated with a workspace'
   end
 
-  describe "NOTE_ON_DATASET" do
+  describe "NoteOnDataset" do
     subject do
-      Events::NOTE_ON_DATASET.add(
+      Events::NoteOnDataset.add(
         :actor => actor,
         :dataset => dataset,
         :body => "<3 <3 <3"
@@ -135,9 +135,9 @@ describe "Notes" do
     it_creates_a_global_activity
   end
 
-  describe "NOTE_ON_WORKSPACE_DATASET" do
+  describe "NoteOnWorkspaceDataset" do
     subject do
-      Events::NOTE_ON_WORKSPACE_DATASET.add(
+      Events::NoteOnWorkspaceDataset.add(
         :actor => actor,
         :dataset => dataset,
         :workspace => workspace,
@@ -195,7 +195,7 @@ describe "Notes" do
       }, user)
 
       last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_GREENPLUM_INSTANCE"
+      last_note.action.should == "NoteOnGreenplumInstance"
       last_note.greenplum_instance.should == greenplum_instance
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
@@ -211,7 +211,7 @@ describe "Notes" do
 
       last_note = Events::Note.first
       last_note.hadoop_instance.should == hadoop_instance
-      last_note.action.should == "NOTE_ON_HADOOP_INSTANCE"
+      last_note.action.should == "NoteOnHadoopInstance"
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
     end
@@ -224,7 +224,7 @@ describe "Notes" do
       }, user)
 
       last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_HDFS_FILE"
+      last_note.action.should == "NoteOnHdfsFile"
       last_note.actor.should == user
       last_note.hdfs_file.hadoop_instance_id.should == 1234
       last_note.hdfs_file.path.should == "/data/test.csv"
@@ -240,7 +240,7 @@ describe "Notes" do
         }, user)
 
         last_note = Events::Note.first
-        last_note.action.should == "NOTE_ON_WORKSPACE"
+        last_note.action.should == "NoteOnWorkspace"
         last_note.actor.should == user
         last_note.workspace.should == workspace
         last_note.body.should == "More crazy content"
@@ -271,7 +271,7 @@ describe "Notes" do
       }, user)
 
       last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_WORKFILE"
+      last_note.action.should == "NoteOnWorkfile"
       last_note.actor.should == user
       last_note.workfile.should == workfile
       last_note.workspace.should == workspace
@@ -286,7 +286,7 @@ describe "Notes" do
       }, user)
 
       last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_DATASET"
+      last_note.action.should == "NoteOnDataset"
       last_note.actor.should == user
       last_note.dataset.should == dataset
       last_note.body.should == "Crazy dataset content"
@@ -301,7 +301,7 @@ describe "Notes" do
       }, user)
 
       last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_WORKSPACE_DATASET"
+      last_note.action.should == "NoteOnWorkspaceDataset"
       last_note.actor.should == user
       last_note.dataset == dataset
       last_note.workspace == workspace

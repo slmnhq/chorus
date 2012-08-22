@@ -158,8 +158,8 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :bob_creates_private_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
       fbuilder.name :alice_creates_public_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
 
-      fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
-      fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
+      fbuilder.name :note_on_bob_public_workfile, Events::NoteOnWorkfile.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
+      fbuilder.name :note_on_alice_private_workfile, Events::NoteOnWorkfile.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
       fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
 
     end
@@ -183,22 +183,22 @@ FixtureBuilder.configure do |fbuilder|
     csv_file.save!(:validate => false)
 
     #Notes
-    note_on_greenplum = Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
+    note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
     fbuilder.name :note_on_greenplum, note_on_greenplum
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
-    Events::NOTE_ON_HADOOP_INSTANCE.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    Events::NOTE_ON_HDFS_FILE.by(bob).add(:hdfs_file => hdfs_file_reference, :body => 'hhhhhhaaaadooooopppp')
-    Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
-    Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
-    Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
+    Events::NoteOnHadoopInstance.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
+    Events::NoteOnHdfsFile.by(bob).add(:hdfs_file => hdfs_file_reference, :body => 'hhhhhhaaaadooooopppp')
+    Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
+    Events::NoteOnDataset.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
+    Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
     Events::FileImportSuccess.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
-    fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
-    fbuilder.name :note_on_workspace_dataset, Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
-    fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
-    fbuilder.name :note_on_alice_private, Events::NOTE_ON_WORKSPACE.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
+    fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
+    fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
+    fbuilder.name :note_on_alice_private, Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
     #Events
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)

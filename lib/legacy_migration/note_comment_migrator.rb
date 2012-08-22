@@ -11,32 +11,32 @@ class NoteCommentMigrator < AbstractMigrator
           instance_id, instance_provider = instance_id_and_provider(comment_id)
           if instance_provider == 'Greenplum Database'
             greenplum_instance = Instance.find(instance_id)
-            event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body, :actor => actor)
+            event = Events::NoteOnGreenplumInstance.create(:greenplum_instance => greenplum_instance, :body => comment_body, :actor => actor)
           elsif instance_provider == 'Hadoop'
             hadoop_instance = HadoopInstance.find(instance_id)
-            event = Events::NOTE_ON_HADOOP_INSTANCE.create(:hadoop_instance => hadoop_instance, :body => comment_body, :actor => actor)
+            event = Events::NoteOnHadoopInstance.create(:hadoop_instance => hadoop_instance, :body => comment_body, :actor => actor)
           else
             Raise "Unknown Instance Provider: #{instance_provider}"
           end
         when 'hdfs'
           hadoop_id, path = comment_id.split('|')
           hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
-          event = Events::NOTE_ON_HDFS_FILE.create(:hdfs_file => hdfs_file, :body => comment_body, :actor => actor)
+          event = Events::NoteOnHdfsFile.create(:hdfs_file => hdfs_file, :body => comment_body, :actor => actor)
         when 'workspace'
           workspace = Workspace.find_with_destroyed(workspace_id(comment_id))
-          event = Events::NOTE_ON_WORKSPACE.create(:workspace => workspace, :body => comment_body, :actor => actor)
+          event = Events::NoteOnWorkspace.create(:workspace => workspace, :body => comment_body, :actor => actor)
         when 'workfile'
           workspace = Workspace.find_with_destroyed(comment_workspace_id(comment_id))
           workfile = Workfile.find_with_destroyed(workfile_id(comment_id))
-          event = Events::NOTE_ON_WORKFILE.create(:workspace => workspace, :workfile => workfile, :body => comment_body, :actor => actor)
+          event = Events::NoteOnWorkfile.create(:workspace => workspace, :workfile => workfile, :body => comment_body, :actor => actor)
         when 'databaseObject'
           if comment_workspace_id
             workspace = Workspace.find_with_destroyed(find_rails_workspace_id(comment_workspace_id))
             dataset = Dataset.find(rails_dataset_id(entity_id))
-            event = Events::NOTE_ON_WORKSPACE_DATASET.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
+            event = Events::NoteOnWorkspaceDataset.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
           else
             dataset = Dataset.find(rails_dataset_id(entity_id))
-            event = Events::NOTE_ON_DATASET.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
+            event = Events::NoteOnDataset.create(:workspace => workspace, :body => comment_body, :actor => actor, :dataset => dataset)
           end
         else
           next

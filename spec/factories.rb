@@ -219,22 +219,22 @@ FactoryGirl.define do
       workspace
     end
 
-    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
+    factory :note_on_greenplum_instance_event, :class => Events::NoteOnGreenplumInstance do
       greenplum_instance
       body "Note to self, add a body"
     end
 
-    factory :note_on_hadoop_instance_event, :class => Events::NOTE_ON_HADOOP_INSTANCE do
+    factory :note_on_hadoop_instance_event, :class => Events::NoteOnHadoopInstance do
       hadoop_instance
       body "Note to self, add a body"
     end
 
-    factory :note_on_hdfs_file_event, :class => Events::NOTE_ON_HDFS_FILE do
+    factory :note_on_hdfs_file_event, :class => Events::NoteOnHdfsFile do
       association :hdfs_file, :factory => :hdfs_file_reference
       body "This is a note on an hdfs file"
     end
 
-    factory :note_on_workspace_event, :class => Events::NOTE_ON_WORKSPACE do
+    factory :note_on_workspace_event, :class => Events::NoteOnWorkspace do
       association :workspace, :factory => :workspace
       body "This is a note on a workspace"
     end

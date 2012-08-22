@@ -152,7 +152,7 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#noteObject", function() {
-            context("for a NOTE_ON_GREENPLUM_INSTANCE", function() {
+            context("for a NoteOnGreenplumInstance", function() {
                 it("returns a greenplumInstance with the right data", function() {
                     activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
                         greenplumInstance: { id: 13 }
@@ -164,7 +164,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_HDFS_FILE", function() {
+            context("for a NoteOnHdfsFile", function() {
                 it("returns a hdfsFile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnHdfsFileCreated({
                         hdfsFile: { path: "/happy/path.txt", hadoopInstanceId: 331 }
@@ -176,7 +176,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKSPACE", function() {
+            context("for a NoteOnWorkspace", function() {
                 it("returns a workspace with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkspaceCreated({
                         workspace: { id: 123 }
@@ -187,7 +187,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_DATASET", function() {
+            context("for a NoteOnDataset", function() {
                 it("returns a dataset with the right data", function() {
                     activity = rspecFixtures.activity.noteOnDatasetCreated({
                         dataset: { id: 123 }
@@ -198,7 +198,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKSPACE_DATASET", function() {
+            context("for a NoteOnWorkspaceDataset", function() {
                 it("returns a workspace dataset with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkspaceDatasetCreated({
                         dataset: { id: 123 }
@@ -209,7 +209,7 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
-            context("for a NOTE_ON_WORKFILE", function() {
+            context("for a NoteOnWorkfile", function() {
                 it("returns a workfile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnWorkfileCreated({
                         workfile: { id: 123 }

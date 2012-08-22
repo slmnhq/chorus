@@ -59,34 +59,34 @@
             var model;
 
             switch (this.get("actionType")) {
-                case "NOTE_ON_HADOOP_INSTANCE":
+                case "NoteOnHadoopInstance":
                     model = new chorus.models.HadoopInstance();
                     model.set(this.get("hadoopInstance"));
                     break;
-                case "NOTE_ON_GREENPLUM_INSTANCE":
+                case "NoteOnGreenplumInstance":
                     model = new chorus.models.GreenplumInstance();
                     model.set(this.get("greenplumInstance"));
                     break;
-                case "NOTE_ON_HDFS_FILE":
+                case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsFile();
                     model.set({
                         hadoopInstance: new chorus.models.HadoopInstance({ id: this.get("hdfsFile").hadoopInstanceId }),
                         path: this.get("hdfsFile").path
                     });
                     break;
-                case "NOTE_ON_WORKSPACE":
+                case "NoteOnWorkspace":
                     model = new chorus.models.Workspace();
                     model.set(this.get("workspace"));
                     break;
-                case "NOTE_ON_DATASET":
+                case "NoteOnDataset":
                     model = new chorus.models.Dataset();
                     model.set(this.get("dataset"));
                     break;
-                case "NOTE_ON_WORKSPACE_DATASET":
+                case "NoteOnWorkspaceDataset":
                     model = new chorus.models.WorkspaceDataset();
                     model.set(this.get("dataset"));
                     break;
-                case "NOTE_ON_WORKFILE":
+                case "NoteOnWorkfile":
                     model = new chorus.models.Workfile();
                     model.set(this.get("workfile"));
                     break;

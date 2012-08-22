@@ -23,7 +23,7 @@ describe Events::NoteAccess do
 
     context "when the note is on a workspace and the current user is the workspace owner" do
       let(:note) do
-        Events::NOTE_ON_WORKSPACE.by(users(:alice)).create(
+        Events::NoteOnWorkspace.by(users(:alice)).create(
           :workspace => workspaces(:bob_public),
           :body => "hi"
         )
@@ -70,9 +70,9 @@ describe Events::NoteAccess do
 
   describe "classes for individual note types" do
     it "has a class for each type of note" do
-      Events::NOTE_ON_WORKSPACEAccess.new(fake_controller).should be_a Events::NoteAccess
-      Events::NOTE_ON_GREENPLUM_INSTANCEAccess.new(fake_controller).should be_a Events::NoteAccess
-      Events::NOTE_ON_HADOOP_INSTANCEAccess.new(fake_controller).should be_a Events::NoteAccess
+      Events::NoteOnWorkspaceAccess.new(fake_controller).should be_a Events::NoteAccess
+      Events::NoteOnGreenplumInstanceAccess.new(fake_controller).should be_a Events::NoteAccess
+      Events::NoteOnHadoopInstanceAccess.new(fake_controller).should be_a Events::NoteAccess
     end
   end
 end

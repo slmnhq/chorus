@@ -221,7 +221,7 @@
                     default:
                         return 'default.many';
                 }
-            } else if (self.workspace().id && self.get("actionType") != "NOTE_ON_WORKSPACE") {
+            } else if (self.workspace().id && self.get("actionType") != "NoteOnWorkspace") {
                 return 'default';
             } else {
                 return 'without_workspace';
@@ -266,16 +266,16 @@
         noteObjectType: function(self) {
             var actionType = self.model.get("actionType");
             switch (actionType) {
-                case "NOTE_ON_GREENPLUM_INSTANCE":
+                case "NoteOnGreenplumInstance":
                     return "Greenplum instance";
-                case "NOTE_ON_HADOOP_INSTANCE":
+                case "NoteOnHadoopInstance":
                     return "Hadoop instance";
-                case "NOTE_ON_HDFS_FILE":
+                case "NoteOnHdfsFile":
                     return "file";
-                case "NOTE_ON_WORKSPACE":
+                case "NoteOnWorkspace":
                     return "workspace";
-                case "NOTE_ON_DATASET":
-                case "NOTE_ON_WORKSPACE_DATASET":
+                case "NoteOnDataset":
+                case "NoteOnWorkspaceDataset":
                     return hidden.datasetType(self);
                 default:
                     return "";

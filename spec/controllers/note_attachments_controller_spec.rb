@@ -10,7 +10,7 @@ describe NoteAttachmentsController do
 
   context "#create" do
     it "changes the file content" do
-      event = Events::NOTE_ON_GREENPLUM_INSTANCE.first
+      event = Events::NoteOnGreenplumInstance.first
       file = test_file('workfile.sql')
       post :create, :note_id => event.id, :fileToUpload => {:contents => file}
       response.code.should == '200'
