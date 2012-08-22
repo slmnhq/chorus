@@ -13,7 +13,7 @@ if [ -f $SCHEDULER_PID_FILE ]; then
   fi
 fi
 
-$RUBY script/rails runner "require 'job_scheduler'; JobScheduler.run" > $CHORUS_HOME/log/scheduler.$RAILS_ENV.log 2>&1 &
+$RUBY script/rails runner "JobScheduler.run" > $CHORUS_HOME/log/scheduler.$RAILS_ENV.log 2>&1 &
 scheduler_pid=$!
 echo $scheduler_pid > $SCHEDULER_PID_FILE
 log "Scheduler started as pid $scheduler_pid"
