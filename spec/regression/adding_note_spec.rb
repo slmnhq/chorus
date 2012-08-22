@@ -66,3 +66,52 @@ describe "adding multiple files to a note" do
 
 end
 
+describe "adding multiple datasets to a note" do
+
+  xit "adds multiple datasets" do
+    login('edcadmin', 'secret')
+    create_valid_workspace(:name => "multiple datasets")
+    workspace_id = Workspace.find_by_name("multiple datasets").id
+    create_gpdb_instance(:name => "datanote", :host => "chorus-gpdb42.sf.pivotallabs.com")
+    click_link "datanote"
+    sleep(2)
+    click_link "gpdb_chorus_ci"
+    sleep(2)
+    click_link "gpdb_test_schema"
+    sleep(3)
+    wait_for_ajax
+    page.should have_content "base_table1"
+    page.should have_content "All"
+    click_link "All"
+    wait_for_ajax
+    click_link "Associate with a workspace"
+    within(".collection_list") do
+      page.find("li[data-id='#{workspace_id}']").click
+    end
+    click_button "Associate Datasets"
+    go_to_workspace_page
+    click_link "multiple datasets"
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
+    click_link "Add a note"
+    wait_until { page.has_selector?("#facebox .dialog h1") }
+    within_modal do
+      set_cleditor_value("body", "Note on the workspace with multiple datasets")
+      click_link "Show options"
+      click_link "Dataset"
+        within (".collection_list") do
+          page.find("li[data-id='2297']").click
+          page.find("li[data-id='2298']").click
+          page.find("li[data-id='2299']").click
+          page.find("li[data-id='2300']").click
+          click_submit_button
+        end
+      click_submit_button
+    end
+    wait_for_ajax
+    page.should have_content "base_table1"
+    page.should have_content "view1"
+    page.should have_content "external_web_table1"
+
+  end
+
+end
