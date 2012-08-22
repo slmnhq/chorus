@@ -7,6 +7,7 @@ describe "Create workspaces" do
     go_to_workspace_page
     create_valid_workspace(:name => "Private Workspace", :shared => false)
     create_valid_user(:username => "private")
+    logout
     login('private','secret')
     go_to_workspace_page
     page.should_not have_content ("Private Workspace")
