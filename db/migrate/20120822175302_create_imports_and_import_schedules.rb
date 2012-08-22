@@ -1,4 +1,4 @@
-class CreateImportSchedules < ActiveRecord::Migration
+class CreateImportsAndImportSchedules < ActiveRecord::Migration
   def up
     create_table :import_schedules do |t|
       t.datetime :start_datetime
