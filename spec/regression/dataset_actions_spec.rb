@@ -176,7 +176,38 @@ describe "de-associating dataset to a workspace" do
     wait_for_ajax
     page.should_not have_content "external_web_table1"
 
-
   end
+end
 
+describe "adding multiple datasets to a workspace" do
+
+  it "adds multiple datasets to a workspace" do
+    login('edcadmin', 'secret')
+    create_valid_workspace(:name => "multiple ws datasets")
+    workspace_id = Workspace.find_by_name("multiple ws datasets").id
+    create_gpdb_instance(:name => "multiplews", :host => "chorus-gpdb42.sf.pivotallabs.com")
+    click_link "multiplews"
+    sleep(2)
+    click_link "gpdb_chorus_ci"
+    sleep(2)
+    click_link "gpdb_test_schema"
+    sleep(3)
+    wait_for_ajax
+    page.should have_content "base_table1"
+    page.should have_content "All"
+    click_link "All"
+    wait_for_ajax
+    click_link "Associate with a workspace"
+    within(".collection_list") do
+      page.find("li[data-id='#{workspace_id}']").click
+    end
+    click_button "Associate Datasets"
+    go_to_workspace_page
+    click_link "multiple ws datasets"
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
+    click_link "Data"
+    page.should have_content "base_table1"
+    page.should have_content "view1"
+    page.should have_content "external_web_table1"
+  end
 end
