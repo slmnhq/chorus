@@ -33,4 +33,16 @@ gpdb_instance:
   gpdb_user: gpadmin
   gpdb_pass: secret
 
+gpdb_instance41:
+  gpdb_host: chorus-gpdb41.sf.pivotallabs.com
+  gpdb_port: 5432
+  gpdb_user: gpadmin
+  gpdb_pass: secret
+
+gpdb_instance42:
+  gpdb_host: chorus-gpdb42.sf.pivotallabs.com
+  gpdb_port: 5432
+  gpdb_user: gpadmin
+  gpdb_pass: secret
+
 hadoop_instance:
