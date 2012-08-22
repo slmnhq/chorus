@@ -125,12 +125,12 @@ describe DatasetsController do
         any_instance_of(Dataset) do |d|
           stub(d).dataset_consistent? { true }
         end
-        expect_import(active_workspace, account.owner, options)
+        expect_import(options.merge(:remote_copy => true), account.owner )
       end
 
       it "makes a DATASET_IMPORT_CREATED event without associated dataset" do
         post :import, :id => src_table.to_param, :dataset_import => options
-        event = Events::DATASET_IMPORT_CREATED.first
+        event = Events::DatasetImportCreated.first
         event.actor.should == account.owner
         event.dataset.should == nil
         event.workspace.id.should == options[:workspace_id].to_i
@@ -142,7 +142,7 @@ describe DatasetsController do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
       it "should return successfully for active workspaces" do
-        expect_import(active_workspace, account.owner, options)
+        expect_import(options.merge(:remote_copy => false), account.owner)
         post :import, :id => src_table.to_param, "dataset_import" => options
 
         GpdbTable.refresh(account, schema)
@@ -163,7 +163,7 @@ describe DatasetsController do
 
     context "into a table in a different database" do
       before(:each) do
-        expect_import(active_workspace, account.owner, options)
+        expect_import(options.merge(:remote_copy => true), account.owner)
       end
 
       it "should return successfully for active workspaces" do
@@ -198,12 +198,12 @@ describe DatasetsController do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { true }
           end
-          expect_import(active_workspace, account.owner, options)
+          expect_import(options.merge(:remote_copy => true), account.owner)
         end
 
         it "makes a DATASET_IMPORT_CREATED event with associated dataset" do
           post :import, :id => src_table.to_param, :dataset_import => options
-          event = Events::DATASET_IMPORT_CREATED.first
+          event = Events::DatasetImportCreated.first
           event.actor.should == account.owner
           event.dataset.should == Dataset.find_by_name("master_table1")
           event.workspace.id.should == options[:workspace_id].to_i
@@ -212,11 +212,11 @@ describe DatasetsController do
       end
     end
 
-    def expect_import(workspace, owner, options)
+    def expect_import(options, owner)
       any_instance_of(Dataset) do |d|
-        mock(d).import(workspace, owner, anything) do |workspace, owner, attributes|
+        mock(d).import(anything, owner) do |attributes, owner |
           attributes.except(:dataset_import_created_event_id).should == options.except(:dataset_import_created_event_id)
-          Events::DATASET_IMPORT_CREATED.find(attributes[:dataset_import_created_event_id]).actor == account.owner
+          Events::DatasetImportCreated.find(attributes[:dataset_import_created_event_id]).actor == account.owner
         end
       end
     end

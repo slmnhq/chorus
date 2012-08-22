@@ -387,17 +387,18 @@ describe Dataset::Query, :database_integration => true do
       let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
       let(:dst_table_name) { "the_new_table" }
       let(:options) {
-        {
+        HashWithIndifferentAccess.new(
             "to_table" => "the_new_table",
-            "new_table" => true
-        }
+            "new_table" => true,
+            "remote_copy" => true
+        )
       }
 
       context "into a table in another db using gpfdist" do
         context "new table" do
           it "creates a correct gppipe" do
             mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
-            source_table.gpfdist_import(options, user)
+            source_table.import(options, user)
           end
         end
 
@@ -405,7 +406,7 @@ describe Dataset::Query, :database_integration => true do
           it "creates a correct gppipe" do
             options["new_table"] = 'false'
             mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
-            source_table.gpfdist_import(options, user)
+            source_table.import(options, user)
           end
         end
       end
@@ -417,12 +418,13 @@ describe Dataset::Query, :database_integration => true do
         let(:workspace) { workspaces(:bob_public) }
         let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
         let(:options) {
-          {
+          HashWithIndifferentAccess.new(
               "to_table" => "the_new_table",
               "sample_count" => 50,
               "new_table" => "true",
-              "workspace_id" => "123"
-          }
+              "workspace_id" => "123",
+              "remote_copy" => false
+          )
         }
         context "importing into new table" do
           it "creates a correct gp table copier" do

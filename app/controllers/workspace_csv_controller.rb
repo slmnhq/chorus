@@ -36,7 +36,7 @@ class WorkspaceCsvController < ApplicationController
 
   def create_import_event(csv_file)
     schema = csv_file.workspace.sandbox
-    Events::FILE_IMPORT_CREATED.by(csv_file.user).add(
+    Events::FileImportCreated.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :dataset => schema.datasets.find_by_name(csv_file.to_table),
         :file_name => csv_file.contents_file_name,

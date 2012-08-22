@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe Gppipe, :database_integration => true do
+
+  def setup_data
+    gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+    gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
+    gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
+  end
+
   before do
     refresh_chorus
     create_source_table
@@ -11,7 +18,7 @@ describe Gppipe, :database_integration => true do
   # In the test, use gpfdist to move data between tables in the same schema and database
   let(:instance_account1) { GpdbIntegration.real_gpdb_account }
   let(:user) { instance_account1.owner }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
   let(:schema_name) { 'test_schema' }
   let(:schema) { database.schemas.find_by_name(schema_name) }
 
@@ -60,12 +67,15 @@ describe Gppipe, :database_integration => true do
                       PRIMARY KEY("id2", "id3", "id")'.tr("\n","").gsub(/\s+/, " ").strip }
   let(:distrib_def) { "" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
-  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true" }.merge(extra_options) }
-  let(:extra_options) { {} }
+  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true"}.merge(extra_options) }
+  let(:extra_options) { {:dataset_import_created_event_id => Events::DatasetImportCreated.by(user).add(
+      :workspace => workspace,
+      :dataset => nil,
+      :destination_table => destination_table_name
+  ).id} }
   let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
   let(:sandbox) { workspace.sandbox }
-  let(:attributes) { {} }
 
   let(:create_source_table) do
     gpdb1.exec_query("drop table if exists #{source_table_name};")
@@ -95,7 +105,6 @@ describe Gppipe, :database_integration => true do
   context "for a table with 1 column and no primary key, distributed randomly" do
     let(:table_def) { '"2id" integer' }
     let(:distrib_def) { "DISTRIBUTED RANDOMLY" }
-
     after do
       gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
     end
@@ -127,11 +136,6 @@ describe Gppipe, :database_integration => true do
 
 
   context "actually running the query" do
-    before do
-      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
-      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
-      gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
-    end
 
     after do
       gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
@@ -139,22 +143,16 @@ describe Gppipe, :database_integration => true do
     end
 
     it "has the correct DDL for create table" do
+      setup_data
       gp_pipe.table_definition_with_keys.should == table_def
     end
 
     context ".run_import" do
-      before do
-        dataset_import_created_event_id = Events::DATASET_IMPORT_CREATED.by(user).add(
-            :workspace => workspace,
-            :dataset => nil,
-            :destination_table => dst_table
-        )
-        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
-      end
 
       context "into a new table" do
         before do
-          attributes.merge!(:new_table => true)
+          extra_options.merge!("new_table" => true)
+          setup_data
         end
 
         it "creates a new pipe and runs it" do
@@ -163,32 +161,33 @@ describe Gppipe, :database_integration => true do
         end
 
         it "drops the newly created table when there's an exception" do
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should raise_error
+          lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
           any_instance_of(Thread) do |thread|
             stub(thread).join { raise Exception }
           end
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should raise_error
+          lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
         end
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
-          Gppipe.run_import(schema.id, src_table, workspace.id, dst_table, user.id, attributes)
-          event = Events::DATASET_IMPORT_CREATED.first
-          event.id = attributes[:dataset_import_created_event_id]
+          Gppipe.run_import(source_dataset.id, user.id, options)
+          event = Events::DatasetImportCreated.first
+          event.id = options[:dataset_import_created_event_id]
           event.actor.should == user
-          event.dataset.name.should == dst_table
+          event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
           event.workspace.should == workspace
         end
       end
 
       context "into an existing table" do
-        let(:extra_options) { { "new_table" => "false" } }
         before do
-          gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
+          extra_options.merge!("new_table" => false)
         end
-        it "creates a new pipe and runs it" do
 
+        it "creates a new pipe and runs it" do
+          setup_data
+          gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
           gp_pipe.run
           gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
         end
@@ -197,13 +196,19 @@ describe Gppipe, :database_integration => true do
           any_instance_of(Thread) do |thread|
             stub(thread).join { raise Exception }
           end
+          setup_data
+          gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
-          lambda {gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}")}.should_not raise_error
+          lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should_not raise_error
         end
 
         context "when truncate => true" do
-          let(:extra_options) { {"new_table" => "false", "truncate" => 'true'} }
+
+
           it "should truncate" do
+            extra_options.merge!("truncate" => 'true')
+            setup_data
+            gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
             gpdb1.exec_query("insert into #{gp_pipe.destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
             gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 1
             gp_pipe.run
@@ -212,8 +217,11 @@ describe Gppipe, :database_integration => true do
         end
 
         context "when truncate => false" do
-          let(:extra_options) { {"new_table" => "false", "truncate" => 'false'} }
+
           it "does not truncate" do
+            extra_options.merge!("truncate" => 'false')
+            setup_data
+            gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
             gpdb1.exec_query("insert into #{gp_pipe.destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
             gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 1
             gp_pipe.run
@@ -226,6 +234,9 @@ describe Gppipe, :database_integration => true do
     context "with distribution key" do
       let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
 
+      before do
+        setup_data
+      end
       it "should move data from candy to dst_candy and have the correct primary key and distribution key" do
         gp_pipe.run
 
@@ -261,7 +272,9 @@ describe Gppipe, :database_integration => true do
 
     context "limiting the number of rows" do
       let(:extra_options) { {"sample_count" => 1} }
-
+      before do
+        setup_data
+      end
       it "should only have the first row" do
         gp_pipe.run
 
@@ -296,6 +309,7 @@ describe Gppipe, :database_integration => true do
 
     context "destination table already exists" do
       before do
+        setup_data
         gpdb2.exec_query("CREATE TABLE #{gp_pipe.destination_table_fullname}(#{table_def})")
       end
 
@@ -313,8 +327,8 @@ describe Gppipe, :database_integration => true do
       let(:destination_table_name) { "2dst_candy" }
 
       it "single quotes table and schema names if they have weird chars" do
+        setup_data
         gp_pipe.run
-
         gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
       end
     end
@@ -322,8 +336,9 @@ describe Gppipe, :database_integration => true do
     context "when #run failed" do
       it "drops newly created the table when there's an exception" do
         any_instance_of(Thread) do |thread|
-          stub(thread).join { raise Exception, "Internal Error"}
+          stub(thread).join { raise Exception, "Internal Error" }
         end
+        setup_data
         lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed, "Internal Error")
       end
     end

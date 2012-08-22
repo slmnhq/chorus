@@ -31,7 +31,6 @@ describe GpTableCopier, :database_integration => true do
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, options) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
-  let(:attributes) { {} }
 
   before do
     refresh_chorus
@@ -57,12 +56,12 @@ describe GpTableCopier, :database_integration => true do
 
     context ".run_import" do
       before do
-        dataset_import_created_event_id = Events::DATASET_IMPORT_CREATED.by(user).add(
+        dataset_import_created_event_id = Events::DatasetImportCreated.by(user).add(
             :workspace => workspace,
             :dataset => nil,
-            :destination_table => dst_table_name
-        )
-        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
+            :destination_table => destination_table_name
+        ).id
+        extra_options.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
       end
 
       context "in new table" do
@@ -85,7 +84,9 @@ describe GpTableCopier, :database_integration => true do
         end
 
         it "creates a DatasetImportFailed on a failed import" do
-          GpTableCopier.run_import(-1, user.id, options)
+          expect {
+            GpTableCopier.run_import(-1, user.id, options)
+          }.to raise_exception(ActiveRecord::RecordNotFound)
           event = Events::DatasetImportFailed.first
           event.actor.should == user
           event.error_message.should == "Couldn't find Dataset with id=-1"
@@ -95,19 +96,19 @@ describe GpTableCopier, :database_integration => true do
         end
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
-          GpTableCopier.run_import(schema.id, src_table_name, workspace.id, dst_table_name, user.id, attributes)
-          event = Events::DATASET_IMPORT_CREATED.first
-          event.id = attributes[:dataset_import_created_event_id]
+          GpTableCopier.run_import(source_dataset.id, user.id, options)
+          event = Events::DatasetImportCreated.first
+          event.id = extra_options[:dataset_import_created_event_id]
           event.actor.should == user
-          event.dataset.name.should == dst_table_name
+          event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
           event.workspace.should == workspace
         end
       end
 
       context "in existing table" do
-        let(:extra_options) { {"new_table" => "false" } }
         before do
+          extra_options.merge!("new_table" => false)
           call_sql("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
         end
 
@@ -118,8 +119,8 @@ describe GpTableCopier, :database_integration => true do
         end
 
         context "when it should truncate" do
-          let(:extra_options) { {"new_table" => "false", "truncate" => "true" } }
           before do
+            extra_options.merge!("truncate" => true)
             call_sql("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
           end
 
@@ -161,7 +162,9 @@ describe GpTableCopier, :database_integration => true do
         end
 
         it "creates a DatasetImportFailed on a failed import" do
-          GpTableCopier.run_import(-1, user.id, options)
+          expect {
+            GpTableCopier.run_import(-1, user.id, options)
+          }.to raise_exception(ActiveRecord::RecordNotFound)
           event = Events::DatasetImportFailed.first
           event.actor.should == user
           event.error_message.should == "Couldn't find Dataset with id=-1"
@@ -208,9 +211,8 @@ describe GpTableCopier, :database_integration => true do
     end
 
     context "when the rows are limited" do
-      let(:extra_options) { { "sample_count" => 1 } }
-
       before do
+        extra_options.merge!("sample_count" => 1)
         copier.run
         GpdbTable.refresh(account, schema)
       end
@@ -219,20 +221,23 @@ describe GpTableCopier, :database_integration => true do
         dest_rows = call_sql("SELECT * FROM #{destination_table_name}", sandbox)
         dest_rows.count.should == 1
       end
+    end
 
-      context "when the row limit value is 0" do
-        let(:extra_options) { { "sample_count" => 0 } }
+    context "when the row limit value is 0" do
+      before do
+        extra_options.merge!("sample_count" => 0)
+        copier.run
+        GpdbTable.refresh(account, schema)
+      end
 
-        it "creates the table and copies 0 rows" do
-          dest_rows = call_sql("SELECT * FROM #{destination_table_name}", sandbox)
-          dest_rows.count.should == 0
-        end
+      it "creates the table and copies 0 rows" do
+        dest_rows = call_sql("SELECT * FROM #{destination_table_name}", sandbox)
+        dest_rows.count.should == 0
       end
     end
 
     context "when the sandbox and src schema are not the same" do
       let(:sandbox) { database.schemas.find_by_name('test_schema2') }
-      before { attributes.merge!(:new_table => true) }
 
       it "creates a new table in the correct schema" do
         copier.run
@@ -241,25 +246,6 @@ describe GpTableCopier, :database_integration => true do
         database.find_dataset_in_schema(destination_table_name, sandbox.name).should be_a(GpdbTable)
         dest_rows = call_sql("SELECT * FROM #{destination_table_name}", sandbox)
         dest_rows.count.should == 2
-      end
-
-      it "populates the activity properly" do
-        GpTableCopier.run_import(source_dataset.id, user.id, options)
-        event = Events::DatasetImportSuccess.first
-        dataset_import_created_event_id = Events::DatasetImportCreated.by(user).add(
-            :workspace => workspace,
-            :dataset => nil,
-            :destination_table => dst_table_name
-        )
-        attributes.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
-
-        GpTableCopier.run_import(schema.id, src_table_name, workspace.id, dst_table_name, user.id, attributes)
-        event = Events::DatasetImportSuccess.first
-        event.actor.should == user
-        event.dataset.name.should == destination_table_name
-        event.dataset.schema.should == sandbox
-        event.workspace.should == workspace
-        event.source_dataset.should == source_dataset
       end
 
       context "when the destination table already exists" do

@@ -376,11 +376,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DATASET_IMPORT_CREATED" do
+  describe "DatasetImportCreated" do
     let(:source_dataset) { datasets(:bobs_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DATASET_IMPORT_CREATED.add(
+      Events::DatasetImportCreated.add(
           :actor => actor,
           :dataset => dataset,
           :source_dataset => source_dataset,

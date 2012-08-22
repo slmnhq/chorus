@@ -20,7 +20,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { account.owner }
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
-    let(:file_import_created_event) { Events::FILE_IMPORT_CREATED.first }
+    let(:file_import_created_event) { Events::FileImportCreated.first }
 
     def fetch_from_gpdb(sql)
       schema.with_gpdb_connection(account) do |connection|
@@ -250,7 +250,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { csv_file.user }
     let(:dataset) { datasets(:bobs_table) }
     let(:instance_account) { csv_file.workspace.sandbox.instance.account_for_user!(csv_file.user) }
-    let(:file_import_created_event) { Events::FILE_IMPORT_CREATED.first }
+    let(:file_import_created_event) { Events::FileImportCreated.first }
 
     describe "destination_dataset" do
       before do
@@ -279,7 +279,7 @@ describe CsvImporter, :database_integration => true do
         event.import_type.should == 'file'
       end
 
-      it "makes sure the FILE_IMPORT_CREATED event object is linked to the dataset" do
+      it "makes sure the FileImportSuccess event object is linked to the dataset" do
         dataset = datasets(:bobs_table)
         file_import_created_event.reload
         file_import_created_event.dataset.should == dataset

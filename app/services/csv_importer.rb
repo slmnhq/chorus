@@ -1,17 +1,18 @@
 class CsvImporter
 
-  attr_accessor :csv_file, :schema, :account
+  attr_accessor :csv_file, :schema, :account, :import_created_event_id
 
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
 
-  def self.import_file(csv_file_id)
-    csv_importer = new(csv_file_id)
+  def self.import_file(csv_file_id, import_created_event_id)
+    csv_importer = new(csv_file_id, import_created_event_id)
     csv_importer.import
     csv_importer.csv_file.delete
   end
 
-  def initialize(csv_file_id)
+  def initialize(csv_file_id, import_created_event_id)
     self.csv_file = CsvFile.find(csv_file_id)
+    self.import_created_event_id = import_created_event_id
     self.schema = csv_file.workspace.sandbox
     self.account = schema.instance.account_for_user!(csv_file.user)
   end
@@ -49,7 +50,7 @@ class CsvImporter
   end
 
   def create_success_event
-    file_import_created_event = Events::FileImportSuccess.find(import_created_event_id)
+    file_import_created_event = Events::FileImportCreated.find(import_created_event_id)
     file_import_created_event.dataset = destination_dataset
     file_import_created_event.save!
     Events::FileImportSuccess.by(csv_file.user).add(

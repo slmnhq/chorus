@@ -82,7 +82,9 @@ describe WorkspaceCsvController do
 
     context "when there's no table conflict" do
       before do
-        mock(QC.default_queue).enqueue.with("CsvImporter.import_file", @csv_file.id)
+        mock(QC.default_queue).enqueue.with("CsvImporter.import_file", @csv_file.id, anything) do | method, file_id, event_id |
+          Events::FileImportCreated.by(user).first.id.should == event_id
+        end
       end
 
       it "updates the necessary import fields on the csv file model" do
@@ -121,7 +123,7 @@ describe WorkspaceCsvController do
           it "makes a FILE_IMPORT_CREATED event with no associated dataset" do
             put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
 
-            event = Events::FILE_IMPORT_CREATED.first
+            event = Events::FileImportCreated.first
             event.actor.should == user
             event.dataset.should be_nil
             event.workspace.should == workspace
@@ -150,7 +152,7 @@ describe WorkspaceCsvController do
 
             put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params.merge(:to_table => dataset.name)
 
-            event = Events::FILE_IMPORT_CREATED.first
+            event = Events::FileImportCreated.first
             event.actor.should == user
             event.dataset.should == dataset
             event.workspace.should == workspace
@@ -179,7 +181,7 @@ describe WorkspaceCsvController do
       it "does not create an FILE_IMPORT_CREATED event" do
         expect do
           put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
-        end.to_not change(Events::FILE_IMPORT_CREATED, :count)
+        end.to_not change(Events::FileImportCreated, :count)
       end
     end
   end
