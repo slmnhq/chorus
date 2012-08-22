@@ -17,14 +17,13 @@ def add_sandbox(params={})
     page.execute_script("$('.instance .select_container select').change();")
     wait_for_ajax(5)
     #database
-    #page.execute_script("$('select[name=database]').selectmenu('value', '#{database.id}')")
-    page.execute_script("$('select[name=database]').selectmenu('value', '1')")
+    page.execute_script("$('select[name=database]').selectmenu('value', '#{database.id}')")
     page.execute_script("$('.database .select_container select').change();")
     wait_for_ajax(5)
     sleep(20)
     #schema
-    #page.execute_script("$('select[name=schema]').selectmenu('value', '#{schema.id}')")
-    #page.execute_script("$('.schema .select_container select').change();")
+    page.execute_script("$('select[name=schema]').selectmenu('value', '#{schema.id}')")
+    page.execute_script("$('.schema .select_container select').change();")
 
     click_submit_button
 end
