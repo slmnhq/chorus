@@ -23,7 +23,7 @@ class GpTableCopier
 
   def distribution_key_clause
     return @distribution_key_clause if @distribution_key_clause
-    @distribution_key_clause = source_schema.with_gpdb_connection(destination_account) do |connection|
+    @distribution_key_clause = source_schema.with_gpdb_connection(source_account) do |connection|
       rows = connection.exec_query(distribution_key_sql)
       clause = rows.empty? ? 'DISTRIBUTED RANDOMLY' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
     end

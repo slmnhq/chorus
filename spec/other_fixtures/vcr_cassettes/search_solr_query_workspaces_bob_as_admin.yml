@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Workspace+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Workspace%29&q=bobsearch&fl=%2A+score&qf=name_texts+summary_texts+body_texts&defType=dismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Workspace+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Workspace%29&q=bobsearch&fl=%2A+score&qf=name_texts+summary_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -23,24 +23,24 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
-        summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
+        summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>4,''groups''=>[{''groupValue''=>''Workspace
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2245.316,''docs''=>[{''id''=>''Workspace
-        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>2245.316}]}},{''groupValue''=>''Workspace
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2245.316,''docs''=>[{''id''=>''Workspace
-        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>2245.316}]}},{''groupValue''=>''Workspace
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>962.2783,''docs''=>[{''id''=>''Workspace
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2397.8892,''docs''=>[{''id''=>''Workspace
+        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>2397.8892}]}},{''groupValue''=>''Workspace
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2397.8892,''docs''=>[{''id''=>''Workspace
+        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>2397.8892}]}},{''groupValue''=>''Workspace
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1027.6667,''docs''=>[{''id''=>''Workspace
         1000000'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''BobSearch
-        can see I guess''],''score''=>962.2783}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>962.2783,''docs''=>[{''id''=>''Workspace
+        can see I guess''],''score''=>1027.6667}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1027.6667,''docs''=>[{''id''=>''Workspace
         1000001'',''name_texts''=>[''Alice Private''],''summary_texts''=>[''Not for
-        bobsearch, ha ha''],''score''=>962.2783}]}}]}},''highlighting''=>{''Workspace
+        bobsearch, ha ha''],''score''=>1027.6667}]}}]}},''highlighting''=>{''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000004''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000000''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@ can see I guess'']},''Workspace
         1000001''=>{''summary_texts''=>[''Not for @@@hl@@@bobsearch@@@endhl@@@, ha
         ha'']}}}'
     http_version:
-  recorded_at: Fri, 17 Aug 2012 18:48:05 GMT
+  recorded_at: Wed, 22 Aug 2012 20:58:56 GMT
 recorded_with: VCR 2.1.1
 ...
