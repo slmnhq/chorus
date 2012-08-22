@@ -17,9 +17,7 @@ fi
 
 POSTGRES_PORT=8543
 
-$CHORUS_HOME/postgres/bin/pg_ctl -D $POSTGRES_DIR -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>/dev/null
-while [ ! -f $POSTGRES_PID_FILE ]
-do
-    sleep 1
-done
+$CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DIR/server.log -D $POSTGRES_DIR -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>/dev/null
+
+wait_for_start $POSTGRES_PID_FILE
 log "postgres started as pid `head -1 $POSTGRES_PID_FILE`"

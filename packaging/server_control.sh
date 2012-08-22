@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
+. "$bin"/chorus-config.sh
+
+pushd $CHORUS_HOME
 
 function start_postgres () {
   $bin/start-postgres.sh
@@ -85,3 +88,4 @@ else
   echo "Usage: $0 <start|stop|restart|monitor>"
 fi
 
+popd
