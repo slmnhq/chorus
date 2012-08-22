@@ -37,7 +37,7 @@ cd $CHORUS_HOME
 case $RAILS_ENV in
     development )
         log "starting mizuno on port 8081..."
-        bundle exec mizuno -p 8081 --threads 10
+        mizuno -p 8081 --threads 10
         ;;
     * )
         log "starting jetty..."

@@ -1,1 +1,0 @@
-ChorusWorker.new.start

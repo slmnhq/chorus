@@ -1,5 +1,5 @@
 #web:	bundle exec mizuno -p 3000
-worker: script/rails runner script/start_worker.rb
+#worker: script/rails runner script/start_worker.rb
 #clock:  script/start_clock.rb
 jasmine: bundle exec rake jasmine
 solr_test: env RAILS_ENV=test bundle exec rake services:solr:run

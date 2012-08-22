@@ -5,7 +5,6 @@ if [ "$CHORUS_HOME" = "" ]; then
     exit 1
 fi
 test "$RAILS_ENV" = "" && RAILS_ENV=production
-echo Running in $RAILS_ENV mode...
 
 case $RAILS_ENV in
     production )
@@ -23,6 +22,7 @@ SOLR_PID_FILE=$CHORUS_HOME/tmp/pids/solr-$RAILS_ENV.pid
 NGINX_PID_FILE=$CHORUS_HOME/vendor/nginx/nginx_dist/nginx_data/logs/nginx.pid
 JETTY_PID_FILE=$CHORUS_HOME/vendor/jetty/run/jetty.pid
 SCHEDULER_PID_FILE=$CHORUS_HOME/tmp/pids/scheduler.$RAILS_ENV.pid
+WORKER_PID_FILE=$CHORUS_HOME/tmp/pids/worker.$RAILS_ENV.pid
 
 ##### Determine which nginx binary to use for this platform #####
 
@@ -37,4 +37,8 @@ fi
 
 function log () {
     echo [$RAILS_ENV] $1
+}
+
+function log_inline () {
+    echo -n [$RAILS_ENV] $1
 }
