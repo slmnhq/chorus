@@ -111,4 +111,45 @@ describe "Editing instance details" do
     end
 
   end
+
+  it "asks for password when I try to access a private instance" do
+
+    create_gpdb_instance(:name =>"credentials")
+    credentials_id = Instance.find_by_name("credentials").id
+
+    create_valid_user(:username => "credentials")
+    wait_for_ajax
+    logout
+    login('credentials', 'secret')
+    go_to_instance_page
+    wait_for_ajax
+    page.find("li[data-greenplum-instance-id='#{credentials_id}']").click
+    wait_for_ajax
+    click_link "credentials"
+    wait_for_ajax
+    within_modal do
+      fill_in 'dbUsername', :with => "admin"
+      fill_in 'dbPassword', :with => "secret"
+      click_submit_button
+      wait_for_ajax
+      page.should have_content "Failed to establish JDBC connection"
+      fill_in 'dbUsername', :with => "gpadmin"
+      fill_in 'dbPassword', :with => "secre"
+      click_submit_button
+      wait_for_ajax
+      page.should have_content "Failed to establish JDBC connection"
+      fill_in 'dbUsername', :with => "gpadmin"
+      fill_in 'dbPassword', :with => "secret"
+      click_submit_button
+    end
+    wait_for_ajax
+    click_link "analytics_with!"
+    wait_for_ajax
+    click_link "public"
+    wait_for_ajax
+    page.should have_content "You do not have datasets in this schema."
+
+
+  end
+
 end
