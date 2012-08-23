@@ -225,4 +225,49 @@ describe "creating a user" do
 
   end
 
+  it "allows user to edit their own info" do
+
+    create_new_user_page
+    wait_for_ajax
+    fill_in 'firstName', :with => "edit"
+    fill_in 'lastName', :with => "user"
+    fill_in 'username', :with => "edituser"
+    fill_in 'email', :with => "someemail@email.com"
+    fill_in 'password', :with => "secret"
+    fill_in 'passwordConfirmation', :with => "secret"
+    fill_in 'dept', :with => "Greenplum"
+    fill_in 'title', :with => "QA"
+    click_submit_button
+
+    wait_until { current_route == "/users" }
+    within(".list") do
+      click_link "edit user"
+    end
+    page.find("h1").should have_content "edit user"
+
+    logout
+    login('edituser', 'secret')
+    go_to_user_list_page
+    within(".list") do
+      click_link "edit user"
+    end
+    page.find("h1").should have_content "edit user"
+    click_link "Edit Profile"
+    wait_for_ajax
+    sleep(2)
+    page.find("h1").should have_content "edit user"
+    fill_in 'firstName', :with => "edited"
+    fill_in 'lastName', :with => "users"
+    fill_in 'email', :with => "some1email@email.com"
+    fill_in 'dept', :with => "Greenplum edit"
+    fill_in 'title', :with => "QA edit"
+    click_submit_button
+    wait_for_ajax
+    page.find("h1").should have_content "edited users"
+    page.should have_content "some1email@email.com"
+    page.should have_content "Greenplum edit"
+    page.should have_content "QA edit"
+
+  end
+
 end
