@@ -279,6 +279,58 @@ class ActivityMigrator < AbstractMigrator
       end
     end
 
+
+  def migrate_file_import_created
+    Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      action,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'Events::FileImportCreated',
+      datasets.id,
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM legacy_migrate.edc_activity_stream streams
+      INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+        ON streams.id = target_dataset.activity_stream_id
+        AND target_dataset.entity_type = 'table'
+      INNER JOIN datasets
+        ON normalize_key(target_dataset.object_id) = datasets.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE streams.type = 'IMPORT_CREATED' AND streams.indirect_verb = 'of file'
+    AND streams.id NOT IN (SELECT legacy_id from events);
+    ))
+
+    backfill_file_import_created_additional_data
+  end
+
+  def backfill_file_import_created_additional_data
+
+    Events::FileImportCreated.where('additional_data IS NULL').each do |event|
+      row = Legacy.connection.exec_query("SELECT aso1.object_name as file_name, aso2.object_name as table_name FROM edc_activity_stream_object aso1
+                                      INNER JOIN edc_activity_stream_object aso2 ON aso2.activity_stream_id  = '#{event.legacy_id}' AND aso2.entity_type = 'table'
+                                      WHERE aso1.activity_stream_id = '#{event.legacy_id}'
+                                      AND aso1.entity_type = 'file';").first
+      event.additional_data = {:filename => row['file_name'], :import_type => 'file', :destination_table => row['table_name']}
+      event.save!
+    end
+  end
+
     def migrate_public_workspace_created
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
@@ -484,6 +536,55 @@ class ActivityMigrator < AbstractMigrator
         AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileCreated');
         ))
     end
+
+  def migrate_dataset_import_created
+    Legacy.connection.exec_query(%Q(
+  INSERT INTO events(
+    legacy_id,
+    action,
+    target2_id,
+    target2_type,
+    created_at,
+    updated_at,
+    workspace_id,
+    actor_id)
+  SELECT
+    streams.id,
+    'Events::DatasetImportCreated',
+    datasets.id,
+    'Dataset',
+    streams.created_tx_stamp,
+    streams.last_updated_tx_stamp,
+    workspaces.id,
+    users.id
+  FROM legacy_migrate.edc_activity_stream streams
+    INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+      ON streams.id = target_dataset.activity_stream_id
+      AND target_dataset.entity_type = 'table'
+    INNER JOIN datasets
+      ON normalize_key(target_dataset.object_id) = datasets.legacy_id
+    INNER JOIN workspaces
+      ON workspaces.legacy_id = streams.workspace_id
+    INNER JOIN legacy_migrate.edc_activity_stream_object actor
+      ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+    INNER JOIN users
+      ON users.legacy_id = actor.object_id
+  WHERE streams.type = 'IMPORT_CREATED' AND streams.indirect_verb = 'of dataset'
+  AND streams.id NOT IN (SELECT legacy_id from events);
+  ))
+
+    backfill_dataset_import_created_additional_data
+  end
+
+  def backfill_dataset_import_created_additional_data
+    Events::DatasetImportCreated.where('additional_data IS NULL').each do |event|
+      row = Legacy.connection.exec_query("SELECT object_name, object_id FROM legacy_migrate.edc_activity_stream_object aso
+                                    WHERE aso.activity_stream_id = '#{event.legacy_id}'
+                                    AND aso.entity_type = 'table';").first
+      event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
+      event.save!
+    end
+  end
 
     def migrate_greenplum_instance_created
       Legacy.connection.exec_query(%Q(
@@ -765,8 +866,10 @@ class ActivityMigrator < AbstractMigrator
       ActiveRecord::Base.record_timestamps = false
 
       migrate_source_table_created
+      migrate_file_import_created
       migrate_file_import_success
       migrate_file_import_failed
+      migrate_dataset_import_created
       migrate_dataset_import_success
       migrate_dataset_import_failed
       migrate_public_workspace_created
