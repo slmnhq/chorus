@@ -7,6 +7,7 @@ class DataMigrator
     SandboxMigrator.new.migrate
     AssociatedDatasetMigrator.new.migrate
     ActivityMigrator.new.migrate
+    NoteMigrator.new.migrate
 
     # Note attachments
     # Note comments

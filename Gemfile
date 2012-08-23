@@ -33,7 +33,6 @@ group :integration do
   gem 'capybara',            :require => false
   gem 'capybara-webkit'
   gem 'headless'
-  gem 'database_cleaner',    :require => false
   gem 'capybara-screenshot'
 end
 
@@ -48,6 +47,7 @@ group :test, :integration do
   gem 'vcr'
   gem 'fakefs',              :require => false
   gem 'chunky_png'
+  gem 'database_cleaner',    :require => false
 end
 
 group :test, :development, :integration do

@@ -88,6 +88,10 @@ class HdfsEntry < ActiveRecord::Base
     end
   end
 
+  def parent_path
+    File.dirname(path)
+  end
+
   private
 
   def self.normalize_path(path)
@@ -96,7 +100,6 @@ class HdfsEntry < ActiveRecord::Base
 
   def build_full_path
     return true if path == "/"
-    self.parent_path = File.dirname(path)
     self.parent = hadoop_instance.hdfs_entries.find_or_create_by_path(parent_path)
     self.parent.is_directory = true
     self.parent.save!

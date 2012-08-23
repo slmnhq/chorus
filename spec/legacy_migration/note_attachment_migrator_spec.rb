@@ -8,7 +8,7 @@
 #    WorkspaceMigrator.new.migrate
 #    MembershipMigrator.new.migrate
 #    WorkfileMigrator.new.migrate
-#    NoteCommentMigrator.new.migrate
+#    NoteMigrator.new.migrate
 #    AssociatedDatasetMigrator.new.migrate
 #  end
 #

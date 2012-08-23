@@ -40,7 +40,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'SOURCE_TABLE_CREATED'
-    AND streams.id NOT IN (SELECT legacy_id from events);
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::SourceTableCreated');
     ))
   end
 
@@ -77,7 +77,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of file'
-    AND streams.id NOT IN (SELECT legacy_id from events);
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::FileImportSuccess');
     ))
 
     backfill_file_import_success_additional_data
@@ -117,7 +117,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_FAILED' AND streams.indirect_verb = 'of file'
-    AND streams.id NOT IN (SELECT legacy_id from events);
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::FileImportFailed');
     ))
 
     backfill_file_import_failed_additional_data
@@ -174,7 +174,7 @@ class ActivityMigrator < AbstractMigrator
     INNER JOIN users
       ON users.legacy_id = actor.object_id
   WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of dataset'
-  AND streams.id NOT IN (SELECT legacy_id from events);
+  AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetImportSuccess');
   ))
 
     backfill_dataset_import_success_additional_data
@@ -223,7 +223,7 @@ class ActivityMigrator < AbstractMigrator
     INNER JOIN users
       ON users.legacy_id = actor.object_id
   WHERE streams.type = 'IMPORT_FAILED' AND streams.indirect_verb = 'of dataset'
-  AND streams.id NOT IN (SELECT legacy_id from events);
+  AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetImportFailed');
   ))
 
     backfill_dataset_import_failed_additional_data
@@ -280,7 +280,7 @@ class ActivityMigrator < AbstractMigrator
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_CREATED'
       AND workspaces.public = true
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::PublicWorkspaceCreated');
       ))
   end
 
@@ -309,7 +309,7 @@ class ActivityMigrator < AbstractMigrator
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_CREATED'
       AND workspaces.public = false
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::PrivateWorkspaceCreated');
       ))
   end
 
@@ -337,7 +337,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_ARCHIVED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceArchived');
       ))
   end
 
@@ -365,7 +365,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_UNARCHIVED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceUnarchived');
       ))
   end
 
@@ -393,7 +393,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_MAKE_PUBLIC'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceMakePublic');
       ))
   end
 
@@ -421,7 +421,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKSPACE_MAKE_PRIVATE'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceMakePrivate');
       ))
   end
 
@@ -457,7 +457,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKFILE_CREATED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileCreated');
       ))
   end
 
@@ -489,7 +489,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'INSTANCE_CREATED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::GreenplumInstanceCreated');
       ))
   end
 
@@ -521,7 +521,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'INSTANCE_CREATED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::HadoopInstanceCreated');
       ))
   end
 
@@ -554,7 +554,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users actor_user
         ON actor_user.legacy_id = actor.object_id
       WHERE streams.type = 'USER_ADDED'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::UserAdded');
       ))
   end
 
@@ -593,7 +593,7 @@ class ActivityMigrator < AbstractMigrator
         ON target_user.object_id = user_added.legacy_id
       WHERE streams.type = 'MEMBERS_ADDED' AND target_user.object_id IN (SELECT object_id from
         legacy_migrate.edc_activity_stream_object where activity_stream_id = streams.id limit 1 )
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::MembersAdded');
       ))
 
     backfill_member_added_additional_data
@@ -641,7 +641,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'PROVISIONING_FAIL'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ProvisioningFail');
       ))
 
   end
@@ -674,7 +674,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'PROVISIONING_SUCCESS'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ProvisioningSuccess');
       ))
 
   end
@@ -711,7 +711,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
       WHERE streams.type = 'WORKFILE_UPGRADED_VERSION'
-      AND streams.id NOT IN (SELECT legacy_id from events);
+      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileUpgradedVersion');
       ))
 
     backfill_version_additional_data

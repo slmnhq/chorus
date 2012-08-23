@@ -29,7 +29,7 @@ class ImageMigrator < AbstractMigrator
       )
 
       user_image_rows.each do |row|
-        user = User.unscoped.find_by_legacy_id(row['user_id'])
+        user = User.unscoped.find_by_legacy_id!(row['user_id'])
         user.image = StringIO.new(row['image'].force_encoding("UTF-8"))
         user.save!
       end

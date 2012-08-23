@@ -52,7 +52,6 @@ describe HdfsEntry do
 
         first_result.is_directory.should be_true
         first_result.path.should == '/empty'
-        first_result.parent_path.should == '/'
         first_result.parent.path.should == '/'
         first_result.size.should == 10
         first_result.content_count.should == 0
@@ -69,7 +68,6 @@ describe HdfsEntry do
 
         last_entry = HdfsEntry.last
         last_entry.path.should == '/photo.png'
-        last_entry.parent_path.should == '/'
         last_entry.parent.path.should == '/'
         last_entry.hadoop_instance.should == hadoop_instance
         last_entry.modified_at.should == "2010-10-20 22:00:00"
@@ -220,7 +218,7 @@ describe HdfsEntry do
       child.parent.is_directory.should be_true
     end
 
-    it "sets the parent_path" do
+    it "has a parent_path" do
       child.parent_path.should == "/nonexistent_dir"
     end
 
