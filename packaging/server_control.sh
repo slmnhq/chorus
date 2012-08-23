@@ -2,16 +2,11 @@
 bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 
-# If we are in production, binaries are located in current/packaging/
 if [ -d $bin/current/packaging/ ]; then
     bin=$bin/current/packaging
 fi
 
-echo bin1: $bin
-
 . "$bin"/chorus-config.sh
-
-echo bin: $bin
 
 command=$1
 shift

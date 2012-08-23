@@ -1,5 +1,11 @@
+#!/usr/bin/env bash
 bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
+
+if [ -d $bin/current/packaging/ ]; then
+    bin=$bin/current/packaging
+fi
+
 . "$bin"/chorus-config.sh
 
 if [ -f $SOLR_PID_FILE ]; then
