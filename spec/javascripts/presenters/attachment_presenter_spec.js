@@ -30,8 +30,14 @@ describe("chorus.presenters.Attachment", function() {
             expect(presenter.name()).toBe(model.get('name'));
         });
 
-        it("uses nothing otherwise", function() {
+        it("uses file name if available", function() {
             var model = rspecFixtures.workfile.text();
+            var presenter = new chorus.presenters.Attachment(model);
+            expect(presenter.name()).toBe(model.get('fileName'));
+        });
+
+        it("uses nothing otherwise", function() {
+            var model = rspecFixtures.hdfsFile();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBeUndefined();
         });

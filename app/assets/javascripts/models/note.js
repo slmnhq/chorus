@@ -72,5 +72,8 @@ chorus.models.Note = chorus.models.Activity.extend({
         if (this.datasets) {
             this.set({ datasetIds:this.datasets.pluck('id') }, { silent:true });
         }
+        if (this.workfiles) {
+            this.set({ workfileIds:this.workfiles.pluck('id') }, { silent:true });
+        }
     }
 });

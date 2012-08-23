@@ -78,6 +78,20 @@ describe("chorus.models.Note", function() {
             });
         });
 
+        describe("saving the workfile attachments", function() {
+            it("assigns the 'workfileIds' field as a list of workfile ids", function() {
+                this.model1 = rspecFixtures.workfile.sql();
+                this.model2 = rspecFixtures.workfile.text();
+                this.model3 = rspecFixtures.workfile.binary();
+
+                this.model.workfiles = new chorus.collections.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
+
+                this.model.save();
+
+                expect(this.model.get("workfileIds")).toEqual([this.model1.get("id"),this.model2.get("id"),this.model3.get("id")]);
+            });
+        });
+
         describe("saveFiles", function() {
             var errorResponse = {
                 errors: {

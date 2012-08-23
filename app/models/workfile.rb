@@ -11,6 +11,7 @@ class Workfile < ActiveRecord::Base
   has_many :drafts, :class_name => 'WorkfileDraft'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
+  has_and_belongs_to_many :events_notes, :class_name => 'Events::Note'
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
 

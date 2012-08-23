@@ -34,6 +34,18 @@ describe NotesController do
       end
     end
 
+
+    context "with workfiles" do
+      it "associates the workfiles to the Note" do
+        workspace = workspaces(:bob_public)
+        associated_workfiles = workspace.workfiles[0..1]
+        associated_workfile_ids = associated_workfiles.map(&:id)
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :workfile_ids => associated_workfile_ids }
+        response.code.should == "201"
+        Events::NoteOnWorkspace.first.workfiles.should =~ associated_workfiles
+      end
+    end
+
     context "with an exception" do
       it "responds with an error code" do
         workspace = workspaces(:archived)

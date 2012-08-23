@@ -62,6 +62,12 @@ class EventPresenter < Presenter
         model_hash.merge!({:workspace => model.workspace}) if model.workspace
         model_hash.merge!({:entity_type => 'dataset'} )
         hash << model_hash
+        end
+      workfiles = model.workfiles
+      workfiles.each do |workfile|
+        model_hash = present(workfile)
+        model_hash.merge!({:entity_type => 'workfile'} )
+        hash << model_hash
       end
     end
     return {:attachments => hash}
