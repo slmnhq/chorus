@@ -29,7 +29,7 @@ LOG_CONFIG_FILE=$CHORUS_HOME/vendor/solr/logging-$RAILS_ENV.properties
 
 if [ -f $SOLR_PID_FILE ]; then
   if kill -0 `cat $SOLR_PID_FILE` > /dev/null 2>&1; then
-    log "Solr already running as process `cat $SOLR_PID_FILE`.  Stop it first."
+    log "Solr already running as process `cat $SOLR_PID_FILE`."
     exit 1
   fi
 fi

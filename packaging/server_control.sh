@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
+
+# If we are in production, binaries are located in current/packaging/
+if [ -d $bin/current/packaging/ ]; then
+    bin=$bin/current/packaging
+fi
+
+echo bin1: $bin
+
 . "$bin"/chorus-config.sh
+
+echo bin: $bin
 
 command=$1
 shift
@@ -44,14 +54,26 @@ function stop () {
   popd > /dev/null
 }
 
+function monitor () {
+  echo "Monitoring services..."
+  echo
+  while true
+  do
+    start
+    sleep 10
+    echo
+  done
+}
+
 function usage () {
   script=`basename $0`
-  echo "$script is a utility to start, stop, or restart the Chorus services."
+  echo "$script is a utility to start, stop, restart, or monitor the Chorus services."
   echo
   echo Usage:
   echo "  $script start   [services]         start services"
   echo "  $script stop    [services]         stop services"
   echo "  $script restart [services]         stop and start services"
+  echo "  $script monitor [services]         monitor and restart services as needed"
   echo
   echo "The following services are available: postgres, workers, scheduler, solr, webserver."
   echo "If no services are specified on the command line, $script manages all services."
@@ -60,10 +82,12 @@ function usage () {
   echo "  $script start                      start all services"
   echo "  $script stop                       stop all services"
   echo "  $script restart                    restart all services"
+  echo "  $script monitor                    monitor all services"
   echo
   echo "  $script start postgres solr        start specific services"
   echo "  $script stop scheduler workers     stop specific services"
   echo "  $script restart webserver          restart specific services"
+  echo "  $script monitor workers            monitor specific services"
   echo
 
   return 1
@@ -71,14 +95,17 @@ function usage () {
 
 case $command in
     start )
-        start $services
+        start
         ;;
     stop )
         stop
         ;;
     restart )
-        stop $services
-        start $services
+        stop
+        start
+        ;;
+     monitor )
+        monitor
         ;;
     * )
         usage
