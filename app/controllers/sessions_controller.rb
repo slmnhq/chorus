@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_filter :require_login, :except => :show
-  skip_after_filter :extend_expiration
+  skip_before_filter :extend_expiration
 
   def create
     user = CredentialsValidator.user(params[:session][:username], params[:session][:password])
