@@ -127,6 +127,7 @@ window.rspecFixtureDefinitions = {
             fileImportCreated: {},
             fileImportFailed: {},
             fileImportSuccess: {},
+            datasetImportCreated:{},
             datasetImportFailed: {},
             datasetImportSuccess: {},
             noteOnHdfsFileCreated: {},

@@ -936,14 +936,14 @@ describe("chorus.presenters.Activity", function() {
             it("blank out the without_workspace style and use default instead", function () {
                 presenter.options.displayStyle = ["without_workspace"];
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.FILE_IMPORT_CREATED.default",
+                    "activity.header.FileImportCreated.default",
                     activity_data
                 );
             });
             context("when importing to a new table", function () {
                 it("displays the destination table name without link", function () {
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.FILE_IMPORT_CREATED.default",
+                        "activity.header.FileImportCreated.default",
                         activity_data
                     );
                 });
@@ -959,8 +959,75 @@ describe("chorus.presenters.Activity", function() {
                 });
                 it("displays the destination table name with dataset link", function () {
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.FILE_IMPORT_CREATED.default",
+                        "activity.header.FileImportCreated.default",
                         activity_data
+                    );
+                });
+            });
+        });
+    });
+
+
+    context("dataset import created event", function() {
+        var activity_data;
+        beforeEach(function () {
+            datasetModel = rspecFixtures.dataset();
+            model = rspecFixtures.activity.datasetImportCreated({dataset: datasetModel});
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            sourceDataset = model.importSource();
+
+            activity_data = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                datasetType: t("dataset.types.table"),
+                destObjectOrName: linkTo(dataset.showUrl(), dataset.name())
+            };
+        });
+        context("when called with a DATASET_IMPORT_CREATED event", function () {
+            it("blank out the without_workspace style and use default instead", function () {
+                presenter.options.displayStyle = ["without_workspace"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.DatasetImportCreated.default",
+                    activity_data
+                );
+            });
+            context("when importing to a new table", function () {
+                beforeEach(function() {
+                    datasetModel = rspecFixtures.dataset();
+                    model = rspecFixtures.activity.datasetImportCreated();
+                    dataset = model.dataset();
+                    presenter = new chorus.presenters.Activity(model);
+                    activity_data["destObjectOrName"] =  "other_table"
+                });
+                it("displays the destination table name without link", function () {
+                    rspecFixtures.activity.datasetImportCreated();
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.DatasetImportCreated.default",
+                        activity_data
+                    );
+                });
+            });
+            context("when importing to an existing table", function () {
+                var datasetModel;
+                beforeEach(function () {
+                    datasetModel = rspecFixtures.dataset();
+                    model = rspecFixtures.activity.datasetImportCreated({dataset: datasetModel});
+                    dataset = model.dataset();
+                    presenter = new chorus.presenters.Activity(model);
+                });
+                it("displays the destination table name with dataset link", function () {
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.DatasetImportCreated.default", {
+                            actorLink: linkTo(actor.showUrl(), actor.name()),
+                            importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                            datasetType: t("dataset.types.table"),
+                            destObjectOrName: linkTo(dataset.showUrl(), dataset.name()),
+                            workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                    }
                     );
                 });
             });

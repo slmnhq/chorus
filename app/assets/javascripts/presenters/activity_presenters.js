@@ -153,6 +153,12 @@
                 computed: [ "noteObjectType" ]
             },
 
+            FileImportCreated: {
+                links: ["actor", "workspace", "dataset"],
+                attrs: ["importType"],
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
+            },
+
             FileImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
@@ -170,6 +176,12 @@
                 computed: ["count"]
             },
 
+            DatasetImportCreated: {
+                links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+            },
+
             DatasetImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],
@@ -178,7 +190,7 @@
 
             DatasetImportFailed: {
                 links: ["workspace"],
-                attrs: ["sourceTable"],
+                attrs: ["sourceDataset"],
                 computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
             },
 

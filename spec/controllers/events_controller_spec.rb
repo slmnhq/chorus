@@ -149,6 +149,7 @@ describe EventsController do
         "fileImportCreated" => Events::FileImportCreated,
         "fileImportSuccess" => Events::FileImportSuccess,
         "fileImportFailed" => Events::FileImportFailed,
+        "datasetImportCreated" => Events::DatasetImportCreated,
         "datasetImportSuccess" => Events::DatasetImportSuccess,
         "datasetImportFailed" => Events::DatasetImportFailed,
         "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion
