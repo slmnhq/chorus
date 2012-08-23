@@ -22,3 +22,6 @@ alias ll='ls -la'
 alias st='script/test'
 alias rage='bundle exec rake db:migrate db:test:prepare'
 alias run_all_tests='st && rake phantom && rspec spec/integration && rake api_docs'
+
+export CHORUS_HOME=~/workspace/chorusrails
+alias server_control='CHORUS_HOME=~/workspace/chorusrails RAILS_ENV=development ~/workspace/chorusrails/packaging/server_control.sh'

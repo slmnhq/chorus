@@ -3,89 +3,118 @@ bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 . "$bin"/chorus-config.sh
 
-pushd $CHORUS_HOME
+command=$1
+shift
 
-function start_postgres () {
-  $bin/start-postgres.sh
+services=(${@})
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            return 0
+        fi
+    }
+    return 1
 }
 
-function start_workers () {
-  $bin/start-workers.sh
+function no_services() {
+  if [ ${#services[@]} -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
-function start_scheduler () {
-  $bin/start-scheduler.sh
+function should_handle () {
+  # If no services are provided, or $1 is one of the services to start
+  if no_services || contains ${services[@]} $1; then
+    return 0
+  else
+    return 1
+  fi
 }
-
-function start_solr () {
-  $bin/start-solr.sh
-}
-
-function start_webserver () {
-  $bin/start-webserver.sh
-}
-
-function stop_workers () {
-  $bin/stop-workers.sh
-}
-
-function stop_scheduler () {
-  $bin/stop-scheduler.sh
-}
-
-function stop_solr () {
-  $bin/stop-solr.sh
-}
-
-function stop_webserver () {
-  $bin/stop-webserver.sh
-}
-
-function stop_postgres () {
-  $bin/stop-postgres.sh
-}
-
 
 function start () {
-  if [ "$1" = "postgres" -o "$1" = "" ];   then start_postgres;    fi
-  if [ "$1" = "workers" -o "$1" = "" ];    then start_workers;     fi
-  if [ "$1" = "scheduler" -o "$1" = "" ];  then start_scheduler;   fi
-  if [ "$1" = "solr" -o "$1" = "" ];       then start_solr;        fi
-  if [ "$1" = "webserver" -o "$1" = "" ];  then start_webserver;   fi
+  pushd $CHORUS_HOME > /dev/null
+  if should_handle postgres;  then $bin/start-postgres.sh;    fi
+  if should_handle workers;   then $bin/start-workers.sh;     fi
+  if should_handle scheduler; then $bin/start-scheduler.sh;   fi
+  if should_handle solr;      then $bin/start-solr.sh;        fi
+  if should_handle webserver; then $bin/start-webserver.sh;   fi
+  popd > /dev/null
 }
-
 
 function stop () {
-  if [ "$1" = "scheduler" -o "$1" = "" ];  then stop_scheduler;   fi
-  if [ "$1" = "workers" -o "$1" = "" ];    then stop_workers;     fi
-  if [ "$1" = "solr" -o "$1" = "" ];       then stop_solr;        fi
-  if [ "$1" = "webserver" -o "$1" = "" ];  then stop_webserver;   fi
-  if [ "$1" = "postgres" -o "$1" = "" ];   then stop_postgres;    fi
+  pushd $CHORUS_HOME > /dev/null
+  if should_handle webserver;  then $bin/stop-webserver.sh;   fi
+  if should_handle solr;       then $bin/stop-solr.sh;        fi
+  if should_handle scheduler;  then $bin/stop-scheduler.sh;   fi
+  if should_handle workers;    then $bin/stop-workers.sh;     fi
+  if should_handle postgres;   then $bin/stop-postgres.sh;    fi
+  popd > /dev/null
 }
 
-if [ "$1" = "start" ]
-then
-  start $2
-  exit 0
-elif [ "$1" = "stop" ]
-then
-  stop $2
-  exit 0
-elif [ "$1" = "restart" ]
-then
-  stop
-  start
-  exit 0
-elif [ "$1" = "monitor" ]
-then
-  echo "monitoring services"
-  while true
-  do
-    start
-    sleep 10
-  done
-else
-  echo "Usage: $0 <start|stop|restart|monitor>"
-fi
+function usage () {
+  script=`basename $0`
+  echo "$script is a utility to start, stop, or restart the Chorus services."
+  echo
+  echo Usage:
+  echo "  $script start   [services]         start services"
+  echo "  $script stop    [services]         stop services"
+  echo "  $script restart [services]         stop and start services"
+  echo
+  echo "The following services are available: postgres, workers, scheduler, solr, webserver."
+  echo "If no services are specified on the command line, $script manages all services."
+  echo
+  echo Examples:
+  echo "  $script start                      start all services"
+  echo "  $script stop                       stop all services"
+  echo "  $script restart                    restart all services"
+  echo
+  echo "  $script start postgres solr        start specific services"
+  echo "  $script stop scheduler workers     stop specific services"
+  echo "  $script restart webserver          restart specific services"
+  echo
+}
 
-popd
+case $command in
+    start )
+        start $services
+        ;;
+    stop )
+        stop
+        ;;
+    restart )
+        stop $services
+        start $services
+        ;;
+    * )
+        usage
+        ;;
+esac
+
+# --- Delete me ---
+#if [(( ${#services[@]} == 0 || contains ${services[@]} $1 ))]; then
+#echo ${#services[@]} services in should_handle
+#if [ ${#services[@]} -eq 0 ]; then
+#if no_services; then
+
+#should_handle baz
+# Delete me
+#exit
+
+#if [ should_handle baz ]; then
+#    echo Hello
+#fi
+
+#if [ "$1" = "scheduler" -o "$1" = "" ];  then $bin/stop-scheduler.sh;   fi
+  #if [ "$1" = "workers" -o "$1" = "" ];    then $bin/stop-workers.sh;     fi
+  #if [ "$1" = "solr" -o "$1" = "" ];       then $bin/stop-solr.sh;        fi
+  #if [ "$1" = "webserver" -o "$1" = "" ];  then $bin/stop-webserver.sh;   fi
+  #if [ "$1" = "postgres" -o "$1" = "" ];   then $bin/stop-postgres.sh;    fi
+
+#if no_services; then
+#  echo No services exist!
+#fi
