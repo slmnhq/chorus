@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# on mac, use homebrew recipe with:
+#  ./configure --prefix=./nginx_data --with-http_ssl_module --with-pcre --with-ipv6 --with-cc-opt=-I/usr/local/include --with-ld-opt=-L/usr/local/lib --with-http_gzip_static_module
+
 mkdir build
 pushd build
 

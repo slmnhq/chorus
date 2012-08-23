@@ -97,6 +97,22 @@ describe "Notes" do
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
     it_behaves_like 'event associated with a workspace'
+
+    it "can not be created on an archived workspace" do
+      note = Events::NoteOnWorkspace.new(:workspace => workspaces(:archived), :actor => actor, :body => 'WOO!')
+      note.valid?
+      puts note.errors
+      note.should have_at_least(1).errors_on(:workspace)
+    end
+
+    it "is valid if the workspace later becomes archived" do
+      subject
+      workspace.archived = 'true'
+      workspace.archiver = actor
+      workspace.save!
+      subject.reload
+      subject.should be_valid
+    end
   end
 
   describe "NoteOnWorkfile" do

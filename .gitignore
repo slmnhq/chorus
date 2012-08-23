@@ -45,10 +45,11 @@ tags
 /b
 
 # Ignore postgres database
-/var
+/postgres-db
 
 # Ignore solr data
 /solr/data
+/vendor/solr/logging-*.properties
 
 # Ignore jetpack artifacts
 /vendor/jetty
@@ -60,3 +61,10 @@ tags
 
 # Ignore file with build sha
 /version_build
+
+# Ignore generated nginx conf
+nginx.conf
+
+# Ignore nginx logs
+/vendor/nginx/nginx_dist/nginx_data/logs/*.log
+/vendor/nginx/nginx_dist/nginx_data/logs/*.pid

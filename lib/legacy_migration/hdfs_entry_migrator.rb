@@ -13,6 +13,8 @@ class HdfsEntryMigrator < AbstractMigrator
     def migrate
       prerequisites
 
+      Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+
       Legacy.connection.exec_query(%Q(
       SELECT DISTINCT
         entity_id
@@ -28,6 +30,8 @@ class HdfsEntryMigrator < AbstractMigrator
         entry.is_directory = false
         entry.save!
       end
+
+      Sunspot.session = Sunspot.session.original_session
     end
   end
 end

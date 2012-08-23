@@ -133,6 +133,7 @@ class Install
     FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
 
+    FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr", "#{release_path}/solr")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")
@@ -167,10 +168,6 @@ class Install
 
   def link_current_to_release
     FileUtils.ln_sf("#{release_path}", "#{destination_path}/current")
-  end
-
-  def extract_nginx
-    chorus_exec("tar xzf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}/")
   end
 
   def extract_postgres
@@ -213,10 +210,6 @@ if __FILE__ == $0
     install.link_shared_files
     puts "Done"
 
-    print "Extracting NGINX..."
-    install.extract_nginx
-    puts "Done"
-
     print "Extracting postgres..."
     install.extract_postgres
     puts "Done"
@@ -244,4 +237,3 @@ if __FILE__ == $0
     puts Install::MESSAGES[:installation_failed_with_reason] % e.message
   end
 end
-

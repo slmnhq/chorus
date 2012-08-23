@@ -27,10 +27,17 @@ describe GpTableCopier, :database_integration => true do
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
   let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true" }.merge(extra_options) }
-  let(:extra_options) { {} }
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, options) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
+  let(:dataset_import_created_event_id) do
+    Events::DatasetImportCreated.by(user).add(
+      :workspace => workspace,
+      :dataset => nil,
+      :destination_table => destination_table_name
+    ).id
+  end
+  let(:extra_options) { {:dataset_import_created_event_id => dataset_import_created_event_id} }
 
   before do
     refresh_chorus
@@ -55,15 +62,6 @@ describe GpTableCopier, :database_integration => true do
     end
 
     context ".run_import" do
-      before do
-        dataset_import_created_event_id = Events::DatasetImportCreated.by(user).add(
-            :workspace => workspace,
-            :dataset => nil,
-            :destination_table => destination_table_name
-        ).id
-        extra_options.merge!(:dataset_import_created_event_id => dataset_import_created_event_id)
-      end
-
       context "in new table" do
 
         it "creates a new table copier and runs it" do
@@ -98,7 +96,7 @@ describe GpTableCopier, :database_integration => true do
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, options)
           event = Events::DatasetImportCreated.first
-          event.id = extra_options[:dataset_import_created_event_id]
+          event.id = dataset_import_created_event_id
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
@@ -135,8 +133,8 @@ describe GpTableCopier, :database_integration => true do
         end
 
         context "when it should not truncate" do
-          let(:extra_options) { {"new_table" => "false", "truncate" => "false" } }
           before do
+            extra_options.merge!("new_table" => "false", "truncate" => "false")
             call_sql("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
           end
 
