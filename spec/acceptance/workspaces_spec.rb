@@ -109,7 +109,7 @@ resource "Workspaces" do
     scope_parameters :hdfs_external_table, [:hadoop_instance_id, :pathname, :has_header, :column_names, :column_types, :delimiter, :table_name]
 
     let(:hadoop_instance_id) { hadoop_instance.id }
-    let(:pathname) { "foo_fighter/twisted_sisters/" }
+    let(:pathname) { "/foo_fighter/twisted_sisters/" }
     let(:has_header) { true }
     let(:column_names) { ["field1", "field2"] }
     let(:types) { ["text", "text"] }

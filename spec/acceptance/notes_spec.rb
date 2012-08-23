@@ -3,6 +3,7 @@ require 'spec_helper'
 resource "Notes" do
   let(:user) { users(:bob) }
   let(:note) { FactoryGirl.create :note_on_hdfs_file_event, :actor => user }
+  let(:hdfs_file) { HdfsEntry.files.first }
   let!(:instance) { FactoryGirl.create(:instance, :id => 123) }
   let!(:attachment) { note_attachments(:sql) }
 
@@ -36,7 +37,7 @@ resource "Notes" do
 
     let(:body) { note.body }
     let(:entity_type) { "hdfs_file" }
-    let(:entity_id) { "1|/fake/path/to/a/file.txt" }
+    let(:entity_id) { "#{hdfs_file.hadoop_instance_id}|#{hdfs_file.path}" }
 
     example_request "Post a new note on a HDFS file" do
       status.should == 201

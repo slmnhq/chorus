@@ -9,7 +9,7 @@ namespace :api_docs do
       puts 'No missing API Docs'
     else
       puts output
-      exit
+      exit 1
     end
   end
 

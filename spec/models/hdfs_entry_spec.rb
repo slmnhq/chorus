@@ -17,6 +17,11 @@ describe HdfsEntry do
       duplicate_entry.errors.count.should == 1
     end
 
+    it "should require a path that starts with a slash" do
+      FactoryGirl.build(:hdfs_entry, :path => 'foo/bar.csv').should have_at_least(1).error_on(:path)
+      FactoryGirl.build(:hdfs_entry, :path => '/foo/bar.csv').should be_valid
+    end
+
     it { should validate_presence_of(:hadoop_instance) }
   end
 

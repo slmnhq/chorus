@@ -12,6 +12,9 @@ class HdfsEntry < ActiveRecord::Base
 
   validates_uniqueness_of :path, :scope => :hadoop_instance_id
   validates_presence_of :hadoop_instance
+  validates_format_of :path, :with => %r{\A/.*}
+
+  scope :files, where(:is_directory => false)
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable :unless => lambda { |model| model.is_directory? || model.stale? } do

@@ -162,6 +162,12 @@ FactoryGirl.define do
     workspace
   end
 
+  factory :hdfs_entry do
+    hadoop_instance
+    path "/folder/subfolder/file.csv"
+    modified_at 1.year.ago
+  end
+
   factory :event, :class => Events::Base do
     actor
 
@@ -210,7 +216,7 @@ FactoryGirl.define do
 
     factory :hdfs_external_table_created_event, :class => Events::WorkspaceAddHdfsAsExtTable do
       association :dataset, :factory => :gpdb_table
-      association :hdfs_file, :factory => :hdfs_file_reference
+      association :hdfs_file, :factory => :hdfs_entry
       workspace
     end
 
@@ -225,7 +231,7 @@ FactoryGirl.define do
     end
 
     factory :note_on_hdfs_file_event, :class => Events::NoteOnHdfsFile do
-      association :hdfs_file, :factory => :hdfs_file_reference
+      association :hdfs_file, :factory => :hdfs_entry
       body "This is a note on an hdfs file"
     end
 
