@@ -8,11 +8,8 @@ class ImageMigrator < AbstractMigrator
       MembershipMigrator.migrate
     end
 
-    def silence_activerecord
-      ActiveRecord::Base.record_timestamps = false
-      Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
-      yield
-      ActiveRecord::Base.record_timestamps = true
+    def classes_to_validate
+      []
     end
 
     def migrate

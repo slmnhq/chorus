@@ -6,6 +6,14 @@ class DatabaseObjectMigrator < AbstractMigrator
       ensure_legacy_id :datasets
     end
 
+    def classes_to_validate
+      [
+          Dataset,
+          GpdbSchema,
+          GpdbDatabase
+      ]
+    end
+
     def normalize_key(str)
       str.gsub(/^"|"$/, '').gsub('"|"', '|')
     end
@@ -13,7 +21,6 @@ class DatabaseObjectMigrator < AbstractMigrator
 
     def migrate
       Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
-      ActiveRecord::Base.record_timestamps = true
 
       prerequisites
 
@@ -91,6 +98,8 @@ class DatabaseObjectMigrator < AbstractMigrator
         database = instance.databases.find_or_create_by_name(row['database_name'])
         database.schemas.find_or_create_by_name(row['schema_name'])
       end
+
+      Sunspot.session = Sunspot.session.original_session
     end
   end
 end

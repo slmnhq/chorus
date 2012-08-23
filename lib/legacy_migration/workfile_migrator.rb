@@ -25,11 +25,8 @@ class WorkfileMigrator < AbstractMigrator
       ensure_legacy_id :workfile_drafts
     end
 
-    def silence_activerecord
-      ActiveRecord::Base.record_timestamps = false
-      Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
-      yield
-      ActiveRecord::Base.record_timestamps = true
+    def classes_to_validate
+      [Workfile]
     end
 
     def migrate

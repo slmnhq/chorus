@@ -5,18 +5,28 @@ class MembershipMigrator < AbstractMigrator
       ensure_legacy_id :memberships
     end
 
+    def classes_to_validate
+      [
+          [Membership, {:joins => :workspace, :conditions => "workspaces.deleted_at IS NULL", :include => [:user, :workspace]}]
+      ]
+    end
+
     def migrate
       prerequisites
 
       Legacy.connection.exec_query("INSERT INTO public.memberships(
                                 legacy_id,
                                 user_id,
-                                workspace_id)
+                                workspace_id,
+                                created_at,
+                                updated_at)
                               SELECT
                                 edc_member.id::integer,
                                 users.id,
-                                workspaces.id
-                                FROM legacy_migrate.edc_member
+                                workspaces.id,
+                                edc_member.created_tx_stamp,
+                                edc_member.last_updated_tx_stamp
+                              FROM legacy_migrate.edc_member
                                 JOIN users
                                 ON users.username = edc_member.member_name
                                 JOIN workspaces

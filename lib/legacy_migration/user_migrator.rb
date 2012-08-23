@@ -6,6 +6,10 @@ class UserMigrator < AbstractMigrator
       ensure_legacy_id :users
     end
 
+    def classes_to_validate
+      [User]
+    end
+
     def migrate
       prerequisites
       Legacy.connection.exec_query("INSERT INTO public.users(

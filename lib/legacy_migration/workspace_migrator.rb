@@ -6,10 +6,14 @@ class WorkspaceMigrator < AbstractMigrator
       # for all Workspaces to be valid, depends on MembershipMigrator, but is circular
     end
 
+    def classes_to_validate
+      [
+          [Workspace, {:include => [:owner, :members, :archiver]}]
+      ]
+    end
+
     def migrate
       prerequisites
-
-      Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
 
       Legacy.connection.exec_query("
         INSERT INTO public.workspaces(

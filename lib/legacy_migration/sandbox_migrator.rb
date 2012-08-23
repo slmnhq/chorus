@@ -5,6 +5,10 @@ class SandboxMigrator < AbstractMigrator
       DatabaseObjectMigrator.migrate
     end
 
+    def classes_to_validate
+      []
+    end
+
     def migrate
       prerequisites
 

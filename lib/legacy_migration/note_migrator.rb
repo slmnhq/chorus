@@ -1,21 +1,27 @@
 class NoteMigrator < AbstractMigrator
   class << self
     def prerequisites
-      UserMigrator.migrate
-      InstanceMigrator.migrate
-      HadoopInstanceMigrator.migrate
       HdfsEntryMigrator.migrate
-      WorkspaceMigrator.migrate
       WorkfileMigrator.migrate
       DatabaseObjectMigrator.migrate
       ensure_legacy_id :events
     end
+
+    def classes_to_validate
+      [
+          Events::NoteOnGreenplumInstance,
+          Events::NoteOnHadoopInstance,
+          Events::NoteOnHdfsFile,
+          Events::NoteOnWorkspace,
+          Events::NoteOnWorkfile,
+          Events::NoteOnWorkspaceDataset,
+          Events::NoteOnDataset
+      ]
+    end
   
     def migrate
       prerequisites
-  
-      ActiveRecord::Base.record_timestamps = false
-  
+
       migrate_notes_on_gpdb_instances
       migrate_notes_on_hadoop_instances
       migrate_notes_on_hdfs_files
@@ -23,8 +29,6 @@ class NoteMigrator < AbstractMigrator
       migrate_notes_on_workfiles
       migrate_notes_on_workspace_datasets
       migrate_notes_on_datasets
-  
-      ActiveRecord::Base.record_timestamps = true
     end
   
     private
@@ -301,11 +305,13 @@ class NoteMigrator < AbstractMigrator
     end
   
     def copy_note_body_for_class(klass)
-      klass.find_with_destroyed(:all, :conditions => 'additional_data IS NULL').each do |note|
-        row = Legacy.connection.exec_query("SELECT body FROM edc_comment
-                                        WHERE id = '#{note.legacy_id}'").first
-        note.additional_data = {:body => row['body']}
-        note.save!(:validate => false)
+      silence_activerecord do
+        klass.find_with_destroyed(:all, :conditions => 'additional_data IS NULL').each do |note|
+          row = Legacy.connection.exec_query("SELECT body FROM edc_comment
+                                          WHERE id = '#{note.legacy_id}'").first
+          note.additional_data = {:body => row['body']}
+          note.save!(:validate => false)
+        end
       end
     end
   end

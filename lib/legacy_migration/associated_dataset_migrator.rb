@@ -7,6 +7,10 @@ class AssociatedDatasetMigrator < AbstractMigrator
       ensure_legacy_id :associated_datasets
     end
 
+    def classes_to_validate
+      [AssociatedDataset]
+    end
+
     def migrate
       prerequisites
 

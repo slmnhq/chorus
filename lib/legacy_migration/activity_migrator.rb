@@ -8,6 +8,30 @@ class ActivityMigrator < AbstractMigrator
       ensure_legacy_id :events
     end
 
+    def classes_to_validate
+      [
+          Events::SourceTableCreated,
+          Events::FileImportSuccess,
+          Events::FileImportFailed,
+          Events::DatasetImportSuccess,
+          Events::DatasetImportFailed,
+          Events::PublicWorkspaceCreated,
+          Events::PrivateWorkspaceCreated,
+          Events::WorkspaceArchived,
+          Events::WorkspaceUnarchived,
+          Events::WorkspaceMakePublic,
+          Events::WorkspaceMakePrivate,
+          Events::WorkfileCreated,
+          Events::GreenplumInstanceCreated,
+          Events::HadoopInstanceCreated,
+          Events::UserAdded,
+          Events::MembersAdded,
+          Events::ProvisioningFail,
+          Events::ProvisioningSuccess,
+          Events::WorkfileUpgradedVersion
+      ]
+    end
+
     def migrate_source_table_created
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
@@ -736,9 +760,9 @@ class ActivityMigrator < AbstractMigrator
     end
 
     def migrate
-      ActiveRecord::Base.record_timestamps = false
-
       prerequisites
+
+      ActiveRecord::Base.record_timestamps = false
 
       migrate_source_table_created
       migrate_file_import_success

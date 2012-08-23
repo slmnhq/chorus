@@ -4,6 +4,12 @@ class HdfsEntryMigrator < AbstractMigrator
       HadoopInstanceMigrator.migrate
     end
 
+    def classes_to_validate
+      [
+          [HdfsEntry, {:include => :hadoop_instance}]
+      ]
+    end
+
     def migrate
       prerequisites
 

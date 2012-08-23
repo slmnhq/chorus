@@ -5,6 +5,10 @@ class HadoopInstanceMigrator < AbstractMigrator
       ensure_legacy_id :hadoop_instances
     end
 
+    def classes_to_validate
+      [HadoopInstance]
+    end
+
     def migrate
       prerequisites
 

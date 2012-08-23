@@ -6,6 +6,10 @@ class InstanceAccountMigrator < AbstractMigrator
       ensure_legacy_id :instance_accounts
     end
 
+    def classes_to_validate
+      [InstanceAccount]
+    end
+
     def migrate
       prerequisites
 

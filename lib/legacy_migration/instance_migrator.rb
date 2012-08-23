@@ -5,6 +5,10 @@ class InstanceMigrator < AbstractMigrator
       ensure_legacy_id :instances
     end
 
+    def classes_to_validate
+      [Instance]
+    end
+
     def migrate
       prerequisites
       Legacy.connection.exec_query("INSERT INTO public.instances(
