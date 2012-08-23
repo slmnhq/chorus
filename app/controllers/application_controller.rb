@@ -51,10 +51,18 @@ class ApplicationController < ActionController::Base
   end
 
   def check_expiration
-    head(:unauthorized) unless session[:expires_at] && session[:expires_at] > Time.now
+    head(:unauthorized) if expired?
+  end
+
+  def expired?
+    !session[:expires_at] || session[:expires_at] < Time.now
   end
 
   def extend_expiration
+    force_extend_expiration unless expired?
+  end
+
+  def force_extend_expiration
     session[:expires_at] = Chorus::Application.config.chorus['session_timeout_minutes'].minutes.from_now
   end
 
