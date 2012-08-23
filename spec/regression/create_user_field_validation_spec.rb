@@ -196,4 +196,33 @@ describe "creating a user" do
 
   end
 
+  it "should let an admin create a user as an admin" do
+
+    create_new_user_page
+    wait_for_ajax
+    first_name = Forgery::Name.first_name
+    last_name = Forgery::Name.last_name
+    username = "#{first_name}#{last_name}"
+    department = Forgery::Name.industry
+    title = Forgery::Name.title
+
+    fill_in 'firstName', :with =>first_name
+    fill_in 'lastName', :with => last_name
+    fill_in 'username', :with => username
+    fill_in 'email', :with => "someemail@email.com"
+    fill_in 'password', :with => "secret"
+    fill_in 'passwordConfirmation', :with => "secret"
+    fill_in 'dept', :with => "Greenplum"
+    fill_in 'title', :with => "QA"
+    check "Make this user an administrator"
+    click_submit_button
+
+    wait_until { current_route == "/users" }
+    click_link("#{first_name} #{last_name}")
+    page.should have_content "Administrator"
+    page.find("h1").should have_content("#{first_name} #{last_name}")
+
+
+  end
+
 end
