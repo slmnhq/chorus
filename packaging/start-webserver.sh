@@ -9,7 +9,7 @@ bin=`cd "$bin"; pwd`
 # in production, start jetty in background
 
 STARTING="web server"
-depends_on postgres solr worker
+depends_on postgres solr
 
 log "Writing nginx config..."
 $RUBY vendor/nginx/generate_nginx_conf.rb
