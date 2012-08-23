@@ -2,12 +2,12 @@ class DataMigrator
 
   # Only need to call the leaf nodes
   def self.migrate_all
-    InstanceAccountMigrator.new.migrate
-    ImageMigrator.new.migrate
-    SandboxMigrator.new.migrate
-    AssociatedDatasetMigrator.new.migrate
-    ActivityMigrator.new.migrate
-    NoteMigrator.new.migrate
+    InstanceAccountMigrator.migrate
+    ImageMigrator.migrate
+    SandboxMigrator.migrate
+    AssociatedDatasetMigrator.migrate
+    ActivityMigrator.migrate
+    NoteMigrator.migrate
 
     # Note attachments
     # Note comments

@@ -4,9 +4,9 @@ describe InstanceAccountMigrator do
   describe ".migrate" do
     describe "validate the number of entries migrated" do
       it "creates new InstanceAccounts from old AccountMap and is idempotent" do
-        InstanceAccountMigrator.new.migrate
+        InstanceAccountMigrator.migrate
         InstanceAccount.count.should == 4
-        InstanceAccountMigrator.new.migrate
+        InstanceAccountMigrator.migrate
         InstanceAccount.count.should == 4
       end
     end

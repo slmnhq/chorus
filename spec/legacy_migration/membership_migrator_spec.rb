@@ -3,13 +3,13 @@ require 'legacy_migration_spec_helper'
 describe MembershipMigrator do
   describe ".migrate" do
     before :all do
-      MembershipMigrator.new.migrate
+      MembershipMigrator.migrate
     end
 
     describe "copying the data" do
       it "creates new membership for legacy GPDB instances, including new owner-workspaces associations that did not exist and be idempotent" do
         Membership.count.should == 75
-        MembershipMigrator.new.migrate
+        MembershipMigrator.migrate
         Membership.count.should == 75
       end
 

@@ -3,13 +3,13 @@ require 'legacy_migration_spec_helper'
 describe InstanceMigrator do
   describe ".migrate" do
     before do
-      InstanceMigrator.new.migrate
+      InstanceMigrator.migrate
     end
 
     describe "copying the data" do
       it "creates new instances for legacy GPDB instances and is idempotent" do
         Instance.count.should == 5
-        InstanceMigrator.new.migrate
+        InstanceMigrator.migrate
         Instance.count.should == 5
       end
 

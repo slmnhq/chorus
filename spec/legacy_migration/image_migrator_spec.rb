@@ -10,7 +10,7 @@ TYPE_MAP = {
 describe ImageMigrator do
   describe ".migrate" do
     before :all do
-      ImageMigrator.new.migrate
+      ImageMigrator.migrate
     end
 
     describe "copying the data" do

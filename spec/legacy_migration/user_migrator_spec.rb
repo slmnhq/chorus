@@ -3,13 +3,13 @@ require 'legacy_migration_spec_helper'
 describe UserMigrator do
   describe ".migrate" do
     before do
-      UserMigrator.new.migrate
+      UserMigrator.migrate
     end
 
     describe "copying the data" do
       it "creates new users for legacy users and is idempotent" do
         User.unscoped.count.should == 8
-        UserMigrator.new.migrate
+        UserMigrator.migrate
         User.unscoped.count.should == 8
       end
 

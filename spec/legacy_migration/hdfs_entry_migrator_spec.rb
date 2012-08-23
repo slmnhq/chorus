@@ -2,7 +2,7 @@ require 'legacy_migration_spec_helper'
 
 describe HdfsEntryMigrator do
   before :all do
-    HdfsEntryMigrator.new.migrate
+    HdfsEntryMigrator.migrate
   end
 
   describe ".migrate" do
@@ -24,7 +24,7 @@ describe HdfsEntryMigrator do
 
     it "is idempotent" do
       count = HdfsEntry.unscoped.count
-      HdfsEntryMigrator.new.migrate
+      HdfsEntryMigrator.migrate
       HdfsEntry.unscoped.count.should == count
     end
   end

@@ -3,7 +3,7 @@ require 'legacy_migration_spec_helper'
 describe AssociatedDatasetMigrator do
 
   before :all do
-    AssociatedDatasetMigrator.new.migrate
+    AssociatedDatasetMigrator.migrate
   end
 
   describe ".migrate" do
@@ -18,7 +18,7 @@ describe AssociatedDatasetMigrator do
     describe "copying the data" do
       it "creates new associated dataset from legacy associated datasets and is idempotent" do
         AssociatedDataset.count.should == 14
-        AssociatedDatasetMigrator.new.migrate
+        AssociatedDatasetMigrator.migrate
         AssociatedDataset.count.should == 14
       end
 

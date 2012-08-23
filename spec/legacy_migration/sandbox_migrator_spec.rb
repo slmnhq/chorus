@@ -2,7 +2,7 @@ require 'legacy_migration_spec_helper'
 
 describe SandboxMigrator do
   it "stores the schema id that corresponds to the associated legacy sandbox in the respective migrated workspace" do
-    SandboxMigrator.new.migrate
+    SandboxMigrator.migrate
     Workspace.unscoped.where("sandbox_id is not null").count.should == 8
 
     Legacy.connection.select_all("SELECT * FROM edc_sandbox").each do |legacy_sandbox|

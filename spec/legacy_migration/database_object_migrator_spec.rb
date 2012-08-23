@@ -3,7 +3,7 @@ require 'legacy_migration_spec_helper'
 describe DatabaseObjectMigrator do
 
   before :all do
-    DatabaseObjectMigrator.new.migrate
+    DatabaseObjectMigrator.migrate
   end
 
   it "should normalize the keys correctly" do
@@ -17,7 +17,7 @@ describe DatabaseObjectMigrator do
   it "should migrate datasets and schemas from edc_activity_stream_object and edc_sandbox, and be idempotent" do
     Dataset.count.should == 102
     GpdbSchema.count.should == 14
-    DatabaseObjectMigrator.new.migrate
+    DatabaseObjectMigrator.migrate
     Dataset.count.should == 102
     GpdbSchema.count.should == 14
 
