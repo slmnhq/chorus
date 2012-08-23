@@ -5,6 +5,4 @@ module Events
 
     include_shared_search_fields(:dataset)
   end
-
-  NoteOnDatasetAccess = NoteAccess
 end
