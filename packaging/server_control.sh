@@ -19,21 +19,9 @@ function contains() {
     return 1
 }
 
-function no_services() {
-  if [ ${#services[@]} -eq 0 ]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 function should_handle () {
-  # If no services are provided, or $1 is one of the services to start
-  if no_services || contains ${services[@]} $1; then
-    return 0
-  else
-    return 1
-  fi
+  # If no services are provided, or $1 is a service to start
+  [ ${#services[@]} -eq 0 ] || contains ${services[@]} $1
 }
 
 function start () {
@@ -77,6 +65,8 @@ function usage () {
   echo "  $script stop scheduler workers     stop specific services"
   echo "  $script restart webserver          restart specific services"
   echo
+
+  return 1
 }
 
 case $command in
@@ -94,27 +84,3 @@ case $command in
         usage
         ;;
 esac
-
-# --- Delete me ---
-#if [(( ${#services[@]} == 0 || contains ${services[@]} $1 ))]; then
-#echo ${#services[@]} services in should_handle
-#if [ ${#services[@]} -eq 0 ]; then
-#if no_services; then
-
-#should_handle baz
-# Delete me
-#exit
-
-#if [ should_handle baz ]; then
-#    echo Hello
-#fi
-
-#if [ "$1" = "scheduler" -o "$1" = "" ];  then $bin/stop-scheduler.sh;   fi
-  #if [ "$1" = "workers" -o "$1" = "" ];    then $bin/stop-workers.sh;     fi
-  #if [ "$1" = "solr" -o "$1" = "" ];       then $bin/stop-solr.sh;        fi
-  #if [ "$1" = "webserver" -o "$1" = "" ];  then $bin/stop-webserver.sh;   fi
-  #if [ "$1" = "postgres" -o "$1" = "" ];   then $bin/stop-postgres.sh;    fi
-
-#if no_services; then
-#  echo No services exist!
-#fi
