@@ -3,6 +3,4 @@ module Events
     has_targets :hdfs_file
     has_activities :actor, :hdfs_file, :global
   end
-
-  NoteOnHdfsFileAccess = NoteAccess
 end

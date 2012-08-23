@@ -16,7 +16,8 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/mizuno.git
-  revision: 9a7e0dd6e30e33e636d6e16358e4c640a6f1fc0f
+  revision: d58541608288ef3b223c9cf9ed9a1feb9e0b59a3
+  branch: 0.6.4_changes
   specs:
     mizuno (0.6.4)
       childprocess (>= 0.2.6)

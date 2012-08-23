@@ -11,6 +11,4 @@ module Events
 
     include_shared_search_fields(:workspace)
   end
-
-  NoteOnWorkspaceAccess = NoteAccess
 end
