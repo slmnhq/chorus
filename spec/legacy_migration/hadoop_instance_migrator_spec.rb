@@ -3,13 +3,13 @@ require 'legacy_migration_spec_helper'
 describe HadoopInstanceMigrator do
   describe ".migrate" do
     before :all do
-      HadoopInstanceMigrator.new.migrate
+      HadoopInstanceMigrator.migrate
     end
 
     describe "copying the data" do
       it "creates new instances for legacy hadoop instances and is idempotent" do
         HadoopInstance.count.should == 2
-        HadoopInstanceMigrator.new.migrate
+        HadoopInstanceMigrator.migrate
         HadoopInstance.count.should == 2
       end
 

@@ -8,7 +8,7 @@ describe ActivityMigrator do
         stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
       end
 
-      ActivityMigrator.new.migrate
+      ActivityMigrator.migrate
     end
 
     context "migrating activities that reference datasets" do
@@ -23,7 +23,7 @@ describe ActivityMigrator do
 
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
       #  #expect {
-      #  #  ActivityMigrator.new.migrate
+      #  #  ActivityMigrator.migrate
       #  #}.to change(Events::WorkspaceAddHdfsAsExtTable, :count).by(1)
       #
       #  event = Events::WorkspaceAddHdfsAsExtTable.find(event_id_for('10718'))

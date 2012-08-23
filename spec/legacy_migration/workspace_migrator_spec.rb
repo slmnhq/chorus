@@ -3,13 +3,13 @@ require 'legacy_migration_spec_helper'
 describe WorkspaceMigrator do
   describe ".migrate" do
     before :all do
-      WorkspaceMigrator.new.migrate
+      WorkspaceMigrator.migrate
     end
 
     describe "copying the data" do
       it "creates new workspaces for legacy workspaces" do
         Workspace.unscoped.count.should == 73
-        WorkspaceMigrator.new.migrate
+        WorkspaceMigrator.migrate
         Workspace.unscoped.count.should == 73
       end
 
@@ -39,7 +39,7 @@ describe WorkspaceMigrator do
       end
 
       it "creates all valid workspaces" do
-        MembershipMigrator.new.migrate
+        MembershipMigrator.migrate
         invalids = Workspace.all.reject { |workspace| workspace.valid? }
         invalids.should be_empty
       end
