@@ -70,6 +70,12 @@ class DatabaseObjectMigrator < AbstractMigrator
               FROM legacy_migrate.edc_comment_artifact
               WHERE entity_type = 'databaseObject'
             )
+            UNION
+            (
+              SELECT normalize_key(source_id) AS dataset_string
+              FROM legacy_migrate.edc_import
+              WHERE source_type = 'dataset'
+            )
           ) a
         WHERE dataset_string NOT IN (select legacy_id from datasets);
       ))
