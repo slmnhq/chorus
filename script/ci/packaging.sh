@@ -4,4 +4,4 @@
 
 export FORCE_DEPLOY=true
 
-RAILS_ENV=integration rake package:stage package:installer --trace
+rake package:stage package:installer --trace
