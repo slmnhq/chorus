@@ -17,6 +17,13 @@ namespace :api_docs do
   task :generate => :check do
     Rake::Task['docs:generate'].invoke
   end
+
+  desc "Package api docs"
+  task :package => "docs:generate" do
+    destination_archive = File.expand_path(File.dirname(__FILE__) + '../../../doc/api_documentation.tar.gz')
+    source_directory = File.expand_path(File.dirname(__FILE__) + '../../../public')
+    `tar czf #{destination_archive} -C #{source_directory} api/`
+  end
 end
 
 desc "Check and generate API docs"

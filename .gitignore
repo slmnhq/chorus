@@ -13,6 +13,7 @@ app/assets/javascripts/environment.js
 
 # Ignore API doc directory
 /public/api
+/doc/api_documentation.tar.gz
 
 # Ignore workfile attachments outside of public folder
 /system/workfile_versions/*
