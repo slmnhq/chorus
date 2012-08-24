@@ -40,4 +40,3 @@ production:
   database: chorus_rails_production
   <<: *default
   username: pivotal
-  port: 9543

@@ -5,5 +5,5 @@ app_root: $CHORUS_HOME
 java_options: -Djava.library.path=$CHORUS_HOME/vendor/hadoop/lib/
 ruby_version: 1.9
 app_type: rack
-http_port: 9081
+http_port: 8081
 bundle_without: [integration, development, test]
