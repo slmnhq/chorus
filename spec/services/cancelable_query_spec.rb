@@ -61,6 +61,15 @@ describe CancelableQuery do
 
       cancelable_query.execute(sql, :limit => 40)
     end
+
+    describe "logging" do
+      it "logs sql sent to the exec_query method of the connection" do
+        log = ''
+        stub(Rails.logger).debug {|message| log = message}
+        cancelable_query.execute("SELECT * FROM users")
+        log.should include "SELECT * FROM users"
+      end
+    end
   end
 
   describe "#cancel" do

@@ -4,6 +4,7 @@ class CancelableQuery
   def initialize(connection, check_id)
     @check_id = check_id
     @connection = connection
+    @instrumenter = ActiveSupport::Notifications.instrumenter
   end
 
   def execute(sql, options = {})
@@ -16,10 +17,16 @@ class CancelableQuery
         statement.set_fetch_size(options[:limit])
         statement.set_max_rows(options[:limit])
       end
-      statement.execute
+      @instrumenter.instrument(
+          "sql.active_record",
+          :sql => sql,
+          :name => 'SQL',
+          :connection_id => @connection.object_id) do
+        statement.execute
+      end
       capture_warnings(statement)
       result_set = statement.get_result_set
-      while(statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
+      while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
         result_set.close if result_set
         result_set = statement.get_result_set
       end
@@ -61,7 +68,7 @@ class CancelableQuery
 
   def capture_warnings(statement)
     warning = statement.get_warnings
-    while(warning)
+    while (warning)
       @results.warnings << warning.to_s
       warning = warning.next_warning
     end
