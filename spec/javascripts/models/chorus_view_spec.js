@@ -1,11 +1,15 @@
 describe("chorus.models.ChorusView", function() {
     beforeEach(function() {
-        this.sourceDataset = newFixtures.workspaceDataset.sandboxTable();
+        this.sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
         this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()])
         this.model = this.sourceDataset.deriveChorusView();
         this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
     });
 
+    it("has the right url", function() {
+        this.model.attributes.sourceObjectId = "100";
+        expect(this.model.url()).toMatchUrl('/datasets/100/chorus_view');
+    });
 
     it("delegates to the source object for #schema and #workspace", function() {
         expect(this.model.schema().name()).toBe(this.sourceDataset.schema().name());
@@ -33,7 +37,7 @@ describe("chorus.models.ChorusView", function() {
         it("requires an object name", function() {
             this.model.performValidation();
             expect(this.model.require).toHaveBeenCalledWith("objectName", undefined, "dataset.chorusview.validation.object_name_required");
-        })
+        });
 
         it("enforces object name constraints", function() {
             this.model.performValidation();
@@ -245,7 +249,7 @@ describe("chorus.models.ChorusView", function() {
     describe("generateFromClause", function() {
         context("with only the base table", function() {
             it("has the proper from clause", function() {
-                expect(this.model.generateFromClause()).toBe('FROM ' + this.sourceDataset.get("schema").name + '."' + this.sourceDataset.get('objectName') + '"');
+                expect(this.model.generateFromClause()).toBe('FROM ' + this.sourceDataset.get("schema").name + '.' + this.sourceDataset.get('objectName'));
             });
         });
 

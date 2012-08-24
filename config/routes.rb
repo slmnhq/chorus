@@ -47,7 +47,7 @@ Chorus::Application.routes.draw do
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
     resource :download, :only => :show, :controller => 'dataset_downloads'
-    resources :chorus_view, :only => :create
+    resource :chorus_view, :only => :create, :controller => 'chorus_views'
     member do
       post :import
     end

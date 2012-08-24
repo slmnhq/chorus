@@ -16,7 +16,7 @@ describe ChorusViewsController, :database_integration => true do
     let(:options) {
       HashWithIndifferentAccess.new(
           :query => "Select * from base_table1",
-          :schema => schema.id,
+          :schema_id => schema.id,
           :name => "my_chorus_view"
       )
     }
@@ -33,7 +33,7 @@ describe ChorusViewsController, :database_integration => true do
       let(:options) {
         HashWithIndifferentAccess.new(
             :query => "Select * from non_existing_table",
-            :schema => schema.id,
+            :schema_id => schema.id,
             :name => "invalid_chorus_view"
         )
       }

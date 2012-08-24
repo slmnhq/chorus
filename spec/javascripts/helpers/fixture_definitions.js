@@ -19,7 +19,7 @@ window.fixtureDefinitions = {
     workspaceDataset: {
         derived: {
             id: function(a) {
-                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName ].join('"|"') + '"';
+                return a.id;
             }
         },
 
