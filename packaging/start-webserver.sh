@@ -45,7 +45,9 @@ case $RAILS_ENV in
         ;;
     * )
         log "starting jetty..."
-        vendor/jetty/jetty-init start &>/dev/null &
+        cd $CHORUS_HOME/vendor/jetty/
+        ./jetty-init start &>/dev/null &
+        cd $CHORUS_HOME
         wait_for_start $JETTY_PID_FILE
         ;;
 esac

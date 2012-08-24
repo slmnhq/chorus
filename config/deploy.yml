@@ -1,6 +1,6 @@
 stage:
   host: chorus-staging
-  path: ~/chorusrails-deploy
+  path: ~/chorusrails-deploy-new
   postgres_build: postgres-redhat6.2-9.1.4.tar.gz
 
 chorus21:

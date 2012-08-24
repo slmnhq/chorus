@@ -19,7 +19,7 @@ if [ "$RAILS_ENV" = "development" ]; then
 fi
 # TODO: end going away
 
-POSTGRES_PORT=8543
+POSTGRES_PORT=9543
 
 $CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DIR/server.log -D $POSTGRES_DIR -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>/dev/null
 

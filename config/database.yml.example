@@ -10,7 +10,3 @@ default: &default
 production:
   database: chorus_2_2_production
   <<: *default
-
-legacy:
-  database: chorus
-  <<: *default

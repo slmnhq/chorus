@@ -10,7 +10,7 @@ fi
 
 log_inline "stopping nginx "
 cd $CHORUS_HOME/vendor/nginx/nginx_dist/
-./$NGINX -s stop &>/dev/null
+./$NGINX -s stop
 wait_for_stop $NGINX_PID_FILE
 cd $CHORUS_HOME
 
@@ -22,7 +22,9 @@ case $RAILS_ENV in
         ;;
     * )
         log_inline "stopping jetty "
-        vendor/jetty/jetty-init stop &>/dev/null
+        cd $CHORUS_HOME/vendor/jetty/
+        ./jetty-init stop
+        cd $CHORUS_HOME
         wait_for_stop $JETTY_PID_FILE
         ;;
 esac

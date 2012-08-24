@@ -102,42 +102,41 @@ module PackageMaker
     releases_path = path + "/releases"
     release_path = path + "/releases/" + release_name
 
+    run "ssh #{host} 'mkdir -p #{path}'"
+    run "ssh #{host} 'mkdir -p #{release_path}'"
     run "scp #{filename} #{host}:#{path}"
-    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
+    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename} &> /dev/null'"
 
     run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/log #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/tmp #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/system #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/log && ln -s #{shared_path}/log #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/tmp && ln -s #{shared_path}/tmp #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/system && ln -s #{shared_path}/system #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/postgres #{release_path}/postgres'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/db #{release_path}/postgres-db'"
 
     # symlink configuration
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/database.yml #{release_path}/config'"
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
 
-    # Server control
-    run "ssh #{host} 'cp -f #{release_path}/packaging/server_control.sh #{path}/server_control.sh'"
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres/#{postgres_build}'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres/#{postgres_build}  &> /dev/null'"
 
     run "ssh #{host} 'test ! -e #{shared_path}/db && RELEASE_PATH=#{release_path} CHORUS_HOME=#{path} bash #{release_path}/packaging/bootstrap_app.sh'"
 
+    # Temporary
+    #
+    #run "ssh #{host} 'cd #{path}; ./postgres/bin/createuser -p 9543 -s edcadmin"
     run "ssh #{host} 'PATH=$PATH:#{path}/postgres/bin RAILS_ENV=production #{release_path}/bin/rake db:migrate'"
 
-    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh stop'"
-
-    run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}'"
-
+    run "ssh #{host} 'cd #{current_path}; CHORUS_HOME=#{current_path} RAILS_ENV=production ./packaging/server_control.sh stop'"
     run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
-    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path}/nginx_dist #{path}/nginx_dist'"
-
-    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh start'"
+    run "ssh #{host} 'cd #{current_path}; CHORUS_HOME=#{current_path} RAILS_ENV=production ./packaging/server_control.sh start'"
 
     run "ssh #{host} 'cd #{path}; rm greenplum*.tar.gz'"
-    run "ssh #{host} 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
+    #run "ssh #{host} 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
   end
 
   def deploy(config)
