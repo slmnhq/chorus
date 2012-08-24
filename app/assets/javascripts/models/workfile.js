@@ -156,7 +156,7 @@
         },
 
         canEdit: function() {
-            return this.isLatestVersion() && this.workspace().isActive();
+            return this.isLatestVersion() && this.workspace().isActive() && this.workspace().canUpdate();
         },
 
         isLatestVersion: function() {

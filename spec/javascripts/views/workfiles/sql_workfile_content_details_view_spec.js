@@ -44,6 +44,51 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             });
         });
 
+        describe("permissions", function() {
+            context("when user only has read and commenting permissions", function() {
+                beforeEach(function() {
+                    this.model.workspace().set({ permission: ["read", "commenting"] });
+                    this.view.render();
+                });
+
+                it("should disable the 'Run File' ", function() {
+                    expect(this.view.$(".run_file")).toBeDisabled();
+                });
+
+                it("should disable the 'Save' button", function() {
+                    expect(this.view.$(".save button")).toBeDisabled();
+                });
+            });
+
+            context("when user has read, commenting, update permissions ", function() {
+                beforeEach(function() {
+                    this.model.workspace().set({ permission: ["read", "commenting", "update"] });
+                    this.view.render();
+                });
+                it("should not disable the 'Run File' ", function() {
+                    expect(this.view.$(".run_file")).not.toBeDisabled();
+                });
+
+                it("should not disable the 'Save' button", function() {
+                    expect(this.view.$(".save button")).not.toBeDisabled();
+                });
+            });
+
+            context("when user only has admin permissions", function() {
+                beforeEach(function() {
+                    this.model.workspace().set({ permission: ["admin"] });
+                    this.view.render();
+                });
+                it("should not disabled the 'Run File' ", function() {
+                    expect(this.view.$(".run_file")).not.toBeDisabled();
+                });
+
+                it("should not disable the 'Save' button", function() {
+                    expect(this.view.$(".save button")).not.toBeDisabled();
+                });
+            });
+        })
+
         context("when the user has not selected any text", function() {
             beforeEach(function() {
                 this.contentView.getSelectedText = function() {

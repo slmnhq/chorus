@@ -331,18 +331,32 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.canEdit()).toBeFalsy();
         });
 
-        it("returns true when its version is the current version", function() {
-            this.model.set({latestVersionId: 6});
-            this.model.get('versionInfo').id = 6
-            expect(this.model.canEdit()).toBeTruthy();
-        });
-
         it("returns false when its workspace is archived", function() {
             this.model.workspace().isActive.andReturn(false);
             this.model.set({latestVersionId: 6});
             this.model.get('versionInfo').id = 6
             expect(this.model.canEdit()).toBeFalsy();
         });
+
+        it("returns false when user does not have admin/update permissions", function() {
+            this.model.workspace().set({permission: ["read", "commenting"]});
+            this.model.set({latestVersionId: 6});
+            this.model.get('versionInfo').id = 6
+            expect(this.model.canEdit()).toBeFalsy();
+        });
+
+        it("returns true when its version is the current version and has update permission", function() {
+            this.model.set({latestVersionId: 6, permission: ["update"]});
+            this.model.get('versionInfo').id = 6
+            expect(this.model.canEdit()).toBeTruthy();
+        });
+
+        it("returns true when its version is the current version and has admin permission", function() {
+            this.model.set({latestVersionId: 6, permission: ["admin"]});
+            this.model.get('versionInfo').id = 6
+            expect(this.model.canEdit()).toBeTruthy();
+        });
+
     });
 
     describe("isText", function() {

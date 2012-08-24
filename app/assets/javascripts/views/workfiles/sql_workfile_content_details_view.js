@@ -29,8 +29,9 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             }
         });
 
-        if (!this.model.workspace().isActive()) {
+        if (!this.model.workspace().isActive() || !this.model.workspace().canUpdate()) {
             this.$(".run_file").attr("disabled", "disabled");
+            this.$(".save button").attr("disabled", "disabled");
         }
 
         if (!this.hasValidExecutionSchema()) {
