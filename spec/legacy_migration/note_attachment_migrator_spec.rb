@@ -1,43 +1,96 @@
-#require 'legacy_migration_spec_helper'
-#
-#describe NoteAttachmentMigrator, :legacy_migration => true, :type => :legacy_migration do
-#  before do
-#    UserMigrator.migrate
-#    InstanceMigrator.migrate
-#    HadoopInstanceMigrator.migrate
-#    WorkspaceMigrator.migrate
-#    MembershipMigrator.migrate
-#    WorkfileMigrator.migrate
-#    NoteMigrator.migrate
-#    AssociatedDatasetMigrator.migrate
-#  end
-#
-#  it "changes the number of note attachments" do
-#    expect { NoteAttachmentMigrator.migrate }.to change(NoteAttachment, :count).by(24)
-#  end
-#
-#  it "migrates all note file attachments" do
-#    NoteAttachmentMigrator.migrate
-#    Legacy.connection.select_all("SELECT ec.id AS comment_id, ef.file file, ec.chorus_rails_event_id, ef.file_name FROM edc_file ef, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'file' AND eca.comment_id = ec.id AND eca.entity_id = ef.id AND ec.is_deleted = false AND eca.is_deleted = false AND ef.is_deleted = false").each do |legacy_attachment|
-#      attachment = NoteAttachment.find_by_note_id(legacy_attachment["chorus_rails_event_id"])
-#      if attachment
-#        attachment.contents_file_name.should == legacy_attachment["file_name"].gsub(" ", "_")
-#        attachment.note_id.should == legacy_attachment["chorus_rails_event_id"]
-#        File.open(attachment.contents.path, 'rb').read.should == legacy_attachment["file"]
-#      end
-#    end
-#  end
-#
-#  it "migrates all note dataset attachments" do
-#    NoteAttachmentMigrator.migrate
-#    Legacy.connection.select_all("SELECT ec.id AS comment_id, ec.workspace_id as workspace_id, ed.id as dataset_id, ec.chorus_rails_event_id  FROM edc_dataset ed, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'databaseObject' AND eca.comment_id = ec.id AND eca.entity_id = ed.composite_id AND ec.is_deleted = false AND eca.is_deleted = false AND ed.is_deleted = false").each do |legacy_dataset_attachment|
-#      note = Events::Base.find_by_id(legacy_dataset_attachment["chorus_rails_event_id"])
-#      original_comment_id = legacy_dataset_attachment["comment_id"]
-#      if note # TODO: remove this check once notes on all types of things have been implemented. currently, unimplemented notes with attachments will break this test
-#        Legacy.connection.select_all("select ed.chorus_rails_associated_dataset_id, ec.id as comment_id, eca.id as artifact_id, eca.entity_type, eca.entity_id as artifact_entity_id FROM edc_comment_artifact eca JOIN edc_dataset ed ON ed.composite_id = eca.entity_id JOIN edc_comment ec ON ec.id = eca.comment_id WHERE eca.entity_type = 'databaseObject' AND ec.id = '#{original_comment_id}' AND ec.is_deleted = false AND eca.is_deleted = false AND ed.is_deleted = false").each do |dataset|
-#          note.datasets.should include(AssociatedDataset.find(dataset["chorus_rails_associated_dataset_id"]).dataset)
-#        end
-#      end
-#    end
-#  end
-#end
+require 'legacy_migration_spec_helper'
+
+describe NoteAttachmentMigrator do
+  before :all do
+    any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
+      # Stub everything with a PNG so paperclip doesn't blow up
+      stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
+    end
+
+    NoteAttachmentMigrator.migrate
+  end
+
+  describe ".migrate" do
+
+    it "should migrate the Workfile Attachments on Notes to the new database" do
+      count = 0
+      Legacy.connection.select_all("
+        SELECT eca.*
+        FROM edc_comment ec
+          INNER JOIN edc_comment_artifact eca
+            ON eca.comment_id = ec.id AND eca.entity_type = 'workfile'
+      ").each do |legacy_attachment|
+        count += 1
+        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
+        workfile = Workfile.find_by_legacy_id(legacy_attachment["entity_id"])
+        note.workfiles.should include(workfile)
+      end
+      count.should > 0
+      Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"].should == count
+    end
+
+
+    it "should migrate the dataset Attachments on Notes to the new database" do
+      count = 0
+      Legacy.connection.select_all("
+        SELECT eca.comment_id as comment_id , normalize_key(eca.entity_id) as dataset_id
+        FROM edc_comment ec
+          INNER JOIN edc_comment_artifact eca
+            ON eca.comment_id = ec.id AND eca.entity_type = 'databaseObject'
+      ").each do |legacy_attachment|
+        count += 1
+        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
+        dataset = Dataset.find_by_legacy_id((legacy_attachment["dataset_id"]))
+        note.datasets.should include(dataset)
+      end
+      count.should > 0
+      Legacy.connection.select_all("select count(*) from datasets_notes").first["count"].should == count
+    end
+
+      it "migrates all note file attachments" do
+        Legacy.connection.select_all("
+          SELECT eca.id as attachment_id , ef.file file,
+          ef.file_name FROM edc_file ef, edc_comment ec, edc_comment_artifact eca
+          WHERE eca.entity_type = 'file' AND eca.comment_id = ec.id AND ef.id = eca.entity_id
+        ").each do |legacy_attachment|
+
+          attachment = NoteAttachment.find_by_legacy_id(legacy_attachment["attachment_id"])
+          if attachment
+            attachment.contents_file_name.should == legacy_attachment["file_name"].gsub(" ", "_")
+            File.open(attachment.contents.path, 'r').read == legacy_attachment["file"]
+          end
+        end
+      end
+
+
+    it "is idempotent for workfiles" do
+      count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
+      NoteAttachmentMigrator.migrate
+      after_migration_count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
+      after_migration_count.should == count
+    end
+
+    it "is idempotent for datasets" do
+      count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
+      NoteAttachmentMigrator.migrate
+      after_migration_count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
+      after_migration_count.should == count
+    end
+
+    it "is idempotent for desktop attachments" do
+      count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
+      NoteAttachmentMigrator.migrate
+      after_migration_count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
+      after_migration_count.should == count
+    end
+
+    it "migrates all the desktop attachments" do
+      count = Legacy.connection.select_all("select count(*) from note_attachments").first
+      Legacy.connection.select_all("
+        SELECT count(*) as count
+        FROM edc_comment_artifact
+        WHERE entity_type = 'file'
+      ").first["count"].should == count["count"]
+    end
+  end
+end

@@ -15,10 +15,10 @@ describe DatabaseObjectMigrator do
   end
 
   it "should migrate datasets and schemas from edc_activity_stream_object and edc_sandbox, and be idempotent" do
-    Dataset.count.should == 102
+    Dataset.count.should == 106
     GpdbSchema.count.should == 14
     DatabaseObjectMigrator.migrate
-    Dataset.count.should == 102
+    Dataset.count.should == 106
     GpdbSchema.count.should == 14
 
     database = Instance.find_by_name('gillette').databases.find_by_name('analytics_with%')

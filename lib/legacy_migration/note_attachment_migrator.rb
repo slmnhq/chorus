@@ -1,12 +1,84 @@
 class NoteAttachmentMigrator < AbstractMigrator
   class << self
+    def prerequisites
+      NoteMigrator.migrate
+      ensure_legacy_id :notes_workfiles
+      ensure_legacy_id :datasets_notes
+      ensure_legacy_id :note_attachments
+    end
+
     def classes_to_validate
-      [NoteAttachment]
+      [
+      ]
     end
 
     def migrate
-      get_file do |chorus_rails_event_id, file_name , file|
-        event = Events::Base.find_by_id(chorus_rails_event_id)
+      prerequisites
+      migrate_workfiles_attachment_on_notes
+      migrate_dataset_attachment_on_notes
+      migrate_desktop_attachment_on_notes
+    end
+
+    private
+
+    def migrate_workfiles_attachment_on_notes
+      Legacy.connection.exec_query(%Q(
+      INSERT INTO notes_workfiles(
+        legacy_id,
+        note_id,
+        workfile_id
+        )
+      SELECT
+        edc_comment_artifact.id,
+        events.id,
+        workfiles.id
+      FROM
+        legacy_migrate.edc_comment_artifact
+        INNER JOIN legacy_migrate.edc_comment
+          ON edc_comment.id = edc_comment_artifact.comment_id
+        INNER JOIN workfiles
+          ON workfiles.legacy_id = edc_comment_artifact.entity_id
+        INNER JOIN events
+          ON events.legacy_id = edc_comment_artifact.comment_id AND
+          events.action LIKE 'Events::Note%'
+      WHERE
+        edc_comment_artifact.entity_type = 'workfile'
+        AND edc_comment_artifact.id NOT IN (SELECT legacy_id from notes_workfiles );
+      ))
+    end
+
+    def migrate_dataset_attachment_on_notes
+      Legacy.connection.exec_query(%Q(
+      INSERT INTO datasets_notes(
+        legacy_id,
+        note_id,
+        dataset_id
+        )
+      SELECT
+        edc_comment_artifact.id,
+        events.id,
+        datasets.id
+      FROM
+        legacy_migrate.edc_comment_artifact
+        INNER JOIN legacy_migrate.edc_comment
+          ON edc_comment.id = edc_comment_artifact.comment_id
+        INNER JOIN datasets
+          ON datasets.legacy_id = normalize_key(edc_comment_artifact.entity_id)
+        INNER JOIN events
+          ON events.legacy_id = edc_comment_artifact.comment_id AND
+          events.action LIKE 'Events::Note%'
+      WHERE
+        edc_comment_artifact.entity_type = 'databaseObject'
+        AND edc_comment_artifact.id NOT IN (SELECT legacy_id from datasets_notes );
+      ))
+
+    end
+
+
+    def migrate_desktop_attachment_on_notes
+
+      get_file do |note_legacy_id, file_name, file, attachment_legacy_id|
+        event = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => note_legacy_id})
         unless event
           next
         end
@@ -16,27 +88,21 @@ class NoteAttachmentMigrator < AbstractMigrator
 
         fake_file = FakeFileUpload.new(file)
         fake_file.original_filename = file_name
-        fake_file.content_type = MIME::Types.type_for(file_name)
+        fake_file.content_type = MIME::Types.type_for(file_name).first
 
         note_attachment.contents = fake_file
+        note_attachment.legacy_id = attachment_legacy_id
         note_attachment.save!
-      end
-
-      get_dataset do |associated_dataset_id, event_id|
-        note = Events::Note.find_by_id(event_id)
-        dataset_association = AssociatedDataset.find_by_id(associated_dataset_id)
-        next unless note && dataset_association
-
-        dataset = dataset_association.dataset
-        note.datasets << dataset
       end
     end
 
     def get_file
-      sql = "SELECT ef.file file, ec.chorus_rails_event_id event_id, ef.file_name file_name FROM edc_file ef, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'file' AND eca.comment_id = ec.id AND eca.entity_id = ef.id AND ec.is_deleted = false AND eca.is_deleted = false AND ef.is_deleted = false"
+      sql = "SELECT ef.file file, ec.id note_legacy_id, ef.file_name file_name , eca.id attachment_legacy_id
+      FROM edc_file ef, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'file' AND
+      eca.comment_id = ec.id AND eca.entity_id = ef.id AND eca.id NOT IN (SELECT legacy_id from note_attachments );"
       comment_file_data = Legacy.connection.exec_query(sql)
       comment_file_data.map do |comment_data|
-        yield comment_data["event_id"], comment_data["file_name"], comment_data["file"]
+        yield comment_data["note_legacy_id"], comment_data["file_name"], comment_data["file"], comment_data["attachment_legacy_id"]
       end
     end
 
@@ -44,25 +110,5 @@ class NoteAttachmentMigrator < AbstractMigrator
       attr_accessor :content_type, :original_filename
     end
 
-    def get_dataset
-      sql = <<-SQL
-      SELECT
-        ed.chorus_rails_associated_dataset_id as dataset_id,
-        ec.chorus_rails_event_id as event_id
-      FROM edc_dataset ed, edc_comment ec, edc_comment_artifact eca
-      WHERE eca.entity_type = 'databaseObject'
-        AND ed.type = 'SOURCE_TABLE'
-        AND eca.comment_id = ec.id
-        AND eca.entity_id = ed.composite_id
-        AND ec.is_deleted = false
-        AND eca.is_deleted = false
-        AND ed.is_deleted = false
-      SQL
-
-      comment_file_data = Legacy.connection.exec_query(sql)
-      comment_file_data.map do |comment_data|
-        yield comment_data["dataset_id"], comment_data["event_id"]
-      end
-    end
   end
 end
