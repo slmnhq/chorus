@@ -3,7 +3,7 @@ default: &default
   encoding: unicode
   username: edcadmin
   password:
-  port: 9543
+  port: 8543
   min_messages: warning
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -40,4 +40,4 @@ production:
   database: chorus_rails_production
   <<: *default
   username: pivotal
-  # port: 5432
+  port: 9543
