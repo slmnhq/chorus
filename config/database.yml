@@ -9,7 +9,7 @@ default: &default
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
   host: 127.0.0.1
-  pool: 10
+  pool: 20
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public
