@@ -4,7 +4,7 @@ class ChorusView < Dataset
   def validate_query
     raise ActiveRecord::StatementInvalid unless query.upcase.start_with?("SELECT", "WITH")
     account = account_for_user!(schema.database.instance.owner)
-    schema.with_gpdb_connection(account, false) do |conn|
+    schema.with_gpdb_connection(account, true) do |conn|
       conn.exec_query("EXPLAIN #{query}")
     end
   end

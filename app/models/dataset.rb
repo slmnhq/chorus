@@ -18,9 +18,9 @@ class Dataset < ActiveRecord::Base
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
   has_and_belongs_to_many :events_notes, :class_name => 'Events::Note'
 
-  scope :tables, where(:type => GpdbTable.name)
-  scope :views, where(:type => GpdbView.name)
-  scope :chorus_views, where(:type =>  ChorusView.name)
+  scope :tables, where(:type => 'GpdbTable')
+  scope :views, where(:type => 'GpdbView')
+  scope :chorus_views, where(:type =>  'ChorusView')
 
   delegate :with_gpdb_connection, :to => :schema
   delegate :instance, :to => :schema
