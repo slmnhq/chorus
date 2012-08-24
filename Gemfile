@@ -42,6 +42,7 @@ group :test, :integration do
   gem 'factory_girl'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'
+  gem 'journey', '1.0.3'
   gem 'timecop'
   gem 'hashie'
   gem 'vcr'
