@@ -47,6 +47,33 @@ def create_gpdb_instance(params={})
                          :shared => params[:shared])
 end
 
+def create_gpdb_instance41()
+  create_gpdb_instance(:name => "GPDB_Instance41#{Time.now.to_i}",
+                         :desc => "Creating GPDB Instance",
+                         :host => WEBPATH['gpdb_instance41']['gpdb_host'],
+                         :port => WEBPATH['gpdb_instance41']['gpdb_port'],
+                         :dbuser => WEBPATH['gpdb_instance41']['gpdb_user'],
+                         :dbpass => WEBPATH['gpdb_instance41']['gpdb_pass'])
+end
+
+def create_gpdb_instance42()
+  create_gpdb_instance(:name => "GPDB_Instance41#{Time.now.to_i}",
+                         :desc => "Creating GPDB Instance",
+                         :host => WEBPATH['gpdb_instance42']['gpdb_host'],
+                         :port => WEBPATH['gpdb_instance42']['gpdb_port'],
+                         :dbuser => WEBPATH['gpdb_instance42']['gpdb_user'],
+                         :dbpass => WEBPATH['gpdb_instance42']['gpdb_pass'])
+end
+
+def create_gpdb_instance42()
+  create_gpdb_instance(:name => "GPDB_Instance42#{Time.now.to_i}",
+                         :desc => "Creating GPDB Instance",
+                         :host => WEBPATH['gpdb_instance42']['gpdb_host'],
+                         :port => WEBPATH['gpdb_instance42']['gpdb_port'],
+                         :dbuser => WEBPATH['gpdb_instance42']['gpdb_user'],
+                         :dbpass => WEBPATH['gpdb_instance42']['gpdb_pass'])
+end
+
 # Register a new greenplum instance
 def create_gpdb_instance_no_ui(params={})
   Gpdb::InstanceRegistrar.create!({
