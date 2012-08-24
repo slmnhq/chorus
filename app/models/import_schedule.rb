@@ -7,7 +7,6 @@ class ImportSchedule < ActiveRecord::Base
     val = ImportTime.new(
         start_datetime,
         end_date,
-        last_scheduled_at,
         frequency,
         Time.current
     ).next_import_time
