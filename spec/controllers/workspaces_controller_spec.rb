@@ -278,13 +278,15 @@ describe WorkspacesController do
     end
 
     context "user can create a new schema as sandbox" do
-      let(:database) { gpdb_schemas(:other_schema).database }
-
-      before do
-        stub(subject).create_schema_in_gpdb("create_new_schema", database) {}
-      end
+      let!(:database) { gpdb_schemas(:other_schema).database }
 
       it "should create a GpdbSchema in Chorus meta data" do
+        any_instance_of(GpdbDatabase) do |db|
+          stub(db).create_schema.with_any_args {
+            GpdbSchema.create!({:name => "create_new_schema", :database => database }, :without_protection => true)
+          }
+        end
+
         put :update, :id => workspace.id, :workspace => {
             :owner => {id: "3"},
             :public => "false",
@@ -299,18 +301,21 @@ describe WorkspacesController do
         schema.database.should == database
       end
 
-      it "should clean up the greenplum schema if the Chorus meta data save fails" do
-        stub(subject).create_schema_in_gpdb("create_new_schema", database) {}
-        any_instance_of(GpdbSchema) { |schema| mock(schema).save! {
-          raise ActiveRecord::RecordNotFound
-        } }
-        mock(subject).cleanup_schema_in_gpdb.with_any_args {}
+      it "should raise error when the create fails" do
+        any_instance_of(GpdbDatabase) do |db|
+          stub(db).create_schema.with_any_args {
+            raise Exception.new("Schema creation failed")
+          }
+        end
         put :update, :id => workspace.id, :workspace => {
             :owner => {id: "3"},
             :public => "false",
             :schema_name => "create_new_schema",
             :database_id => database.id
         }
+
+        response.code.should == "422"
+        decoded_errors.fields.schema.GENERIC.message.should == "Schema creation failed"
       end
     end
   end

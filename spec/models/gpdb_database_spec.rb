@@ -61,4 +61,53 @@ describe GpdbDatabase do
       end
     end
   end
+
+  describe ".create_schema", :database_integration => true do
+    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+
+    before do
+      refresh_chorus
+    end
+
+    def fetch_from_gpdb(sql)
+      database.with_gpdb_connection(account) do |connection|
+        result = connection.exec_query(sql)
+        yield result
+      end
+    end
+
+    after(:each) do
+      database.with_gpdb_connection(account) do |connection|
+        connection.exec_query('DROP SCHEMA IF EXISTS "my_new_schema"')
+      end
+    end
+
+    it "creates the schema" do
+      database.create_schema("my_new_schema", account.owner)
+
+      database.schemas.find_by_name("my_new_schema").should_not be_nil
+      database.schemas.find_by_name("my_new_schema").database.should == database
+
+      fetch_from_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
+        result[0]["nspname"].should == "my_new_schema"
+      end
+    end
+
+    it "should throw an error if schema already exists" do
+        expect{ database.create_schema("test_schema", account.owner) }.to raise_error(StandardError, "Schema test_schema already exists in database #{database.name}")
+    end
+
+    it "should clean up if the schema create failed" do
+      any_instance_of(GpdbSchema) do |schema|
+        stub(schema).save! { raise Exception }
+      end
+      mock.proxy(database).cleanup_schema_in_gpdb("my_new_schema", account.owner)
+      expect { database.create_schema("my_new_schema", account.owner) }.to raise_error(ApiValidationError)
+
+      fetch_from_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
+        result.length.should == 0
+      end
+    end
+  end
 end
