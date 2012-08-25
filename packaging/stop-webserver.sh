@@ -23,7 +23,7 @@ case $RAILS_ENV in
     * )
         log_inline "stopping jetty "
         cd $CHORUS_HOME/vendor/jetty/
-        JETTY_PID=$JETTY_PID_FILE ./jetty-init stop
+        JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV ./jetty-init stop
         cd $CHORUS_HOME
         wait_for_stop $JETTY_PID_FILE
         ;;
