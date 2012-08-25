@@ -56,7 +56,7 @@ class WorkfileMigrator < AbstractMigrator
             WHEN 't' THEN last_updated_tx_stamp
             ELSE null
           END
-        FROM legacy_migrate.edc_work_file
+        FROM edc_work_file
         INNER JOIN users owner
           ON owner.username = edc_work_file.owner
         INNER JOIN workspaces workspace
@@ -83,7 +83,7 @@ class WorkfileMigrator < AbstractMigrator
           created_tx_stamp,
           last_updated_tx_stamp,
           commit_message
-        FROM legacy_migrate.edc_workfile_version
+        FROM edc_workfile_version
         INNER JOIN users owner
           ON owner.username = edc_workfile_version.version_owner
         INNER JOIN users modifier
@@ -108,7 +108,7 @@ class WorkfileMigrator < AbstractMigrator
           owner.id,
           created_tx_stamp,
           last_updated_tx_stamp
-        FROM legacy_migrate.edc_workfile_draft
+        FROM edc_workfile_draft
         INNER JOIN users owner
           ON owner.username = edc_workfile_draft.draft_owner
         INNER JOIN workfiles
@@ -125,9 +125,9 @@ class WorkfileMigrator < AbstractMigrator
               workspace_id,
               file_name,
               mime_type
-            FROM legacy_migrate.edc_workfile_version
+            FROM edc_workfile_version
             INNER JOIN
-              legacy_migrate.edc_work_file
+              edc_work_file
               ON edc_workfile_version.workfile_id = edc_work_file.id
             WHERE edc_workfile_version.id = '#{workfile_version.legacy_id}';
           ").first
@@ -144,9 +144,9 @@ class WorkfileMigrator < AbstractMigrator
             SELECT
               draft_file_id,
               workspace_id
-            FROM legacy_migrate.edc_workfile_draft
+            FROM edc_workfile_draft
             INNER JOIN
-              legacy_migrate.edc_work_file
+              edc_work_file
               ON edc_workfile_draft.workfile_id = edc_work_file.id
             WHERE edc_workfile_draft.id = '#{workfile_draft.legacy_id}';
           ").first

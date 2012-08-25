@@ -36,10 +36,10 @@ class HadoopInstanceMigrator < AbstractMigrator
           substring(map.db_user_name, position(',' in map.db_user_name) + 1),
           i.created_tx_stamp,
           i.last_updated_tx_stamp
-        FROM legacy_migrate.edc_instance i
+        FROM edc_instance i
           INNER JOIN users u
           ON u.username = i.owner
-          INNER JOIN legacy_migrate.edc_account_map map
+          INNER JOIN edc_account_map map
           ON map.instance_id = i.id
         WHERE instance_provider = 'Hadoop'
         AND is_deleted = 'f'

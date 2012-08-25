@@ -19,7 +19,7 @@ class HdfsEntryMigrator < AbstractMigrator
       SELECT DISTINCT
         entity_id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
       WHERE
         edc_comment.entity_type = 'hdfs'
         AND entity_id NOT IN (SELECT hadoop_instances.legacy_id || '|' || path from hdfs_entries INNER JOIN hadoop_instances ON hadoop_instances.id = hdfs_entries.hadoop_instance_id WHERE is_directory = false)

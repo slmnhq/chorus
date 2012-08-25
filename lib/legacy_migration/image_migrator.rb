@@ -20,8 +20,8 @@ class ImageMigrator < AbstractMigrator
         "SELECT
           edc_user.id AS user_id,
           edc_image_instance.image AS image
-        FROM legacy_migrate.edc_user
-        INNER JOIN legacy_migrate.edc_image_instance
+        FROM edc_user
+        INNER JOIN edc_image_instance
           ON edc_user.image_id = edc_image_instance.image_id
           AND type = 'original';"
         )
@@ -36,8 +36,8 @@ class ImageMigrator < AbstractMigrator
         "SELECT
           edc_workspace.id AS workspace_id,
           edc_image_instance.image AS image
-        FROM legacy_migrate.edc_workspace
-        INNER JOIN legacy_migrate.edc_image_instance
+        FROM edc_workspace
+        INNER JOIN edc_image_instance
           ON edc_workspace.icon_id = edc_image_instance.image_id
           AND type = 'original';"
         )

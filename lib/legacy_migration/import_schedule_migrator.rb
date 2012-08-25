@@ -43,8 +43,8 @@ class ImportScheduleMigrator < AbstractMigrator
           i.truncate,
           u.id,
           sample_count
-        FROM legacy_migrate.edc_import_schedule s
-        INNER JOIN legacy_migrate.edc_import i
+        FROM edc_import_schedule s
+        INNER JOIN edc_import i
           on i.schedule_id = s.id
         INNER JOIN datasets d
           on d.legacy_id = normalize_key(i.source_id)

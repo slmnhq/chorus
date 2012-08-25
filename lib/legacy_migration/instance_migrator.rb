@@ -36,7 +36,7 @@ class InstanceMigrator < AbstractMigrator
                               u.id,
                               i.created_tx_stamp,
                               i.last_updated_tx_stamp
-                            FROM legacy_migrate.edc_instance i
+                            FROM edc_instance i
                               INNER JOIN users u
                               ON u.username = i.owner
                             WHERE instance_provider = 'Greenplum Database'

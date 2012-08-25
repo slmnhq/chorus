@@ -33,8 +33,8 @@ class NoteAttachmentMigrator < AbstractMigrator
         events.id,
         workfiles.id
       FROM
-        legacy_migrate.edc_comment_artifact
-        INNER JOIN legacy_migrate.edc_comment
+        edc_comment_artifact
+        INNER JOIN edc_comment
           ON edc_comment.id = edc_comment_artifact.comment_id
         INNER JOIN workfiles
           ON workfiles.legacy_id = edc_comment_artifact.entity_id
@@ -59,8 +59,8 @@ class NoteAttachmentMigrator < AbstractMigrator
         events.id,
         datasets.id
       FROM
-        legacy_migrate.edc_comment_artifact
-        INNER JOIN legacy_migrate.edc_comment
+        edc_comment_artifact
+        INNER JOIN edc_comment
           ON edc_comment.id = edc_comment_artifact.comment_id
         INNER JOIN datasets
           ON datasets.legacy_id = normalize_key(edc_comment_artifact.entity_id)

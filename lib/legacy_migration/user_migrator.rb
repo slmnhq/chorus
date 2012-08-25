@@ -41,7 +41,7 @@ class UserMigrator < AbstractMigrator
                                     ELSE null
                                   END,
                                 substring(password, 6)
-                              FROM legacy_migrate.edc_user
+                              FROM edc_user
                               WHERE edc_user.id NOT IN (SELECT legacy_id FROM users);")
     end
   end

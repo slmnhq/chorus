@@ -57,8 +57,8 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
-        INNER JOIN legacy_migrate.edc_instance
+        edc_comment
+        INNER JOIN edc_instance
           ON edc_instance.id = edc_comment.entity_id
             AND instance_provider = 'Greenplum Database'
         INNER JOIN users
@@ -97,8 +97,8 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
-        INNER JOIN legacy_migrate.edc_instance
+        edc_comment
+        INNER JOIN edc_instance
           ON edc_instance.id = edc_comment.entity_id
             AND instance_provider = 'Hadoop'
         INNER JOIN users
@@ -137,7 +137,7 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
         INNER JOIN hadoop_instances
           ON hadoop_instances.legacy_id = substring(edc_comment.entity_id from 0 for position('|' in edc_comment.entity_id))
         INNER JOIN hdfs_entries
@@ -175,7 +175,7 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
         INNER JOIN workspaces
           ON workspaces.legacy_id = edc_comment.entity_id
         INNER JOIN users
@@ -212,7 +212,7 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
         INNER JOIN workfiles
           ON workfiles.legacy_id = edc_comment.entity_id
         INNER JOIN users
@@ -251,7 +251,7 @@ class NoteMigrator < AbstractMigrator
         users.id,
         workspaces.id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
         INNER JOIN datasets
           ON datasets.legacy_id = normalize_key(edc_comment.entity_id)
         INNER JOIN users
@@ -290,7 +290,7 @@ class NoteMigrator < AbstractMigrator
         END,
         users.id
       FROM
-        legacy_migrate.edc_comment
+        edc_comment
         INNER JOIN datasets
           ON datasets.legacy_id = normalize_key(edc_comment.entity_id)
         INNER JOIN users

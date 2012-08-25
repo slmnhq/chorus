@@ -49,31 +49,31 @@ class DatabaseObjectMigrator < AbstractMigrator
           (
             (
               SELECT normalize_key(object_id) AS dataset_string
-              FROM legacy_migrate.edc_activity_stream_object
+              FROM edc_activity_stream_object
               WHERE entity_type IN ('databaseObject', 'table') AND object_id LIKE '%|%|%|%|%'
             )
             UNION
             (
               SELECT normalize_key(composite_id) AS dataset_string
-              FROM legacy_migrate.edc_dataset
+              FROM edc_dataset
               WHERE type = 'SOURCE_TABLE'
             )
             UNION
             (
               SELECT normalize_key(entity_id) AS dataset_string
-              FROM legacy_migrate.edc_comment
+              FROM edc_comment
               WHERE entity_type = 'databaseObject'
             )
             UNION
             (
               SELECT normalize_key(entity_id) AS dataset_string
-              FROM legacy_migrate.edc_comment_artifact
+              FROM edc_comment_artifact
               WHERE entity_type = 'databaseObject'
             )
             UNION
             (
               SELECT normalize_key(source_id) AS dataset_string
-              FROM legacy_migrate.edc_import
+              FROM edc_import
               WHERE source_type = 'dataset'
             )
           ) a
@@ -103,7 +103,7 @@ class DatabaseObjectMigrator < AbstractMigrator
         SELECT DISTINCT instance_id,
                         database_name,
                         schema_name
-        FROM legacy_migrate.edc_sandbox")
+        FROM edc_sandbox")
 
       schema_rows.each do |row|
         instance = Instance.find_by_legacy_id!(row['instance_id'])

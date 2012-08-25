@@ -52,14 +52,14 @@ class ActivityMigrator < AbstractMigrator
         streams.last_updated_tx_stamp,
         workspaces.id,
         users.id
-      FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+      FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_dataset
           ON streams.id = target_dataset.activity_stream_id AND target_dataset.object_type = 'object'
         INNER JOIN datasets
           ON normalize_key(target_dataset.object_id) = datasets.legacy_id
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -88,15 +88,15 @@ class ActivityMigrator < AbstractMigrator
         streams.last_updated_tx_stamp,
         workspaces.id,
         users.id
-      FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+      FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_dataset
           ON streams.id = target_dataset.activity_stream_id
           AND target_dataset.entity_type = 'databaseObject'
         INNER JOIN datasets
           ON normalize_key(target_dataset.object_id) = datasets.legacy_id
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -133,10 +133,10 @@ class ActivityMigrator < AbstractMigrator
         streams.last_updated_tx_stamp,
         workspaces.id,
         users.id
-      FROM legacy_migrate.edc_activity_stream streams
+      FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -185,15 +185,15 @@ class ActivityMigrator < AbstractMigrator
       streams.last_updated_tx_stamp,
       workspaces.id,
       users.id
-    FROM legacy_migrate.edc_activity_stream streams
-      INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object target_dataset
         ON streams.id = target_dataset.activity_stream_id
         AND target_dataset.entity_type = 'table'
       INNER JOIN datasets
         ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
-      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+      INNER JOIN edc_activity_stream_object actor
         ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
       INNER JOIN users
         ON users.legacy_id = actor.object_id
@@ -206,7 +206,7 @@ class ActivityMigrator < AbstractMigrator
 
     def backfill_dataset_import_success_additional_data
       Events::DatasetImportSuccess.where('additional_data IS NULL').each do |event|
-        row = Legacy.connection.exec_query("SELECT object_name, object_id FROM legacy_migrate.edc_activity_stream_object aso
+        row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                       WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                       AND aso.entity_type = 'table';").first
         event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id}
@@ -234,15 +234,15 @@ class ActivityMigrator < AbstractMigrator
       streams.last_updated_tx_stamp,
       workspaces.id,
       users.id
-    FROM legacy_migrate.edc_activity_stream streams
-      INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object target_dataset
         ON streams.id = target_dataset.activity_stream_id
         AND target_dataset.entity_type = 'table'
       INNER JOIN datasets
         ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
-      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+      INNER JOIN edc_activity_stream_object actor
         ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
       INNER JOIN users
         ON users.legacy_id = actor.object_id
@@ -257,8 +257,8 @@ class ActivityMigrator < AbstractMigrator
       Events::DatasetImportFailed.where('additional_data IS NULL').each do |event|
         row = Legacy.connection.exec_query("
           SELECT et.result AS error_message
-          FROM legacy_migrate.edc_task et
-          INNER JOIN legacy_migrate.edc_activity_stream_object aso
+          FROM edc_task et
+          INNER JOIN edc_activity_stream_object aso
             ON et.id = aso.object_id
             AND aso.object_type = 'object' AND aso.entity_type = 'task'
           WHERE aso.activity_stream_id = '#{event.legacy_id}';
@@ -269,8 +269,8 @@ class ActivityMigrator < AbstractMigrator
           event.additional_data[:error_message] = ''
         end
 
-        additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table, aso2.object_id as source_dataset FROM legacy_migrate.edc_activity_stream_object aso1,
-                                        legacy_migrate.edc_activity_stream_object aso2
+        additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table, aso2.object_id as source_dataset FROM edc_activity_stream_object aso1,
+                                        edc_activity_stream_object aso2
                                         WHERE aso1.activity_stream_id = '#{event.legacy_id}' and aso2.activity_stream_id = '#{event.legacy_id}'
                                         AND aso1.entity_type = 'table' AND aso2.entity_type = 'databaseObject';").first
         event.additional_data[:source_dataset_id] = Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(additional_data['source_dataset'])).id
@@ -300,15 +300,15 @@ class ActivityMigrator < AbstractMigrator
       streams.last_updated_tx_stamp,
       workspaces.id,
       users.id
-    FROM legacy_migrate.edc_activity_stream streams
-      INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object target_dataset
         ON streams.id = target_dataset.activity_stream_id
         AND target_dataset.entity_type = 'table'
       INNER JOIN datasets
         ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
-      INNER JOIN legacy_migrate.edc_activity_stream_object actor
+      INNER JOIN edc_activity_stream_object actor
         ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
       INNER JOIN users
         ON users.legacy_id = actor.object_id
@@ -347,10 +347,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -376,10 +376,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -405,10 +405,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -433,10 +433,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -461,10 +461,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -489,10 +489,10 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -521,14 +521,14 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_workfile
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_workfile
           ON streams.id = target_workfile.activity_stream_id AND target_workfile.entity_type = 'workfile'
         INNER JOIN workfiles
           ON target_workfile.object_id = workfiles.legacy_id
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -557,15 +557,15 @@ class ActivityMigrator < AbstractMigrator
     streams.last_updated_tx_stamp,
     workspaces.id,
     users.id
-  FROM legacy_migrate.edc_activity_stream streams
-    INNER JOIN legacy_migrate.edc_activity_stream_object target_dataset
+  FROM edc_activity_stream streams
+    INNER JOIN edc_activity_stream_object target_dataset
       ON streams.id = target_dataset.activity_stream_id
       AND target_dataset.entity_type = 'table'
     INNER JOIN datasets
       ON normalize_key(target_dataset.object_id) = datasets.legacy_id
     INNER JOIN workspaces
       ON workspaces.legacy_id = streams.workspace_id
-    INNER JOIN legacy_migrate.edc_activity_stream_object actor
+    INNER JOIN edc_activity_stream_object actor
       ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
     INNER JOIN users
       ON users.legacy_id = actor.object_id
@@ -578,7 +578,7 @@ class ActivityMigrator < AbstractMigrator
 
   def backfill_dataset_import_created_additional_data
     Events::DatasetImportCreated.where('additional_data IS NULL').each do |event|
-      row = Legacy.connection.exec_query("SELECT object_name, object_id FROM legacy_migrate.edc_activity_stream_object aso
+      row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                     WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                     AND aso.entity_type = 'table';").first
       event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
@@ -604,12 +604,12 @@ class ActivityMigrator < AbstractMigrator
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
         INNER JOIN instances
           ON target_instance.object_id = instances.legacy_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -636,12 +636,12 @@ class ActivityMigrator < AbstractMigrator
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
         INNER JOIN hadoop_instances
           ON target_instance.object_id = hadoop_instances.legacy_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -668,13 +668,13 @@ class ActivityMigrator < AbstractMigrator
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           actor_user.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_user
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_user
           ON streams.id = target_user.activity_stream_id AND target_user.entity_type = 'user'
           AND target_user.object_type = 'object'
         INNER JOIN users user_added
           ON target_user.object_id = user_added.legacy_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users actor_user
           ON actor_user.legacy_id = actor.object_id
@@ -703,21 +703,21 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           actor_user.id
-        FROM legacy_migrate.edc_activity_stream streams
+        FROM edc_activity_stream streams
 
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users actor_user
           ON actor_user.legacy_id = actor.object_id
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_user
+        INNER JOIN edc_activity_stream_object target_user
           ON streams.id = target_user.activity_stream_id AND target_user.entity_type = 'user'
           AND target_user.object_type = 'object'
         INNER JOIN users user_added
           ON target_user.object_id = user_added.legacy_id
         WHERE streams.type = 'MEMBERS_ADDED' AND target_user.object_id IN (SELECT object_id from
-          legacy_migrate.edc_activity_stream_object where activity_stream_id = streams.id limit 1 )
+          edc_activity_stream_object where activity_stream_id = streams.id limit 1 )
         AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::MembersAdded');
         ))
 
@@ -728,7 +728,7 @@ class ActivityMigrator < AbstractMigrator
       Events::MembersAdded.where('additional_data IS NULL').each do |event|
         row = Legacy.connection.exec_query("
           SELECT count(*) AS count
-          FROM legacy_migrate.edc_activity_stream_object aso
+          FROM edc_activity_stream_object aso
           WHERE aso.activity_stream_id = '#{event.legacy_id}'
           AND aso.object_type = 'object' AND aso.entity_type = 'user';
         ").first
@@ -756,12 +756,12 @@ class ActivityMigrator < AbstractMigrator
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
         INNER JOIN instances
           ON target_instance.object_id = instances.legacy_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -789,12 +789,12 @@ class ActivityMigrator < AbstractMigrator
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_instance
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
         INNER JOIN instances
           ON target_instance.object_id = instances.legacy_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -824,14 +824,14 @@ class ActivityMigrator < AbstractMigrator
           streams.last_updated_tx_stamp,
           workspaces.id,
           users.id
-        FROM legacy_migrate.edc_activity_stream streams
-        INNER JOIN legacy_migrate.edc_activity_stream_object target_workfile
+        FROM edc_activity_stream streams
+        INNER JOIN edc_activity_stream_object target_workfile
           ON streams.id = target_workfile.activity_stream_id AND target_workfile.entity_type = 'workfile'
         INNER JOIN workfiles
           ON target_workfile.object_id = workfiles.legacy_id
         INNER JOIN workspaces
           ON workspaces.legacy_id = streams.workspace_id
-        INNER JOIN legacy_migrate.edc_activity_stream_object actor
+        INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
           ON users.legacy_id = actor.object_id
@@ -847,7 +847,7 @@ class ActivityMigrator < AbstractMigrator
       Events::WorkfileUpgradedVersion.where('additional_data IS NULL').each do |event|
         row = Legacy.connection.exec_query("
           SELECT aso.object_id AS version_num, versions.id AS version_id, versions.commit_message
-          FROM legacy_migrate.edc_activity_stream_object aso
+          FROM edc_activity_stream_object aso
           INNER JOIN workfile_versions versions ON workfile_id = #{event.target1_id} AND
           versions.version_num = aso.object_id::integer
           WHERE aso.activity_stream_id = '#{event.legacy_id}'

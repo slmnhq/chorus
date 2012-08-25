@@ -27,7 +27,7 @@ class AssociatedDatasetMigrator < AbstractMigrator
         workspaces.id,
         created_tx_stamp,
         last_updated_tx_stamp
-      FROM legacy_migrate.edc_dataset
+      FROM edc_dataset
       INNER JOIN datasets
         ON datasets.legacy_id = normalize_key(edc_dataset.composite_id)
       INNER JOIN workspaces

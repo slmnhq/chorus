@@ -26,7 +26,7 @@ class MembershipMigrator < AbstractMigrator
                                 workspaces.id,
                                 edc_member.created_tx_stamp,
                                 edc_member.last_updated_tx_stamp
-                              FROM legacy_migrate.edc_member
+                              FROM edc_member
                                 JOIN users
                                 ON users.username = edc_member.member_name
                                 JOIN workspaces

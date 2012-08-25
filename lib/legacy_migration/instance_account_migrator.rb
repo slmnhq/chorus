@@ -14,7 +14,7 @@ class InstanceAccountMigrator < AbstractMigrator
       prerequisites
 
       # Make sure instances are flagged as shared if any legacy account maps are shared
-      Legacy.connection.exec_query("UPDATE instances SET shared = true WHERE legacy_id IN (SELECT instance_id FROM legacy_migrate.edc_account_map WHERE shared = 'yes');")
+      Legacy.connection.exec_query("UPDATE instances SET shared = true WHERE legacy_id IN (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');")
 
       inserted = Legacy.connection.exec_query("INSERT INTO public.instance_accounts(
                                 legacy_id,
@@ -27,7 +27,7 @@ class InstanceAccountMigrator < AbstractMigrator
                                 db_user_name,
                                 u.id,
                                 i.id
-                              FROM legacy_migrate.edc_account_map map
+                              FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name
                               INNER JOIN instances i
@@ -39,7 +39,7 @@ class InstanceAccountMigrator < AbstractMigrator
       unless inserted == 0
         InstanceAccount.where("legacy_id is not null").each do |instance_account|
           result = Legacy.connection.exec_query("SELECT db_password, secret_key
-                                                 FROM legacy_migrate.edc_account_map
+                                                 FROM edc_account_map
                                                  WHERE id = '#{instance_account.legacy_id}'").first
           instance_account.update_attribute(:db_password, decrypt_password(result['db_password'], result['secret_key']))
         end

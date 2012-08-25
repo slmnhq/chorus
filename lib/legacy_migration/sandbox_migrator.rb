@@ -14,7 +14,7 @@ class SandboxMigrator < AbstractMigrator
 
       Legacy.connection.exec_query(
         "UPDATE public.workspaces SET sandbox_id = schema.id
-         FROM legacy_migrate.edc_sandbox sandbox
+         FROM edc_sandbox sandbox
           INNER JOIN gpdb_schemas schema
             ON sandbox.schema_name = schema.name
           INNER JOIN gpdb_databases database
