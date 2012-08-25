@@ -17,7 +17,7 @@ describe("chorus.views.SearchResultList", function() {
         });
 
         it("has a list element for each model in the collection", function() {
-            expect(this.view.$('li').length).toBe(2);
+            expect(this.view.$('li').length).toBe(1);
         });
     });
 

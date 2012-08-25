@@ -1,6 +1,6 @@
 @import "_common.scss";
 
-.instance_list {
+.hadoop_instance_list, .instance_list {
     .instance_provider .details{
         @include list-section-heading;
         padding: 5px 10px;

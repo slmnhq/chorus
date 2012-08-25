@@ -318,6 +318,12 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
+        describe("#hadoopInstances", function() {
+            it("returns a Search HadoopInstanceSet", function() {
+                expect(this.model.hadoopInstances()).toBeA(chorus.collections.Search.HadoopInstanceSet)
+            });
+        });
+
         describe("#attachments", function() {
             it("returns a Search ArtifactSet", function() {
                 expect(this.model.attachments()).toBeA(chorus.collections.Search.AttachmentSet)
@@ -335,6 +341,7 @@ describe("chorus.models.SearchResult", function() {
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",
                     instances: "InstanceSet",
+                    hadoopInstances: "HadoopInstanceSet",
                     users: "UserSet",
                     attachments: "AttachmentSet"
                 };

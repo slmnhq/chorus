@@ -47,6 +47,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance")
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hadoop_instance")
             });
 
             describe("filtering by result type", function() {
@@ -178,22 +179,48 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.instanceLIs.length).toBe(2)
+                    expect(this.instanceLIs.length).toBe(1)
                 });
 
                 describe("clicking on an instance search result", function() {
                     beforeEach(function() {
                         spyOn(this.page.sidebars.instance, "setInstance");
-                        this.instanceLIs.eq(1).trigger("click");
+                        this.instanceLIs.eq(0).trigger("click");
                     });
 
                     it("selects that instance", function() {
-                        expect(this.instanceLIs.eq(1)).toHaveClass("selected");
+                        expect(this.instanceLIs.eq(0)).toHaveClass("selected");
                     });
 
                     it("shows the instance in the sidebar", function() {
                         expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
-                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(1))
+                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0))
+                    });
+                });
+            });
+
+            describe("the hadoop instance section", function() {
+                beforeEach(function() {
+                    this.hadoopInstanceLIs = this.page.$(".hadoop_instance_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.hadoopInstanceLIs.length).toBe(1)
+                });
+
+                describe("clicking on an hadoop instance search result", function() {
+                    beforeEach(function() {
+                        spyOn(this.page.sidebars.hadoopInstance, "setInstance");
+                        this.hadoopInstanceLIs.eq(0).trigger("click");
+                    });
+
+                    it("selects that hadoop instance", function() {
+                        expect(this.hadoopInstanceLIs.eq(0)).toHaveClass("selected");
+                    });
+
+                    it("shows the hadoop instance in the sidebar", function() {
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
+                        expect(this.page.sidebars.hadoopInstance.setInstance).toHaveBeenCalledWith(this.page.search.hadoopInstances().at(0))
                     });
                 });
             });

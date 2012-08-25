@@ -56,7 +56,7 @@ FixtureBuilder.configure do |fbuilder|
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
     fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
-    hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "bobsearch for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)

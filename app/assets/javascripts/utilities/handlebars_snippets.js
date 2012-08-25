@@ -175,7 +175,7 @@
         },
 
         hotKeyName: function(hotKeyChar) {
-            return _.str.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
+            return _.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
         },
 
         workspaceUsage: function(percentageUsed, sizeText) {

@@ -36,6 +36,14 @@ describe SearchPresenter, :type => :view do
       instance_hash[:results][0].should have_key(:highlighted_attributes)
     end
 
+    it "includes the right hadoop instance keys" do
+      @hash.should have_key(:hadoop_instances)
+      hadoop_instance_hash = @hash[:hadoop_instances]
+      hadoop_instance_hash.should have_key(:numFound)
+      hadoop_instance_hash.should have_key(:results)
+      hadoop_instance_hash[:results][0].should have_key(:highlighted_attributes)
+    end
+
     it "includes the right workspace keys" do
       @hash.should have_key(:workspaces)
       workspaces_hash = @hash[:workspaces]

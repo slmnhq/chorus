@@ -24,7 +24,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:33 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -72,9 +72,59 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">HadoopInstance 1000000</field><field name="type">HadoopInstance</field><field name="type">ActiveRecord::Base</field><field name="class_name">HadoopInstance</field><field name="grouping_id_s">HadoopInstance 1000000</field><field name="type_name_s">HadoopInstance</field><field boost="1000000" name="name_texts">Hadoop</field><field boost="1000" name="description_texts">bobsearch for the hadoop instance</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -97,9 +147,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -122,9 +172,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -147,9 +197,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -172,9 +222,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>14}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -197,9 +247,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -222,9 +272,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>20}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -247,9 +297,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -272,9 +322,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -297,9 +347,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -322,9 +372,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -347,9 +397,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -372,9 +422,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -397,9 +447,159 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000020</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000003</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>41}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspace 1000030</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000036</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000037</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspaceDataset 1000032</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000035</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="grouping_id_s">Dataset 1000002</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+    http_version:
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -424,113 +624,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000020</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000003</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc></add>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
       string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspace 1000030</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000036</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000037</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>17}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspaceDataset 1000032</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000035</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="grouping_id_s">Dataset 1000002</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -549,56 +649,6 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
-    http_version:
-  recorded_at: Wed, 22 Aug 2012 20:59:46 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:37 GMT
 recorded_with: VCR 2.1.1
 ...

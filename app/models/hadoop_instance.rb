@@ -6,6 +6,14 @@ class HadoopInstance < ActiveRecord::Base
   has_many :hdfs_entries
   validates_presence_of :name, :host, :port
 
+  attr_accessor :highlighted_attributes, :search_result_notes
+  searchable do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+  end
+
   def url
     "gphdfs://#{host}:#{port}/"
   end

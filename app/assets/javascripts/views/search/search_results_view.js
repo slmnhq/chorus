@@ -3,14 +3,15 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     templateName: "search_results",
 
     subviews: {
-        ".this_workspace":     "thisWorkspaceList",
-        ".hdfs_list":          "hdfsList",
-        ".user_list":          "userList",
-        ".workfile_list":      "workfileList",
-        ".workspace_list":     "workspaceList",
-        ".dataset_list":       "datasetList",
-        ".instance_list":      "instanceList",
-        ".attachment_list":    "attachmentList"
+        ".this_workspace":       "thisWorkspaceList",
+        ".hdfs_list":            "hdfsList",
+        ".user_list":            "userList",
+        ".workfile_list":        "workfileList",
+        ".workspace_list":       "workspaceList",
+        ".dataset_list":         "datasetList",
+        ".instance_list":        "instanceList",
+        ".hadoop_instance_list": "hadoopInstanceList",
+        ".attachment_list":      "attachmentList"
     },
 
     events: {
@@ -35,6 +36,9 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         }
         if (this.model.instances().length) {
             this.instanceList = this.buildListView('instance', this.model.instances());
+        }
+        if (this.model.hadoopInstances().length) {
+            this.hadoopInstanceList = this.buildListView('hadoop_instance', this.model.hadoopInstances());
         }
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());

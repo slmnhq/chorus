@@ -55,6 +55,12 @@
         searchKey: "instances"
     });
 
+    chorus.collections.Search.HadoopInstanceSet = chorus.collections.HadoopInstanceSet.include(
+        searchCollectionMixins
+    ).extend({
+            searchKey: "hadoopInstances"
+        });
+
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
         searchCollectionMixins
     ).extend({

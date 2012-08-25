@@ -4,7 +4,7 @@ class Search
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, Instance, Workspace, Workfile, Dataset, HdfsEntry]
+    @models_to_search = [User, Instance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry]
     self.query = params[:query]
     self.per_type = params[:per_type]
     if per_type
@@ -63,6 +63,10 @@ class Search
 
   def instances
     models[:instances] || []
+  end
+
+  def hadoop_instances
+    models[:hadoop_instances] || []
   end
 
   def workspaces

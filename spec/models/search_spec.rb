@@ -18,6 +18,7 @@ describe Search do
         search.search
         Sunspot.session.should be_a_search_for(User)
         Sunspot.session.should be_a_search_for(Instance)
+        Sunspot.session.should be_a_search_for(HadoopInstance)
         Sunspot.session.should be_a_search_for(Workspace)
         Sunspot.session.should be_a_search_for(Dataset)
         Sunspot.session.should be_a_search_for(HdfsEntry)
@@ -45,7 +46,7 @@ describe Search do
           search = Search.new(user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
-            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100})
+            hsh.merge({:users => 100, :instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100})
           end
           stub(search.search).each_hit_with_result { [] }
           search.models
@@ -108,6 +109,7 @@ describe Search do
     let(:bob) { users(:bob) }
     let(:carly) { users(:carly) }
     let(:instance) { instances(:greenplum) }
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
     let(:public_workspace) { workspaces(:alice_public) }
     let(:private_workspace) { workspaces(:bob_private) }
@@ -174,6 +176,25 @@ describe Search do
           search = Search.new(bob, :query => 'bobsearch')
           search.instances.length.should == 1
           search.instances.first.should == instance
+        end
+      end
+    end
+
+    describe "hadoop_instances" do
+      it "includes the highlighted attributes" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          hadoop_instance = search.hadoop_instances.first
+          hadoop_instance.highlighted_attributes.length.should == 1
+          hadoop_instance.highlighted_attributes[:description][0].should == "<em>bobsearch</em> for the hadoop instance"
+        end
+      end
+
+      it "returns the HadoopInstance objects found" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'hadoop instance')
+          search.hadoop_instances.length.should == 1
+          search.hadoop_instances.first.should == hadoop_instance
         end
       end
     end

@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3AWorkspace+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000002%29%29&q=greenplumsearch&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+database_name_texts+schema_name_texts+column_name_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
+      string: fq=type%3A%28User+OR+Instance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28User+OR+Instance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3AWorkspace+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000002%29%29&q=greenplumsearch&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+database_name_texts+schema_name_texts+column_name_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
     headers:
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,23 +22,24 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts parent_name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''greenplumsearch'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(User
-        OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Events\\:\\:Note)'',''type_name_s:(User
-        OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry)'',''-(type_name_s:Workspace
+        OR Instance OR HadoopInstance OR Workspace OR Workfile OR Dataset OR HdfsEntry
+        OR Events\\:\\:Note)'',''type_name_s:(User OR Instance OR HadoopInstance OR
+        Workspace OR Workfile OR Dataset OR HdfsEntry)'',''-(type_name_s:Workspace
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>2,''groups''=>[{''groupValue''=>''Instance
-        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1427.3237,''docs''=>[{''id''=>''Instance
+        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1453.7727,''docs''=>[{''id''=>''Instance
         1000000'',''name_texts''=>[''Greenplum''],''description_texts''=>[''Just for
-        bobsearch and greenplumsearch''],''score''=>1427.3237},{''id''=>''Events::NoteOnGreenplumInstance
-        1000023'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>0.818295}]}},{''groupValue''=>''Instance
-        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.309272,''docs''=>[{''id''=>''Events::NoteOnGreenplumInstance
-        1000026'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.309272},{''id''=>''Events::NoteOnGreenplumInstance
-        1000025'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.1456131}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Instance
+        bobsearch and greenplumsearch''],''score''=>1453.7727},{''id''=>''Events::NoteOnGreenplumInstance
+        1000023'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>0.8385756}]}},{''groupValue''=>''Instance
+        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.3417209,''docs''=>[{''id''=>''Events::NoteOnGreenplumInstance
+        1000026'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.3417209},{''id''=>''Events::NoteOnGreenplumInstance
+        1000025'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.1740059}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Instance
         1000000''=>{''description_texts''=>[''Just for bobsearch and @@@hl@@@greenplumsearch@@@endhl@@@'']},''Events::NoteOnGreenplumInstance
         1000023''=>{''body_texts''=>[''i am a comment with @@@hl@@@greenplumsearch@@@endhl@@@
         in me'']},''Events::NoteOnGreenplumInstance 1000026''=>{''body_texts''=>[''no,
@@ -46,6 +47,6 @@ http_interactions:
         1000025''=>{''body_texts''=>[''is this a @@@hl@@@greenplumsearch@@@endhl@@@
         instance?'']}}}'
     http_version:
-  recorded_at: Wed, 22 Aug 2012 20:58:53 GMT
+  recorded_at: Fri, 24 Aug 2012 19:20:56 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -1133,26 +1133,6 @@ beforeEach(function() {
                 "instances": {
                     "results": [
                         {
-                            "port": 8020,
-                            "id": "10040",
-                            "isDeleted": false,
-                            "lastUpdatedStamp": "2012-03-07 12:59:45",
-                            "host": "gillette",
-                            "instanceProvider": "Hadoop",
-                            "name": "my_hadoop",
-                            "state": "online",
-                            "highlightedAttributes": {
-                                "name": ["<em>my<\/em>_hadoop"]
-                            },
-                            "entityType": "instance",
-                            "owner": {
-                                "id": "InitialUser",
-                                "lastName": "Admin",
-                                "firstName": "EDC"
-                            },
-                            "comments": []
-                        },
-                        {
                             "port": 5432,
                             "id": "10043",
                             "isDeleted": false,
@@ -1173,7 +1153,32 @@ beforeEach(function() {
                             "comments": []
                         }
                     ],
-                    "numFound": 2
+                    "numFound": 1
+                },
+                "hadoop_instances": {
+                    "results": [
+                        {
+                            "port": 8020,
+                            "id": "10040",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-03-07 12:59:45",
+                            "host": "gillette",
+                            "instanceProvider": "Hadoop",
+                            "name": "my_hadoop",
+                            "state": "online",
+                            "highlightedAttributes": {
+                                "name": ["<em>my<\/em>_hadoop"]
+                            },
+                            "entityType": "instance",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "comments": []
+                        }
+                    ],
+                    "numFound": 1
                 },
                 "users": {
                     "results": [

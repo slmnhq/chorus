@@ -8,6 +8,7 @@
         workspaces: "WorkspaceSet",
         workspaceItems: "WorkspaceItemSet",
         instances: "InstanceSet",
+        hadoopInstances: "HadoopInstanceSet",
         users: "UserSet",
         attachments: "AttachmentSet"
     };
@@ -126,6 +127,7 @@
         datasets: makeCollectionMethod("datasets"),
         workspaces: makeCollectionMethod("workspaces"),
         instances: makeCollectionMethod("instances"),
+        hadoopInstances: makeCollectionMethod("hadoopInstances"),
         users: makeCollectionMethod("users"),
         hdfs: makeCollectionMethod("hdfs"),
         workspaceItems: makeCollectionMethod("workspaceItems"),
@@ -147,6 +149,9 @@
                     break;
                 case "instance":
                     return this.instances();
+                    break;
+                case "hadoopInstance":
+                    return this.hadoopInstances();
                     break;
                 case "hdfs":
                     return this.hdfs();
