@@ -68,7 +68,7 @@ end
 
 describe "adding multiple datasets to a note" do
 
-  xit "adds multiple datasets" do
+  it "adds multiple datasets" do
     login('edcadmin', 'secret')
     create_valid_workspace(:name => "multiple datasets")
     workspace_id = Workspace.find_by_name("multiple datasets").id
@@ -94,23 +94,25 @@ describe "adding multiple datasets to a note" do
     wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
     click_link "Add a note"
     wait_until { page.has_selector?("#facebox .dialog h1") }
-    within_modal do
-      set_cleditor_value("body", "Note on the workspace with multiple datasets")
-      click_link "Show options"
-      click_link "Dataset"
-        within (".collection_list") do
-          page.find("li[data-id='2297']").click
-          page.find("li[data-id='2298']").click
-          page.find("li[data-id='2299']").click
-          page.find("li[data-id='2300']").click
-          click_submit_button
-        end
-      click_submit_button
-    end
+    set_cleditor_value("body", "Note on the workspace with multiple datasets")
+    click_link "Show options"
+    click_link "Dataset"
+    data1_id = Dataset.find_by_name("base_table1").id
+    data2_id = Dataset.find_by_name("master_table1").id
+    data3_id = Dataset.find_by_name("view1").id
+      within (".collection_list") do
+        page.find("li[data-id='#{data1_id}']").click
+        page.find("li[data-id='#{data2_id}']").click
+        page.find("li[data-id='#{data3_id}']").click
+      end
+    click_button 'Attach Datasets'
     wait_for_ajax
+    click_button 'Add Note'
+    click_link "Data"
+    wait_for_ajax
+    click_link "Summary"
+    page.should have_content "Note on the workspace with multiple datasets"
     page.should have_content "base_table1"
-    page.should have_content "view1"
-    page.should have_content "external_web_table1"
 
   end
 
