@@ -186,7 +186,8 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.chorusView).toHaveAttrs({
                 sourceObjectId: this.dataset.id,
                 name: this.dataset.get("objectName"),
-                schemaId: this.dataset.schema().id
+                schemaId: this.dataset.schema().id,
+                workspaceId: this.dataset.get("workspace").id
             });
         });
     });

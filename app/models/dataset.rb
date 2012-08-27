@@ -76,7 +76,7 @@ class Dataset < ActiveRecord::Base
 
     if options[:mark_stale]
       (schema.datasets.not_stale - found_datasets).each do |dataset|
-        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true) unless dataset.type == 'ChorusView'
       end
     end
   end

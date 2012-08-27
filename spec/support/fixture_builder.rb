@@ -104,6 +104,10 @@ FixtureBuilder.configure do |fbuilder|
     other_table = GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
     GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)
 
+    # Chorus View
+    bob_chorus_view = ChorusView.new({:name => "bob_chorus_view", :schema => bob_schema, :query => "select * from a_table"}, :without_protection => true)
+    bob_chorus_view.save!(:validate => false)
+
     # Database Instance Accounts
     bobsearch_database.instance_accounts << bob_bobs_instance_account
     shared_search_database.instance_accounts << shared_instance_account

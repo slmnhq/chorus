@@ -59,6 +59,11 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :chorus_view do
+    sequence(:name) { |n| "chorus_view#{n}" }
+    association :schema, :factory => :gpdb_schema
+  end
+
   factory :gpdb_column do
     sequence(:name) { |n| "column#{n}" }
     data_type "text"

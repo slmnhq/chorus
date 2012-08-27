@@ -24,10 +24,10 @@ describe DatasetsController do
       get :index, :schema_id => schema.to_param
 
       response.code.should == "200"
-      decoded_response.length.should == 2
+      decoded_response.length.should == schema.datasets.count
 
-      decoded_response[0].id.should == table.id
-      decoded_response[1].id.should == view.id
+      decoded_response.map{ |item| item.id}.should include (table.id)
+      decoded_response.map{ |item| item.id}.should include (view.id)
     end
 
     it "should not return db objects in another schema" do
