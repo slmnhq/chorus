@@ -1,3 +1,5 @@
+require 'events/note'
+
 module Events
   class NoteOnHadoopInstance < Note
     has_targets :hadoop_instance

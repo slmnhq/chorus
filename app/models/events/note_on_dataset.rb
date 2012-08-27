@@ -1,3 +1,5 @@
+require 'events/note'
+
 module Events
   class NoteOnDataset < Note
     has_targets :dataset

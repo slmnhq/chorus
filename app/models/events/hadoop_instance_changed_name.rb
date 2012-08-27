@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class HadoopInstanceChangedName < Base
     has_targets :hadoop_instance

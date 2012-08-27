@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class DatasetImportFailed < Base
     has_targets :workspace

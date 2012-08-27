@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class WorkspaceMakePrivate < Base
     has_targets :workspace

@@ -1,3 +1,5 @@
+require 'dataset'
+
 class ChorusView < Dataset
   validate :validate_query
 

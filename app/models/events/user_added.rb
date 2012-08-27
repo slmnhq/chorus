@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class UserAdded < Base
     has_targets :new_user

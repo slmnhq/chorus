@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class GreenplumInstanceCreated < Base
     has_targets :greenplum_instance

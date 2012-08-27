@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class DatasetImportSuccess < Base
     has_targets :workspace, :dataset

@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class FileImportCreated < Base
     has_targets :workspace, :dataset

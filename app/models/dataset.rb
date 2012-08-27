@@ -1,3 +1,5 @@
+require 'stale'
+
 class SqlCommandFailed < Exception
 end
 

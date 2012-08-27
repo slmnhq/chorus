@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class GreenplumInstanceChangedOwner < Base
     has_targets :greenplum_instance, :new_owner
