@@ -37,7 +37,7 @@ describe Gpdb::InstanceRegistrar do
     end
 
     it "requires db connection params" do
-      [:host, :port, :maintenance_db].each do |attribute|
+      [:maintenance_db].each do |attribute|
         expect {
           Gpdb::InstanceRegistrar.create!(valid_input_attributes.merge(attribute => nil), owner)
         }.to raise_error(ActiveRecord::RecordInvalid)

@@ -26,7 +26,7 @@ describe Gpdb::ConnectionChecker do
   end
 
   it "check the validation of instance attributes, before checking connection" do
-    instance.host = nil
+    instance.port = nil
     expect { Gpdb::ConnectionChecker.check!(instance, account) }.to raise_error ActiveRecord::RecordInvalid
   end
 end
