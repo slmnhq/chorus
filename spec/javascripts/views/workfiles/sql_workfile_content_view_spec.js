@@ -276,7 +276,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 expect(this.view.chorusView.get("schemaName")).toBe('wow');
                 expect(this.view.chorusView.get("query")).toBe('select * from table;');
                 expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
-                expect(this.view.chorusView.get("objectType")).toBe("QUERY");
+                expect(this.view.chorusView.get("objectType")).toBe("CHORUS_VIEW");
             });
         });
 
@@ -294,7 +294,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 expect(this.view.chorusView.get("schemaName")).toBe('wow');
                 expect(this.view.chorusView.get("query")).toBe('select');
                 expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
-                expect(this.view.chorusView.get("objectType")).toBe("QUERY");
+                expect(this.view.chorusView.get("objectType")).toBe("CHORUS_VIEW");
             });
         });
     });

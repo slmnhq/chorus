@@ -11,7 +11,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
         this.joins = []
         this.sourceObjectColumns = []
         this.attributes.type = "CHORUS_VIEW";
-        this.attributes.objectType = "QUERY";
+        this.attributes.objectType = "CHORUS_VIEW";
     },
 
     declareValidations: function(newAttrs) {

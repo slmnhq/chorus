@@ -20,7 +20,7 @@ describe("chorus.models.ChorusView", function() {
         var model = new chorus.models.ChorusView();
         expect(model).toHaveAttrs({
             type: "CHORUS_VIEW",
-            objectType: "QUERY"
+            objectType: "CHORUS_VIEW"
         });
     });
 

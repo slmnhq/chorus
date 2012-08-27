@@ -324,8 +324,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         "VIEW": "view",
         "EXTERNAL_TABLE": "table",
         "MASTER_TABLE": "table",
-        "CHORUS_VIEW": "view",
-        "QUERY": "query"
+        "CHORUS_VIEW": "view"
     },
 
     entityTypeMap: {

@@ -29,7 +29,10 @@ describe ChorusViewsController, :database_integration => true do
       workspace.bound_datasets.should include(chorus_view)
 
       response.code.should == "201"
-      response.body.should == "{}"
+      decoded_response[:query].should == "Select * from base_table1"
+      decoded_response[:schema][:id].should == schema.id
+      decoded_response[:object_name].should == "my_chorus_view"
+      decoded_response[:workspace][:id].should == workspace.id
     end
 
     context "query is invalid" do

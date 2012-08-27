@@ -178,14 +178,10 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.chorusView.get('sourceObjectId')).toBe(this.dataset.get('id'));
         });
 
-        it("gives the chorus view a default name", function() {
-            expect(this.chorusView.get('name')).toBe(this.dataset.get("objectName"));
-        });
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
                 sourceObjectId: this.dataset.id,
-                name: this.dataset.get("objectName"),
                 schemaId: this.dataset.schema().id,
                 workspaceId: this.dataset.get("workspace").id
             });

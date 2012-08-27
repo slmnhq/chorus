@@ -12,7 +12,7 @@ class ChorusViewsController < ApplicationController
       workspace = Workspace.find(param[:workspace_id])
       workspace.bound_datasets << chorus_view
 
-      render :json => {}, :status => :created
+      present chorus_view, :presenter_options => {:workspace => workspace}, :status => :created
     rescue ActiveRecord::StatementInvalid => e
       head 422
     end

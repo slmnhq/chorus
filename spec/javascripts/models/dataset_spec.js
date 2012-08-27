@@ -285,7 +285,6 @@ describe("chorus.models.Dataset", function() {
         var expectedTypeMap = {
             "TABLE": "table",
             "VIEW": "view",
-            "QUERY": "query",
             "EXTERNAL_TABLE": "table",
             "MASTER_TABLE": "table",
             "CHORUS_VIEW": "view"
