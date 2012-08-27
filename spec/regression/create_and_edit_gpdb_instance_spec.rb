@@ -152,4 +152,20 @@ describe "Editing instance details" do
 
   end
 
+  it "lets the user see the instance config info" do
+
+    create_gpdb_instance(:name => "config", :shared => true)
+    config_id = Instance.find_by_name("config").id
+    go_to_instance_page
+    page.find("li[data-greenplum-instance-id='#{config_id}']").click
+    within "#sidebar" do
+      page.find("li[data-name='configuration']").click
+    end
+    page.should have_content "config"
+    page.should have_content "chorus-gpdb40.sf"
+    page.should have_content "4.0.6.2"
+    page.should have_content "gpadmin"
+
+  end
+
 end
