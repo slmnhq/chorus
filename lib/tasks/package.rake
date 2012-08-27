@@ -120,6 +120,8 @@ module PackageMaker
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/database.yml #{release_path}/config'"
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
 
+    # Server control
+    run "ssh #{host} 'ln -s #{release_path}/packaging/server_control.sh #{path}/server_control.sh'"
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
