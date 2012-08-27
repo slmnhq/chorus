@@ -109,7 +109,7 @@ describe("chorus.models.Dataset", function() {
     describe("iconFor", function() {
         var largeIconMap = {
             "CHORUS_VIEW": {
-                "QUERY": "chorus_view_large.png"
+                "CHORUS_VIEW": "chorus_view_large.png"
             },
 
             "SOURCE_TABLE": {
@@ -130,7 +130,7 @@ describe("chorus.models.Dataset", function() {
 
         var mediumIconMap = {
             "CHORUS_VIEW": {
-                "QUERY": "chorus_view_medium.png"
+                "CHORUS_VIEW": "chorus_view_medium.png"
             },
 
             "SOURCE_TABLE": {

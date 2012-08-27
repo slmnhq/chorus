@@ -1088,22 +1088,22 @@ describe("chorus.views.DatasetSidebar", function() {
             this.newImport = fixtures.datasetImport();
             spyOn(this.view, 'render').andCallThrough();
             chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
-        })
+        });
         it("updates the importConfiguration and renders", function() {
             expect(this.view.resource.getImport()).toBe(this.newImport);
             expect(this.view.render).toHaveBeenCalled();
-        })
-    })
+        });
+    });
 
     describe("has all the translations for all objectTypes", function() {
-        _.each(["QUERY", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
+        _.each(["CHORUS_VIEW", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
             it("does not have any missing translations for" + type, function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.tabs.activity.options.type).not.toContain("missing");
             })
         }, this)
-    })
+    });
 
     describe("event handing", function() {
         describe("start:visualization", function() {

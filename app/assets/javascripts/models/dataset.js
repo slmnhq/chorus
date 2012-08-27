@@ -336,7 +336,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     iconMap: {
         "CHORUS_VIEW": {
-            "QUERY": "chorus_view"
+            CHORUS_VIEW: "chorus_view"
         },
 
         "SOURCE_TABLE": {

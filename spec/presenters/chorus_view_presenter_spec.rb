@@ -14,6 +14,7 @@ describe ChorusViewPresenter, :type => :view do
     hash[:id].should_not be_nil
     hash[:object_name].should == "bob_chorus_view"
     hash[:type].should == "CHORUS_VIEW"
+    hash[:object_type].should == "CHORUS_VIEW"
 
     schema = hash[:schema]
     schema[:id].should == chorus_view.schema.id
