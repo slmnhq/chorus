@@ -117,3 +117,38 @@ describe "adding multiple datasets to a note" do
   end
 
 end
+
+describe "adding multiple workfiles to a note" do
+
+  xit "adds multiple workfiles" do
+    login('edcadmin', 'secret')
+    create_valid_workspace(:name => "multiple workfiles")
+    create_valid_workfile(:name => "workfile1")
+    create_valid_workfile(:name => "workfile2")
+    create_valid_workfile(:name => "workfile3")
+
+    click_link ("Summary")
+    click_link "Add a note"
+    wait_until { page.has_selector?("#facebox .dialog h1") }
+    set_cleditor_value("body", "Note on the workspace with multiple workfiles")
+    click_link "Show options"
+    click_link "Work File"
+    wf1_id = Workfile.find_by_name("workfile1.sql").id
+    wf2_id = Workfile.find_by_name("workfile2.sql").id
+    wf3_id = Workfile.find_by_name("workfile3.sql").id
+    within (".collection_list") do
+      page.find("li[data-id='#{wf1_id}']").click
+      page.find("li[data-id='#{wf2_id}']").click
+      page.find("li[data-id='#{wf3_id}']").click
+    end
+    click_button 'Attach Datasets'
+    wait_for_ajax
+    click_button 'Add Note'
+    click_link "Data"
+    wait_for_ajax
+    click_link "Summary"
+    page.should have_content "Note on the workspace with multiple workfiles"
+
+  end
+
+end
