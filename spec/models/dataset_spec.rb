@@ -381,63 +381,108 @@ describe Dataset::Query, :database_integration => true do
   describe "#import" do
     let(:user) { account.owner }
 
-    context "with correct input" do
-      let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-      let(:workspace) { workspaces(:bob_public) }
-      let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
-      let(:dst_table_name) { "the_new_table" }
-      let(:options) {
-        HashWithIndifferentAccess.new(
-            "to_table" => "the_new_table",
-            "new_table" => true,
-            "remote_copy" => true
-        )
-      }
+    context "when doing an immediate import" do
+      context "with correct input" do
+        let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
+        let(:workspace) { workspaces(:bob_public) }
+        let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+        let(:dst_table_name) { "the_new_table" }
+        let(:options) {
+          HashWithIndifferentAccess.new(
+              "to_table" => "the_new_table",
+              "new_table" => true,
+              "remote_copy" => true
+          )
+        }
 
-      context "into a table in another db using gpfdist" do
-        context "new table" do
-          it "creates a correct gppipe" do
-            mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
-            source_table.import(options, user)
+        context "into a table in another db using gpfdist" do
+          context "new table" do
+            it "creates a correct gppipe" do
+              mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+              source_table.import(options, user)
+            end
+          end
+
+          context "existing table" do
+            it "creates a correct gppipe" do
+              options["new_table"] = 'false'
+              mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+              source_table.import(options, user)
+            end
           end
         end
 
-        context "existing table" do
-          it "creates a correct gppipe" do
-            options["new_table"] = 'false'
-            mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
-            source_table.import(options, user)
+        context "into a table in the same db" do
+          let(:source_table) { datasets(:bobs_table) }
+          let(:schema) { gpdb_schemas(:bobs_schema) }
+          let(:workspace) { workspaces(:bob_public) }
+          let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+          let(:options) {
+            HashWithIndifferentAccess.new(
+                "to_table" => "the_new_table",
+                "sample_count" => 50,
+                "new_table" => "true",
+                "workspace_id" => "123",
+                "remote_copy" => false
+            )
+          }
+          context "importing into new table" do
+            it "creates a correct gp table copier" do
+              mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+              source_table.import(options, user)
+            end
+          end
+
+          context "into a existing table" do
+            it "creates a correct gp table copier" do
+              options["new_table"] = 'false'
+              mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+              source_table.import(options, user)
+            end
           end
         end
       end
 
-
-      context "into a table in the same db" do
-        let(:source_table) { datasets(:bobs_table) }
-        let(:schema) { gpdb_schemas(:bobs_schema) }
+      context "when scheduling an import" do
+        let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
+        let(:start_time) { "2012-08-23 23:00:00.0" }
         let(:workspace) { workspaces(:bob_public) }
         let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+        let(:dst_table_name) { "the_new_table" }
         let(:options) {
           HashWithIndifferentAccess.new(
+              "workspace_id" => workspace.id,
+              "dataset_id" => source_table.id,
               "to_table" => "the_new_table",
-              "sample_count" => 50,
-              "new_table" => "true",
-              "workspace_id" => "123",
-              "remote_copy" => false
+              "new_table" => true,
+              "remote_copy" => true,
+              "activate_schedule" => true,
+              "schedule_start_time" => start_time,
+              "schedule_end_time" => "2012-11-24",
+              "schedule_frequency"=>"WEEKLY",
+              "row_limit" => 1,
+              "import_type"=>"schedule"
           )
         }
-        context "importing into new table" do
-          it "creates a correct gp table copier" do
-            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
-            source_table.import(options, user)
-          end
-        end
 
-        context "into a existing table" do
-          it "creates a correct gp table copier" do
-            options["new_table"] = 'false'
-            mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
-            source_table.import(options, user)
+        it "creates an import schedule" do
+          Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+            expect {
+              source_table.import(options, user)
+            }.to change(ImportSchedule, :count).by(1)
+            ImportSchedule.last.tap do |import_schedule|
+              import_schedule.start_datetime.should == DateTime.parse(start_time)
+              import_schedule.end_date.should == Date.parse("2012-11-24")
+              import_schedule.workspace.should == workspace
+              import_schedule.source_dataset.should == source_table
+              import_schedule.frequency.should == 'weekly'
+              import_schedule.to_table.should == "the_new_table"
+              import_schedule.new_table.should == true
+              import_schedule.row_limit.should == 1
+              import_schedule.last_scheduled_at.should == nil
+              import_schedule.user.should == user
+              import_schedule.next_import_at.should == DateTime.parse(start_time)
+            end
           end
         end
       end

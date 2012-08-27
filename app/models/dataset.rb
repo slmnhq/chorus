@@ -153,12 +153,25 @@ class Dataset < ActiveRecord::Base
   end
 
   def import(attributes, user)
-    if attributes[:remote_copy]
-      copy_method = "Gppipe.run_import"
+    if attributes[:import_type] == "schedule"
+
+      ImportSchedule.create! do |schedule|
+        schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :sample_count, :new_table, :row_limit), :without_protection => true)
+        schedule.start_datetime = attributes[:schedule_start_time]
+        schedule.end_date = attributes[:schedule_end_time]
+        schedule.frequency = attributes[:schedule_frequency].downcase
+        schedule.source_dataset_id = attributes[:dataset_id]
+        schedule.user = user
+        schedule.set_next_import
+      end
     else
-      copy_method = "GpTableCopier.run_import"
+      if attributes[:remote_copy]
+        copy_method = "Gppipe.run_import"
+      else
+        copy_method = "GpTableCopier.run_import"
+      end
+      QC.enqueue(copy_method, id, user.id, attributes)
     end
-    QC.enqueue(copy_method, id, user.id, attributes)
   end
 
   def preview_sql
