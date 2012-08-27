@@ -107,6 +107,7 @@ module PackageMaker
     run "scp #{filename} #{host}:#{path}"
     run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename} &> /dev/null'"
 
+    run "ssh #{host} 'mkdir -p #{shared_path}/solr/data'"
     run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
     run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/log && ln -s #{shared_path}/log #{release_path}/'"
@@ -119,6 +120,8 @@ module PackageMaker
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/database.yml #{release_path}/config'"
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
 
+    # Server control
+    run "ssh #{host} 'ln -s #{release_path}/packaging/server_control.sh #{path}/server_control.sh'"
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"

@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class WorkfileUpgradedVersion < Base
     has_targets :workfile, :workspace

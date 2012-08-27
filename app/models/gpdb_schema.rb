@@ -117,7 +117,7 @@ class GpdbSchema < ActiveRecord::Base
   def mark_schemas_as_stale
     if stale? && stale_at_changed?
       datasets.each do |dataset|
-        dataset.mark_stale!
+        dataset.mark_stale! unless dataset.type == "ChorusView"
       end
     end
   end

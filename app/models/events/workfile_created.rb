@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class WorkfileCreated < Base
     has_targets :workfile, :workspace

@@ -1,3 +1,6 @@
+require 'events/base'
+require 'model_map'
+
 module Events
   class Note < Base
     validates_presence_of :actor_id

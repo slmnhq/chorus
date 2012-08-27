@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class MembersAdded < Base
     has_targets :member, :workspace

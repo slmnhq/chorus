@@ -1,3 +1,5 @@
+require 'dataset'
+
 class GpdbTable < Dataset
 
   def analyze(account)

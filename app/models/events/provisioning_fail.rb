@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class ProvisioningFail < Base
     has_targets :greenplum_instance

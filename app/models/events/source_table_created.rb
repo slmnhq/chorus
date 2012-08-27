@@ -1,3 +1,5 @@
+require 'events/base'
+
 module Events
   class SourceTableCreated < Base
     has_targets :dataset, :workspace

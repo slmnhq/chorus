@@ -1,3 +1,5 @@
+require 'json_hash_serializer'
+
 module Events
   class Base < ActiveRecord::Base
     include SoftDelete

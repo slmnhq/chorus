@@ -179,16 +179,15 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it("gives the chorus view a default name", function() {
-            expect(this.chorusView.get('objectName')).toBe(this.dataset.get("objectName"));
+            expect(this.chorusView.get('name')).toBe(this.dataset.get("objectName"));
         });
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
-                instanceId: this.dataset.schema().database().instance().id,
-                databaseName: this.dataset.schema().database().name(),
-                schemaName: this.dataset.schema().name(),
-                workspace: this.dataset.get("workspace"),
-                instance: this.dataset.schema().database().get("instance")
+                sourceObjectId: this.dataset.id,
+                name: this.dataset.get("objectName"),
+                schemaId: this.dataset.schema().id,
+                workspaceId: this.dataset.get("workspace").id
             });
         });
     });
