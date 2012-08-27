@@ -33,6 +33,7 @@ class AssociatedDatasetMigrator < AbstractMigrator
       INNER JOIN workspaces
         ON edc_dataset.workspace_id = workspaces.legacy_id
       WHERE edc_dataset.type = 'SOURCE_TABLE'
+      AND edc_dataset.is_deleted = 'f'
       AND edc_dataset.id NOT IN (SELECT legacy_id FROM associated_datasets);
       ")
     end

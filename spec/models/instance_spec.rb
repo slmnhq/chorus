@@ -3,8 +3,6 @@ require "spec_helper"
 describe Instance do
   describe "validations" do
     it { should validate_presence_of :name }
-    it { should validate_presence_of :host }
-    it { should validate_presence_of :port }
     it { should validate_presence_of :maintenance_db }
 
     describe "name" do
@@ -26,7 +24,7 @@ describe Instance do
     end
 
     describe "port" do
-      context "when port is not a number " do
+      context "when port is not a number" do
         it "fails validation" do
           FactoryGirl.build(:instance, :port => "1aaa1").should_not be_valid
         end
@@ -35,6 +33,18 @@ describe Instance do
       context "when port is number" do
         it "validates" do
           FactoryGirl.build(:instance, :port => "1111").should be_valid
+        end
+      end
+
+      context "when host is set but not port" do
+        it "fails validation" do
+          FactoryGirl.build(:instance, :host => "1111", :port => "").should_not be_valid
+        end
+      end
+
+      context "when host and port both are not set" do
+        it "NO validate" do
+          FactoryGirl.build(:instance, :host => "", :port => "").should be_valid
         end
       end
     end

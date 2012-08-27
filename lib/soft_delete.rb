@@ -12,6 +12,10 @@ module SoftDelete
     end
   end
 
+  def deleted?
+    deleted_at.present?
+  end
+
   module ClassMethods
     def find_with_destroyed *args
       self.with_exclusive_scope { find(*args) }

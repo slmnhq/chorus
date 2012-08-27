@@ -272,7 +272,9 @@ class ActivityMigrator < AbstractMigrator
         additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table, aso2.object_id as source_dataset FROM edc_activity_stream_object aso1,
                                         edc_activity_stream_object aso2
                                         WHERE aso1.activity_stream_id = '#{event.legacy_id}' and aso2.activity_stream_id = '#{event.legacy_id}'
-                                        AND aso1.entity_type = 'table' AND aso2.entity_type = 'databaseObject';").first
+                                        AND aso1.entity_type = 'table' AND aso2.entity_type IN ('databaseObject', 'chorusView');").first
+        # TODO Remove this line once we have chorus views
+        next unless additional_data
         event.additional_data[:source_dataset_id] = Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(additional_data['source_dataset'])).id
         event.additional_data[:destination_table] = additional_data['destination_table']
         event.save!
@@ -846,7 +848,7 @@ class ActivityMigrator < AbstractMigrator
     def backfill_version_additional_data
       Events::WorkfileUpgradedVersion.where('additional_data IS NULL').each do |event|
         row = Legacy.connection.exec_query("
-          SELECT aso.object_id AS version_num, versions.id AS version_id, versions.commit_message
+          SELECT aso.object_id AS version_num, versions.id AS version_id, versions.commit_message AS commit_message
           FROM edc_activity_stream_object aso
           INNER JOIN workfile_versions versions ON workfile_id = #{event.target1_id} AND
           versions.version_num = aso.object_id::integer
@@ -855,7 +857,7 @@ class ActivityMigrator < AbstractMigrator
         ").first
         event.additional_data = {:version_num => "#{row['version_num']}".to_s,
                                  :version_id => "#{row['version_id']}".to_s,
-                                 :commit_message => "#{row['commit_message']}"}
+                                 :commit_message => row['commit_message']}
         event.save!
       end
     end

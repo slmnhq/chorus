@@ -8,9 +8,10 @@ describe UserMigrator do
 
     describe "copying the data" do
       it "creates new users for legacy users and is idempotent" do
-        User.unscoped.count.should == 8
+        count = Legacy.connection.exec_query("SELECT count(*) FROM edc_user").first["count"]
+        User.unscoped.count.should == count
         UserMigrator.migrate
-        User.unscoped.count.should == 8
+        User.unscoped.count.should == count
       end
 
       it "copies the correct data fields from the legacy user" do

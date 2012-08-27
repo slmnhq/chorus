@@ -16,8 +16,7 @@ describe ImageMigrator do
     describe "copying the data" do
       it "gives an image attachment to all users who had profile images" do
         legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")
-        legacy_users_with_images.length.should == 3
-        User.where("image_file_name is not null").count.should == 3
+        User.where("image_file_name is not null").count.should == legacy_users_with_images.length
 
         legacy_users_with_images.each do |legacy_user|
           new_user = User.find_by_legacy_id(legacy_user["id"])
@@ -38,8 +37,7 @@ describe ImageMigrator do
 
       it "gives an image attachment to all workspaces which had icons" do
         legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
-        legacy_workspaces_with_images.length.should == 1
-        Workspace.where("image_file_name is not null").count.should == 1
+        Workspace.where("image_file_name is not null").count.should == legacy_workspaces_with_images.length
 
         legacy_workspaces_with_images.each do |legacy_workspace|
           new_workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])

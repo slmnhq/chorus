@@ -2,8 +2,8 @@ class Instance < ActiveRecord::Base
   attr_accessible :name, :description, :host, :port, :maintenance_db,
                   :provision_type, :description, :instance_provider, :version
 
-  validates_presence_of :name, :host, :port, :maintenance_db
-  validates_numericality_of :port, :only_integer => true
+  validates_presence_of :name, :maintenance_db
+  validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_format_of :name, :with => /^[a-zA-Z][a-zA-Z0-9_]{0,43}$/
 
   has_many :activities, :as => :entity

@@ -56,7 +56,6 @@ class DatabaseObjectMigrator < AbstractMigrator
             (
               SELECT normalize_key(composite_id) AS dataset_string
               FROM edc_dataset
-              WHERE type = 'SOURCE_TABLE'
             )
             UNION
             (

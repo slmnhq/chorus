@@ -13,12 +13,17 @@ describe ActivityMigrator do
 
     context "migrating activities that reference datasets" do
       it "copies SOURCE TABLE CREATED data fields from the legacy activity" do
-        Events::SourceTableCreated.count.should == 12
-        event = Events::SourceTableCreated.find_by_legacy_id('10002')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
-        event.dataset.should be_a(Dataset)
-        event.created_at.to_s.should == "2012-03-07 17:59:20 UTC"
+        count = 0
+        Legacy.connection.select_all("SELECT * from legacy_migrate.edc_activity_stream ed where type = 'SOURCE_TABLE_CREATED'").each do |row|
+          count +=1
+          event = Events::SourceTableCreated.find_by_legacy_id!(row["id"])
+          event.workspace.should be_instance_of(Workspace)
+          event.actor.should be_instance_of(User)
+          event.dataset.should be_a(Dataset)
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        count.should > 0
+        Events::SourceTableCreated.count.should == count
       end
 
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
@@ -36,214 +41,323 @@ describe ActivityMigrator do
       #end
 
       it "copies FILE IMPORT CREATED activities" do
-        Events::FileImportCreated.count.should == 12
-        event = Events::FileImportCreated.find_by_legacy_id('10175')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "ws"
-        event.actor.should be_a(User)
-        event.actor.username.should == "edcadmin"
-        event.dataset.should be_a(Dataset)
-        event.dataset.name.should == "sixrows33columns"
-        event.additional_data['filename'].should == "sixrows33columns.csv"
-        event.additional_data['import_type'].should == "file"
-        event.additional_data['destination_table'].should == "sixrows33columns"
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id  from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
+          type = 'IMPORT_CREATED' and indirect_verb = 'of file';").each do |row|
+          count +=1
+
+          event = Events::FileImportCreated.find_by_legacy_id(row["id"])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.dataset.name.should == row["table_name"]
+          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['import_type'].should == "file"
+          event.additional_data['destination_table'].should == row["table_name"]
+        end
+        count.should > 0
+        Events::FileImportCreated.count.should == count
       end
 
       it "copies FILE IMPORT SUCCESS activities" do
-        Events::FileImportSuccess.count.should == 5
-        event = Events::FileImportSuccess.find_by_legacy_id('10177')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "ws"
-        event.actor.should be_a(User)
-        event.actor.username.should == "edcadmin"
-        event.dataset.should be_a(Dataset)
-        event.dataset.name.should == "sixrows33columns"
-        event.additional_data['filename'].should == "sixrows33columns.csv"
-        event.additional_data['import_type'].should == "file"
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id  from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
+          type = 'IMPORT_SUCCESS' and indirect_verb = 'of file';").each do |row|
+          count += 1
+          event = Events::FileImportSuccess.find_by_legacy_id(row['id'])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.dataset.name.should == row["table_name"]
+          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['import_type'].should == "file"
+        end
+        count.should > 0
+        Events::FileImportSuccess.count.should == count
       end
 
       it "copies FILE IMPORT FAILED activities" do
-        Events::FileImportFailed.count.should == 7
-        event = Events::FileImportFailed.find_by_legacy_id('10368')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "active_public"
-        event.actor.should be_a(User)
-        event.actor.username.should == "edcadmin"
-        event.additional_data['filename'].should == "SFO 2011 Annual Survey.csv"
-        event.additional_data['import_type'].should == "file"
-        event.additional_data['destination_table'].should == "sfo_2011_annual_survey"
-        event.additional_data['error_message'].should == "[ERROR: invalid input syntax for type double precision: \"1,909.00\"\n  Where: COPY sfo_2011_annual_survey, line 3851, column runid]"
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id, et.result as result  from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso2 ON aso2.activity_stream_id = aso.activity_stream_id AND aso2.entity_type = 'task'
+          INNER JOIN legacy_migrate.edc_task et ON et.id = aso2.object_id where
+          type = 'IMPORT_FAILED' and indirect_verb = 'of file';").each do |row|
+          count += 1
+          event = Events::FileImportFailed.find_by_legacy_id(row['id'])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['import_type'].should == "file"
+          event.additional_data['destination_table'].should == row["table_name"]
+          event.additional_data['error_message'].should == row["result"]
+        end
+        count.should > 0
+        Events::FileImportFailed.count.should == count
       end
 
       it "copies DATASET IMPORT CREATED activities" do
-        Events::DatasetImportCreated.count.should == 117  # TODO - check it should match Datasetimportsucess + Dataset import failed
-        event = Events::DatasetImportCreated.find_by_legacy_id('10331')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "New And Improved Title"
-        event.actor.should be_a(User)
-        event.actor.username.should == "notadmin"
-        event.dataset.should be_a(Dataset)
-        event.additional_data['source_dataset_id'].should_not be_nil
-        event.additional_data['destination_table'].should == 'import_try_2'
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
+          type = 'IMPORT_CREATED' and indirect_verb = 'of dataset';").each do |row|
+          count += 1
+          event = Events::DatasetImportCreated.find_by_legacy_id(row['id'])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.additional_data['source_dataset_id'].should_not be_nil
+          event.additional_data['destination_table'].should == row["table_name"]
+        end
+        count.should > 0
+        Events::DatasetImportCreated.count.should == count
       end
 
       it "copies DATASET IMPORT SUCCESS activities" do
-        Events::DatasetImportSuccess.count.should == 96
-        event = Events::DatasetImportSuccess.find_by_legacy_id('10308')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "New And Improved Title"
-        event.actor.should be_a(User)
-        event.actor.username.should == "notadmin"
-        event.dataset.should be_a(Dataset)
-        event.additional_data['source_dataset_id'].should_not be_nil
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
+          type = 'IMPORT_SUCCESS' and indirect_verb = 'of dataset';").each do |row|
+          count += 1
+          event = Events::DatasetImportSuccess.find_by_legacy_id(row['id'])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.additional_data['source_dataset_id'].should_not be_nil
+        end
+        count.should > 0
+        Events::DatasetImportSuccess.count.should == count
       end
 
       it "copies DATASET IMPORT FAILED activities" do
-        Events::DatasetImportFailed.count.should == 20
-        event = Events::DatasetImportFailed.find_by_legacy_id('10336')
-        event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "New And Improved Title"
-        event.actor.should be_a(User)
-        event.actor.username.should == "notadmin"
-        event.additional_data['destination_table'].should == "import_try_2"
-        event.additional_data['source_dataset_id'].should_not be_nil
-        event.additional_data['error_message'].should include("ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id, et.result as result from legacy_migrate.edc_activity_stream ed INNER JOIN
+          legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso2 ON aso2.activity_stream_id = aso.activity_stream_id AND aso2.entity_type = 'task'
+          INNER JOIN legacy_migrate.edc_task et ON et.id = aso2.object_id where
+          type = 'IMPORT_FAILED' and indirect_verb = 'of dataset';").each do |row|
+          count += 1
+          event = Events::DatasetImportFailed.find_by_legacy_id(row['id'])
+          event.workspace.legacy_id.should == row["workspace_id"]
+          event.actor.username.should == row["author"]
+          event.additional_data['destination_table'].should == row["table_name"]
+          event.additional_data['source_dataset_id'].should_not be_nil
+          event.additional_data['error_message'].should == row["result"]
 
-        event = Events::DatasetImportFailed.find_by_legacy_id('10174')
-        event.additional_data['error_message'].should == ''
+        end
+        count.should > 0
+        Events::DatasetImportFailed.count.should == count
       end
     end
 
     context "migrating activities that do not reference datasets" do
       it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
-        Events::PublicWorkspaceCreated.count.should == 70
-
-        event = Events::PublicWorkspaceCreated.find_by_legacy_id('10158')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed INNER JOIN
+        legacy_migrate.edc_workspace as ew  ON ew.id = ed.entity_id and ew.is_public = true where
+        type = 'WORKSPACE_CREATED' ;").each do |row|
+          count += 1
+          event = Events::PublicWorkspaceCreated.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::PublicWorkspaceCreated.count.should == count
       end
 
       it "copies PRIVATE WORKSPACE CREATED data fields from the legacy activity" do
-        Events::PrivateWorkspaceCreated.count.should == 3
-
-        event = Events::PrivateWorkspaceCreated.find_by_legacy_id('10401')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed INNER JOIN
+        legacy_migrate.edc_workspace as ew  ON ew.id = ed.entity_id and ew.is_public = false where
+        type = 'WORKSPACE_CREATED' ;").each do |row|
+          count += 1
+          event = Events::PrivateWorkspaceCreated.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::PrivateWorkspaceCreated.count.should == count
       end
 
       it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
-        Events::WorkspaceArchived.count.should == 4
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
+        type = 'WORKSPACE_ARCHIVED' ;").each do |row|
+          count += 1
 
-        event = Events::WorkspaceArchived.find_by_legacy_id('10304')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+          event = Events::WorkspaceArchived.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceArchived.count.should == count
       end
 
       it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
-        Events::WorkspaceUnarchived.count.should == 1
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
+        type = 'WORKSPACE_UNARCHIVED' ;").each do |row|
+          count += 1
 
-        event = Events::WorkspaceUnarchived.find_by_legacy_id('10721')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+          event = Events::WorkspaceUnarchived.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceUnarchived.count.should == count
       end
 
       it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
-        Events::WorkspaceMakePublic.count.should == 1
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
+        type = 'WORKSPACE_MAKE_PUBLIC' ;").each do |row|
+          count += 1
 
-        event = Events::WorkspaceMakePublic.find_by_legacy_id('10719')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+          event = Events::WorkspaceMakePublic.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceMakePublic.count.should == count
       end
 
       it "copies WORKSPACE MAKE PRIVATE data fields from the legacy activity" do
-        Events::WorkspaceMakePrivate.count.should == 1
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
+        type = 'WORKSPACE_MAKE_PRIVATE' ;").each do |row|
+          count += 1
 
-        event = Events::WorkspaceMakePrivate.find_by_legacy_id('10720')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
+          event = Events::WorkspaceMakePrivate.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceMakePrivate.count.should == count
       end
 
       it "copies WORKFILE CREATED data fields from the legacy activity" do
-        Events::WorkfileCreated.count.should == 36
-
-        event = Events::WorkfileCreated.find_by_legacy_id('10010')
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
-        event.workfile.should be_instance_of(Workfile)
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_id as workfile_id from legacy_migrate.edc_activity_stream ed INNER JOIN
+        legacy_migrate.edc_activity_stream_object as aso  ON aso.activity_stream_id = ed.id and aso.entity_type = 'workfile' where
+        type = 'WORKFILE_CREATED' ;").each do |row|
+          count += 1
+          event = Events::WorkfileCreated.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+          Workfile.unscoped.find_by_id(event.target1_id).legacy_id.should == row['workfile_id']
+        end
+        count.should > 0
+        Events::WorkfileCreated.count.should == count
       end
 
       it "copies INSTANCE CREATED (greenplum) data fields from the legacy activity" do
-        Events::GreenplumInstanceCreated.count.should == 3
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
+        INNER JOIN legacy_migrate.edc_instance ei ON ei.id = ed.entity_id and ei.instance_provider = 'Greenplum Database'
+        where  type = 'INSTANCE_CREATED' ;").each do |row|
+          count += 1
 
-        event = Events::GreenplumInstanceCreated.find_by_legacy_id('10036')
-
-        event.workspace.should be_blank
-        event.actor.should be_instance_of(User)
-        event.greenplum_instance.should be_instance_of(Instance)
+          event = Events::GreenplumInstanceCreated.find_by_legacy_id(row['id'])
+          event.workspace.should be_blank
+          event.actor.username.should == row["author"]
+          event.greenplum_instance.legacy_id.should == row['entity_id']
+        end
+        count.should > 0
+        Events::GreenplumInstanceCreated.count.should == count
       end
 
       it "copies INSTANCE CREATED (hadoop) data fields from the legacy activity" do
-        Events::HadoopInstanceCreated.count.should == 2
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
+        INNER JOIN legacy_migrate.edc_instance ei ON ei.id = ed.entity_id and ei.instance_provider = 'Hadoop'
+        where  type = 'INSTANCE_CREATED' ;").each do |row|
+          count += 1
 
-        event = Events::HadoopInstanceCreated.find_by_legacy_id('10006')
+          event = Events::HadoopInstanceCreated.find_by_legacy_id(row['id'])
 
-        event.workspace.should be_blank
-        event.actor.should be_instance_of(User)
-        event.hadoop_instance.should be_instance_of(HadoopInstance)
+          event.workspace.should be_blank
+          event.actor.username.should == row["author"]
+          event.hadoop_instance.legacy_id.should == row['entity_id']
+        end
+        count.should > 0
+        Events::HadoopInstanceCreated.count.should == count
       end
 
       it "copies USER ADDED data fields from the legacy activity" do
-        Events::UserAdded.count.should == 7
-
-        event = Events::UserAdded.find_by_legacy_id('10195')
-
-        event.actor.should be_instance_of(User)
-        event.new_user.should be_instance_of(User)
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
+         where  type = 'USER_ADDED';").each do |row|
+          count += 1
+          event = Events::UserAdded.find_by_legacy_id(row['id'])
+          event.actor.username.should == row["author"]
+          event.new_user.legacy_id.should == row['entity_id']
+        end
+        count.should > 0
+        Events::UserAdded.count.should == count
       end
 
       it "copies MEMBERS ADDED data fields from the legacy activity" do
-        Events::MembersAdded.count.should == 4
-
-        event = Events::MembersAdded.find_by_legacy_id('10261')
-
-        event.actor.should be_instance_of(User)
-        event.member.should be_instance_of(User)
-        event.workspace.should be_instance_of(Workspace)
-        event.num_added.should == "2"
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, count(aso) AS count from legacy_migrate.edc_activity_stream ed
+        INNER JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id and aso.object_type = 'object'
+         where  type = 'MEMBERS_ADDED' GROUP BY ed.id;").each do |row|
+          count += 1
+          event = Events::MembersAdded.find_by_legacy_id(row['id'])
+          event.actor.username.should == row["author"]
+          event.num_added.should == row['count'].to_s
+        end
+        count.should > 0
+        Events::MembersAdded.count.should == count
       end
 
       it "copies PROVISIONING_FAIL from legacy activity" do
-        Events::ProvisioningFail.count.should == 1
-
-        event = Events::ProvisioningFail.find_by_legacy_id('10723')
-
-        event.workspace.should be_blank
-        event.actor.should be_instance_of(User)
-        event.greenplum_instance.should be_instance_of(Instance)
-        event.additional_data['error_message'].should == nil
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
+          where  type = 'PROVISIONING_FAIL';").each do |row|
+          count += 1
+          event = Events::ProvisioningFail.find_by_legacy_id(row['id'])
+          event.actor.username.should == row["author"]
+          event.workspace.should be_blank
+          event.greenplum_instance.legacy_id.should == row['entity_id']
+          event.additional_data['error_message'].should == nil
+        end
+        count.should > 0
+        Events::ProvisioningFail.count.should == count
       end
 
 
       it "copies PROVISIONING_SUCCESS from legacy activity" do
-        Events::ProvisioningSuccess.count.should == 1
-
-        event = Events::ProvisioningSuccess.find_by_legacy_id('10722')
-
-        event.workspace.should be_blank
-        event.actor.should be_instance_of(User)
-        event.greenplum_instance.should be_instance_of(Instance)
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
+          where  type = 'PROVISIONING_SUCCESS';").each do |row|
+          count += 1
+          event = Events::ProvisioningSuccess.find_by_legacy_id(row['id'])
+          event.actor.username.should == row["author"]
+          event.workspace.should be_blank
+          event.greenplum_instance.legacy_id.should == row['entity_id']
+          event.additional_data['error_message'].should == nil
+        end
+        count.should > 0
+        Events::ProvisioningSuccess.count.should == count
       end
 
       it "copies WORKFILE UPGRADED VERSION from legacy activity" do
-        Events::WorkfileUpgradedVersion.count.should == 8
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_id as version_num, aso2.object_id as workfile_id, ewv.commit_message as commit_message from legacy_migrate.edc_activity_stream ed
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id AND aso.entity_type = 'version'
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso2 ON aso2.activity_stream_id = ed.id AND aso2.entity_type = 'workfile'
+          INNER JOIN legacy_migrate.edc_workfile_version ewv ON ewv.workfile_id = aso2.object_id AND ewv.version_num =aso.object_id ::integer
+          where  type = 'WORKFILE_UPGRADED_VERSION';").each do |row|
+          count += 1
 
-        event = Events::WorkfileUpgradedVersion.find_by_legacy_id('10611')
+          event = Events::WorkfileUpgradedVersion.find_by_legacy_id(row["id"])
 
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
-        event.workfile.should be_instance_of(Workfile)
-        event.additional_data['version_num'].should == "2"
-        event.additional_data['commit_message'].should == "j"
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+          Workfile.unscoped.find_by_id(event.target1_id).legacy_id.should == row['workfile_id']
+          event.additional_data['version_num'].should == row['version_num']
+          event.additional_data['commit_message'].should == row['commit_message']
+        end
+        count.should > 0
+        Events::WorkfileUpgradedVersion.count.should == count
       end
     end
     #

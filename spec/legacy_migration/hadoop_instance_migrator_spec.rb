@@ -8,29 +8,24 @@ describe HadoopInstanceMigrator do
 
     describe "copying the data" do
       it "creates new instances for legacy hadoop instances and is idempotent" do
-        HadoopInstance.count.should == 2
+        count = Legacy.connection.select_all("select count(*) from edc_instance where instance_provider = 'Hadoop'").first["count"]
+        HadoopInstance.count.should == count
         HadoopInstanceMigrator.migrate
-        HadoopInstance.count.should == 2
+        HadoopInstance.count.should == count
       end
 
       it "copies the correct data fields from the legacy instance" do
-        instance1 = HadoopInstance.find_by_legacy_id('10030')
-        instance1.name.should == 'hadoopNotHadoopUser'
-        instance1.username.should == 'anything'
-        instance1.group_list.should == 'anything'
-        instance1.description.should == nil
-        instance1.host.should == 'chorus-gphd11'
-        instance1.port.should == 8020
-        instance1.owner.should == User.find_by_username('notadmin')
-
-        instance2 = HadoopInstance.find_by_legacy_id('10001')
-        instance2.name.should == 'hadoop'
-        instance2.username.should == 'hadoop'
-        instance2.group_list.should == 'hadoop'
-        instance2.description.should == nil
-        instance2.host.should == 'chorus-gphd11'
-        instance2.port.should == 8020
-        instance2.owner.should == User.find_by_username('edcadmin')
+        Legacy.connection.select_all("select ei.* , eam.db_user_name from edc_instance ei
+        INNER JOIN edc_account_map eam ON eam.instance_id = ei.id where instance_provider = 'Hadoop'").each do |row|
+          instance1 = HadoopInstance.find_by_legacy_id(row['id'])
+          instance1.name.should == row['name']
+          instance1.username.should == row['db_user_name'].split(",")[0]
+          instance1.group_list.should == row['db_user_name'].split(",")[1]
+          instance1.description.should == row['description']
+          instance1.host.should == row['host']
+          instance1.port.should == row['port']
+          instance1.owner.should == User.unscoped.find_by_username(row['owner'])
+        end
       end
     end
   end

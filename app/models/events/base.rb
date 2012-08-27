@@ -84,19 +84,18 @@ module Events
     end
 
     def self.has_targets(*target_names)
-      self.target_names = target_names.compact
+      options = target_names.extract_options!
+      self.target_names = target_names
       self.attr_accessible(*target_names)
 
       target_names.each_with_index do |name, i|
-        alias_getter_and_setter("target#{i+1}", name)
+        alias_getter_and_setter("target#{i+1}", name, options)
       end
 
       alias_method("primary_target", target_names.first)
     end
 
-    def self.alias_getter_and_setter(existing_name, new_name)
-      return unless new_name
-
+    def self.alias_getter_and_setter(existing_name, new_name, options)
       # The events table has a dedicated 'workspace_id' column,
       # so we don't alias :workspace to :target1 or :target2.
       # Subclasses should still specify the workspace as
@@ -104,8 +103,13 @@ module Events
       # in their JSON representation.
       return if new_name == :workspace
 
-      alias_method(new_name, existing_name)
       alias_method("#{new_name}=", "#{existing_name}=")
+      if options[:access_deleted]
+        association_class = new_name.to_s.classify
+        class_eval "def #{new_name}() #{association_class}.unscoped { #{existing_name} }; end"
+      else
+        alias_method(new_name, existing_name)
+      end
     end
 
     def self.has_activities(*entity_names)

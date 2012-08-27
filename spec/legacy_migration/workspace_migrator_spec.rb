@@ -8,13 +8,15 @@ describe WorkspaceMigrator do
 
     describe "copying the data" do
       it "creates new workspaces for legacy workspaces" do
-        Workspace.unscoped.count.should == 73
+        count = Legacy.connection.select_all("SELECT count(*)  FROM edc_workspace ").first["count"]
+        Workspace.unscoped.count.should == count
         WorkspaceMigrator.migrate
-        Workspace.unscoped.count.should == 73
+        Workspace.unscoped.count.should == count
       end
 
       it "creates new workspaces for legacy workspaces 2" do
-        Workspace.count.should == 68
+        count = Legacy.connection.select_all("SELECT count(*)  FROM edc_workspace where is_deleted is false ").first["count"]
+        Workspace.count.should == count
       end
 
       it "copies the correct data fields from the legacy workspace" do

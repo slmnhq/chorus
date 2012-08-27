@@ -132,6 +132,13 @@ describe "Notes" do
     it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity
     it_behaves_like 'event associated with a workspace'
+
+    it "can access associated workfiles when they are deleted" do
+      subject
+      workfile.destroy
+      subject.reload.workfile.should == workfile
+      subject.workfile.should be_deleted
+    end
   end
 
   describe "NoteOnDataset" do

@@ -13,17 +13,21 @@ describe AssociatedDatasetMigrator do
       FROM edc_dataset
       LEFT JOIN edc_instance
         ON edc_dataset.instance_id = edc_instance.id
+      where edc_dataset.is_deleted = false and edc_dataset.type ='SOURCE_TABLE'
     SQL
 
     describe "copying the data" do
       it "creates new associated dataset from legacy associated datasets and is idempotent" do
-        AssociatedDataset.count.should == 14
+        legacy_datasets = Legacy.connection.select_all(LEGACY_ASSOCIATED_DATASETS_SQL)
+        AssociatedDataset.count.should == legacy_datasets.count
         AssociatedDatasetMigrator.migrate
-        AssociatedDataset.count.should == 14
+        AssociatedDataset.count.should == legacy_datasets.count
       end
 
       it "copies the correct data fields from the legacy associated dataset" do
-        Legacy.connection.select_all(LEGACY_ASSOCIATED_DATASETS_SQL).each do |legacy_associated_dataset|
+        legacy_datasets = Legacy.connection.select_all(LEGACY_ASSOCIATED_DATASETS_SQL)
+        legacy_datasets.count.should == AssociatedDataset.count
+        legacy_datasets.each do |legacy_associated_dataset|
           next if legacy_associated_dataset['type'] == 'CHORUS_VIEW'
    
           associated_dataset = AssociatedDataset.unscoped.find_by_legacy_id(legacy_associated_dataset["id"])

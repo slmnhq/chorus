@@ -8,9 +8,10 @@ describe InstanceMigrator do
 
     describe "copying the data" do
       it "creates new instances for legacy GPDB instances and is idempotent" do
-        Instance.count.should == 5
+        count = Legacy.connection.select_all("SELECT count(*) FROM edc_instance WHERE instance_provider = 'Greenplum Database'").first["count"]
+        Instance.count.should == count
         InstanceMigrator.migrate
-        Instance.count.should == 5
+        Instance.count.should == count
       end
 
       it "copies the correct data fields from the legacy instance" do
@@ -20,7 +21,7 @@ describe InstanceMigrator do
           instance.name.should == legacy_instance["name"]
           instance.description.should == legacy_instance["description"]
           instance.host.should == legacy_instance["host"]
-          instance.port.should == legacy_instance["port"].to_i
+          instance.port.should == legacy_instance["port"].try(:to_i)
           #instance.expire.should == legacy_instance["expire"]
           #instance.state.should == legacy_instance["state"]
           instance.provision_type.should == legacy_instance["provision_type"]
