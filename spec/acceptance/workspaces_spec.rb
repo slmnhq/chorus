@@ -57,6 +57,53 @@ resource "Workspaces" do
     end
   end
 
+  put "/workspaces/:id" do
+    let(:id) { workspace.to_param }
+
+    parameter :name, "Workspace name"
+    parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
+    parameter :summary, "Notes about the workspace"
+    parameter :instance_id, "id of instance to create database in"
+    parameter :database_name, "name of a new database"
+    parameter :schema_name, "Name of new schema"
+
+    required_parameters :name
+    scope_parameters :workspace, :all
+
+    let(:name) { "Awesome Workspace" }
+    let(:public) { "1" }
+    let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
+    let(:database_name) { "new_database_name" }
+    let(:instance_id) { greenplum_instance.id }
+
+    example_request "Add a sandbox by creating a new schema in a new database" do
+      status.should == 200
+    end
+  end
+
+  put "/workspaces/:id" do
+    let(:id) { workspace.to_param }
+
+    parameter :name, "Workspace name"
+    parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
+    parameter :summary, "Notes about the workspace"
+    parameter :database_id, "id of a database"
+    #parameter :schema_name, "Name of new schema"
+
+    required_parameters :name
+    scope_parameters :workspace, :all
+
+    let(:name) { "Awesome Workspace" }
+    let(:public) { "1" }
+    let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
+    let(:database_id) { database.id }
+    #let(:schema_name) { "new_schema_name" }
+
+    example_request "Add a sandbox by creating a new schema in an existing database" do
+      status.should == 200
+    end
+  end
+
   post "/workspaces" do
     parameter :name, "Workspace name"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
