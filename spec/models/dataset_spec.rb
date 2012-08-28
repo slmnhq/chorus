@@ -398,7 +398,7 @@ describe Dataset::Query, :database_integration => true do
         context "into a table in another db using gpfdist" do
           context "new table" do
             it "creates a correct gppipe" do
-              mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+              mock(Import).run.with(source_table.id, user.id, options)
               source_table.import(options, user)
             end
           end
@@ -406,7 +406,7 @@ describe Dataset::Query, :database_integration => true do
           context "existing table" do
             it "creates a correct gppipe" do
               options["new_table"] = 'false'
-              mock(QC.default_queue).enqueue.with("Gppipe.run_import", source_table.id, user.id, options)
+              mock(Import).run.with(source_table.id, user.id, options)
               source_table.import(options, user)
             end
           end
@@ -428,7 +428,7 @@ describe Dataset::Query, :database_integration => true do
           }
           context "importing into new table" do
             it "creates a correct gp table copier" do
-              mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+              mock(Import).run.with(source_table.id, user.id, options)
               source_table.import(options, user)
             end
           end
@@ -436,7 +436,7 @@ describe Dataset::Query, :database_integration => true do
           context "into a existing table" do
             it "creates a correct gp table copier" do
               options["new_table"] = 'false'
-              mock(QC.default_queue).enqueue.with("GpTableCopier.run_import", source_table.id, user.id, options)
+              mock(Import).run.with(source_table.id, user.id, options)
               source_table.import(options, user)
             end
           end
