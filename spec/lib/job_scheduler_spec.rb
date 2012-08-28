@@ -36,6 +36,17 @@ describe JobScheduler do
     end
   end
 
+  describe "ImportScheduler" do
+    it "runs every minute" do
+      job_scheduler.job_named('ImportSchedule.run_pending_imports').period.should == 1.minute
+    end
+
+    it "runs the ImportScheduler in the same thread" do
+      mock(ImportSchedule).run_pending_imports
+      job_scheduler.job_named('ImportSchedule.run_pending_imports').run(Time.now)
+    end
+  end
+
   describe "JobScheduler.run" do
     it "builds a JobScheduler and then runs it starts the clockwork" do
       built = false

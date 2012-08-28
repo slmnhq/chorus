@@ -16,6 +16,13 @@ class JobScheduler
     every(Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours, 'SolrIndexer.refresh_and_index') do
       QC.enqueue("SolrIndexer.refresh_and_index", [])
     end
+
+    every(1.minute, 'ImportSchedule.run_pending_imports') do
+      # At present, we choose to enqueue the pending imports in this thread. If this becomes a bottleneck,
+      # we may choose to run this in a separate queued job.
+      ImportSchedule.run_pending_imports
+    end
+
   end
 
   def job_named(job)

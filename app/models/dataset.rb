@@ -153,6 +153,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def import(attributes, user)
+    # If the user is creating a scheduled import
     if attributes[:import_type] == "schedule"
 
       ImportSchedule.create! do |schedule|
@@ -164,7 +165,10 @@ class Dataset < ActiveRecord::Base
         schedule.user = user
         schedule.set_next_import
       end
+
+    # If the user is performing an immediate import
     else
+      #TODO: Move the following code to Import.run
       if attributes[:remote_copy]
         copy_method = "Gppipe.run_import"
       else
