@@ -8,3 +8,5 @@ gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/
 
 mkdir -p tmp/pids
+
+rm tmp/fixture_builder.yml
