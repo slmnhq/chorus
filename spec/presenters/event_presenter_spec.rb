@@ -108,6 +108,22 @@ describe EventPresenter, :type => :view do
           hash[:attachments][1][:type].should == "SANDBOX_TABLE"
         end
       end
+
+      context "with a workfile image attachment" do
+        let(:event) { FactoryGirl.create(:note_on_workspace_event) }
+        let(:workfile) { Workfile.find_by_file_name("image.png") }
+        let(:current_user) { users(:bob) }
+
+        it "contains the images icon url" do
+          stub(view).current_user { current_user }
+          event.workspace.save
+          stub(event).workfiles { [workfile] }
+          hash = subject.to_hash
+          hash[:attachments].should be_present
+          hash[:attachments][0][:entity_type].should == 'workfile'
+          hash[:attachments][0][:version_info][:icon_url].should =~ /\/workfile_versions\/.*image\?style=icon/
+        end
+      end
     end
   end
 end
