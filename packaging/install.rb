@@ -70,7 +70,7 @@ class Install
         a.split('.').map(&:to_i) <=> b.split('.').map(&:to_i)
       end
 
-      if (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i)) >= 0
+      if (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i)) >= 0 && !ENV['FORCE_DEPLOY']
         raise(InvalidVersion.new("Version #{version} is older than currently installed version (#{most_recent_installed_version})."))
       end
 

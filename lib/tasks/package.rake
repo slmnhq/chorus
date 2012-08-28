@@ -99,14 +99,12 @@ module PackageMaker
 
     run "scp #{filename} #{host}:~"
     run "ssh #{host} 'echo \"#{path}\" > #{answers_file} && echo \"y\" >> #{answers_file} && echo \"#{postgres_build}\" >> #{answers_file}'"
-    run "ssh #{host} 'cd ~ && ./#{filename} #{answers_file}'"
+    run "ssh #{host} 'cd ~ && #{ENV['FORCE_DEPLOY'] ? "FORCE_DEPLOY=true" : ""} ./#{filename} #{answers_file}'"
 
     run "ssh #{host} 'cd ~; rm #{filename}'"
   end
 
   def deploy(config)
-    check_existing_version(config)
-
     filename = "greenplum-chorus-#{version_name}.sh"
     upload(filename, config)
   end
@@ -122,16 +120,6 @@ module PackageMaker
 
     run "ssh #{host} 'mkdir -p #{path}/releases'"
     run "ssh #{host} 'mkdir -p #{shared_path}/tmp/pids && mkdir -p #{shared_path}/log && mkdir -p #{shared_path}/system && mkdir -p #{shared_path}/solr/data'"
-  end
-
-  def check_existing_version(config)
-    return if ENV['FORCE_DEPLOY']
-    versions = `ssh #{config['host']} 'ls #{config['path']}/releases/'`.split
-
-    if versions.include? version_name
-      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel. Or run with FORCE_DEPLOY=true"
-      puts "Press enter to continue..." while STDIN.gets != "\n"
-    end
   end
 
   def head_sha
