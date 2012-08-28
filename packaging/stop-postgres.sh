@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-bin=`dirname "$0"`
+bin=`readlink "$0"`
+if [ "$bin" == "" ]; then
+ bin=$0
+fi
+bin=`dirname "$bin"`
 bin=`cd "$bin"; pwd`
 
 if [ -d $bin/current/packaging/ ]; then
