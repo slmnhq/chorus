@@ -445,7 +445,7 @@ describe Dataset::Query, :database_integration => true do
 
       context "when scheduling an import" do
         let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-        let(:start_time) { "2012-08-23 23:00:00.0" }
+        let(:start_time) { "Thu, 23 Aug 2012 23:00:00 +0000" }
         let(:workspace) { workspaces(:bob_public) }
         let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
         let(:dst_table_name) { "the_new_table" }
@@ -471,7 +471,7 @@ describe Dataset::Query, :database_integration => true do
               source_table.import(options, user)
             }.to change(ImportSchedule, :count).by(1)
             ImportSchedule.last.tap do |import_schedule|
-              import_schedule.start_datetime.should == DateTime.parse(start_time)
+              import_schedule.start_datetime.should == Time.parse(start_time)
               import_schedule.end_date.should == Date.parse("2012-11-24")
               import_schedule.workspace.should == workspace
               import_schedule.source_dataset.should == source_table
