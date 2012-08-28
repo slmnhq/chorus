@@ -103,7 +103,6 @@ module PackageMaker
     release_path = path + "/releases/" + release_name
 
     run "ssh #{host} 'mkdir -p #{path}'"
-    run "ssh #{host} 'mkdir -p #{release_path}'"
     run "scp #{filename} #{host}:#{path}"
     run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename} &> /dev/null'"
 

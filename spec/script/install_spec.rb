@@ -10,6 +10,7 @@ describe "Install" do
 
   let(:installer) { Install.new('.') }
   before do
+    ENV['CHORUS_HOME'] = nil
     stub(installer).prompt(anything)
   end
 
@@ -35,6 +36,84 @@ describe "Install" do
         stub_input "~/chorus"
         installer.get_destination_path
         installer.destination_path.should == "#{ENV['HOME']}/chorus"
+      end
+    end
+
+    describe "when there is a CHORUS_HOME set" do
+      before do
+        ENV["CHORUS_HOME"] = install_dir + "/current"
+      end
+      let(:install_dir) { "/not/standard/dir" }
+
+      it "should fall back to the CHORUS_HOME path when the user enters nothing" do
+        mock(installer).prompt("#{Install::MESSAGES[:default_chorus_path]} [#{install_dir}]:")
+        stub_input nil
+        installer.get_destination_path
+        installer.destination_path.should == install_dir
+      end
+    end
+
+    describe "when the user specifies a directory that looks like a Chorus 2.2 install" do
+      before do
+        stub(installer).version { "2.2.0.1-8840ae71c" }
+        stub_input nil
+        installed_versions.each do |version|
+          FileUtils.mkdir_p("/opt/chorus/releases/#{version}")
+        end
+      end
+
+      context "when there are only older version installed" do
+        let(:installed_versions) { ["2.2.0.0-8840ae71c"] }
+
+        it "should prompt the user to confirm downtime for upgrade" do
+          mock(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+          installer.get_destination_path
+        end
+
+        [nil, 'y', 'yEs'].each do |input|
+          context "when the user confirms upgrade with #{input}" do
+            before do
+              all_inputs = [nil, input]
+              stub(installer).get_input { all_inputs.shift }
+              installer.get_destination_path
+            end
+
+            it "should set the destination path" do
+              installer.destination_path.should == '/opt/chorus'
+            end
+
+            it "should set do_upgrade" do
+              installer.do_upgrade.should be_true
+            end
+          end
+        end
+
+        context "when the user cancels the upgrade" do
+          before do
+            all_inputs = [nil, 'this is not a yes']
+            stub(installer).get_input { all_inputs.shift }
+          end
+
+          it "should raise to cancel the install" do
+            expect { installer.get_destination_path }.to raise_error(Install::UpgradeCancelled)
+          end
+        end
+      end
+
+      context "when the installed version is newer" do
+        let(:installed_versions) { ["2.2.0.2-8840ae71c", "2.2.0.0-8840ae71c"] }
+
+        it "should notify the user and fail" do
+          expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
+        end
+      end
+
+      context "When the installed version is equal" do
+        let(:installed_versions) { ["2.2.0.1-8840ae71c"] }
+
+        it "should notify the user and fail" do
+          expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
+        end
       end
     end
   end
@@ -197,18 +276,58 @@ describe "Install" do
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
       FileUtils.touch './chorus_installation/config/chorus.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
     end
 
-    it "creates chorus.yml file in shared path" do
+    it "should create chorus.yml.example in shared path" do
+      File.exists?('/opt/chorus/shared/chorus.yml.example').should be_false
       installer.copy_config_files
 
-      File.exists?('/opt/chorus/shared/chorus.yml').should be_true
+      File.exists?('/opt/chorus/shared/chorus.yml.example').should be_true
     end
 
-    it "creates database.yml file in shared path" do
-      installer.copy_config_files
+    context "chorus.yml" do
+      context "when chorus.yml doesn't exist in shared path" do
+        it "creates chorus.yml file in shared path" do
+          File.exists?('/opt/chorus/shared/chorus.yml').should be_false
+          installer.copy_config_files
 
-      File.exists?('/opt/chorus/shared/database.yml').should be_true
+          File.exists?('/opt/chorus/shared/chorus.yml').should be_true
+        end
+      end
+
+      context "when chorus.yml file already exists in the shared path" do
+        before do
+          FileUtils.mkdir_p('/opt/chorus/shared')
+          File.open('/opt/chorus/shared/chorus.yml', 'w') { |f| f.puts "some yaml stuff" }
+        end
+
+        it "should not overwrite existing chorus.yml" do
+          installer.copy_config_files
+          File.read('/opt/chorus/shared/chorus.yml').strip.should == "some yaml stuff"
+        end
+      end
+    end
+
+    context "when database.yml doesn't exist in shared path" do
+      it "creates database.yml file in shared path" do
+        File.exists?('/opt/chorus/shared/database.yml').should be_false
+        installer.copy_config_files
+
+        File.exists?('/opt/chorus/shared/database.yml').should be_true
+      end
+    end
+
+    context "when database.yml exists in the shared path" do
+      before do
+        FileUtils.mkdir_p('/opt/chorus/shared')
+        File.open('/opt/chorus/shared/database.yml', 'w') { |f| f.puts "some yaml stuff" }
+      end
+
+      it "should not overwrite existing database.yml" do
+        installer.copy_config_files
+        File.read('/opt/chorus/shared/database.yml').strip.should == "some yaml stuff"
+      end
     end
   end
 
@@ -217,18 +336,6 @@ describe "Install" do
       installer.destination_path = "/opt/chorus"
       stub_version
       FileUtils.mkdir_p(installer.destination_path)
-    end
-
-    it "creates a symlink to a postgres installation" do
-      installer.link_services
-
-      File.readlink('/opt/chorus/postgres').should == '/opt/chorus/releases/2.2.0.0/postgres'
-    end
-
-    it "creates a symlink to a nginx installation" do
-      installer.link_services
-
-      File.readlink('/opt/chorus/nginx_dist').should == '/opt/chorus/releases/2.2.0.0/nginx_dist'
     end
 
     it "creates a symlink to server_control.sh" do
@@ -271,17 +378,6 @@ describe "Install" do
     end
   end
 
-  describe "#create_database" do
-    before do
-      installer.destination_path = "/opt/chorus"
-      mock(installer).system("/opt/chorus/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { true }
-    end
-
-    it "runs postgres' initdb command and creates the db structure" do
-      installer.create_database
-    end
-  end
-
   describe "#create_database_config" do
     before do
       installer.destination_path = "/opt/chorus"
@@ -299,28 +395,97 @@ describe "Install" do
 
       YAML.load_file('/opt/chorus/shared/database.yml')['production']['password'].should == installer.database_password
     end
+
+    it "does not update database.yml if upgrading" do
+      installer.do_upgrade = true
+      installer.create_database_config
+
+      YAML.load_file('/opt/chorus/shared/database.yml')['production']['password'].should == 'something'
+    end
   end
 
-  describe "#create_database_structure" do
+  describe "#setup_database" do
     before do
+      mock(installer).version { "2.2.0.0" }
       installer.destination_path = "/opt/chorus"
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
-
       @call_order = []
-
-      mock(installer).version { "2.2.0.0" }
-      mock(installer).sleep(2) { @call_order << "sleep" }
-
       mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
-      mock(installer).system(%Q{/opt/chorus/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
-      mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
       mock(installer).system("cd /opt/chorus && ./server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
     end
 
-    it "creates the database structure" do
-      installer.create_database_structure
-      @call_order.should == ["start", "sleep", "create_user", "migrate", "stop"]
+    context "when installing fresh" do
+      before do
+        mock(installer).system("/opt/chorus/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { @call_order << "create_database" }
+        mock(installer).system(%Q{/opt/chorus/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
+        mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
+      end
+
+      it "creates the database structure" do
+        installer.setup_database
+        @call_order.should == ["create_database", "start", "create_user", "migrate", "stop"]
+      end
+    end
+
+    context "when upgrading" do
+      before do
+        installer.do_upgrade = true
+        mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:migrate >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
+      end
+
+      it "should migrate the existing database" do
+        installer.setup_database
+        @call_order.should == %w(start migrate stop)
+      end
+    end
+  end
+
+  describe "#stop_old_install" do
+    context "when installing fresh" do
+      before do
+        dont_allow(installer).system
+      end
+
+      it "should do nothing" do
+        installer.stop_old_install
+      end
+    end
+
+    context "when upgrading" do
+      before do
+        installer.do_upgrade = true
+        installer.destination_path = '/opt/chorus'
+        mock(installer).system("cd /opt/chorus && ./server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
+      end
+
+      it "should stop the previous version" do
+        installer.stop_old_install
+      end
+    end
+  end
+
+  describe "#startup" do
+    context "when installing fresh" do
+      before do
+        dont_allow(installer).system
+      end
+
+      it "should do nothing" do
+        installer.startup
+      end
+    end
+
+    context "when upgrading" do
+      before do
+        installer.do_upgrade = true
+        installer.destination_path = '/opt/chorus'
+        mock(installer).system("cd /opt/chorus && ./server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
+      end
+
+      it "should stop the previous version" do
+        installer.startup
+      end
     end
   end
 
@@ -338,18 +503,6 @@ describe "Install" do
     end
   end
 
-  describe "#extract_nginx" do
-    before do
-      stub_version
-      installer.destination_path = "/opt/chorus"
-    end
-
-    it "calls tar to unpack nginx" do
-      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/nginx_dist-1.2.2.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1") { true }
-      installer.extract_nginx
-    end
-  end
-
   describe "#extract_postgres" do
     before do
       stub_version
@@ -358,19 +511,19 @@ describe "Install" do
 
     it "calls tar to unpack postgres" do
       installer.instance_variable_set(:@postgres_package, 'postgres-blahblah.tar.gz')
-      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1")  { true }
+      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1") { true }
       installer.extract_postgres
     end
   end
 
   describe "command execution" do
-    before() do
+    before do
       installer.destination_path = '/opt/chorus'
     end
 
     it "raises an exception if exit code is different than zero" do
-      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { false }
-      expect { installer.create_database_structure }.to raise_error(Install::CommandFailed)
+      mock(installer).system("silly command >> /opt/chorus/install.log 2>&1") { false }
+      expect { installer.send(:chorus_exec, "silly command") }.to raise_error(Install::CommandFailed)
     end
   end
 

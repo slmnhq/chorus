@@ -9,32 +9,36 @@ class Install
   NonRootValidationError = Class.new(StandardError)
   CommandFailed = Class.new(StandardError)
   LocalhostUndefined = Class.new(StandardError)
+  InvalidVersion = Class.new(StandardError)
+  UpgradeCancelled = Class.new(StandardError)
 
-  attr_accessor :destination_path, :database_password, :database_user
+  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade
 
   DEFAULT_PATH = "/opt/chorus"
 
   MESSAGES = {
-      select_os:"Could not detect your Linux version. Please select one of the following:",
-      select_redhat_55:"[1] - RedHat (CentOS/RHEL) 5.5 or compatible",
-      select_redhat_62:"[2] - RedHat (CentOS/RHEL) 6.2 or compatible",
-      select_SLES_11:"[3] - SuSE Enterprise Linux Server 11 or compatible",
-      select_abort_install:"[4] - Abort install",
-      version_not_supported:"Version not supported",
-      default_chorus_path:"Please enter Chorus destination path [#{DEFAULT_PATH}]:",
-      installation_complete:"Installation completed.",
+      select_os: "Could not detect your Linux version. Please select one of the following:",
+      select_redhat_55: "[1] - RedHat (CentOS/RHEL) 5.5 or compatible",
+      select_redhat_62: "[2] - RedHat (CentOS/RHEL) 6.2 or compatible",
+      select_SLES_11: "[3] - SuSE Enterprise Linux Server 11 or compatible",
+      select_abort_install: "[4] - Abort install",
+      version_not_supported: "Version not supported",
+      default_chorus_path: "Please enter Chorus destination path",
+      installation_complete: "Installation completed.",
       installation_failed: "Installation failed. Please check install.log for details",
       installation_failed_with_reason: "Installation failed: %s",
-      abort_install_non_root:"Aborting install: Please run the installer as a non-root user.",
+      abort_install_non_root: "Aborting install: Please run the installer as a non-root user.",
       abort_install_localhost_undefined: "Aborting install: Could not connect to 'localhost', please set in /etc/hosts",
-      run_server_control: "run ./server_control.sh start from %s to start everything up!"
+      run_server_control: "run ./server_control.sh start from %s to start everything up!",
+      confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:",
+      cancelled_upgrade: "cancelled by user"
   }
 
   def initialize(installer_home)
     @installer_home = installer_home
   end
 
-  def prompt(message, default="")
+  def prompt(message)
     puts message
   end
 
@@ -49,14 +53,36 @@ class Install
   def chorus_installation_path
     File.join(@installer_home, 'chorus_installation')
   end
-  
+
   def determine_postgres_installer
     @postgres_package = get_postgres_build
   end
 
   def get_destination_path
-    prompt MESSAGES[:default_chorus_path]
-    @destination_path = File.expand_path(get_input || DEFAULT_PATH)
+    default_path = ENV['CHORUS_HOME'] || DEFAULT_PATH
+    default_path = default_path.sub(/\/current$/, '')
+    prompt "#{MESSAGES[:default_chorus_path]} [#{default_path}]:"
+    @destination_path = File.expand_path(get_input || default_path)
+
+    if Dir.exists?(@destination_path)
+      installed_versions = Dir[File.join(@destination_path, 'releases', '*')]
+      most_recent_installed_version = installed_versions.map { |path| File.basename(path) }.max do |a, b|
+        a.split('.').map(&:to_i) <=> b.split('.').map(&:to_i)
+      end
+
+      if (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i)) >= 0
+        raise(InvalidVersion.new("Version #{version} is older than currently installed version (#{most_recent_installed_version})."))
+      end
+
+      prompt MESSAGES[:confirm_upgrade]
+      user_upgrade_input = get_input || 'y'
+      unless %w(y yes).include? user_upgrade_input.downcase
+        raise(UpgradeCancelled)
+      end
+
+      self.do_upgrade = true
+    end
+
   end
 
   def get_postgres_build
@@ -119,13 +145,16 @@ class Install
 
   def copy_config_files
     FileUtils.mkdir_p("#{destination_path}/shared")
-    FileUtils.cp("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
-    FileUtils.cp("#{chorus_installation_path}/config/chorus.yml.example", "#{destination_path}/shared/chorus.yml")
+    unless File.exists? "#{destination_path}/shared/database.yml"
+      FileUtils.cp("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
+    end
+    FileUtils.cp("#{chorus_installation_path}/config/chorus.yml.example", "#{destination_path}/shared/chorus.yml.example")
+    unless File.exists? "#{destination_path}/shared/chorus.yml"
+      FileUtils.cp("#{chorus_installation_path}/config/chorus.defaults.yml", "#{destination_path}/shared/chorus.yml")
+    end
   end
 
   def link_services
-    FileUtils.ln_sf("#{release_path}/postgres", "#{destination_path}/postgres")
-    FileUtils.ln_sf("#{release_path}/nginx_dist", "#{destination_path}/nginx_dist")
     FileUtils.ln_sf("#{release_path}/packaging/server_control.sh", "#{destination_path}/server_control.sh")
   end
 
@@ -140,11 +169,9 @@ class Install
     FileUtils.ln_sf("#{destination_path}/shared/system", "#{release_path}/system")
   end
 
-  def create_database
-    chorus_exec "#{destination_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
-  end
-
   def create_database_config
+    return if do_upgrade
+
     database_config_path = "#{destination_path}/shared/database.yml"
     database_config = YAML.load_file(database_config_path)
 
@@ -158,12 +185,18 @@ class Install
     end
   end
 
-  def create_database_structure
-    chorus_exec "cd #{destination_path} && ./server_control.sh start postgres"
-    sleep 2
-    chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
-    chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate db:seed"
-    chorus_exec "cd #{destination_path} && ./server_control.sh stop postgres"
+  def setup_database
+    if do_upgrade
+      start_postgres
+      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
+      stop_postgres
+    else
+      chorus_exec "#{destination_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
+      start_postgres
+      chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate db:seed"
+      stop_postgres
+    end
   end
 
   def link_current_to_release
@@ -172,6 +205,18 @@ class Install
 
   def extract_postgres
     chorus_exec("tar xzf #{release_path}/packaging/postgres/#{@postgres_package} -C #{release_path}/")
+  end
+
+  def stop_old_install
+    return unless do_upgrade
+
+    chorus_exec "cd #{destination_path} && ./server_control.sh stop"
+  end
+
+  def startup
+    return unless do_upgrade
+
+    chorus_exec "cd #{destination_path} && ./server_control.sh start"
   end
 
   private
@@ -190,6 +235,14 @@ class Install
 
   def chorus_exec(command)
     system("#{command} >> #{destination_path}/install.log 2>&1") || raise(CommandFailed, command)
+  end
+
+  def stop_postgres
+    chorus_exec "cd #{destination_path} && ./server_control.sh stop postgres"
+  end
+
+  def start_postgres
+    chorus_exec "cd #{destination_path} && ./server_control.sh start postgres"
   end
 end
 
@@ -214,19 +267,34 @@ if __FILE__ == $0
     install.extract_postgres
     puts "Done"
 
-    install.link_services
+    if install.do_upgrade
+      print "Shutting down previous Chorus install..."
+      install.stop_old_install
+      puts "Done"
+      print "Updating database..."
+    else
+      print "Creating database..."
+    end
 
-    print "Creating database..."
-    install.create_database
-    install.create_database_structure
+
+    install.link_services
+    install.setup_database
     puts "Done"
 
     install.link_current_to_release
+
+    print "Starting up Chorus..."
+    install.startup
+    puts "Done"
 
     puts Install::MESSAGES[:installation_complete]
     puts Install::MESSAGES[:run_server_control] % install.destination_path
   rescue Install::NonRootValidationError
     puts Install::MESSAGES[:abort_install_non_root]
+  rescue Install::UpgradeCancelled
+    puts Install::MESSAGES[:installation_failed_with_reason] % Install::MESSAGES[:cancelled_upgrade]
+  rescue Install::InvalidVersion => e
+    puts Install::MESSAGES[:installation_failed_with_reason] % e.message
   rescue Install::CommandFailed => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts Install::MESSAGES[:installation_failed]
