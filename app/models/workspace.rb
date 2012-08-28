@@ -67,10 +67,14 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def datasets
+  def datasets(type = nil)
     if sandbox
       associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-      Dataset.where("schema_id = ? OR id IN (?)", sandbox.id, associated_dataset_ids)
+      filtered_datasets = Dataset.where("schema_id = ? OR id IN (?)", sandbox.id, associated_dataset_ids) if !type
+      filtered_datasets = Dataset.where("schema_id = ? AND (type='GpdbTable' OR type='GpdbView')", sandbox.id) if type == "SANDBOX_TABLE"
+      filtered_datasets = Dataset.where("schema_id = ? AND (type='ChorusView')", sandbox.id) if type == "CHORUS_VIEW"
+      filtered_datasets = Dataset.where("schema_id != (?) AND id IN (?)", sandbox.id, associated_dataset_ids) if type == "SOURCE_TABLE"
+      filtered_datasets
     else
       bound_datasets
     end

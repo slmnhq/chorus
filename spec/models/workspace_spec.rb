@@ -116,16 +116,29 @@ describe Workspace do
     let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, :schema => schema) }
     let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
     let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
+    let(:chorus_view) {
+      ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
+    }
 
     before do
       workspace.bound_datasets << source_table
     end
 
     context "when the workspace has a sandbox" do
+      before do
+        chorus_view.save!(:validate => false)
+        workspace.bound_datasets << chorus_view
+      end
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-        workspace.datasets.should =~ [sandbox_table, source_table]
+        workspace.datasets.should =~ [sandbox_table, source_table, chorus_view]
+      end
+
+      it "filters by type" do
+        workspace.datasets("SANDBOX_TABLE").should =~ [sandbox_table]
+        workspace.datasets("CHORUS_VIEW").should =~ [chorus_view]
+        workspace.datasets("SOURCE_TABLE").should =~ [source_table]
       end
     end
 

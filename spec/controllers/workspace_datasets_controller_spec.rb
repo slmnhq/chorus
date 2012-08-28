@@ -43,6 +43,11 @@ describe WorkspaceDatasetsController do
         response.object_name.should =~ /view/
       end
     end
+
+    it "should filter db objects by type" do
+      mock(workspace).datasets("SANDBOX_TABLE") { datasets }
+      get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
+    end
   end
 
   describe "#create" do
