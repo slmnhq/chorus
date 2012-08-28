@@ -20,7 +20,7 @@ namespace :package do
     PackageMaker.make_installer
   end
 
-  task :stage => :prepare_app do
+  task :stage => :installer do
     deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
     PackageMaker.deploy(deploy_configuration)
   end
@@ -95,64 +95,20 @@ module PackageMaker
     path = config['path']
     postgres_build = config['postgres_build']
 
-    release_name = version_name
+    answers_file = "~/install_answers.txt"
 
-    shared_path = path + "/shared"
-    current_path = path + "/current"
-    releases_path = path + "/releases"
-    release_path = path + "/releases/" + release_name
+    run "scp #{filename} #{host}:~"
+    run "ssh #{host} 'echo \"#{path}\" > #{answers_file} && echo \"y\" >> #{answers_file} && echo \"#{postgres_build}\" >> #{answers_file}'"
+    run "ssh #{host} 'cd ~ && ./#{filename} #{answers_file}'"
 
-    run "ssh #{host} 'mkdir -p #{path}'"
-    run "scp #{filename} #{host}:#{path}"
-    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename} &> /dev/null'"
-
-    run "ssh #{host} 'mkdir -p #{shared_path}/solr/data'"
-    run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
-
-    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/log && ln -s #{shared_path}/log #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/tmp && ln -s #{shared_path}/tmp #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && mkdir -p #{shared_path}/system && ln -s #{shared_path}/system #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/postgres #{release_path}/postgres'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/db #{release_path}/postgres-db'"
-
-    # symlink configuration
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/database.yml #{release_path}/config'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
-
-    # Server control
-    run "ssh #{host} 'ln -s #{release_path}/packaging/server_control.sh #{path}/server_control.sh'"
-
-    # Setup DB
-    run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres/#{postgres_build}  &> /dev/null'"
-
-    run "ssh #{host} 'test ! -e #{shared_path}/db && RELEASE_PATH=#{release_path} CHORUS_HOME=#{path} bash #{release_path}/packaging/bootstrap_app.sh'"
-
-    # Temporary
-    #
-    #run "ssh #{host} 'cd #{path}; ./postgres/bin/createuser -p 9543 -s edcadmin"
-    run "ssh #{host} 'PATH=$PATH:#{path}/postgres/bin RAILS_ENV=production #{release_path}/bin/rake db:migrate'"
-
-    run "ssh #{host} 'cd #{current_path}; CHORUS_HOME=#{current_path} RAILS_ENV=production ./packaging/server_control.sh stop'"
-    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
-    run "ssh #{host} 'cd #{current_path}; CHORUS_HOME=#{current_path} RAILS_ENV=production ./packaging/server_control.sh start'"
-
-    run "ssh #{host} 'cd #{path}; rm greenplum*.tar.gz'"
-    #run "ssh #{host} 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
+    run "ssh #{host} 'cd ~; rm #{filename}'"
   end
 
   def deploy(config)
     check_existing_version(config)
 
-    filename = make
+    filename = "greenplum-chorus-#{version_name}.sh"
     upload(filename, config)
-  end
-
-  def make(options = {})
-    filename = "greenplum-chorus-#{timestamp}-#{version_name}.tar.gz"
-    archive_app(filename)
-
-    filename
   end
 
   def clean_workspace
@@ -176,14 +132,6 @@ module PackageMaker
       puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel. Or run with FORCE_DEPLOY=true"
       puts "Press enter to continue..." while STDIN.gets != "\n"
     end
-  end
-
-  def archive_app(filename)
-    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{PATHS_TO_PACKAGE.join(" ")}"
-  end
-
-  def timestamp
-    Time.now.strftime("%Y%m%d-%H%M%S")
   end
 
   def head_sha

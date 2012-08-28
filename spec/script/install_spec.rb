@@ -406,19 +406,19 @@ describe "Install" do
 
   describe "#setup_database" do
     before do
-      mock(installer).version { "2.2.0.0" }
+      stub(installer).version { "2.2.0.0" }
       installer.destination_path = "/opt/chorus"
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
       @call_order = []
-      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
-      mock(installer).system("cd /opt/chorus && ./server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
+      mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
+      mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
     end
 
     context "when installing fresh" do
       before do
-        mock(installer).system("/opt/chorus/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { @call_order << "create_database" }
-        mock(installer).system(%Q{/opt/chorus/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
+        mock(installer).system("/opt/chorus/releases/2.2.0.0/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { @call_order << "create_database" }
+        mock(installer).system(%Q{/opt/chorus/releases/2.2.0.0/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
         mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
       end
 
@@ -454,9 +454,10 @@ describe "Install" do
 
     context "when upgrading" do
       before do
+        stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("cd /opt/chorus && ./server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
       end
 
       it "should stop the previous version" do
@@ -478,9 +479,10 @@ describe "Install" do
 
     context "when upgrading" do
       before do
+        stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("cd /opt/chorus && ./server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
       end
 
       it "should stop the previous version" do
@@ -493,10 +495,18 @@ describe "Install" do
     before do
       installer.destination_path = "/opt/chorus"
       stub(installer).version { '2.2.0.0' }
-      FileUtils.mkdir_p '/opt/chorus '
+      FileUtils.mkdir_p '/opt/chorus/releases/1.2.2.2'
     end
 
     it "creates a symlink to the new release from current" do
+      installer.link_current_to_release
+
+      File.readlink('/opt/chorus/current').should == '/opt/chorus/releases/2.2.0.0'
+    end
+
+    it "should overwrite an existing link" do
+      FileUtils.ln_s("/opt/chorus/releases/1.2.2.2", "/opt/chorus/current")
+      mock(File).delete("/opt/chorus/current")                     # FakeFS workaround
       installer.link_current_to_release
 
       File.readlink('/opt/chorus/current').should == '/opt/chorus/releases/2.2.0.0'

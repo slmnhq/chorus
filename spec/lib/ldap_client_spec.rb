@@ -151,7 +151,7 @@ describe LdapClient do
   describe ".search" do
     before :each do
       any_instance_of(Net::LDAP) do |ldap|
-        mock(ldap).search.with_any_args do |options|
+        stub(ldap).search.with_any_args do |options|
           options[:filter].to_s.should == "(sAMAccountName=testguy)"
           entries
         end
@@ -162,6 +162,7 @@ describe LdapClient do
       let(:entries) { [] }
 
       it "should return an empty array" do
+        stub(LdapClient).enabled? { true }
         LdapClient.search("testguy").should be_empty
       end
     end
@@ -174,6 +175,7 @@ describe LdapClient do
 
 
       it "maps the customized fields to our standardized fields" do
+        stub(LdapClient).enabled? { true }
         results = LdapClient.search("testguy")
         results.should be_a(Array)
         results.first.should be_a(Hash)
@@ -192,6 +194,16 @@ describe LdapClient do
                                  :username => "testguy" }
       end
     end
+
+    context "when LDAP is disabled" do
+      before do
+        stub(LdapClient).enabled? { false }
+      end
+
+      it "should raise an error" do
+        expect { LdapClient.search("testguy") }.to raise_error(LdapClient::LdapNotEnabled)
+      end
+    end
   end
 
   describe ".authenticate" do
@@ -206,8 +218,19 @@ describe LdapClient do
 
           mock(ldap).bind { true }
         end
+        stub(LdapClient).enabled? { true }
 
         LdapClient.authenticate("testguy", "secret").should be_true
+      end
+    end
+
+    context "when LDAP is disabled" do
+      before do
+        stub(LdapClient).enabled? { false }
+      end
+
+      it "should raise an error" do
+        expect { LdapClient.authenticate("testguy", "secret") }.to raise_error(LdapClient::LdapNotEnabled)
       end
     end
   end

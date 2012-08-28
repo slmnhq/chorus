@@ -1,10 +1,11 @@
 require 'net/ldap'
 
 module LdapClient
+  LdapNotEnabled = Class.new(StandardError)
   extend self
 
   def enabled?
-    config['enable']
+    config.fetch('enable', false)
   end
 
   # used to prefill a user create form
@@ -36,10 +37,11 @@ module LdapClient
   end
 
   def client
+    raise LdapNotEnabled.new unless enabled?
     Net::LDAP.new :host => config['host'], :base => config['base']
   end
 
   def config
-    Chorus::Application.config.chorus['ldap']
+    Chorus::Application.config.chorus['ldap'] || {}
   end
 end

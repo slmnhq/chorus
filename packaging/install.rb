@@ -191,15 +191,16 @@ class Install
       chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
       stop_postgres
     else
-      chorus_exec "#{destination_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
+      chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
       start_postgres
-      chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+      chorus_exec %Q{#{release_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
       chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate db:seed"
       stop_postgres
     end
   end
 
   def link_current_to_release
+    File.delete("#{destination_path}/current") if File.exists?("#{destination_path}/current")
     FileUtils.ln_sf("#{release_path}", "#{destination_path}/current")
   end
 
@@ -210,13 +211,13 @@ class Install
   def stop_old_install
     return unless do_upgrade
 
-    chorus_exec "cd #{destination_path} && ./server_control.sh stop"
+    server_control "stop"
   end
 
   def startup
     return unless do_upgrade
 
-    chorus_exec "cd #{destination_path} && ./server_control.sh start"
+    server_control "start"
   end
 
   private
@@ -238,11 +239,15 @@ class Install
   end
 
   def stop_postgres
-    chorus_exec "cd #{destination_path} && ./server_control.sh stop postgres"
+    server_control "stop postgres"
   end
 
   def start_postgres
-    chorus_exec "cd #{destination_path} && ./server_control.sh start postgres"
+    server_control "start postgres"
+  end
+
+  def server_control(args)
+    chorus_exec "cd #{destination_path} && CHORUS_HOME=#{release_path} ./server_control.sh #{args}"
   end
 end
 
@@ -288,7 +293,7 @@ if __FILE__ == $0
     puts "Done"
 
     puts Install::MESSAGES[:installation_complete]
-    puts Install::MESSAGES[:run_server_control] % install.destination_path
+    puts Install::MESSAGES[:run_server_control] % install.destination_path unless install.do_upgrade
   rescue Install::NonRootValidationError
     puts Install::MESSAGES[:abort_install_non_root]
   rescue Install::UpgradeCancelled

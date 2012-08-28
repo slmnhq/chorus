@@ -4,4 +4,4 @@
 
 export FORCE_DEPLOY=true
 
-rake package:stage package:installer --trace
+rake package:stage --trace
