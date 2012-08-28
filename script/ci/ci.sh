@@ -5,7 +5,6 @@
 set -e
 export RAILS_ENV=test
 
-b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
 b/rake assets:precompile
 
 echo "starting gpfdist (Linux RHEL5 only)"

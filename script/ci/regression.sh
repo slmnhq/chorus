@@ -1,11 +1,11 @@
 #!/bin/bash
 
+export RAILS_ENV=integration
+
 . script/ci/setup.sh
 
 set -e
-export RAILS_ENV=integration
 
-b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
 b/rake assets:precompile
 
 # start solr
