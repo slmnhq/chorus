@@ -190,7 +190,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
             });
 
-            xcontext("with a database name and schema name", function() {
+            context("with a database name and schema name", function() {
                 beforeEach(function() {
                     spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                         instance: "4",
@@ -203,8 +203,15 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
 
                 it("should set the database name and schema name on the model", function() {
-                    expect(this.sandbox.get("databaseName")).toBe("new_database");
-                    expect(this.sandbox.get("schemaName")).toBe("new_schema");
+                    expect(this.dialog.workspace.get("databaseName")).toBe("new_database");
+                    expect(this.dialog.workspace.get("schemaName")).toBe("new_schema");
+                    expect(this.dialog.workspace.get("instanceId")).toBe("4");
+                });
+
+                it("saves the workspace with the new sandbox id", function() {
+                    expect(this.server.lastUpdate().params()["workspace[schema_name]"]).toBe("new_schema");
+                    expect(this.server.lastUpdate().params()["workspace[database_name]"]).toBe("new_database");
+                    expect(this.server.lastUpdate().params()["workspace[instance_id]"]).toBe("4");
                 });
             });
         });

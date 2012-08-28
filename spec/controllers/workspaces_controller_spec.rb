@@ -277,45 +277,90 @@ describe WorkspacesController do
       end
     end
 
-    context "user can create a new schema as sandbox" do
+    context "when new sandbox is a new schema in an existing database" do
       let!(:database) { gpdb_schemas(:other_schema).database }
 
-      it "should create a GpdbSchema in Chorus meta data" do
+      it "calls create_schema" do
         any_instance_of(GpdbDatabase) do |db|
-          stub(db).create_schema.with_any_args {
-            GpdbSchema.create!({:name => "create_new_schema", :database => database }, :without_protection => true)
-          }
+          mock(db).create_schema("create_new_schema", owner) do |name|
+            database.schemas.create!({:name => name }, :without_protection => true)
+          end
         end
 
-        put :update, :id => workspace.id, :workspace => {
-            :owner => {id: "3"},
-            :public => "false",
-            :schema_name => "create_new_schema",
-            :database_id => database.id
-        }
+        send_request
 
-        workspace.reload
-        schema = database.schemas.find_by_name("create_new_schema")
-        workspace.sandbox.id.should == schema.id
-        schema.name.should == "create_new_schema"
-        schema.database.should == database
+        workspace.reload.sandbox.tap do |sandbox|
+          sandbox.name.should == "create_new_schema"
+        end
       end
 
-      it "should raise error when the create fails" do
+      it "returns an error if creation fails" do
         any_instance_of(GpdbDatabase) do |db|
           stub(db).create_schema.with_any_args {
             raise Exception.new("Schema creation failed")
           }
         end
+        send_request
+        response.code.should == "422"
+        decoded_errors.fields.schema.GENERIC.message.should == "Schema creation failed"
+      end
+
+      def send_request
         put :update, :id => workspace.id, :workspace => {
-            :owner => {id: "3"},
+            :owner => {id: owner.id.to_s},
             :public => "false",
             :schema_name => "create_new_schema",
             :database_id => database.id
         }
+      end
+    end
 
+    context "when new sandbox is a new schema in a new database" do
+      let(:instance) { instances(:bobs_instance) }
+
+      it "calls both create_database and create_schema" do
+
+        any_instance_of(Instance) do |instance_double|
+          mock(instance_double).create_database("new_database", owner) do |name|
+            instance.databases.create!({:name => name}, :without_protection => true)
+          end
+        end
+
+        any_instance_of(GpdbDatabase) do |database_double|
+          mock(database_double).create_schema("create_new_schema", owner) do |name|
+            database = instance.reload.databases.find_by_name("new_database")
+            database.schemas.create!({:name => name}, :without_protection => true)
+          end
+        end
+
+        send_request
+
+        workspace.reload.sandbox.tap do |sandbox|
+          sandbox.name.should == "create_new_schema"
+          sandbox.database.name.should == "new_database"
+        end
+      end
+
+      it "returns an error if creation fails" do
+        any_instance_of(Instance) do |instance|
+          stub(instance).create_database.with_any_args {
+            raise Exception.new("Database creation failed")
+          }
+        end
+
+        send_request
         response.code.should == "422"
-        decoded_errors.fields.schema.GENERIC.message.should == "Schema creation failed"
+        decoded_errors.fields.database.GENERIC.message.should == "Database creation failed"
+      end
+
+      def send_request
+        put :update, :id => workspace.id, :workspace => {
+            :owner => {id: owner.id.to_s},
+            :public => "false",
+            :schema_name => "create_new_schema",
+            :database_name => "new_database",
+            :instance_id => instance.id
+        }
       end
     end
   end

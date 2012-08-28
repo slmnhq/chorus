@@ -62,51 +62,70 @@ describe GpdbDatabase do
     end
   end
 
-  describe ".create_schema", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  describe ".create_schema" do
+    context "using a real greenplum instance", :database_integration => true do
+      let(:account) { GpdbIntegration.real_gpdb_account }
+      let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+      let(:instance) { database.instance }
 
-    before do
-      refresh_chorus
-    end
+      before do
+        refresh_chorus
+      end
 
-    def fetch_from_gpdb(sql)
-      database.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query(sql)
-        yield result
+      after do
+        exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
+      end
+
+      it "creates the schema" do
+
+        database.create_schema("my_new_schema", account.owner).tap do |schema|
+          schema.name.should == "my_new_schema"
+          schema.database.should == database
+        end
+
+        database.schemas.find_by_name("my_new_schema").should_not be_nil
+
+        exec_on_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
+          result[0]["nspname"].should == "my_new_schema"
+        end
+      end
+
+      it "raises an error if a schema with the same name already exists" do
+        expect {
+          database.create_schema(database.schemas.last.name, account.owner)
+        }.to raise_error(ActiveRecord::StatementInvalid) { |exception|
+          exception.message.should match("already exists")
+        }
+      end
+
+      def exec_on_gpdb(sql)
+        Gpdb::ConnectionBuilder.connect!(instance, account, database.name) do |connection|
+          result = connection.exec_query(sql)
+          block_given? ? yield(result) : result
+        end
       end
     end
 
-    after(:each) do
-      database.with_gpdb_connection(account) do |connection|
-        connection.exec_query('DROP SCHEMA IF EXISTS "my_new_schema"')
+    context "when gpdb connection is broken" do
+      let(:database) { gpdb_databases(:bobs_database) }
+      let(:user) { users(:bob) }
+
+      before do
+        stub(Gpdb::ConnectionBuilder).connect!.with_any_args { raise ActiveRecord::JDBCError.new('quack') }
       end
-    end
 
-    it "creates the schema" do
-      database.create_schema("my_new_schema", account.owner)
-
-      database.schemas.find_by_name("my_new_schema").should_not be_nil
-      database.schemas.find_by_name("my_new_schema").database.should == database
-
-      fetch_from_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
-        result[0]["nspname"].should == "my_new_schema"
+      it "raises an error" do
+        expect {
+          database.create_schema("test_schema", user) }.to raise_error(ActiveRecord::JDBCError) { |exception|
+          exception.message.should match("quack")
+        }
       end
-    end
 
-    it "should throw an error if schema already exists" do
-        expect{ database.create_schema("test_schema", account.owner) }.to raise_error(StandardError, "Schema test_schema already exists in database #{database.name}")
-    end
-
-    it "should clean up if the schema create failed" do
-      any_instance_of(GpdbSchema) do |schema|
-        stub(schema).save! { raise Exception }
-      end
-      mock.proxy(database).cleanup_schema_in_gpdb("my_new_schema", account.owner)
-      expect { database.create_schema("my_new_schema", account.owner) }.to raise_error(ApiValidationError)
-
-      fetch_from_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
-        result.length.should == 0
+      it "does not create a local database" do
+        expect {
+          database.create_schema("my_new_schema", user)
+        }.to raise_error(ActiveRecord::JDBCError)
+        database.schemas.find_by_name("my_new_schema").should be_nil
       end
     end
   end

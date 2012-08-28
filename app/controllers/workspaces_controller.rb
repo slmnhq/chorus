@@ -30,21 +30,25 @@ class WorkspacesController < ApplicationController
   def update
     workspace = Workspace.find(params[:id])
     original_archived = workspace.archived?.to_s
-    params[:workspace][:archiver] = current_user if params[:workspace][:archived] == 'true'
-    workspace.attributes = params[:workspace]
+    attributes = params[:workspace]
+    attributes[:archiver] = current_user if attributes[:archived] == 'true'
+    workspace.attributes = attributes
     authorize! :update, workspace
 
     Workspace.transaction do
-      if params[:workspace][:schema_name]
+      if attributes[:schema_name]
         begin
-          database = GpdbDatabase.find(params[:workspace][:database_id])
-          workspace_sandbox = database.create_schema(params[:workspace][:schema_name], current_user)
+          if attributes[:database_name]
+            instance = Instance.find(attributes[:instance_id])
+            database = instance.create_database(attributes[:database_name], current_user)
+          else
+            database = GpdbDatabase.find(attributes[:database_id])
+          end
+          workspace.sandbox = database.create_schema(attributes[:schema_name], current_user)
         rescue Exception => e
-          raise ApiValidationError.new(:schema, :generic, {:message => e.message})
+          raise ApiValidationError.new(database ? :schema : :database, :generic, {:message => e.message})
         end
-        workspace.sandbox = workspace_sandbox
       end
-
       create_workspace_events(workspace, original_archived)
       workspace.save!
     end

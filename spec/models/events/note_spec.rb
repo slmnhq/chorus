@@ -101,7 +101,6 @@ describe "Notes" do
     it "can not be created on an archived workspace" do
       note = Events::NoteOnWorkspace.new(:workspace => workspaces(:archived), :actor => actor, :body => 'WOO!')
       note.valid?
-      puts note.errors
       note.should have_at_least(1).errors_on(:workspace)
     end
 

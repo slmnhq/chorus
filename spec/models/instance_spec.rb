@@ -66,6 +66,69 @@ describe Instance do
     instance.owner_id.should_not == changed_id
   end
 
+  describe "#create_database" do
+    context "using a real remote greenplum instance", :database_integration => true do
+      let(:account) { GpdbIntegration.real_gpdb_account }
+      let(:instance) { GpdbIntegration.real_gpdb_instance }
+
+      before do
+        refresh_chorus
+      end
+
+      after do
+        exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
+      end
+
+      it "creates the database" do
+        expect do
+          instance.create_database("new_database", account.owner).tap do |database|
+            database.name.should == "new_database"
+            database.instance.should == instance
+          end
+        end.to change(GpdbDatabase, :count).by(1)
+        exec_on_gpdb("select datname from pg_database where datname = 'new_database';").should_not be_empty
+      end
+
+      it "raises an error if a database with the same name already exists" do
+        expect {
+          instance.create_database(instance.databases.last.name, account.owner)
+        }.to raise_error(ActiveRecord::StatementInvalid) {|error|
+          error.message.should match "already exists"
+        }
+      end
+
+      def exec_on_gpdb(sql)
+        Gpdb::ConnectionBuilder.connect!(instance, account) do |connection|
+          connection.exec_query(sql)
+        end
+      end
+    end
+
+    context "when gpdb connection is broken" do
+      let(:instance) { instances(:bobs_instance) }
+      let(:user) { users(:bob) }
+
+      before do
+        mock(Gpdb::ConnectionBuilder).connect!.with_any_args { raise ActiveRecord::JDBCError.new('quack') }
+      end
+
+      it "raises an error" do
+        expect {
+          instance.create_database("bobs_database_new", user)
+        }.to raise_error(ActiveRecord::JDBCError) { |error|
+          error.message.should match "quack"
+        }
+      end
+
+      it "does not create a database entry" do
+        expect {
+          instance.create_database("bobs_database_new", user)
+        }.to raise_error(ActiveRecord::JDBCError)
+        instance.databases.find_by_name("bobs_database_new").should be_nil
+      end
+    end
+  end
+
   describe "#owner_account" do
     it "returns the instance owner's account" do
       owner = FactoryGirl.create(:user)

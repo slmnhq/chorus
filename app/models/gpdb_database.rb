@@ -29,6 +29,13 @@ class GpdbDatabase < ActiveRecord::Base
     end
   end
 
+  def create_schema(name, current_user)
+    raise ActiveRecord::StatementInvalid, "Schema '#{name}' already exists." unless schemas.where(:name => name).empty?
+    create_schema_in_gpdb(name, current_user)
+    GpdbSchema.refresh(account_for_user!(current_user), self)
+    schemas.find_by_name!(name)
+  end
+
   def with_gpdb_connection(account, &block)
     Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
   end
@@ -37,44 +44,14 @@ class GpdbDatabase < ActiveRecord::Base
     schemas.find_by_name(schema_name).datasets.find_by_name(dataset_name)
   end
 
-  def create_schema(name, current_user)
-    if schemas.find_by_name(name)
-      raise StandardError, "Schema #{name} already exists in database #{self.name}"
-    end
-
-    create_schema_in_gpdb(name, current_user)
-    schema = GpdbSchema.new
-    begin
-      schema.name = name
-      schema.database = self
-      schema.save!
-      schema
-    rescue Exception => e
-      cleanup_schema_in_gpdb(name, current_user)
-      raise ApiValidationError.new(:schema, :generic, {:message => "Create schema #{name} command failed"})
-    end
-  end
+  private
 
   def create_schema_in_gpdb(name, current_user)
     with_gpdb_connection(instance.account_for_user!(current_user)) do |conn|
       sql = "CREATE SCHEMA #{conn.quote_column_name(name)}"
       conn.exec_query(sql)
     end
-  rescue ActiveRecord::StatementInvalid => e
-    raise ApiValidationError.new(:schema, :generic, {:message => "Create schema #{name} command failed"})
   end
-
-  def cleanup_schema_in_gpdb(name, current_user)
-    with_gpdb_connection(instance.account_for_user!(current_user)) do |conn|
-      sql = "DROP SCHEMA IF EXISTS #{conn.quote_column_name(name)}"
-      conn.exec_query(sql)
-      return GpdbSchema.new
-    end
-  rescue ActiveRecord::StatementInvalid => e
-    return GpdbSchema.new
-  end
-
-  private
 
   def mark_schemas_as_stale
     if stale? && stale_at_changed?

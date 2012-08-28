@@ -66,6 +66,13 @@ class Instance < ActiveRecord::Base
     Rails.logger.error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   end
 
+  def create_database(name, current_user)
+    raise ActiveRecord::StatementInvalid, "Database '#{name}' already exists." unless databases.where(:name => name).empty?
+    create_database_in_instance(name, current_user)
+    refresh_databases
+    databases.find_by_name!(name)
+  end
+
   def account_names
     accounts.pluck(:db_username)
   end
@@ -91,6 +98,13 @@ class Instance < ActiveRecord::Base
   end
 
   private
+
+  def create_database_in_instance(name, current_user)
+    Gpdb::ConnectionBuilder.connect!(self, instance.account_for_user!(current_user)) do |conn|
+      sql = "CREATE DATABASE #{conn.quote_column_name(name)}"
+      conn.exec_query(sql)
+    end
+  end
 
   def database_and_role_sql
     roles = Arel::Table.new("pg_catalog.pg_roles", :as => "r")

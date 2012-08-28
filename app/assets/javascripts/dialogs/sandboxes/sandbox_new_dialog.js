@@ -89,10 +89,15 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
             this.workspace.set({ sandboxId: sandboxId }, {silent : true});
             this.workspace.save();
         } else {
-            // Create new schema
+            // Create new schema / database
             var schemaName = this.activeForm.fieldValues().schemaName;
+            var databaseName = this.activeForm.fieldValues().databaseName;
+            var instanceId = this.activeForm.fieldValues().instance;
             var databaseId = this.activeForm.fieldValues().database;
-            this.workspace.set({schemaName: schemaName, databaseId: databaseId}, {silent : true});
+            this.workspace.set({schemaName: schemaName,
+                                databaseId: databaseId,
+                                databaseName: databaseName,
+                                instanceId: instanceId}, {silent : true});
             this.workspace.save();
         }
 
