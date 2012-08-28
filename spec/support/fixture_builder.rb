@@ -227,8 +227,9 @@ FixtureBuilder.configure do |fbuilder|
 
     #ImportSchedule
     pending_import_schedule = ImportSchedule.create!({:start_datetime => Time.local(2012, 8, 22, 11, 0).to_datetime, :end_date => Date.parse("2012-08-25"), :last_scheduled_at => nil,
-                                                     :frequency => 'daily', :user_id => bob.id, :row_limit => 1, :truncate => true, :workspace_id => bob_public_workspace.id,
+                                                     :frequency => 'daily', :user_id => bob.id, :sample_count => 1, :truncate => true, :workspace_id => bob_public_workspace.id,
                                                      :source_dataset_id => bobs_table.id, :to_table => 'destination-table'}, :without_protection => true)
+
     fbuilder.name :pending_import_schedule, pending_import_schedule
   end
 end

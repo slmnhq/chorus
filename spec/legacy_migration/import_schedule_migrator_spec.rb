@@ -49,10 +49,19 @@ describe ImportScheduleMigrator do
           row['source_id'].should include(import_schedule.source_dataset.name)
           import_schedule.truncate.should == (row["truncate"] =="t")
           import_schedule.user.legacy_id.should == row["owner_id"]
-          import_schedule.row_limit.should == row["sample_count"].try(:to_i)
+          import_schedule.sample_count.should == row["sample_count"].try(:to_i)
           import_schedule.deleted_at.should !=nil if import_schedule.workspace.deleted_at
         end
       end
+
+      it "copies a undeleted import schedule from a deleted workspace (and marks it as deleted)" do
+        import_schedule = ImportSchedule.find_by_legacy_id('10000')
+        workspace = Workspace.unscoped.find(import_schedule.workspace_id)
+        import_schedule.deleted_at.should == workspace.deleted_at
+        workspace.name.should == 'another workspace_del_1331570259423'
+      end
+
+
     end
   end
 end

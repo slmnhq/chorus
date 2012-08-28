@@ -9,7 +9,7 @@ class ImportScheduler
           :truncate => schedule.truncate,
           :new_table => schedule.new_table,
           :user_id => schedule.user_id,
-          :row_limit => schedule.row_limit
+          :sample_count => schedule.sample_count
       }
 
       import = Import.create!(attributes, :without_protection => true)

@@ -23,7 +23,7 @@ class ImportScheduleMigrator < AbstractMigrator
           source_dataset_id,
           truncate,
           user_id,
-          row_limit
+          sample_count
           )
         SELECT
           s.id,

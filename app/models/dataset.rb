@@ -7,6 +7,7 @@ class Dataset < ActiveRecord::Base
   include Stale
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
+  has_many :import_schedules, :foreign_key => 'source_dataset_id'
   delegate :instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
@@ -156,12 +157,12 @@ class Dataset < ActiveRecord::Base
     # If the user is creating a scheduled import
     if attributes[:import_type] == "schedule"
 
-      ImportSchedule.create! do |schedule|
-        schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :sample_count, :new_table, :row_limit), :without_protection => true)
+      import_schedules.create! do |schedule|
+        schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :new_table, :sample_count), :without_protection => true)
+
         schedule.start_datetime = attributes[:schedule_start_time]
         schedule.end_date = attributes[:schedule_end_time]
         schedule.frequency = attributes[:schedule_frequency].downcase
-        schedule.source_dataset_id = attributes[:dataset_id]
         schedule.user = user
         schedule.set_next_import
       end

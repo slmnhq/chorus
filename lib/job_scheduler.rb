@@ -17,10 +17,10 @@ class JobScheduler
       QC.enqueue("SolrIndexer.refresh_and_index", [])
     end
 
-    every(1.minute, 'ImportSchedule.run_pending_imports') do
+    every(1.minute, 'ImportScheduler.run') do
       # At present, we choose to enqueue the pending imports in this thread. If this becomes a bottleneck,
       # we may choose to run this in a separate queued job.
-      ImportSchedule.run_pending_imports
+      ImportScheduler.run
     end
 
   end

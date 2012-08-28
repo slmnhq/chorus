@@ -37,18 +37,20 @@ class DatasetsController < GpdbController
                                      :dest_table_name => dst_table_name }) unless src_table.dataset_consistent?(dst_table)
     end
 
-    event = Events::DatasetImportCreated.by(current_user).add(
-        :workspace => workspace,
-        :source_dataset => src_table,
-        :dataset => dst_table,
-        :destination_table => dst_table_name
-    )
+    Dataset.transaction do
+      event = Events::DatasetImportCreated.by(current_user).add(
+          :workspace => workspace,
+          :source_dataset => src_table,
+          :dataset => dst_table,
+          :destination_table => dst_table_name
+      )
 
-    attributes = params[:dataset_import].dup.merge(
-      :dataset_import_created_event_id => event.id.to_s,
-      :remote_copy => workspace.sandbox.database != src_table.schema.database
-    )
-    src_table.import(attributes, current_user )
+      attributes = params[:dataset_import].dup.merge(
+        :dataset_import_created_event_id => event.id.to_s,
+        :remote_copy => workspace.sandbox.database != src_table.schema.database
+      )
+      src_table.import(attributes, current_user )
+    end
 
     render :json => {}, :status => :created
   end

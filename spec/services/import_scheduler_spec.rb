@@ -14,7 +14,7 @@ describe ImportScheduler do
           import.source_dataset_id.should == import_schedule.source_dataset_id
           import.truncate.should == import_schedule.truncate
           import.user_id.should == import_schedule.user_id
-          import.row_limit.should == import_schedule.row_limit
+          import.sample_count.should == import_schedule.sample_count
         end
       end
     end

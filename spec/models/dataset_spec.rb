@@ -460,7 +460,7 @@ describe Dataset::Query, :database_integration => true do
               "schedule_start_time" => start_time,
               "schedule_end_time" => "2012-11-24",
               "schedule_frequency"=>"WEEKLY",
-              "row_limit" => 1,
+              "sample_count" => 1,
               "import_type"=>"schedule"
           )
         }
@@ -478,7 +478,7 @@ describe Dataset::Query, :database_integration => true do
               import_schedule.frequency.should == 'weekly'
               import_schedule.to_table.should == "the_new_table"
               import_schedule.new_table.should == true
-              import_schedule.row_limit.should == 1
+              import_schedule.sample_count.should == 1
               import_schedule.last_scheduled_at.should == nil
               import_schedule.user.should == user
               import_schedule.next_import_at.should == DateTime.parse(start_time)

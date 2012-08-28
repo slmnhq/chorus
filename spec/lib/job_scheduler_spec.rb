@@ -38,12 +38,12 @@ describe JobScheduler do
 
   describe "ImportScheduler" do
     it "runs every minute" do
-      job_scheduler.job_named('ImportSchedule.run_pending_imports').period.should == 1.minute
+      job_scheduler.job_named('ImportScheduler.run').period.should == 1.minute
     end
 
     it "runs the ImportScheduler in the same thread" do
-      mock(ImportSchedule).run_pending_imports
-      job_scheduler.job_named('ImportSchedule.run_pending_imports').run(Time.now)
+      mock(ImportScheduler).run
+      job_scheduler.job_named('ImportScheduler.run').run(Time.now)
     end
   end
 
