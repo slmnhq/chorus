@@ -307,6 +307,14 @@ describe Gppipe, :database_integration => true do
       end
     end
 
+    context "create external table does not succeed" do
+      it "does not hang" do
+        setup_data
+        stub(Gppipe).write_protocol { 'gpfdistinvalid' }
+        expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+      end
+    end
+
     context "destination table already exists" do
       before do
         setup_data

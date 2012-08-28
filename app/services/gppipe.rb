@@ -22,6 +22,14 @@ class Gppipe < GpTableCopier
     Chorus::Application.config.chorus['gpfdist.ssl'] ? 'gpfdists' : 'gpfdist'
   end
 
+  def self.write_protocol
+    self.protocol
+  end
+
+  def self.read_protocol
+    self.protocol
+  end
+
   def table_definition
     return @table_definition if @table_definition
     # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
@@ -53,13 +61,13 @@ class Gppipe < GpTableCopier
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
+          src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition})
+                                 LOCATION ('#{Gppipe.write_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
+                               LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           thr = Thread.new do
-            src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition})
-                                 LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
             src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
           end
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
-                               LOCATION ('#{Gppipe.protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
           thr.join
         rescue Exception => e
