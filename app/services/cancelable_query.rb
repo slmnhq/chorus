@@ -24,6 +24,7 @@ class CancelableQuery
           :connection_id => @connection.object_id) do
         statement.execute
       end
+      driver.commit
       capture_warnings(statement)
       result_set = statement.get_result_set
       while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)

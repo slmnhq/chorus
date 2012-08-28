@@ -62,6 +62,11 @@ describe CancelableQuery do
       cancelable_query.execute(sql, :limit => 40)
     end
 
+    it "actually commits data changes" do
+      mock.proxy(driver).commit
+      cancelable_query.execute("select 1;")
+    end
+
     describe "logging" do
       it "logs sql sent to the exec_query method of the connection" do
         log = ''
