@@ -1,6 +1,6 @@
 #Only defaults that should apply to all applications should go in here, optional configurations should only go into chorus.yml.example
 session_timeout_minutes: 120
-instance_poll_interval_minutes: 1
+instance_poll_interval_minutes: 5
 delete_unimported_csv_files_interval_hours: 6
 delete_unimported_csv_files_after_hours: 24
 reindex_datasets_interval_hours: 24
