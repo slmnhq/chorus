@@ -62,8 +62,13 @@ describe CancelableQuery do
       cancelable_query.execute(sql, :limit => 40)
     end
 
-    it "actually commits data changes" do
+    it "actually commits data changes when a limit is specified" do
       mock.proxy(driver).commit
+      cancelable_query.execute("select 1;", :limit => 40)
+    end
+
+    it "actually does not try to commit when no limit is specified (as autocommit is enabled)" do
+      dont_allow(driver).commit
       cancelable_query.execute("select 1;")
     end
 
