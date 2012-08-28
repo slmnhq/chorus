@@ -62,6 +62,8 @@ class Instance < ActiveRecord::Base
         database.save
       end
     end
+  rescue ActiveRecord::JDBCError => e
+    Rails.logger.error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   end
 
   def account_names
