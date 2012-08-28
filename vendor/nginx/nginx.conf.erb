@@ -51,7 +51,7 @@ http {
 
         location / {
             root  ../../../../public/;
-            try_files $uri @app;
+            try_files $uri $uri/index.html @app;
         }
 
         location /system/ {
