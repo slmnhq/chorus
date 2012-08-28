@@ -20,6 +20,10 @@ RSpec.configure do |config|
     `cd #{Rails.root} && RAILS_ENV=test packaging/chorus_migrate.sh db/legacy/legacy.sql`
   end
 
+  config.after(:suite) do
+    `psql -p 8543 chorus_rails_test -c 'drop schema if exists legacy_migrate cascade'`
+  end
+
   Chorus::Application.configure do |config|
     config.config.legacy_chorus_root_path = Rails.root + "system/legacy_workfiles"
   end
