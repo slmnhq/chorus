@@ -24,7 +24,7 @@ if [ -f $WORKER_PID_FILE ]; then
   fi
 fi
 
-$RUBY script/rails runner "QC::Worker.new.start" > $CHORUS_HOME/log/worker.$RAILS_ENV.log 2>&1 &
+RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "QC::Worker.new.start" > $CHORUS_HOME/log/worker.$RAILS_ENV.log 2>&1 &
 worker_pid=$!
 echo $worker_pid > $WORKER_PID_FILE
 log "Worker started as pid $worker_pid"
