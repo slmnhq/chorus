@@ -86,6 +86,13 @@ describe WorkfileExecutionsController do
         post :create, :id => workfile.id, :schema_id => schema.id, :sql => 'select hippopotamus', :check_id => check_id
         response.code.should == "422"
       end
+
+      after do
+        account = schema.account_for_user!(users(:admin))
+        schema.with_gpdb_connection(account) do |connection|
+          connection.exec_query("DROP TABLE IF EXISTS table_with_warnings")
+        end
+      end
     end
   end
 
