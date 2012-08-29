@@ -76,3 +76,37 @@ describe " add an instance " do
     end
   end
 end
+
+describe "users can view the contents of a hdfs file" do
+  it "can see the contents of a hdfs file" do
+    login('edcadmin', 'secret')
+    create_valid_hadoop_instance(:name => "viewing_contents_of_hdfs")
+    hdfs_id = HadoopInstance.find_by_name("viewing_contents_of_hdfs").id
+    wait_for_ajax
+    go_to_instance_page
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{hdfs_id}']").click
+    end
+    click_link "viewing_contents_of_hdfs"
+    wait_for_ajax
+    page.should have_content "case_sf_311.csv"
+    click_link "case_sf_311.csv"
+    wait_for_ajax
+    page.should have_content "1157509,06/30/2012 11:52 PM,,Open,210 WEST POINT RD,SFHA Requests,SFHA - Emergency"
+    go_to_instance_page
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{hdfs_id}']").click
+    end
+    click_link "viewing_contents_of_hdfs"
+    wait_for_ajax
+    page.should have_content "case_sf_311_subset_text.txt"
+    click_link "case_sf_311_subset_text.txt"
+    wait_for_ajax
+    page.should have_content "1157509,06/30/2012 11:52 PM,,Open,210 WEST POINT RD"
+
+  end
+
+
+
+
+end
