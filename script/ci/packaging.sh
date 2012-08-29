@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export RAILS_ENV=test
+
 . script/ci/setup.sh
 
 export FORCE_DEPLOY=true
