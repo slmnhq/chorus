@@ -54,8 +54,8 @@ module Events
         and(activities[:entity_id].in(workspace_ids))
 
       dashboard_activities = activities.where(entity_is_global.or(entity_in_user_workspaces))
-
-      where(:id => dashboard_activities.project(:event_id))
+      event_ids = ActiveRecord::Base.connection.execute(dashboard_activities.project(:event_id).to_sql).map{ |h| h['event_id'] }
+      where(:id => event_ids)
     end
 
     def create_activities
