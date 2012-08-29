@@ -55,15 +55,15 @@ describe InstanceStatus do
       end
 
       it "checks the connection status for each instance" do
-        instance1.update_attribute(:online, false)
-        instance2.update_attribute(:online, false)
-        instance3.update_attribute(:online, true)
+        instance1.update_attribute(:state, "offline")
+        instance2.update_attribute(:state, "offline")
+        instance3.update_attribute(:state, "online")
 
         InstanceStatus.check_gpdb_instances
 
-        instance1.reload.should be_online
-        instance2.reload.should be_online
-        instance3.reload.should_not be_online
+        instance1.reload.state.should == "online"
+        instance2.reload.state.should == "online"
+        instance3.reload.state.should == "offline"
       end
 
 
@@ -93,15 +93,15 @@ describe InstanceStatus do
       end
 
       it "does not fail to update other instances" do
-        instance1.update_attribute(:online, false)
-        instance2.update_attribute(:online, false)
-        instance3.update_attribute(:online, true)
+        instance1.update_attribute(:state, "offline")
+        instance2.update_attribute(:state, "offline")
+        instance3.update_attribute(:state, "online")
 
         InstanceStatus.check_gpdb_instances
 
-        instance1.reload.should_not be_online
-        instance2.reload.should be_online
-        instance3.reload.should be_online
+        instance1.reload.state.should == "offline"
+        instance2.reload.state.should == "online"
+        instance3.reload.state.should == "online"
       end
     end
   end

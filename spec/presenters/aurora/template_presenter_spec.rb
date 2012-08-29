@@ -18,7 +18,7 @@ describe Aurora::TemplatePresenter, :type => :view do
 
     it "includes status" do
       @hash[:name].should  == "name"
-      @hash[:memory_size_in_mb].should == 1024
+      @hash[:memory_size_in_gb].should == 1
       @hash[:vcpu_number].should == 3
     end
   end

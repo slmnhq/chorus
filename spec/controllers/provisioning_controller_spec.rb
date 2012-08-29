@@ -9,7 +9,7 @@ describe ProvisioningController do
 
     template.name = 'small'
     template.vcpu_number = 3
-    template.memory_size = 4096
+    template.memory_size = 4
   end
 
   describe "#show" do

@@ -1,5 +1,5 @@
 class InstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, :online?, :shared, :provision_type,
+  delegate :name, :host, :port, :id, :owner, :state, :shared, :provision_type,
            :maintenance_db, :description, :instance_provider, :version, to: :model
 
   def to_hash
@@ -10,7 +10,7 @@ class InstancePresenter < Presenter
       :id => id,
       :owner => present(owner),
       :shared => shared,
-      :state => online? ? "online" : "offline",
+      :state => state,
       :provision_type => provision_type,
       :maintenance_db => maintenance_db,
       :description => description,

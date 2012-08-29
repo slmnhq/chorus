@@ -17,7 +17,7 @@ describe Gpdb::ConnectionChecker do
 
     Gpdb::ConnectionChecker.check!(instance, account)
 
-    instance.should be_online
+    instance.state.should == "online"
   end
 
   it "check the validation of account attributes, before checking connection" do

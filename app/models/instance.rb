@@ -1,5 +1,5 @@
 class Instance < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db,
+  attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
                   :provision_type, :description, :instance_provider, :version
 
   validates_presence_of :name, :maintenance_db

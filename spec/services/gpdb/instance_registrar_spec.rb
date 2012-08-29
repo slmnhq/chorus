@@ -131,6 +131,7 @@ describe Gpdb::InstanceRegistrar do
         instance.host.should == "provisioning_ip"
         instance.maintenance_db.should == "postgres"
         instance.provision_type.should == "create"
+        instance.state.should == "provisioning"
       end
     end
   end

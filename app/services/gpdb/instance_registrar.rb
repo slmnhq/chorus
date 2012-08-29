@@ -7,6 +7,7 @@ module Gpdb
       config.merge!(aurora_default_attributes) if options[:aurora]
       instance = owner.instances.build(config)
       instance.shared = config[:shared]
+      instance.state = 'provisioning' if options[:aurora]
 
       account = owner.instance_accounts.build(config)
       ActiveRecord::Base.transaction do

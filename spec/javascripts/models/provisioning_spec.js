@@ -30,7 +30,7 @@ describe("chorus.models.Provisioning", function () {
             expect(this.model.getTemplates()).toBeA(Array);
             expect(provisioningTemplate.name(), "small");
             expect(provisioningTemplate.get("vcpuNumber"), 1);
-            expect(provisioningTemplate.get("memorySizeInMb"), 4096);
+            expect(provisioningTemplate.get("memorySizeInGb"), 4);
         });
     });
 });

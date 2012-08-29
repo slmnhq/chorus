@@ -18,7 +18,6 @@ class InstancesController < GpdbController
     use_aurora = params[:instance][:provision_type] == "create"
     created_instance = Gpdb::InstanceRegistrar.create!(params[:instance], current_user,
                                                        :aurora => use_aurora)
-
     if use_aurora
       QC.enqueue("AuroraProvider.provide!", created_instance.id, params[:instance])
     end

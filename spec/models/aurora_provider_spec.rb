@@ -74,6 +74,10 @@ describe AuroraProvider do
                                           :schema_name => schema_name
                                         }) { database }
         end
+
+        any_instance_of(Instance) do |instance|
+          stub(instance).refresh_databases() {}
+        end
       end
 
       it "creates a database" do
@@ -91,6 +95,18 @@ describe AuroraProvider do
         event = Events::ProvisioningSuccess.find_by_actor_id(instance.owner)
         event.greenplum_instance.should == instance
       end
+
+      context "state" do
+        before do
+          mock(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {}
+        end
+        it "updates the state to online" do
+          AuroraProvider.provide!(instance.id, attributes)
+          instance.reload
+          instance.state.should == 'online'
+        end
+      end
+
       context "when schema name is not public" do
         before do
           mock(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {
@@ -133,6 +149,13 @@ describe AuroraProvider do
         event.greenplum_instance.should == instance
         event.additional_data['error_message'].should == "server cannot be reached"
       end
+
+      it "updates the state to fault" do
+        AuroraProvider.provide!(instance.id, attributes)
+        instance.reload
+        instance.state.should == 'fault'
+      end
+
     end
   end
 end

@@ -36,6 +36,7 @@ class AuroraProvider
     })
     db = provider.aurora_service.create_database(db_attributes)
     instance.host = db.public_ip
+    instance.state = 'online'
     instance.save!
     Events::ProvisioningSuccess.by(instance.owner).add(:greenplum_instance => instance)
     schema_name =  attributes["schema_name"]
@@ -46,6 +47,9 @@ class AuroraProvider
     instance
 
   rescue StandardError => e
+    instance = Instance.find(instance_id)
+    instance.state = 'fault'
+    instance.save!
     Events::ProvisioningFail.by(instance.owner).add(:greenplum_instance => instance,
                                                        :error_message => e.message)
   end

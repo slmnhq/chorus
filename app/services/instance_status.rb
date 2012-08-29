@@ -3,7 +3,12 @@ module InstanceStatus
   def self.each_instance(instances)
     instances.each do |instance|
       begin
-        instance.online = false
+        #TODO - rename online in HadoopInstance also to state
+        if (instance.class.name == "HadoopInstance")
+          instance.online = false
+        else
+          instance.state = "offline" if instance.state == "online"
+        end
         yield instance
       rescue => e
         Rails.logger.error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
@@ -32,7 +37,7 @@ module InstanceStatus
   def self.check_gpdb_instances
     each_instance(Instance.scoped) do |instance|
       Gpdb::ConnectionBuilder.connect!(instance, instance.owner_account) do |conn|
-        instance.online = true
+        instance.state = "online"
         version_string = conn.exec_query("select version()")[0]["version"]
         # if the version string looks like this:
         # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
