@@ -12,6 +12,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
             _.times(3, function() {
                 members.add(newFixtures.user());
             });
+            members.pagination = {records: 3};
 
             spyOn(this.members, "fetchAllIfNotLoaded");
             chorus.PageEvents.broadcast("workspace:selected", this.workspace);
@@ -19,7 +20,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         it("calls fetchIfNotLoaded on members", function() {
             expect(this.members.fetchAllIfNotLoaded).toHaveBeenCalled();
-        })
+        });
 
         it("includes an image for each member", function() {
             var images = this.view.$(".members img");
@@ -34,7 +35,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
             expect(links.eq(0).attr("title")).toBe(this.members.models[0].displayName());
             expect(links.eq(1).attr("title")).toBe(this.members.models[1].displayName());
             expect(links.eq(2).attr("title")).toBe(this.members.models[2].displayName());
-        })
+        });
 
         it("includes a link to each member's page", function() {
             var links = this.view.$(".members li a");
@@ -45,9 +46,9 @@ describe("chorus.views.WorkspaceMemberList", function() {
         });
 
         it("does not have the more workspace members link", function() {
-            expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0)
-        })
-    })
+            expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0);
+        });
+    });
 
     describe("when there are more than 24 members", function() {
         beforeEach(function() {
@@ -58,6 +59,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
             _.times(25, function() {
                 members.add(newFixtures.user());
             });
+            members.pagination = {records: 25};
 
             spyOn(this.members, "fetchAllIfNotLoaded");
             chorus.PageEvents.broadcast("workspace:selected", this.workspace);
@@ -65,14 +67,14 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         it("calls fetchIfNotLoaded on members", function() {
             expect(this.members.fetchAllIfNotLoaded).toHaveBeenCalled();
-        })
+        });
 
         it("only shows the first 24 images", function() {
             expect(this.view.$(".members img").length).toBe(24);
         });
 
         it("has a X more workspace members link", function() {
-            expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(1)
+            expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(1);
         });
-    })
-})
+    });
+});

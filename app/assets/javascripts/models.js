@@ -336,6 +336,7 @@ chorus.collections = {
                                 collection.trigger("reset", collection);
                                 collection.trigger("loaded");
                             } else {
+                                collection.loaded = false;
                                 fetchPage.call(collection, page + 1);
                             }
                         } else {
@@ -351,6 +352,9 @@ chorus.collections = {
             }
         })(),
 
+        totalRecordCount: function() {
+            return this.pagination && this.pagination.records;
+        },
 
         parse: function(data) {
             this.pagination = data.pagination;

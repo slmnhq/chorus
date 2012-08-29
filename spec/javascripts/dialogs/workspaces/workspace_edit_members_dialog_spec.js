@@ -11,11 +11,16 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
     describe("initialization", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
+            spyOn(this.workspace.members(), 'fetchAll');
             this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
         });
 
         it("fetches all users", function() {
             expect(this.dialog.collection.fetchAll).toHaveBeenCalled();
+        });
+
+        it("fetches all members", function() {
+            expect(this.workspace.members().fetchAll).toHaveBeenCalled();
         });
     });
 

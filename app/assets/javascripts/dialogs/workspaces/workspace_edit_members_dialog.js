@@ -14,7 +14,7 @@ chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
         this.members = this.options.pageModel.members();
 
         this.collection.fetchAll();
-        this.members.fetch();
+        this.members.fetchAll();
 
         this.bindings.add(this.collection, "reset", this.render);
         this.bindings.add(this.members, "saved", this.saved);
