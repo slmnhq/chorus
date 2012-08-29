@@ -11,25 +11,50 @@ describe GpdbColumn do
       let(:instance) { GpdbIntegration.real_gpdb_instance }
       let(:account) { GpdbIntegration.real_gpdb_account }
       let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
-      let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
-      it "gets the column information for table users" do
-        id = subject.first
+      context "view/table" do
+        let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
-        id.name.should eq('id')
-        id.data_type.should eq('integer')
-        id.description.should be_blank
-        id.ordinal_position.should eq(1)
+        it "gets the column information for table users" do
+          id = subject.first
+
+          id.name.should eq('id')
+          id.data_type.should eq('integer')
+          id.description.should be_blank
+          id.ordinal_position.should eq(1)
+        end
+
+        it "gets the column stats for table users" do
+          column1 = subject[2]
+
+          stats = column1.statistics
+          stats.should be_a GpdbColumnStatistics
+          stats.null_fraction.should be_present
+          stats.number_distinct.should be_present
+          stats.common_values.should be_present
+        end
       end
 
-      it "gets the column stats for table users" do
-        column1 = subject[2]
+      context "with a real chorus view" do
+        let(:schema) { database.schemas.find_by_name('test_schema') }
+        let(:dataset) {
+          view = ChorusView.new
+          view.name = "myChorusView"
+          view.schema = schema
+          view.query = "SELECT * FROM base_table1"
+          view.save!
+          view
+        }
 
-        stats = column1.statistics
-        stats.should be_a GpdbColumnStatistics
-        stats.null_fraction.should be_present
-        stats.number_distinct.should be_present
-        stats.common_values.should be_present
+        it "gets the column information" do
+          row = subject.first
+          row.name.should eq('id')
+          row.data_type.should eq('integer')
+        end
+
+        it "deletes the temporary table when it is done" do
+          schema.datasets.find_by_name("tmp_tbl").should == nil
+        end
       end
     end
 

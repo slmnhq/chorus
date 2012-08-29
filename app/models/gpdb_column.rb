@@ -22,9 +22,42 @@ class GpdbColumn
 
   attr_accessor :data_type, :description, :ordinal_position, :statistics, :name, :statistics
 
-  def self.columns_for(account, table)
-    columns_with_stats = table.with_gpdb_connection(account) do |conn|
-      conn.exec_query(COLUMN_METADATA_QUERY % [conn.quote(table.schema.name), conn.quote(table.name), conn.quote(conn.quote_column_name(table.name))])
+  def self.columns_for(account, dataset)
+    case dataset.type
+      when 'ChorusView'
+        self.columns_for_chorusview(account, dataset)
+      else
+        self.columns_for_table(account, dataset)
+    end
+  end
+
+  def self.columns_for_chorusview(account, view)
+    columns_with_stats = view.with_gpdb_connection(account) do |conn|
+      query = view.query
+      if (query =~ /limit *\d *[;] *$/i) == nil
+        query += " LIMIT 1"
+      end
+
+      conn.exec_query("CREATE TEMP TABLE tmp_tbl AS #{query}")
+
+      table = GpdbTable.new
+      table.name = "tmp_tbl"
+      table.schema = view.schema
+
+      result = self.columns_for_table(account, table, conn)
+
+      conn.exec_query("DROP TABLE IF EXISTS tmp_tbl")
+      result
+    end
+  end
+
+  def self.columns_for_table(account, table, connection = nil)
+    if connection
+      columns_with_stats = connection.exec_query(COLUMN_METADATA_QUERY % [connection.quote(table.schema.name), connection.quote(table.name), connection.quote(connection.quote_column_name(table.name))])
+    else
+      columns_with_stats = table.with_gpdb_connection(account) do |conn|
+        conn.exec_query(COLUMN_METADATA_QUERY % [conn.quote(table.schema.name), conn.quote(table.name), conn.quote(conn.quote_column_name(table.name))])
+      end
     end
 
     columns_with_stats.map.with_index do |raw_row_data, i|
