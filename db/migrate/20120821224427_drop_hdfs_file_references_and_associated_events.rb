@@ -1,8 +1,6 @@
 class DropHdfsFileReferencesAndAssociatedEvents < ActiveRecord::Migration
   def up
     drop_table :hdfs_file_references
-    execute "truncate table activities;"
-    execute "truncate table events;"
   end
 
   def down
