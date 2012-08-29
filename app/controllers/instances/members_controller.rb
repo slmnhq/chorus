@@ -2,7 +2,7 @@ module Instances
   class MembersController < ApplicationController
     def index
       accounts = Instance.find(params[:instance_id]).accounts
-      present paginate(accounts.order(:id))
+      present paginate(accounts.includes(:owner).order(:id))
     end
 
     def create

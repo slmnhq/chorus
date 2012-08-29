@@ -7,7 +7,7 @@ class WorkspacesController < ApplicationController
       workspaces = Workspace.workspaces_for(current_user)
     end
     workspaces = workspaces.active if params[:active]
-    present paginate(workspaces.order("lower(name) ASC"))
+    present paginate(workspaces.includes([:owner, :archiver, {:sandbox => {:database => :instance}}]).order("lower(name) ASC"))
   end
 
   def create
