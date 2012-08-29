@@ -48,7 +48,9 @@ Chorus::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Enable threaded mode
-  config.threadsafe!
+  if !(defined?($rails_rake_task) && $rails_rake_task)
+    config.threadsafe!
+  end
   config.eager_load_paths += config.autoload_paths
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
