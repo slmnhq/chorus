@@ -103,6 +103,17 @@ describe "users can view the contents of a hdfs file" do
     click_link "case_sf_311_subset_text.txt"
     wait_for_ajax
     page.should have_content "1157509,06/30/2012 11:52 PM,,Open,210 WEST POINT RD"
+    go_to_instance_page
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{hdfs_id}']").click
+    end
+    click_link "viewing_contents_of_hdfs"
+    wait_for_ajax
+    page.should have_content "data"
+    click_link "data"
+    wait_for_ajax
+    click_link "test.csv"
+    page.should have_content "a,b,c"
 
   end
 
