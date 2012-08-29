@@ -106,7 +106,7 @@ module PackageMaker
     run "ssh #{host} 'cd ~; rm #{filename}'"
     if install_success
       builds_to_keep = 5
-      run "ssh #{host} 'test `ls | wc -l` -gt #{builds_to_keep} && cd #{path}/releases && find . -maxdepth 1 -not -newer "`ls -t | head -#{builds_to_keep + 1} | tail -1`" -not -name '.' -exec rm -rf {} \;'"
+      run "ssh #{host} 'test `ls | wc -l` -gt #{builds_to_keep} && cd #{path}/releases && find . -maxdepth 1 -not -newer \"`ls -t | head -#{builds_to_keep + 1} | tail -1`\" -not -name \".\" -exec rm -rf {} \;'"
     end
 
     raise StandardError.new("Installation failed!") unless install_success
