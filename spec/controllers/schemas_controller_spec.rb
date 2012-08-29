@@ -10,9 +10,9 @@ describe SchemasController do
   end
 
   context "#index" do
-    let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
-    let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
-    let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2") }
+    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner_id => user.id) }
+    let(:instanceAccount) { FactoryGirl.create(:instance_account, :gpdb_instance_id => gpdb_instance.id, :owner_id => user.id) }
+    let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => "test2") }
     let(:schema1) { FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database) }
     let(:schema2) { FactoryGirl.build(:gpdb_schema, :name => 'schema2', :database => database) }
 
@@ -28,7 +28,7 @@ describe SchemasController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, instance)
+      mock(subject).authorize!(:show_contents, gpdb_instance)
       get :index, :database_id => database.to_param
     end
 
@@ -39,12 +39,12 @@ describe SchemasController do
       decoded_response.should have(2).items
 
       decoded_response[0].name.should == "schema1"
-      decoded_response[0].database.instance.id.should == instance.id
+      decoded_response[0].database.instance.id.should == gpdb_instance.id
       decoded_response[0].database.name.should == "test2"
       decoded_response[0].dataset_count.should == 2
 
       decoded_response[1].name.should == "schema2"
-      decoded_response[1].database.instance.id.should == instance.id
+      decoded_response[1].database.instance.id.should == gpdb_instance.id
       decoded_response[1].database.name.should == "test2"
       decoded_response[1].dataset_count.should == 1
     end
@@ -61,7 +61,7 @@ describe SchemasController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, schema.instance)
+      mock(subject).authorize!(:show_contents, schema.gpdb_instance)
       get :show, :id => schema.to_param
     end
 

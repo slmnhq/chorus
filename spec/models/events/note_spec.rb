@@ -6,7 +6,7 @@ describe "Notes" do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
-  let(:greenplum_instance) { instances(:greenplum) }
+  let(:greenplum_instance) { gpdb_instances(:greenplum) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:workspace) { workspaces(:alice_private) }
   let(:workfile) { workfiles(:bob_public)}

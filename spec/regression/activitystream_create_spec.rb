@@ -7,10 +7,10 @@ describe " system generated activities " do
 
   it "creates an activity stream when a gpdb instance is created" do
     create_gpdb_instance(:name => "gpdb_instance")
-    gpdb_instance_id = Instance.find_by_name("gpdb_instance").id
+    gpdb_instance_id = GpdbInstance.find_by_name("gpdb_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance gpdb_instance"
-    go_to_instance_page
+    go_to_gpdb_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin added a new instance gpdb_instance"
     go_to_user_list_page
@@ -24,12 +24,12 @@ describe " system generated activities " do
     name = "changechorusname"
 
     create_gpdb_instance(:name => name)
-    gpdb_instance_id = Instance.find_by_name(name).id
+    gpdb_instance_id = GpdbInstance.find_by_name(name).id
 
     go_to_home_page
     page.should have_content "EDC Admin added a new instance #{name}"
 
-    go_to_instance_page
+    go_to_gpdb_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
 
     click_link "Edit Instance"
@@ -39,7 +39,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
 
-    go_to_instance_page
+    go_to_gpdb_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
 
@@ -60,7 +60,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoopchangename"
 
-    go_to_instance_page
+    go_to_gpdb_instance_page
     within(".instance_provider.hadoop_instance") do
       wait_for_ajax
       page.find("li[data-hadoop-instance-id='#{hadoop_id}']").click
@@ -86,7 +86,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoop_instance"
 
-    go_to_instance_page
+    go_to_gpdb_instance_page
     wait_for_ajax
     within(".instance_provider.hadoop_instance") do
       wait_for_ajax
@@ -327,14 +327,14 @@ describe " system generated activities " do
   it "creates system generated activity when a sandbox is added" do
     create_gpdb_instance(:name => "sandboxas")
     inst_name = "sandboxas"
-    instance_id = Instance.find_by_name(inst_name).id
+    gpdb_instance_id = GpdbInstance.find_by_name(inst_name).id
     go_to_workspace_page
     create_valid_workspace(:name => "sandboxas")
 
     click_link "Add a sandbox"
     wait_for_ajax(5)
     #instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
+    page.execute_script("$('select[name=instance]').selectmenu('value', '#{gpdb_instance_id}')")
     page.execute_script("$('.instance .select_container select').change();")
     wait_for_ajax(5)
     #database

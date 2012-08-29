@@ -21,7 +21,7 @@ resource "Search" do
 
   get "/search/global" do
     parameter :query, "Search term"
-    parameter :entity_type, "The type of entity to search for (Instance, User, Workspace, Workfile)"
+    parameter :entity_type, "The type of entity to search for (GpdbInstance, User, Workspace, Workfile)"
     parameter :page, "Page number"
     parameter :per_page, "Results per page"
     example "Entity Search" do
@@ -38,7 +38,7 @@ resource "Search" do
     required_parameters :types
 
     let(:user) { users(:admin) }
-    let(:types) { ['Dataset', 'Instance'] }
+    let(:types) { ['Dataset', 'GpdbInstance'] }
     example_request "Reindexing" do
       status.should == 200
     end

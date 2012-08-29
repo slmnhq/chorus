@@ -128,8 +128,8 @@ class Gppipe < GpTableCopier
 
   def src_conn
     @raw_src_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => source_schema.instance.host,
-        :port => source_schema.instance.port,
+        :host => source_schema.gpdb_instance.host,
+        :port => source_schema.gpdb_instance.port,
         :database => source_schema.database.name,
         :username => source_account.db_username,
         :password => source_account.db_password,
@@ -139,8 +139,8 @@ class Gppipe < GpTableCopier
 
   def dst_conn
     @raw_dst_conn ||= ActiveRecord::Base.postgresql_connection(
-        :host => destination_schema.instance.host,
-        :port => destination_schema.instance.port,
+        :host => destination_schema.gpdb_instance.host,
+        :port => destination_schema.gpdb_instance.port,
         :database => destination_schema.database.name,
         :username => destination_account.db_username,
         :password => destination_account.db_password,

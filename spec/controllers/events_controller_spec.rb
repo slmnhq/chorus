@@ -14,10 +14,10 @@ describe EventsController do
       Activity.create!(:entity => object, :event => event)
     end
 
-    context "when getting the activities for an instance" do
-      let(:object) { instances(:greenplum) }
+    context "when getting the activities for a gpdb instance" do
+      let(:object) { gpdb_instances(:greenplum) }
 
-      it "presents the instance's activities" do
+      it "presents the gpdb instance's activities" do
         mock_present { |models| models.should include(event) }
         get :index, :entity_type => "greenplum_instance", :entity_id => object.id
         response.code.should == "200"

@@ -15,7 +15,7 @@ describe InstanceAccount do
     it { should belong_to :owner }
     it { should validate_presence_of :owner_id }
 
-    it { should belong_to :instance }
-    it { should validate_presence_of :instance_id }
+    it { should belong_to :gpdb_instance }
+    it { should validate_presence_of :gpdb_instance_id }
   end
 end

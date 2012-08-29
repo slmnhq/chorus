@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DatasetStreamer, :database_integration => true do
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
   let(:dataset) { database.find_dataset_in_schema("base_table1", "test_schema") }
   let(:user) { GpdbIntegration.real_gpdb_account.owner }
   let(:streamer) { DatasetStreamer.new(dataset, user) }

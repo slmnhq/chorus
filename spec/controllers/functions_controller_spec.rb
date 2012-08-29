@@ -10,7 +10,6 @@ describe FunctionsController do
   end
 
   describe "#index" do
-    let(:instance) { instances(:greenplum) }
     let(:instanceAccount) { instance_accounts(:iamcarly) }
 
     let(:database) { gpdb_databases(:bobs_database) }
@@ -36,7 +35,7 @@ describe FunctionsController do
     end
 
     it "should check for permissions" do
-      mock(subject).authorize! :show_contents, schema.instance
+      mock(subject).authorize! :show_contents, schema.gpdb_instance
       get :index, :schema_id => schema.to_param
     end
 

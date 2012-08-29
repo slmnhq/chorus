@@ -90,8 +90,8 @@ class DatabaseObjectMigrator < AbstractMigrator
         next if ids[3] == 'QUERY'
         dataset_name = ids[4]
 
-        instance = Instance.find_by_legacy_id!(legacy_instance_id)
-        database = instance.databases.find_or_create_by_name(database_name)
+        gpdb_instance = GpdbInstance.find_by_legacy_id!(legacy_instance_id)
+        database = gpdb_instance.databases.find_or_create_by_name(database_name)
         schema = database.schemas.find_or_create_by_name(schema_name)
         dataset = schema.datasets.new
         dataset.name = dataset_name
@@ -113,8 +113,8 @@ class DatabaseObjectMigrator < AbstractMigrator
         FROM edc_sandbox")
 
       schema_rows.each do |row|
-        instance = Instance.find_by_legacy_id!(row['instance_id'])
-        database = instance.databases.find_or_create_by_name(row['database_name'])
+        gpdb_instance = GpdbInstance.find_by_legacy_id!(row['instance_id'])
+        database = gpdb_instance.databases.find_or_create_by_name(row['database_name'])
         database.schemas.find_or_create_by_name(row['schema_name'])
       end
 

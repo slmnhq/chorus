@@ -200,7 +200,7 @@ describe User do
   end
 
   describe "associations" do
-    it { should have_many(:instances) }
+    it { should have_many(:gpdb_instances) }
     it { should have_many(:instance_accounts) }
     it { should have_many(:hadoop_instances) }
     it { should have_many(:workspaces) }
@@ -257,8 +257,8 @@ describe User do
       User.find_by_id(user.id).should be_nil
     end
 
-    it "should not allow deleting a user who owns an instance" do
-      user.instances << FactoryGirl.create(:instance, :owner => user)
+    it "should not allow deleting a user who owns a gpdb instance" do
+      user.gpdb_instances << FactoryGirl.create(:gpdb_instance, :owner => user)
       begin
         user.destroy
         fail
@@ -291,7 +291,7 @@ describe User do
   describe "#accessible_account_ids" do
     it "includes the users individual instance accounts plus all shared instance accounts" do
       user = users(:bob)
-      shared_ids = InstanceAccount.joins(:instance).where("instances.shared = true").collect(&:id)
+      shared_ids = InstanceAccount.joins(:gpdb_instance).where("gpdb_instances.shared = true").collect(&:id)
       user_ids = user.instance_account_ids
       user.accessible_account_ids.should =~ (shared_ids + user_ids).uniq
     end

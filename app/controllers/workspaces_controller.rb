@@ -7,7 +7,7 @@ class WorkspacesController < ApplicationController
       workspaces = Workspace.workspaces_for(current_user)
     end
     workspaces = workspaces.active if params[:active]
-    present paginate(workspaces.includes([:owner, :archiver, {:sandbox => {:database => :instance}}]).order("lower(name) ASC"))
+    present paginate(workspaces.includes([:owner, :archiver, {:sandbox => {:database => :gpdb_instance}}]).order("lower(name) ASC"))
   end
 
   def create
@@ -39,8 +39,8 @@ class WorkspacesController < ApplicationController
       if attributes[:schema_name]
         begin
           if attributes[:database_name]
-            instance = Instance.find(attributes[:instance_id])
-            database = instance.create_database(attributes[:database_name], current_user)
+            gpdb_instance = GpdbInstance.find(attributes[:instance_id])
+            database = gpdb_instance.create_database(attributes[:database_name], current_user)
           else
             database = GpdbDatabase.find(attributes[:database_id])
           end

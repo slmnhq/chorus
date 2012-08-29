@@ -14,7 +14,7 @@ class CsvImporter
     self.csv_file = CsvFile.find(csv_file_id)
     self.import_created_event_id = import_created_event_id
     self.schema = csv_file.workspace.sandbox
-    self.account = schema.instance.account_for_user!(csv_file.user)
+    self.account = schema.gpdb_instance.account_for_user!(csv_file.user)
   end
 
   def import

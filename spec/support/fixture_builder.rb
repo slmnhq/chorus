@@ -44,16 +44,16 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
+    greenplum_instance = GpdbInstance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    aurora_instance = Instance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
+    aurora_instance = GpdbInstance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
     Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
     Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
 
-    purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
-    bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
+    purplebanana_instance = GpdbInstance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
+    bobs_instance = GpdbInstance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
     fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "bobsearch for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
@@ -61,42 +61,42 @@ FixtureBuilder.configure do |fbuilder|
 
     HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
-    chorus_gpdb40_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
-    chorus_gpdb41_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
-    chorus_gpdb42_instance = Instance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb42").merge({:name => "chorus_gpdb42", :owner => admin}), :without_protection => true)
+    chorus_gpdb40_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
+    chorus_gpdb41_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
+    chorus_gpdb42_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb42").merge({:name => "chorus_gpdb42", :owner => admin}), :without_protection => true)
 
     # Instance Accounts
-    shared_instance_account = InstanceAccount.create!({:owner => admin, :instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
+    shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
     fbuilder.name(:admin, shared_instance_account)
-    carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
+    carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :gpdb_instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
     fbuilder.name(:iamcarly, carly_bobs_instance_account)
-    bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
+    bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :gpdb_instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:bobo, bob_bobs_instance_account)
-    aurora_instance_account = InstanceAccount.create!({:owner => admin, :instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true)
+    aurora_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true)
     fbuilder.name(:aurora, aurora_instance_account)
 
-    chorus_gpdb40_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :instance => chorus_gpdb40_instance}), :without_protection => true)
+    chorus_gpdb40_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :gpdb_instance => chorus_gpdb40_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb40_test_superuser, chorus_gpdb40_instance_account)
-    chorus_gpdb41_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :instance => chorus_gpdb41_instance}), :without_protection => true)
+    chorus_gpdb41_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :gpdb_instance => chorus_gpdb41_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb41_test_superuser, chorus_gpdb41_instance_account)
-    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :instance => chorus_gpdb42_instance}), :without_protection => true)
+    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :gpdb_instance => chorus_gpdb42_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
 
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb40_instance}, :without_protection => true)
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb41_instance}, :without_protection => true)
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :instance => chorus_gpdb42_instance}, :without_protection => true)
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb40_instance}, :without_protection => true)
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb41_instance}, :without_protection => true)
+    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb42_instance}, :without_protection => true)
 
     # Datasets
-    bob_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)
+    bob_database = GpdbDatabase.create!({ :gpdb_instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)
     bob_schema = GpdbSchema.create!({ :name => "bobs_schema", :database => bob_database }, :without_protection => true)
     bobs_table = GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
     GpdbView.create!({ :name => "bobs_view", :schema => bob_schema }, :without_protection => true)
 
-    bobsearch_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
+    bobsearch_database = GpdbDatabase.create!({ :gpdb_instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
     bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
     bobssearch_table = GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
 
-    shared_search_database = GpdbDatabase.create!({ :instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
+    shared_search_database = GpdbDatabase.create!({ :gpdb_instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
     shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
     GpdbTable.create!({ :name => "bobsearch_shared_table", :schema => shared_search_schema }, :without_protection => true)
 

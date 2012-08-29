@@ -3,9 +3,9 @@ require 'spec_helper'
 describe DatasetsController do
   let(:user) { users(:carly) }
   let(:instance_account) { instance_accounts(:iamcarly) }
-  let(:instance) { instance_account.instance }
+  let(:gpdb_instance) { instance_account.gpdb_instance }
 
-  let(:database) { instance.databases.first }
+  let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:table) { schema.datasets.tables.first }
   let(:view) { schema.datasets.views.first }
@@ -96,7 +96,7 @@ describe DatasetsController do
   describe "#import", :database_integration => true do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:user) { account.owner }
-    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }

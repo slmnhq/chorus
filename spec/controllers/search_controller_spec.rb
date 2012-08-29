@@ -56,8 +56,8 @@ describe SearchController do
       end
 
       it "should enqueue the refresh" do
-        mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_index", ['Dataset', 'Instance'])
-        post :reindex, :types => ['Dataset', 'Instance']
+        mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_index", ['Dataset', 'GpdbInstance'])
+        post :reindex, :types => ['Dataset', 'GpdbInstance']
         response.should be_success
       end
 

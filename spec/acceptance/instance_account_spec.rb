@@ -5,14 +5,14 @@ resource "Greenplum DB account for current user" do
   let!(:non_owner) { users(:alice) }
   let!(:member) { users(:carly) }
 
-  let!(:instance) { instances(:bobs_instance) }
-  let(:instance_id) { instance.to_param }
+  let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+  let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do
     stub(Gpdb::ConnectionChecker).check! { true }
   end
 
-  get "/instances/:instance_id/account" do
+  get "/gpdb_instances/:gpdb_instance_id/account" do
     before do
       log_in owner
     end
@@ -28,7 +28,7 @@ resource "Greenplum DB account for current user" do
     end
   end
 
-  post "/instances/:instance_id/account" do
+  post "/gpdb_instances/:gpdb_instance_id/account" do
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -47,7 +47,7 @@ resource "Greenplum DB account for current user" do
     end
   end
 
-  put "/instances/:instance_id/account" do
+  put "/gpdb_instances/:gpdb_instance_id/account" do
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -66,7 +66,7 @@ resource "Greenplum DB account for current user" do
     end
   end
 
-  delete "/instances/:instance_id/account" do
+  delete "/gpdb_instances/:gpdb_instance_id/account" do
     before do
       log_in member
     end

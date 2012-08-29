@@ -79,14 +79,14 @@ describe Presenter, :type => :view do
       let(:object_to_present) do
         [
             FactoryGirl.build(:user, :username => 'user'),
-            FactoryGirl.build(:instance, :name => 'instance')
+            FactoryGirl.build(:gpdb_instance, :name => 'gpdb_instance')
         ]
       end
 
       it "presents an array with a hash for each model" do
         json.length.should == 2
         json[0][:username].should == 'user'
-        json[1][:name].should == 'instance'
+        json[1][:name].should == 'gpdb_instance'
       end
     end
 

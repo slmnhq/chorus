@@ -1,9 +1,9 @@
-module Instances
+module GpdbInstances
   class OwnerController < ApplicationController
     def update
-      authorize! :edit, instance
-      Gpdb::InstanceOwnership.change(current_user, instance, new_owner)
-      present instance
+      authorize! :edit, gpdb_instance
+      Gpdb::InstanceOwnership.change(current_user, gpdb_instance, new_owner)
+      present gpdb_instance
     end
 
     private
@@ -12,8 +12,8 @@ module Instances
       User.find(params[:owner][:id])
     end
 
-    def instance
-      @instance ||= Instance.owned_by(current_user).find(params[:instance_id])
+    def gpdb_instance
+      @gpdb_instance ||= GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
     end
   end
 end

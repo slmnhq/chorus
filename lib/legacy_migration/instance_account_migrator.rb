@@ -13,14 +13,14 @@ class InstanceAccountMigrator < AbstractMigrator
     def migrate
       prerequisites
 
-      # Make sure instances are flagged as shared if any legacy account maps are shared
-      Legacy.connection.exec_query("UPDATE instances SET shared = true WHERE legacy_id IN (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');")
+      # Make sure gpdb_instances are flagged as shared if any legacy account maps are shared
+      Legacy.connection.exec_query("UPDATE gpdb_instances SET shared = true WHERE legacy_id IN (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');")
 
       inserted = Legacy.connection.exec_query("INSERT INTO public.instance_accounts(
                                 legacy_id,
                                 db_username,
                                 owner_id,
-                                instance_id
+                                gpdb_instance_id
                               )
                               SELECT
                                 map.id,
@@ -30,7 +30,7 @@ class InstanceAccountMigrator < AbstractMigrator
                               FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name
-                              INNER JOIN instances i
+                              INNER JOIN gpdb_instances i
                                 ON map.instance_id = i.legacy_id
                               WHERE map.id NOT IN (SELECT legacy_id FROM instance_accounts)
                               AND i.instance_provider = 'Greenplum Database'

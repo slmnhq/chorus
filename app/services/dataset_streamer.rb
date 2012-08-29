@@ -16,7 +16,7 @@ class DatasetStreamer
 
   def enum
     row_number = 0
-    account = dataset.instance.account_for_user!(user)
+    account = dataset.gpdb_instance.account_for_user!(user)
 
     Enumerator.new do |y|
       begin

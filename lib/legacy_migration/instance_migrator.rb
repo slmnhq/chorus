@@ -2,16 +2,16 @@ class InstanceMigrator < AbstractMigrator
   class << self
     def prerequisites
       UserMigrator.migrate
-      ensure_legacy_id :instances
+      ensure_legacy_id :gpdb_instances
     end
 
     def classes_to_validate
-      [Instance]
+      [GpdbInstance]
     end
 
     def migrate
       prerequisites
-      Legacy.connection.exec_query("INSERT INTO public.instances(
+      Legacy.connection.exec_query("INSERT INTO public.gpdb_instances(
                               legacy_id,
                               name,
                               description,
@@ -40,7 +40,7 @@ class InstanceMigrator < AbstractMigrator
                               INNER JOIN users u
                               ON u.username = i.owner
                             WHERE instance_provider = 'Greenplum Database'
-                            AND i.id NOT IN (SELECT legacy_id FROM instances);")
+                            AND i.id NOT IN (SELECT legacy_id FROM gpdb_instances);")
 
     end
   end

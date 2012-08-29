@@ -316,19 +316,18 @@ describe WorkspacesController do
     end
 
     context "when new sandbox is a new schema in a new database" do
-      let(:instance) { instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
 
       it "calls both create_database and create_schema" do
-
-        any_instance_of(Instance) do |instance_double|
+        any_instance_of(GpdbInstance) do |instance_double|
           mock(instance_double).create_database("new_database", owner) do |name|
-            instance.databases.create!({:name => name}, :without_protection => true)
+            gpdb_instance.databases.create!({:name => name}, :without_protection => true)
           end
         end
 
         any_instance_of(GpdbDatabase) do |database_double|
           mock(database_double).create_schema("create_new_schema", owner) do |name|
-            database = instance.reload.databases.find_by_name("new_database")
+            database = gpdb_instance.reload.databases.find_by_name("new_database")
             database.schemas.create!({:name => name}, :without_protection => true)
           end
         end
@@ -342,8 +341,8 @@ describe WorkspacesController do
       end
 
       it "returns an error if creation fails" do
-        any_instance_of(Instance) do |instance|
-          stub(instance).create_database.with_any_args {
+        any_instance_of(GpdbInstance) do |gpdb_instance|
+          stub(gpdb_instance).create_database.with_any_args {
             raise Exception.new("Database creation failed")
           }
         end
@@ -359,7 +358,7 @@ describe WorkspacesController do
             :public => "false",
             :schema_name => "create_new_schema",
             :database_name => "new_database",
-            :instance_id => instance.id
+            :instance_id => gpdb_instance.id
         }
       end
     end

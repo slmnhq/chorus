@@ -1,7 +1,7 @@
-module Instances
+module GpdbInstances
   class AccountController < ApplicationController
     def show
-      present Instance.find(params[:instance_id]).account_for_user(current_user)
+      present GpdbInstance.find(params[:gpdb_instance_id]).account_for_user(current_user)
     end
 
     def create
@@ -13,19 +13,19 @@ module Instances
     end
 
     def destroy
-      instance = Instance.unshared.find(params[:instance_id])
-      instance.account_for_user(current_user).destroy
+      gpdb_instance = GpdbInstance.unshared.find(params[:gpdb_instance_id])
+      gpdb_instance.account_for_user(current_user).destroy
       render :json => {}
     end
 
     private
 
     def updated_account
-      instance = Instance.unshared.find(params[:instance_id])
+      gpdb_instance = GpdbInstance.unshared.find(params[:gpdb_instance_id])
 
-      account = instance.accounts.find_or_initialize_by_owner_id(current_user.id)
+      account = gpdb_instance.accounts.find_or_initialize_by_owner_id(current_user.id)
       account.attributes = params[:account]
-      Gpdb::ConnectionChecker.check!(instance, account)
+      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
       account
     end

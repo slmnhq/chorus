@@ -38,7 +38,7 @@ describe InstanceAccountMigrator do
           account.db_username.should == legacy["db_user_name"]
           account.db_password.should == InstanceAccountMigrator.decrypt_password(legacy['db_password'], legacy['secret_key'])
           account.owner.legacy_id.should == legacy["legacy_user_id"]
-          account.instance.legacy_id.should == legacy["legacy_instance_id"]
+          account.gpdb_instance.legacy_id.should == legacy["legacy_instance_id"]
         end
       end
 
@@ -49,9 +49,9 @@ describe InstanceAccountMigrator do
                               AND i.instance_provider = 'Greenplum Database'
                               WHERE map.shared = 'yes'")
         shared_accounts.each do |row|
-          Instance.find_by_legacy_id!(row['instance_id']).should be_shared
+          GpdbInstance.find_by_legacy_id!(row['instance_id']).should be_shared
         end
-        shared_accounts.length.should == Instance.where(:shared => true).count
+        shared_accounts.length.should == GpdbInstance.where(:shared => true).count
       end
     end
   end

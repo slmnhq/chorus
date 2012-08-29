@@ -12,11 +12,11 @@ module SolrIndexer
   private
 
   def self.refresh
-    Instance.find_each do |instance|
-      instance.refresh_databases(:mark_stale => true)
+    GpdbInstance.find_each do |gpdb_instance|
+      gpdb_instance.refresh_databases(:mark_stale => true)
 
-      instance.databases.each do |database|
-        GpdbSchema.refresh(instance.owner_account, database, :mark_stale => true, :refresh_all => true)
+      gpdb_instance.databases.each do |database|
+        GpdbSchema.refresh(gpdb_instance.owner_account, database, :mark_stale => true, :refresh_all => true)
       end
     end
     HadoopInstance.find_each do |hadoop_instance|

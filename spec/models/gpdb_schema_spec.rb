@@ -9,8 +9,8 @@ describe GpdbSchema do
   end
 
   context ".refresh" do
-    let(:instance) { instances(:bobs_instance) }
-    let(:account) { instance.owner_account }
+    let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+    let(:account) { gpdb_instance.owner_account }
     let(:database) { gpdb_databases(:bobs_database) }
     let(:schema) { gpdb_schemas(:bobs_schema) }
     before(:each) do

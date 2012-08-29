@@ -24,7 +24,7 @@ describe ColumnController do
     end
 
     it "should check for permissions" do
-      mock(subject).authorize! :show_contents, table.instance
+      mock(subject).authorize! :show_contents, table.gpdb_instance
       get :index, :dataset_id => table.to_param
     end
 

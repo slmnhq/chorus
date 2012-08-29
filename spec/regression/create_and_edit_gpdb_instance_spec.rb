@@ -77,10 +77,10 @@ describe "Editing instance details" do
       create_gpdb_instance(:name => "Instance1")
       create_gpdb_instance(:name => "Instance2")
 
-      instance_1_id = Instance.find_by_name("Instance1").id
+      gpdb_instance_1_id = GpdbInstance.find_by_name("Instance1").id
       visit("#/instances")
       within(".instance_provider") do
-        page.find("li[data-greenplum-instance-id='#{instance_1_id}']").click
+        page.find("li[data-greenplum-instance-id='#{gpdb_instance_1_id}']").click
       end
       click_link "Edit Instance"
 
@@ -90,16 +90,16 @@ describe "Editing instance details" do
         click_button "Save Configuration"
       end
 
-      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("ChangeInstanceName")
-      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("Change Description")
+      page.find("li[data-greenplum-instance-id='#{gpdb_instance_1_id}']").should have_content("ChangeInstanceName")
+      page.find("li[data-greenplum-instance-id='#{gpdb_instance_1_id}']").should have_content("Change Description")
     end
 
     it "should allow the editing of the instance host and port" do
       create_gpdb_instance(:name => "validinstance")
-      validinstance_id = Instance.find_by_name("validinstance").id
+      valid_gpdb_instance_id = GpdbInstance.find_by_name("validinstance").id
       visit("#/instances")
       within(".instance_provider") do
-        page.find("li[data-greenplum-instance-id='#{validinstance_id}']").click
+        page.find("li[data-greenplum-instance-id='#{valid_gpdb_instance_id}']").click
       end
       click_link "Edit Instance"
       within_modal do
@@ -115,13 +115,13 @@ describe "Editing instance details" do
   it "asks for password when I try to access a private instance" do
 
     create_gpdb_instance(:name =>"credentials")
-    credentials_id = Instance.find_by_name("credentials").id
+    credentials_id = GpdbInstance.find_by_name("credentials").id
 
     create_valid_user(:username => "credentials")
     wait_for_ajax
     logout
     login('credentials', 'secret')
-    go_to_instance_page
+    go_to_gpdb_instance_page
     wait_for_ajax
     page.find("li[data-greenplum-instance-id='#{credentials_id}']").click
     wait_for_ajax
@@ -148,15 +148,12 @@ describe "Editing instance details" do
     click_link "public"
     wait_for_ajax
     page.should have_content "You do not have datasets in this schema."
-
-
   end
 
   it "lets the user see the instance config info" do
-
     create_gpdb_instance(:name => "config", :shared => true)
-    config_id = Instance.find_by_name("config").id
-    go_to_instance_page
+    config_id = GpdbInstance.find_by_name("config").id
+    go_to_gpdb_instance_page
     page.find("li[data-greenplum-instance-id='#{config_id}']").click
     within "#sidebar" do
       page.find("li[data-name='configuration']").click
@@ -165,7 +162,5 @@ describe "Editing instance details" do
     page.should have_content "chorus-gpdb40.sf"
     page.should have_content "4.0.6.2"
     page.should have_content "gpadmin"
-
   end
-
 end

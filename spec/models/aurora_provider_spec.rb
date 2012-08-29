@@ -51,14 +51,14 @@ describe AuroraProvider do
   end
 
   describe ".provide!" do
-    let(:instance) { instances(:aurora) }
+    let(:gpdb_instance) { gpdb_instances(:aurora) }
     let(:database) { Object.new }
     let(:schema_name) {"schema_name"}
     let(:attributes) { {"template" => "small",
                         "size" => 1,
                         "database_name" => "database",
                         "schema_name" => schema_name} }
-    let(:new_database) {GpdbDatabase.create({:name => 'database', :instance => instance}, :without_protection => true)}
+    let(:new_database) {GpdbDatabase.create({:name => 'database', :gpdb_instance => gpdb_instance}, :without_protection => true)}
 
     context "when provisioning succeeds" do
       before do
@@ -75,62 +75,62 @@ describe AuroraProvider do
                                         }) { database }
         end
 
-        any_instance_of(Instance) do |instance|
-          stub(instance).refresh_databases() {}
+        any_instance_of(GpdbInstance) do |gpdb_instance|
+          stub(gpdb_instance).refresh_databases() {}
         end
       end
 
       it "creates a database" do
-        AuroraProvider.provide!(instance.id, attributes)
+        AuroraProvider.provide!(gpdb_instance.id, attributes)
       end
 
       it "updates the host of the instance with the correct ip address" do
-        AuroraProvider.provide!(instance.id, attributes)
-        instance.reload
-        instance.host.should == "123.321.12.34"
+        AuroraProvider.provide!(gpdb_instance.id, attributes)
+        gpdb_instance.reload
+        gpdb_instance.host.should == "123.321.12.34"
       end
 
       it "generates a ProvisioningSuccess event" do
-        AuroraProvider.provide!(instance.id, attributes)
-        event = Events::ProvisioningSuccess.find_by_actor_id(instance.owner)
-        event.greenplum_instance.should == instance
+        AuroraProvider.provide!(gpdb_instance.id, attributes)
+        event = Events::ProvisioningSuccess.find_by_actor_id(gpdb_instance.owner)
+        event.greenplum_instance.should == gpdb_instance
       end
 
       context "state" do
         before do
-          mock(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {}
+          mock(Gpdb::ConnectionBuilder).connect!(gpdb_instance, gpdb_instance.owner_account, 'database') {}
         end
         it "updates the state to online" do
-          AuroraProvider.provide!(instance.id, attributes)
-          instance.reload
-          instance.state.should == 'online'
+          AuroraProvider.provide!(gpdb_instance.id, attributes)
+          gpdb_instance.reload
+          gpdb_instance.state.should == 'online'
         end
       end
 
       context "when schema name is not public" do
         before do
-          mock(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {
+          mock(Gpdb::ConnectionBuilder).connect!(gpdb_instance, gpdb_instance.owner_account, 'database') {
           }
-          mock(instance).databases {
+          mock(gpdb_instance).databases {
             [new_database]
           }
         end
         it "connects to the newly created database and creates new schema" do
-          AuroraProvider.provide!(instance.id, attributes)
-          instance.reload
-          instance.databases.map(&:name).should include("database")
+          AuroraProvider.provide!(gpdb_instance.id, attributes)
+          gpdb_instance.reload
+          gpdb_instance.databases.map(&:name).should include("database")
         end
       end
       context "when new schema name is public" do
         let(:schema_name) { 'public' }
         let(:create_new_schema_called) { false }
         before do
-          stub(Gpdb::ConnectionBuilder).connect!(instance, instance.owner_account, 'database') {
+          stub(Gpdb::ConnectionBuilder).connect!(gpdb_instance, gpdb_instance.owner_account, 'database') {
             create_new_schema_called = true
           }
         end
         it "connects to the newly created database and does not create new schema if schema_name is public" do
-          AuroraProvider.provide!(instance.id, attributes)
+          AuroraProvider.provide!(gpdb_instance.id, attributes)
           create_new_schema_called.should == false
         end
       end
@@ -144,16 +144,16 @@ describe AuroraProvider do
       end
 
       it "generates a ProvisioningFail event" do
-        AuroraProvider.provide!(instance.id, attributes)
-        event = Events::ProvisioningFail.find_by_actor_id(instance.owner)
-        event.greenplum_instance.should == instance
+        AuroraProvider.provide!(gpdb_instance.id, attributes)
+        event = Events::ProvisioningFail.find_by_actor_id(gpdb_instance.owner)
+        event.greenplum_instance.should == gpdb_instance
         event.additional_data['error_message'].should == "server cannot be reached"
       end
 
       it "updates the state to fault" do
-        AuroraProvider.provide!(instance.id, attributes)
-        instance.reload
-        instance.state.should == 'fault'
+        AuroraProvider.provide!(gpdb_instance.id, attributes)
+        gpdb_instance.reload
+        gpdb_instance.state.should == 'fault'
       end
 
     end

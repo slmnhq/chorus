@@ -1,13 +1,13 @@
 require "spec_helper"
 
 describe EventPresenter, :type => :view do
-  let(:instance) { FactoryGirl.create(:instance) }
+  let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
 
   describe "#to_hash" do
     subject { EventPresenter.new(event, view) }
 
     context "Non-note event" do
-      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => instance) }
+      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => gpdb_instance) }
 
       it "includes the 'id', 'timestamp', 'actor', 'action'" do
         hash = subject.to_hash
@@ -18,7 +18,7 @@ describe EventPresenter, :type => :view do
       end
 
       it "presents all of the event's 'targets', using the same names" do
-        special_instance = FactoryGirl.build(:instance)
+        special_instance = FactoryGirl.build(:gpdb_instance)
         special_user = FactoryGirl.build(:user)
 
         stub(event).targets do

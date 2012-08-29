@@ -602,16 +602,16 @@ class ActivityMigrator < AbstractMigrator
         SELECT
           streams.id,
           'Events::GreenplumInstanceCreated',
-          instances.id,
-          'Instance',
+          gpdb_instances.id,
+          'GpdbInstance',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN instances
-          ON target_instance.object_id = instances.legacy_id
+        INNER JOIN gpdb_instances
+          ON target_instance.object_id = gpdb_instances.legacy_id
         INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
@@ -754,16 +754,16 @@ class ActivityMigrator < AbstractMigrator
         SELECT
           streams.id,
           'Events::ProvisioningFail',
-          instances.id,
-          'Instance',
+          gpdb_instances.id,
+          'GpdbInstance',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN instances
-          ON target_instance.object_id = instances.legacy_id
+        INNER JOIN gpdb_instances
+          ON target_instance.object_id = gpdb_instances.legacy_id
         INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users
@@ -787,16 +787,16 @@ class ActivityMigrator < AbstractMigrator
         SELECT
           streams.id,
           'Events::ProvisioningSuccess',
-          instances.id,
-          'Instance',
+          gpdb_instances.id,
+          'GpdbInstance',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN instances
-          ON target_instance.object_id = instances.legacy_id
+        INNER JOIN gpdb_instances
+          ON target_instance.object_id = gpdb_instances.legacy_id
         INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users

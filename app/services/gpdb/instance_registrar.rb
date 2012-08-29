@@ -5,40 +5,40 @@ module Gpdb
     def self.create!(connection_config, owner, options = {})
       config = connection_config.merge(:instance_provider => "Greenplum Database")
       config.merge!(aurora_default_attributes) if options[:aurora]
-      instance = owner.instances.build(config)
-      instance.shared = config[:shared]
-      instance.state = 'provisioning' if options[:aurora]
+      gpdb_instance = owner.gpdb_instances.build(config)
+      gpdb_instance.shared = config[:shared]
+      gpdb_instance.state = 'provisioning' if options[:aurora]
 
       account = owner.instance_accounts.build(config)
       ActiveRecord::Base.transaction do
-        instance.save!
-        account.instance = instance
-        ConnectionChecker.check!(instance, account) unless options[:aurora]
-        instance.save!
+        gpdb_instance.save!
+        account.gpdb_instance = gpdb_instance
+        ConnectionChecker.check!(gpdb_instance, account) unless options[:aurora]
+        gpdb_instance.save!
         account.save!
       end
 
-      Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => instance)
+      Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => gpdb_instance)
 
-      instance
+      gpdb_instance
     end
 
-    def self.update!(instance, connection_config, updater)
-      raise InvalidInstanceError if instance.nil?
-      instance.attributes = connection_config
+    def self.update!(gpdb_instance, connection_config, updater)
+      raise InvalidInstanceError if gpdb_instance.nil?
+      gpdb_instance.attributes = connection_config
 
-      ConnectionChecker.check!(instance, instance.owner_account)
+      ConnectionChecker.check!(gpdb_instance, gpdb_instance.owner_account)
 
-      if instance.name_changed?
+      if gpdb_instance.name_changed?
         Events::GreenplumInstanceChangedName.by(updater).add(
-          :greenplum_instance => instance,
-          :old_name => instance.name_was,
-          :new_name => instance.name
+          :greenplum_instance => gpdb_instance,
+          :old_name => gpdb_instance.name_was,
+          :new_name => gpdb_instance.name
         )
       end
 
-      instance.save!
-      instance
+      gpdb_instance.save!
+      gpdb_instance
     end
 
     private

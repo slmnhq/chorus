@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe GpdbDatabase do
   context "#refresh" do
-    let(:instance) { FactoryGirl.create(:instance) }
-    let(:account) { FactoryGirl.create(:instance_account, :instance => instance) }
+    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
+    let(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
 
     before(:each) do
       stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
@@ -15,11 +15,11 @@ describe GpdbDatabase do
     it "creates new copies of the databases in our db" do
       GpdbDatabase.refresh(account)
 
-      databases = instance.databases
+      databases = gpdb_instance.databases
 
       databases.length.should == 4
       databases.map { |db| db.name }.should =~ ["db_a", "db_B", "db_C", "db_d"]
-      databases.map { |db| db.instance_id }.uniq.should == [instance.id]
+      databases.map { |db| db.gpdb_instance_id }.uniq.should == [gpdb_instance.id]
     end
 
     it "does not re-create databases that already exist in our database" do
@@ -36,7 +36,7 @@ describe GpdbDatabase do
 
       it "marks them as non-stale" do
         GpdbDatabase.refresh(account)
-        account.instance.databases.each { |database|
+        account.gpdb_instance.databases.each { |database|
           database.reload.should_not be_stale
         }
       end
@@ -65,8 +65,8 @@ describe GpdbDatabase do
   describe ".create_schema" do
     context "using a real greenplum instance", :database_integration => true do
       let(:account) { GpdbIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
-      let(:instance) { database.instance }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+      let(:instance) { database.gpdb_instance }
 
       before do
         refresh_chorus

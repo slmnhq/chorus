@@ -97,13 +97,13 @@ module GpdbIntegration
   end
 
   def self.real_gpdb_account
-    instance = GpdbIntegration.real_gpdb_instance
-    instance.owner_account
+    gpdb_instance = GpdbIntegration.real_gpdb_instance
+    gpdb_instance.owner_account
   end
 
   def self.real_gpdb_instance
     host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
-    Instance.find_by_name(host_name.gsub("-", "_"))
+    GpdbInstance.find_by_name(host_name.gsub("-", "_"))
   end
 end
 

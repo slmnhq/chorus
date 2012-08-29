@@ -276,7 +276,7 @@ describe UsersController do
 
       context "user owns an instance" do
         before do
-          user.instances << FactoryGirl.create(:instance, :owner => user)
+          user.gpdb_instances << FactoryGirl.create(:gpdb_instance, :owner => user)
           delete :destroy, :id => user.id
         end
 

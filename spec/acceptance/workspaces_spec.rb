@@ -5,10 +5,10 @@ resource "Workspaces" do
 
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => user) }
   let(:greenplum_instance) { FactoryGirl.create(:greenplum_instance, :owner => user) }
-  let!(:database) { FactoryGirl.create(:gpdb_database, :instance => greenplum_instance) }
+  let!(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => greenplum_instance) }
   let!(:sandbox) { FactoryGirl.create(:gpdb_schema, :database => database) }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
-  let!(:instance_account) { FactoryGirl.create(:instance_account, :owner => user, :instance => sandbox.instance) }
+  let!(:instance_account) { FactoryGirl.create(:instance_account, :owner => user, :gpdb_instance => sandbox.gpdb_instance) }
   let(:workspace_id) { workspace.to_param }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
   let!(:associated_dataset) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }

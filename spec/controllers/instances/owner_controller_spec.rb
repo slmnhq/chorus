@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Instances::OwnerController do
-  let(:instance) { instances(:purple_banana) }
-  let(:user) { instance.owner }
+describe GpdbInstances::OwnerController do
+  let(:gpdb_instance) { gpdb_instances(:purple_banana) }
+  let(:user) { gpdb_instance.owner }
   let(:new_owner) { users(:alice) }
 
   ignore_authorization!
@@ -13,22 +13,22 @@ describe Instances::OwnerController do
 
   describe "#update" do
     def request_ownership_update
-      put :update, :instance_id => instance.to_param, :owner => {:id => new_owner.to_param }
+      put :update, :gpdb_instance_id => gpdb_instance.to_param, :owner => {:id => new_owner.to_param }
     end
 
     it "uses authorization" do
-      mock(controller).authorize!(:edit, instance)
+      mock(controller).authorize!(:edit, gpdb_instance)
       request_ownership_update
     end
 
     it "switches ownership of instance and account" do
-      mock(Gpdb::InstanceOwnership).change(user, instance, new_owner)
+      mock(Gpdb::InstanceOwnership).change(user, gpdb_instance, new_owner)
       request_ownership_update
     end
 
-    it "presents the instance" do
-      stub(Gpdb::InstanceOwnership).change(user, instance, new_owner)
-      mock_present { |instance_presented| instance_presented.should == instance }
+    it "presents the gpdb instance" do
+      stub(Gpdb::InstanceOwnership).change(user, gpdb_instance, new_owner)
+      mock_present { |instance_presented| instance_presented.should == gpdb_instance }
       request_ownership_update
     end
   end

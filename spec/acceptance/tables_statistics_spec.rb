@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 resource "Greenplum Table statistics" do
-  let(:owner) { gpdb_table.schema.instance.owner }
+  let(:owner) { gpdb_table.schema.gpdb_instance.owner }
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
   let(:table_id) { gpdb_table.to_param }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => gpdb_table.instance, :owner => owner) }
+  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_table.gpdb_instance, :owner => owner) }
 
   let(:stats) do
     GpdbTableStatistics.new.tap do |statistics|

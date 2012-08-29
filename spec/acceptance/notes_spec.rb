@@ -4,7 +4,6 @@ resource "Notes" do
   let(:user) { users(:bob) }
   let(:note) { FactoryGirl.create :note_on_hdfs_file_event, :actor => user }
   let(:hdfs_file) { HdfsEntry.files.first }
-  let!(:instance) { FactoryGirl.create(:instance, :id => 123) }
   let!(:attachment) { note_attachments(:sql) }
 
   before do

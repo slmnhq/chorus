@@ -4,12 +4,12 @@ class GpTableCopier
   def self.run_import(source_table_id, user_id, options)
     options = HashWithIndifferentAccess.new(options)
 
-    instance = new(source_table_id, user_id, options)
-    instance.run
+    gpdb_instance = new(source_table_id, user_id, options)
+    gpdb_instance.run
 
-    Dataset.refresh(instance.destination_account, instance.destination_schema)
-    dst_table = instance.destination_schema.datasets.find_by_name(instance.destination_table_name)
-    create_success_event(dst_table, instance.source_table, instance.destination_workspace, User.find(user_id), options[:dataset_import_created_event_id])
+    Dataset.refresh(gpdb_instance.destination_account, gpdb_instance.destination_schema)
+    dst_table = gpdb_instance.destination_schema.datasets.find_by_name(gpdb_instance.destination_table_name)
+    create_success_event(dst_table, gpdb_instance.source_table, gpdb_instance.destination_workspace, User.find(user_id), options[:dataset_import_created_event_id])
   rescue Exception => e
     user = User.find_by_id(user_id)
     src_table = Dataset.find_by_id(source_table_id)
@@ -133,11 +133,11 @@ class GpTableCopier
   end
 
   def destination_account
-    @destination_account ||= destination_schema.instance.account_for_user!(user)
+    @destination_account ||= destination_schema.gpdb_instance.account_for_user!(user)
   end
 
   def source_account
-    @source_account ||= source_schema.instance.account_for_user!(user)
+    @source_account ||= source_schema.gpdb_instance.account_for_user!(user)
   end
 
   def destination_table_fullname

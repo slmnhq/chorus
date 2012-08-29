@@ -2,20 +2,20 @@ require 'spec_helper'
 
 resource "Greenplum DB members" do
   let!(:owner) { users(:bob) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => instance, :owner => owner) }
+  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner) }
   let!(:non_member) { users(:alice) }
-  let!(:member_account) { FactoryGirl.create(:instance_account, :instance => instance) }
+  let!(:member_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
   let!(:member) { member_account.owner }
 
-  let!(:instance) { FactoryGirl.create(:instance, :owner => owner) }
-  let(:instance_id) { instance.to_param }
+  let!(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner => owner) }
+  let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do
     log_in owner
     stub(Gpdb::ConnectionChecker).check! { true }
   end
 
-  get "/instances/:instance_id/members" do
+  get "/gpdb_instances/:gpdb_instance_id/members" do
     example_request "List members with access to DB" do
       explanation <<-DESC
         For a Greenplum instance owner to manage which users can access their
@@ -29,7 +29,7 @@ resource "Greenplum DB members" do
     end
   end
 
-  post "/instances/:instance_id/members" do
+  post "/gpdb_instances/:gpdb_instance_id/members" do
     parameter :owner_id, "User ID of new member"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
@@ -46,7 +46,7 @@ resource "Greenplum DB members" do
     end
   end
 
-  put "/instances/:instance_id/members/:id" do
+  put "/gpdb_instances/:gpdb_instance_id/members/:id" do
     parameter :id, "Account ID of member to update"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
@@ -63,7 +63,7 @@ resource "Greenplum DB members" do
     end
   end
 
-  delete "/instances/:instance_id/members/:id" do
+  delete "/gpdb_instances/:gpdb_instance_id/members/:id" do
     parameter :id, "Account ID of member to delete"
 
     let(:id) { member_account.to_param }

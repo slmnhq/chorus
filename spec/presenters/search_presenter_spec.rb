@@ -30,10 +30,10 @@ describe SearchPresenter, :type => :view do
 
     it "includes the right instance keys" do
       @hash.should have_key(:instances)
-      instance_hash = @hash[:instances]
-      instance_hash.should have_key(:numFound)
-      instance_hash.should have_key(:results)
-      instance_hash[:results][0].should have_key(:highlighted_attributes)
+      gpdb_instance_hash = @hash[:instances]
+      gpdb_instance_hash.should have_key(:numFound)
+      gpdb_instance_hash.should have_key(:results)
+      gpdb_instance_hash[:results][0].should have_key(:highlighted_attributes)
     end
 
     it "includes the right hadoop instance keys" do
@@ -62,11 +62,11 @@ describe SearchPresenter, :type => :view do
     end
 
     it "includes the comments" do
-      instance_hash = @hash[:instances]
-      instance_result = instance_hash[:results][0]
-      instance_result.should have_key(:comments)
-      instance_result[:comments].length.should == 1
-      instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bobsearch</em>"
+      gpdb_instance_hash = @hash[:instances]
+      gpdb_instance_result = gpdb_instance_hash[:results][0]
+      gpdb_instance_result.should have_key(:comments)
+      gpdb_instance_result[:comments].length.should == 1
+      gpdb_instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bobsearch</em>"
     end
 
     it "includes the right dataset keys" do

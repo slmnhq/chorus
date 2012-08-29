@@ -18,7 +18,7 @@ describe NotesController do
     end
 
     it "uses authorization" do
-      id = instances(:greenplum).to_param
+      id = gpdb_instances(:greenplum).to_param
       mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
     end
@@ -62,7 +62,7 @@ describe NotesController do
         log_in note.actor
       end
 
-      it "update the note on an instance" do
+      it "update the note on a gpdb instance" do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "200"
 
@@ -77,7 +77,7 @@ describe NotesController do
         log_in other_user
       end
 
-      it "update the note on an instance" do
+      it "update the note on a gpdb instance" do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "403"
 

@@ -7,7 +7,7 @@ class SchemasController < GpdbController
 
   def show
     schema = GpdbSchema.find_and_verify_in_source(params[:id], current_user)
-    authorize_instance_access(schema)
+    authorize_gpdb_instance_access(schema)
     present schema
   end
 end

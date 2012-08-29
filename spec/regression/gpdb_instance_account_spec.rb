@@ -8,14 +8,14 @@ describe "creating an instance credential" do
   it "creates a new instance account" do
     create_gpdb_instance(:name => "NewInstanceAccountNameInstance")
     sleep(1)
-    instance_id = Instance.find_by_name("NewInstanceAccountNameInstance").id
+    gpdb_instance_id = GpdbInstance.find_by_name("NewInstanceAccountNameInstance").id
     create_valid_user(:username => "EddyNice", :first_name => "Eddy", :last_name => "Nice")
     user_id = User.find_by_username("EddyNice").id
 
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     within(".instance_provider") do
-      page.find("li[data-greenplum-instance-id='#{instance_id}']").click
+      page.find("li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     end
     click_link "Edit"
     within_modal do

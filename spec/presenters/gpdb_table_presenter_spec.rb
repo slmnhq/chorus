@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe GpdbTablePresenter, :type => :view do
   before(:each) do
-    instance = FactoryGirl.build(:instance, :id => 123, :name => "instance1")
-    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :instance => instance)
+    gpdb_instance = FactoryGirl.build(:gpdb_instance, :id => 123, :name => "instance1")
+    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :gpdb_instance => gpdb_instance)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     table = FactoryGirl.build(:gpdb_table, :id => 321, :name => "table1", :schema => schema)
 

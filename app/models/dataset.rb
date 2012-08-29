@@ -8,7 +8,7 @@ class Dataset < ActiveRecord::Base
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   has_many :import_schedules, :foreign_key => 'source_dataset_id'
-  delegate :instance, :account_for_user!, :to => :schema
+  delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :schema_id
@@ -26,7 +26,7 @@ class Dataset < ActiveRecord::Base
   scope :chorus_views, where(:type =>  'ChorusView')
 
   delegate :with_gpdb_connection, :to => :schema
-  delegate :instance, :to => :schema
+  delegate :gpdb_instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable :unless => :stale? do |s|
@@ -131,7 +131,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_data
-    GpdbColumn.columns_for(schema.database.instance.owner_account, self)
+    GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
   end
 
   def dataset_consistent?(another_dataset)
@@ -194,7 +194,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_data
-    GpdbColumn.columns_for(schema.database.instance.owner_account, self)
+    GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
   end
 
   def dataset_consistent?(another_dataset)

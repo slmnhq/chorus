@@ -6,13 +6,13 @@ describe SolrIndexer do
       mock(SolrIndexer).index('some stuff to index')
     end
 
-    it "refreshes all instances,  all their databases, and all hadoop instances" do
-      instance_count = 0
-      any_instance_of(Instance) do |instance|
-        stub(instance).refresh_databases { instance_count += 1 }
+    it "refreshes all gpdb instances, all their databases, and all hadoop instances" do
+      gpdb_instance_count = 0
+      any_instance_of(GpdbInstance) do |instance|
+        stub(instance).refresh_databases { gpdb_instance_count += 1 }
       end
 
-      Instance.all.each do |instance|
+      GpdbInstance.all.each do |instance|
         instance.databases.each do |database|
           mock(GpdbSchema).refresh(instance.owner_account, database, :mark_stale => true, :refresh_all => true)
         end
@@ -25,7 +25,7 @@ describe SolrIndexer do
 
       SolrIndexer.refresh_and_index('some stuff to index')
 
-      instance_count.should == Instance.count
+      gpdb_instance_count.should == GpdbInstance.count
       hadoop_instance_count.should == HadoopInstance.count
     end
   end
@@ -48,11 +48,11 @@ describe SolrIndexer do
     end
 
     context "when passed more than one type to index" do
-      let(:to_index) { ['Dataset', 'Instance'] }
+      let(:to_index) { ['Dataset', 'GpdbInstance'] }
 
       it "should index all types" do
         mock(Dataset).solr_index
-        mock(Instance).solr_index
+        mock(GpdbInstance).solr_index
         subject
       end
     end

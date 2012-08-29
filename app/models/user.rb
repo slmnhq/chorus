@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
-  has_many :instances, :foreign_key => :owner_id
+  has_many :gpdb_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships
   has_many :workspaces, :through => :memberships
@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    if instances.count > 0
+    if gpdb_instances.count > 0
       errors.add(:user, :nonempty_instance_list)
       raise ActiveRecord::RecordInvalid.new(self)
     elsif owned_workspaces.count > 0
@@ -120,7 +120,7 @@ class User < ActiveRecord::Base
   end
 
   def accessible_account_ids
-    shared_account_ids = InstanceAccount.joins(:instance).where("instances.shared = true").collect(&:id)
+    shared_account_ids = InstanceAccount.joins(:gpdb_instance).where("gpdb_instances.shared = true").collect(&:id)
     (shared_account_ids + instance_account_ids).uniq
   end
 end

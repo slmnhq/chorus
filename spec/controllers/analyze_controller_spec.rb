@@ -4,7 +4,7 @@ describe AnalyzeController do
   ignore_authorization!
   let(:user) { users(:carly) }
   let(:gpdb_table) { datasets(:bobs_table) }
-  let(:instance) { gpdb_table.instance }
+  let(:gpdb_instance) { gpdb_table.gpdb_instance }
   let(:account) { instance_accounts(:iamcarly) }
 
   before do
@@ -20,7 +20,7 @@ describe AnalyzeController do
     end
 
     it "uses authentication" do
-      mock(subject).authorize! :show_contents, gpdb_table.instance
+      mock(subject).authorize! :show_contents, gpdb_table.gpdb_instance
       post :create, :table_id => gpdb_table.to_param
     end
 

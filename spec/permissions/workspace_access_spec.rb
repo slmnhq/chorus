@@ -103,8 +103,8 @@ describe WorkspaceAccess do
         context "when user can show_contents? of the dataset instance" do
           it "allows update" do
             schema = gpdb_schemas(:other_schema)
-            any_instance_of(InstanceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.instance) { true }
+            any_instance_of(GpdbInstanceAccess) do |instance_access|
+              mock(instance_access).show_contents?(schema.gpdb_instance) { true }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_true
@@ -114,8 +114,8 @@ describe WorkspaceAccess do
         context "when user can not show_contents? of the dataset instance" do
           it "does not allow update" do
             schema = gpdb_schemas(:other_schema)
-            any_instance_of(InstanceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.instance) { false }
+            any_instance_of(GpdbInstanceAccess) do |instance_access|
+              mock(instance_access).show_contents?(schema.gpdb_instance) { false }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_false

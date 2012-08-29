@@ -18,7 +18,7 @@ describe GpTableCopier, :database_integration => true do
 
   let(:account) { GpdbIntegration.real_gpdb_account }
   let(:user) { account.owner }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:source_table_name) { "src_table" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table_name) }

@@ -4,7 +4,7 @@ resource "Chorus Views" do
   let(:dataset) { datasets(:bobs_table) }
   let(:owner) { users(:bob) }
   let(:workspace) { workspaces(:bob_public) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => dataset.instance, :owner => owner) }
+  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => dataset.gpdb_instance, :owner => owner) }
   let(:dataset_id) { dataset.id }
 
   before do

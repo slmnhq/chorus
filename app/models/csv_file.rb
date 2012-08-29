@@ -30,7 +30,7 @@ class CsvFile < ActiveRecord::Base
 
   def table_already_exists(table_name)
     schema = workspace.sandbox
-    account = schema.instance.account_for_user!(user)
+    account = schema.gpdb_instance.account_for_user!(user)
     check_table(table_name, account, schema)
     true
   rescue Exception => e

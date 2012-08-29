@@ -10,20 +10,20 @@ describe InstanceDatabasesController do
   end
 
   describe "#index" do
-    it "fails when no such instance" do
-      get :index, :instance_id => 12345
+    it "fails when no such gpdb instance" do
+      get :index, :gpdb_instance_id => 12345
       response.code.should == "404"
     end
 
     context "when instance accessible" do
-      let(:instance) { FactoryGirl.create :instance, :shared => true }
-      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
-      let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
+      let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }
+      let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => gpdb_instance.owner }
+      let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
 
       it "checks authorization" do
         stub(GpdbDatabase).refresh { [database] }
-        mock(subject).authorize!(:show_contents, instance)
-        get :index, :instance_id => instance.id
+        mock(subject).authorize!(:show_contents, gpdb_instance)
+        get :index, :gpdb_instance_id => gpdb_instance.id
       end
 
       context "when the refresh of the db fails" do
@@ -32,7 +32,7 @@ describe InstanceDatabasesController do
         end
 
         it "should fail" do
-          get :index, :instance_id => instance.id
+          get :index, :gpdb_instance_id => gpdb_instance.id
           response.code.should == "422"
         end
       end
@@ -43,10 +43,10 @@ describe InstanceDatabasesController do
         end
 
         it "should succeed" do
-          get :index, :instance_id => instance.id
+          get :index, :gpdb_instance_id => gpdb_instance.id
           response.code.should == "200"
           decoded_response[0].id.should == database.id
-          decoded_response[0].instance.id.should == instance.id
+          decoded_response[0].instance.id.should == gpdb_instance.id
         end
       end
     end
@@ -56,15 +56,15 @@ describe InstanceDatabasesController do
     let(:database) { FactoryGirl.create(:gpdb_database) }
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, database.instance)
+      mock(subject).authorize!(:show_contents, database.gpdb_instance)
       get :show, :id => database.to_param
     end
 
     it "renders the database" do
       get :show, :id => database.to_param
       response.code.should == "200"
-      decoded_response.instance.id.should == database.instance.id
-      decoded_response.instance.name.should == database.instance.name
+      decoded_response.instance.id.should == database.gpdb_instance.id
+      decoded_response.instance.name.should == database.gpdb_instance.name
       decoded_response.id.should == database.id
       decoded_response.name.should == database.name
     end

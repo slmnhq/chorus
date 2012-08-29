@@ -8,9 +8,9 @@ describe GpdbColumn do
       before do
         refresh_chorus
       end
-      let(:instance) { GpdbIntegration.real_gpdb_instance }
+      let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
       let(:account) { GpdbIntegration.real_gpdb_account }
-      let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
+      let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
 
       context "view/table" do
         let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
@@ -62,7 +62,7 @@ describe GpdbColumn do
       before do
         #{"attname"=>"notes", "format_type"=>"text", "description"=>nil, "attnum"=>11, "null_frac"=>nil, "n_distinct"=>nil,
         #"most_common_vals"=>nil, "most_common_freqs"=>nil, "histogram_bounds"=>nil, "reltuples"=>0.0}
-        mock(Gpdb::ConnectionBuilder).connect!(instance, account, dataset.schema.database.name) do
+        mock(Gpdb::ConnectionBuilder).connect!(gpdb_instance, account, dataset.schema.database.name) do
           [
               {"attname" => 'email', "format_type" => 'varchar(255)', "description" => 'it must be present',
                "attnum" => 1, "null_frac" => '1stats1', "n_distinct" => '1stats2', "most_common_vals" => '1stats3',
@@ -73,7 +73,7 @@ describe GpdbColumn do
           ]
         end
       end
-      let(:instance) { instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
       let(:account) { instance_accounts(:bobo) }
       let(:dataset) { datasets(:bobs_table) }
 

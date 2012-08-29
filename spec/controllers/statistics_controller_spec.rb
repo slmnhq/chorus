@@ -8,10 +8,10 @@ describe StatisticsController do
   end
 
   context "#show" do
-    let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
-    let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
+    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner_id => user.id) }
+    let(:instanceAccount) { FactoryGirl.create(:instance_account, :gpdb_instance_id => gpdb_instance.id, :owner_id => user.id) }
 
-    let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "database1") }
+    let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => "database1") }
     let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1', :database => database) }
     let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
 

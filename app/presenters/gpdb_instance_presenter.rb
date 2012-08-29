@@ -1,4 +1,4 @@
-class InstancePresenter < Presenter
+class GpdbInstancePresenter < Presenter
   delegate :name, :host, :port, :id, :owner, :state, :shared, :provision_type,
            :maintenance_db, :description, :instance_provider, :version, to: :model
 

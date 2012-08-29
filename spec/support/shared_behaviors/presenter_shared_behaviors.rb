@@ -11,8 +11,8 @@ end
 
 shared_examples "dataset presenter" do |dataset_factory_name|
   before do
-    instance = FactoryGirl.build(:instance, :id => 123, :name => "instance1")
-    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :instance => instance)
+    gpdb_instance = FactoryGirl.build(:gpdb_instance, :id => 123, :name => "instance1")
+    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :gpdb_instance => gpdb_instance)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     @dataset = FactoryGirl.build(dataset_factory_name,
       :id => 321,

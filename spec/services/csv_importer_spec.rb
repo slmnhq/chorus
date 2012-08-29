@@ -15,7 +15,7 @@ describe CsvImporter, :database_integration => true do
       end
     end
 
-    let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
     let(:account) { GpdbIntegration.real_gpdb_account }
@@ -249,7 +249,7 @@ describe CsvImporter, :database_integration => true do
     let(:csv_file) { CsvFile.first }
     let(:user) { csv_file.user }
     let(:dataset) { datasets(:bobs_table) }
-    let(:instance_account) { csv_file.workspace.sandbox.instance.account_for_user!(csv_file.user) }
+    let(:instance_account) { csv_file.workspace.sandbox.gpdb_instance.account_for_user!(csv_file.user) }
     let(:file_import_created_event) { Events::FileImportCreated.first }
 
     describe "destination_dataset" do

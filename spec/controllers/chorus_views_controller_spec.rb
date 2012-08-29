@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ChorusViewsController, :database_integration => true do
   let(:account) { GpdbIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:bob_public)}
 

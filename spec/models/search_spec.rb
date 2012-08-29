@@ -17,7 +17,7 @@ describe Search do
         search = Search.new(user, :query => 'bob')
         search.search
         Sunspot.session.should be_a_search_for(User)
-        Sunspot.session.should be_a_search_for(Instance)
+        Sunspot.session.should be_a_search_for(GpdbInstance)
         Sunspot.session.should be_a_search_for(HadoopInstance)
         Sunspot.session.should be_a_search_for(Workspace)
         Sunspot.session.should be_a_search_for(Dataset)
@@ -46,7 +46,7 @@ describe Search do
           search = Search.new(user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
-            hsh.merge({:users => 100, :instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100})
+            hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100})
           end
           stub(search.search).each_hit_with_result { [] }
           search.models
@@ -65,10 +65,10 @@ describe Search do
 
         describe "entity_type" do
           it "searches for the provided models" do
-            search = Search.new(user, :query => 'bob', :entity_type => 'instance')
+            search = Search.new(user, :query => 'bob', :entity_type => 'gpdb_instance')
             search.search
             Sunspot.session.should_not be_a_search_for(User)
-            Sunspot.session.should be_a_search_for(Instance)
+            Sunspot.session.should be_a_search_for(GpdbInstance)
           end
         end
 
@@ -97,7 +97,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :entity_type => 'user')
         search.search
         Sunspot.session.should be_a_search_for(User)
-        Sunspot.session.should_not be_a_search_for(Instance)
+        Sunspot.session.should_not be_a_search_for(GpdbInstance)
         Sunspot.session.should have_search_params(:fulltext, 'bob')
         Sunspot.session.should_not have_search_params(:facet, :type_name)
       end
@@ -108,7 +108,7 @@ describe Search do
     let(:admin) { users(:admin) }
     let(:bob) { users(:bob) }
     let(:carly) { users(:carly) }
-    let(:instance) { instances(:greenplum) }
+    let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
     let(:public_workspace) { workspaces(:alice_public) }
@@ -129,7 +129,7 @@ describe Search do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
           search.num_found[:users].should == 1
-          search.num_found[:instances].should == 1
+          search.num_found[:gpdb_instances].should == 1
           search.num_found[:datasets].should == 2
         end
       end
@@ -138,7 +138,7 @@ describe Search do
         VCR.use_cassette('search_solr_query_user_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch', :entity_type => 'user')
           search.num_found[:users].should == 1
-          search.num_found[:instances].should == 0
+          search.num_found[:gpdb_instances].should == 0
         end
       end
     end
@@ -161,21 +161,21 @@ describe Search do
       end
     end
 
-    describe "instances" do
+    describe "gpdb_instances" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
-          instance = search.instances.first
-          instance.highlighted_attributes.length.should == 1
-          instance.highlighted_attributes[:description][0].should == "Just for <em>bobsearch</em> and greenplumsearch"
+          gpdb_instance = search.gpdb_instances.first
+          gpdb_instance.highlighted_attributes.length.should == 1
+          gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>bobsearch</em> and greenplumsearch"
         end
       end
 
-      it "returns the Instance objects found" do
+      it "returns the GpdbInstance objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
-          search.instances.length.should == 1
-          search.instances.first.should == instance
+          search.gpdb_instances.length.should == 1
+          search.gpdb_instances.first.should == gpdb_instance
         end
       end
     end
@@ -264,7 +264,7 @@ describe Search do
         end
       end
 
-      it "returns the Instance objects found" do
+      it "returns the HadoopInstance objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
           search.hdfs_entries.length.should == 1
@@ -277,10 +277,10 @@ describe Search do
       it "includes highlighted notes in the highlighted_attributes" do
         VCR.use_cassette('search_solr_query_all_types_greenplum_as_bob') do
           search = Search.new(bob, :query => 'greenplumsearch')
-          search.instances.length.should == 2
-          instance_with_notes = search.instances[1]
-          instance_with_notes.search_result_notes.length.should == 2
-          instance_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
+          search.gpdb_instances.length.should == 2
+          gpdb_instance_with_notes = search.gpdb_instances[1]
+          gpdb_instance_with_notes.search_result_notes.length.should == 2
+          gpdb_instance_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end
       end
     end

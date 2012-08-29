@@ -64,7 +64,7 @@ describe ApplicationController do
     end
 
     describe "when an access denied error is raised" do
-      let(:object_to_present) { instances(:greenplum) }
+      let(:object_to_present) { gpdb_instances(:greenplum) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }
 
       before do
@@ -79,7 +79,7 @@ describe ApplicationController do
 
       it "includes the given model's id" do
         get :index
-        decoded_response.instance.id.should == object_to_present.id
+        decoded_response.gpdb_instance.id.should == object_to_present.id
       end
     end
   end

@@ -1,36 +1,36 @@
-module Instances
+module GpdbInstances
   class MembersController < ApplicationController
     def index
-      accounts = Instance.find(params[:instance_id]).accounts
+      accounts = GpdbInstance.find(params[:gpdb_instance_id]).accounts
       present paginate(accounts.includes(:owner).order(:id))
     end
 
     def create
-      instance = Instance.unshared.owned_by(current_user).find(params[:instance_id])
+      gpdb_instance = GpdbInstance.unshared.owned_by(current_user).find(params[:gpdb_instance_id])
 
-      account = instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
+      account = gpdb_instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
       account.attributes = params[:account]
 
-      Gpdb::ConnectionChecker.check!(instance, account)
+      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
 
       present account, :status => :created
     end
 
     def update
-      instance = Instance.owned_by(current_user).find(params[:instance_id])
+      gpdb_instance = GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
 
-      account = instance.accounts.find(params[:id])
+      account = gpdb_instance.accounts.find(params[:id])
       account.attributes = params[:account]
-      Gpdb::ConnectionChecker.check!(instance, account)
+      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
 
       present account, :status => :ok
     end
 
     def destroy
-      instance = Instance.owned_by(current_user).find(params[:instance_id])
-      account = instance.accounts.find(params[:id])
+      gpdb_instance = GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
+      account = gpdb_instance.accounts.find(params[:id])
 
       account.destroy
       render :json => {}

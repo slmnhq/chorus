@@ -47,8 +47,8 @@ class NoteMigrator < AbstractMigrator
       SELECT
         edc_comment.id,
         'Events::NoteOnGreenplumInstance',
-        instances.id,
-        'Instance',
+        gpdb_instances.id,
+        'GpdbInstance',
         edc_comment.created_stamp,
         edc_comment.last_updated_stamp,
         CASE edc_comment.is_deleted
@@ -63,8 +63,8 @@ class NoteMigrator < AbstractMigrator
             AND instance_provider = 'Greenplum Database'
         INNER JOIN users
           ON users.username = edc_comment.author_name
-        INNER JOIN instances
-          ON instances.legacy_id = edc_comment.entity_id
+        INNER JOIN gpdb_instances
+          ON gpdb_instances.legacy_id = edc_comment.entity_id
       WHERE
         edc_comment.entity_type = 'instance'
         AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnGreenplumInstance');

@@ -25,38 +25,37 @@ class AuroraProvider
   end
 
   def self.provide!(instance_id, attributes = {})
-    instance = Instance.find(instance_id)
+    gpdb_instance = GpdbInstance.find(instance_id)
     provider = create_from_aurora_service
 
     db_attributes = attributes.dup.symbolize_keys!
     db_attributes.merge!({
       :template => provider.aurora_service.find_template_by_name(attributes["template"]),
-      :db_username => instance.owner_account.db_username,
-      :db_password => instance.owner_account.db_password
+      :db_username => gpdb_instance.owner_account.db_username,
+      :db_password => gpdb_instance.owner_account.db_password
     })
     db = provider.aurora_service.create_database(db_attributes)
-    instance.host = db.public_ip
-    instance.state = 'online'
-    instance.save!
-    Events::ProvisioningSuccess.by(instance.owner).add(:greenplum_instance => instance)
+    gpdb_instance.host = db.public_ip
+    gpdb_instance.save!
+    Events::ProvisioningSuccess.by(gpdb_instance.owner).add(:greenplum_instance => gpdb_instance)
     schema_name =  attributes["schema_name"]
     if schema_name != 'public'
-      create_new_schema(instance.owner_account, attributes["database_name"], schema_name);
+      create_new_schema(gpdb_instance.owner_account, attributes["database_name"], schema_name);
     end
-    instance.refresh_databases
-    instance
+    gpdb_instance.refresh_databases
+    gpdb_instance
 
   rescue StandardError => e
-    instance = Instance.find(instance_id)
-    instance.state = 'fault'
-    instance.save!
-    Events::ProvisioningFail.by(instance.owner).add(:greenplum_instance => instance,
+    gpdb_instance = GpdbInstance.find(instance_id)
+    gpdb_instance.state = 'fault'
+    gpdb_instance.save!
+    Events::ProvisioningFail.by(gpdb_instance.owner).add(:greenplum_instance => gpdb_instance,
                                                        :error_message => e.message)
   end
 
   private
   def self.create_new_schema(account, database_name, schema_name)
-    Gpdb::ConnectionBuilder.connect!(account.instance, account, database_name ) do |conn|
+    Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, database_name ) do |conn|
       conn.exec_query("CREATE SCHEMA #{schema_name}")
     end
   end

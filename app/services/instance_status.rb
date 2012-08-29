@@ -35,15 +35,15 @@ module InstanceStatus
   end
 
   def self.check_gpdb_instances
-    each_instance(Instance.scoped) do |instance|
-      Gpdb::ConnectionBuilder.connect!(instance, instance.owner_account) do |conn|
-        instance.state = "online"
+    each_instance(GpdbInstance.scoped) do |gpdb_instance|
+      Gpdb::ConnectionBuilder.connect!(gpdb_instance, gpdb_instance.owner_account) do |conn|
+        gpdb_instance.state = "online"
         version_string = conn.exec_query("select version()")[0]["version"]
         # if the version string looks like this:
         # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
         # then we just want "4.1.1.2"
 
-        instance.version = version_string.match(/Greenplum Database ([\d\.]*)/)[1]
+        gpdb_instance.version = version_string.match(/Greenplum Database ([\d\.]*)/)[1]
       end
     end
   end

@@ -16,7 +16,7 @@ FactoryGirl.define do
     admin true
   end
 
-  factory :instance, :aliases => [:greenplum_instance] do
+  factory :gpdb_instance, :aliases => [:greenplum_instance] do
     sequence(:name) { |n| "instance#{n}" }
     sequence(:host) { |n| "host#{n}.emc.com" }
     sequence(:port) { |n| 5000+n }
@@ -36,12 +36,12 @@ FactoryGirl.define do
     sequence(:db_username) { |n| "username#{n}" }
     db_password "secret"
     owner
-    instance
+    gpdb_instance
   end
 
   factory :gpdb_database do
     sequence(:name) { |n| "database#{n}" }
-    instance
+    gpdb_instance
   end
 
   factory :gpdb_schema do

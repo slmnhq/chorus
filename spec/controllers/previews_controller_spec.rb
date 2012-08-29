@@ -4,9 +4,9 @@ describe PreviewsController do
   ignore_authorization!
 
   let(:gpdb_table) { datasets(:bobs_table) }
-  let(:instance) { gpdb_table.instance }
+  let(:gpdb_instance) { gpdb_table.gpdb_instance }
   let(:user) { users(:carly) }
-  let(:account) { instance.account_for_user!(user) }
+  let(:account) { gpdb_instance.account_for_user!(user) }
 
   before do
     log_in user
@@ -20,7 +20,7 @@ describe PreviewsController do
       end
 
       it "uses authentication" do
-        mock(subject).authorize! :show_contents, gpdb_table.instance
+        mock(subject).authorize! :show_contents, gpdb_instance
         post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
       end
 

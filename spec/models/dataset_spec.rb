@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:instance) { instances(:bobs_instance) }
-  let(:account) { instance.owner_account }
+  let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+  let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
   let(:dataset) { datasets(:bobs_table) }
@@ -318,7 +318,7 @@ end
 
 describe Dataset::Query, :database_integration => true do
   let(:account) { GpdbIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   before do
@@ -344,7 +344,7 @@ describe Dataset::Query, :database_integration => true do
 
     context "when 'public' schema does not exist" do
       let(:database_name) { "#{GpdbIntegration.database_name}_no_public_schema" }
-      let(:database) { GpdbDatabase.find_by_name_and_instance_id(database_name, GpdbIntegration.real_gpdb_instance) }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(database_name, GpdbIntegration.real_gpdb_instance) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 

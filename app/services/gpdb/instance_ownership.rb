@@ -4,39 +4,39 @@ module Gpdb
   module InstanceOwnership
     class << self
 
-      def change(updater, instance, new_owner)
-        if instance.shared?
-          change_owner_of_shared(instance, new_owner)
+      def change(updater, gpdb_instance, new_owner)
+        if gpdb_instance.shared?
+          change_owner_of_shared(gpdb_instance, new_owner)
         else
-          change_owner_of_unshared(instance, new_owner)
+          change_owner_of_unshared(gpdb_instance, new_owner)
         end
 
         Events::GreenplumInstanceChangedOwner.by(updater).add(
-          :greenplum_instance => instance,
+          :greenplum_instance => gpdb_instance,
           :new_owner => new_owner
         )
       end
 
       private
 
-      def change_owner_of_shared(instance, new_owner)
+      def change_owner_of_shared(gpdb_instance, new_owner)
         ActiveRecord::Base.transaction do
-          owner_account = instance.owner_account
+          owner_account = gpdb_instance.owner_account
           owner_account.owner = new_owner
           owner_account.save!
-          instance.owner = new_owner
-          instance.save!
+          gpdb_instance.owner = new_owner
+          gpdb_instance.save!
         end
       end
 
-      def change_owner_of_unshared(instance, new_owner)
-        ensure_user_has_account(instance, new_owner)
-        instance.owner = new_owner
-        instance.save!
+      def change_owner_of_unshared(gpdb_instance, new_owner)
+        ensure_user_has_account(gpdb_instance, new_owner)
+        gpdb_instance.owner = new_owner
+        gpdb_instance.save!
       end
 
-      def ensure_user_has_account(instance, new_owner)
-        instance.account_for_user!(new_owner)
+      def ensure_user_has_account(gpdb_instance, new_owner)
+        gpdb_instance.account_for_user!(new_owner)
       end
 
     end

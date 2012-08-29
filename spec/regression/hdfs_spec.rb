@@ -8,11 +8,11 @@ describe "adding an txt ext table " do
     create_valid_workspace(:name => "exttxttabletxt")
     wait_for_ajax
     inst_name = "exttxttablegp"
-    instance_id = Instance.find_by_name(inst_name).id
+    gpdb_instance_id = GpdbInstance.find_by_name(inst_name).id
     click_link "Add a sandbox"
     wait_for_ajax(5)
     #instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
+    page.execute_script("$('select[name=instance]').selectmenu('value', '#{gpdb_instance_id}')")
     page.execute_script("$('.instance .select_container select').change();")
     wait_for_ajax(5)
     #database
@@ -41,23 +41,21 @@ describe "adding an txt ext table " do
     wait_for_ajax
     page.should have_content "exttable"
     click_link "exttabletxt"
-
   end
 end
 
 describe "adding an csv ext table " do
-
   it "tries to create an external table from text file" do
     login('edcadmin', 'secret')
     create_gpdb_instance(:name => "exttablecsvgp")
     create_valid_workspace(:name => "exttablecsv")
     wait_for_ajax
     inst_name = "exttablecsvgp"
-    instance_id = Instance.find_by_name(inst_name).id
+    gpdb_instance_id = GpdbInstance.find_by_name(inst_name).id
     click_link "Add a sandbox"
     wait_for_ajax(5)
     #instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
+    page.execute_script("$('select[name=instance]').selectmenu('value', '#{gpdb_instance_id}')")
     page.execute_script("$('.instance .select_container select').change();")
     wait_for_ajax(5)
     #database
@@ -86,6 +84,5 @@ describe "adding an csv ext table " do
     wait_for_ajax
     page.should have_content "exttable"
     click_link "exttablecsv"
-
   end
 end

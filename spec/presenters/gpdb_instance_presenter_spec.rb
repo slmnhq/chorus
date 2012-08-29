@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe InstancePresenter, :type => :view do
+describe GpdbInstancePresenter, :type => :view do
   before(:each) do
     @user = FactoryGirl.create :user
 
-    @instance = FactoryGirl.build :instance
-    @instance.owner = @user
-    @presenter = InstancePresenter.new(@instance, view)
+    @gpdb_instance = FactoryGirl.build :gpdb_instance
+    @gpdb_instance.owner = @user
+    @presenter = GpdbInstancePresenter.new(@gpdb_instance, view)
   end
 
   describe "#to_hash" do
@@ -34,7 +34,7 @@ describe InstancePresenter, :type => :view do
       @owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
     end
 
-    it_behaves_like "sanitized presenter", :instance, :name
-    it_behaves_like "sanitized presenter", :instance, :host
+    it_behaves_like "sanitized presenter", :gpdb_instance, :name
+    it_behaves_like "sanitized presenter", :gpdb_instance, :host
   end
 end

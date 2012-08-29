@@ -6,8 +6,8 @@ describe "Event types" do
   extend EventHelpers
 
   let(:actor) { FactoryGirl.create(:user) }
-  let(:greenplum_instance) { FactoryGirl.create(:instance) }
-  let(:aurora_instance) { instances(:aurora) }
+  let(:greenplum_instance) { FactoryGirl.create(:gpdb_instance) }
+  let(:aurora_instance) { gpdb_instances(:aurora) }
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
   let(:user) { FactoryGirl.create(:user) }
   let(:workfile) { FactoryGirl.create(:workfile) }

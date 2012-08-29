@@ -33,7 +33,7 @@ class GpdbSchema < ActiveRecord::Base
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id
   delegate :with_gpdb_connection, :to => :database
-  delegate :instance, :account_for_user!, :to => :database
+  delegate :gpdb_instance, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
 

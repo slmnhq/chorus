@@ -3,12 +3,12 @@ require 'spec_helper'
 describe VisualizationsController do
   let(:user) { FactoryGirl.create(:user) }
 
-  let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
-  let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
+  let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner_id => user.id) }
+  let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
   let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'public', :database => database) }
   let(:dataset) { FactoryGirl.create(:gpdb_table, :name => '1000_songs_test_1', :schema => schema) }
 
-  let(:instance_account) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
+  let(:instance_account) { FactoryGirl.create(:instance_account, :gpdb_instance_id => gpdb_instance.id, :owner_id => user.id) }
 
   before do
     log_in user

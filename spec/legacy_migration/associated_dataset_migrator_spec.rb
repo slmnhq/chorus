@@ -36,7 +36,7 @@ describe AssociatedDatasetMigrator do
           associated_dataset.dataset.name.should == legacy_associated_dataset['object_name']
           associated_dataset.dataset.schema.name.should == legacy_associated_dataset['schema_name']
           associated_dataset.dataset.schema.database.name.should == legacy_associated_dataset['database_name']
-          associated_dataset.dataset.schema.database.instance.legacy_id.should == legacy_associated_dataset['instance_id']
+          associated_dataset.dataset.schema.database.gpdb_instance.legacy_id.should == legacy_associated_dataset['instance_id']
         end
       end
     end

@@ -1,22 +1,22 @@
-module Instances
+module GpdbInstances
   class SharingController < ApplicationController
     def create
-      instance.shared = true
-      instance.accounts.where("id != #{instance.owner_account.id}").destroy_all
-      instance.save!
-      present instance, :status => :created
+      gpdb_instance.shared = true
+      gpdb_instance.accounts.where("id != #{gpdb_instance.owner_account.id}").destroy_all
+      gpdb_instance.save!
+      present gpdb_instance, :status => :created
     end
 
     def destroy
-      instance.shared = false
-      instance.save!
-      present instance
+      gpdb_instance.shared = false
+      gpdb_instance.save!
+      present gpdb_instance
     end
 
     private
 
-    def instance
-      @instance ||= Instance.owned_by(current_user).find(params[:instance_id])
+    def gpdb_instance
+      @gpdb_instance ||= GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
     end
   end
 end

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 resource "Greenplum DB instances" do
   let!(:owner) { users(:alice) }
-  let(:owned_instance) { FactoryGirl.create(:instance, :owner => owner) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => owned_instance, :owner => owner)}
-  let!(:other_instance) { FactoryGirl.create(:instance) }
+  let(:owned_instance) { FactoryGirl.create(:gpdb_instance, :owner => owner) }
+  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => owned_instance, :owner => owner)}
+  let!(:other_instance) { FactoryGirl.create(:gpdb_instance) }
   let!(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => owned_instance) }
   let!(:activity) { Activity.create!(:entity => owned_instance, :event => event) }
 
@@ -13,7 +13,7 @@ resource "Greenplum DB instances" do
     stub(Gpdb::ConnectionChecker).check! { true }
   end
 
-  post "/instances" do
+  post "/gpdb_instances" do
     parameter :name, "Instance alias"
     parameter :description, "Description"
     parameter :host, "Host IP or address"
@@ -40,7 +40,7 @@ resource "Greenplum DB instances" do
     end
   end
 
-  get "/instances" do
+  get "/gpdb_instances" do
     parameter :accessible, "1 to limit the list to instances the current user can access, 0 for all instances"
     let(:accessible) { "1" }
 
@@ -49,7 +49,7 @@ resource "Greenplum DB instances" do
     end
   end
 
-  get "/instances/:id" do
+  get "/gpdb_instances/:id" do
     let(:id) { owned_instance.to_param }
 
     example_request "Get the specific Instance" do
@@ -57,7 +57,7 @@ resource "Greenplum DB instances" do
     end
   end
 
-  put "/instances/:id" do
+  put "/gpdb_instances/:id" do
     parameter :name, "Instance alias"
     parameter :description, "Description"
     parameter :host, "Host IP or address"
@@ -78,8 +78,8 @@ resource "Greenplum DB instances" do
     end
   end
 
-  get "/instances/:instance_id/activities" do
-    let(:instance_id) { owned_instance.to_param }
+  get "/gpdb_instances/:gpdb_instance_id/activities" do
+    let(:gpdb_instance_id) { owned_instance.to_param }
 
     example_request "List all activities on an instance" do
       status.should == 200

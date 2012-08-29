@@ -3,8 +3,8 @@ require "spec_helper"
 describe Events::Base do
   describe ".add(params)" do
     it "creates an event with the given parameters" do
-      instance1 = FactoryGirl.create(:instance)
-      instance2 = FactoryGirl.create(:instance)
+      gpdb_instance1 = FactoryGirl.create(:gpdb_instance)
+      gpdb_instance2 = FactoryGirl.create(:gpdb_instance)
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
@@ -12,8 +12,8 @@ describe Events::Base do
       hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
       workspace = FactoryGirl.create(:workspace)
 
-      Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => instance1)
-      Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
+      Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => gpdb_instance1)
+      Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => gpdb_instance2, :new_owner => user3)
       Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
       event1 = Events::GreenplumInstanceCreated.first
@@ -21,10 +21,10 @@ describe Events::Base do
       event3 = Events::WorkspaceAddHdfsAsExtTable.first
 
       event1.actor.should == user1
-      event1.greenplum_instance.should == instance1
+      event1.greenplum_instance.should == gpdb_instance1
 
       event2.actor.should == user2
-      event2.greenplum_instance.should == instance2
+      event2.greenplum_instance.should == gpdb_instance2
       event2.new_owner.should == user3
 
       event3.workspace.should == workspace

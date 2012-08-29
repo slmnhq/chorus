@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Visualization::Heatmap do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'public') }
-  let(:database) { GpdbDatabase.find_by_name_and_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
   let(:dataset) { database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
   let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
   let(:relation) { %Q{"#{schema.name}"."#{dataset.name}"} }

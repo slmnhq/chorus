@@ -2,8 +2,8 @@ def go_to_workspace_page
   visit(WEBPATH['workspace']['route'])
 end
 
-def go_to_instance_page
-  visit(WEBPATH['instance']['route'])
+def go_to_gpdb_instance_page
+  visit(WEBPATH['gpdb_instance']['route'])
 end
 
 def go_to_user_list_page

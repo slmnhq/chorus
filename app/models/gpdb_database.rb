@@ -1,10 +1,10 @@
 class GpdbDatabase < ActiveRecord::Base
   include Stale
 
-  belongs_to :instance
+  belongs_to :gpdb_instance
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
   has_and_belongs_to_many :instance_accounts
-  delegate :account_for_user!, :to => :instance
+  delegate :account_for_user!, :to => :gpdb_instance
 
   before_save :mark_schemas_as_stale
 
@@ -18,13 +18,13 @@ class GpdbDatabase < ActiveRecord::Base
   SQL
 
   def self.refresh(account)
-    instance = account.instance
-    db_names = Gpdb::ConnectionBuilder.connect!(instance, account) do |conn|
+    gpdb_instance = account.gpdb_instance
+    db_names = Gpdb::ConnectionBuilder.connect!(gpdb_instance, account) do |conn|
       conn.exec_query(DATABASE_NAMES_SQL)
     end.map { |row| row["datname"] }
 
     db_names.map do |name|
-      db = instance.databases.find_or_create_by_name!(name)
+      db = gpdb_instance.databases.find_or_create_by_name!(name)
       db.update_attributes!({:stale_at => nil}, :without_protection => true)
     end
   end
@@ -37,7 +37,7 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def with_gpdb_connection(account, &block)
-    Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
+    Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, name, &block)
   end
 
   def find_dataset_in_schema(dataset_name, schema_name)
@@ -47,7 +47,7 @@ class GpdbDatabase < ActiveRecord::Base
   private
 
   def create_schema_in_gpdb(name, current_user)
-    with_gpdb_connection(instance.account_for_user!(current_user)) do |conn|
+    with_gpdb_connection(gpdb_instance.account_for_user!(current_user)) do |conn|
       sql = "CREATE SCHEMA #{conn.quote_column_name(name)}"
       conn.exec_query(sql)
     end

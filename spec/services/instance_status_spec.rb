@@ -2,31 +2,31 @@ require 'spec_helper'
 
 describe InstanceStatus do
   describe "#check_hdfs_instances" do
-    let(:instance1) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
-    let(:instance2) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
-    let(:instance3) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:hadoop_instance1) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:hadoop_instance2) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:hadoop_instance3) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
 
     describe "#check_hdfs_instances" do
       before do
-        mock(Hdfs::QueryService).instance_version(instance1) { "1.0.0" }
-        mock(Hdfs::QueryService).instance_version(instance2) { nil }
-        mock(Hdfs::QueryService).instance_version(instance3) { "0.20.205" }
+        mock(Hdfs::QueryService).instance_version(hadoop_instance1) { "1.0.0" }
+        mock(Hdfs::QueryService).instance_version(hadoop_instance2) { nil }
+        mock(Hdfs::QueryService).instance_version(hadoop_instance3) { "0.20.205" }
       end
 
       it "updates the connection status for each instance" do
         InstanceStatus.check_hdfs_instances
 
-        instance1.reload.should be_online
-        instance2.reload.should_not be_online
-        instance3.reload.should be_online
+        hadoop_instance1.reload.should be_online
+        hadoop_instance2.reload.should_not be_online
+        hadoop_instance3.reload.should be_online
       end
 
       it "updates the version for each instance" do
         InstanceStatus.check_hdfs_instances
 
-        instance1.reload.version.should == "1.0.0"
-        instance2.reload.version.should == "0.20.1"
-        instance3.reload.version.should == "0.20.205"
+        hadoop_instance1.reload.version.should == "1.0.0"
+        hadoop_instance2.reload.version.should == "0.20.1"
+        hadoop_instance3.reload.version.should == "0.20.205"
       end
     end
   end
@@ -34,13 +34,13 @@ describe InstanceStatus do
   describe "#check_gpdb_instances" do
     let(:user1) { FactoryGirl::create :user }
 
-    let(:instance_account1) { FactoryGirl::create :instance_account, :instance => instance1, :owner => user1 }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :instance => instance2, :owner => user1 }
-    let(:instance_account3) { FactoryGirl::create :instance_account, :instance => instance3, :owner => user1 }
+    let(:instance_account1) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance1, :owner => user1 }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance2, :owner => user1 }
+    let(:instance_account3) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance3, :owner => user1 }
 
-    let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
-    let(:instance2) { FactoryGirl.create :instance, :owner_id => user1.id }
-    let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
+    let(:gpdb_instance1) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
+    let(:gpdb_instance2) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
+    let(:gpdb_instance3) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
 
     context "successfully connect to the database" do
 
@@ -55,28 +55,28 @@ describe InstanceStatus do
       end
 
       it "checks the connection status for each instance" do
-        instance1.update_attribute(:state, "offline")
-        instance2.update_attribute(:state, "offline")
-        instance3.update_attribute(:state, "online")
+        gpdb_instance1.update_attribute(:state, "offline")
+        gpdb_instance2.update_attribute(:state, "offline")
+        gpdb_instance3.update_attribute(:state, "online")
 
         InstanceStatus.check_gpdb_instances
 
-        instance1.reload.state.should == "online"
-        instance2.reload.state.should == "online"
-        instance3.reload.state.should == "offline"
+        gpdb_instance1.reload.state.should == "online"
+        gpdb_instance2.reload.state.should == "online"
+        gpdb_instance3.reload.state.should == "offline"
       end
 
 
-      it "checks the version for each instance" do
-        instance1.update_attribute(:version, "random_version")
-        instance2.update_attribute(:version, "random_version")
-        instance3.update_attribute(:version, "random_version")
+      it "checks the version for each gpdb instance" do
+        gpdb_instance1.update_attribute(:version, "random_version")
+        gpdb_instance2.update_attribute(:version, "random_version")
+        gpdb_instance3.update_attribute(:version, "random_version")
 
         InstanceStatus.check_gpdb_instances
 
-        instance1.reload.version.should == "4.1.1.1"
-        instance2.reload.version.should == "4.1.1.2"
-        instance3.reload.version.should == "random_version"
+        gpdb_instance1.reload.version.should == "4.1.1.1"
+        gpdb_instance2.reload.version.should == "4.1.1.2"
+        gpdb_instance3.reload.version.should == "random_version"
       end
     end
 
@@ -93,15 +93,15 @@ describe InstanceStatus do
       end
 
       it "does not fail to update other instances" do
-        instance1.update_attribute(:state, "offline")
-        instance2.update_attribute(:state, "offline")
-        instance3.update_attribute(:state, "online")
+        gpdb_instance1.update_attribute(:state, "offline")
+        gpdb_instance2.update_attribute(:state, "offline")
+        gpdb_instance3.update_attribute(:state, "online")
 
         InstanceStatus.check_gpdb_instances
 
-        instance1.reload.state.should == "offline"
-        instance2.reload.state.should == "online"
-        instance3.reload.state.should == "online"
+        gpdb_instance1.reload.state.should == "offline"
+        gpdb_instance2.reload.state.should == "online"
+        gpdb_instance3.reload.state.should == "online"
       end
     end
   end

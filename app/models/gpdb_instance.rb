@@ -1,4 +1,4 @@
-class Instance < ActiveRecord::Base
+class GpdbInstance < ActiveRecord::Base
   attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
                   :provision_type, :description, :instance_provider, :version
 
@@ -21,7 +21,7 @@ class Instance < ActiveRecord::Base
   end
 
   def self.unshared
-    where("instances.shared = false OR instances.shared IS NULL")
+    where("gpdb_instances.shared = false OR gpdb_instances.shared IS NULL")
   end
 
   def self.owned_by(user)
@@ -33,9 +33,9 @@ class Instance < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    where('instances.shared OR instances.owner_id = :owned OR instances.id IN (:with_membership)',
+    where('gpdb_instances.shared OR gpdb_instances.owner_id = :owned OR gpdb_instances.id IN (:with_membership)',
           :owned => user.id,
-          :with_membership => user.instance_accounts.pluck(:instance_id)
+          :with_membership => user.instance_accounts.pluck(:gpdb_instance_id)
     )
   end
 
@@ -93,7 +93,7 @@ class Instance < ActiveRecord::Base
     account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
   end
 
-  def instance
+  def gpdb_instance
     self
   end
 

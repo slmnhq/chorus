@@ -4,12 +4,12 @@ describe InstanceAccountPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
 
-    @instance = FactoryGirl.create :instance
-    @instance.owner = @user
+    @gpdb_instance = FactoryGirl.create :gpdb_instance
+    @gpdb_instance.owner = @user
 
     @account = FactoryGirl.create :instance_account
     @account.owner = @user
-    @account.instance = @instance
+    @account.gpdb_instance = @gpdb_instance
 
     @presenter = InstanceAccountPresenter.new(@account, view)
   end
@@ -22,7 +22,7 @@ describe InstanceAccountPresenter, :type => :view do
     it "includes the right keys and values" do
       @hash[:id].should == @account.id
       @hash[:owner_id].should == @user.id
-      @hash[:instance_id].should == @instance.id
+      @hash[:instance_id].should == @gpdb_instance.id
       @hash[:db_username].should == @account[:db_username]
     end
 
