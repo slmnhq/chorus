@@ -296,17 +296,23 @@ if __FILE__ == $0
     puts Install::MESSAGES[:run_server_control] % install.destination_path unless install.do_upgrade
   rescue Install::NonRootValidationError
     puts Install::MESSAGES[:abort_install_non_root]
+    exit 1
   rescue Install::UpgradeCancelled
     puts Install::MESSAGES[:installation_failed_with_reason] % Install::MESSAGES[:cancelled_upgrade]
+    exit 1
   rescue Install::InvalidVersion => e
     puts Install::MESSAGES[:installation_failed_with_reason] % e.message
+    exit 1
   rescue Install::CommandFailed => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts Install::MESSAGES[:installation_failed]
+    exit 1
   rescue Install::LocalhostUndefined
     puts Install::MESSAGES[:abort_install_localhost_undefined]
+    exit 1
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts Install::MESSAGES[:installation_failed_with_reason] % e.message
+    exit 1
   end
 end

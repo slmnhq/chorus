@@ -36,14 +36,6 @@ integration:
   database: chorus_rails_integration
   <<: *default
 
-acceptance:
-  database: chorus_rails_acceptance
-  <<: *default
-
-packaging:
-  database: chorus_rails_packaging
-  <<: *default
-
 production:
   database: chorus_rails_production
   <<: *default

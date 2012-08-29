@@ -53,16 +53,6 @@ describe ImportScheduleMigrator do
           import_schedule.deleted_at.should !=nil if import_schedule.workspace.deleted_at
         end
       end
-
-      it "copies a undeleted import schedule from a deleted workspace (and marks it as deleted)" do
-        pending "someone should really fix this"
-        import_schedule = ImportSchedule.find_by_legacy_id('10000')
-        workspace = Workspace.unscoped.find(import_schedule.workspace_id)
-        import_schedule.deleted_at.should == workspace.deleted_at
-        workspace.name.should == 'another workspace_del_1331570259423'
-      end
-
-
     end
   end
 end

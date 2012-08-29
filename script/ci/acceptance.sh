@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export RAILS_ENV=acceptance
+export RAILS_ENV=test
 
 . script/ci/setup.sh
 
