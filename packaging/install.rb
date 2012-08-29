@@ -211,7 +211,7 @@ class Install
   def stop_old_install
     return unless do_upgrade
 
-    server_control "stop"
+    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
   end
 
   def startup
@@ -247,7 +247,7 @@ class Install
   end
 
   def server_control(args)
-    chorus_exec "cd #{destination_path} && CHORUS_HOME=#{release_path} ./server_control.sh #{args}"
+    chorus_exec "CHORUS_HOME=#{release_path} #{release_path}/packaging/server_control.sh #{args}"
   end
 end
 

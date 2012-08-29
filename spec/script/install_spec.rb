@@ -411,8 +411,8 @@ describe "Install" do
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
       @call_order = []
-      mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
-      mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
+      mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
+      mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
     end
 
     context "when installing fresh" do
@@ -457,7 +457,7 @@ describe "Install" do
         stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).system("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
       end
 
       it "should stop the previous version" do
@@ -482,7 +482,7 @@ describe "Install" do
         stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("cd /opt/chorus && CHORUS_HOME=/opt/chorus/releases/2.2.0.0 ./server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
       end
 
       it "should stop the previous version" do
