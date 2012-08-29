@@ -159,71 +159,7 @@ class Dataset < ActiveRecord::Base
 
       import_schedules.create! do |schedule|
         schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :new_table, :sample_count), :without_protection => true)
-
-        schedule.start_datetime = Time.parse(attributes[:schedule_start_time]).getutc
-        schedule.end_date = attributes[:schedule_end_time]
-        schedule.frequency = attributes[:schedule_frequency].downcase
-        schedule.user = user
-        schedule.set_next_import
-      end
-
-    # If the user is performing an immediate import
-    else
-      Import.run(id, user.id, attributes)
-    end
-  end
-
-  def preview_sql
-    all_rows_sql(100)
-  end
-
-  def all_rows_sql(limit = nil)
-    Arel::Table.new(name).project('*').take(limit).to_sql
-  end
-
-  def database_name
-    schema.database.name
-  end
-
-  def schema_name
-    schema.name
-  end
-
-  def column_name
-    column_data.map(&:name)
-  end
-
-  def column_data
-    GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
-  end
-
-  def dataset_consistent?(another_dataset)
-    another_column_data = another_dataset.column_data
-    my_column_data = column_data
-
-    consistent_size = my_column_data.size == another_column_data.size
-
-    consistent_size && my_column_data.all? do |column|
-      another_column = another_column_data.find do |another_column|
-        another_column.name == column.name
-      end
-
-      another_column && another_column.data_type == column.data_type
-    end
-  end
-
-  def type_name
-    'Dataset'
-  end
-
-  def import(attributes, user)
-    # If the user is creating a scheduled import
-    if attributes[:import_type] == "schedule"
-
-      import_schedules.create! do |schedule|
-        schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :new_table, :sample_count), :without_protection => true)
-
-        schedule.start_datetime = attributes[:schedule_start_time]
+        schedule.start_datetime = Time.parse(attributes[:schedule_start_time]) # adds local timezone
         schedule.end_date = attributes[:schedule_end_time]
         schedule.frequency = attributes[:schedule_frequency].downcase
         schedule.user = user

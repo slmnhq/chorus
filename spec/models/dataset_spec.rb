@@ -442,47 +442,47 @@ describe Dataset::Query, :database_integration => true do
           end
         end
       end
+    end
 
-      context "when scheduling an import" do
-        let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-        let(:start_time) { "Thu, 23 Aug 2012 23:00:00 +0000" }
-        let(:workspace) { workspaces(:bob_public) }
-        let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
-        let(:dst_table_name) { "the_new_table" }
-        let(:options) {
-          HashWithIndifferentAccess.new(
-              "workspace_id" => workspace.id,
-              "dataset_id" => source_table.id,
-              "to_table" => "the_new_table",
-              "new_table" => true,
-              "remote_copy" => true,
-              "activate_schedule" => true,
-              "schedule_start_time" => start_time,
-              "schedule_end_time" => "2012-11-24",
-              "schedule_frequency"=>"WEEKLY",
-              "sample_count" => 1,
-              "import_type"=>"schedule"
-          )
-        }
+    context "when scheduling an import" do
+      let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
+      let(:start_time) { "Thu, 23 Aug 2012 23:00:00" }
+      let(:workspace) { workspaces(:bob_public) }
+      let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+      let(:dst_table_name) { "the_new_table" }
+      let(:options) {
+        HashWithIndifferentAccess.new(
+            "workspace_id" => workspace.id,
+            "dataset_id" => source_table.id,
+            "to_table" => "the_new_table",
+            "new_table" => true,
+            "remote_copy" => true,
+            "activate_schedule" => true,
+            "schedule_start_time" => start_time,
+            "schedule_end_time" => "2012-11-24",
+            "schedule_frequency"=>"WEEKLY",
+            "sample_count" => 1,
+            "import_type"=>"schedule"
+        )
+      }
 
-        it "creates an import schedule" do
-          Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
-            expect {
-              source_table.import(options, user)
-            }.to change(ImportSchedule, :count).by(1)
-            ImportSchedule.last.tap do |import_schedule|
-              import_schedule.start_datetime.should == Time.parse(start_time)
-              import_schedule.end_date.should == Date.parse("2012-11-24")
-              import_schedule.workspace.should == workspace
-              import_schedule.source_dataset.should == source_table
-              import_schedule.frequency.should == 'weekly'
-              import_schedule.to_table.should == "the_new_table"
-              import_schedule.new_table.should == true
-              import_schedule.sample_count.should == 1
-              import_schedule.last_scheduled_at.should == nil
-              import_schedule.user.should == user
-              import_schedule.next_import_at.should == DateTime.parse(start_time)
-            end
+      it "creates an import schedule" do
+        Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+          expect {
+            source_table.import(options, user)
+          }.to change(ImportSchedule, :count).by(1)
+          ImportSchedule.last.tap do |import_schedule|
+            import_schedule.start_datetime.should == Time.parse(start_time)
+            import_schedule.end_date.should == Date.parse("2012-11-24")
+            import_schedule.workspace.should == workspace
+            import_schedule.source_dataset.should == source_table
+            import_schedule.frequency.should == 'weekly'
+            import_schedule.to_table.should == "the_new_table"
+            import_schedule.new_table.should == true
+            import_schedule.sample_count.should == 1
+            import_schedule.last_scheduled_at.should == nil
+            import_schedule.user.should == user
+            import_schedule.next_import_at.should == Time.parse(start_time)
           end
         end
       end
