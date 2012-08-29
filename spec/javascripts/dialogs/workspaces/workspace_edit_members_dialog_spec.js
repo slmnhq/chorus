@@ -5,22 +5,18 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
             "ownerId": "34",
             "ownerFullName": "President Henderson"
         });
+        spyOn(chorus.collections.UserSet.prototype, 'fetchAllIfNotLoaded').andCallThrough();
+        spyOn(this.workspace.members(), 'fetchAllIfNotLoaded').andCallThrough();
         this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
     });
 
     describe("initialization", function() {
-        beforeEach(function() {
-            spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            spyOn(this.workspace.members(), 'fetchAll');
-            this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
-        });
-
         it("fetches all users", function() {
-            expect(this.dialog.collection.fetchAll).toHaveBeenCalled();
+            expect(this.dialog.collection.fetchAllIfNotLoaded).toHaveBeenCalled();
         });
 
         it("fetches all members", function() {
-            expect(this.workspace.members().fetchAll).toHaveBeenCalled();
+            expect(this.workspace.members().fetchAllIfNotLoaded).toHaveBeenCalled();
         });
     });
 

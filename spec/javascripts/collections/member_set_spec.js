@@ -35,23 +35,17 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request succeeds", function() {
             beforeEach(function() {
-                this.response = { status: "ok", resource : [
-                    { foo : "hi" }
-                ] };
-
-                this.server.respondWith(
-                    'PUT',
-                    this.memberSet.url(),
-                    this.prepareResponse(this.response));
-
-
-                this.server.respond();
+                this.server.completeUpdateFor(this.memberSet, [{ foo : "hi" }], {page: 1, total: 1, records: 1})
             });
 
             it("triggers the 'saved' event on the member set", function() {
                 expect("saved").toHaveBeenTriggeredOn(this.memberSet);
-            })
-        })
+            });
+
+            it("updates the pagination data", function() {
+                expect(this.memberSet.pagination.records).toBe(1);
+            });
+        });
 
         context("when the request fails", function() {
             beforeEach(function() {

@@ -9,6 +9,7 @@ chorus.collections.MemberSet = chorus.collections.Base.extend({
         Backbone.sync('update', this, {
             data:this.toUrlParams(),
             success:function (resp, status, xhr) {
+                self.pagination = resp.pagination;
                 var savedEvent = (resp.status == "ok") ? "saved" : "saveFailed"
                 self.trigger(savedEvent);
             }
