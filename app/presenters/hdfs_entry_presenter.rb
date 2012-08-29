@@ -1,7 +1,8 @@
 class HdfsEntryPresenter < Presenter
-  delegate :parent_path, :modified_at, :size, :is_directory, :content_count, :name, :to => :model
+  delegate :id, :parent_path, :modified_at, :size, :is_directory, :content_count, :name, :to => :model
   def to_hash
     {
+        :id => id,
         :path => parent_path,
         :size => size,
         :name => name,

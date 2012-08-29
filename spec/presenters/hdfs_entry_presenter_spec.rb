@@ -18,6 +18,7 @@ describe HdfsEntryPresenter, :type => :view do
     let(:hash) { presenter.to_hash }
 
     it "includes the fields" do
+      hash[:id].should == entry.id
       hash[:name].should == "data"
       hash[:path].should == "/"
       hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
