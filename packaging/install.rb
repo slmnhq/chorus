@@ -11,6 +11,7 @@ class Install
   LocalhostUndefined = Class.new(StandardError)
   InvalidVersion = Class.new(StandardError)
   UpgradeCancelled = Class.new(StandardError)
+  InvalidOperatingSystem = Class.new(StandardError)
 
   attr_accessor :destination_path, :database_password, :database_user, :do_upgrade
 
@@ -22,16 +23,16 @@ class Install
       select_redhat_62: "[2] - RedHat (CentOS/RHEL) 6.2 or compatible",
       select_SLES_11: "[3] - SuSE Enterprise Linux Server 11 or compatible",
       select_abort_install: "[4] - Abort install",
-      version_not_supported: "Version not supported",
       default_chorus_path: "Please enter Chorus destination path",
       installation_complete: "Installation completed.",
       installation_failed: "Installation failed. Please check install.log for details",
       installation_failed_with_reason: "Installation failed: %s",
+      abort_install_version_not_supported: "Aborting install: Version not supported",
       abort_install_non_root: "Aborting install: Please run the installer as a non-root user.",
       abort_install_localhost_undefined: "Aborting install: Could not connect to 'localhost', please set in /etc/hosts",
+      abort_install_cancelled_upgrade: "Aborting install: Cancelled by user",
       run_server_control: "run ./server_control.sh start from %s to start everything up!",
-      confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:",
-      cancelled_upgrade: "cancelled by user"
+      confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:"
   }
 
   def initialize(installer_home)
@@ -110,7 +111,7 @@ class Install
       when 3
         "postgres-suse11-9.1.4.tar.gz"
       else
-        raise InstallationFailed, MESSAGES[:version_not_supported]
+        raise InvalidOperatingSystem
     end
   end
 
@@ -220,6 +221,46 @@ class Install
     server_control "start"
   end
 
+  def install
+    print "Copying files into #{install.destination_path}..."
+    copy_chorus_to_destination
+    create_shared_structure
+    copy_config_files
+    create_database_config
+    link_shared_files
+    puts "Done"
+
+    print "Extracting postgres..."
+    extract_postgres
+    puts "Done"
+
+    if do_upgrade
+      print "Shutting down previous Chorus install..."
+      stop_old_install
+      puts "Done"
+      print "Updating database..."
+    else
+      print "Creating database..."
+    end
+
+    link_services
+    setup_database
+    puts "Done"
+  rescue InvalidVersion => e
+    raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
+  rescue CommandFailed => e
+    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    raise InstallationFailed.new MESSAGES[:installation_failed]
+  rescue => e
+    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
+  end
+
+  def remove_and_restart_previous!
+    FileUtils.rm_fr release_path
+    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh start" if do_upgrade
+  end
+
   private
   def get_input
     input = gets.strip
@@ -253,62 +294,38 @@ end
 
 if __FILE__ == $0
   begin
-    install = Install.new(File.dirname(__FILE__))
+    installer = Install.new(File.dirname(__FILE__))
 
-    install.validate_non_root
-    install.validate_localhost
-    install.get_destination_path
-    install.determine_postgres_installer
+    installer.validate_non_root
+    installer.validate_localhost
+    installer.get_destination_path
+    installer.determine_postgres_installer
 
-    print "Copying files into #{install.destination_path}..."
-    install.copy_chorus_to_destination
-    install.create_shared_structure
-    install.copy_config_files
-    install.create_database_config
-    install.link_shared_files
-    puts "Done"
+    installer.install
 
-    print "Extracting postgres..."
-    install.extract_postgres
-    puts "Done"
-
-    if install.do_upgrade
-      print "Shutting down previous Chorus install..."
-      install.stop_old_install
-      puts "Done"
-      print "Updating database..."
-    else
-      print "Creating database..."
-    end
-
-
-    install.link_services
-    install.setup_database
-    puts "Done"
-
-    install.link_current_to_release
+    installer.link_current_to_release
 
     print "Starting up Chorus..."
-    install.startup
+    installer.startup
     puts "Done"
 
     puts Install::MESSAGES[:installation_complete]
-    puts Install::MESSAGES[:run_server_control] % install.destination_path unless install.do_upgrade
+    puts Install::MESSAGES[:run_server_control] % installer.destination_path unless installer.do_upgrade
   rescue Install::NonRootValidationError
     puts Install::MESSAGES[:abort_install_non_root]
     exit 1
-  rescue Install::UpgradeCancelled
-    puts Install::MESSAGES[:installation_failed_with_reason] % Install::MESSAGES[:cancelled_upgrade]
-    exit 1
-  rescue Install::InvalidVersion => e
-    puts Install::MESSAGES[:installation_failed_with_reason] % e.message
-    exit 1
-  rescue Install::CommandFailed => e
-    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
-    puts Install::MESSAGES[:installation_failed]
-    exit 1
   rescue Install::LocalhostUndefined
     puts Install::MESSAGES[:abort_install_localhost_undefined]
+    exit 1
+  rescue Install::InvalidOperatingSystem
+    puts Install::MESSAGES[:abort_install_version_not_supported]
+    exit 1
+  rescue Install::UpgradeCancelled
+    puts Install::MESSAGES[:abort_install_cancelled_upgrade]
+    exit 1
+  rescue Install::InstallationFailed => e
+    installer.remove_and_restart_previous!
+    puts e.message
     exit 1
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }

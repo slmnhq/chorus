@@ -203,7 +203,7 @@ describe "Install" do
         end
 
         it "bails" do
-          expect { installer.get_postgres_build }.to raise_error(Install::InstallationFailed)
+          expect { installer.get_postgres_build }.to raise_error(Install::InvalidOperatingSystem)
         end
       end
 
