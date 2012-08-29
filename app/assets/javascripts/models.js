@@ -325,7 +325,7 @@ chorus.collections = {
         })(),
 
         totalRecordCount: function() {
-            return this.pagination && this.pagination.records;
+            return (this.pagination && this.pagination.records) || this.models.length;
         },
 
         sortDesc: function(idx) {

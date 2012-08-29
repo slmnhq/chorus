@@ -1167,6 +1167,18 @@ describe("chorus.models.Abstract", function() {
             });
         })
 
+        describe("#totalRecordCount", function() {
+            it("uses the pagination records number when pagination exists", function () {
+                this.collection.pagination = { page: 1, total: 1, records : 100 };
+                expect(this.collection.totalRecordCount()).toBe(100);
+            });
+
+            it("users the models lengths when pagination does not exists", function () {
+                this.collection.add(new chorus.models.Base());
+                expect(this.collection.totalRecordCount()).toBe(1);
+            });
+
+        });
         describe("LastFetchWins", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.LastFetchWins([], { foo: "bar" });

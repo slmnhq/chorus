@@ -6,7 +6,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
             "ownerFullName": "President Henderson"
         });
         spyOn(chorus.collections.UserSet.prototype, 'fetchAllIfNotLoaded').andCallThrough();
-        spyOn(this.workspace.members(), 'fetchAllIfNotLoaded').andCallThrough();
+        spyOn(this.workspace.members(), 'fetchIfNotLoaded').andCallThrough();
         this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
     });
 
@@ -16,7 +16,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
         });
 
         it("fetches all members", function() {
-            expect(this.workspace.members().fetchAllIfNotLoaded).toHaveBeenCalled();
+            expect(this.workspace.members().fetchIfNotLoaded).toHaveBeenCalled();
         });
     });
 
