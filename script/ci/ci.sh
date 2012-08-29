@@ -1,9 +1,10 @@
 #!/bin/bash
 
+export RAILS_ENV=test
+
 . script/ci/setup.sh
 
 set -e
-export RAILS_ENV=test
 
 b/rake assets:precompile
 
