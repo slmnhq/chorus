@@ -111,11 +111,11 @@ _.extend(sinon.fakeServer, {
         }
     },
 
-    completeUpdateFor: function(model, response) {
+    completeUpdateFor: function(model, response, pagination) {
         response = this.makeFakeResponse(model, response);
-        var create = this.lastUpdateFor(model);
-        if (create) {
-            create.succeed(response);
+        var update = this.lastUpdateFor(model);
+        if (update) {
+            update.succeed(response, pagination);
         } else {
             throw "No update found for " + model.url() + ". Found updates for: [" + _.pluck(this.creates(), 'url').join(', ') + "]";
         }

@@ -40,8 +40,8 @@ describe("chorus.collections.MemberSet", function() {
 
             it("triggers the 'saved' event on the member set", function() {
                 expect("saved").toHaveBeenTriggeredOn(this.memberSet);
-            })
-        })
+            });
+        });
 
         context("when the request fails", function() {
             beforeEach(function() {
@@ -51,6 +51,6 @@ describe("chorus.collections.MemberSet", function() {
             it("triggers the 'saveFailed' event on the member set", function() {
                 expect("saveFailed").toHaveBeenTriggeredOn(this.memberSet);
             })
-        })
+        });
     });
 });
