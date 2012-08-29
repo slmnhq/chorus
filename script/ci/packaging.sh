@@ -6,4 +6,5 @@ export RAILS_ENV=packaging
 
 export FORCE_DEPLOY=true
 
+rm -fr .bundle
 rake package:stage --trace
