@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   def index
     events = if params[:entity_type] == "dashboard"
-       Events::Base.for_dashboard_of(current_user)
+       Events::Base.for_dashboard_of(current_user).includes([:target1, :target2, :actor, {:workspace => {:sandbox => :database}}])
      elsif params[:entity_type] == "user"
        ModelMap.model_from_params(params[:entity_type], params[:entity_id]).accessible_events(current_user)
      else
