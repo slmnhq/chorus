@@ -4,6 +4,8 @@ if [ "$CHORUS_HOME" = "" ]; then
     echo CHORUS_HOME not set
     exit 1
 fi
+# remove trailing '/' from CHORUS_HOME
+CHORUS_HOME=`echo $CHORUS_HOME | sed 's/\/$//'`
 test "$RAILS_ENV" = "" && RAILS_ENV=production
 
 case $RAILS_ENV in
