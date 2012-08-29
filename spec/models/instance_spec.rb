@@ -304,7 +304,7 @@ describe Instance do
         missing_database.stale_at.should be_within(5.seconds).of(Time.now)
       end
 
-      it "does not mark databases as stalle if flag not set" do
+      it "does not mark databases as stale if flag not set" do
         missing_database.should_not be_stale
         instance.refresh_databases
         missing_database.reload.should_not be_stale
@@ -320,6 +320,22 @@ describe Instance do
         missing_database.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
         instance.refresh_databases(:mark_stale => true)
         missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+      end
+
+      context "when the instance is not available" do
+        before do
+          stub(Gpdb::ConnectionBuilder).connect! { raise ActiveRecord::JDBCError.new("Broken!") }
+        end
+
+        it "marks all the associated databases as stale if the flag is set" do
+          instance.refresh_databases(:mark_stale => true)
+          database.reload.should be_stale
+        end
+
+        it "does not mark the associated databases as stale if the flag is not set" do
+          instance.refresh_databases
+          database.reload.should_not be_stale
+        end
       end
     end
   end

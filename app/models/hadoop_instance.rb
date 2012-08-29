@@ -21,5 +21,10 @@ class HadoopInstance < ActiveRecord::Base
   def refresh(path = "/")
     entries = HdfsEntry.list(path, self)
     entries.each { |entry| refresh(entry.path) if entry.is_directory? }
+  rescue Hdfs::DirectoryNotFoundError => e
+    return unless path == '/'
+    hdfs_entries.each do |hdfs_entry|
+      hdfs_entry.mark_stale!
+    end
   end
 end

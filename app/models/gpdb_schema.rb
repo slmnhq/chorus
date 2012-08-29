@@ -38,15 +38,11 @@ class GpdbSchema < ActiveRecord::Base
   before_save :mark_schemas_as_stale
 
   def self.refresh(account, database, options = {})
-    begin
-      schema_rows = database.with_gpdb_connection(account) do |conn|
-        conn.exec_query(SCHEMAS_SQL)
-      end
-    rescue Exception => e
-      return
-    end
-
     found_schemas = []
+
+    schema_rows = database.with_gpdb_connection(account) do |conn|
+      conn.exec_query(SCHEMAS_SQL)
+    end
 
     schema_rows.map do |row|
       begin
@@ -64,7 +60,9 @@ class GpdbSchema < ActiveRecord::Base
       rescue ActiveRecord::StatementInvalid => e
       end
     end
-
+  rescue ActiveRecord::JDBCError => e
+    Rails.logger.error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
+  ensure
     if options[:mark_stale]
       (database.schemas.not_stale - found_schemas).each do |schema|
         schema.stale_at = Time.now

@@ -84,6 +84,22 @@ describe GpdbSchema do
       GpdbSchema.refresh(account, database)
       schema.reload.should_not be_stale
     end
+
+    context "when the database is not available" do
+      before do
+        stub(Gpdb::ConnectionBuilder).connect! { raise ActiveRecord::JDBCError.new("Broken!") }
+      end
+
+      it "marks all the associated schemas as stale if the flag is set" do
+        GpdbSchema.refresh(account, database, :mark_stale => true)
+        schema.reload.should be_stale
+      end
+
+      it "does not mark the associated schemas as stale if the flag is not set" do
+        GpdbSchema.refresh(account, database)
+        schema.reload.should_not be_stale
+      end
+    end
   end
 
   describe ".find_and_verify_in_source", :database_integration => true do

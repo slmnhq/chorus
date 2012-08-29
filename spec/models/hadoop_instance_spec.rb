@@ -34,5 +34,37 @@ describe HadoopInstance do
       mock(HdfsEntry).list(deep_dir.path, subject) { [] }
       subject.refresh
     end
+
+    context "when the server is not reachable" do
+      let(:instance) { hadoop_instances(:hadoop) }
+      before do
+        any_instance_of(Hdfs::QueryService) do |qs|
+          stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
+        end
+      end
+
+      it "marks all the hdfs entries as stale" do
+        instance.refresh
+        instance.hdfs_entries.size.should > 3
+        instance.hdfs_entries.each do |entry|
+          entry.should be_stale
+        end
+      end
+    end
+
+    context "when a DirectoryNotFoundError happens on a subdirectory" do
+      let(:instance) { hadoop_instances(:hadoop) }
+      before do
+        any_instance_of(Hdfs::QueryService) do |qs|
+          stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
+        end
+      end
+
+      it "does not mark any entries as stale" do
+        expect {
+          instance.refresh("/foo")
+        }.to_not change { instance.hdfs_entries.not_stale.count }
+      end
+    end
   end
 end

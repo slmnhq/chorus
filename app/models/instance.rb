@@ -40,8 +40,8 @@ class Instance < ActiveRecord::Base
   end
 
   def refresh_databases(options ={})
-    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
     found_databases = []
+    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
     database_account_groups = rows.inject({}) do |groups, row|
       groups[row["database_name"]] ||= []
       groups[row["database_name"]] << row["db_username"]
@@ -55,15 +55,15 @@ class Instance < ActiveRecord::Base
       database.instance_accounts = database_accounts
       found_databases << database
     end
-
+  rescue ActiveRecord::JDBCError => e
+    Rails.logger.error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
+  ensure
     if options[:mark_stale]
-      (instance.databases.not_stale - found_databases).each do |database|
+      (databases.not_stale - found_databases).each do |database|
         database.stale_at = Time.now
         database.save
       end
     end
-  rescue ActiveRecord::JDBCError => e
-    Rails.logger.error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   end
 
   def create_database(name, current_user)
@@ -100,7 +100,7 @@ class Instance < ActiveRecord::Base
   private
 
   def create_database_in_instance(name, current_user)
-    Gpdb::ConnectionBuilder.connect!(self, instance.account_for_user!(current_user)) do |conn|
+    Gpdb::ConnectionBuilder.connect!(self, account_for_user!(current_user)) do |conn|
       sql = "CREATE DATABASE #{conn.quote_column_name(name)}"
       conn.exec_query(sql)
     end
