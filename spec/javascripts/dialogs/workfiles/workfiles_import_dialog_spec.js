@@ -61,6 +61,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         it("navigates to the show page of the workfile", function() {
             expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/9");
         });
+
+        it ("enables the choosefile button again", function() {
+            expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
+            expect(this.dialog.$("input[type=file]")).not.toHaveClass("hidden");
+        });
     });
 
     context("when clicking upload a file button", function() {
@@ -174,7 +179,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
             });
 
-            it("disables the upload button", function() {
+            it("disables the upload button and select file also", function() {
                 expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
                 expect(this.dialog.$("button.choose").prop("disabled")).toBeTruthy();
                 expect(this.dialog.$("input")).toBeHidden();
@@ -235,6 +240,10 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
                 it("sets the button text back to 'Upload File'", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
+                });
+
+                it ("enables the choosefile button again", function() {
+                    expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();
                 });
             });
         });

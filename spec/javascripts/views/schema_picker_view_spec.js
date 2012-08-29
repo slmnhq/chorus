@@ -290,7 +290,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                 context("when the schema list fetch completes", function() {
                                     beforeEach(function() {
-                                        this.server.completeFetchFor(this.view.schemas, [rspecFixtures.schema({name: 'SCHEMA!'})]);
+                                        this.server.completeFetchAllFor(this.view.schemas, [rspecFixtures.schema({name: 'SCHEMA!'})]);
                                     });
 
                                     itShowsSelect("schema");
@@ -527,7 +527,7 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view.$(".instance select").val("4").change();
                 this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
-                this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
+                this.server.completeFetchAllFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                 this.view.$(".schema select").val("6").change();
 
                 expect(this.view.schemaId()).toBe('6');
@@ -542,7 +542,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view.render();
                     this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
-                    this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
+                    this.server.completeFetchAllFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
                 });
 
@@ -568,7 +568,7 @@ describe("chorus.views.SchemaPicker", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
-                        this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
+                        this.server.completeFetchAllFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                         this.view.$(".schema select").val("6").change();
                     });
 

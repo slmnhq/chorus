@@ -308,6 +308,7 @@ chorus.collections = {
                             collection.trigger("reset", collection);
                             collection.trigger("loaded");
                         } else {
+                            collection.loaded = false;
                             fetchPage.call(collection, page + 1);
                         }
                     },
@@ -322,6 +323,10 @@ chorus.collections = {
                 fetchPage.call(this, 1);
             }
         })(),
+
+        totalRecordCount: function() {
+            return this.pagination && this.pagination.records;
+        },
 
         sortDesc: function(idx) {
             // Not used. We only do ascending sort for now.

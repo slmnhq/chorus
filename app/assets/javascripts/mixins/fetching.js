@@ -12,7 +12,11 @@
 
         fetchAllIfNotLoaded: function() {
             if (this.loaded) {
-                return;
+                if(this.models.length >= this.pagination.records) {
+                    return;
+                } else {
+                    this.loaded = false;
+                }
             }
             if (!this.fetching) {
                 this.fetchAll();

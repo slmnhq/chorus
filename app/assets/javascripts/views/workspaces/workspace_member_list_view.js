@@ -18,7 +18,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
                             displayName: member.displayName()
                         };
                     }).value(),
-                extra_members: Math.max(this.model.members().length - this.numMembers, 0)
+                extra_members: Math.max(this.model.members().totalRecordCount() - this.numMembers, 0)
             }
         } else {
             return {}
@@ -28,8 +28,8 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     setWorkspace: function(workspace) {
         this.resource = this.model = workspace
         if (workspace) {
-            workspace.members().fetchAllIfNotLoaded()
-            workspace.members().onLoaded(this.render, this)
+            workspace.members().fetchAllIfNotLoaded();
+            workspace.members().onLoaded(this.render, this);
         }
         this.render()
     }
