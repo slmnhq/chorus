@@ -139,33 +139,6 @@ describe GpdbInstance do
     end
   end
 
-  describe "#delete_database" do
-    context "using a real remote greenplum instance", :database_integration => true do
-      let(:account) { GpdbIntegration.real_gpdb_account }
-      let(:instance) { GpdbIntegration.real_gpdb_instance }
-
-      before do
-        exec_on_gpdb('DROP DATABASE IF EXISTS "new_database" ; CREATE DATABASE "new_database"')
-        refresh_chorus
-      end
-
-      after do
-        exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
-      end
-
-      it "drops the database" do
-        instance.delete_database("new_database", account.owner)
-        exec_on_gpdb("select datname from pg_database where datname = 'new_database';").should be_empty
-      end
-    end
-
-    def exec_on_gpdb(sql)
-      Gpdb::ConnectionBuilder.connect!(instance, account) do |connection|
-        connection.exec_query(sql)
-      end
-    end
-  end
-
   describe ".accessible_to" do
     before(:each) do
       @user = FactoryGirl.create :user

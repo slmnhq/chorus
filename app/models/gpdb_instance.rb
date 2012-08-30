@@ -97,14 +97,6 @@ class GpdbInstance < ActiveRecord::Base
     self
   end
 
-  def delete_database(name, current_user)
-    Gpdb::ConnectionBuilder.connect!(self, account_for_user!(current_user)) do |conn|
-      sql = "DROP DATABASE IF EXISTS #{conn.quote_column_name(name)}"
-      conn.exec_query(sql)
-    end
-    refresh_databases
-  end
-
   private
 
   def create_database_in_instance(name, current_user)

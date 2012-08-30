@@ -309,22 +309,6 @@ describe WorkspacesController do
         decoded_errors.fields.schema.GENERIC.message.should == "Schema creation failed"
       end
 
-      it "returns an error if creation fails" do
-        delete_database_called_true = false
-        any_instance_of(GpdbDatabase) do |db|
-          stub(db).create_schema.with_any_args {
-            raise Exception.new("Schema creation failed")
-          }
-        end
-        stub(database.gpdb_instance).delete_database {
-          delete_database_called_true = true
-        }
-
-        send_request
-        response.code.should == "422"
-        delete_database_called_true.should be_false
-      end
-
       def send_request
         put :update, :id => workspace.id, :workspace => {
             :owner => {id: owner.id.to_s},
@@ -366,29 +350,46 @@ describe WorkspacesController do
         end
       end
 
+      it "does not call create_schema if the schema name is public" do
+        any_instance_of(GpdbInstance) do |instance_double|
+          stub(instance_double).create_database("new_database", gpdb_instance.owner) do |name|
+            database = gpdb_instance.databases.create!({:name => name}, :without_protection => true)
+            database.schemas.create!({:name => "public"}, :without_protection => true)
+            database
+          end
+        end
+        create_schema_called = false
+        any_instance_of(GpdbDatabase) do |database_double|
+          stub(database_double).create_schema("public", gpdb_instance.owner) do |name|
+            create_schema_called = true
+          end
+        end
+
+        put :update, :id => workspace.id, :workspace => {
+            :owner => {id: owner.id.to_s},
+            :public => "false",
+            :schema_name => "public",
+            :database_name => "new_database",
+            :instance_id => gpdb_instance.id
+        }
+
+        workspace.reload.sandbox.tap do |sandbox|
+          sandbox.name.should == "public"
+          sandbox.database.name.should == "new_database"
+        end
+        create_schema_called.should be_false
+      end
+
       it "returns an error if creation fails" do
         any_instance_of(GpdbInstance) do |gpdb_instance|
           stub(gpdb_instance).create_database.with_any_args {
             raise Exception.new("Database creation failed")
           }
-          mock(gpdb_instance).delete_database.with_any_args {}
         end
 
         send_request
         response.code.should == "422"
         decoded_errors.fields.database.GENERIC.message.should == "Database creation failed"
-      end
-
-      it "returns an error if schema creation fails" do
-        any_instance_of(GpdbInstance) do |gpdb_instance|
-          stub(gpdb_instance).create_schema.with_any_args {
-            raise Exception.new("Schema creation failed")
-          }
-          mock(gpdb_instance).delete_database.with_any_args {}
-        end
-
-        send_request
-        response.code.should == "422"
       end
 
       def send_request
