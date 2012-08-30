@@ -256,11 +256,11 @@ describe("chorus.models.GreenplumInstance", function() {
             it("requires size to be less than the config's max provision size", function() {
                 this.attrs.size = "200";
 
-                chorus.models.Config.instance().set({provisionMaxSizeInGB: 500});
+                chorus.models.Config.instance().set({provisionMaxSizeInGb: 500});
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 expect(this.instance.errors.size).toBeFalsy();
 
-                chorus.models.Config.instance().set({provisionMaxSizeInGB: 100});
+                chorus.models.Config.instance().set({provisionMaxSizeInGb: 100});
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();
             });
@@ -300,11 +300,11 @@ describe("chorus.models.GreenplumInstance", function() {
             it("requires size to be less than the config's max provision size", function() {
                 this.attrs.size = "200";
 
-                chorus.models.Config.instance().set({provisionMaxSizeInGB: 500});
+                chorus.models.Config.instance().set({provisionMaxSizeInGb: 500});
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 expect(this.instance.errors.size).toBeFalsy();
 
-                chorus.models.Config.instance().set({provisionMaxSizeInGB: 100});
+                chorus.models.Config.instance().set({provisionMaxSizeInGb: 100});
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();
             });

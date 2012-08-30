@@ -26,7 +26,7 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
                 break;
             case "create" :
                 this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
-                this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
+                this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGb"), newAttrs);
                 if (this.isNew()) {
                     this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);

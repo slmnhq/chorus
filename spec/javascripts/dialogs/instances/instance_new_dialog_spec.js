@@ -1,3 +1,7 @@
+
+
+
+
 describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.InstancesNew();
