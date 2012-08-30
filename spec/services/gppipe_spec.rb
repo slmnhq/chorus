@@ -148,7 +148,7 @@ describe Gppipe, :database_integration => true do
       gp_pipe.table_definition_with_keys.should == table_def
     end
 
-    context ".run_import" do
+    describe ".run_import" do
 
       context "into a new table" do
         before do
