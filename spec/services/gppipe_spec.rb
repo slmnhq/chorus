@@ -13,6 +13,7 @@ describe Gppipe, :database_integration => true do
     create_source_table
     refresh_chorus
     stub(Gppipe).gpfdist_url { Socket.gethostname }
+    stub(Gppipe).grace_period_seconds { 1 }
   end
 
   # In the test, use gpfdist to move data between tables in the same schema and database
@@ -167,7 +168,7 @@ describe Gppipe, :database_integration => true do
               sleep(5)
             end
           end
-          stub(gp_pipe).read_pipe { sleep(2) }
+          stub(gp_pipe).read_pipe { sleep(0.1) }
 
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
           lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
@@ -177,7 +178,7 @@ describe Gppipe, :database_integration => true do
           stub(gp_pipe).write_pipe do
             raise RuntimeError, "custom error"
           end
-          stub(gp_pipe).read_pipe { sleep(2) }
+          stub(gp_pipe).read_pipe { sleep(0.1) }
 
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
         end
@@ -212,7 +213,7 @@ describe Gppipe, :database_integration => true do
               sleep(5)
             end
           end
-          stub(gp_pipe).read_pipe { sleep(2) }
+          stub(gp_pipe).read_pipe { sleep(0.1) }
 
           setup_data
           gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
@@ -367,7 +368,7 @@ describe Gppipe, :database_integration => true do
             sleep(5)
           end
         end
-        stub(gp_pipe).read_pipe { sleep(2) }
+        stub(gp_pipe).read_pipe { sleep(0.1) }
 
         setup_data
         lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed, "Gpfdist writer thread was hung, even through reader completed.")

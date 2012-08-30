@@ -9,10 +9,13 @@ class Gppipe < GpTableCopier
   GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
 
   GPFDIST_TIMEOUT_SECONDS = 600
-  GRACE_PERIOD = 5
 
   def self.timeout_seconds
     GPFDIST_TIMEOUT_SECONDS
+  end
+
+  def self.grace_period_seconds
+    5
   end
 
   def self.gpfdist_url
@@ -81,13 +84,13 @@ class Gppipe < GpTableCopier
           while(thr1.alive? || thr2.alive?)
             sleep(1)
             if(thr1.alive? && !thr2.alive?)
-              sleep(GRACE_PERIOD)
+              sleep(Gppipe.grace_period_seconds)
               if(thr1.alive?)
                 thr1.kill
                 raise RuntimeError, "Gpfdist writer thread was hung, even through reader completed."
               end
             elsif(!thr1.alive? && thr2.alive?)
-              sleep(GRACE_PERIOD)
+              sleep(Gppipe.grace_period_seconds)
               if(thr2.alive?)
                 thr2.kill
                 raise RuntimeError, "Gpfdist reader thread was hung, even through writer completed."
