@@ -1,7 +1,7 @@
 chorus.collections.InstanceSet = chorus.collections.Base.extend({
     constructorName: "InstanceSet",
     model: chorus.models.GreenplumInstance,
-    urlTemplate: "instances/",
+    urlTemplate: "gpdb_instances/",
 
     urlParams: function() {
         return _.extend(this._super('urlParams') || {}, {accessible: this.attributes.accessible});

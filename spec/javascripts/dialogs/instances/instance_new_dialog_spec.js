@@ -292,7 +292,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     });
 
                     it("navigates to the instance list", function() {
-                        expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", {selectId: 123});
+                        expect(chorus.router.navigate).toHaveBeenCalledWith("/gpdb_instances", {selectId: 123});
                     });
                 });
 

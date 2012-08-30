@@ -10,16 +10,16 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#url", function() {
         it("has the right url for modifying own account", function() {
             this.model.set({userId: chorus.session.user().id});
-            expect(this.model.url({ method: 'update' })).toMatchUrl("/instances/1045/account");
-            expect(this.model.url({ method: 'delete' })).toMatchUrl("/instances/1045/account");
-            expect(this.model.url({ method: 'create' })).toMatchUrl("/instances/1045/account");
-            expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/account");
+            expect(this.model.url({ method: 'update' })).toMatchUrl("/gpdb_instances/1045/account");
+            expect(this.model.url({ method: 'delete' })).toMatchUrl("/gpdb_instances/1045/account");
+            expect(this.model.url({ method: 'create' })).toMatchUrl("/gpdb_instances/1045/account");
+            expect(this.model.url({ method: 'read' })).toMatchUrl("/gpdb_instances/1045/account");
         });
 
         it("has the right url for modifying members's accounts", function() {
-            expect(this.model.url({ method: 'update' })).toMatchUrl("/instances/1045/members/72");
-            expect(this.model.url({ method: 'delete' })).toMatchUrl("/instances/1045/members/72");
-            expect(this.model.url({ method: 'create' })).toMatchUrl("/instances/1045/members");
+            expect(this.model.url({ method: 'update' })).toMatchUrl("/gpdb_instances/1045/members/72");
+            expect(this.model.url({ method: 'delete' })).toMatchUrl("/gpdb_instances/1045/members/72");
+            expect(this.model.url({ method: 'create' })).toMatchUrl("/gpdb_instances/1045/members");
         });
     });
 
@@ -58,7 +58,7 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(this.server.requests[0].url).toMatchUrl("/instances/4/members")
+            expect(this.server.requests[0].url).toMatchUrl("/gpdb_instances/4/members")
         })
 
         it("returns an InstanceAccount", function() {

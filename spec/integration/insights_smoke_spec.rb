@@ -2,14 +2,12 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "creating a note on a workspace" do
 
-
   it "clicks on the insights link on the home page" do
     login('edcadmin', 'secret')
     wait_for_ajax
     click_link "Insights"
     wait_for_ajax
     wait_until {page.find(".title h1").text == "Insights"}
-
   end
 
   it "creates an insight" do
@@ -22,6 +20,5 @@ describe "creating a note on a workspace" do
       set_cleditor_value("body", "This is adding an Insight")
       click_submit_button
     end
-
   end
 end

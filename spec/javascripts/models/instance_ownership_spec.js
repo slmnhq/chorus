@@ -4,7 +4,7 @@ describe("chorus.models.InstanceOwnership", function() {
     });
 
     it("has a valid url", function() {
-        expect(this.model.url()).toBe("/instances/1/owner");
+        expect(this.model.url()).toBe("/gpdb_instances/1/owner");
     });
 
     it("wraps parameters in 'owner'", function() {

@@ -1,6 +1,6 @@
 # Opens gpdb dialog and verifies fields
 def open_gpdb_instance_dialog
-  visit("#/gpdb_instances")
+  visit("#/instances")
   click_button "Add instance"
   within_modal do
     choose("register_existing_greenplum")
@@ -23,16 +23,16 @@ end
 # Registers a new GPDB instance, parameters: name, desc, host, port, dbuser, dbpass, shared.
 def register_gpdb_instance(params={})
   params[:name] ||= "GPDB_instance#{Time.now.to_i}"
-  visit("#/gpdb_instances")
+  visit("#/instances")
   fill_up_instance_dialog(params)
   click_submit_button
 end
 
 # Make sure that instance name is listed on the instance list page.
 def verify_instance_name(name)
-  inst_route = WEBPATH['gpdb_instance']['route']
+  inst_route = WEBPATH['gpdb_instance_db']['route']
   visit(inst_route)
-  find(WEBPATH['gpdb_instance']['list']).should have_content(name)
+  find(WEBPATH['gpdb_instance_db']['list']).should have_content(name)
 end
 
 # Create a greenplum instance, the only params available: name, desc, shared. Other parameters

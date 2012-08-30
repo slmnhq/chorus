@@ -41,7 +41,7 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("#url", function() {
         it("has the instanceId param", function() {
             var uri = new URI(this.accountSet.url());
-            expect(uri.path()).toMatchUrl("/instances/1/members");
+            expect(uri.path()).toMatchUrl("/gpdb_instances/1/members");
         });
     });
 

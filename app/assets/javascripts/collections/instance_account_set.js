@@ -1,7 +1,7 @@
 chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
     constructorName: "InstanceAccountSet",
     model: chorus.models.InstanceAccount,
-    urlTemplate: "instances/{{instanceId}}/members",
+    urlTemplate: "gpdb_instances/{{instanceId}}/members",
 
     users: function() {
         return this.map(function(model) {

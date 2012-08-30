@@ -165,7 +165,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("destroys the sharing", function() {
-                        expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.id + "/sharing");
+                        expect(this.server.lastDestroy().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing");
                     });
 
                     context("when the destroy succeeds", function() {
@@ -195,7 +195,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             });
 
                             it("sends a create to the server", function() {
-                                expect(this.server.lastCreate().url).toBe("/instances/" + this.instance.id + "/sharing")
+                                expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing")
                             });
                         });
                     });
@@ -427,7 +427,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("should call delete on the accounts", function() {
-                    expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.get("id") + "/members/" + this.accountBeingRemoved.id);
+                    expect(this.server.lastDestroy().url).toBe("/gpdb_instances/" + this.instance.get("id") + "/members/" + this.accountBeingRemoved.id);
                 });
 
                 context("when the delete succeeds", function() {
@@ -700,7 +700,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("asks the server to add sharing", function() {
-                    expect(this.server.lastCreate().url).toBe("/instances/" + this.instance.id + "/sharing")
+                    expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing")
                 });
 
                 context("when the create succeeds", function() {

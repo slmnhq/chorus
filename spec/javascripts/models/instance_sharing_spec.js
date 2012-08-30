@@ -4,6 +4,6 @@ describe("chorus.models.InstanceSharing", function() {
     });
 
     it("has a valid url", function() {
-        expect(this.sharing.url()).toBe("/instances/1/sharing");
+        expect(this.sharing.url()).toBe("/gpdb_instances/1/sharing");
     });
 });

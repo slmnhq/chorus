@@ -12,7 +12,7 @@ describe("chorus.models.GreenplumInstance", function() {
     });
 
     it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/instances/" + this.instance.get('id'));
+        expect(this.instance.url()).toBe("/gpdb_instances/" + this.instance.get('id'));
     });
 
     describe(".aurora", function() {

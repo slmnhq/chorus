@@ -95,7 +95,7 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 it("fetches the list of instances", function() {
-                    expect(this.server.requests[0].url).toMatch("/instances/");
+                    expect(this.server.requests[0].url).toMatch("/gpdb_instances/");
                 });
 
                 itDisplaysLoadingPlaceholderFor('instance');
@@ -173,7 +173,7 @@ describe("chorus.views.SchemaPicker", function() {
                         });
 
                         it("fetches the list of databases", function() {
-                            expect(this.server.requests[1].url).toMatch("/instances/" + this.selectedInstance.get('id') + "/databases");
+                            expect(this.server.requests[1].url).toMatch("/gpdb_instances/" + this.selectedInstance.get('id') + "/databases");
                         });
 
                         itSortsTheSelectOptionsAlphabetically('database')
