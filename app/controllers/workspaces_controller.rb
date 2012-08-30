@@ -43,10 +43,10 @@ class WorkspacesController < ApplicationController
           else
             database = GpdbDatabase.find(attributes[:database_id])
           end
-          GpdbSchema.refresh(database.instance.account_for_user!(current_user), database)
+          GpdbSchema.refresh(database.gpdb_instance.account_for_user!(current_user), database)
           workspace.sandbox = database.create_schema(attributes[:schema_name], current_user)
         rescue Exception => e
-          instance.delete_database(attributes[:database_name], current_user) if attributes[:database_name]
+          gpdb_instance.delete_database(attributes[:database_name], current_user) if attributes[:database_name]
           raise ApiValidationError.new(database ? :schema : :database, :generic, {:message => e.message})
         end
       end
