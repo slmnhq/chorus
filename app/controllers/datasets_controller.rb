@@ -29,7 +29,10 @@ class DatasetsController < GpdbController
     dst_table_name = params[:dataset_import]["to_table"]
     dst_table = Dataset.find_by_name(dst_table_name)
 
-    unless create_new_table
+    if create_new_table
+      raise ApiValidationError.new(:base, :table_exists,
+                                   { :table_name => dst_table_name }) if dst_table
+    else
       raise ApiValidationError.new(:base, :table_not_exists,
                                    { :table_name => dst_table_name }) unless dst_table
       raise ApiValidationError.new(:base, :table_not_consistent,

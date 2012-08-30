@@ -4,13 +4,8 @@ class GpTableCopier
   attr_accessor :user_id, :source_table_id, :attributes
 
   def self.run_import(source_table_id, user_id, attributes)
-    new(source_table_id, user_id, attributes).start
-  rescue Exception => e
-    user = User.find_by_id(user_id)
-    src_table = Dataset.find_by_id(source_table_id)
-    dst_workspace = Workspace.find_by_id(attributes["workspace_id"])
-    create_failed_event(attributes["to_table"], src_table, dst_workspace, e.message, user)
-    raise e
+    copier = new(source_table_id, user_id, attributes)
+    copier.start
   end
 
   def start
@@ -21,9 +16,11 @@ class GpTableCopier
 
     run
 
-    Dataset.refresh(destination_account, destination_schema)
-    dst_table = destination_schema.datasets.find_by_name(destination_table_name)
-    create_success_event(dst_table, source_table, destination_workspace, User.find(user_id))
+    create_success_event
+
+  rescue Exception => e
+    create_failed_event(e.message)
+    raise e
   end
 
   def initialize(source_table_id, user_id, attributes)
@@ -86,7 +83,14 @@ class GpTableCopier
     connection.execute(sql)
   end
 
-  def create_success_event(dst_table, source_table, workspace, user)
+  def create_success_event
+    user = User.find_by_id!(user_id)
+    source_table = Dataset.find_by_id!(source_table_id)
+    workspace = Workspace.find_by_id!(attributes[:workspace_id])
+
+    Dataset.refresh(destination_account, destination_schema)
+    dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
+
     Events::DatasetImportCreated.find(attributes[:dataset_import_created_event_id]).tap do |event|
       event.dataset = dst_table
       event.save!
@@ -99,10 +103,13 @@ class GpTableCopier
     )
   end
 
-  def self.create_failed_event(to_table, source_table, workspace, error_message, user)
+  def create_failed_event(error_message)
+    user = User.find_by_id(user_id)
+    source_table = Dataset.find_by_id(source_table_id)
+    workspace = Workspace.find_by_id(attributes[:workspace_id])
     Events::DatasetImportFailed.by(user).add(
         :workspace => workspace,
-        :destination_table => to_table,
+        :destination_table => attributes[:to_table],
         :error_message => error_message,
         :source_dataset => source_table
     )

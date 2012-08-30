@@ -454,8 +454,8 @@ describe "Event types" do
       )
     end
 
-    its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {'source_dataset_id' => source_dataset.id, 'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack again'} }
+    its(:targets) { should == {:workspace => workspace, :source_dataset => source_dataset} }
+    its(:additional_data) { should == {'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack again'} }
 
     it "has a workspace in the source_dataset" do
       subject.source_dataset.bound_workspaces.should include(workspace)

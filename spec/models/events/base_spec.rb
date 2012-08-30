@@ -96,7 +96,7 @@ describe Events::Base do
   end
 
   describe "translating additional data" do
-    let(:event_class) { Events::DatasetImportFailed }
+    let(:event_class) { Events::DatasetImportCreated }
     let(:event) { event_class.first }
 
     describe "#additional_data_key" do

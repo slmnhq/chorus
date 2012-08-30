@@ -123,9 +123,6 @@ describe DatasetsController do
     context "when importing a dataset immediately" do
       context "into a new destination dataset" do
         before do
-          any_instance_of(Dataset) do |d|
-            stub(d).dataset_consistent? { true }
-          end
           attributes[:new_table] = "true"
         end
 
@@ -172,9 +169,20 @@ describe DatasetsController do
           response.code.should == "201"
           response.body.should == "{}"
         end
+
+        it "throws an error if table already exists" do
+          attributes[:to_table] = "master_table1"
+          post :import, :id => src_table.to_param, :dataset_import => attributes
+          response.code.should == "422"
+        end
+
+        it "throws an error if source table can't be found" do
+          post :import, :id => 'missing_source_table', :dataset_import => attributes
+          response.code.should == "404"
+        end
       end
 
-      context "when destination table exists" do
+      context "when importing into an existing table" do
         before do
           attributes[:new_table] = "false"
           attributes[:to_table] = "master_table1"
@@ -229,7 +237,7 @@ describe DatasetsController do
       end
     end
 
-    context "Scheduling an Import" do
+      context "Scheduling an Import" do
       before do
         attributes[:new_table] = 'true'
         attributes[:truncate] = 'true'
