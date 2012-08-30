@@ -34,7 +34,6 @@ class WorkspacesController < ApplicationController
     attributes[:archiver] = current_user if attributes[:archived] == 'true'
     workspace.attributes = attributes
     authorize! :update, workspace
-
     Workspace.transaction do
       if attributes[:schema_name]
         begin
@@ -44,8 +43,10 @@ class WorkspacesController < ApplicationController
           else
             database = GpdbDatabase.find(attributes[:database_id])
           end
+          GpdbSchema.refresh(database.instance.account_for_user!(current_user), database)
           workspace.sandbox = database.create_schema(attributes[:schema_name], current_user)
         rescue Exception => e
+          instance.delete_database(attributes[:database_name], current_user) if attributes[:database_name]
           raise ApiValidationError.new(database ? :schema : :database, :generic, {:message => e.message})
         end
       end

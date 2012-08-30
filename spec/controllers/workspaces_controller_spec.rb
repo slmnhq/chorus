@@ -280,9 +280,13 @@ describe WorkspacesController do
     context "when new sandbox is a new schema in an existing database" do
       let!(:database) { gpdb_schemas(:other_schema).database }
 
+      before do
+        stub(GpdbSchema).refresh(anything, anything) { }
+        log_in database.instance.owner
+      end
       it "calls create_schema" do
         any_instance_of(GpdbDatabase) do |db|
-          mock(db).create_schema("create_new_schema", owner) do |name|
+          stub(db).create_schema("create_new_schema", database.instance.owner) do |name|
             database.schemas.create!({:name => name }, :without_protection => true)
           end
         end
@@ -305,6 +309,22 @@ describe WorkspacesController do
         decoded_errors.fields.schema.GENERIC.message.should == "Schema creation failed"
       end
 
+      it "returns an error if creation fails" do
+        delete_database_called_true = false
+        any_instance_of(GpdbDatabase) do |db|
+          stub(db).create_schema.with_any_args {
+            raise Exception.new("Schema creation failed")
+          }
+        end
+        stub(database.instance).delete_database {
+          delete_database_called_true = true
+        }
+
+        send_request
+        response.code.should == "422"
+        delete_database_called_true.should be_false
+      end
+
       def send_request
         put :update, :id => workspace.id, :workspace => {
             :owner => {id: owner.id.to_s},
@@ -318,16 +338,22 @@ describe WorkspacesController do
     context "when new sandbox is a new schema in a new database" do
       let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
 
+      before do
+        stub(GpdbSchema).refresh(anything, anything) { }
+        log_in instance.owner
+      end
+
       it "calls both create_database and create_schema" do
-        any_instance_of(GpdbInstance) do |instance_double|
-          mock(instance_double).create_database("new_database", owner) do |name|
-            gpdb_instance.databases.create!({:name => name}, :without_protection => true)
+
+        any_instance_of(Instance) do |instance_double|
+          mock(instance_double).create_database("new_database", instance.owner) do |name|
+            instance.databases.create!({:name => name}, :without_protection => true)
           end
         end
 
         any_instance_of(GpdbDatabase) do |database_double|
-          mock(database_double).create_schema("create_new_schema", owner) do |name|
-            database = gpdb_instance.reload.databases.find_by_name("new_database")
+          mock(database_double).create_schema("create_new_schema", instance.owner) do |name|
+            database = instance.reload.databases.find_by_name("new_database")
             database.schemas.create!({:name => name}, :without_protection => true)
           end
         end
@@ -345,11 +371,24 @@ describe WorkspacesController do
           stub(gpdb_instance).create_database.with_any_args {
             raise Exception.new("Database creation failed")
           }
+          mock(instance).delete_database.with_any_args {}
         end
 
         send_request
         response.code.should == "422"
         decoded_errors.fields.database.GENERIC.message.should == "Database creation failed"
+      end
+
+      it "returns an error if schema creation fails" do
+        any_instance_of(Instance) do |instance|
+          stub(instance).create_schema.with_any_args {
+            raise Exception.new("Schema creation failed")
+          }
+          mock(instance).delete_database.with_any_args {}
+        end
+
+        send_request
+        response.code.should == "422"
       end
 
       def send_request
