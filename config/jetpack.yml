@@ -2,7 +2,7 @@ jruby: http://jruby.org.s3.amazonaws.com/downloads/1.6.7/jruby-complete-1.6.7.ja
 jetty: http://dist.codehaus.org/jetty/jetty-hightide-7.4.5/jetty-hightide-7.4.5.v20110725.zip
 jruby-rack: http://repository.codehaus.org/org/jruby/rack/jruby-rack/1.0.10/jruby-rack-1.0.10.jar
 app_root: $CHORUS_HOME
-java_options: -Djava.library.path=$CHORUS_HOME/vendor/hadoop/lib/
+java_options: -Djava.library.path=$CHORUS_HOME/vendor/hadoop/lib/ -server -Xmx1024m -Xms512m -XX:MaxPermSize=128m -Xss2048k
 ruby_version: 1.9
 app_type: rack
 http_port: 8081
