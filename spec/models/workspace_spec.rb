@@ -133,7 +133,7 @@ describe Workspace do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-        workspace.datasets.should =~ [sandbox_table, source_table, chorus_view]
+        workspace.datasets.should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
       end
 
       it "filters by type" do
