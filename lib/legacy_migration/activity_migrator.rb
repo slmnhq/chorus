@@ -2,6 +2,7 @@ class ActivityMigrator < AbstractMigrator
   class << self
     def prerequisites
       DatabaseObjectMigrator.migrate
+      ChorusViewMigrator.migrate
       WorkspaceMigrator.migrate
       WorkfileMigrator.migrate
       SandboxMigrator.migrate #workaround for broken composite keys in DATASET_IMPORT activities

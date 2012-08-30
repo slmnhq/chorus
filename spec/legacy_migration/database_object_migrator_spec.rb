@@ -21,4 +21,9 @@ describe DatabaseObjectMigrator do
     Dataset.count.should == dataset_count
     GpdbSchema.count.should == schema_count
   end
+
+  it "should have a type for every migrated dataset" do
+    d = Dataset.where("type IS NULL")
+    d.should be_empty
+  end
 end

@@ -56,6 +56,7 @@ class DatabaseObjectMigrator < AbstractMigrator
             (
               SELECT normalize_key(composite_id) AS dataset_string
               FROM edc_dataset
+              WHERE type = 'SOURCE_TABLE'
             )
             UNION
             (
@@ -85,15 +86,22 @@ class DatabaseObjectMigrator < AbstractMigrator
         legacy_instance_id = ids[0]
         database_name = ids[1]
         schema_name = ids[2]
+        legacy_dataset_type = ids[3]
+        next if ids[3] == 'QUERY'
         dataset_name = ids[4]
 
         instance = Instance.find_by_legacy_id!(legacy_instance_id)
         database = instance.databases.find_or_create_by_name(database_name)
         schema = database.schemas.find_or_create_by_name(schema_name)
-
         dataset = schema.datasets.new
         dataset.name = dataset_name
         dataset.legacy_id = dataset_string
+        dataset.type = case legacy_dataset_type
+                         when 'VIEW'
+                           'GpdbView'
+                         else
+                           'GpdbTable'
+                       end
         dataset.save!
       end
 
