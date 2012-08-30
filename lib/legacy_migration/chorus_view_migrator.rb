@@ -29,8 +29,8 @@ class ChorusViewMigrator < AbstractMigrator
           schema_name = ids[2]
           dataset_name = ids[4]
 
-          instance = Instance.find_by_legacy_id!(legacy_instance_id)
-          database = instance.databases.find_or_create_by_name(database_name)
+          gpdb_instance = GpdbInstance.find_by_legacy_id!(legacy_instance_id)
+          database = gpdb_instance.databases.find_or_create_by_name(database_name)
           schema = database.schemas.find_or_create_by_name(schema_name)
 
           dataset = schema.datasets.new
