@@ -19,8 +19,9 @@ resource "Notes" do
 
 
     let(:body) { note.body }
+    let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
     let(:entity_type) { "greenplum_instance" }
-    let(:entity_id) { "123" }
+    let(:entity_id) { gpdb_instance.id }
 
     example_request "Post a new note on a Greenplum instance" do
       status.should == 201
