@@ -9,6 +9,7 @@ class Gppipe < GpTableCopier
   GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
 
   GPFDIST_TIMEOUT_SECONDS = 600
+  GRACE_PERIOD = 5
 
   def self.timeout_seconds
     GPFDIST_TIMEOUT_SECONDS
@@ -48,6 +49,14 @@ class Gppipe < GpTableCopier
     @pipe_name ||= "pipe_#{Process.pid}_#{Time.now.to_i}"
   end
 
+  def write_pipe
+    src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
+  end
+
+  def read_pipe
+    dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
+  end
+
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
@@ -65,11 +74,31 @@ class Gppipe < GpTableCopier
                                  LOCATION ('#{Gppipe.write_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
                                LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
-          thr = Thread.new do
-            src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
+
+          thr1 = Thread.new { write_pipe }
+          thr2 = Thread.new { read_pipe }
+
+          while(thr1.alive? || thr2.alive?)
+            sleep(1)
+            if(thr1.alive? && !thr2.alive?)
+              sleep(GRACE_PERIOD)
+              if(thr1.alive?)
+                thr1.kill
+                raise RuntimeError, "Gpfdist writer thread was hung, even through reader completed."
+              end
+            elsif(!thr1.alive? && thr2.alive?)
+              sleep(GRACE_PERIOD)
+              if(thr2.alive?)
+                thr2.kill
+                raise RuntimeError, "Gpfdist reader thread was hung, even through writer completed."
+              end
+            end
           end
-          dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
-          thr.join
+
+          #collect any exceptions raised inside thread1 or thread2
+          thr1.join
+          thr2.join
+
         rescue Exception => e
           if create_new_table?
             dst_conn.exec_query("DROP TABLE IF EXISTS #{destination_table_fullname}")

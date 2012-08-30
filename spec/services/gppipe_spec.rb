@@ -160,13 +160,26 @@ describe Gppipe, :database_integration => true do
           gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
         end
 
-        it "drops the newly created table when there's an exception" do
+        it "drops the newly created table when the write hangs" do
           lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
-          any_instance_of(Thread) do |thread|
-            stub(thread).join { raise Exception }
+          stub(gp_pipe).write_pipe do
+            while(true) do
+              sleep(5)
+            end
           end
+          stub(gp_pipe).read_pipe { sleep(2) }
+
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
           lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
+        end
+
+        it "drops the newly created table when there's an exception" do
+          stub(gp_pipe).write_pipe do
+            raise RuntimeError, "custom error"
+          end
+          stub(gp_pipe).read_pipe { sleep(2) }
+
+          expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
         end
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
@@ -193,9 +206,14 @@ describe Gppipe, :database_integration => true do
         end
 
         it "does not drop the table when there's an exception" do
-          any_instance_of(Thread) do |thread|
-            stub(thread).join { raise Exception }
+
+          stub(gp_pipe).write_pipe do
+            while(true) do
+              sleep(5)
+            end
           end
+          stub(gp_pipe).read_pipe { sleep(2) }
+
           setup_data
           gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
           expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
@@ -343,11 +361,16 @@ describe Gppipe, :database_integration => true do
 
     context "when #run failed" do
       it "drops newly created the table when there's an exception" do
-        any_instance_of(Thread) do |thread|
-          stub(thread).join { raise Exception, "Internal Error" }
+
+        stub(gp_pipe).write_pipe do
+          while(true) do
+            sleep(5)
+          end
         end
+        stub(gp_pipe).read_pipe { sleep(2) }
+
         setup_data
-        lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed, "Internal Error")
+        lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed, "Gpfdist writer thread was hung, even through reader completed.")
       end
     end
   end
@@ -363,7 +386,6 @@ describe Gppipe, :database_integration => true do
       gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
-
 
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do
       gp_pipe.run
