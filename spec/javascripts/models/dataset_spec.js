@@ -203,7 +203,7 @@ describe("chorus.models.Dataset", function() {
             dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = newFixtures.workspaceDataset.chorusView();
+            dataset = rspecFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportSource()).toBeTruthy();
         });
     });
@@ -222,7 +222,7 @@ describe("chorus.models.Dataset", function() {
             dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.workspaceDataset.chorusView();
+            dataset = rspecFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
         });
     });
@@ -328,7 +328,7 @@ describe("chorus.models.Dataset", function() {
 
         context("with a chorus view", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.workspaceDataset.chorusView({
+                this.dataset = rspecFixtures.workspaceDataset.chorusView({
                     query: "select * from hello_world",
                     objectName: "my_chorusview",
                     workspace: {id: "234", name: "abc"}
@@ -538,7 +538,7 @@ describe("chorus.models.Dataset", function() {
 
         context("when the model has a 'query'", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.workspaceDataset.chorusView();
+                this.dataset = rspecFixtures.workspaceDataset.chorusView();
             })
 
             context("when a datasetNumber is not set", function() {
@@ -666,7 +666,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("is true when the tabular data is a chorus view", function() {
-            expect(newFixtures.workspaceDataset.chorusView().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.workspaceDataset.chorusView().isDeleteable()).toBeTruthy();
         });
 
         it("is false otherwise", function() {

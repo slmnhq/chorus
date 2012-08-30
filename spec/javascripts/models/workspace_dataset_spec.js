@@ -183,7 +183,7 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.chorusView).toHaveAttrs({
                 sourceObjectId: this.dataset.id,
                 schemaId: this.dataset.schema().id,
-                workspaceId: this.dataset.get("workspace").id
+                workspace: this.dataset.get("workspace")
             });
         });
     });

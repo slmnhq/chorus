@@ -51,5 +51,8 @@ describe ChorusViewsController, :database_integration => true do
       end
     end
 
+    generate_fixture "workspaceDataset/chorusView.json" do
+         post :create, :chorus_view => options
+    end
   end
 end

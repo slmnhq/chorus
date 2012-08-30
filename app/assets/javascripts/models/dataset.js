@@ -91,7 +91,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     schema: function() {
-    return new chorus.models.Schema(this.get("schema"));
+        return new chorus.models.Schema(this.get("schema"));
     },
 
     workspace: function() {

@@ -54,6 +54,7 @@ window.rspecFixtureDefinitions = {
     workspaceDataset: {
         unique: ["id"],
         children: {
+            chorusView: {},
             datasetTable: {},
             datasetView: {}
         }
