@@ -35,8 +35,9 @@ class Install
       confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:"
   }
 
-  def initialize(installer_home)
+  def initialize(installer_home, silent=false)
     @installer_home = installer_home
+    @silent = !!silent
   end
 
   def prompt(message)
@@ -59,11 +60,28 @@ class Install
     @postgres_package = get_postgres_build
   end
 
+  def silent?
+    @silent
+  end
+
+  def prompt_or_default(default)
+    if silent?
+      default
+    else
+      yield || default
+    end
+  end
+
   def get_destination_path
     default_path = ENV['CHORUS_HOME'] || DEFAULT_PATH
     default_path = default_path.sub(/\/current$/, '')
-    prompt "#{MESSAGES[:default_chorus_path]} [#{default_path}]:"
-    @destination_path = File.expand_path(get_input || default_path)
+
+    relative_path = prompt_or_default(default_path) do
+      prompt "#{MESSAGES[:default_chorus_path]} [#{default_path}]:"
+      get_input
+    end
+
+    @destination_path = File.expand_path(relative_path)
 
     if Dir.exists?(@destination_path)
       installed_versions = Dir[File.join(@destination_path, 'releases', '*')]
@@ -75,8 +93,11 @@ class Install
         raise(InvalidVersion.new("Version #{version} is older than currently installed version (#{most_recent_installed_version})."))
       end
 
-      prompt MESSAGES[:confirm_upgrade]
-      user_upgrade_input = get_input || 'y'
+      user_upgrade_input = prompt_or_default('y') do
+        prompt MESSAGES[:confirm_upgrade]
+        get_input
+      end
+
       unless %w(y yes).include? user_upgrade_input.downcase
         raise(UpgradeCancelled)
       end
@@ -93,6 +114,10 @@ class Install
     redhat_version = supported_redhat_version
     input = 1 if redhat_version == '5.5'
     input = 2 if redhat_version == '6.2'
+
+    if silent? && input.nil?
+      raise InvalidOperatingSystem
+    end
 
     while !(1..4).include?(input)
       prompt MESSAGES[:select_os]
@@ -294,7 +319,7 @@ end
 
 if __FILE__ == $0
   begin
-    installer = Install.new(File.dirname(__FILE__))
+    installer = Install.new(File.dirname(__FILE__), ARGV.include?('-a'))
 
     installer.validate_non_root
     installer.validate_localhost

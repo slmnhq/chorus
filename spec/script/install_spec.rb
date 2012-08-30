@@ -8,13 +8,25 @@ end
 describe "Install" do
   include FakeFS::SpecHelpers
 
-  let(:installer) { Install.new('.') }
+  let(:installer) { Install.new('.', silent) }
+  let(:silent) { false }
   before do
     ENV['CHORUS_HOME'] = nil
+    ENV['FORCE_DEPLOY'] = nil
     stub(installer).prompt(anything)
   end
 
   describe "#get_destination_path" do
+    context "silent install" do
+      let(:silent) { true }
+
+      it "should not prompt the user" do
+        dont_allow(installer).prompt
+        installer.get_destination_path
+        installer.destination_path.should == '/opt/chorus'
+      end
+    end
+
     context "user types input" do
       it "captures the path from the user" do
         stub_input "/foo/bar"
@@ -65,6 +77,16 @@ describe "Install" do
       context "when there are only older version installed" do
         let(:installed_versions) { ["2.2.0.0-8840ae71c"] }
 
+        context 'in silent mode' do
+          let(:silent) { true }
+
+          it "should set do_upgrade to true without user input" do
+            dont_allow(installer).prompt
+            installer.get_destination_path
+            installer.do_upgrade.should be_true
+          end
+        end
+
         it "should prompt the user to confirm downtime for upgrade" do
           mock(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
           installer.get_destination_path
@@ -105,6 +127,13 @@ describe "Install" do
 
         it "should notify the user and fail" do
           expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
+        end
+
+        context "when FORCE_DEPLOY is true" do
+          it 'does not fail' do
+            ENV['FORCE_DEPLOY'] = 'true'
+            expect { installer.get_destination_path }.to_not raise_error(Install::InvalidVersion)
+          end
         end
       end
 
@@ -166,6 +195,15 @@ describe "Install" do
       end
 
       let(:prompt_times) { 1 }
+
+      context "in silent mode" do
+        let(:silent) { true }
+        let(:prompt_times) { 0 }
+
+        it "should fail" do
+          expect { installer.get_postgres_build }.to raise_error(Install::InvalidOperatingSystem)
+        end
+      end
 
       context "when the user selects redhat 5.5" do
         before do
@@ -506,7 +544,7 @@ describe "Install" do
 
     it "should overwrite an existing link" do
       FileUtils.ln_s("/opt/chorus/releases/1.2.2.2", "/opt/chorus/current")
-      mock(File).delete("/opt/chorus/current")                     # FakeFS workaround
+      mock(File).delete("/opt/chorus/current") # FakeFS workaround
       installer.link_current_to_release
 
       File.readlink('/opt/chorus/current').should == '/opt/chorus/releases/2.2.0.0'
