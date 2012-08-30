@@ -1,15 +1,10 @@
 class GpTableCopier
   ImportFailed = Class.new(StandardError)
 
+  attr_accessor :user_id, :source_table_id, :options
+
   def self.run_import(source_table_id, user_id, options)
-    options = HashWithIndifferentAccess.new(options)
-
-    gpdb_instance = new(source_table_id, user_id, options)
-    gpdb_instance.run
-
-    Dataset.refresh(gpdb_instance.destination_account, gpdb_instance.destination_schema)
-    dst_table = gpdb_instance.destination_schema.datasets.find_by_name(gpdb_instance.destination_table_name)
-    create_success_event(dst_table, gpdb_instance.source_table, gpdb_instance.destination_workspace, User.find(user_id), options[:dataset_import_created_event_id])
+    new(source_table_id, user_id, options).start
   rescue Exception => e
     user = User.find_by_id(user_id)
     src_table = Dataset.find_by_id(source_table_id)
@@ -18,10 +13,23 @@ class GpTableCopier
     raise e
   end
 
+  def start
+    Dataset.refresh(destination_account, destination_schema)
+    dst_table = destination_schema.datasets.find_by_name(destination_table_name)
+    self.options["new_table"] = false if create_new_table? && dst_table
+    raise ActiveRecord::RecordNotFound, "Couldn't find destination table." if !create_new_table? && !dst_table
+
+    run
+
+    Dataset.refresh(destination_account, destination_schema)
+    dst_table = destination_schema.datasets.find_by_name(destination_table_name)
+    create_success_event(dst_table, source_table, destination_workspace, User.find(user_id))
+  end
+
   def initialize(source_table_id, user_id, options)
-    @source_table_id = source_table_id
-    @user_id = user_id
-    @options = options
+    self.source_table_id = source_table_id
+    self.user_id = user_id
+    self.options = HashWithIndifferentAccess.new(options)
   end
 
   def distribution_key_clause
@@ -78,8 +86,8 @@ class GpTableCopier
     connection.execute(sql)
   end
 
-  def self.create_success_event(dst_table, source_table, workspace, user, import_created_event_id)
-    Events::DatasetImportCreated.find(import_created_event_id).tap do |event|
+  def create_success_event(dst_table, source_table, workspace, user)
+    Events::DatasetImportCreated.find(options[:dataset_import_created_event_id]).tap do |event|
       event.dataset = dst_table
       event.save!
     end
@@ -101,15 +109,15 @@ class GpTableCopier
   end
 
   def create_new_table?
-    @options["new_table"].to_s == "true"
+    options["new_table"].to_s == "true"
   end
 
   def row_limit
-    @options["sample_count"]
+    options["sample_count"]
   end
 
   def destination_table_name
-    @options["to_table"]
+    options["to_table"]
   end
 
   def user
@@ -149,7 +157,7 @@ class GpTableCopier
   end
 
   def truncate?
-    @options["truncate"].to_s == "true"
+    options["truncate"].to_s == "true"
   end
 
   private

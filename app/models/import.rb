@@ -9,12 +9,18 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :import_schedule
 
-  def self.run(source_dataset_id, user_id, attributes)
-    if attributes[:remote_copy]
-      copy_method = "Gppipe.run_import"
+  def self.run(import_id)
+    Import.find(import_id).run
+  end
+
+  def run
+
+    attributes = {}
+
+    if workspace.sandbox.database != source_dataset.schema.database
+      Gppipe.run_import(source_dataset.id, user.id, attributes)
     else
-      copy_method = "GpTableCopier.run_import"
+      GpTableCopier.run_import(source_dataset.id, user.id, attributes)
     end
-    QC.enqueue(copy_method, source_dataset_id, user_id, attributes)
   end
 end

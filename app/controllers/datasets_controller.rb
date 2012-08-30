@@ -47,7 +47,6 @@ class DatasetsController < GpdbController
 
       attributes = params[:dataset_import].dup.merge(
         :dataset_import_created_event_id => event.id.to_s,
-        :remote_copy => workspace.sandbox.database != src_table.schema.database
       )
       src_table.import(attributes, current_user )
     end

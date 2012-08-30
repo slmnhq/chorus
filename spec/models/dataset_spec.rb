@@ -10,6 +10,7 @@ describe Dataset do
 
   describe "associations" do
     it { should belong_to(:schema) }
+    it { should have_many(:imports) }
   end
 
   describe "workspace association" do
@@ -382,65 +383,33 @@ describe Dataset::Query, :database_integration => true do
     let(:user) { account.owner }
 
     context "when doing an immediate import" do
-      context "with correct input" do
-        let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-        let(:workspace) { workspaces(:bob_public) }
-        let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
-        let(:dst_table_name) { "the_new_table" }
-        let(:options) {
-          HashWithIndifferentAccess.new(
-              "to_table" => "the_new_table",
-              "new_table" => true,
-              "remote_copy" => true
-          )
-        }
+      let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
+      let(:workspace) { workspaces(:bob_public) }
+      let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
+      let(:dst_table_name) { "the_new_table" }
+      let(:attributes) {
+        HashWithIndifferentAccess.new(
+            "workspace_id" => workspace.id,
+            "to_table" => "the_new_table",
+            "new_table" => "true",
+            "truncate" => "false",
+            "sample_count" => "12"
+        )
+      }
 
-        context "into a table in another db using gpfdist" do
-          context "new table" do
-            it "creates a correct gppipe" do
-              mock(Import).run.with(source_table.id, user.id, options)
-              source_table.import(options, user)
-            end
-          end
-
-          context "existing table" do
-            it "creates a correct gppipe" do
-              options["new_table"] = 'false'
-              mock(Import).run.with(source_table.id, user.id, options)
-              source_table.import(options, user)
-            end
+      it "creates a correct gppipe" do
+        mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
+          Import.find(import_id).tap do |import|
+            import.workspace.should == workspace
+            import.to_table.should == "the_new_table"
+            import.source_dataset_id.should == source_table.id
+            import.truncate.should == false
+            import.user_id == user.id
+            import.sample_count.should == 12
+            import.new_table.should == true
           end
         end
-
-        context "into a table in the same db" do
-          let(:source_table) { datasets(:bobs_table) }
-          let(:schema) { gpdb_schemas(:bobs_schema) }
-          let(:workspace) { workspaces(:bob_public) }
-          let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
-          let(:options) {
-            HashWithIndifferentAccess.new(
-                "to_table" => "the_new_table",
-                "sample_count" => 50,
-                "new_table" => "true",
-                "workspace_id" => "123",
-                "remote_copy" => false
-            )
-          }
-          context "importing into new table" do
-            it "creates a correct gp table copier" do
-              mock(Import).run.with(source_table.id, user.id, options)
-              source_table.import(options, user)
-            end
-          end
-
-          context "into a existing table" do
-            it "creates a correct gp table copier" do
-              options["new_table"] = 'false'
-              mock(Import).run.with(source_table.id, user.id, options)
-              source_table.import(options, user)
-            end
-          end
-        end
+        source_table.import(attributes, user)
       end
     end
 
@@ -453,15 +422,15 @@ describe Dataset::Query, :database_integration => true do
       let(:options) {
         HashWithIndifferentAccess.new(
             "workspace_id" => workspace.id,
-            "dataset_id" => source_table.id,
             "to_table" => "the_new_table",
-            "new_table" => true,
-            "remote_copy" => true,
-            "activate_schedule" => true,
+            "new_table" => "true",
+            "remote_copy" => "true",
+            "activate_schedule" => "true",
             "schedule_start_time" => start_time,
             "schedule_end_time" => "2012-11-24",
             "schedule_frequency"=>"WEEKLY",
             "sample_count" => 1,
+            "truncate" => "false",
             "import_type"=>"schedule"
         )
       }
@@ -482,6 +451,7 @@ describe Dataset::Query, :database_integration => true do
             import_schedule.sample_count.should == 1
             import_schedule.last_scheduled_at.should == nil
             import_schedule.user.should == user
+            import_schedule.truncate.should == false
             import_schedule.next_import_at.should == Time.parse(start_time)
           end
         end

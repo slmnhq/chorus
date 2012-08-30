@@ -8,6 +8,7 @@ class Dataset < ActiveRecord::Base
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   has_many :import_schedules, :foreign_key => 'source_dataset_id'
+  has_many :imports, :foreign_key => 'source_dataset_id'
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
@@ -154,21 +155,26 @@ class Dataset < ActiveRecord::Base
   end
 
   def import(attributes, user)
+    import_attributes = attributes.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
+    import_attributes[:user_id] = user.id
+
     # If the user is creating a scheduled import
     if attributes[:import_type] == "schedule"
 
       import_schedules.create! do |schedule|
-        schedule.assign_attributes(attributes.slice(:workspace_id, :to_table, :new_table, :sample_count), :without_protection => true)
         schedule.start_datetime = Time.parse(attributes[:schedule_start_time]) # adds local timezone
         schedule.end_date = attributes[:schedule_end_time]
         schedule.frequency = attributes[:schedule_frequency].downcase
-        schedule.user = user
         schedule.set_next_import
+
+        schedule.assign_attributes(import_attributes, :without_protection => true)
       end
 
     # If the user is performing an immediate import
     else
-      Import.run(id, user.id, attributes)
+      import = imports.create!(import_attributes, :without_protection => true)
+
+      QC.enqueue("Import.run", import.id)
     end
   end
 
