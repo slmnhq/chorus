@@ -325,7 +325,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                             expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
                             expect(this.page.$("ul[data-event=filter] li[data-type=SOURCE_TABLE]")).toExist();
                             expect(this.page.$("ul[data-event=filter] li[data-type=CHORUS_VIEW]")).toExist();
-                            expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_TABLE]")).toExist();
+                            expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_DATASET]")).toExist();
                         });
 
                         it("can filter the list by 'all'", function() {
@@ -342,10 +342,10 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                         });
 
                         it("has can filter the list by 'SANBOX_TABLE'", function() {
-                            this.page.$("li[data-type=SANDBOX_TABLE] a").click();
-                            expect(this.page.collection.attributes.type).toBe("SANDBOX_TABLE");
+                            this.page.$("li[data-type=SANDBOX_DATASET] a").click();
+                            expect(this.page.collection.attributes.type).toBe("SANDBOX_DATASET");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SANDBOX_TABLE");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SANDBOX_DATASET");
                         });
 
                         it("has can filter the list by 'CHORUS_VIEW'", function() {

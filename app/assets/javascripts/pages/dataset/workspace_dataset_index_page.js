@@ -50,7 +50,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                         {data: "", text: t("dataset.header.menu.filter.all")},
                         {data: "SOURCE_TABLE", text: t("dataset.header.menu.filter.source")},
                         {data: "CHORUS_VIEW", text: t("dataset.header.menu.filter.chorus_views")},
-                        {data: "SANDBOX_TABLE", text: t("dataset.header.menu.filter.sandbox")}
+                        {data: "SANDBOX_DATASET", text: t("dataset.header.menu.filter.sandbox")}
                     ],
                     event: "filter"
                 }

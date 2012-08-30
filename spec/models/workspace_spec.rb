@@ -114,6 +114,7 @@ describe Workspace do
     let!(:schema) { FactoryGirl.create(:gpdb_schema) }
     let!(:other_schema) { FactoryGirl.create(:gpdb_schema) }
     let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, :schema => schema) }
+    let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, :schema => schema) }
     let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
     let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
     let(:chorus_view) {
@@ -137,6 +138,7 @@ describe Workspace do
 
       it "filters by type" do
         workspace.datasets("SANDBOX_TABLE").should =~ [sandbox_table]
+        workspace.datasets("SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
         workspace.datasets("CHORUS_VIEW").should =~ [chorus_view]
         workspace.datasets("SOURCE_TABLE").should =~ [source_table]
       end

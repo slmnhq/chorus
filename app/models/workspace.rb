@@ -73,6 +73,8 @@ class Workspace < ActiveRecord::Base
 
       case type
         when "SANDBOX_TABLE" then
+          return Dataset.where("schema_id = ? AND (type='GpdbTable')", sandbox.id)
+        when "SANDBOX_DATASET" then
           return Dataset.where("schema_id = ? AND (type='GpdbTable' OR type='GpdbView')", sandbox.id)
         when "CHORUS_VIEW" then
           return Dataset.where("schema_id = ? AND (type='ChorusView')", sandbox.id)
