@@ -86,6 +86,10 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.workspace.set({ summary: summary }, {silent: true})
 
         if(sandboxId) {
+            this.workspace.unset("schemaName",  {silent : true});
+            this.workspace.unset("databaseId",  {silent : true});
+            this.workspace.unset("databaseName",  {silent : true});
+            this.workspace.unset("instanceId",  {silent : true});
             this.workspace.set({ sandboxId: sandboxId }, {silent : true});
             this.workspace.save();
         } else {
