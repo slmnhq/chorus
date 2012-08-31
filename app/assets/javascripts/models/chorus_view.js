@@ -1,15 +1,20 @@
 chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     constructorName: "ChorusView",
+    paramsToSave: ['id', 'objectName', 'schemaId', 'workspaceId', 'query'],
 
     urlTemplate: function(options) {
         return "datasets/{{this.sourceObjectId}}/chorus_view";
     },
 
+    workspaceId: function() {
+        return this.workspace().id;
+    },
+
     initialize: function() {
         this.sourceObjectId = this.get("sourceObjectId");
         this._super('initialize');
-        this.joins = []
-        this.sourceObjectColumns = []
+        this.joins = [];
+        this.sourceObjectColumns = [];
         this.attributes.type = "CHORUS_VIEW";
         this.attributes.objectType = "CHORUS_VIEW";
     },

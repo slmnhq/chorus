@@ -295,9 +295,9 @@ describe("chorus.models.ChorusView", function() {
                 expect(this.model.valid()).toBeTruthy();
             })
         })
-    })
+    });
 
-    describe("#generateSelectClause", function() {
+    describe("generateSelectClause", function() {
         context("when no columns are selected", function() {
             it("returns 'SELECT *'", function() {
                 expect(this.model.generateSelectClause()).toBe("SELECT *");
@@ -333,6 +333,21 @@ describe("chorus.models.ChorusView", function() {
                 });
             });
         });
+    });
+
+    describe("toJSON", function() {
+        it("only returns necessary attributes", function() {
+            this.model.set({
+                objectName: 'my_chorus_view',
+                query: 'SELECT potato FROM pants;'
+            });
+            expect(this.model.toJSON()['chorus_view']).toEqual({
+                object_name: 'my_chorus_view',
+                schema_id: this.model.get("schemaId"),
+                workspace_id: this.model.workspace().get('id'),
+                query: "SELECT potato FROM pants;"
+            });
+        })
     });
 
     function addJoin(self, sourceColumn) {

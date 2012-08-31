@@ -501,13 +501,13 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                         it("starts the file download", function() {
                             expect($.download).toHaveBeenCalledWith("/data/cvsResultDownload",
-                            {
-                                columnData: JSON.stringify(this.view.resource.getColumns()),
-                                rowsData: JSON.stringify(this.view.resource.getRows()),
-                                datasetName: this.view.resource.name(),
-                                workspaceId: this.view.resource.get("workspaceId");
-                            }
-                            , "post");
+                                {
+                                    columnData: JSON.stringify(this.view.resource.getColumns()),
+                                    rowsData: JSON.stringify(this.view.resource.getRows()),
+                                    datasetName: this.view.resource.name(),
+                                    workspaceId: this.view.resource.get("workspaceId")
+                                }
+                                , "post");
                         });
                     });
                 });

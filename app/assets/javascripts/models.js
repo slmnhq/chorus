@@ -196,6 +196,13 @@ chorus.models = {
                         newAttributes[key] = value;
                     }
                 });
+
+                var functionParams = _.select(paramsToSave, function(paramToSave) {
+                    return _.isFunction(this[paramToSave]);
+                }, this);
+                _.each(functionParams, function(functionParam) {
+                    newAttributes[functionParam] = this[functionParam]();
+                }, this);
                 attributes = newAttributes;
             }
             attributes = this.underscoreKeys(attributes);
