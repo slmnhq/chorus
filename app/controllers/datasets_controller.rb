@@ -17,17 +17,27 @@ class DatasetsController < GpdbController
   end
 
   def import
-    workspace = Workspace.find(params[:dataset_import]["workspace_id"])
+    src_table = Dataset.find(params[:id])
+
+    attributes = params[:dataset_import].dup
+    validate_import_attributes(src_table, attributes)
+    src_table.import(attributes, current_user)
+
+    render :json => {}, :status => :created
+  end
+
+  private
+
+  def validate_import_attributes(src_table, attributes)
+    workspace = Workspace.find(attributes[:workspace_id])
     if workspace.archived?
-      head 422
-      return
+      workspace.errors.add(:archived, "Workspace cannot be archived for import.")
+      raise ActiveRecord::RecordInvalid.new(workspace)
     end
 
-    create_new_table = params[:dataset_import]["new_table"].to_s == "true"
-
-    src_table = Dataset.find(params[:id])
-    dst_table_name = params[:dataset_import]["to_table"]
-    dst_table = Dataset.find_by_name(dst_table_name)
+    create_new_table = attributes[:new_table].to_s == "true"
+    dst_table_name = attributes[:to_table]
+    dst_table = workspace.sandbox.datasets.find_by_name(dst_table_name)
 
     if create_new_table
       raise ApiValidationError.new(:base, :table_exists,
@@ -39,10 +49,5 @@ class DatasetsController < GpdbController
                                    { :src_table_name => src_table.name,
                                      :dest_table_name => dst_table_name }) unless src_table.dataset_consistent?(dst_table)
     end
-
-    attributes = params[:dataset_import].dup
-    src_table.import(attributes, current_user)
-
-    render :json => {}, :status => :created
   end
 end

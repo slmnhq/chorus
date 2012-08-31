@@ -145,27 +145,19 @@ describe DatasetsController do
           response.should be_success
         end
 
-        it "makes a DATASET_IMPORT_CREATED event without associated dataset" do
-          post :import, :id => src_table.to_param, :dataset_import => attributes
-          event = Events::DatasetImportCreated.first
-          event.actor.should == account.owner
-          event.dataset.should == nil
-          event.workspace.id.should == attributes[:workspace_id].to_i
-          event.destination_table.should == 'the_new_table'
+        it "makes a DATASET_IMPORT_CREATED event" do
+          expect { post :import, :id => src_table.to_param, :dataset_import => attributes
+          }.to change(Events::DatasetImportCreated, :count).by(1)
         end
 
         it "should return error for archived workspaces" do
           attributes[:workspace_id] = archived_workspace.id
           post :import, :id => src_table.to_param, "dataset_import" => attributes
-
-          GpdbTable.refresh(account, schema)
           response.code.should == "422"
         end
 
         it "should return successfully for active workspaces" do
           post :import, :id => src_table.to_param, :dataset_import => attributes
-
-          GpdbTable.refresh(account, schema)
           response.code.should == "201"
           response.body.should == "{}"
         end
@@ -185,7 +177,7 @@ describe DatasetsController do
       context "when importing into an existing table" do
         before do
           attributes[:new_table] = "false"
-          attributes[:to_table] = "master_table1"
+          attributes[:to_table] = active_workspace.sandbox.datasets.first.name
         end
 
         context "when destination dataset is consistent with source" do
@@ -195,31 +187,25 @@ describe DatasetsController do
             end
           end
 
-          it "enqueues a new Import.run job for active workspaces" do
-            mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
-              Import.find(import_id).tap do |import|
-                import.workspace.should == active_workspace
-                import.to_table.should == "master_table1"
-                import.source_dataset.should == src_table
-                import.truncate.should == false
-                import.user_id == user.id
-                import.sample_count.should == 12
-                import.new_table.should == false
-              end
+          it "passes the form attributes to import (with some id)" do
+            any_instance_of(Dataset) do |instance|
+              mock.proxy(instance).import(attributes, user)
             end
-
             post :import, :id => src_table.to_param, :dataset_import => attributes
+          end
+
+          it "creates an import for the correct dataset and returns success" do
+            expect {
+              post :import, :id => src_table.to_param, :dataset_import => attributes
+            }.to change(Import, :count).by(1)
+            Import.last.source_dataset.id == src_table.id
             response.should be_success
           end
+        end
 
-          it "makes a DATASET_IMPORT_CREATED event with associated dataset" do
-            post :import, :id => src_table.to_param, :dataset_import => attributes
-            event = Events::DatasetImportCreated.first
-            event.actor.should == account.owner
-            event.dataset.should == Dataset.find_by_name("master_table1")
-            event.workspace.id.should == attributes[:workspace_id].to_i
-            event.destination_table.should == "master_table1"
-          end
+        it "makes a DATASET_IMPORT_CREATED event" do
+          expect { post :import, :id => src_table.to_param, :dataset_import => attributes
+          }.to change(Events::DatasetImportCreated, :count).by(1)
         end
 
         it "throws an error if table does not exist" do
@@ -229,7 +215,9 @@ describe DatasetsController do
         end
 
         it "throws an error if table structure is not consistent" do
-          attributes[:to_table] = "master_table1"
+          any_instance_of(Dataset) do |d|
+            stub(d).dataset_consistent? { false }
+          end
           post :import, :id => src_table.to_param, :dataset_import => attributes
           response.code.should == "422"
           decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present

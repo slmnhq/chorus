@@ -397,7 +397,7 @@ describe Dataset::Query, :database_integration => true do
         )
       }
 
-      it "creates a correct gppipe" do
+      it "creates an import record and executes it in the worker queue" do
         mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
           Import.find(import_id).tap do |import|
             import.workspace.should == workspace
@@ -411,9 +411,54 @@ describe Dataset::Query, :database_integration => true do
         end
         source_table.import(attributes, user)
       end
+
+      it "creates a DATASET_IMPORT_CREATED event" do
+        expect {
+          source_table.import(attributes, user)
+        }.to change(Events::DatasetImportCreated, :count).by(1)
+
+        import = Import.last
+        event_id = import.dataset_import_created_event_id
+
+        Events::DatasetImportCreated.find(event_id).tap do |event|
+          event.actor.should == user
+          event.dataset.should == nil
+          event.source_dataset.should == source_table
+          event.workspace.should == workspace
+          event.destination_table.should == 'the_new_table'
+        end
+      end
+
+      context "when destination table does exist" do
+        let(:dst_table_name) {sandbox.datasets.first.name}
+
+        before do
+          attributes.merge!(
+              "to_table" => dst_table_name,
+              "new_table" => "false")
+        end
+
+        it "creates a DATASET_IMPORT_CREATED event with a properly set destination dataset field" do
+          expect {
+            source_table.import(attributes, user)
+          }.to change(Events::DatasetImportCreated, :count).by(1)
+
+          import = Import.last
+          event_id = import.dataset_import_created_event_id
+
+          Events::DatasetImportCreated.find(event_id).tap do |event|
+            event.actor.should == user
+            event.dataset.name.should == dst_table_name
+            event.source_dataset.should == source_table
+            event.workspace.should == workspace
+            event.destination_table.should == dst_table_name
+          end
+        end
+      end
+
     end
 
-    context "when scheduling an import" do
+    context "when creating a scheduled import" do
       let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:start_time) { "Thu, 23 Aug 2012 23:00:00" }
       let(:workspace) { workspaces(:bob_public) }
@@ -422,8 +467,6 @@ describe Dataset::Query, :database_integration => true do
       let(:options) {
         HashWithIndifferentAccess.new(
             "workspace_id" => workspace.id,
-            "to_table" => "the_new_table",
-            "new_table" => "true",
             "remote_copy" => "true",
             "activate_schedule" => "true",
             "schedule_start_time" => start_time,
@@ -435,24 +478,76 @@ describe Dataset::Query, :database_integration => true do
         )
       }
 
-      it "creates an import schedule" do
-        Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+      context "when destination table does not exist" do
+        before do
+          options.merge!(
+            "to_table" => "the_new_table",
+            "new_table" => "true")
+        end
+
+        it "creates an import schedule" do
+          Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+            expect {
+              source_table.import(options, user)
+            }.to change(ImportSchedule, :count).by(1)
+            ImportSchedule.last.tap do |import_schedule|
+              import_schedule.start_datetime.should == Time.parse(start_time)
+              import_schedule.end_date.should == Date.parse("2012-11-24")
+              import_schedule.workspace.should == workspace
+              import_schedule.source_dataset.should == source_table
+              import_schedule.frequency.should == 'weekly'
+              import_schedule.to_table.should == "the_new_table"
+              import_schedule.new_table.should == true
+              import_schedule.sample_count.should == 1
+              import_schedule.last_scheduled_at.should == nil
+              import_schedule.user.should == user
+              import_schedule.truncate.should == false
+              import_schedule.next_import_at.should == Time.parse(start_time)
+            end
+          end
+        end
+
+        it "creates a DATASET_IMPORT_CREATED event" do
           expect {
             source_table.import(options, user)
-          }.to change(ImportSchedule, :count).by(1)
-          ImportSchedule.last.tap do |import_schedule|
-            import_schedule.start_datetime.should == Time.parse(start_time)
-            import_schedule.end_date.should == Date.parse("2012-11-24")
-            import_schedule.workspace.should == workspace
-            import_schedule.source_dataset.should == source_table
-            import_schedule.frequency.should == 'weekly'
-            import_schedule.to_table.should == "the_new_table"
-            import_schedule.new_table.should == true
-            import_schedule.sample_count.should == 1
-            import_schedule.last_scheduled_at.should == nil
-            import_schedule.user.should == user
-            import_schedule.truncate.should == false
-            import_schedule.next_import_at.should == Time.parse(start_time)
+          }.to change(Events::DatasetImportCreated, :count).by(1)
+
+          import_schedule = ImportSchedule.last
+          event_id = import_schedule.dataset_import_created_event_id
+
+          Events::DatasetImportCreated.find(event_id).tap do |event|
+            event.actor.should == user
+            event.dataset.should == nil
+            event.source_dataset.should == source_table
+            event.workspace.should == workspace
+            event.destination_table.should == 'the_new_table'
+          end
+        end
+      end
+
+      context "when destination table does exist" do
+        let(:dst_table_name) {sandbox.datasets.first.name}
+
+        before do
+          options.merge!(
+              "to_table" => dst_table_name,
+              "new_table" => "false")
+        end
+
+        it "creates a DATASET_IMPORT_CREATED event with a properly set destination dataset field" do
+          expect {
+            source_table.import(options, user)
+          }.to change(Events::DatasetImportCreated, :count).by(1)
+
+          import_schedule = ImportSchedule.last
+          event_id = import_schedule.dataset_import_created_event_id
+
+          Events::DatasetImportCreated.find(event_id).tap do |event|
+            event.actor.should == user
+            event.dataset.name.should == dst_table_name
+            event.source_dataset.should == source_table
+            event.workspace.should == workspace
+            event.destination_table.should == dst_table_name
           end
         end
       end

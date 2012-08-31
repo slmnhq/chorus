@@ -9,8 +9,6 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :import_schedule
 
-  after_create :create_dataset_import_created_event
-
   def self.run(import_id)
     Import.find(import_id).run
   end
@@ -24,19 +22,5 @@ class Import < ActiveRecord::Base
     else
       GpTableCopier.run_import(source_dataset.id, user.id, import_attributes)
     end
-  end
-
-  private
-
-  def create_dataset_import_created_event
-    dst_table = Dataset.find_by_name(to_table)
-    event = Events::DatasetImportCreated.by(user).add(
-        :workspace => workspace,
-        :source_dataset => source_dataset,
-        :dataset => dst_table,
-        :destination_table => to_table
-    )
-    self.dataset_import_created_event_id = event.id
-    save!
   end
 end

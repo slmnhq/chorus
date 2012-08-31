@@ -24,7 +24,7 @@ class Dataset < ActiveRecord::Base
 
   scope :tables, where(:type => 'GpdbTable')
   scope :views, where(:type => 'GpdbView')
-  scope :chorus_views, where(:type =>  'ChorusView')
+  scope :chorus_views, where(:type => 'ChorusView')
 
   delegate :with_gpdb_connection, :to => :schema
   delegate :gpdb_instance, :to => :schema
@@ -40,8 +40,8 @@ class Dataset < ActiveRecord::Base
   end
 
   has_shared_search_fields [
-    { :type => :integer, :method => :instance_account_ids, :options => { :multiple => true } }
-  ]
+                               {:type => :integer, :method => :instance_account_ids, :options => {:multiple => true}}
+                           ]
 
   def instance_account_ids
     schema.database.instance_account_ids
@@ -154,26 +154,23 @@ class Dataset < ActiveRecord::Base
     'Dataset'
   end
 
-  def import(attributes, user)
-    import_attributes = attributes.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
-    import_attributes[:user_id] = user.id
+  def import(params, user)
+    event = create_import_event(params, user)
 
-    # If the user is creating a scheduled import
-    if attributes[:import_type] == "schedule"
+    import_attributes =
+        params.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate).merge(
+            :user_id => user.id,
+            :dataset_import_created_event_id => event.id)
 
-      import_schedules.create! do |schedule|
-        schedule.start_datetime = Time.parse(attributes[:schedule_start_time]) # adds local timezone
-        schedule.end_date = attributes[:schedule_end_time]
-        schedule.frequency = attributes[:schedule_frequency].downcase
+    if params[:import_type] == "schedule" # scheduled imports
+      import_schedules.create!(import_attributes, :without_protection => true) do |schedule|
+        schedule.start_datetime = Time.parse(params[:schedule_start_time]) # adds local timezone
+        schedule.end_date = params[:schedule_end_time]
+        schedule.frequency = params[:schedule_frequency].downcase
         schedule.set_next_import
-
-        schedule.assign_attributes(import_attributes, :without_protection => true)
       end
-
-    # If the user is performing an immediate import
-    else
+    else # immediate imports
       import = imports.create!(import_attributes, :without_protection => true)
-
       QC.enqueue("Import.run", import.id)
     end
   end
@@ -225,49 +222,63 @@ class Dataset < ActiveRecord::Base
 
     def tables_and_views_in_schema
       relations_in_schema.where(RELATIONS[:relkind].in(['r', 'v'])).
-        join(PARTITION_RULE, Arel::Nodes::OuterJoin).
-        on(
-        RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
-          and(RELATIONS[:relhassubclass].eq('f'))
+          join(PARTITION_RULE, Arel::Nodes::OuterJoin).
+          on(
+          RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
+              and(RELATIONS[:relhassubclass].eq('f'))
       ).
-        where(
-        RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
+          where(
+          RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
       ).project(
-        RELATIONS[:relkind].as('type'),
-        RELATIONS[:relname].as('name'),
-        RELATIONS[:relhassubclass].as('master_table')
+          RELATIONS[:relkind].as('type'),
+          RELATIONS[:relname].as('name'),
+          RELATIONS[:relhassubclass].as('master_table')
       )
     end
 
     def metadata_for_dataset(table_name)
       relations_in_schema.
-        where(RELATIONS[:relname].eq(table_name)).
-        join(DESCRIPTIONS, Arel::Nodes::OuterJoin).
-        on(RELATIONS[:oid].eq(DESCRIPTIONS[:objoid])).
-        join(VIEWS, Arel::Nodes::OuterJoin).
-        on(VIEWS[:viewname].eq(RELATIONS[:relname])).
-        join(LAST_OPERATION, Arel::Nodes::OuterJoin).
-        on(
-        LAST_OPERATION[:objid].eq(RELATIONS[:oid]).
-          and(LAST_OPERATION[:staactionname].eq('ANALYZE'))
+          where(RELATIONS[:relname].eq(table_name)).
+          join(DESCRIPTIONS, Arel::Nodes::OuterJoin).
+          on(RELATIONS[:oid].eq(DESCRIPTIONS[:objoid])).
+          join(VIEWS, Arel::Nodes::OuterJoin).
+          on(VIEWS[:viewname].eq(RELATIONS[:relname])).
+          join(LAST_OPERATION, Arel::Nodes::OuterJoin).
+          on(
+          LAST_OPERATION[:objid].eq(RELATIONS[:oid]).
+              and(LAST_OPERATION[:staactionname].eq('ANALYZE'))
       ).
-        join(EXT_TABLES, Arel::Nodes::OuterJoin).
-        on(EXT_TABLES[:reloid].eq(RELATIONS[:oid])).
-        project(
-        (PARTITIONS.where(PARTITIONS[:schemaname].eq(schema.name).
-                            and(PARTITIONS[:tablename].eq(table_name))).
-          project(Arel.sql("*").count)
-        ).as('partition_count'),
-        RELATIONS[:reltuples].as('row_count'),
-        RELATIONS[:relname].as('name'),
-        DESCRIPTIONS[:description].as('description'),
-        VIEWS[:definition].as('definition'),
-        RELATIONS[:relnatts].as('column_count'),
-        LAST_OPERATION[:statime].as('last_analyzed'),
-        Arel.sql(DISK_SIZE).as('disk_size'),
-        Arel.sql(TABLE_TYPE).as('table_type')
+          join(EXT_TABLES, Arel::Nodes::OuterJoin).
+          on(EXT_TABLES[:reloid].eq(RELATIONS[:oid])).
+          project(
+          (PARTITIONS.where(PARTITIONS[:schemaname].eq(schema.name).
+                                and(PARTITIONS[:tablename].eq(table_name))).
+              project(Arel.sql("*").count)
+          ).as('partition_count'),
+          RELATIONS[:reltuples].as('row_count'),
+          RELATIONS[:relname].as('name'),
+          DESCRIPTIONS[:description].as('description'),
+          VIEWS[:definition].as('definition'),
+          RELATIONS[:relnatts].as('column_count'),
+          LAST_OPERATION[:statime].as('last_analyzed'),
+          Arel.sql(DISK_SIZE).as('disk_size'),
+          Arel.sql(TABLE_TYPE).as('table_type')
       )
     end
   end
+
+  private
+
+  def create_import_event(params, user)
+    workspace = Workspace.find(params[:workspace_id])
+    dst_table = workspace.sandbox.datasets.find_by_name(params[:to_table]) unless params[:new_table].to_s == "true"
+    Events::DatasetImportCreated.by(user).add(
+        :workspace => workspace,
+        :source_dataset => self,
+        :dataset => dst_table,
+        :destination_table => params[:to_table]
+    )
+  end
+
 end
 
