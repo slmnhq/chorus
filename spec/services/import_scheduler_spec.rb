@@ -2,8 +2,23 @@ require 'spec_helper'
 
 describe ImportScheduler do
   describe ".run" do
-    let(:start_time) {Time.local(2012, 8, 22, 11, 0).to_datetime}
-    let(:import_schedule) { import_schedules(:pending_import_schedule) }
+    let(:start_time) { Time.local(2012, 8, 22, 11, 0).to_datetime }
+    let(:import_schedule) do
+      ImportSchedule.create!(
+          {:start_datetime => start_time,
+           :end_date => Date.parse("2012-08-25"),
+           :last_scheduled_at => nil,
+           :frequency => 'daily',
+           :user => users(:bob),
+           :sample_count => 1,
+           :truncate => true,
+           :workspace => workspaces(:bob_public),
+           :dataset_import_created_event_id => 'dataset-import-created-event-id',
+           :source_dataset => datasets(:bobs_table),
+           :to_table => 'destination-table'
+          },
+          :without_protection => true)
+    end
 
     def expect_qc_enqueue
       mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
@@ -15,6 +30,7 @@ describe ImportScheduler do
           import.truncate.should == import_schedule.truncate
           import.user_id.should == import_schedule.user_id
           import.sample_count.should == import_schedule.sample_count
+          import.dataset_import_created_event_id.should == import_schedule.dataset_import_created_event_id
         end
       end
     end
