@@ -18,7 +18,7 @@ cat << EOF
 usage: $0 options
 
   -s    legacy sql dump
-  -w    workfile data directory (relative to CHORUS_HOME)
+  -w    workfile data directory (absolute)
 
 EOF
 }
@@ -62,9 +62,6 @@ psql -p 8543 chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate
 pg_dump --ignore-version -p 8543 chorus_tmp_migrate | psql -p 8543 chorus_rails_$RAILS_ENV > /dev/null
 
 # running the migration
-
-# Resolve relative path
-WORKFILE_DIR="$CHORUS_HOME/$WORKFILE_DIR"
 
 cd $CHORUS_HOME
 echo Using Chorus 2.1 sql dump: $SQL_DUMP
