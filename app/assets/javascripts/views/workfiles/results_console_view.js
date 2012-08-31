@@ -218,8 +218,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
             enableResize: this.options.enableResize,
-            enableExpander: this.options.enableExpander,
-            hasResults: this.model && this.model.hasResults()
+            enableExpander: this.options.enableExpander
         }
     }
 });

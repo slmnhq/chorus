@@ -22,18 +22,18 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         it("does not display the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
-        })
+        });
 
         it("displays save to csv file download link", function() {
             expect(this.view.$("a.download_csv")).toExist();
-        })
+        });
 
         it("hides the bottom gutter", function() {
             expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
         });
 
         it("displays the default title", function() {
-            expect(this.view.$("h1").text().trim()).toMatchTranslation("results_console_view.title")
+            expect(this.view.$("h1").text().trim()).toMatchTranslation("results_console_view.title");
         });
 
         context("with a title", function() {
@@ -43,8 +43,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
 
             it("displays the supplied title", function() {
-                expect(this.view.$("h1").text().trim()).toMatchTranslation("test.mouse")
-            })
+                expect(this.view.$("h1").text().trim()).toMatchTranslation("test.mouse");
+            });
         });
 
         context("when the close button is enabled'", function() {
@@ -65,8 +65,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
 
             it("hides the minimize and maximize links", function() {
-                expect(this.view.$("a.minimize")).toHaveClass('hidden')
-                expect(this.view.$("a.maximize")).toHaveClass('hidden')
+                expect(this.view.$("a.minimize")).toHaveClass('hidden');
+                expect(this.view.$("a.maximize")).toHaveClass('hidden');
             });
         });
 
@@ -79,8 +79,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             it("hides the expander", function() {
                 expect(this.view.$(".expander_button")).not.toExist();
             });
-        })
-    })
+        });
+    });
 
     describe("event handling", function() {
         beforeEach(function() {
@@ -93,7 +93,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             beforeEach(function() {
                 this.view.options.enableClose = true;
                 this.view.render();
-                this.view.$(".controls").removeClass("hidden")
+                this.view.$(".controls").removeClass("hidden");
 
                 spyOn(chorus.PageEvents, "broadcast");
                 this.view.$("a.close").click();
@@ -308,7 +308,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         this.task = new chorus.models.DataPreviewTask({});
                         this.view.execute(this.task);
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                        chorus.PageEvents.broadcast("file:executionStarted")
+                        chorus.PageEvents.broadcast("file:executionStarted");
                     });
 
                     it("hides the gutter", function() {
@@ -324,22 +324,22 @@ describe("chorus.views.ResultsConsoleView", function() {
             function itRemovesExecutionUI(shouldCancelTimers) {
                 it("removes the executing class", function() {
                     expect(this.view.$(".right")).not.toHaveClass("executing");
-                })
+                });
 
                 it("hides the spinner", function() {
                     expect(this.view.$(".spinner")).toHaveClass("hidden");
                     expect(this.view.$(".spinner").isLoading()).toBeFalsy();
-                })
+                });
 
                 if (shouldCancelTimers) {
                     it("stops updating the elapsed time", function() {
                         expect(window.clearInterval).toHaveBeenCalled();
-                    })
+                    });
                 }
 
                 it("clears timer ids", function() {
                     expect(this.view.elapsedTimer).toBeUndefined();
-                })
+                });
             }
 
             function itShowsExecutionResults() {
@@ -412,7 +412,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     it("recalculates scrolling", function() {
                         expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                    })
+                    });
 
                     specify("the expander button arrow points up", function() {
                         expect(this.view.$(".arrow")).toHaveClass("up");
@@ -444,7 +444,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                         it("recalculates scrolling", function() {
                             expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                        })
+                        });
 
 
                         specify("the expander button arrow points up", function() {
@@ -456,7 +456,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.view.$(".data_table").css("height")).not.toBe("777px");
                         });
 
-                    })
+                    });
                 });
 
                 describe("getDesiredDataTableHeight", function() {
@@ -505,7 +505,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                                 columnData: JSON.stringify(this.view.resource.getColumns()),
                                 rowsData: JSON.stringify(this.view.resource.getRows()),
                                 datasetName: this.view.resource.name(),
-                                workspaceId: this.view.resource.get("workspaceId")
+                                workspaceId: this.view.resource.get("workspaceId");
                             }
                             , "post");
                         });
@@ -517,7 +517,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 describe("clicking the expander arrow when it points up", function() {
                     beforeEach(function() {
                         this.view.$(".arrow").click();
-                    })
+                    });
 
                     it("collapses the result table", function() {
                         expect(this.view.$(".controls")).toHaveClass("collapsed");
@@ -525,44 +525,44 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
                         expect(this.view.$('.data_table').css("height")).toBe("0px");
-                    })
+                    });
 
                     it("makes the arrow point down", function() {
                         expect(this.view.$(".arrow")).not.toHaveClass("up");
                         expect(this.view.$(".arrow")).toHaveClass("down");
                         expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                    })
+                    });
 
                     it("hides the minimize/maximize links", function() {
                         expect(this.view.$("a.minimize")).toHaveClass("hidden");
                         expect(this.view.$("a.maximize")).toHaveClass("hidden");
-                    })
+                    });
 
                     describe("clicking the arrow when it points down", function() {
                         beforeEach(function() {
                             this.view.$(".arrow").click();
-                        })
+                        });
                         it("restores the result table", function() {
                             expect(this.view.$(".controls")).not.toHaveClass("collapsed");
                             expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
                             expect(this.view.$('.result_table')).toHaveClass(tableShouldHaveClass);
                             expect(this.view.$('.result_table')).not.toHaveClass(tableShouldNotHaveClass);
-                        })
+                        });
 
                         it("makes the arrow point up", function() {
                             expect(this.view.$(".arrow")).toHaveClass("up");
                             expect(this.view.$(".arrow")).not.toHaveClass("down");
                             expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                        })
+                        });
 
                         it("restores the minimize/maximize link", function() {
                             var selector1 = "." + tableShouldHaveClass.slice(0, -1);
                             var selector2 = "." + tableShouldNotHaveClass.slice(0, -1);
-                            expect(this.view.$(selector1)).toHaveClass("hidden")
-                            expect(this.view.$(selector2)).not.toHaveClass("hidden")
-                        })
+                            expect(this.view.$(selector1)).toHaveClass("hidden");
+                            expect(this.view.$(selector2)).not.toHaveClass("hidden");
+                        });
                     });
-                })
+                });
             }
         });
 
@@ -633,4 +633,4 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
         });
     });
-})
+});
