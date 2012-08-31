@@ -66,4 +66,5 @@ end
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
   gem 'mizuno', :github => "pivotal-leopold/mizuno", :branch => '0.6.4_changes'
+  gem 'newrelic_rpm'
 end

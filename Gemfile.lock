@@ -166,6 +166,7 @@ GEM
     multi_json (1.3.6)
     mustache (0.99.4)
     net-ldap (0.3.1)
+    newrelic_rpm (3.4.1)
     nokogiri (1.5.5)
     nokogiri (1.5.5-java)
     paperclip (3.0.4)
@@ -313,6 +314,7 @@ DEPENDENCIES
   jruby-openssl
   mizuno!
   net-ldap
+  newrelic_rpm
   nokogiri
   paperclip (= 3.0.4)
   postgresql_cursor!
