@@ -153,10 +153,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         if (this.isChorusView()) {
             return new chorus.models.ChorusViewPreviewTask({
                 query: this.query(),
-                workspaceId: this.get("workspace").id,
-                instanceId: this.instance().id,
-                databaseName: this.database().name(),
-                schemaName: this.schema().name(),
+                schemaId: this.schema().id,
                 objectName: this.name()
             });
         } else {

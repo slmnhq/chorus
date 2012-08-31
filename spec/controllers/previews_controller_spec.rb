@@ -72,7 +72,11 @@ describe PreviewsController do
     it "returns the results of the sql" do
       mock(SqlExecutor).execute_sql(schema, account, check_id, query) { SqlResult.new }
 
-      post :preview_sql, :schema_id => schema.id, :query => query, :check_id => check_id
+      post :preview_sql, :task => {
+          :schema_id => schema.id,
+          :query => query,
+          :check_id => check_id
+      }
 
       response.code.should == '200'
       decoded_response.columns.should_not be_nil
