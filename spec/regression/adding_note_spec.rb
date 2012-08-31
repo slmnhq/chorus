@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper.rb')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "creating a note on the hadoop file" do
 

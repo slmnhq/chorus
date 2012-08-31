@@ -37,6 +37,7 @@ app/assets/javascripts/environment.js
 
 # Ignore generated fixtures
 /spec/fixtures/*.yml
+/spec/integration/fixtures/*.yml
 /spec/javascripts/fixtures/rspec
 
 # Ignore ctags file

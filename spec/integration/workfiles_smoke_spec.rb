@@ -1,80 +1,88 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "add a workfile" do
+describe "Workfiles" do
 
-  it "creates a simple workfile" do
-    login('edcadmin', 'secret')
-    create_valid_workspace
-    create_valid_workfile
-  end
+  let(:workspace) { workspaces(:bob_public) }
 
-  it "uploads a workfile from the local system" do
-    login('edcadmin', 'secret')
-    create_valid_workspace
-    click_link "Work Files"
-    wait_for_ajax
-    click_button("Upload File")
-    wait_for_ajax
-    within_modal do
-      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+  describe "add a workfile" do
+    it "creates a simple workfile" do
+      login(users(:admin))
+      visit("#/workspaces/#{workspace.id}")
+      wait_for_ajax
+
+      click_link "Work Files"
+      wait_for_ajax
+      click_button "Create SQL File"
+      wf_name = "sql_wf_new"
+      within_modal do
+        fill_in 'fileName', :with => wf_name
+        click_button "Add SQL File"
+        wait_for_ajax
+      end
+      page.should have_content (wf_name)
+      workspace.workfiles.find_by_file_name("#{wf_name}.sql").should_not be_nil
+    end
+
+    it "uploads a workfile from the local system" do
+      login(users(:admin))
+      visit("#/workspaces/#{workspace.id}")
+      wait_for_ajax
+
+      click_link "Work Files"
+      wait_for_ajax
       click_button("Upload File")
-      wait_for_ajax
+      within_modal do
+        attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+        click_button("Upload File")
+        wait_for_ajax
+      end
+      click_link "Work Files"
+      page.should have_content "some.txt"
+      workspace.workfiles.find_by_file_name("some.txt").should_not be_nil
     end
-    click_link "Work Files"
-    page.should have_content "some.txt"
-  end
-end
-
-describe "Deleting workfiles" do
-
-  it "deletes an uploaded file from the show page" do
-    login('edcadmin', 'secret')
-    create_valid_workspace(:name => "workfile_delete")
-    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
-    click_link("Work Files")
-    click_button("Upload File")
-    within_modal do
-      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
-      click_button("Upload File")
-      wait_for_ajax
-    end
-    click_link("Work Files")
-    page.should have_content("some.txt")
-    click_link "some.txt"
-    click_link "Delete"
-
-    within_modal do
-      click_submit_button
-    end
-    page.should_not have_content("some.txt")
-  end
-end
-
-describe "workfiles list page" do
-  before(:all) do
-    login('edcadmin', 'secret')
-    create_valid_workspace(:name => "WorkfileListWorkspace")
-    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
-    create_valid_workfile({:name => "wf4"})
-    create_valid_workfile({:name => "wf1"})
   end
 
-  describe "Lists the work files" do
-    before(:each) do
-      login('edcadmin', 'secret')
-      workspace_id = Workspace.find_by_name("WorkfileListWorkspace").id
-      visit("#/workspaces/#{workspace_id}/workfiles")
+  describe "Deleting workfiles" do
+    let(:workfile) { workfiles(:'sql.sql') }
+
+    it "deletes an uploaded file from the show page" do
+      login(users(:admin))
+      visit("#/workspaces/#{workspace.id}")
       wait_for_ajax
+
+      click_link("Work Files")
+      wait_for_ajax
+      click_link workfile.file_name
+      click_link "Delete"
+
+      within_modal do
+        click_button "Delete Workfile"
+      end
+      page.should_not have_content(workfile.file_name)
+      Workfile.find_by_id(workfile.id).should be_nil
     end
+  end
 
-    it "Lists the work files by updated date when selected" do
-      click_link("Alphabetically")
-      click_link("By Date")
-      wait_for_ajax
-      workfiles = page.all("li.workfile")
+  describe "workfiles list page" do
+    let(:workfile_first_by_date) { workspace.workfiles.order(:updated_at).first }
+    let(:workfile_last_by_date) { workspace.workfiles.order(:updated_at).last }
 
-      workfiles.first.text.should == "wf4.sql"
-      workfiles.last.text.should == "wf1.sql"
+    describe "Lists the work files" do
+      before(:each) do
+        login(users(:admin))
+        visit("#/workspaces/#{workspace.id}/workfiles")
+        wait_for_ajax
+      end
+
+      it "Lists the work files by updated date when selected" do
+        click_link("Alphabetically")
+        click_link("By Date")
+        wait_for_ajax
+        workfiles = page.all("li.workfile")
+
+        workfiles.first.text.should == workfile_first_by_date.file_name
+        workfiles.last.text.should == workfile_last_by_date.file_name
+      end
     end
   end
 end

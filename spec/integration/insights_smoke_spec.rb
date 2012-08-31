@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "creating a note on a workspace" do
+describe "Insights" do
 
-  it "clicks on the insights link on the home page" do
+  xit "clicks on the insights link on the home page" do
     login('edcadmin', 'secret')
     wait_for_ajax
     click_link "Insights"
@@ -10,7 +10,7 @@ describe "creating a note on a workspace" do
     wait_until {page.find(".title h1").text == "Insights"}
   end
 
-  it "creates an insight" do
+  xit "creates an insight" do
     login('edcadmin', 'secret')
     create_valid_workspace
     wait_until { page.find('a[data-dialog="InsightsNew"]').text == "Add an insight"}

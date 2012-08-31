@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 #This file has selenium tests   for creating a workfile and displaying it by type.
 #In addition it also has tests for resolving name conflict

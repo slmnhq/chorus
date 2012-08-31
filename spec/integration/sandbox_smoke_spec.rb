@@ -1,55 +1,36 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Create Sandbox" do
+describe "Sandbox" do
 
-  it "creates sandbox in a private workspace" do
-    login('edcadmin', 'secret')
-    inst_name = "Instance_gpdb42_sand"
-    create_gpdb_instance(:name => inst_name, :host => WEBPATH['gpdb_instance42_db']['gpdb_host'],
-    :port => WEBPATH['gpdb_instance42_db']['gpdb_port'])
-    go_to_workspace_page
-    create_valid_workspace(:name => "Private Workspace", :shared => false)
-    instance_id = Instance.find_by_name(inst_name).id
-#    add_sandbox(:inst_name => inst_name, :db_name => "ChorusAnalytics", :schema_name => "analytics")
+  let(:workspace) { workspaces(:alice_private) }
+  let(:instance) { GpdbIntegration.real_gpdb_instance }
+  let(:database) { instance.databases.find_by_name("ChorusAnalytics") }
+  let(:schema) { database.schemas.first }
 
-    click_link "Add a sandbox"
-    wait_for_ajax(5)
-    #instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
-    page.execute_script("$('.instance .select_container select').change();")
-    wait_for_ajax(5)
-    #database
-    page.execute_script("$('select[name=database]').selectmenu('value', '1')")
-    page.execute_script("$('.database .select_container select').change();")
-    wait_for_ajax(5)
-    #schema
-    page.execute_script("$('select[name=schema]').selectmenu('value', '1')")
-    page.execute_script("$('.schema .select_container select').change();")
-    click_submit_button
+  before do
+    login(users(:admin))
   end
 
-  it "creates sandbox in a public workspace" do
-    login('edcadmin', 'secret')
-    inst_name = "Instance_gpdb42_sand"
-    go_to_workspace_page
-    create_valid_workspace(:name => "Public Workspace")
-    instance_id = Instance.find_by_name(inst_name).id
-#    add_sandbox(:inst_name => inst_name, :db_name => "ChorusAnalytics", :schema_name => "analytics")
-
+  it "creates sandbox in workspace" do
+    visit("#/workspaces/#{workspace.id}")
     click_link "Add a sandbox"
-    wait_for_ajax(5)
-#instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance_id}')")
+    wait_for_ajax
+
+    #instance
+    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance.id}')")
     page.execute_script("$('.instance .select_container select').change();")
-    wait_for_ajax(5)
-#database
-    page.execute_script("$('select[name=database]').selectmenu('value', '1')")
+    wait_for_ajax
+    #database
+    page.execute_script("$('select[name=database]').selectmenu('value', '#{database.id}')")
     page.execute_script("$('.database .select_container select').change();")
-    wait_for_ajax(5)
-#schema
-    page.execute_script("$('select[name=schema]').selectmenu('value', '1')")
+    wait_for_ajax
+    #schema
+    page.execute_script("$('select[name=schema]').selectmenu('value', '#{schema.id}')")
     page.execute_script("$('.schema .select_container select').change();")
-    click_submit_button
+    click_button "Add Sandbox"
+    wait_for_ajax
+
+    workspace.reload.sandbox.should == schema
   end
 end
 

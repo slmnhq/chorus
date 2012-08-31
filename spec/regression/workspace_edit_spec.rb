@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "The workspace add/remove members dialog" do
   it "adds and removes a single member" do

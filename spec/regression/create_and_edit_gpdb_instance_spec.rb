@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe " add an instance " do
   before(:each) do
@@ -121,7 +121,7 @@ describe "Editing instance details" do
     wait_for_ajax
     logout
     login('credentials', 'secret')
-    go_to_gpdb_instance_page
+    go_to_instance_page
     wait_for_ajax
     page.find("li[data-greenplum-instance-id='#{credentials_id}']").click
     wait_for_ajax
@@ -153,7 +153,7 @@ describe "Editing instance details" do
   it "lets the user see the instance config info" do
     create_gpdb_instance(:name => "config", :shared => true)
     config_id = GpdbInstance.find_by_name("config").id
-    go_to_gpdb_instance_page
+    go_to_instance_page
     page.find("li[data-greenplum-instance-id='#{config_id}']").click
     within "#sidebar" do
       page.find("li[data-name='configuration']").click

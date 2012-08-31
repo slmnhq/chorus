@@ -1,64 +1,42 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "searches for instance name" do
-
-  xit "searches for instances" do
-
-    login('edcadmin', 'secret')
-    create_gpdb_instance(:name => "search_instance")
-    wait_for_ajax
-    page.execute_script("$('.chorus_search_container>input').val('search_instance');")
-    find('.chorus_search_container>input').native.send_keys(:return)
-    sleep(2)
-    page.should have_content "Search for"
-    page.should have_content "search_instance"
-
+describe "Search" do
+  before :all do
+    stub(GpdbColumn).columns_for.with_any_args {
+      []
+    }
+    Sunspot.searchable.each do |model|
+      model.solr_index(:batch_commit => false)
+    end
+    Sunspot.commit
   end
-end
 
-describe "searches for workspace name" do
-
-  xit "searches for workspaces" do
-    login('edcadmin', 'secret')
-    create_valid_workspace(:name => "search_workspace")
-    wait_for_ajax
-    page.execute_script("$('.chorus_search_container>input').val('search_workspace');")
-    find('.chorus_search_container>input').native.send_keys(:return)
-    sleep(2)
-    page.should have_content "Search for"
-    page.should have_content "search_workspace"
-
+  before do
+    login(users(:bob))
   end
-end
 
-describe "searches for workfile name" do
-
-  xit "searches for workspaces" do
-    login('edcadmin', 'secret')
-    create_valid_workspace(:name => "workspace", :shared => true)
-    wait_for_ajax
-    create_valid_workfile(:name => "search_workfile")
-    page.execute_script("$('.chorus_search_container>input').val('search_workfile.sql');")
-    find('.chorus_search_container>input').native.send_keys(:return)
-    sleep(2)
-    page.should have_content "Search for"
-    page.should have_content "search_workfile"
-
+  describe "global search" do
+    it "searches all types of objects" do
+      fill_in 'search_text', :with => 'bobsearch'
+      find('.chorus_search_container>input').native.send_keys(:return)
+      wait_for_ajax
+      page.find(".dataset_list").should have_content(datasets(:bobsearch_table).name)
+      found_user = users(:bob)
+      page.find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
+    end
   end
-end
 
-describe "searches for a user name" do
-
-  xit "searches for workspaces" do
-    login('edcadmin', 'secret')
-    create_valid_user(:first_name => "search", :last_name => "user")
-    wait_for_ajax
-    page.execute_script("$('.chorus_search_container>input').val('search user');")
-    find('.chorus_search_container>input').native.send_keys(:return)
-    wait_for_ajax
-    page.should have_content "Search for"
-    page.should have_content "search user"
-
+  describe "model specific search" do
+    it "searches for workspaces" do
+      fill_in 'search_text', :with => 'bobsearch'
+      find('.chorus_search_container>input').native.send_keys(:return)
+      wait_for_ajax
+      click_link 'All Results'
+      click_link 'Workspaces'
+      wait_for_ajax
+      current_route.should == "/search/all/workspace/bobsearch"
+      page.find(".workspace_list").should have_content(workspaces(:alice_public).name)
+    end
   end
-end
 
+end

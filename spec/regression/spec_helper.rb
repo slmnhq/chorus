@@ -1,15 +1,14 @@
-ENV["RAILS_ENV"] = 'integration'
-require File.expand_path("../../../config/environment", __FILE__)
-
-require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara-screenshot'
 require 'headless'
+require 'database_cleaner'
 require 'yaml'
 
 headless = Headless.new
 headless.start
 
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../../config/environment", __FILE__)
 
 Capybara.app = Rails.application
 Capybara.default_driver = :selenium
@@ -17,6 +16,10 @@ Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
 Capybara.server_boot_timeout = 100
 Capybara.save_and_open_page_path = ENV['WORKSPACE']
+
+DatabaseCleaner.strategy = :transaction
+DatabaseCleaner.clean_with :truncation
+load "#{Rails.root}/db/seeds.rb"
 
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
 
@@ -32,21 +35,22 @@ def wait_for_ajax(timeout = 10)
 end
 
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
-Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
-require "#{Rails.root}/spec/support/fixture_builder.rb"
-require "#{Rails.root}/spec/support/database_integration/setup_gpdb.rb"
+Dir[File.join(File.dirname(__FILE__), '..', 'integration', 'helpers', "**", "*")].each {|f| require f}
 
-RSpec.configure do |config|
-  config.mock_with :rr
-  config.fixture_path = "#{Rails.root}/spec/integration/fixtures"
-  config.use_transactional_fixtures = true
-  config.global_fixtures = :all
-  config.include Capybara::DSL
-  config.include Capybara::RSpecMatchers
+RSpec.configure do |c|
+  c.include Capybara::DSL
+  c.include Capybara::RSpecMatchers
 
-  config.include LoginHelpers
-  config.include CleditorHelpers
-  config.include GpdbIntegration
+  c.include LoginHelpers
+  c.include CleditorHelpers
 
-  Capybara.default_wait_time = 5
+  Capybara.default_wait_time = 120
+
+  c.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  c.after(:each) do
+    DatabaseCleaner.clean
+  end
 end

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "editing user profiles" do
   describe "editing your own profile" do

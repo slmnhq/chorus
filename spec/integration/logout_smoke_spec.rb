@@ -1,13 +1,11 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-adminlogin = WEBPATH['admin']['login']
-adminpassword = WEBPATH['admin']['password']
-
-describe "logging out" do
-  it "can log out" do
-    login(adminlogin, adminpassword)
+describe "Logout" do
+  it "logs the user out" do
+    login(users(:admin))
     page.find(WEBPATH['user_menu']['menu']).click
     page.find(WEBPATH['user_menu']['signout']).click
-    wait_until { current_route == "/login" }
+    wait_for_ajax
+    current_route.should == "/login"
   end
 end

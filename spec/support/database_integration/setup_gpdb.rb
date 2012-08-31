@@ -73,7 +73,7 @@ module GpdbIntegration
     config["account"]
   end
 
-  def refresh_chorus
+  def self.refresh_chorus
     account = GpdbIntegration.real_gpdb_account
     GpdbDatabase.refresh(account)
     database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
@@ -94,6 +94,10 @@ module GpdbIntegration
     Dataset.refresh(account, gpdb_schema_without_public_schema)
 
     account
+  end
+
+  def refresh_chorus
+    GpdbIntegration.refresh_chorus
   end
 
   def self.real_gpdb_account

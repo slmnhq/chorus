@@ -1,5 +1,6 @@
 module LoginHelpers
-  def login(username, password)
+  def login(userOrUsername, password = FixtureBuilder.password)
+    username = userOrUsername.is_a?(String) ? userOrUsername : userOrUsername.username
     visit(WEBPATH['login_route'])
     wait_for_ajax
     fill_in 'username', :with => username

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe " system generated activities " do
   before(:each) do
@@ -10,7 +10,7 @@ describe " system generated activities " do
     gpdb_instance_id = GpdbInstance.find_by_name("gpdb_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance gpdb_instance"
-    go_to_gpdb_instance_page
+    go_to_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin added a new instance gpdb_instance"
     go_to_user_list_page
@@ -29,7 +29,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin added a new instance #{name}"
 
-    go_to_gpdb_instance_page
+    go_to_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
 
     click_link "Edit Instance"
@@ -39,7 +39,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
 
-    go_to_gpdb_instance_page
+    go_to_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
 
@@ -60,7 +60,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoopchangename"
 
-    go_to_gpdb_instance_page
+    go_to_instance_page
     within(".instance_provider.hadoop_instance") do
       wait_for_ajax
       page.find("li[data-hadoop-instance-id='#{hadoop_id}']").click
@@ -86,7 +86,7 @@ describe " system generated activities " do
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoop_instance"
 
-    go_to_gpdb_instance_page
+    go_to_instance_page
     wait_for_ajax
     within(".instance_provider.hadoop_instance") do
       wait_for_ajax

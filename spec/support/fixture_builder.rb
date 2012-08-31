@@ -12,6 +12,8 @@ FixtureBuilder.configure do |fbuilder|
     record['file_name'].gsub(/\s+/, '_').downcase
   end
 
+  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{Rails.env}.yml"
+
   # now declare objects
   fbuilder.factory do
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
@@ -220,7 +222,6 @@ FixtureBuilder.configure do |fbuilder|
     Events::DatasetImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :source_dataset => bobs_table, :destination_table => 'other_table')
     Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => bobs_table)
     Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => bobs_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
-    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
     #NotesAttachment
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
@@ -232,5 +233,14 @@ FixtureBuilder.configure do |fbuilder|
                                                      :source_dataset_id => bobs_table.id, :to_table => 'destination-table'}, :without_protection => true)
 
     fbuilder.name :pending_import_schedule, pending_import_schedule
+
+    if Rails.env.integration?
+      puts "Refreshing chorus..."
+      GpdbIntegration.refresh_chorus
+      chorus_gpdb42_instance.refresh_databases
+      GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name("ChorusAnalytics"))
+    end
+
+    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 end

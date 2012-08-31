@@ -9,6 +9,6 @@ bundle install --binstubs=b/
 
 mkdir -p tmp/pids
 
-rm tmp/fixture_builder.yml
+rm tmp/fixture_builder*.yml
 
 b/rake db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"

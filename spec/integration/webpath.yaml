@@ -45,5 +45,9 @@ gpdb_instance42_db:
   gpdb_port: 5432
   gpdb_user: gpadmin
   gpdb_pass: secret
-#PivotalGPDB instances
+
 hadoop_instance_db:
+  host: chorus-gphd11.sf.pivotallabs.com
+  port: 8020
+  username: hadoop
+  group_list: hadoop

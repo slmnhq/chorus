@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 #This file has different actions that can be performed on workfile. The tests include
 #copying a workfile to another workspace

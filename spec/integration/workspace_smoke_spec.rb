@@ -1,40 +1,53 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Create workspaces" do
-
-  it "creates a private workspace" do
-    login('edcadmin', 'secret')
-    go_to_workspace_page
-    create_valid_workspace(:name => "Private Workspace", :shared => false)
-    create_valid_user(:username => "private")
-    logout
-    login('private','secret')
-    go_to_workspace_page
-    page.should_not have_content ("Private Workspace")
+describe "Workspaces" do
+  before do
+    login(users(:admin))
   end
 
-  it "creates a public workspace" do
-    login('edcadmin', 'secret')
-    create_valid_workspace
+  describe "Create workspaces" do
+    it "creates a private workspace" do
+      visit('#/workspaces')
+      click_button "Create Workspace"
+      within_modal do
+        fill_in 'name', :with => "New Workspace"
+        uncheck "Make this workspace publicly available"
+        click_button "Create Workspace"
+      end
+      click_link "Dismiss the workspace quick start guide"
+      logout
+      login(users(:alice))
+      visit('#/workspaces')
+      page.should_not have_content ("Private Workspace")
+    end
+
+    it "creates a public workspace" do
+      visit('#/workspaces')
+      click_button "Create Workspace"
+      within_modal do
+        fill_in 'name', :with => "New Workspace"
+        click_button "Create Workspace"
+      end
+      click_link "Dismiss the workspace quick start guide"
+      Workspace.find_by_name("New Workspace").should_not be_nil
+    end
+  end
+
+  describe "Delete a workspace" do
+    let(:workspace) { workspaces(:bob_public) }
+
+    xit "deletes the workspace" do
+      visit("#/workspaces/#{workspace.id}")
+      click_link "Delete this Workspace"
+      wait_until { page.has_selector?(".submit") }
+      find(".submit").click
+      wait_for_ajax
+
+      visit('/#/workspaces')
+      wait_for_ajax
+      page.execute_script("$('.popup').click()")
+      click_link("All Workspaces")
+      within(".workspace_list") { page.should_not have_content(workspace.name) }
+    end
   end
 end
-
-describe "Delete a workspace" do
-
-  xit "deletes the workspace" do
-    login('edcadmin', 'secret')
-    workspace_name = "DeleteWorkspace"
-    create_valid_workspace(:name => workspace_name)
-    click_link "Delete this Workspace"
-    wait_until { page.has_selector?(".submit") }
-    find(".submit").click
-
-    visit('/#/workspaces')
-    wait_until { current_route == '/#/workspaces' }
-    page.execute_script("$('.popup').click()")
-    click_link("All Workspaces")
-    within(".workspace_list") { page.should_not have_content(workspace_name) }
-  end
-end
-
-
