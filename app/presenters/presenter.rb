@@ -42,4 +42,8 @@ class Presenter
       "#{model.class.name}Presenter".constantize
     end
   end
+
+  def rendering_activities?
+    @options[:activity_stream]
+  end
 end

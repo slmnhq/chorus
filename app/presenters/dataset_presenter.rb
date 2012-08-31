@@ -6,8 +6,12 @@ class DatasetPresenter < Presenter
       :id => id,
       :type => thetype,
       :object_name => h(name),
-      :schema => present(schema)
+      :schema => schema_value
     }.merge(workspace_hash).merge(associated_workspaces_hash)
+  end
+
+  def schema_value
+    rendering_activities? ? {:id => model.schema_id } : present(schema)
   end
 
   def thetype
@@ -23,6 +27,7 @@ class DatasetPresenter < Presenter
   end
 
   def associated_workspaces_hash
+    return {:associated_workspaces => []} if rendering_activities?
     workspaces = bound_workspaces.map do |workspace|
       {:id => workspace.id, :name => workspace.name}
     end

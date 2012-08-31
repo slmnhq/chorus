@@ -8,7 +8,8 @@ describe DatasetPresenter, :type => :view do
 
   it_behaves_like "dataset presenter", :gpdb_table
   let(:workspace) { FactoryGirl.create :workspace }
-  let(:presenter) { described_class.new(dataset, view, {:workspace => workspace}) }
+  let(:presenter) { described_class.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
+  let(:activity_stream) { nil }
   let(:hash) { presenter.to_hash }
 
   describe ".associated_workspaces_hash" do
@@ -20,9 +21,29 @@ describe DatasetPresenter, :type => :view do
       hash[:associated_workspaces][0][:id].should == workspace.id
       hash[:associated_workspaces][0][:name].should == workspace.name
     end
+
+    context "when rendering an activity stream" do
+      let(:activity_stream) { true }
+
+      it "does not render any associated workspaces" do
+        hash[:associated_workspaces].should be_empty
+      end
+    end
   end
 
   describe "#to_hash" do
+    context "when rendering an activity stream" do
+      let(:workspace) { FactoryGirl.create :workspace }
+      let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
+      let(:schema) { FactoryGirl.create :gpdb_schema }
+      let(:activity_stream) { true }
+
+      it "renders only the schema id" do
+        hash[:schema][:id].should == schema.id
+        hash[:schema].keys.size.should == 1
+      end
+    end
+
     context "for a sandbox table" do
       let(:workspace) { FactoryGirl.create :workspace }
       let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
