@@ -48,8 +48,13 @@ Chorus::Application.routes.draw do
     resource :statistics, :only => :show
     resource :download, :only => :show, :controller => 'dataset_downloads'
     resource :chorus_view, :only => :create, :controller => 'chorus_views'
+
     member do
       post :import
+    end
+
+    collection do
+      post :preview_sql, :controller => 'previews'
     end
   end
 
