@@ -62,4 +62,21 @@ describe PreviewsController do
       response.code.should == '200'
     end
   end
+
+  describe "#preview_sql" do
+    let(:schema) { gpdb_schemas(:bobs_schema) }
+    let(:query) { "SELECT * FROM bobs_table;" }
+    let(:user) { users(:bob) }
+    let(:check_id) {'0.43214321' }
+
+    it "returns the results of the sql" do
+      mock(SqlExecutor).execute_sql(schema, account, check_id, query) { SqlResult.new }
+
+      post :preview_sql, :schema_id => schema.id, :query => query, :check_id => check_id
+
+      response.code.should == '200'
+      decoded_response.columns.should_not be_nil
+      decoded_response.rows.should_not be_nil
+    end
+  end
 end

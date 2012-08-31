@@ -8,7 +8,7 @@ describe ActivityMigrator do
         stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
       end
 
-      ActivityMigrator.migrate
+      ActivityMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
     end
 
     context "migrating activities that reference datasets" do

@@ -29,7 +29,8 @@ class WorkfileMigrator < AbstractMigrator
       [Workfile]
     end
 
-    def migrate
+    def migrate(options = {})
+      raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options['workfile_path']
       prerequisites
 
       #TODO deal with latest_workfile_version_id, content_type
@@ -131,10 +132,11 @@ class WorkfileMigrator < AbstractMigrator
               ON edc_workfile_version.workfile_id = edc_work_file.id
             WHERE edc_workfile_version.id = '#{workfile_version.legacy_id}';
           ").first
-          path =  LegacyFilePath.new(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["version_file_id"])
+          path =  LegacyFilePath.new(options['workfile_path'], "workfile", row["workspace_id"], row["version_file_id"])
           fake_file = FakeFileUpload.new(File.read(path.path))
           fake_file.original_filename = row['file_name']
           fake_file.content_type = row['mime_type']
+          fake_file.content_type = 'text/plain' if fake_file.size == 0 # workaround for empty images
           workfile_version.contents = fake_file
           workfile_version.save!
         end
@@ -150,7 +152,7 @@ class WorkfileMigrator < AbstractMigrator
               ON edc_workfile_draft.workfile_id = edc_work_file.id
             WHERE edc_workfile_draft.id = '#{workfile_draft.legacy_id}';
           ").first
-          path = LegacyFilePath.new(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", row["workspace_id"], row["draft_file_id"])
+          path = LegacyFilePath.new(options['workfile_path'], "workfile", row["workspace_id"], row["draft_file_id"])
           workfile_draft.content = StringIO.new(File.read(path.path))
           workfile_draft.save!
         end

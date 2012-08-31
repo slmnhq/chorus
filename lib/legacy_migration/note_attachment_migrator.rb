@@ -1,7 +1,7 @@
 class NoteAttachmentMigrator < AbstractMigrator
   class << self
-    def prerequisites
-      NoteMigrator.migrate
+    def prerequisites(options)
+      NoteMigrator.migrate(options)
       ensure_legacy_id :notes_workfiles
       ensure_legacy_id :datasets_notes
       ensure_legacy_id :note_attachments
@@ -12,8 +12,8 @@ class NoteAttachmentMigrator < AbstractMigrator
       ]
     end
 
-    def migrate
-      prerequisites
+    def migrate(options)
+      prerequisites(options)
       migrate_workfiles_attachment_on_notes
       migrate_dataset_attachment_on_notes
       migrate_desktop_attachment_on_notes

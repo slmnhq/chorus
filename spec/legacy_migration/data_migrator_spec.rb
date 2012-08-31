@@ -12,8 +12,8 @@ describe DataMigrator do
       mock.proxy(ImageMigrator).migrate.any_number_of_times
       mock.proxy(SandboxMigrator).migrate.any_number_of_times
       mock.proxy(AssociatedDatasetMigrator).migrate.any_number_of_times
-      mock.proxy(ActivityMigrator).migrate.any_number_of_times
-      mock.proxy(NoteMigrator).migrate.any_number_of_times
+      mock.proxy(ActivityMigrator).migrate.with(anything).any_number_of_times
+      mock.proxy(NoteMigrator).migrate.with(anything).any_number_of_times
 
       mock.proxy(ActivityMigrator).validate
       mock.proxy(AssociatedDatasetMigrator).validate
@@ -30,7 +30,7 @@ describe DataMigrator do
       mock.proxy(WorkspaceMigrator).validate
       
 
-      DataMigrator.migrate_all
+      DataMigrator.migrate_all(SPEC_WORKFILE_PATH)
     end
   end
 end

@@ -1,8 +1,8 @@
 class NoteMigrator < AbstractMigrator
   class << self
-    def prerequisites
+    def prerequisites(options)
       HdfsEntryMigrator.migrate
-      WorkfileMigrator.migrate
+      WorkfileMigrator.migrate(options)
       DatabaseObjectMigrator.migrate
       ensure_legacy_id :events
     end
@@ -19,8 +19,8 @@ class NoteMigrator < AbstractMigrator
       ]
     end
   
-    def migrate
-      prerequisites
+    def migrate(options)
+      prerequisites(options)
 
       migrate_notes_on_gpdb_instances
       migrate_notes_on_hadoop_instances

@@ -14,4 +14,11 @@ class PreviewsController < GpdbController
     SqlExecutor.cancel_query(dataset, instance_account, params[:id])
     head :ok
   end
+
+  def preview_sql
+    schema = GpdbSchema.find(params[:schema_id])
+    instance_account = authorized_gpdb_account(schema)
+    result = SqlExecutor.execute_sql(schema, instance_account, params[:check_id], params[:query])
+    present(result, :status => :ok)
+  end
 end

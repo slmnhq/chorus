@@ -1,13 +1,15 @@
 class DataMigrator
 
   # Only need to call the leaf nodes
-  def self.migrate_all
+  def self.migrate_all(workfile_path)
+    options = {'workfile_path' => workfile_path}
+
     InstanceAccountMigrator.migrate
     ImageMigrator.migrate
     SandboxMigrator.migrate
     AssociatedDatasetMigrator.migrate
-    ActivityMigrator.migrate
-    NoteMigrator.migrate
+    ActivityMigrator.migrate(options)
+    NoteAttachmentMigrator.migrate(options)
 
     # Note attachments
     # Note comments

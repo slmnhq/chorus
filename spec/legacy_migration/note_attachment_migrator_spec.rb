@@ -7,7 +7,7 @@ describe NoteAttachmentMigrator do
       stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
     end
 
-    NoteAttachmentMigrator.migrate
+    NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
   end
 
   describe ".migrate" do
@@ -65,21 +65,21 @@ describe NoteAttachmentMigrator do
 
     it "is idempotent for workfiles" do
       count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
-      NoteAttachmentMigrator.migrate
+      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       after_migration_count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
       after_migration_count.should == count
     end
 
     it "is idempotent for datasets" do
       count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
-      NoteAttachmentMigrator.migrate
+      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       after_migration_count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
       after_migration_count.should == count
     end
 
     it "is idempotent for desktop attachments" do
       count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
-      NoteAttachmentMigrator.migrate
+      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       after_migration_count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
       after_migration_count.should == count
     end

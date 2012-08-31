@@ -8,7 +8,7 @@ describe WorkfileMigrator do
         stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
       end
 
-      WorkfileMigrator.migrate
+      WorkfileMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
     end
 
     def should_be_equal_dates(date1, date2_str)

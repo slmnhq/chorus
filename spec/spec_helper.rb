@@ -88,10 +88,6 @@ Spork.prefork do
       Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
     end
 
-    Chorus::Application.configure do |config|
-      config.config.legacy_chorus_root_path = Rails.root + "system/legacy_workfiles"
-    end
-
     config.include FileHelper
     config.include FakeRelations
     config.include AuthHelper, :type => :controller

@@ -7,7 +7,6 @@ fi
 
 test "$RAILS_ENV" = "" && RAILS_ENV=production
 
-# system "rake db:test:prepare"
 dropdb -p 8543 chorus_tmp_migrate
 psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
 
