@@ -7,6 +7,7 @@ describe("chorus.models.HdfsEntry", function() {
         context("when entry is a directory", function() {
             beforeEach(function() {
                 this.model = new chorus.models.HdfsEntry({
+                   id: 10012,
                    hadoopInstance: {
                        id: 42
                    },
@@ -17,13 +18,14 @@ describe("chorus.models.HdfsEntry", function() {
             });
 
             it("is correct", function() {
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browse/data/a%25pct/%25foo%25");
+                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browse/" + this.model.id);
             });
         });
 
         context("when entry is a file", function() {
             beforeEach(function() {
                 this.model = new chorus.models.HdfsEntry({
+                    id: 10012,
                     hadoopInstance: {
                         id: '42'
                     },
@@ -33,12 +35,12 @@ describe("chorus.models.HdfsEntry", function() {
             });
 
             it("is correct", function() {
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/data/a%20space/%25foo%25");
+                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/" + this.model.id);
             });
 
             it("is correct when path is /", function() {
-                this.model.set({path: "/"})
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/%25foo%25");
+                this.model.set({path: "/"});
+                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/" + this.model.id);
             });
         });
     });
@@ -46,6 +48,7 @@ describe("chorus.models.HdfsEntry", function() {
     describe("#parent", function() {
         it("returns the entry's parent directory", function() {
             this.model = new chorus.models.HdfsEntry({
+               id: 10012,
                hadoopInstance: {
                    id: 10000
                },
@@ -63,13 +66,14 @@ describe("chorus.models.HdfsEntry", function() {
     describe("pathSegments", function() {
         beforeEach(function() {
             this.model = new chorus.models.HdfsEntry({
+                id: 10012,
                 hadoopInstance: {
                     id: 10000
                 },
                 path: "/foo/bar/%baz",
                 randomAttr: 'something',
                 name: "foo.csv"
-            })
+            });
 
             this.segments = this.model.pathSegments();
         });
@@ -88,7 +92,7 @@ describe("chorus.models.HdfsEntry", function() {
             var segment = this.segments[2];
             expect(segment.get('path')).toBe('/foo/bar');
             expect(segment.get('name')).toBe('%baz');
-            expect(segment.showUrl()).toContain("/foo/bar/%25baz")
+            expect(segment.showUrl()).toContain("10012");
         });
 
         it("maintains random attributes", function() {

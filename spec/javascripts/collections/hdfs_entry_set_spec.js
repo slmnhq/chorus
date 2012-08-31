@@ -7,7 +7,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
 
         it("has the right URL", function() {
-            expect(this.hdfsEntrySet.url()).toContain("/hadoop_instances/" + this.hdfsEntrySet.attributes.hadoopInstance.id + "/files/%2Fdata%2Fsomewhere");
+            expect(this.hdfsEntrySet.url()).toContain("/hadoop_instances/" + this.hdfsEntrySet.attributes.hadoopInstance.id + "/files/" + this.hdfsEntrySet.attributes.id);
         });
 
         describe("add", function() {
@@ -22,7 +22,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
                 var model = this.hdfsEntrySet.hdfsEntry();
                 expect(model).toBeA(chorus.models.HdfsEntry);
                 expect(model.get('name')).toBe('somewhere');
-                expect(model.get('path')).toBe('/data');
+                expect(model.get('path')).toBe('/data/somewhere');
                 expect(model.get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
                 expect(model.get('isDir')).toBeTruthy();
             });

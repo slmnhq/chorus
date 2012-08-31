@@ -511,6 +511,7 @@ beforeEach(function() {
         hdfsEntryDirJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
+                "id": id,
                 "name": "folder" + id,
                 "isDir": true,
                 "lastUpdatedStamp": "2012-02-24T10:28:42Z",
@@ -518,13 +519,15 @@ beforeEach(function() {
                 "count": 6,
                 "owner": "hadoop",
                 "group": "supergroup",
-                "permission": "rwxr-xr-x"
+                "permission": "rwxr-xr-x",
+                "ancestors": [{name: "foo", id: 1}]
             }, overrides);
         },
 
         hdfsEntryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
+                "id": id,
                 "name": "file" + id + ".sql",
                 "isDir": false,
                 "isBinary": false,
@@ -540,6 +543,7 @@ beforeEach(function() {
         hdfsEntryBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
+                "id": id,
                 "name": "file" + id + ".bin",
                 "isDir": false,
                 "isBinary": true,
@@ -555,6 +559,7 @@ beforeEach(function() {
         hdfsEntryUnknownIfBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
+                "id": id,
                 "name": "file" + id + ".???",
                 "isDir": false,
                 "isBinary": null,

@@ -3,11 +3,15 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     nameAttribute: 'name',
     entityType: "hdfs_file",
 
+    urlTemplate: function() {
+        return "hadoop_instances/{{hadoopInstance.id}}/files/{{id}}";
+    },
+
     showUrlTemplate: function() {
         if(this.get("isDir")) {
-            return "hadoop_instances/{{hadoopInstance.id}}/browse" + this.getPath() + "/{{encode name}}";
+            return "hadoop_instances/{{hadoopInstance.id}}/browse/{{id}}";
         } else {
-            return "hadoop_instances/{{hadoopInstance.id}}/browseFile" + this.getPath() + "/{{encode name}}";
+            return "hadoop_instances/{{hadoopInstance.id}}/browseFile/{{id}}";
         }
     },
 
@@ -26,10 +30,10 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     pathSegments: function() {
-        return _.map(this.get("path").split("/").slice(1), function(path_i, i, whole_path) {
-            var cur_path = "/" + whole_path.slice(0, i).join("/")
-            return this.clone().set({ name: path_i, path: cur_path, isDir: true })
-        }, this)
+        return _.map(this.get("ancestors"), function(ancestor) {
+            return new chorus.models.HdfsEntry(_.extend({isDir: true, hadoopInstance: this.get("hadoopInstance")}, ancestor));
+        }, this).reverse();
+
     },
 
     parent: function() {

@@ -313,6 +313,55 @@ describe HdfsEntry do
     end
   end
 
+  describe "#ancestors" do
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:root) {
+      FactoryGirl.build(
+          :hdfs_entry,
+          :hadoop_instance_id => hadoop_instance.id,
+          :path => '/',
+          :is_directory => true,
+          :modified_at => "2010-10-20 22:00:00",
+          :content_count => 1,
+          :id => 1
+      )}
+    context "when the hdfs_entry is root" do
+      it "should be an empty array" do
+        root.ancestors.should == []
+      end
+    end
+
+    context "when the hsfd_entry is not root" do
+      let(:dir) { FactoryGirl.build(
+          :hdfs_entry,
+          :hadoop_instance_id => hadoop_instance.id,
+          :path => '/foo',
+          :is_directory => true,
+          :modified_at => "2010-10-20 22:00:00",
+          :content_count => 1,
+          :parent => root,
+          :id => 2
+      )}
+
+      let(:entry) {FactoryGirl.build(
+          :hdfs_entry,
+          :hadoop_instance_id => hadoop_instance.id,
+          :path => '/foo/bar.csv',
+          :is_directory => false,
+          :modified_at => "2010-10-20 22:00:00",
+          :content_count => 0,
+          :parent => dir,
+          :id => 3
+      )}
+      it "returns the ids and names of all ancestors in order, root last" do
+        entry.ancestors.should == [
+            {:name => dir.name, :id => dir.id},
+            {:name => hadoop_instance.name, :id => root.id}
+        ]
+      end
+    end
+  end
+
   describe "#highlighted_attributes" do
     it "includes path in the highlighted attributes" do
       hdfs_entry = HdfsEntry.new({:path => "/foo.txt"}, :without_protection => true)

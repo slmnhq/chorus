@@ -39,6 +39,18 @@ class HdfsEntry < ActiveRecord::Base
     File.basename(File.dirname(path))
   end
 
+  def ancestors
+    #return @ancestors if @ancestors
+    @ancestors = []
+    if parent
+      puts "parent is #{parent.inspect}"
+      parent_name = parent.path == '/' ? hadoop_instance.name : parent.name
+      @ancestors << {:name => parent_name, :id => parent_id}
+      @ancestors += parent.ancestors
+    end
+    @ancestors
+  end
+
   def highlighted_attributes
     @highlighted_attributes.merge(:path => [highlighted_path])
   end
@@ -81,6 +93,10 @@ class HdfsEntry < ActiveRecord::Base
     end
 
     current_entries
+  end
+
+  def entries
+    HdfsEntry.list(path.chomp('/') + '/', hadoop_instance)
   end
 
   def file

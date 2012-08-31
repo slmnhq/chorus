@@ -15,7 +15,11 @@ describe HdfsEntryPresenter, :type => :view do
   let(:presenter) { HdfsEntryPresenter.new(entry, view) }
 
   describe "#to_hash" do
+
     let(:hash) { presenter.to_hash }
+    before do
+      mock(entry).ancestors {[{:name => "foo", :id => 1}]}
+    end
 
     it "includes the fields" do
       hash[:id].should == entry.id
@@ -26,6 +30,7 @@ describe HdfsEntryPresenter, :type => :view do
       hash[:is_dir].should be_true
       hash[:count].should be(1)
       hash[:hadoop_instance].should == {:id => hadoop_instance.id, :name => hadoop_instance.name }
+      hash[:ancestors].should == [{:name => "foo", :id => 1}]
     end
   end
 end
