@@ -27,6 +27,7 @@ resource "Chorus Views" do
     required_parameters :id, :object_name, :schema_id, :workspace_id, :query
 
     scope_parameters :chorus_view, :all
+
     let(:id) { dataset_id }
     let(:workspace_id) { workspace.id }
     let(:object_name) {"MyChorusView"}
@@ -54,6 +55,8 @@ resource "Chorus Views" do
     parameter :schema_id, "Id of the corresponding schema"
     parameter :query, "Sql of the chorus view"
     parameter :check_id, "Unique token"
+
+    scope_parameters :task, :all
 
     required_parameters :schema_id, :query, :check_id
 

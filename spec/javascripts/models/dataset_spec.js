@@ -330,8 +330,7 @@ describe("chorus.models.Dataset", function() {
             beforeEach(function() {
                 this.dataset = rspecFixtures.workspaceDataset.chorusView({
                     query: "select * from hello_world",
-                    objectName: "my_chorusview",
-                    workspace: {id: "234", name: "abc"}
+                    objectName: "my_chorusview"
                 });
                 this.preview = this.dataset.preview();
             });
@@ -340,10 +339,7 @@ describe("chorus.models.Dataset", function() {
 
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
-                expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.dataset.instance().id);
-                expect(this.preview.get("databaseName")).toBe(this.dataset.database().name());
-                expect(this.preview.get("schemaName")).toBe(this.dataset.schema().name());
+                expect(this.preview.get("schemaId")).toBe(this.dataset.schema().get("id"));
                 expect(this.preview.get("query")).toBe("select * from hello_world");
             });
         });
@@ -352,8 +348,7 @@ describe("chorus.models.Dataset", function() {
             beforeEach(function() {
                 this.dataset = newFixtures.workspaceDataset.chorusViewSearchResult({
                     content: "select * from hello_world",
-                    objectName: "my_chorusview",
-                    workspace: {id: "234", name: "abc"}
+                    objectName: "my_chorusview"
                 });
                 this.dataset.set({ type: "CHORUS_VIEW" });
                 this.preview = this.dataset.preview();
@@ -363,11 +358,8 @@ describe("chorus.models.Dataset", function() {
 
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
-                expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.dataset.instance().id);
-                expect(this.preview.get("databaseName")).toBe(this.dataset.database().name());
-                expect(this.preview.get("schemaName")).toBe(this.dataset.schema().name());
                 expect(this.preview.get("query")).toBe("select * from hello_world");
+                expect(this.preview.get("schemaId")).toBe(this.dataset.schema().get("id"));
             });
         });
 

@@ -16,9 +16,10 @@ class PreviewsController < GpdbController
   end
 
   def preview_sql
-    schema = GpdbSchema.find(params[:schema_id])
+    task = params[:task]
+    schema = GpdbSchema.find(task[:schema_id])
     instance_account = authorized_gpdb_account(schema)
-    result = SqlExecutor.execute_sql(schema, instance_account, params[:check_id], params[:query])
+    result = SqlExecutor.execute_sql(schema, instance_account, task[:check_id], task[:query])
     present(result, :status => :ok)
   end
 end
