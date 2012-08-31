@@ -201,11 +201,11 @@ describe DatasetsController do
             Import.last.source_dataset.id == src_table.id
             response.should be_success
           end
-        end
 
-        it "makes a DATASET_IMPORT_CREATED event" do
-          expect { post :import, :id => src_table.to_param, :dataset_import => attributes
-          }.to change(Events::DatasetImportCreated, :count).by(1)
+          it "makes a DATASET_IMPORT_CREATED event" do
+            expect { post :import, :id => src_table.to_param, :dataset_import => attributes
+            }.to change(Events::DatasetImportCreated, :count).by(1)
+          end
         end
 
         it "throws an error if table does not exist" do
