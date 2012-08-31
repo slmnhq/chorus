@@ -4,7 +4,22 @@ describe EventPresenter, :type => :view do
   let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
 
   describe "#to_hash" do
-    subject { EventPresenter.new(event, view) }
+    subject { EventPresenter.new(event, view, options) }
+    let(:options) { {} }
+
+    context "when rendering the activity stream" do
+      let(:options) { {:activity_stream => true} }
+      let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table) ) }
+      let(:current_user) { users(:bob) }
+
+      it "does not render datasets with their schemas or associated workspaces" do
+        stub(view).current_user { current_user }
+        hash = subject.to_hash
+        hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
+        hash[:dataset][:schema].keys.size.should == 1
+        hash[:dataset][:associated_workspaces].should be_empty
+      end
+    end
 
     context "Non-note event" do
       let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => gpdb_instance) }

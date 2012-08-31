@@ -44,7 +44,7 @@ class EventPresenter < Presenter
   def targets_hash
     model.targets.reduce({}) do |hash, entry|
       name, model = entry
-      hash[name] = present(model)
+      hash[name] = present(model, @options)
       hash
     end
   end
@@ -58,7 +58,7 @@ class EventPresenter < Presenter
       end
       datasets = model.datasets
       datasets.each do |dataset|
-        model_hash = present(dataset, { :workspace => model.workspace })
+        model_hash = present(dataset, {:workspace => model.workspace}.merge(@options))
         model_hash.merge!({:workspace => model.workspace}) if model.workspace
         model_hash.merge!({:entity_type => 'dataset'} )
         hash << model_hash

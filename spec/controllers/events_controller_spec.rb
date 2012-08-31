@@ -96,7 +96,10 @@ describe EventsController do
       end
 
       it "presents the user's activities" do
-        mock_present { |models| models.should == [event] }
+        mock_present do |models,view,options|
+          models.should == [event]
+          options[:activity_stream].should be_true
+        end
         get :index, :entity_type => "dashboard"
         response.code.should == "200"
       end
