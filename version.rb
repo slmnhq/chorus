@@ -5,6 +5,6 @@ module Chorus
     SERVICE_PACK  = 0
     PATCH         = 0
 
-    STRING = [MAJOR, MINOR, SERVICE_PACK, PATCH].compact.join('.')
+    STRING = [MAJOR, MINOR, SERVICE_PACK, PATCH, ENV['BUILD_NUMBER']].compact.join('.')
   end
 end

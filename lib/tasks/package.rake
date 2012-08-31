@@ -100,7 +100,7 @@ module PackageMaker
     run "scp #{filename} #{host}:~"
     run "ssh #{host} 'echo \"#{path}\" > #{answers_file} && echo \"y\" >> #{answers_file} && echo \"#{postgres_build}\" >> #{answers_file}'"
     run "ssh #{host} 'cat /dev/null > #{path}/install.log'"
-    install_success = run "ssh #{host} 'cd ~ && #{ENV['FORCE_DEPLOY'] ? "FORCE_DEPLOY=true" : ""} ./#{filename} #{answers_file}'"
+    install_success = run "ssh #{host} 'cd ~ && ./#{filename} #{answers_file}'"
     run "scp #{host}:#{path}/install.log install.log"
 
     run "ssh #{host} 'cd ~; rm #{filename}'"

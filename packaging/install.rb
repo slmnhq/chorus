@@ -12,12 +12,14 @@ class Install
   InvalidVersion = Class.new(StandardError)
   UpgradeCancelled = Class.new(StandardError)
   InvalidOperatingSystem = Class.new(StandardError)
+  AlreadyInstalled = Class.new(StandardError)
 
   attr_accessor :destination_path, :database_password, :database_user, :do_upgrade
 
   DEFAULT_PATH = "/opt/chorus"
 
   MESSAGES = {
+      already_installed: "This version is already installed",
       select_os: "Could not detect your Linux version. Please select one of the following:",
       select_redhat_55: "[1] - RedHat (CentOS/RHEL) 5.5 or compatible",
       select_redhat_62: "[2] - RedHat (CentOS/RHEL) 6.2 or compatible",
@@ -43,7 +45,7 @@ class Install
   def prompt(message)
     puts message
   end
-  
+
   def log(message)
     puts message
     File.open("install.log", "a") { |f| f.puts message }
@@ -94,8 +96,11 @@ class Install
         a.split('.').map(&:to_i) <=> b.split('.').map(&:to_i)
       end
 
-      if (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i)) >= 0 && !ENV['FORCE_DEPLOY']
-        raise(InvalidVersion.new("Version #{version} is older than currently installed version (#{most_recent_installed_version})."))
+      version_comparison = (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i))
+      if version_comparison > 0
+        raise InvalidVersion, "Version #{version} is older than currently installed version (#{most_recent_installed_version})."
+      elsif version_comparison == 0
+        raise AlreadyInstalled
       end
 
       user_upgrade_input = prompt_or_default('y') do
@@ -357,6 +362,9 @@ if __FILE__ == $0
     installer.remove_and_restart_previous!
     puts e.message
     exit 1
+  rescue Install::AlreadyInstalled
+    puts Install::MESSAGES[:already_installed]
+    exit 0
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts Install::MESSAGES[:installation_failed_with_reason] % e.message

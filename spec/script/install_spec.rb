@@ -12,7 +12,6 @@ describe "Install" do
   let(:silent) { false }
   before do
     ENV['CHORUS_HOME'] = nil
-    ENV['FORCE_DEPLOY'] = nil
     stub(installer).prompt(anything)
   end
 
@@ -128,20 +127,13 @@ describe "Install" do
         it "should notify the user and fail" do
           expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
         end
-
-        context "when FORCE_DEPLOY is true" do
-          it 'does not fail' do
-            ENV['FORCE_DEPLOY'] = 'true'
-            expect { installer.get_destination_path }.to_not raise_error(Install::InvalidVersion)
-          end
-        end
       end
 
       context "When the installed version is equal" do
         let(:installed_versions) { ["2.2.0.1-8840ae71c"] }
 
         it "should notify the user and fail" do
-          expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
+          expect { installer.get_destination_path }.to raise_error(Install::AlreadyInstalled)
         end
       end
     end
