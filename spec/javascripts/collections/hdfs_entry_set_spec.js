@@ -2,17 +2,15 @@ describe("chorus.collections.HdfsEntrySet", function() {
     context("when the collection has path and instance set", function() {
         beforeEach(function() {
             this.hdfsEntrySet = fixtures.hdfsEntrySet(null, {
-                path: '/data/somewhere'
+                path: '/data/somewhere',
+                hadoopInstance: {id: 222},
+                id: 11
             });
         });
 
-        it("has the right URL", function() {
-            expect(this.hdfsEntrySet.url()).toContain("/hadoop_instances/" + this.hdfsEntrySet.attributes.hadoopInstance.id + "/files/" + this.hdfsEntrySet.attributes.id);
-        });
 
         describe("add", function() {
             it("sets the path and instance on the added entries", function() {
-                expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/somewhere');
                 expect(this.hdfsEntrySet.at(0).get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
             })
         });
@@ -21,9 +19,8 @@ describe("chorus.collections.HdfsEntrySet", function() {
             it("returns a HdfsEntry representing the location of the Set", function() {
                 var model = this.hdfsEntrySet.hdfsEntry();
                 expect(model).toBeA(chorus.models.HdfsEntry);
-                expect(model.get('name')).toBe('somewhere');
-                expect(model.get('path')).toBe('/data/somewhere');
-                expect(model.get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
+                expect(model.id).toBe(11);
+                expect(model.get('hadoopInstance')).toEqual({id: 222});
                 expect(model.get('isDir')).toBeTruthy();
             });
         });

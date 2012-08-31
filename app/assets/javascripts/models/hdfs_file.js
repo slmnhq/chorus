@@ -12,16 +12,15 @@ chorus.models.HdfsFile = chorus.models.Base.extend({
     },
 
     showUrlTemplate: function() {
-        return "hadoop_instances/" + this.get('hadoopInstance').id + "/browseFile/" + this.getPath();
+        return "hadoop_instances/" + this.get('hadoopInstance').id + "/browseFile/{{id}}";
     },
 
     getPath: function() {
-        var encodedPath = encodeURIComponent((this.get("path") == "/") ? "" : this.get("path"));
-        return encodedPath.replace(/%2F/g, "/").replace(/^\//, "");
+        return this.get("path") || "";
     },
 
     urlTemplate: function() {
-        return "hadoop_instances/" + this.get('hadoopInstance').id + "/contents/" + encodeURIComponent(this.get("path"));
+        return "hadoop_instances/" + this.get('hadoopInstance').id + "/files/{{id}}";
     },
 
     fileNameFromPath: function() {

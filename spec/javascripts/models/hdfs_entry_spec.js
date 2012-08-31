@@ -53,13 +53,13 @@ describe("chorus.models.HdfsEntry", function() {
                    id: 10000
                },
                path: "/imports/july/21",
-               name: "injuries.csv"
-           })
+               name: "injuries.csv",
+               ancestors: [{id: 2, name: "parent"}, {id: 3, name: "grandparent"}]
+
+           });
 
             var parent = this.model.parent();
-
-            expect(parent.name()).toBe("21");
-            expect(parent.get("path")).toBe("/imports/july");
+            expect(parent.get("name")).toBe("parent");
         });
     });
 
@@ -71,32 +71,26 @@ describe("chorus.models.HdfsEntry", function() {
                     id: 10000
                 },
                 path: "/foo/bar/%baz",
-                randomAttr: 'something',
-                name: "foo.csv"
+                name: "foo.csv",
+                ancestors: [{id: 2, name: "parent"}, {id: 3, name: "grandparent"}, {id: 4, name: "root"}]
+
             });
 
             this.segments = this.model.pathSegments();
         });
 
-        it("returns one segment for each path segment", function() {
+        it("returns one segment for each ancestor", function() {
             expect(this.segments.length).toBe(3);
         });
 
-        it("the first segment represents the first entry", function() {
+        it("the first segment represents the last ancestor", function() {
             var segment = this.segments[0];
-            expect(segment.get('path')).toBe('/');
-            expect(segment.get('name')).toBe('foo');
+            expect(segment.get('name')).toBe('root');
         });
 
-        it("the last segment represents the last entry", function() {
+        it("the last segment represents the first ancestor", function() {
             var segment = this.segments[2];
-            expect(segment.get('path')).toBe('/foo/bar');
-            expect(segment.get('name')).toBe('%baz');
-            expect(segment.showUrl()).toContain("10012");
-        });
-
-        it("maintains random attributes", function() {
-            expect(this.segments[0].get('randomAttr')).toEqual(this.model.get('randomAttr'));
+            expect(segment.get('name')).toBe('parent');
         });
 
         it("sets isDir to true for all segments", function() {
@@ -183,5 +177,17 @@ describe("chorus.models.HdfsEntry", function() {
                 expect(model.getFullAbsolutePath()).toEqual("/workfiles/file.sql");
             });
         });
+    });
+
+    it("has the correct iconUrl", function() {
+        var model = new chorus.models.HdfsEntry({
+            hadoopInstance: {
+                id: 3
+            },
+            is_dir: false,
+            path: "/workfiles/file.txt",
+            name: "file.txt"
+        });
+        expect(model.iconUrl()).toBe("/images/workfiles/large/txt.png")
     });
 });

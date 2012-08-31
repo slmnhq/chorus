@@ -33,7 +33,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
-            fileName: this.model.fileNameFromPath(),
+            fileName: this.model.get("name"),
             entityId: this.getEntityId(),
             lastUpdated: t("hdfs.last_updated", { when: chorus.helpers.relativeTimestamp(this.model.get('lastUpdatedStamp')) })
         }
@@ -47,7 +47,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         e && e.preventDefault();
 
         var csvOptions = {
-            tableName: this.model.fileNameFromPath(),
+            tableName: this.model.get("name"),
             contents: this.model.get('contents')
         }
         

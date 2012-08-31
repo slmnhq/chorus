@@ -5,7 +5,7 @@ chorus.views.HdfsShowFileHeader = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             iconUrl: this.model.iconUrl(),
-            fileName: this.model.fileNameFromPath()
+            fileName: this.model.get("name")
         }
     }
 });

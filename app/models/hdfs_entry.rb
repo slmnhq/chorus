@@ -99,6 +99,11 @@ class HdfsEntry < ActiveRecord::Base
     HdfsEntry.list(path.chomp('/') + '/', hadoop_instance)
   end
 
+  def contents
+    hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
+    hdfs_query.show(path)
+  end
+
   def file
     unless is_directory?
       HdfsFile.new(path, hadoop_instance, {

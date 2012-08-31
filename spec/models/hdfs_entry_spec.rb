@@ -362,6 +362,20 @@ describe HdfsEntry do
     end
   end
 
+  describe "#contents" do
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:entry) { HdfsEntry.new(:path => "/file.txt", :hadoop_instance_id => hadoop_instance.id) }
+    before do
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).show('/file.txt') { ["content"] }
+      end
+    end
+
+    it "retrieves file content from the query service" do
+      entry.contents.should == ['content']
+    end
+  end
+
   describe "#highlighted_attributes" do
     it "includes path in the highlighted attributes" do
       hdfs_entry = HdfsEntry.new({:path => "/foo.txt"}, :without_protection => true)

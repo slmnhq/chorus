@@ -42,5 +42,11 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     getHadoopInstance: function() {
         return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
+    },
+
+    iconUrl: function() {
+        var name = this.get("name") || ""
+        return chorus.urlHelpers.fileIconUrl(_.last(name.split(".")));
     }
+
 });

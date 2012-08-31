@@ -1,17 +1,22 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
         this.hadoopInstance = rspecFixtures.hadoopInstance({id: 1234, name: "MyInstance"});
-        this.file = rspecFixtures.hdfsFile({ path: "/my/path/my file.txt" });
-        this.page = new chorus.pages.HdfsShowFilePage("1234", "my/path/my file.txt");
+        this.file = rspecFixtures.hdfsFile({
+            id: 789,
+            path: "/my/path/my file.txt",
+            name: "my file.txt",
+            ancestors: [{id: 10, name: "path"}, {id: 11, name: "my"}, {id: 12, name: "MyInstance"}],
+            contents: ["first line", "second line"]
+        });
+        this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
     });
 
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("hadoop_instances")
     });
 
-    it("constructs an HDFS file model with the right instance id and path", function() {
-        expect(this.page.model).toBeA(chorus.models.HdfsFile);
-        expect(this.page.model.get("path")).toBe("/my/path/my file.txt");
+    it("constructs an HDFS file model with the right instance id", function() {
+        expect(this.page.model).toBeA(chorus.models.HdfsEntry);
         expect(this.page.model.get("hadoopInstance").id).toBe("1234");
     });
 
@@ -73,32 +78,43 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
     describe("when the path is long", function() {
         beforeEach(function() {
-            spyOn(chorus, "menu")
+            spyOn(chorus, "menu");
 
-            this.page = new chorus.pages.HdfsShowFilePage("1234", "start/m1/m2/m3/end");
+            this.server.completeFetchFor(this.page.model,
+                {
+                    path: "/start/m1/m2/m3/end",
+                    ancestors: [{id: 11, name: "end"},
+                        {id: 22, name: "m3"},
+                        {id: 33, name: "m2"},
+                        {id: 44, name: "m1"},
+                        {id: 55, name: "start"}
+                    ],
+                    name: "foo.csv",
+                    contents: ["hello"]
+                }
+            );
 
-            this.server.completeFetchFor(this.page.model, this.file);
             this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
         });
 
-        it("constructs the breadcrumb links correctly", function() {
-            var options = chorus.menu.mostRecentCall.args[1]
+        it("constructs the breadcrumb links correctly", function () {
+            var options = chorus.menu.mostRecentCall.args[1];
 
             var $content = $(options.content);
 
             expect($content.find("a").length).toBe(5);
 
-            expect($content.find("a").eq(0).attr("href")).toBe("#/hadoop_instances/1234/browse/")
-            expect($content.find("a").eq(1).attr("href")).toBe("#/hadoop_instances/1234/browse/start")
-            expect($content.find("a").eq(2).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1")
-            expect($content.find("a").eq(3).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1/m2")
-            expect($content.find("a").eq(4).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1/m2/m3")
+            expect($content.find("a").eq(0).attr("href")).toBe("#/hadoop_instances/1234/browse/55");
+            expect($content.find("a").eq(1).attr("href")).toBe("#/hadoop_instances/1234/browse/44");
+            expect($content.find("a").eq(2).attr("href")).toBe("#/hadoop_instances/1234/browse/33");
+            expect($content.find("a").eq(3).attr("href")).toBe("#/hadoop_instances/1234/browse/22");
+            expect($content.find("a").eq(4).attr("href")).toBe("#/hadoop_instances/1234/browse/11");
 
-            expect($content.find("a").eq(0).text()).toBe(this.hadoopInstance.get("name"))
-            expect($content.find("a").eq(1).text()).toBe("start")
-            expect($content.find("a").eq(2).text()).toBe("m1")
-            expect($content.find("a").eq(3).text()).toBe("m2")
-            expect($content.find("a").eq(4).text()).toBe("m3")
-        })
+            expect($content.find("a").eq(0).text()).toBe("start");
+            expect($content.find("a").eq(1).text()).toBe("m1");
+            expect($content.find("a").eq(2).text()).toBe("m2");
+            expect($content.find("a").eq(3).text()).toBe("m3");
+            expect($content.find("a").eq(4).text()).toBe("end");
+        });
     })
 });
