@@ -19,7 +19,10 @@ class PreviewsController < GpdbController
     task = params[:task]
     schema = GpdbSchema.find(task[:schema_id])
     instance_account = authorized_gpdb_account(schema)
-    result = SqlExecutor.execute_sql(schema, instance_account, task[:check_id], task[:query])
+
+    sql_without_semicolon = task[:query].gsub(';', '');
+    sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view LIMIT 500;"
+    result = SqlExecutor.execute_sql(schema, instance_account, task[:check_id], sql)
     present(result, :status => :ok)
   end
 end

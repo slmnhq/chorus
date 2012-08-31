@@ -68,9 +68,10 @@ describe PreviewsController do
     let(:query) { "SELECT * FROM bobs_table;" }
     let(:user) { users(:bob) }
     let(:check_id) {'0.43214321' }
+    let(:expected_sql) { "SELECT * FROM (SELECT * FROM bobs_table) AS chorus_view LIMIT 500;" }
 
     it "returns the results of the sql" do
-      mock(SqlExecutor).execute_sql(schema, account, check_id, query) { SqlResult.new }
+      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql) { SqlResult.new }
 
       post :preview_sql, :task => {
           :schema_id => schema.id,
@@ -81,6 +82,16 @@ describe PreviewsController do
       response.code.should == '200'
       decoded_response.columns.should_not be_nil
       decoded_response.rows.should_not be_nil
+    end
+
+    it "limits the rows to 500" do
+      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql) { SqlResult.new }
+
+      post :preview_sql, :task => {
+          :schema_id => schema.id,
+          :query => query,
+          :check_id => check_id
+      }
     end
   end
 end
