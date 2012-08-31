@@ -48,7 +48,12 @@ then
      exit 1
 fi
 
+$bin/start-postgres.sh
+
 # importing legacy sql
+# The database must exist
+log "Ensuring that application database exists..."
+RAILS_ENV=$RAILS_ENV rake db:create
 
 dropdb -p 8543 chorus_tmp_migrate
 psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
@@ -64,7 +69,7 @@ pg_dump --ignore-version -p 8543 chorus_tmp_migrate | psql -p 8543 chorus_rails_
 # running the migration
 
 cd $CHORUS_HOME
-echo Using Chorus 2.1 sql dump: $SQL_DUMP
-echo Using Chorus 2.1 workfile directory:   $WORKFILE_DIR
+log "Using Chorus 2.1 sql dump: $SQL_DUMP"
+log "Using Chorus 2.1 workfile directory: $WORKFILE_DIR"
 $RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
-echo Migration finished.
+log "Migration finished."
