@@ -287,7 +287,7 @@ class Install
   end
 
   def remove_and_restart_previous!
-    FileUtils.rm_fr release_path
+    FileUtils.rm_rf release_path
     chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh start" if do_upgrade
   end
 
