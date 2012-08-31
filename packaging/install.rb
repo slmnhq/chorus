@@ -43,6 +43,11 @@ class Install
   def prompt(message)
     puts message
   end
+  
+  def log(message)
+    puts message
+    File.open("install.log", "a") { |f| f.puts message }
+  end
 
   def validate_non_root
     raise NonRootValidationError if Process.uid == 0
@@ -247,30 +252,30 @@ class Install
   end
 
   def install
-    print "Copying files into #{install.destination_path}..."
+    log "Copying files into #{install.destination_path}..."
     copy_chorus_to_destination
     create_shared_structure
     copy_config_files
     create_database_config
     link_shared_files
-    puts "Done"
+    log "Done"
 
-    print "Extracting postgres..."
+    log "Extracting postgres..."
     extract_postgres
-    puts "Done"
+    log "Done"
 
     if do_upgrade
-      print "Shutting down previous Chorus install..."
+      log "Shutting down previous Chorus install..."
       stop_old_install
-      puts "Done"
-      print "Updating database..."
+      log "Done"
+      log "Updating database..."
     else
-      print "Creating database..."
+      log "Creating database..."
     end
 
     link_services
     setup_database
-    puts "Done"
+    log "Done"
   rescue InvalidVersion => e
     raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
   rescue CommandFailed => e
