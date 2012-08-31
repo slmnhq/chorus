@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+bin=`readlink "$0"`
+if [ "$bin" == "" ]; then
+ bin=$0
+fi
+bin=`dirname "$bin"`
+bin=`cd "$bin"; pwd`
+
+if [ -d $bin/current/packaging/ ]; then
+    bin=$bin/current/packaging
+fi
+
+. "$bin"/chorus-config.sh
+
+usage()
+{
+cat << EOF
+usage: $0 options
+
+  -s    legacy sql dump
+  -w    workfile data directory (relative to CHORUS_HOME)
+
+EOF
+}
+
+SQL_DUMP=
+WORKFILE_DIR=
+
+while getopts “s:w:” OPTION
+do
+     case $OPTION in
+         s)
+             SQL_DUMP=$OPTARG
+             ;;
+         w)
+             WORKFILE_DIR=$OPTARG
+             ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+
+if [[ -z $SQL_DUMP ]] || [[ -z $WORKFILE_DIR ]]
+then
+     usage
+     exit 1
+fi
+
+# importing legacy sql
+
+dropdb -p 8543 chorus_tmp_migrate
+psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
+
+# Create a temporary database so we can namespace legacy tables into their own schema
+createdb -p 8543 chorus_tmp_migrate
+psql -p 8543 chorus_tmp_migrate < $SQL_DUMP > /dev/null
+psql -p 8543 chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
+
+# Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
+pg_dump --ignore-version -p 8543 chorus_tmp_migrate | psql -p 8543 chorus_rails_$RAILS_ENV > /dev/null
+
+# running the migration
+
+# Resolve relative path
+WORKFILE_DIR="$CHORUS_HOME/$WORKFILE_DIR"
+
+cd $CHORUS_HOME
+echo Using Chorus 2.1 sql dump: $SQL_DUMP
+echo Using Chorus 2.1 workfile directory:   $WORKFILE_DIR
+$RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
+echo Migration finished.

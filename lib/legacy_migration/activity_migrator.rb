@@ -1,10 +1,10 @@
 class ActivityMigrator < AbstractMigrator
   class << self
-    def prerequisites
+    def prerequisites(options)
       DatabaseObjectMigrator.migrate
       ChorusViewMigrator.migrate
       WorkspaceMigrator.migrate
-      WorkfileMigrator.migrate
+      WorkfileMigrator.migrate(options)
       SandboxMigrator.migrate #workaround for broken composite keys in DATASET_IMPORT activities
       ensure_legacy_id :events
     end
@@ -863,8 +863,8 @@ class ActivityMigrator < AbstractMigrator
       end
     end
 
-    def migrate
-      prerequisites
+    def migrate(options)
+      prerequisites(options)
 
       ActiveRecord::Base.record_timestamps = false
 

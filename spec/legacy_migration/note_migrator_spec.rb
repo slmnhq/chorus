@@ -7,7 +7,7 @@ describe NoteMigrator do
       stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
     end
 
-    NoteMigrator.migrate
+    NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
   end
 
   describe ".migrate" do
@@ -165,7 +165,7 @@ describe NoteMigrator do
 
     it "is idempotent" do
       count = Events::Note.unscoped.count
-      NoteMigrator.migrate
+      NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       Events::Note.unscoped.count.should == count
     end
 
