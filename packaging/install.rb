@@ -247,7 +247,7 @@ class Install
   end
 
   def install
-    print "Copying files into #{install.destination_path}..."
+    print "Copying files into #{destination_path}..."
     copy_chorus_to_destination
     create_shared_structure
     copy_config_files
