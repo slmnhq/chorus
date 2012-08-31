@@ -4,7 +4,7 @@ require 'model_map'
 module Events
   class Note < Base
     validates_presence_of :actor_id
-    has_many :attachments, :class_name => 'NoteAttachment'
+
     searchable do |s|
       s.text :body, :stored => true do
         search_body
@@ -12,11 +12,7 @@ module Events
       s.string :grouping_id
       s.string :type_name
     end
-    has_and_belongs_to_many :datasets
-    attr_accessible :dataset_ids, :datasets
-
-    has_and_belongs_to_many :workfiles
-    attr_accessible :workfile_ids, :workfile
+    attr_accessible :dataset_ids, :workfile_ids
 
     has_additional_data :body
 

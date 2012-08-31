@@ -12,6 +12,14 @@ module Events
     attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
+
+    # subclass associations on parent to facilitate .includes
+    has_many :attachments, :class_name => 'NoteAttachment', :foreign_key => 'note_id'
+    has_many :notes_workfiles, :foreign_key => 'note_id'
+    has_many :workfiles, :through => :notes_workfiles
+    has_many :datasets_notes, :foreign_key => 'note_id'
+    has_many :datasets, :through => :datasets_notes
+
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
