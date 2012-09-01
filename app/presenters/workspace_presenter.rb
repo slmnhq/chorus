@@ -16,8 +16,12 @@ class WorkspacePresenter < Presenter
         :has_added_workfile => has_added_workfile,
         :has_added_sandbox => has_added_sandbox,
         :has_changed_settings => has_changed_settings,
-        :sandbox_info => present(sandbox),
+        :sandbox_info => sandbox_hash,
         :latest_comment_list => nil   # temporarily added for rspec fixture - needed by JS specs
     }
+  end
+
+  def sandbox_hash
+    rendering_activities? ? {:id => model.sandbox_id } : present(sandbox)
   end
 end

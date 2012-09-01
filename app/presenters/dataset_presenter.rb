@@ -6,11 +6,11 @@ class DatasetPresenter < Presenter
       :id => id,
       :type => thetype,
       :object_name => h(name),
-      :schema => schema_value
+      :schema => schema_hash
     }.merge(workspace_hash).merge(associated_workspaces_hash)
   end
 
-  def schema_value
+  def schema_hash
     rendering_activities? ? {:id => model.schema_id } : present(schema)
   end
 
@@ -23,7 +23,7 @@ class DatasetPresenter < Presenter
   end
 
   def workspace_hash
-    options[:workspace] ? {:workspace => present(options[:workspace])} : {}
+    options[:workspace] ? {:workspace => present(options[:workspace], @options)} : {}
   end
 
   def associated_workspaces_hash

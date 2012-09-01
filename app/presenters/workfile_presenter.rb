@@ -4,7 +4,7 @@ class WorkfilePresenter < Presenter
   def to_hash
     workfile = {
       :id => id,
-      :workspace => present(workspace),
+      :workspace => present(workspace, @options),
       :owner => present(owner),
       :file_name => h(file_name),
       :file_type => h(content_type),

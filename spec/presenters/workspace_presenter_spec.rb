@@ -7,8 +7,10 @@ describe WorkspacePresenter, :type => :view do
     @archiver = FactoryGirl.create :user
     @schema = FactoryGirl.create :gpdb_schema
     @workspace = FactoryGirl.build :workspace, :owner => @user, :archiver => @archiver, :sandbox => @schema
-    @presenter = WorkspacePresenter.new(@workspace, view)
+    @presenter = WorkspacePresenter.new(@workspace, view, options)
   end
+
+  let(:options) { {} }
 
   describe "#to_hash" do
     before do
@@ -57,5 +59,14 @@ describe WorkspacePresenter, :type => :view do
     end
 
     it_behaves_like "sanitized presenter", :workspace, :summary
+
+    context "when rendering an activity stream" do
+      let(:options) { {:activity_stream => true} }
+
+      it "should only render the sandbox id" do
+        @hash[:sandbox_info][:id].should == @schema.id
+        @hash[:sandbox_info].keys.size.should == 1
+      end
+    end
   end
 end

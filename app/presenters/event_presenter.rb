@@ -12,7 +12,7 @@ class EventPresenter < Presenter
   def basic_hash
     {
       :id => model.id,
-      :actor => present(model.actor),
+      :actor => present(model.actor, @options),
       :action => action,
       :timestamp => model.created_at
     }
@@ -34,7 +34,7 @@ class EventPresenter < Presenter
       if value.class == String
         [key, sanitize(value)]
       else
-        [model.additional_data_key(key), present(model.additional_data_value(key))]
+        [model.additional_data_key(key), present(model.additional_data_value(key), @options)]
       end
 
     end
@@ -54,7 +54,7 @@ class EventPresenter < Presenter
     if model.is_a?(Events::Note)
       attachments = model.attachments
       attachments.each_with_index do |model, index|
-        hash[index] = present(model)
+        hash[index] = present(model, @options)
       end
       datasets = model.datasets
       datasets.each do |dataset|
@@ -65,7 +65,7 @@ class EventPresenter < Presenter
         end
       workfiles = model.workfiles
       workfiles.each do |workfile|
-        model_hash = present(workfile.latest_workfile_version)
+        model_hash = present(workfile.latest_workfile_version, @options)
         model_hash.merge!({:entity_type => 'workfile'} )
         hash << model_hash
       end

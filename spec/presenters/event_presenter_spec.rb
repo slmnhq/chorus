@@ -9,15 +9,29 @@ describe EventPresenter, :type => :view do
 
     context "when rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
-      let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table) ) }
       let(:current_user) { users(:bob) }
 
-      it "does not render datasets with their schemas or associated workspaces" do
-        stub(view).current_user { current_user }
-        hash = subject.to_hash
-        hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
-        hash[:dataset][:schema].keys.size.should == 1
-        hash[:dataset][:associated_workspaces].should be_empty
+      context "SourceTableCreated" do
+        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table) ) }
+        it "does not render datasets with their schemas or associated workspaces" do
+          stub(view).current_user { current_user }
+          hash = subject.to_hash
+          hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
+          hash[:dataset][:schema].keys.size.should == 1
+          hash[:dataset][:associated_workspaces].should be_empty
+        end
+      end
+
+      context "NoteOnWorkspace" do
+        let(:workspace_with_sandbox) { workspaces(:bob_public) }
+        let(:event) { FactoryGirl.create(:note_on_workspace_event, :workspace => workspace_with_sandbox) }
+
+        it "only renders the sandbox id of a workspace" do
+          stub(view).current_user { current_user }
+          hash = subject.to_hash
+          hash[:workspace][:sandbox_info][:id].should == workspace_with_sandbox.sandbox_id
+          hash[:workspace][:sandbox_info].keys.size.should == 1
+        end
       end
     end
 
