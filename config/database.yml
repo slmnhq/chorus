@@ -40,3 +40,7 @@ production:
   database: chorus_rails_production
   <<: *default
   username: pivotal
+
+packaging:
+  database: chorus_rails_packaging
+  <<: *default

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export RAILS_ENV=test
+export RAILS_ENV=packaging
 
 . script/ci/setup.sh
 
 rm -fr .bundle
-rake package:stage --trace
+rake package:installer --trace

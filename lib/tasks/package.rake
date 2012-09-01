@@ -24,6 +24,16 @@ namespace :package do
     deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
     PackageMaker.deploy(deploy_configuration)
   end
+  
+  desc 'Deploy PACKAGE_FILE to staging'
+  task :deploy_stage do
+    unless ENV['PACKAGE_FILE']
+      puts "You have to specify PACKAGE_FILE to deploy"
+      exit(1)
+    end
+    deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
+    PackageMaker.deploy(deploy_configuration, ENV['PACKAGE_FILE'])
+  end
 
   task :prepare_remote do
     deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
@@ -112,8 +122,8 @@ module PackageMaker
     raise StandardError.new("Installation failed!") unless install_success
   end
 
-  def deploy(config)
-    filename = "greenplum-chorus-#{version_name}.sh"
+  def deploy(config, filename=nil)
+    filename ||= "greenplum-chorus-#{version_name}.sh"
     upload(filename, config)
   end
 
@@ -154,3 +164,4 @@ module PackageMaker
     "#{Chorus::VERSION::STRING}-#{head_sha}"
   end
 end
+
