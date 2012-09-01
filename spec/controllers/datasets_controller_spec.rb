@@ -26,8 +26,8 @@ describe DatasetsController do
       response.code.should == "200"
       decoded_response.length.should == schema.datasets.count
 
-      decoded_response.map{ |item| item.id}.should include (table.id)
-      decoded_response.map{ |item| item.id}.should include (view.id)
+      decoded_response.map { |item| item.id }.should include (table.id)
+      decoded_response.map { |item| item.id }.should include (view.id)
     end
 
     it "should not return db objects in another schema" do
@@ -225,7 +225,7 @@ describe DatasetsController do
       end
     end
 
-      context "Scheduling an Import" do
+    context "Scheduling an Import" do
       before do
         attributes[:new_table] = 'true'
         attributes[:truncate] = 'true'
@@ -264,6 +264,134 @@ describe DatasetsController do
           schedule.to_table.should == 'the_new_table'
         end
       end
+    end
+  end
+
+  # TODO: should probably be someplace else
+  describe "smoke test for import schedules", :database_integration => true do
+    # In the test, use gpfdist to move data between tables in the same schema and database
+    let(:instance_account1) { GpdbIntegration.real_gpdb_account }
+    let(:user) { instance_account1.owner }
+    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+    let(:schema_name) { 'test_schema' }
+    let(:schema) { database.schemas.find_by_name(schema_name) }
+    let(:source_table) { "candy" }
+    let(:source_table_name) { "\"#{schema_name}\".\"#{source_table}\"" }
+    let(:destination_table_name) { "dst_candy" }
+    let(:destination_table_fullname) { "\"test_schema\".\"dst_candy\"" }
+    let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
+    let(:sandbox) { workspace.sandbox }
+
+    let(:gpdb_params) do
+      {
+          :host => instance_account1.gpdb_instance.host,
+          :port => instance_account1.gpdb_instance.port,
+          :database => database.name,
+          :username => instance_account1.db_username,
+          :password => instance_account1.db_password,
+          :adapter => "jdbcpostgresql"}
+    end
+
+    let(:gpdb1) { ActiveRecord::Base.postgresql_connection(gpdb_params) }
+    let(:gpdb2) { ActiveRecord::Base.postgresql_connection(gpdb_params) }
+
+    let(:table_def) { '"id" numeric(4,0),
+                   "name" character varying(255),
+                    "id2" integer,
+                    "id3" integer,
+                    "date_test" date,
+                    "fraction" double precision,
+                    "numeric_with_scale" numeric(4,2),
+                    "time_test" time without time zone,
+                    "time_with_precision" time(3) without time zone,
+                    "time_with_zone" time(3) with time zone,
+                    "time_stamp_with_precision" timestamp(3) with time zone,
+                    PRIMARY KEY("id2", "id3", "id")'.tr("\n", "").gsub(/\s+/, " ").strip }
+
+    let(:source_dataset) { schema.datasets.find_by_name(source_table) }
+    let(:import_attributes) do
+      {
+          :workspace => workspace,
+          :workspace_id => workspace.id,
+          :to_table => destination_table_name,
+          :new_table => true,
+          :dataset => nil,
+          :truncate => false,
+          :destination_table => destination_table_name,
+      }
+    end
+
+    let(:start_time) { "2012-08-23 23:00:00.0" }
+
+    let(:create_source_table) do
+      gpdb1.exec_query("drop table if exists #{source_table_name};")
+      gpdb1.exec_query("create table #{source_table_name}(#{table_def});")
+    end
+
+    def setup_data
+      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
+      gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
+    end
+
+    before do
+      refresh_chorus
+      create_source_table
+      refresh_chorus
+      stub(Gppipe).gpfdist_url { Socket.gethostname }
+      stub(Gppipe).grace_period_seconds { 1 }
+      setup_data
+      # synchronously run all queued import jobs
+      mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
+        Import.run import_id
+      end
+    end
+
+    it "copies data" do
+      expect {
+        expect {
+          post :import, :id => source_dataset.id, :dataset_import => import_attributes
+        }.to change(Events::DatasetImportCreated, :count).by(1)
+      }.to change(Events::DatasetImportSuccess, :count).by(1)
+      check_destination_table
+    end
+
+    context "does a scheduled import" do
+      before do
+        import_attributes.merge!(
+            :import_type => 'schedule',
+            :schedule_frequency => 'weekly',
+            :schedule_start_time => start_time,
+            :schedule_end_time => "2012-08-24")
+      end
+
+      it "copies data when the start time has passed" do
+        Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+          expect {
+            post :import, :id => source_dataset.id, :dataset_import => import_attributes
+          }.to change(Events::DatasetImportCreated, :count).by(1)
+        end
+        Timecop.freeze(DateTime.parse(start_time) + 1.day) do
+          expect {
+            ImportScheduler.run
+          }.to change(Events::DatasetImportSuccess, :count).by(1)
+        end
+        check_destination_table
+      end
+    end
+
+    after do
+      gpdb1.exec_query("drop table if exists #{source_table_name};")
+      gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
+      gpdb1.try(:disconnect!)
+      gpdb2.try(:disconnect!)
+      # We call src_schema from the test, although it is only called from run outside of tests, so we need to clean up
+      #gp_pipe.src_conn.try(:disconnect!)
+      #gp_pipe.dst_conn.try(:disconnect!)
+    end
+
+    def check_destination_table
+      gpdb2.exec_query("SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
 end
