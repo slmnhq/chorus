@@ -90,8 +90,8 @@ class Install
 
     @destination_path = File.expand_path(relative_path)
 
-    if Dir.exists?(@destination_path)
-      installed_versions = Dir[File.join(@destination_path, 'releases', '*')]
+    installed_versions = Dir[File.join(@destination_path, 'releases', '*')]
+    if installed_versions.length > 0
       most_recent_installed_version = installed_versions.map { |path| File.basename(path) }.max do |a, b|
         a.split('.').map(&:to_i) <=> b.split('.').map(&:to_i)
       end

@@ -68,8 +68,19 @@ describe "Install" do
       before do
         stub(installer).version { "2.2.0.1-8840ae71c" }
         stub_input nil
+        FileUtils.mkdir_p("/opt/chorus/releases")
         installed_versions.each do |version|
           FileUtils.mkdir_p("/opt/chorus/releases/#{version}")
+        end
+      end
+
+      context "but no versions are actually installed" do
+        let(:installed_versions) { [] }
+
+        it "should do a non-upgrade install" do
+          dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+          installer.get_destination_path
+          installer.do_upgrade.should be_false
         end
       end
 
