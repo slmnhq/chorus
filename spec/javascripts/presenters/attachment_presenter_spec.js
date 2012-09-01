@@ -38,6 +38,7 @@ describe("chorus.presenters.Attachment", function() {
 
         it("uses nothing otherwise", function() {
             var model = rspecFixtures.hdfsFile();
+            model.unset("name");
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBeUndefined();
         });

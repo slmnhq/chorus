@@ -7,7 +7,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.bindings.add(this.instance, "loaded", this.instanceFetched);
         this.hadoopInstanceId = hadoopInstanceId;
 
-
         this.hdfsEntry = new chorus.models.HdfsEntry({
             id: id,
             hadoopInstance: {
@@ -16,7 +15,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         });
         this.hdfsEntry.fetch();
         this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
-
+        this.dependOn(this.hdfsEntry);
 
 
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
@@ -78,8 +77,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
-//        $li.append(chorus.helpers.linkTo(this.instance.showUrl(), this.instance.get("name")).toString());
-//        $content.append($li);
 
         var pathSegments = this.hdfsEntry.pathSegments();
         var maxLength = 20;

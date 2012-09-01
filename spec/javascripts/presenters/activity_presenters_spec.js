@@ -661,13 +661,15 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
-                hdfsFile: { hadoopInstance: {id: 1234}, path: "/random/path.csv" }
+                hdfsFile: { isDir: false, id: 4567, name: "path.csv", hadoopInstance: {id: 1234}}
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            hdfsFile = rspecFixtures.hdfsFile({
+            hdfsFile = fixtures.hdfsEntryDir({
+                id: 4567,
                 hadoopInstance: { id: 1234 },
-                path: "/random/path.csv"
+                name: "path.csv",
+                isDir: false
             });
         });
 

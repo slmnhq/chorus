@@ -113,17 +113,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                         fixtures.hdfsEntryDirJson() ]
                 }
             );
-
-//            var model = new chorus.models.HdfsEntry({
-//                hadoopInstance:{
-//                    id:111
-//                },
-//                path:"/",
-//                name:"foo.csv"
-//            });
-
-//            this.server.completeFetchFor(this.page.hdfsEntry, {path:"start/m1/m2/m3/end", entries:[model.attributes]});
-//            this.server.completeFetchFor(this.page.instance, this.instance);
         });
 
         it("ellipsizes the inner directories", function () {

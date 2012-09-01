@@ -167,11 +167,11 @@ describe("chorus.models.Activity", function() {
             context("for a NoteOnHdfsFile", function() {
                 it("returns a hdfsFile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnHdfsFileCreated({
-                        hdfsFile: { path: "/happy/path.txt", hadoopInstance: {id: 331} }
+                        hdfsFile: { id: 2345, name: "path.txt", hadoopInstance: {id: 331} }
                     });
                     var hdfsFile = activity.noteObject();
-                    expect(hdfsFile).toBeA(chorus.models.HdfsFile);
-                    expect(hdfsFile.get("path")).toBe("/happy/path.txt");
+                    expect(hdfsFile).toBeA(chorus.models.HdfsEntry);
+                    expect(hdfsFile.get("name")).toBe("path.txt");
                     expect(hdfsFile.get("hadoopInstance").id).toBe(331)
                 });
             });

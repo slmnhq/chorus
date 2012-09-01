@@ -4,11 +4,11 @@ describe("chorus.collections.CsvHdfsFileSet", function () {
             fixtures.hdfsEntryFileJson(),
             fixtures.hdfsEntryDirJson(),
             fixtures.hdfsEntryBinaryFileJson()
-        ], { path: "/foo", hadoopInstance: {id: 1}});
+        ], { id: 123, hadoopInstance: {id: 1}});
     });
 
     it("use the correct url", function() {
-        expect(this.collection.url()).toMatchUrl("/hadoop_instances/1/files/%2Ffoo", {paramsToIgnore: ["page", "rows"]})
+        expect(this.collection.url()).toMatchUrl("/hadoop_instances/1/files/123", {paramsToIgnore: ["page", "rows"]})
     });
 
     describe("#filesOnly", function () {

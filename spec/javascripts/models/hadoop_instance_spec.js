@@ -40,15 +40,6 @@ describe("chorus.models.HadoopInstance", function() {
         })
     });
 
-    describe("#entriesForDir(directoryName)", function() {
-        it("returns an HdfsEntrySet with the right instance id and path", function() {
-            var entries = this.model.entriesForPath("foo");
-            expect(entries).toBeA(chorus.collections.HdfsEntrySet);
-            expect(entries.attributes.path).toBe("foo");
-            expect(entries.attributes.hadoopInstance.id).toBe(this.model.get("id"));
-        });
-    });
-
     describe("#providerIconUrl", function() {
         it("returns the right url for hadoop instances", function() {
             expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
@@ -57,7 +48,7 @@ describe("chorus.models.HadoopInstance", function() {
 
     describe("#sharedAccountDetails", function() {
         it("returns the account name of the user who owns the instance and shared it", function() {
-            var sharedAccountDetails = this.model.get("username") + ", " + this.model.get("groupList")
+            var sharedAccountDetails = this.model.get("username") + ", " + this.model.get("groupList");
             expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
         });
     });

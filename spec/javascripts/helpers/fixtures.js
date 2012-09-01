@@ -669,8 +669,9 @@ beforeEach(function() {
                     },
                     "workspace": {},
                     "hdfs": {
-                        "id": "10020|/data/cleardb.sql",
+                        "id": "333",
                         "path": "/data/cleardb.sql",
+                        "name": "cleardb.sql",
                         "hadoopInstance": {
                             "id": "10020",
                             "name": "hadoooooooooop"

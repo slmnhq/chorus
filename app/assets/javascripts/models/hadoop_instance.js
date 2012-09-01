@@ -39,15 +39,6 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
     },
 
-    entriesForPath: function(id) {
-        return new chorus.collections.HdfsEntrySet([], {
-            id: id,
-            hadoopInstance: {
-                id: this.get("id")
-            }
-        });
-    },
-
     accountForCurrentUser: function() {
         return null;
     },

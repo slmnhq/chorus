@@ -68,10 +68,11 @@
                     model.set(this.get("greenplumInstance"));
                     break;
                 case "NoteOnHdfsFile":
-                    model = new chorus.models.HdfsFile();
+                    model = new chorus.models.HdfsEntry();
                     model.set({
                         hadoopInstance: new chorus.models.HadoopInstance(this.get("hdfsFile").hadoopInstance),
-                        path: this.get("hdfsFile").path
+                        id: this.get("hdfsFile").id,
+                        name: this.get("hdfsFile").name
                     });
                     break;
                 case "NoteOnWorkspace":
