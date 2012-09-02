@@ -1,3 +1,4 @@
 #!/bin/bash
-PACKAGE=$WORKSPACE/greenplum_chorus-*.sh
+PACKAGE=$WORKSPACE/greenplum-chorus-*.sh
+echo "Deploying $PACKAGE"
 rake package:deploy_stage PACKAGE_FILE=$PACKAGE
