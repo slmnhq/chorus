@@ -1,4 +1,7 @@
 #!/bin/bash
-PACKAGE=$WORKSPACE/greenplum-chorus-*.sh
-echo "Deploying $PACKAGE"
-rake package:deploy_stage PACKAGE_FILE=$PACKAGE
+for file in $WORKSPACE/greenplum-chorus-*.sh
+do
+  echo "Deploying $file"
+  rake package:deploy_stage PACKAGE_FILE=$file
+  exit $?
+done
