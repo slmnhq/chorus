@@ -6,5 +6,5 @@ java_options: -Djava.library.path=$CHORUS_HOME/vendor/hadoop/lib/ -server -Xmx10
 ruby_version: 1.9
 app_type: rack
 http_port: 8081
-bundle_without: [integration, development, test]
+bundle_without: [integration, development, test, packaging]
 max_concurrent_connections: 20
