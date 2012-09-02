@@ -36,7 +36,7 @@ group :integration do
   gem 'capybara-screenshot'
 end
 
-group :test, :integration do
+group :test, :integration, :packaging do
   gem 'rr'
   gem 'fuubar'
   gem 'factory_girl'
@@ -51,7 +51,7 @@ group :test, :integration do
   gem 'database_cleaner',    :require => false
 end
 
-group :test, :development, :integration do
+group :test, :development, :integration, :packaging do
   gem 'foreman', '0.46',         :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false

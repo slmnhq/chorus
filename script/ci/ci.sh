@@ -43,8 +43,13 @@ RAILS_ENV=test packaging/chorus_migrate.sh db/legacy/legacy.sql
 rspec --options .rspec-ci spec/legacy_migration
 LEGACY_MIGRATION_TESTS_RESULT=$?
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT`
+echo "Running API docs check"
+b/rake api_docs:check
+API_DOCS_CHECK_RESULT=$?
+
+SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
 echo "RSpec exit code: $RUBY_TESTS_RESULT"
 echo "Jasmine exit code: $JS_TESTS_RESULT"
 echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
+echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
 exit $SUCCESS
