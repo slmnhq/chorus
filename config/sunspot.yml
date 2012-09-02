@@ -21,3 +21,9 @@ integration:
     hostname: localhost
     port: 8984
     log_level: WARNING
+
+packaging:
+  solr:
+    hostname: localhost
+    post: 8981
+    log_level: WARNING
