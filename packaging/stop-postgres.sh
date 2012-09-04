@@ -6,10 +6,6 @@ fi
 bin=`dirname "$bin"`
 bin=`cd "$bin"; pwd`
 
-if [ -d $bin/current/packaging/ ]; then
-    bin=$bin/current/packaging
-fi
-
 . "$bin"/chorus-config.sh
 
 log_inline "stopping postgres "
