@@ -12,6 +12,7 @@ module Events
     attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
+    has_many :notifications
 
     # subclass associations on parent to facilitate .includes
     has_many :attachments, :class_name => 'NoteAttachment', :foreign_key => 'note_id'

@@ -3,8 +3,10 @@ require 'spec_helper'
 describe UserPresenter, :type => :view do
   before(:each) do
     @user = FactoryGirl.build :user
-    @presenter = UserPresenter.new(@user, view)
+    @presenter = UserPresenter.new(@user, view, options)
   end
+
+  let(:options) { {} }
 
   describe "#to_hash" do
     before do
@@ -28,6 +30,19 @@ describe UserPresenter, :type => :view do
 
     [:username, :first_name, :last_name, :email, :title, :dept, :notes].each do |attribute|
       it_behaves_like "sanitized presenter", :user, attribute
+    end
+
+    context "When rendering the activity stream" do
+      let(:options) { {:activity_stream => true} }
+
+      it "only renders the id, first/last name, username, and image" do
+        @hash[:id].should == @user.id
+        @hash[:username].should == @user.username
+        @hash[:first_name].should == @user.first_name
+        @hash[:last_name].should == @user.last_name
+        @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).to_hash)
+        @hash.keys.size.should == 5
+      end
     end
   end
 end

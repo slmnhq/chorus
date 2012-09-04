@@ -7,6 +7,16 @@ class NotesController < ApplicationController
     entity_id = note_params[:entity_id]
     authorize! :create, Events::Note, entity_type, entity_id
     note = Events::Note.create_from_params(note_params, current_user)
+
+    if note_params[:recipients]
+      note_params[:recipients].each do |recipient_id|
+        notification = Notification.new
+        notification.recipient_id = recipient_id
+        notification.event_id = note.id
+        notification.save!
+      end
+    end
+
     present note, :status => :created
   end
 

@@ -64,8 +64,9 @@ describe WorkspacePresenter, :type => :view do
       let(:options) { {:activity_stream => true} }
 
       it "should only render the sandbox id" do
-        @hash[:sandbox_info][:id].should == @schema.id
-        @hash[:sandbox_info].keys.size.should == 1
+        @hash[:id].should == @workspace.id
+        @hash[:name].should == @workspace.name
+        @hash.keys.size.should == 2
       end
     end
   end
