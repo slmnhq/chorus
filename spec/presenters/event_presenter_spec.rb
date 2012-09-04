@@ -29,8 +29,9 @@ describe EventPresenter, :type => :view do
         it "only renders the sandbox id of a workspace" do
           stub(view).current_user { current_user }
           hash = subject.to_hash
-          hash[:workspace][:sandbox_info][:id].should == workspace_with_sandbox.sandbox_id
-          hash[:workspace][:sandbox_info].keys.size.should == 1
+          hash[:workspace].should have_key(:id)
+          hash[:workspace].should have_key(:name)
+          hash[:workspace].keys.size.should == 2
         end
       end
     end
