@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 class ApplicationController < ActionController::Base
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index

@@ -89,6 +89,30 @@ describe Dataset do
     end
   end
 
+  describe ".filter_by_name" do
+    let(:second_dataset) {
+      GpdbTable.new({:name => 'rails_only_table', :schema => schema}, :without_protection => true)
+    }
+    let(:dataset_list) {
+      [dataset, second_dataset]
+    }
+
+    it "scopes objects by name" do
+      Dataset.filter_by_name(dataset_list, dataset.name).size.should == 1
+    end
+
+    it "matches anywhere in the name, regardless of case" do
+      dataset.update_attributes!({:name => "amatCHingtable"}, :without_protection => true)
+
+      Dataset.filter_by_name(dataset_list, "match").count.should == 1
+      Dataset.filter_by_name(dataset_list, "MATCH").count.should == 1
+    end
+
+    it "returns all objects if name is not provided" do
+      Dataset.filter_by_name(dataset_list, nil).count.should == dataset_list.count
+    end
+  end
+
   context ".refresh" do
     context "refresh once, without mark_stale flag" do
       before do
@@ -109,6 +133,11 @@ describe Dataset do
         new_view.master_table.should be_false
       end
 
+      it "returns the list of datasets" do
+        datasets = Dataset.refresh(account, schema)
+        datasets.map(&:name).should match_array(['bobs_table','new_table','new_view'])
+      end
+
       context "when trying to create a duplicate record" do
         let(:duped_dataset) { Dataset.new({:name => dataset.name, :schema_id => schema.id}, :without_protection => true) }
         before do
@@ -124,11 +153,19 @@ describe Dataset do
         end
 
         it "keeps going when not caught by rails validations" do
-          mock(duped_dataset).save { raise ActiveRecord::RecordNotUnique.new("boooo!", Exception.new) }
+          mock(duped_dataset).save! { raise ActiveRecord::RecordNotUnique.new("boooo!", Exception.new) }
 
           expect { Dataset.refresh(account, schema) }.to change { GpdbTable.count }.by(1)
           schema.datasets.find_by_name('new_table').should be_present
           schema.datasets.find_by_name('new_view').should be_present
+        end
+
+        it "returns the list of datasets without duplicates" do
+          mock(duped_dataset).save! { raise ActiveRecord::RecordInvalid.new(duped_dataset) }
+
+          datasets = Dataset.refresh(account, schema)
+          datasets.size.should == 2
+          datasets.map(&:name).should match_array(['new_table','new_view'])
         end
       end
 

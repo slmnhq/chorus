@@ -2,11 +2,10 @@ class DatasetsController < GpdbController
   def index
     schema = GpdbSchema.find(params[:schema_id])
     account = authorized_gpdb_account(schema)
-    Dataset.refresh(account, schema)
+    datasets = Dataset.refresh(account, schema)
 
-    datasets = schema.datasets.
-        with_name_like(params[:filter]).
-        order("lower(name)")
+    datasets = Dataset.filter_by_name(datasets, params[:filter])
+      .sort! { |a,b| a.name.downcase <=> b.name.downcase }
 
     present paginate(datasets)
   end

@@ -67,12 +67,12 @@ class Dataset < ActiveRecord::Base
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
-      found_datasets << dataset
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
-        dataset.save if dataset.changed?
-      rescue ActiveRecord::RecordNotUnique
+        dataset.save! if dataset.changed?
+        found_datasets << dataset
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
       end
     end
 
@@ -81,6 +81,8 @@ class Dataset < ActiveRecord::Base
         dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true) unless dataset.type == 'ChorusView'
       end
     end
+
+    found_datasets
   end
 
   def self.find_and_verify_in_source(dataset_id, user)
@@ -116,6 +118,16 @@ class Dataset < ActiveRecord::Base
       where("name ILIKE ?", "%#{name}%")
     else
       scoped
+    end
+  end
+
+  def self.filter_by_name(datasets, name)
+    if name.present?
+      datasets.select do |dataset|
+        dataset.name =~ /#{name}/i
+      end
+    else
+      datasets
     end
   end
 

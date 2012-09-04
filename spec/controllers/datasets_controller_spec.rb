@@ -4,10 +4,12 @@ describe DatasetsController do
   let(:user) { users(:carly) }
   let(:instance_account) { instance_accounts(:iamcarly) }
   let(:gpdb_instance) { instance_account.gpdb_instance }
+  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
 
   let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:table) { schema.datasets.tables.first }
+  let(:dataset) { datasets(:bobs_table) }
   let(:view) { schema.datasets.views.first }
 
   before do
@@ -16,18 +18,21 @@ describe DatasetsController do
 
   context "#index" do
     before do
-      mock(Dataset).refresh(instance_account, schema)
+      stub_gpdb(instance_account, datasets_sql => [
+          {'type' => "v", "name" => "new_view", "master_table" => 'f'},
+          {'type' => "r", "name" => "new_table", "master_table" => 't'},
+          {'type' => "r", "name" => dataset.name, "master_table" => 't'}
+      ])
       stub(table).add_metadata!(instance_account)
     end
 
-    it "should retrieve all db objects for a schema" do
+    it "should retrieve authorized db objects for a schema" do
       get :index, :schema_id => schema.to_param
 
       response.code.should == "200"
-      decoded_response.length.should == schema.datasets.count
-
-      decoded_response.map { |item| item.id }.should include (table.id)
-      decoded_response.map { |item| item.id }.should include (view.id)
+      decoded_response.length.should == 3
+      decoded_response.map(&:object_name).should match_array(['bobs_table','new_table','new_view'])
+      schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
     end
 
     it "should not return db objects in another schema" do
