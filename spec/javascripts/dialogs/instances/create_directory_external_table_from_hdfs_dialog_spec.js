@@ -87,16 +87,18 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         describe("changing the file", function () {
             beforeEach(function() {
-                spyOn(chorus, 'styleSelect')
-                this.dialog.$("input[name='expression']").val("*.csv")
+                spyOn(chorus, 'styleSelect');
+                this.dialog.$("input[name='expression']").val("*.csv");
                 this.dialog.$("input#pattern").prop("checked", "checked").change();
-                var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"))
+                var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"));
                 selElement.change();
             });
+
             it("should fetch the new sample", function() {
-                expect(this.server.lastFetch().url).toBe("/hadoop_instances/"+this.collection.attributes.hadoopInstance.id+"/contents/"+
-                    encodeURIComponent(this.collection.at(1).get("path")))
+                expect(this.server.lastFetch().url).toBe("/hadoop_instances/"+this.collection.attributes.hadoopInstance.id+"/files/"+
+                    this.collection.at(1).id);
             });
+
             it("display spinner", function() {
                 expect(this.dialog.$(".data_table").isLoading()).toBeTruthy();
             });

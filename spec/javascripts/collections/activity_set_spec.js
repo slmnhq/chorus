@@ -23,9 +23,10 @@ describe("chorus.collections.ActivitySet", function() {
 
             context("for a hdfs model type", function () {
                 beforeEach(function() {
-                    model = rspecFixtures.hdfsFile({
+                    model = fixtures.hdfsFile({
                         hadoopInstance : { id : 1 },
-                        path : "/data/test.csv"
+                        path : "/data",
+                        name : "test.csv"
                     });
 
                     activities = chorus.collections.ActivitySet.forModel(model);

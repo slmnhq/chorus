@@ -17,6 +17,21 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
         this.dependOn(this.hdfsEntry);
 
+        this.collection = new chorus.collections.HdfsEntrySet([], {
+            hadoopInstance: {
+                id: this.hadoopInstanceId
+            }
+        });
+
+        this.mainContent = new chorus.views.MainContentList({
+            modelClass: "HdfsEntry",
+            collection: this.collection
+        });
+
+        this.sidebar = new chorus.views.HdfsEntrySidebar({
+            hadoopInstanceId: this.hadoopInstanceId
+        });
+
 
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
 
@@ -35,16 +50,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     },
 
     everythingLoaded: function() {
-        this.mainContent = new chorus.views.MainContentList({
-            modelClass: "HdfsEntry",
-            collection: this.collection
-        });
-
-        this.sidebar = new chorus.views.HdfsEntrySidebar({
-            rootPath: this.path,
-            hadoopInstanceId: this.hadoopInstanceId
-        });
-
         this.mainContent.contentHeader.options.title = this.instance.get("name") + ": " + this.ellipsizePath();
         this.render();
     },
@@ -56,11 +61,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     },
 
     entryFetched: function() {
-        this.collection = new chorus.collections.HdfsEntrySet(this.hdfsEntry.get("entries"), {
-            hadoopInstance: {
-                id: this.hadoopInstanceId
-            }
-        });
+        this.collection.reset(this.hdfsEntry.get("entries"));
+
+        this.entrySelected(this.collection.at(0));
 
         this.collection.loaded = true;
 
@@ -97,7 +100,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     },
 
     ellipsizePath: function() {
-        var path = this.hdfsEntry.get("path") || ""
+        var path = (this.hdfsEntry.get("path") || "") + "/" + this.hdfsEntry.name();
         var folders = path.split('/');
         if (folders.length > 3) {
             return "/" + folders[1] + "/.../" + folders[folders.length-1]

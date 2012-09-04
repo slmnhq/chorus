@@ -1,7 +1,12 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
         this.instance = rspecFixtures.hadoopInstance({id: "1234", name: "instance Name"});
-        this.hdfsEntry = fixtures.hdfsEntryDir({hadoopInstance: this.instance.attributes, id: "4"});
+        this.hdfsEntry = fixtures.hdfsEntryDir({
+            hadoopInstance: this.instance.attributes,
+            id: "4",
+            name: "myDir",
+            path: "/foo"
+        });
         this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
     });
 
@@ -42,7 +47,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 {
                 ancestors: [],
                 path: "/foo",
-                name: "foo",
+                name: "myDir",
                 entries: [
                     fixtures.hdfsEntryDirJson(),
                     fixtures.hdfsEntryDirJson(),
@@ -52,7 +57,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("should have title in the mainContentList", function() {
-            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /foo");
+            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /foo/myDir");
         });
 
         it("should have the right breadcrumbs", function() {
@@ -106,7 +111,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                         {id: 44, name: "m1"},
                         {id: 55, name: "start"}
                     ],
-                    name: "foo.csv",
+                    name: "foo",
                     entries: [
                         fixtures.hdfsEntryDirJson(),
                         fixtures.hdfsEntryDirJson(),
@@ -116,7 +121,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("ellipsizes the inner directories", function () {
-            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /start/.../end");
+            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /start/.../foo");
         });
 
         it("constructs the breadcrumb links correctly", function () {

@@ -2,8 +2,9 @@
     beforeEach(function() {
         var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
-        this.file = rspecFixtures.hdfsFile({
+        this.file = fixtures.hdfsEntryFile({
             path: "/folder/filename.txt",
+            name: "filename.txt",
             hadoopInstance: {id: 9876},
             lastUpdatedStamp: now
         });

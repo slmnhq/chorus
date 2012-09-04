@@ -524,6 +524,10 @@ beforeEach(function() {
             }, overrides);
         },
 
+        hdfsEntryFile: function(overrides) {
+            return new chorus.models.HdfsEntry(this.hdfsEntryFileJson(overrides));
+        },
+
         hdfsEntryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
@@ -536,7 +540,10 @@ beforeEach(function() {
                 "count": 0,
                 "owner": "hadoop",
                 "group": "supergroup",
-                "permission": "rw-r--r--"
+                "permission": "rw-r--r--",
+                "contents": "Contents!",
+                "path": "/foo/bar",
+                "hadoopInstance": {"id": fixtures.nextId()}
             }, overrides);
         },
 
@@ -574,11 +581,16 @@ beforeEach(function() {
 
         hdfsFile: function(overrides) {
             var json = fixtures.hdfsFileJson(overrides);
-            return new chorus.models.HdfsFile(json);
+            return new chorus.models.HdfsEntry(json);
         },
 
         hdfsFileJson: function(overrides) {
             return _.extend({
+                id: fixtures.nextId(),
+                name: "fixtureFile.sql",
+                hadoopInstance: {id: fixtures.nextId()},
+                contents: "Contents",
+                ancestors: [],
                 lastUpdatedStamp: "2012-03-05T15:23:44Z",
                 lines: [
                     "some content;",
@@ -1467,7 +1479,8 @@ beforeEach(function() {
                 isDir: false,
                 lastUpdatedStamp: "2012-03-05 15:23:55",
                 name: "Thumbs.db",
-                path: "/webui/images/thirdparty/jquerybubblepopup-theme/green"
+                path: "/webui/images/thirdparty/jquerybubblepopup-theme/green",
+                ancestors: []
             }, overrides);
         },
 
@@ -1564,9 +1577,9 @@ beforeEach(function() {
 
                         {
                             "entityType": "hdfs",
-                            "id": "10020|/webui/js/chorus/app/viewsViews.js",
+                            "id": "10021",
                             "name": "EdcViews.js",
-                            "path": "/webui/js/chorus/app/views",
+                            "path": "/webui/js/chorus/app/views/EdcViews.js",
                             isBinary: false,
                             isDir: false,
                             "lastUpdatedStamp": "2012-03-14 16:46:40",

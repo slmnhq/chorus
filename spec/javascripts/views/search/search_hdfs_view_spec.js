@@ -56,7 +56,10 @@ describe("chorus.views.SearchHdfs", function() {
             this.result = fixtures.searchResult({hdfs: {
                 results: [
                     fixtures.searchResultHdfsJson({
+                        id: 55,
+                        name: "bbb",
                         path: "/aaa/bbb",
+                        ancestors: [{name: "aaa", id: 44}, {name: "root", id: 33}],
                         isDir: false,
                         isBinary: false,
                         highlightedAttributes: {
@@ -92,10 +95,10 @@ describe("chorus.views.SearchHdfs", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).html()).toEqual("<em>aaa</em>");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/44");
 
             expect($links.eq(1).html()).toEqual("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa/bbb");
+            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browseFile/55");
         });
     });
 
@@ -104,9 +107,15 @@ describe("chorus.views.SearchHdfs", function() {
             this.result = fixtures.searchResult({hdfs: {
                 results: [
                     fixtures.searchResultHdfsJson({
+                        id: 55,
+                        name: "bbb",
                         path: "/aaa/bbb",
                         isDir: false,
-                        isBinary: true
+                        isBinary: true,
+                        ancestors: [{name: "aaa", id: 44}, {name: "root", id: 33}],
+                        highlightedAttributes: {
+                            path: ["/<em>aaa</em>/bbb"]
+                        }
                     })
                 ],
                 numFound: 10}
@@ -134,10 +143,10 @@ describe("chorus.views.SearchHdfs", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).text()).toBe("aaa");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/44");
 
             expect($links.eq(1).text()).toBe("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa/bbb");
+            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browseFile/55");
         });
     });
 });

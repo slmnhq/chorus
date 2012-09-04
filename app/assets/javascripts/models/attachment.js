@@ -56,7 +56,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     hdfsFile: function() {
         if(!this._hdfsFile) {
-            this._hdfsFile = this.get('hdfs') && new chorus.models.HdfsFile(this.get('hdfs'));
+            this._hdfsFile = this.get('hdfs') && new chorus.models.HdfsEntry(this.get('hdfs'));
         }
         return this._hdfsFile;
     },

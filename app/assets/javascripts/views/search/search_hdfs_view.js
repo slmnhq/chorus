@@ -5,8 +5,11 @@ chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
 
     additionalContext: function() {
         var segments  = this.getHighlightedPathSegments();
-        var pathLinks = _.map(this.model.pathSegments(), function(entry, index) {
-            if (this.hasHighlightedAttributes(entry)) {
+        var pathSegments = this.model.pathSegments() || [];
+        pathSegments.shift(); // remove root segment
+        pathSegments.push(this.model);
+        var pathLinks = _.map(pathSegments, function(entry, index) {
+            if (this.hasHighlightedAttributes()) {
                 var link = $("<a></a>").attr("href", entry.showUrl());
                 link.html(segments[index]);
                 return new Handlebars.SafeString(link.outerHtml());
@@ -31,7 +34,7 @@ chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
         return path.split(/\/(?!em>)/).slice(1);
     },
 
-    hasHighlightedAttributes: function(model) {
-        return model.get("highlightedAttributes") && model.get("highlightedAttributes")["path"];
+    hasHighlightedAttributes: function() {
+        return this.model.get("highlightedAttributes") && this.model.get("highlightedAttributes")["path"];
     }
 });

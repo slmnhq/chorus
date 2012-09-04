@@ -62,24 +62,23 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                     this.hdfsEntry = new chorus.models.HdfsEntry({
                         hadoopInstance: {
-                            id: '42'
+                            id: '123'
                         },
+                        id: '55',
                         path: '/',
                         name: 'my_file.sql',
                         isBinary: false
                     });
 
                     chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
-
-                    this.model = new chorus.models.HdfsFile({hadoopInstance: {id: 123}, path: "/my_file.sql"});
                 });
 
                 it("launches the dialog with right HdfsFile", function() {
                     this.view.$('a.external_table').click();
-                    this.server.completeFetchFor(this.model);
+                    this.server.completeFetchFor(this.hdfsEntry);
 
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                    expect(chorus.modal.model.get("path")).toBe("/my_file.sql");
+                    expect(chorus.modal.model.get("path")).toBe("/");
                 });
             });
 
@@ -87,23 +86,22 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 beforeEach(function() {
                     this.hdfsEntry = new chorus.models.HdfsEntry({
                         hadoopInstance: {
-                            id: '42'
+                            id: '123'
                         },
+                        id: '55',
                         path: '/foo',
                         name: 'my_file.sql',
                         isBinary: false
                     });
                     chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
-
-                    this.model = new chorus.models.HdfsFile({hadoopInstance: {id: 123}, path: "/foo/my_file.sql"});
                 });
 
                 it("launches the dialog with right HdfsFile", function() {
                     this.view.$('a.external_table').click();
-                    this.server.completeFetchFor(this.model);
+                    this.server.completeFetchFor(this.hdfsEntry);
 
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
-                    expect(chorus.modal.model.get("path")).toBe("/foo/my_file.sql");
+                    expect(chorus.modal.model.get("path")).toBe("/foo");
                 });
             });
         });
