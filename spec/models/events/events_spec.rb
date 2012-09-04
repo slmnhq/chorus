@@ -417,7 +417,7 @@ describe "Event types" do
       subject.source_dataset.bound_workspaces.should include(workspace)
     end
 
-    it_creates_activities_for { [actor, workspace, dataset] }
+    it_creates_activities_for { [actor, workspace, dataset, source_dataset] }
     it_does_not_create_a_global_activity
 
   end
@@ -461,7 +461,7 @@ describe "Event types" do
       subject.source_dataset.bound_workspaces.should include(workspace)
     end
 
-    it_creates_activities_for { [actor, workspace] }
+    it_creates_activities_for { [actor, workspace, source_dataset] }
     it_does_not_create_a_global_activity
   end
 
