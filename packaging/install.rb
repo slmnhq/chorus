@@ -48,7 +48,7 @@ class Install
 
   def log(message)
     puts message
-    File.open("install.log", "a") { |f| f.puts message }
+    File.open("#{destination_path}/install.log", "a") { |f| f.puts message }
   end
 
   def validate_non_root
@@ -284,10 +284,10 @@ class Install
   rescue InvalidVersion => e
     raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
   rescue CommandFailed => e
-    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    log "#{e.class}: #{e.message}"
     raise InstallationFailed.new MESSAGES[:installation_failed]
   rescue => e
-    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    log "#{e.class}: #{e.message}"
     raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
   end
 
