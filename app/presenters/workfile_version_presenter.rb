@@ -8,8 +8,8 @@ class WorkfileVersionPresenter < Presenter
         :id => id,
         :version_num => version_num,
         :commit_message => h(commit_message),
-        :owner => present(owner),
-        :modifier => present(modifier),
+        :owner => owner_hash,
+        :modifier => modifier_hash,
         :created_at => created_at,
         :updated_at => updated_at,
         :content_url => contents.url,
@@ -17,6 +17,14 @@ class WorkfileVersionPresenter < Presenter
         :content => get_content
       }
     })
+  end
+
+  def owner_hash
+    rendering_activities? ? { :id => model.owner_id } : present(owner)
+  end
+
+  def modifier_hash
+    rendering_activities? ? { :id => model.modifier_id } : present(modifier)
   end
 
   def icon_url

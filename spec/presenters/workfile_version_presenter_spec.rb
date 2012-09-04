@@ -4,7 +4,8 @@ describe WorkfileVersionPresenter, :type => :view do
   let(:workfile) { workfiles(:bob_public) }
   let(:owner) { workfile.owner }
   let(:version) { workfile.latest_workfile_version }
-  let(:presenter) { WorkfileVersionPresenter.new(version, view) }
+  let(:presenter) { WorkfileVersionPresenter.new(version, view, options) }
+  let(:options) { {} }
 
   before(:each) do
     stub(view).current_user { owner }
@@ -103,6 +104,17 @@ describe WorkfileVersionPresenter, :type => :view do
 
       it "includes the text of the file" do
         hash[:content].should == File.read(version.contents.path)
+      end
+    end
+
+    context "when rendering the activity stream" do
+      let(:options) { {:activity_stream => true} }
+
+      it "does not render the owner or modifier" do
+        hash[:owner][:id].should == owner.id
+        hash[:modifier][:id].should == owner.id
+        hash[:owner].keys.size.should == 1
+        hash[:modifier].keys.size.should == 1
       end
     end
   end
