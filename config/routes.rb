@@ -88,6 +88,8 @@ Chorus::Application.routes.draw do
     resources :attachments, :only => [:create, :show], :controller => 'note_attachments'
   end
 
+  resources :notifications, :only => [:index]
+
   resources :attachments, :only => [] do
     resource :download, :only => [:show] , :controller => 'attachment_downloads'
   end

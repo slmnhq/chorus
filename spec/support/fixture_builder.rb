@@ -236,5 +236,9 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+
+    #Notification
+    bobs_note = Events::NoteOnDataset.by(bob).first
+    fbuilder.name(:bobs_notification, Notification.create!({:recipient => bob, :notification_event => bobs_note}, :without_protection => true) )
   end
 end

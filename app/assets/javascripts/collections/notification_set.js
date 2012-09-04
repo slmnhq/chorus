@@ -1,7 +1,7 @@
 chorus.collections.NotificationSet = chorus.collections.Base.extend({
     constructorName: "NotificationSet",
     model: chorus.models.Notification,
-    urlTemplate: "notification",
+    urlTemplate: "notifications",
 
     urlParams: function() {
         return this.attributes;
