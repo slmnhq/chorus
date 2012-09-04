@@ -353,4 +353,57 @@ describe " system generated activities " do
 
   end
 
+
+  xit "generates system activity when an instance owner is changed" do
+    #There is a bug and it has been filed waiting on the bug to complete this test
+
+  end
+
+  xit "generates system activity when an external table is created from hdfs" do
+    #There is bug and not able to create an external table
+    create_valid_hadoop_instance(:name => "hdfs_as")
+    hdfs1_id = HadoopInstance.find_by_name("hdfs_as").id
+    wait_for_ajax
+    go_to_instance_page
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{hdfs1_id}']").click
+    end
+    click_link "hdfs_as"
+    wait_for_ajax
+    page.should have_content "case_sf_311.csv"
+    click_link "case_sf_311.csv"
+    wait_for_ajax
+    page.should have_content "1157509,06/30/2012 11:52 PM,,Open,210 WEST POINT RD,SFHA Requests,SFHA - Emergency"
+    click_link "Create as an external table"
+    within_modal do
+      fill_in 'tableName', :with => "hdfs_as"
+      click_button "Create External Table"
+    end
+
+
+  end
+
+  it "generates system activity when I upgrade the version of the file" do
+
+    create_valid_workspace(:name => "workfile_upgradas", :shared => true)
+    wait_for_ajax
+    create_valid_workfile(:name => "upgrade_version")
+    wait_for_ajax
+    page.find(".save .save_file_as").click
+    wait_until { page.find(".qtip[aria-hidden=false]") }
+    page.find("a[data-menu-name=new]").click
+    click_button "Save New Version"
+    wait_for_ajax
+    within "#sidebar" do
+      page.find("li[data-name='activity']").click
+    end
+    page.should have_content "EDC Admin added Version 2"
+    click_link "Summary"
+    wait_for_ajax
+    page.should have_content "EDC Admin added Version 2 of work file upgrade_version"
+    go_to_home_page
+    page.should have_content "EDC Admin added Version 2 of work file upgrade_version.sql in workspace workfile_upgradas"
+
+  end
+
 end
