@@ -1,7 +1,7 @@
 ##### Required environment variables CHORUS_HOME and RAILS_ENV #####
 
 if [ "$CHORUS_HOME" = "" ]; then
-    echo CHORUS_HOME not set
+    echo CHORUS_HOME not set, it should be set to the 'current' directory in your Chorus installation
     exit 1
 fi
 # remove trailing '/' from CHORUS_HOME
