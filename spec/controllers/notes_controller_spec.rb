@@ -53,6 +53,19 @@ describe NotesController do
         response.code.should == "422"
       end
     end
+
+    context "with 'notify users'" do
+      let(:bob) { users(:bob) }
+      let(:alice) { users(:alice) }
+
+      it "notifies the recipients" do
+        workspace = workspaces(:bob_public)
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => [bob.id, alice.id] }
+        response.code.should == "201"
+        bob.notification_events.last.body = "Notify people note"
+        alice.notification_events.last.body = "Notify people note"
+      end
+    end
   end
 
   describe "#update" do

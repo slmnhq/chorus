@@ -20,6 +20,9 @@ class User < ActiveRecord::Base
   has_many :workspaces, :through => :memberships
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
+  has_many :notifications, :foreign_key => 'recipient_id'
+
+  has_many :notification_events, :through => :notifications, :class_name => 'Events::Base'
 
   has_many :instance_accounts, :foreign_key => :owner_id
   has_many :hadoop_instances, :foreign_key => :owner_id
