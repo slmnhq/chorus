@@ -245,5 +245,10 @@ FactoryGirl.define do
       body "This is a note on a workspace"
     end
   end
+
+  factory :import_schedule, :class => ImportSchedule do
+    association :source_dataset, :factory => :gpdb_table
+    workspace
+  end
 end
 

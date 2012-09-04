@@ -1,5 +1,5 @@
 class DatasetPresenter < Presenter
-  delegate :id, :name, :schema, :source_dataset_for, :bound_workspaces, :api_type, :to => :model
+  delegate :id, :name, :schema, :source_dataset_for, :bound_workspaces, :import_schedules, :api_type, :to => :model
 
   def to_hash
     {
@@ -7,7 +7,7 @@ class DatasetPresenter < Presenter
       :type => thetype,
       :object_name => h(name),
       :schema => schema_hash
-    }.merge(workspace_hash).merge(associated_workspaces_hash)
+    }.merge(workspace_hash).merge(associated_workspaces_hash).merge(frequency)
   end
 
   def schema_hash
@@ -24,6 +24,15 @@ class DatasetPresenter < Presenter
 
   def workspace_hash
     options[:workspace] ? {:workspace => present(options[:workspace], @options)} : {}
+  end
+
+  def frequency
+    if options[:workspace] && options[:workspace].id
+      import_schedule = import_schedules.where("workspace_id = #{options[:workspace].id}")
+      {:frequency => import_schedule.first ? import_schedule.first.frequency : ""}
+    else
+      {:frequency => ""}
+    end
   end
 
   def associated_workspaces_hash

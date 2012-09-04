@@ -138,7 +138,7 @@ describe("chorus.views.Dataset", function() {
 
     context("when the model has an import schedule", function() {
         beforeEach(function() {
-            this.dataset.set({ importFrequency: "WEEKLY"});
+            this.dataset.set({ frequency: "WEEKLY"});
         });
 
         it("displays the correct import tag", function() {
@@ -148,7 +148,7 @@ describe("chorus.views.Dataset", function() {
 
     context("when the model does not have an import schedule", function() {
         beforeEach(function() {
-            this.dataset.unset("importFrequency");
+            this.dataset.unset("frequency");
         });
 
         it("does not display the import tag", function() {

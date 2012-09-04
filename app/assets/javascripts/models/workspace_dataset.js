@@ -80,7 +80,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         if (this.getImport().loaded) {
             if (this.getImport().hasActiveSchedule()) { return this.getImport().frequency(); }
         } else {
-            return this.get("importFrequency");
+            return this.get("frequency");
         }
     },
 

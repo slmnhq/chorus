@@ -226,7 +226,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#importFrequency", function() {
         beforeEach(function() {
-            this.dataset.set({importFrequency: 'WEEKLY'});
+            this.dataset.set({frequency: 'WEEKLY'});
         })
 
         context("when the dataset's import is not loaded", function() {

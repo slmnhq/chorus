@@ -63,7 +63,10 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:create, :show], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
-    resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets"
+    resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
+      resource :import, :only => [:show], :controller => "dataset_imports"
+    end
+
     resources :external_tables, :only => [:create]
     resources :csv, :only => [:create], :controller => 'workspace_csv' do
       member do

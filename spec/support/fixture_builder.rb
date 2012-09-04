@@ -184,6 +184,9 @@ FixtureBuilder.configure do |fbuilder|
       WorkfileVersion.create!({:workfile => binary_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
     end
 
+    import_schedule = ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04', :frequency => 'weekly', :workspace_id => bob_public_workspace.id, :to_table => "new_table_for_import", :source_dataset_id => bobs_table.id, :truncate => 't', :new_table => 't', :user_id => bob.id} , :without_protection => true)
+    fbuilder.name :bob_schedule, import_schedule
+
     #CSV File
     csv_file = CsvFile.new({:user => carly, :workspace => bob_public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'bobs_table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)
