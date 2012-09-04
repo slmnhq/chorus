@@ -1,11 +1,6 @@
 describe("chorus.collections.NotificationSet", function() {
     beforeEach(function() {
-        this.collection = fixtures.notificationSet([
-            fixtures.notification({ id: "101", type: "NOTE" }),
-            fixtures.notification({ id: "102", type: "WORKSPACE_CREATED" }),
-            fixtures.notification({ id: "103", type: "MembersAdded" }),
-            fixtures.notification({ id: "104", type: "INSTANCE_CREATED" })
-        ]);
+        this.collection = rspecFixtures.notificationSet();
     });
 
     it("is composed of notifications", function() {
@@ -15,7 +10,7 @@ describe("chorus.collections.NotificationSet", function() {
     describe("#url", function() {
         context("when constructed with no type option", function() {
             it("is correct", function() {
-                expect(this.collection.url()).toHaveUrlPath("/notification")
+                expect(this.collection.url()).toHaveUrlPath("/notifications")
             });
         });
 
@@ -25,7 +20,7 @@ describe("chorus.collections.NotificationSet", function() {
             });
 
             it("is correct", function() {
-                expect(this.collection.url()).toMatchUrl("/notification?type=unread", { paramsToIgnore: ["page", "rows" ]})
+                expect(this.collection.url()).toMatchUrl("/notifications?type=unread", { paramsToIgnore: ["page", "rows" ]})
             });
         });
     });
@@ -45,16 +40,20 @@ describe("chorus.collections.NotificationSet", function() {
 
         it("has an activity model for each model in the notification set", function() {
             expect(this.activities.models.length).toBe(4);
+            expect(this.activities.models[0].get("id")).toBe(this.collection.models[0].get("id"));
+            expect(this.activities.models[1].get("id")).toBe(this.collection.models[1].get("id"));
+            expect(this.activities.models[2].get("id")).toBe(this.collection.models[2].get("id"));
+            expect(this.activities.models[3].get("id")).toBe(this.collection.models[3].get("id"));
 
-            expect(this.activities.models[0].get("id")).toBe("101");
-            expect(this.activities.models[1].get("id")).toBe("102");
-            expect(this.activities.models[2].get("id")).toBe("103");
-            expect(this.activities.models[3].get("id")).toBe("104");
+            expect(this.activities.models[0].get("action")).toBe("NOTE");
+            expect(this.activities.models[1].get("action")).toBe("NOTE");
+            expect(this.activities.models[2].get("action")).toBe("NOTE");
+            expect(this.activities.models[3].get("action")).toBe("NOTE");
 
-            expect(this.activities.models[0].get("type")).toBe("NOTE");
-            expect(this.activities.models[1].get("type")).toBe("WORKSPACE_CREATED");
-            expect(this.activities.models[2].get("type")).toBe("MembersAdded");
-            expect(this.activities.models[3].get("type")).toBe("INSTANCE_CREATED");
+            expect(this.activities.models[0].get("actionType")).toBe("NoteOnGreenplumInstance");
+            expect(this.activities.models[1].get("actionType")).toBe("NoteOnGreenplumInstance");
+            expect(this.activities.models[2].get("actionType")).toBe("NoteOnGreenplumInstance");
+            expect(this.activities.models[3].get("actionType")).toBe("NoteOnGreenplumInstance");
         });
     });
 
@@ -104,7 +103,13 @@ describe("chorus.collections.NotificationSet", function() {
         });
 
         it("calls the correct API", function() {
-            expect(this.server.lastUpdate().url).toBe("/notification/101,102,103,104/read")
+            expect(this.server.lastUpdate().url).toBe("/notification/read");
+            expect(this.server.lastUpdate().params()["notification_ids[]"]).toEqual([
+                this.collection.models[0].get("id").toString(),
+                this.collection.models[1].get("id").toString(),
+                this.collection.models[2].get("id").toString(),
+                this.collection.models[3].get("id").toString()
+            ]);
         });
 
         describe("when the call succeeds", function() {

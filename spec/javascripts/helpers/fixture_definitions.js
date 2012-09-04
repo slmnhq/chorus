@@ -141,6 +141,8 @@ window.rspecFixtureDefinitions = {
         }
     },
 
+    notificationSet: {},
+
     searchResult : {},
     emptySearchResult : {
         model: "SearchResult"
