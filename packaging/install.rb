@@ -257,6 +257,7 @@ class Install
   end
 
   def install
+    log "Installing Chorus version #{version} to #{destination_path}"
     log "Copying files into #{destination_path}..."
     copy_chorus_to_destination
     create_shared_structure
@@ -303,7 +304,7 @@ class Install
   end
 
   def version
-    File.read("#{chorus_installation_path}/version_build").strip
+    @version ||= File.read("#{chorus_installation_path}/version_build").strip
   end
 
   def release_path
@@ -311,7 +312,7 @@ class Install
   end
 
   def chorus_exec(command)
-    system("#{command} >> #{destination_path}/install.log 2>&1") || raise(CommandFailed, command)
+    system("PATH=#{release_path}/postgres/bin:$PATH && #{command} >> #{destination_path}/install.log 2>&1") || raise(CommandFailed, command)
   end
 
   def stop_postgres

@@ -452,15 +452,15 @@ describe "Install" do
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
       @call_order = []
-      mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
-      mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
+      mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start postgres") { @call_order << 'start' }
+      mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres") { @call_order << 'stop' }
     end
 
     context "when installing fresh" do
       before do
-        mock(installer).system("/opt/chorus/releases/2.2.0.0/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { @call_order << "create_database" }
-        mock(installer).system(%Q{/opt/chorus/releases/2.2.0.0/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
-        mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
+        mock(installer).chorus_exec("/opt/chorus/releases/2.2.0.0/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db") { @call_order << "create_database" }
+        mock(installer).chorus_exec(%Q{/opt/chorus/releases/2.2.0.0/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}) { @call_order << "create_user" }
+        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed") { @call_order << "migrate" }
       end
 
       it "creates the database structure" do
@@ -472,7 +472,7 @@ describe "Install" do
     context "when upgrading" do
       before do
         installer.do_upgrade = true
-        mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:migrate >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
+        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:migrate") { @call_order << "migrate" }
       end
 
       it "should migrate the existing database" do
@@ -498,7 +498,7 @@ describe "Install" do
         stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh stop >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh stop") { true }
       end
 
       it "should stop the previous version" do
@@ -523,7 +523,7 @@ describe "Install" do
         stub(installer).version { '2.2.0.0' }
         installer.do_upgrade = true
         installer.destination_path = '/opt/chorus'
-        mock(installer).system("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start >> /opt/chorus/install.log 2>&1") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start") { true }
       end
 
       it "should stop the previous version" do
@@ -562,7 +562,7 @@ describe "Install" do
 
     it "calls tar to unpack postgres" do
       installer.instance_variable_set(:@postgres_package, 'postgres-blahblah.tar.gz')
-      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1") { true }
+      mock(installer).chorus_exec("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/") { true }
       installer.extract_postgres
     end
   end
@@ -570,10 +570,11 @@ describe "Install" do
   describe "command execution" do
     before do
       installer.destination_path = '/opt/chorus'
+      stub(installer).version { "2.2.0.0" }
     end
 
     it "raises an exception if exit code is different than zero" do
-      mock(installer).system("silly command >> /opt/chorus/install.log 2>&1") { false }
+      mock(installer).system("PATH=/opt/chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command >> /opt/chorus/install.log 2>&1") { false }
       expect { installer.send(:chorus_exec, "silly command") }.to raise_error(Install::CommandFailed)
     end
   end
