@@ -97,6 +97,23 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         })
     });
 
+    describe("when the entry is the root directory", function () {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.hdfsEntry,
+                {
+                    ancestors: [],
+                    path: "/",
+                    name: "/",
+                    entries: []
+                }
+            );
+        });
+
+        it("shows just '/' for root", function () {
+            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.name() + ": /");
+        });
+    })
 
     describe("when the path is long", function () {
         beforeEach(function () {
