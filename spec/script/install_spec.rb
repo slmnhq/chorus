@@ -270,7 +270,7 @@ describe "Install" do
       FileUtils.mkpath './chorus_installation/'
       FileUtils.touch './chorus_installation/source_file_of_some_kind'
       stub_version
-      mock(FileUtils).cp_r('./chorus_installation/.', '/opt/chorus/releases/2.2.0.0', hash_including(:preserve => true))
+      mock(FileUtils).cp_r('./chorus_installation/.', '/opt/chorus/releases/2.2.0.0', :preserve => true)
     end
 
     it "creates the correct release path" do
