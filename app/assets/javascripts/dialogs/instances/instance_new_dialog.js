@@ -101,7 +101,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         if (this.model.get("provision_type") == "create") {
             this.provisioning = true;
             chorus.toast("instances.new_dialog.provisioning");
-            chorus.router.navigate("/gpdb_instances", { selectId: this.model.get("id") });
+            chorus.router.navigate("/instances", { selectId: this.model.get("id") });
 
         }
 
