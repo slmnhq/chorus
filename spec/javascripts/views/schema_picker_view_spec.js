@@ -25,6 +25,13 @@ describe("chorus.views.SchemaPicker", function() {
                 expect(this.server.lastFetchFor(this.instance.databases())).toBeDefined();
             });
 
+            context("when clicking the 'new database' button", function() {
+                it("empties the 'existing database' select", function() {
+                    spyOn(this.view, 'clearDatabaseSelection');
+                    this.view.createNewDatabase({ preventDefault: function() {} });
+                    expect(this.view.clearDatabaseSelection).toHaveBeenCalled();
+                });
+            });
         });
 
         context("when an instance and a database are provided", function() {

@@ -114,9 +114,14 @@
 
         createNewDatabase:function (e) {
             e.preventDefault();
+            this.clearDatabaseSelection();
             this.resetSelect("schema");
             this.setState({ database: CREATE_NEW, schema: CREATE_NESTED });
             this.$(".schema input.name").val(chorus.models.Schema.DEFAULT_NAME);
+        },
+
+        clearDatabaseSelection: function() {
+            this.resetSelect('database')
         },
 
         createNewSchema:function (e) {
