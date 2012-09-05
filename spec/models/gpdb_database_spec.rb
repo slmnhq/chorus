@@ -4,6 +4,7 @@ describe GpdbDatabase do
   context "#refresh" do
     let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
     let(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
+    let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
 
     before(:each) do
       stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
@@ -18,8 +19,19 @@ describe GpdbDatabase do
       databases = gpdb_instance.databases
 
       databases.length.should == 4
-      databases.map { |db| db.name }.should =~ ["db_a", "db_B", "db_C", "db_d"]
+      databases.map { |db| db.name }.should =~ db_names
       databases.map { |db| db.gpdb_instance_id }.uniq.should == [gpdb_instance.id]
+    end
+
+    it "returns a list of GpdbDatabase objects" do
+      results = GpdbDatabase.refresh(account)
+
+      db_objects = []
+      db_names.each do |name|
+        db_objects << gpdb_instance.databases.find_by_name(name)
+      end
+
+      results.should match_array(db_objects)
     end
 
     it "does not re-create databases that already exist in our database" do

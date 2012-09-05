@@ -19,14 +19,18 @@ class GpdbDatabase < ActiveRecord::Base
 
   def self.refresh(account)
     gpdb_instance = account.gpdb_instance
+    results = []
     db_names = Gpdb::ConnectionBuilder.connect!(gpdb_instance, account) do |conn|
       conn.exec_query(DATABASE_NAMES_SQL)
     end.map { |row| row["datname"] }
 
     db_names.map do |name|
       db = gpdb_instance.databases.find_or_create_by_name!(name)
+      results << db
       db.update_attributes!({:stale_at => nil}, :without_protection => true)
     end
+
+    results
   end
 
   def create_schema(name, current_user)

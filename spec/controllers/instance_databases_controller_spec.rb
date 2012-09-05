@@ -18,7 +18,9 @@ describe InstanceDatabasesController do
     context "when instance accessible" do
       let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }
       let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => gpdb_instance.owner }
-      let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
+      let!(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
+      let!(:database2) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
+      let!(:database3) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
 
       it "checks authorization" do
         stub(GpdbDatabase).refresh { [database] }
@@ -39,7 +41,7 @@ describe InstanceDatabasesController do
 
       context "when refresh of the db succeeds" do
         before do
-          stub(GpdbDatabase).refresh { [database] }
+          stub(GpdbDatabase).refresh { [database2, database] }
         end
 
         it "should succeed" do
@@ -47,6 +49,8 @@ describe InstanceDatabasesController do
           response.code.should == "200"
           decoded_response[0].id.should == database.id
           decoded_response[0].instance.id.should == gpdb_instance.id
+          decoded_response.size.should == 2
+          decoded_response[0].name.should < decoded_response[1].name
         end
       end
     end
