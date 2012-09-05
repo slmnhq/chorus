@@ -110,6 +110,10 @@ class HdfsEntry < ActiveRecord::Base
     File.dirname(path)
   end
 
+  def url
+    hadoop_instance.url.chomp('/') + path
+  end
+
   private
 
   def self.normalize_path(path)

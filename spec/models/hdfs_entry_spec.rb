@@ -398,6 +398,14 @@ describe HdfsEntry do
     end
   end
 
+  describe "#url" do
+    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:entry) { hadoop_instance.hdfs_entries.build(:path => "/file.txt") }
+    it "returns a url" do
+      entry.url.should == "gphdfs://hadoop.example.com:1111/file.txt"
+    end
+  end
+
   describe ".from_param(param)" do
     it "uses the hadoop instance id and file-system path specified in the string" do
       entry = hdfs_entries(:hdfs_file)
