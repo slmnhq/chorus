@@ -25,8 +25,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         }))();
 
         this.model.set({
-            hadoopInstanceId: '234',
-            path: '/foo/bar.txt'
+            hdfs_entry_id: '234'
         });
 
         this.dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: this.model, csvOptions: this.csvOptions});
@@ -127,8 +126,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     expect(request.params()["fake_model[table_name]"]).toBe("hi");
                     expect(request.params()["fake_model[types][]"]).toEqual(['text','text','text','text','text']);
                     expect(request.params()["fake_model[delimiter]"]).toBe(",");
-                    expect(request.params()["fake_model[path]"]).toBe("/foo/bar.txt");
-                    expect(request.params()["fake_model[hadoop_instance_id]"]).toBe("234");
+                    expect(request.params()["fake_model[hdfs_entry_id]"]).toBe("234");
                     expect(request.params()["fake_model[column_names][]"]).toEqual(['column_1', 'column_2', 'column_3', 'column_4', 'column_5']);
                 });
 

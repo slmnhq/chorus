@@ -11,7 +11,7 @@ describe HdfsExternalTable do
     let(:hdfs_file) { hadoop_instance.hdfs_entries.create!({:path => "/foo_fighter/twisted_sisters/"}, :without_protection => true) }
     let(:parameters) do
       {
-          :id => hdfs_file.id,
+          :hdfs_entry_id => hdfs_file.id,
           :has_header => true,
           :column_names => ["field1", "field2"],
           :types => ["text", "text"],
@@ -71,7 +71,7 @@ describe HdfsExternalTable do
       end
 
       describe "validating parameters" do
-        [:id, :has_header, :column_names, :types, :delimiter, :table_name].each do |missing_parameter|
+        [:hdfs_entry_id, :has_header, :column_names, :types, :delimiter, :table_name].each do |missing_parameter|
           it "raises a validation error when missing parameter #{missing_parameter}" do
             expect { HdfsExternalTable.create(workspace, account, parameters.except(missing_parameter), user)}.to raise_error { |error|
               error.errors.messages[:parameter_missing][0][1][:message].should == "Parameter #{missing_parameter} missing for Hdfs External Table"
@@ -99,7 +99,7 @@ describe HdfsExternalTable do
 
       let(:parameters) do
         {
-            :id => hdfs_file.id,
+            :hdfs_entry_id => hdfs_file.id,
             :has_header => true,
             :column_names => ["col1", "col2", "col3", "col4", "col5"],
             :types => ["text", "text", "text", "text", "text"],

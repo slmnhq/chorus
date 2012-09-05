@@ -4,9 +4,7 @@
 
         this.file = fixtures.hdfsEntryFile({
             id: 789,
-            path: "/folder/filename.txt",
             name: "filename.txt",
-            hadoopInstance: {id: 9876},
             lastUpdatedStamp: now
         });
 
@@ -60,7 +58,7 @@
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.model.get("path")).toBe("/folder/filename.txt");
+                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(789);
             });
         });
 

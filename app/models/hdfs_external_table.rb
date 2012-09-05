@@ -34,7 +34,7 @@ class HdfsExternalTable
     def create_sql(parameters)
       validate_parameters!(parameters)
 
-      hdfs_entry = HdfsEntry.find(parameters[:id])
+      hdfs_entry = HdfsEntry.find(parameters[:hdfs_entry_id])
 
       header = parameters[:has_header].present? ? 'HEADER' : ''
 
@@ -49,7 +49,7 @@ class HdfsExternalTable
     end
 
     def validate_parameters!(parameters)
-      [:id, :has_header, :column_names, :types, :delimiter, :table_name].each do |attr|
+      [:hdfs_entry_id, :has_header, :column_names, :types, :delimiter, :table_name].each do |attr|
         raise ApiValidationError.new(:parameter_missing, :generic, {:message => "Parameter #{attr} missing for Hdfs External Table"}) unless parameters.has_key?(attr)
       end
 
@@ -59,8 +59,7 @@ class HdfsExternalTable
     end
 
     def create_event(dataset, workspace, parameters, creator)
-      hdfs_entry = HdfsEntry.find(parameters[:id])
-      #hdfs_entry = HdfsEntry.find_or_create_by_hadoop_instance_id_and_path(parameters[:hadoop_instance_id], parameters[:path])
+      hdfs_entry = HdfsEntry.find(parameters[:hdfs_entry_id])
 
       Events::WorkspaceAddHdfsAsExtTable.by(creator).add(
           :workspace => workspace,
