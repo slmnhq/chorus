@@ -9,7 +9,7 @@ resource "Greenplum DB instances" do
 
   before do
     log_in owner
-    stub(GpdbDatabase).refresh.with_any_args { true }
+    stub(GpdbDatabase).refresh.with_any_args { [database] }
   end
 
 
