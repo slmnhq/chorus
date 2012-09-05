@@ -14,6 +14,7 @@ describe DataMigrator do
       mock.proxy(AssociatedDatasetMigrator).migrate.any_number_of_times
       mock.proxy(ActivityMigrator).migrate.with(anything).any_number_of_times
       mock.proxy(NoteMigrator).migrate.with(anything).any_number_of_times
+      mock.proxy(NotificationMigrator).migrate.with(anything).any_number_of_times
 
       mock.proxy(ActivityMigrator).validate
       mock.proxy(AssociatedDatasetMigrator).validate
@@ -25,6 +26,7 @@ describe DataMigrator do
       mock.proxy(MembershipMigrator).validate
       mock.proxy(NoteAttachmentMigrator).validate
       mock.proxy(NoteMigrator).validate
+      mock.proxy(NotificationMigrator).validate
       mock.proxy(UserMigrator).validate
       mock.proxy(WorkfileMigrator).validate
       mock.proxy(WorkspaceMigrator).validate

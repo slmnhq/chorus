@@ -10,6 +10,7 @@ class DataMigrator
     AssociatedDatasetMigrator.migrate
     ActivityMigrator.migrate(options)
     NoteAttachmentMigrator.migrate(options)
+    NotificationMigrator.migrate(options)
 
     # Note attachments
     # Note comments
@@ -25,6 +26,7 @@ class DataMigrator
     MembershipMigrator.validate
     NoteAttachmentMigrator.validate
     NoteMigrator.validate
+    NotificationMigrator.validate
     UserMigrator.validate
     WorkfileMigrator.validate
     WorkspaceMigrator.validate

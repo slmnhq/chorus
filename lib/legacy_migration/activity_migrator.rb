@@ -7,6 +7,7 @@ class ActivityMigrator < AbstractMigrator
       WorkfileMigrator.migrate(options)
       SandboxMigrator.migrate #workaround for broken composite keys in DATASET_IMPORT activities
       ensure_legacy_id :events
+      ensure_legacy_type :events
     end
 
     def classes_to_validate
@@ -37,6 +38,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -46,6 +48,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
+        'edc_activity_stream',
         'Events::SourceTableCreated',
         datasets.id,
         'Dataset',
@@ -73,6 +76,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target2_id,
         target2_type,
@@ -82,6 +86,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
+        'edc_activity_stream',
         'Events::FileImportSuccess',
         datasets.id,
         'Dataset',
@@ -122,6 +127,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         created_at,
         updated_at,
@@ -129,6 +135,7 @@ class ActivityMigrator < AbstractMigrator
         actor_id)
       SELECT
         streams.id,
+        'edc_activity_stream',
         'Events::FileImportFailed',
         streams.created_tx_stamp,
         streams.last_updated_tx_stamp,
@@ -170,6 +177,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
     INSERT INTO events(
       legacy_id,
+      legacy_type,
       action,
       target2_id,
       target2_type,
@@ -179,6 +187,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
+      'edc_activity_stream',
       'Events::DatasetImportSuccess',
       datasets.id,
       'Dataset',
@@ -219,6 +228,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
     INSERT INTO events(
       legacy_id,
+      legacy_type,
       action,
       target2_id,
       target2_type,
@@ -228,6 +238,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
+      'edc_activity_stream',
       'Events::DatasetImportFailed',
       datasets.id,
       'Dataset',
@@ -287,6 +298,7 @@ class ActivityMigrator < AbstractMigrator
     Legacy.connection.exec_query(%Q(
     INSERT INTO events(
       legacy_id,
+      legacy_type,
       action,
       target2_id,
       target2_type,
@@ -296,6 +308,7 @@ class ActivityMigrator < AbstractMigrator
       actor_id)
     SELECT
       streams.id,
+      'edc_activity_stream',
       'Events::FileImportCreated',
       datasets.id,
       'Dataset',
@@ -338,6 +351,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -345,6 +359,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::PublicWorkspaceCreated',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -367,6 +382,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -374,6 +390,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::PrivateWorkspaceCreated',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -396,6 +413,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -403,6 +421,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkspaceArchived',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -424,6 +443,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -431,6 +451,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkspaceUnarchived',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -452,6 +473,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -459,6 +481,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkspaceMakePublic',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -480,6 +503,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           created_at,
           updated_at,
@@ -487,6 +511,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkspaceMakePrivate',
           streams.created_tx_stamp,
           streams.last_updated_tx_stamp,
@@ -508,6 +533,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -517,6 +543,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkfileCreated',
           workfiles.id,
           'Workfile',
@@ -544,6 +571,7 @@ class ActivityMigrator < AbstractMigrator
     Legacy.connection.exec_query(%Q(
   INSERT INTO events(
     legacy_id,
+    legacy_type,
     action,
     target2_id,
     target2_type,
@@ -553,6 +581,7 @@ class ActivityMigrator < AbstractMigrator
     actor_id)
   SELECT
     streams.id,
+    'edc_activity_stream',
     'Events::DatasetImportCreated',
     datasets.id,
     'Dataset',
@@ -593,6 +622,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -601,6 +631,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::GreenplumInstanceCreated',
           gpdb_instances.id,
           'GpdbInstance',
@@ -625,6 +656,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -633,6 +665,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::HadoopInstanceCreated',
           hadoop_instances.id,
           'HadoopInstance',
@@ -657,6 +690,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -665,6 +699,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::UserAdded',
           user_added.id,
           'User',
@@ -690,6 +725,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -699,6 +735,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::MembersAdded',
           user_added.id,
           'User',
@@ -745,6 +782,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -753,6 +791,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::ProvisioningFail',
           gpdb_instances.id,
           'GpdbInstance',
@@ -778,6 +817,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -786,6 +826,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::ProvisioningSuccess',
           gpdb_instances.id,
           'GpdbInstance',
@@ -811,6 +852,7 @@ class ActivityMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
         INSERT INTO events(
           legacy_id,
+          legacy_type,
           action,
           target1_id,
           target1_type,
@@ -820,6 +862,7 @@ class ActivityMigrator < AbstractMigrator
           actor_id)
         SELECT
           streams.id,
+          'edc_activity_stream',
           'Events::WorkfileUpgradedVersion',
           workfiles.id,
           'Workfile',

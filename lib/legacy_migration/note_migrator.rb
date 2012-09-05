@@ -5,6 +5,7 @@ class NoteMigrator < AbstractMigrator
       WorkfileMigrator.migrate(options)
       DatabaseObjectMigrator.migrate
       ensure_legacy_id :events
+      ensure_legacy_type :events
     end
 
     def classes_to_validate
@@ -37,6 +38,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -46,6 +48,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnGreenplumInstance',
         gpdb_instances.id,
         'GpdbInstance',
@@ -77,6 +80,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -86,6 +90,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnHadoopInstance',
         hadoop_instances.id,
         'HadoopInstance',
@@ -117,6 +122,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -126,6 +132,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnHdfsFile',
         hdfs_entries.id,
         'HdfsEntry',
@@ -157,6 +164,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         workspace_id,
         created_at,
@@ -165,6 +173,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnWorkspace',
         workspaces.id,
         edc_comment.created_stamp,
@@ -192,6 +201,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -201,6 +211,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnWorkfile',
         workfiles.id,
         'Workfile',
@@ -229,6 +240,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -239,6 +251,7 @@ class NoteMigrator < AbstractMigrator
         workspace_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnWorkspaceDataset',
         datasets.id,
         'Dataset',
@@ -270,6 +283,7 @@ class NoteMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO events(
         legacy_id,
+        legacy_type,
         action,
         target1_id,
         target1_type,
@@ -279,6 +293,7 @@ class NoteMigrator < AbstractMigrator
         actor_id)
       SELECT
         edc_comment.id,
+        'edc_comment',
         'Events::NoteOnDataset',
         datasets.id,
         'Dataset',

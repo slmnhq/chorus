@@ -6,6 +6,12 @@ class AbstractMigrator
     end
   end
 
+  def self.ensure_legacy_type(sym)
+    unless ActiveRecord::Base.connection.column_exists?(sym, :legacy_type)
+      ActiveRecord::Base.connection.add_column sym, :legacy_type, :string
+    end
+  end
+
   def self.validate
     classes_to_validate.each do |klass|
       klass, finder_options = klass if klass.is_a? Array
