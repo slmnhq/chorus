@@ -4,8 +4,7 @@ describe DatasetsController do
   let(:user) { users(:carly) }
   let(:instance_account) { instance_accounts(:iamcarly) }
   let(:gpdb_instance) { instance_account.gpdb_instance }
-  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
-
+  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema(options).to_sql }
   let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:table) { schema.datasets.tables.first }
@@ -25,37 +24,38 @@ describe DatasetsController do
       ])
       stub(table).add_metadata!(instance_account)
     end
+    context "without any filter " do
+      let(:options) { {:sort => [{:relname => 'asc'}]} }
+      it "should retrieve authorized db objects for a schema" do
+        get :index, :schema_id => schema.to_param
 
-    it "should retrieve authorized db objects for a schema" do
-      get :index, :schema_id => schema.to_param
+        response.code.should == "200"
+        decoded_response.length.should == 3
+        decoded_response.map(&:object_name).should match_array(['bobs_table', 'new_table', 'new_view'])
+        schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
+      end
 
-      response.code.should == "200"
-      decoded_response.length.should == 3
-      decoded_response.map(&:object_name).should match_array(['bobs_table','new_table','new_view'])
-      schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
+      it "should not return db objects in another schema" do
+        different_table = datasets(:other_table)
+        get :index, :schema_id => schema.to_param
+        decoded_response.map(&:id).should_not include different_table.id
+      end
+
+      it "should paginate results" do
+        get :index, :schema_id => schema.to_param, :per_page => 1
+        decoded_response.length.should == 1
+      end
+
+      it "should sort db objects by name" do
+        get :index, :schema_id => schema.to_param
+        # stub checks for valid SQL with sorting
+      end
     end
-
-    it "should not return db objects in another schema" do
-      different_table = datasets(:other_table)
-      get :index, :schema_id => schema.to_param
-      decoded_response.map(&:id).should_not include different_table.id
-    end
-
-    it "should paginate results" do
-      get :index, :schema_id => schema.to_param, :per_page => 1
-      decoded_response.length.should == 1
-    end
-
-    it "should sort db objects by name" do
-      get :index, :schema_id => schema.to_param
-      decoded_response.first.object_name.downcase.should < decoded_response.second.object_name.downcase
-    end
-
-    it "should filter db objects by name" do
-      get :index, :schema_id => schema.to_param, :filter => 'view'
-      decoded_response.length.should >= 1
-      decoded_response.each do |response|
-        response.object_name.should =~ /view/
+    context "with filter" do
+      let(:options) { {:filter => [{:relname => 'view'}], :sort => [{:relname => 'asc'}]} }
+      it "should filter db objects by name" do
+        get :index, :schema_id => schema.to_param, :filter => 'view'
+        # stub checks for valid SQL with sorting and filtering
       end
     end
   end

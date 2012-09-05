@@ -393,27 +393,47 @@ describe Dataset::Query, :database_integration => true do
   end
 
   describe "#tables_and_views_in_schema" do
-    let(:sql) { subject.tables_and_views_in_schema.to_sql }
+    let(:sql) { subject.tables_and_views_in_schema(options).to_sql }
+    context "without filter options" do
+      let(:options) { {} }
 
-    it "returns a query whose result includes the names of all tables and views in the schema," +
-           "but does not include sub-partition tables, indexes, or relations in other schemas" do
-      names = rows.map { |row| row["name"] }
-      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table", "7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?"]
+      it "returns a query whose result includes the names of all tables and views in the schema," +
+             "but does not include sub-partition tables, indexes, or relations in other schemas" do
+        names = rows.map { |row| row["name"] }
+        names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table", "7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?"]
+      end
+
+      it "includes the relations' types ('r' for table, 'v' for view)" do
+        view_row = rows.find { |row| row['name'] == "view1" }
+        view_row["type"].should == "v"
+
+        rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r", "r", "r", "r"]
+      end
+
+      it "includes whether or not each relation is a master table" do
+        master_row = rows.find { |row| row['name'] == "master_table1" }
+        master_row["master_table"].should == "t"
+
+        rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f", "f", "f", "f"]
+      end
+    end
+    context "with filter options" do
+      let(:options) { {:filter => [{:relname => "Table"}]} }
+      it "returns a query whose result with proper filtering" do
+        names = rows.map { |row| row["name"] }
+        names.should =~ ["base_table1", "external_web_table1", "master_table1", "different_names_table", "different_types_table"]
+      end
     end
 
-    it "includes the relations' types ('r' for table, 'v' for view)" do
-      view_row = rows.find { |row| row['name'] == "view1" }
-      view_row["type"].should == "v"
-
-      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r", "r", "r", "r"]
+    context "with sort options" do
+      let(:options) {  {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]}}
+      it "returns a query whose result with proper filtering" do
+        names = rows.map { |row| row["name"] }
+        names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1" ]
+      end
     end
 
-    it "includes whether or not each relation is a master table" do
-      master_row = rows.find { |row| row['name'] == "master_table1" }
-      master_row["master_table"].should == "t"
 
-      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f", "f", "f", "f"]
-    end
   end
 
   describe "#import" do
