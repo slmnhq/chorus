@@ -44,7 +44,7 @@ describe "Visualizations" do
       wait_for_ajax(60)
       click_link "analytics"
       wait_for_ajax
-      click_link "campaign_dim"
+      click_link "campaign_dim_stage"
       wait_for_ajax
       click_button "Visualize"
       find(".chart_icon.boxplot").click
