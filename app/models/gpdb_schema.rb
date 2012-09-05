@@ -8,6 +8,7 @@ class GpdbSchema < ActiveRecord::Base
   WHERE
     schemas.nspname NOT LIKE 'pg_%'
     AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
+  ORDER BY lower(schemas.nspname)
   SQL
 
   SCHEMA_FUNCTION_QUERY = <<-SQL
@@ -44,7 +45,7 @@ class GpdbSchema < ActiveRecord::Base
       conn.exec_query(SCHEMAS_SQL)
     end
 
-    schema_rows.map do |row|
+    schema_rows.each do |row|
       begin
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
         found_schemas << schema
@@ -56,10 +57,10 @@ class GpdbSchema < ActiveRecord::Base
         end
         Dataset.refresh(account, schema, options) if schema_new || options[:refresh_all]
 
-        schema
       rescue ActiveRecord::StatementInvalid => e
       end
     end
+    found_schemas
   rescue ActiveRecord::JDBCError => e
     Rails.logger.error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
   ensure

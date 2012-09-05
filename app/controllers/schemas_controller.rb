@@ -1,8 +1,8 @@
 class SchemasController < GpdbController
   def index
     database = GpdbDatabase.find(params[:database_id])
-    GpdbSchema.refresh(authorized_gpdb_account(database), database)
-    present database.schemas.order("lower(name)")
+    schemas = GpdbSchema.refresh(authorized_gpdb_account(database), database)
+    present schemas
   end
 
   def show

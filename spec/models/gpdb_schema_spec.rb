@@ -102,6 +102,21 @@ describe GpdbSchema do
     end
   end
 
+  context "refresh returns the list of schemas", :database_integration => true do
+    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
+
+    before do
+      refresh_chorus
+    end
+
+    it "returns the sorted list of schemas" do
+      schemas = GpdbSchema.refresh(account, database)
+      schemas.should be_a(Array)
+      schemas.map(&:name).should == schemas.map(&:name).sort
+    end
+  end
+
   describe ".find_and_verify_in_source", :database_integration => true do
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:rails_only_schema) { GpdbSchema.find_by_name('rails_only_schema') }
