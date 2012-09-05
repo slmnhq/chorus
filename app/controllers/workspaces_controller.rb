@@ -72,7 +72,7 @@ class WorkspacesController < ApplicationController
           Events::WorkspaceMakePublic.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceMakePrivate.by(current_user).add(:workspace => workspace)
     end
-    if params[:workspace][:archived] != original_archived
+    if params[:workspace][:archived].present? && params[:workspace][:archived] != original_archived
       workspace.archived? ?
           Events::WorkspaceArchived.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceUnarchived.by(current_user).add(:workspace => workspace)

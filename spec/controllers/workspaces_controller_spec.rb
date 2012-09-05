@@ -262,13 +262,16 @@ describe WorkspacesController do
 
       it "allows changing the sandbox" do
         sandbox = gpdb_schemas(:other_schema)
-        lambda {
-          put :update, :id => workspace.id, :workspace => {
-              :sandbox_id => sandbox.to_param
-          }
 
-          response.should be_success
-        }.should change(Events::WorkspaceAddSandbox.by(owner), :count).by(1)
+        lambda {
+          lambda {
+            put :update, :id => workspace.id, :workspace => {
+                :sandbox_id => sandbox.to_param
+            }
+
+            response.should be_success
+          }.should change(Events::WorkspaceAddSandbox.by(owner), :count).by(1)
+        }.should_not change(Events::WorkspaceUnarchived, :count)
 
         workspace.reload
         workspace.sandbox_id.should == sandbox.id
