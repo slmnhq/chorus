@@ -12,10 +12,12 @@ resource "Greenplum DB schemas" do
   let(:table) { FactoryGirl.create(:gpdb_table, :name => "table1", :schema => db_schema) }
   let(:view) { FactoryGirl.create(:gpdb_view, :name => "view1", :schema => db_schema) }
 
+  let(:default_dataset_refresh_options) { { :sort => [{:relname => 'asc'}] } }
+
   before do
     log_in owner
     stub(GpdbSchema).refresh(owner_account, database) { [db_schema] }
-    stub(Dataset).refresh(owner_account, db_schema) { [table, view] }
+    stub(Dataset).refresh(owner_account, db_schema, default_dataset_refresh_options) { [table, view] }
     stub(Dataset).add_metadata!(anything, owner_account)
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).verify_in_source
