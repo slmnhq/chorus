@@ -2,8 +2,6 @@ class InstanceDatabasesController < GpdbController
   def index
     gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
     databases = GpdbDatabase.refresh(authorized_gpdb_account(gpdb_instance))
-    databases = (databases & gpdb_instance.databases)
-      .sort! { |a,b| a.name.downcase <=> b.name.downcase }
 
     present databases
   end

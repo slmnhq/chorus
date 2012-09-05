@@ -55,6 +55,16 @@ describe GpdbDatabase do
     end
   end
 
+  context "refresh using a real greenplum instance", :database_integration => true do
+    let(:account) { GpdbIntegration.real_gpdb_account }
+
+    it "sorts the database by name in ASC order" do
+      results = GpdbDatabase.refresh(account)
+      results[0].name.should < results[1].name
+      results[-2].name.should < results[-1].name
+    end
+  end
+
   context "association" do
     it { should have_many :schemas }
   end

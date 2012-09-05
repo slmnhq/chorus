@@ -41,7 +41,7 @@ describe InstanceDatabasesController do
 
       context "when refresh of the db succeeds" do
         before do
-          stub(GpdbDatabase).refresh { [database2, database] }
+          stub(GpdbDatabase).refresh { [database, database2] }
         end
 
         it "should succeed" do
@@ -50,7 +50,6 @@ describe InstanceDatabasesController do
           decoded_response[0].id.should == database.id
           decoded_response[0].instance.id.should == gpdb_instance.id
           decoded_response.size.should == 2
-          decoded_response[0].name.should < decoded_response[1].name
         end
       end
     end

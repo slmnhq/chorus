@@ -15,6 +15,7 @@ class GpdbDatabase < ActiveRecord::Base
     pg_database
   WHERE
     datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
+    ORDER BY lower(datname) ASC
   SQL
 
   def self.refresh(account)
