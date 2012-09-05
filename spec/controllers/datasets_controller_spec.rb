@@ -146,35 +146,35 @@ describe DatasetsController do
             end
           end
 
-          post :import, :id => src_table.to_param, :dataset_import => attributes
+          post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           response.should be_success
         end
 
         it "makes a DATASET_IMPORT_CREATED event" do
-          expect { post :import, :id => src_table.to_param, :dataset_import => attributes
+          expect { post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
         end
 
         it "should return error for archived workspaces" do
           attributes[:workspace_id] = archived_workspace.id
-          post :import, :id => src_table.to_param, "dataset_import" => attributes
+          post :import, :id => src_table.to_param, :workspace_id => archived_workspace.id, "dataset_import" => attributes
           response.code.should == "422"
         end
 
         it "should return successfully for active workspaces" do
-          post :import, :id => src_table.to_param, :dataset_import => attributes
+          post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           response.code.should == "201"
           response.body.should == "{}"
         end
 
         it "throws an error if table already exists" do
           attributes[:to_table] = "master_table1"
-          post :import, :id => src_table.to_param, :dataset_import => attributes
+          post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           response.code.should == "422"
         end
 
         it "throws an error if source table can't be found" do
-          post :import, :id => 'missing_source_table', :dataset_import => attributes
+          post :import, :id => 'missing_source_table', :workspace_id => active_workspace.id, :dataset_import => attributes
           response.code.should == "404"
         end
       end
@@ -196,26 +196,26 @@ describe DatasetsController do
             any_instance_of(Dataset) do |instance|
               mock.proxy(instance).import(attributes, user)
             end
-            post :import, :id => src_table.to_param, :dataset_import => attributes
+            post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           end
 
           it "creates an import for the correct dataset and returns success" do
             expect {
-              post :import, :id => src_table.to_param, :dataset_import => attributes
+              post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
             }.to change(Import, :count).by(1)
             Import.last.source_dataset.id == src_table.id
             response.should be_success
           end
 
           it "makes a DATASET_IMPORT_CREATED event" do
-            expect { post :import, :id => src_table.to_param, :dataset_import => attributes
+            expect { post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
             }.to change(Events::DatasetImportCreated, :count).by(1)
           end
         end
 
         it "throws an error if table does not exist" do
           attributes[:to_table] = "table_that_does_not_exist"
-          post :import, :id => src_table.to_param, :dataset_import => attributes
+          post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           response.code.should == "422"
         end
 
@@ -223,7 +223,7 @@ describe DatasetsController do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { false }
           end
-          post :import, :id => src_table.to_param, :dataset_import => attributes
+          post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
           response.code.should == "422"
           decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
         end
@@ -242,7 +242,7 @@ describe DatasetsController do
 
       it "makes a new import schedule and returns success" do
         attributes[:sample_count] = ''
-        post :import, :id => src_table.to_param, :dataset_import => attributes
+        post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
 
         src_table.import_schedules.last.tap do |schedule|
           schedule.workspace.should == active_workspace
@@ -258,7 +258,7 @@ describe DatasetsController do
 
       it "limits the number of rows when set" do
         attributes[:sample_count] = '40'
-        post :import, :id => src_table.to_param, :dataset_import => attributes
+        post :import, :id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
 
         src_table.import_schedules.last.tap do |schedule|
           schedule.workspace.should == active_workspace
@@ -317,7 +317,6 @@ describe DatasetsController do
     let(:import_attributes) do
       {
           :workspace => workspace,
-          :workspace_id => workspace.id,
           :to_table => destination_table_name,
           :new_table => true,
           :dataset => nil,
@@ -355,7 +354,7 @@ describe DatasetsController do
     it "copies data" do
       expect {
         expect {
-          post :import, :id => source_dataset.id, :dataset_import => import_attributes
+          post :import, :id => source_dataset.id, :workspace_id => workspace.id, :dataset_import => import_attributes
         }.to change(Events::DatasetImportCreated, :count).by(1)
       }.to change(Events::DatasetImportSuccess, :count).by(1)
       check_destination_table
@@ -373,7 +372,7 @@ describe DatasetsController do
       it "copies data when the start time has passed" do
         Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
           expect {
-            post :import, :id => source_dataset.id, :dataset_import => import_attributes
+            post :import, :id => source_dataset.id, :workspace_id => workspace.id, :dataset_import => import_attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
         end
         Timecop.freeze(DateTime.parse(start_time) + 1.day) do

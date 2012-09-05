@@ -19,6 +19,7 @@ class DatasetsController < GpdbController
     src_table = Dataset.find(params[:id])
 
     attributes = params[:dataset_import].dup
+    attributes[:workspace_id] = params[:workspace_id]
     validate_import_attributes(src_table, attributes)
     src_table.import(attributes, current_user)
 

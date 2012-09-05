@@ -49,10 +49,6 @@ Chorus::Application.routes.draw do
     resource :download, :only => :show, :controller => 'dataset_downloads'
     resource :chorus_view, :only => :create, :controller => 'chorus_views'
 
-    member do
-      post :import
-    end
-
     collection do
       post :preview_sql, :controller => 'previews'
     end
@@ -65,6 +61,9 @@ Chorus::Application.routes.draw do
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
       resource :import, :only => [:show], :controller => "dataset_imports"
+      member do
+        post :import, :controller => "datasets"
+      end
     end
 
     resources :external_tables, :only => [:create]

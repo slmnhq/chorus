@@ -94,33 +94,4 @@ resource "Greenplum Tables / Views" do
     end
   end
 
-  post "/datasets/:id/import" do
-    let(:workspace) { workspaces(:bob_public) }
-
-    parameter :id, "Id of the source dataset"
-    parameter :workspace_id, "Id of the workspace you're importing into"
-    parameter :to_table, "Table name of the destination table"
-    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
-    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :activate_schedule, "not implemented yet"
-    parameter :import_type, "not yet implemented (currently oneTime)"
-    parameter :sample_count, "Maximum number of rows to import"
-
-    required_parameters :id, :to_table, :new_table, :workspace_id
-
-    scope_parameters :dataset_import, :all
-
-    let(:id) { dataset_id }
-    let(:workspace_id) { workspace.id }
-    let(:to_table) { "fancyTable" }
-    let(:truncate) { "false" }
-    let(:new_table) { "true" }
-    let(:activate_schedule) { "false" }
-    let(:import_type) { "oneTime" }
-    let(:sample_count) { "500" }
-
-    example_request "Import an existing dataset into a workspace" do
-      status.should == 201
-    end
-  end
 end

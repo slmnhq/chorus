@@ -143,6 +143,68 @@ resource "Workspaces" do
     end
   end
 
+  post "/workspaces/:workspace_id/datasets/:id/import" do
+    let!(:bob_workspace) { workspaces(:bob_public) }
+
+    parameter :id, "Id of the source dataset"
+    parameter :workspace_id, "Id of the workspace you're importing into"
+    parameter :to_table, "Table name of the destination table"
+    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
+    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
+    parameter :activate_schedule, "not implemented yet"
+    parameter :import_type, "not yet implemented (currently oneTime)"
+    parameter :sample_count, "Maximum number of rows to import"
+
+    required_parameters :id, :to_table, :new_table, :workspace_id
+
+    scope_parameters :dataset_import, :all
+
+    let(:id) { datasets(:bobs_table).id }
+    let(:workspace_id) { bob_workspace.id }
+    let(:to_table) { "fancyTable" }
+    let(:truncate) { "false" }
+    let(:new_table) { "true" }
+    let(:activate_schedule) { "false" }
+    let(:import_type) { "oneTime" }
+    let(:sample_count) { "500" }
+    let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
+
+    before do
+      any_instance_of(Dataset) do |dataset|
+        stub(dataset).verify_in_source
+        stub(dataset).add_metadata!.with_any_args { statistics }
+        stub(dataset).statistics.with_any_args { statistics }
+      end
+    end
+
+    example_request "Import an existing dataset into a workspace" do
+      status.should == 201
+    end
+  end
+
+  get "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+    let(:dataset_id) { dataset.to_param }
+
+    before do
+      stub(ImportSchedule).find_by_workspace_id_and_source_dataset_id(workspace_id, dataset_id) {
+        ImportSchedule.new(
+          :start_datetime => '2012-09-04 23:00:00-07',
+          :end_date => '2012-12-04',
+          :frequency => 'weekly',
+          :workspace_id => workspace.id,
+          :to_table => "new_table_for_import",
+          :source_dataset_id => dataset.id,
+          :truncate => 't',
+          :new_table => 't',
+          :user_id => user.id)
+      }
+    end
+
+    example_request "Show import schedule for a dataset" do
+      status.should == 200
+    end
+  end
+
   post "/workspaces/:workspace_id/external_tables" do
     parameter :hadoop_instance_id, "Instance id of the hadoop instance", :scope => :hdfs_external_table
     parameter :pathname, "Pathname to the CSV file containing the table data", :scope => :hdfs_external_table
