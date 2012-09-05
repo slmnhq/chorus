@@ -3,6 +3,7 @@
 require 'fileutils'
 require 'securerandom'
 require 'yaml'
+require_relative 'version_detector'
 
 class Install
   InstallationFailed = Class.new(StandardError)
@@ -13,8 +14,10 @@ class Install
   UpgradeCancelled = Class.new(StandardError)
   InvalidOperatingSystem = Class.new(StandardError)
   AlreadyInstalled = Class.new(StandardError)
+  UpgradeTo21Required = Class.new(StandardError)
+  UpgradeUnsupported = Class.new(StandardError)
 
-  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade
+  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade
 
   DEFAULT_PATH = "/opt/chorus"
 
@@ -33,8 +36,12 @@ class Install
       abort_install_non_root: "Aborting install: Please run the installer as a non-root user.",
       abort_install_localhost_undefined: "Aborting install: Could not connect to 'localhost', please set in /etc/hosts",
       abort_install_cancelled_upgrade: "Aborting install: Cancelled by user",
+      upgrade_to_2_1_required: "Aborting install: Chorus must be upgraded to 2.1 before it can be upgraded to 2.2",
+      upgrade_unsupported: "Aborting install: Chorus cannot upgrade from existing installation",
       run_server_control: "run ./server_control.sh start from %s to start everything up!",
-      confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:"
+      confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:",
+      confirm_legacy_upgrade: "Chorus 2.1 installation detected, do you want to upgrade to 2.2? [y]:",
+      legacy_destination_path: "Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory"
   }
 
   def initialize(installer_home, silent=false)
@@ -89,32 +96,46 @@ class Install
     end
 
     @destination_path = File.expand_path(relative_path)
+    detector = VersionDetector.new(@destination_path)
+    prompt_for_2_2_upgrade if detector.can_upgrade_2_2?(version)
+    prompt_for_legacy_upgrade if detector.can_upgrade_legacy?
+  end
 
-    installed_versions = Dir[File.join(@destination_path, 'releases', '*')]
-    if installed_versions.length > 0
-      most_recent_installed_version = installed_versions.map { |path| File.basename(path) }.max do |a, b|
-        a.split('.').map(&:to_i) <=> b.split('.').map(&:to_i)
-      end
-
-      version_comparison = (most_recent_installed_version.split('.').map(&:to_i) <=> version.split('.').map(&:to_i))
-      if version_comparison > 0
-        raise InvalidVersion, "Version #{version} is older than currently installed version (#{most_recent_installed_version})."
-      elsif version_comparison == 0
-        raise AlreadyInstalled
-      end
-
-      user_upgrade_input = prompt_or_default('y') do
-        prompt MESSAGES[:confirm_upgrade]
-        get_input
-      end
-
-      unless %w(y yes).include? user_upgrade_input.downcase
-        raise(UpgradeCancelled)
-      end
-
-      self.do_upgrade = true
+  def prompt_for_legacy_upgrade
+    user_upgrade_input = prompt_or_default('y') do
+      prompt MESSAGES[:confirm_legacy_upgrade]
+      get_input
     end
 
+    unless %w(y yes).include? user_upgrade_input.downcase
+      raise(UpgradeCancelled)
+    end
+
+    self.do_legacy_upgrade = true
+    prompt_legacy_upgrade_destination
+  end
+
+  def prompt_legacy_upgrade_destination
+    @destination_path = nil
+    while @destination_path.nil? do
+      prompt MESSAGES[:legacy_destination_path]
+      @destination_path = get_input
+    end
+
+    @destination_path = File.expand_path @destination_path
+  end
+
+  def prompt_for_2_2_upgrade
+    user_upgrade_input = prompt_or_default('y') do
+      prompt MESSAGES[:confirm_upgrade]
+      get_input
+    end
+
+    unless %w(y yes).include? user_upgrade_input.downcase
+      raise(UpgradeCancelled)
+    end
+
+    self.do_upgrade = true
   end
 
   def get_postgres_build
@@ -362,6 +383,12 @@ if __FILE__ == $0
   rescue Install::InstallationFailed => e
     installer.remove_and_restart_previous!
     puts e.message
+    exit 1
+  rescue Install::UpgradeTo21Required
+    puts Install::MESSAGES[:upgrade_to_2_1_required]
+    exit 1
+  rescue Install::UpgradeUnsupported
+    puts Install::MESSAGES[:upgrade_unsupported]
     exit 1
   rescue Install::AlreadyInstalled
     puts Install::MESSAGES[:already_installed]

@@ -16,6 +16,17 @@ describe "Install" do
   end
 
   describe "#get_destination_path" do
+    before do
+      stub(installer).version { "2.2.0.1-8840ae71c" }
+      any_instance_of(VersionDetector) do |detector|
+        stub(detector).can_upgrade_2_2?(anything) { upgrade_2_2 }
+        stub(detector).can_upgrade_legacy? { upgrade_legacy }
+      end
+    end
+
+    let(:upgrade_2_2) { false }
+    let(:upgrade_legacy) { false }
+
     context "silent install" do
       let(:silent) { true }
 
@@ -64,88 +75,148 @@ describe "Install" do
       end
     end
 
-    describe "when the user specifies a directory that looks like a Chorus 2.2 install" do
-      before do
-        stub(installer).version { "2.2.0.1-8840ae71c" }
-        stub_input nil
-        FileUtils.mkdir_p("/opt/chorus/releases")
-        installed_versions.each do |version|
-          FileUtils.mkdir_p("/opt/chorus/releases/#{version}")
-        end
+    context "when not upgrading" do
+      it "should do a non-upgrade install" do
+        dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+        installer.get_destination_path
+        installer.do_upgrade.should be_false
       end
+    end
 
-      context "but no versions are actually installed" do
-        let(:installed_versions) { [] }
+    describe "when the user specifies a directory that looks like an upgradable Chorus 2.2 install" do
+      let(:upgrade_2_2) { true }
 
-        it "should do a non-upgrade install" do
-          dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+      context 'in silent mode' do
+        let(:silent) { true }
+
+        it "should set do_upgrade to true without user input" do
+          dont_allow(installer).prompt
           installer.get_destination_path
-          installer.do_upgrade.should be_false
+          installer.do_upgrade.should be_true
         end
       end
 
-      context "when there are only older version installed" do
-        let(:installed_versions) { ["2.2.0.0-8840ae71c"] }
+      it "should prompt the user to confirm downtime for upgrade" do
+        mock(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+        installer.get_destination_path
+      end
 
-        context 'in silent mode' do
-          let(:silent) { true }
-
-          it "should set do_upgrade to true without user input" do
-            dont_allow(installer).prompt
+      [nil, 'y', 'yEs'].each do |input|
+        context "when the user confirms upgrade with #{input}" do
+          before do
+            all_inputs = [nil, input]
+            stub(installer).get_input { all_inputs.shift }
             installer.get_destination_path
+          end
+
+          it "should set the destination path" do
+            installer.destination_path.should == '/opt/chorus'
+          end
+
+          it "should set do_upgrade" do
             installer.do_upgrade.should be_true
           end
         end
+      end
 
-        it "should prompt the user to confirm downtime for upgrade" do
-          mock(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
-          installer.get_destination_path
+      context "when the user cancels the upgrade" do
+        before do
+          all_inputs = [nil, 'this is not a yes']
+          stub(installer).get_input { all_inputs.shift }
         end
 
-        [nil, 'y', 'yEs'].each do |input|
-          context "when the user confirms upgrade with #{input}" do
-            before do
-              all_inputs = [nil, input]
-              stub(installer).get_input { all_inputs.shift }
-              installer.get_destination_path
-            end
+        it "should raise to cancel the install" do
+          expect { installer.get_destination_path }.to raise_error(Install::UpgradeCancelled)
+        end
+      end
+    end
 
-            it "should set the destination path" do
-              installer.destination_path.should == '/opt/chorus'
-            end
+    describe "when the user specifies a directory that can be upgraded from a legacy install" do
+      let(:upgrade_legacy) { true }
+      before do
+        stub_input nil
+      end
 
-            it "should set do_upgrade" do
-              installer.do_upgrade.should be_true
-            end
-          end
+      it "should confirm legacy upgrade" do
+        mock(installer).prompt_for_legacy_upgrade
+        installer.get_destination_path
+      end
+    end
+  end
+
+  describe "#prompt_for_legacy_upgrade" do
+    subject { installer.prompt_for_legacy_upgrade }
+    before do
+      stub(installer).version { '2.2.0.0' }
+    end
+
+    [nil, 'y', 'yEs'].each do |input|
+      context "when the user confirms upgrade with #{input}" do
+        before do
+          all_inputs = [input]
+          stub(installer).get_input { all_inputs.shift }
+          mock(installer).prompt_legacy_upgrade_destination
         end
 
-        context "when the user cancels the upgrade" do
-          before do
-            all_inputs = [nil, 'this is not a yes']
-            stub(installer).get_input { all_inputs.shift }
-          end
+        it "should set do_legacy_upgrade" do
+          subject
+          installer.do_legacy_upgrade.should be_true
+        end
+      end
+    end
 
-          it "should raise to cancel the install" do
-            expect { installer.get_destination_path }.to raise_error(Install::UpgradeCancelled)
-          end
+    context "when the user cancels the upgrade" do
+      before do
+        all_inputs = ['this is not a yes']
+        stub(installer).get_input { all_inputs.shift }
+      end
+
+      it "should raise to cancel the install" do
+        expect { subject }.to raise_error(Install::UpgradeCancelled)
+      end
+    end
+  end
+
+  describe "#prompt_legacy_upgrade_destination" do
+    subject { installer.prompt_legacy_upgrade_destination }
+
+    it "should ask the user to specify a path to install 2.2" do
+      mock(installer).prompt("Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory")
+      subject
+    end
+
+    context "when the user types something" do
+      before do
+        stub_input "/home/chorus22"
+
+      end
+      it "should set the destination path to that thing" do
+        subject
+        installer.destination_path.should == "/home/chorus22"
+      end
+    end
+
+    context "when the user types nothing" do
+      let(:inputs) { [nil, "/foo/bar"] }
+      before do
+        stub(installer).version {"2.2.2"}
+        stub(installer).get_input do
+          inputs.shift
         end
       end
 
-      context "when the installed version is newer" do
-        let(:installed_versions) { ["2.2.0.2-8840ae71c", "2.2.0.0-8840ae71c"] }
-
-        it "should notify the user and fail" do
-          expect { installer.get_destination_path }.to raise_error(Install::InvalidVersion)
-        end
+      it "should keep trying" do
+        mock(installer).prompt("Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory").times(2)
+        subject
+        installer.destination_path.should == "/foo/bar"
       end
+    end
 
-      context "When the installed version is equal" do
-        let(:installed_versions) { ["2.2.0.1-8840ae71c"] }
-
-        it "should notify the user and fail" do
-          expect { installer.get_destination_path }.to raise_error(Install::AlreadyInstalled)
-        end
+    describe "when the user types a relative path" do
+      it "returns the expanded path" do
+        stub_input "~/chorus"
+        subject
+        installer.destination_path.should == "#{ENV['HOME']}/chorus"
       end
     end
   end
