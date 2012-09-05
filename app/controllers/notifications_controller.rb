@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
   def index
-    present current_user.notification_events
+    present paginate(current_user.notification_events)
   end
 end

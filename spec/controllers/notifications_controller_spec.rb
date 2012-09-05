@@ -23,6 +23,11 @@ describe NotificationsController do
       first_event.body.should == bobs_event.body
     end
 
+    it "should paginate notifications" do
+      get :index, :per_page => 1
+      decoded_response.length.should == 1
+    end
+
     generate_fixture "notificationSet.json" do
       get :index
     end
