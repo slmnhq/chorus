@@ -51,7 +51,13 @@ class User < ActiveRecord::Base
   end
 
   def accessible_events(current_user)
-    Events::Base.by(self).where("workspace_id is NULL or workspace_id in (select id from workspaces where public is true) or workspace_id in (select workspace_id from memberships where user_id = #{current_user.id})")
+    events.where("workspace_id IS NULL
+                    OR workspace_id IN
+                      (SELECT id FROM workspaces
+                        WHERE public IS TRUE)
+                    OR workspace_id IN
+                      (SELECT workspace_id FROM memberships
+                        WHERE user_id = #{current_user.id})").includes(:actor, :target1, :target2)
   end
 
   def uniqueness_of_non_deleted_username
