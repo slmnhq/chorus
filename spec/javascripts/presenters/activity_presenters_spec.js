@@ -665,7 +665,7 @@ describe("chorus.presenters.Activity", function() {
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            hdfsFile = fixtures.hdfsEntryDir({
+            hdfsFile = rspecFixtures.hdfsDir({
                 id: 4567,
                 hadoopInstance: { id: 1234 },
                 name: "path.csv",

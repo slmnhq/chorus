@@ -1,12 +1,8 @@
-    describe("chorus.views.HdfsShowFileSidebar", function() {
+describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
+        var yesterday = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
-        this.file = fixtures.hdfsEntryFile({
-            id: 789,
-            name: "filename.txt",
-            lastUpdatedStamp: now
-        });
+        this.file = rspecFixtures.hdfsFile({lastUpdatedStamp: yesterday});
 
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
@@ -23,7 +19,7 @@
         });
 
         it("has the right title (the filename)", function() {
-            expect(this.view.$(".file_name")).toContainText("filename.txt")
+            expect(this.view.$(".file_name")).toContainText("test.csv")
         })
 
         it("shows the correct last_updated value", function() {
@@ -32,7 +28,7 @@
 
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe(789);
+            expect(this.view.$("a.dialog").data("entity-id")).toBe(1000017);
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
         })
 
@@ -58,7 +54,7 @@
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(789);
+                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(1000017);
             });
         });
 

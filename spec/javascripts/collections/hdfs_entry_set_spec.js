@@ -36,12 +36,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
 
         describe("add", function() {
             it("keeps the path and instance already set on the entry", function() {
-                var entry = fixtures.hdfsEntryFileJson({
-                    hadoopInstance: {
-                        id: '10000'
-                    },
-                    path: '/data/foo'
-                });
+                var entry = rspecFixtures.hdfsFile({path: '/data/foo', hadoopInstance: {id: '10000'}});
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');
                 expect(this.hdfsEntrySet.at(0).get('hadoopInstance').id).toBe('10000');

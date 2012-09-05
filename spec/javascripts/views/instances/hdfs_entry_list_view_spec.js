@@ -1,7 +1,7 @@
 describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
         this.collection = fixtures.hdfsEntrySet(null, {hadoopInstance: {id: "1234"}, path: "/abc"});
-        this.collection.add(fixtures.hdfsEntryDirJson({count: -1}));
+        this.collection.add(rspecFixtures.hdfsDir({count: -1}));
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
 

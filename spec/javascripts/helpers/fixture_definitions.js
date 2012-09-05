@@ -193,7 +193,8 @@ window.rspecFixtureDefinitions = {
 
     schemaFunctionSet: {},
 
-    hdfsFile: { model: "HdfsFile" },
+    hdfsFile: { model: "HdfsEntry" },
+    hdfsDir: { model: "HdfsEntry" },
 
     workfileExecutionResults: {
         model: "WorkfileExecutionTask"
