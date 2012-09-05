@@ -24,6 +24,7 @@ describe("chorus.collections.ActivitySet", function() {
             context("for a hdfs model type", function () {
                 beforeEach(function() {
                     model = fixtures.hdfsFile({
+                        id: 8789,
                         hadoopInstance : { id : 1 },
                         path : "/data",
                         name : "test.csv"
@@ -33,7 +34,7 @@ describe("chorus.collections.ActivitySet", function() {
                 });
 
                 it("includes the entity_type, the ", function() {
-                    expect(activities.url()).toBe("/activities?entity_type=hdfs_file&entity_id=1%7C%2Fdata%2Ftest.csv" );
+                    expect(activities.url()).toBe("/activities?entity_type=hdfs_file&entity_id=8789" );
                 });
             });
 

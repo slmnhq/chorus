@@ -139,7 +139,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_makes_workspace_private, Events::WorkspaceMakePrivate.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
     #HDFS Entry
-    hdfs_entry = HdfsEntry.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql', :is_directory => false, :modified_at => "2010-10-22 22:00:00"}, :without_protection => true)
+    hdfs_entry = hadoop_instance.hdfs_entries.create!({:path => '/foo/bar/baz.sql', :is_directory => false, :modified_at => "2010-10-22 22:00:00"}, :without_protection => true)
+    fbuilder.name :hdfs_file, hdfs_entry
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|

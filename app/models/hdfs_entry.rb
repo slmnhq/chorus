@@ -1,7 +1,7 @@
 class HdfsEntry < ActiveRecord::Base
   include Stale
 
-  attr_accessible :path, :hadoop_instance_id
+  attr_accessible :path
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -26,11 +26,6 @@ class HdfsEntry < ActiveRecord::Base
 
   before_save :build_full_path, :on_create => true
 
-  def self.from_param(param)
-    hadoop_instance_id, path = param.split('|')
-    self.find_or_create_by_hadoop_instance_id_and_path(hadoop_instance_id, path)
-  end
-
   def name
     File.basename(path)
   end
@@ -43,7 +38,6 @@ class HdfsEntry < ActiveRecord::Base
     #return @ancestors if @ancestors
     @ancestors = []
     if parent
-      puts "parent is #{parent.inspect}"
       parent_name = parent.path == '/' ? hadoop_instance.name : parent.name
       @ancestors << {:name => parent_name, :id => parent_id}
       @ancestors += parent.ancestors

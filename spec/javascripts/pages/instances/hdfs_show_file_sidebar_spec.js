@@ -3,6 +3,7 @@
         var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
         this.file = fixtures.hdfsEntryFile({
+            id: 789,
             path: "/folder/filename.txt",
             name: "filename.txt",
             hadoopInstance: {id: 9876},
@@ -33,7 +34,7 @@
 
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe("9876|/folder/filename.txt");
+            expect(this.view.$("a.dialog").data("entity-id")).toBe(789);
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
         })
 

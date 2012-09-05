@@ -30,7 +30,7 @@ describe Hdfs::FilesController do
     context "a directory" do
 
       before do
-        mock(HdfsEntry).list('/data/', hadoop_instance) { [entry] }
+        mock(HdfsEntry).list('/data/', hadoop_instance) { [] }
       end
 
       it "renders the path correctly, appending slashes" do

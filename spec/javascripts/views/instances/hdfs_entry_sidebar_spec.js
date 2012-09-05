@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", hadoopInstanceId: 123});
+        this.view = new chorus.views.HdfsEntrySidebar({hadoopInstanceId: 123});
     });
 
     describe("#render", function() {
@@ -38,6 +38,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 this.modalSpy = stubModals();
 
                 this.hdfsEntry = new chorus.models.HdfsEntry({
+                    id: 55,
                     hadoopInstance: {
                         id: 123
                     },
@@ -52,7 +53,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             itHasTheRightDefaultBehavior(true);
 
             it("adds the entity id", function() {
-                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("123|/foo/my_file.sql");
+                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("55");
             });
 
 

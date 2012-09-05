@@ -35,7 +35,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     setEntry: function(entry) {
         this.resource = entry;
         if (entry) {
-            entry.entityId = this.getEntityId();
+            entry.entityId = this.resource.id;
 
             if (this.tabs.activity ) {
                 delete this.tabs.activity ;
@@ -63,18 +63,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
-            entityId: this.getEntityId(),
+            entityId: this.resource && this.resource.id,
             lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
-        }
-    },
-
-    getEntityId: function() {
-        if (this.resource) {
-            if (this.resource.get("id")) {
-                return this.resource.get("id");
-            } else {
-                return this.resource.getActivityStreamId();
-            }
         }
     },
 

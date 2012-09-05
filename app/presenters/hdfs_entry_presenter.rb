@@ -12,15 +12,14 @@ class HdfsEntryPresenter < Presenter
         :hadoop_instance => present(hadoop_instance),
         :ancestors => ancestors,
     }
-    unless options[:shallow]
-      hash[:entries] = present entries, :shallow => true
-    end
+
     if is_directory
-        hash[:count] = content_count
-        hash[:path]  = parent_path
+      hash[:entries] = present entries if options[:deep]
+      hash[:count] = content_count
+      hash[:path]  = parent_path
     else
-        hash[:contents] = contents unless options[:shallow]
-        hash[:path] = path
+      hash[:contents] = contents if options[:deep]
+      hash[:path] = path
     end
 
     hash

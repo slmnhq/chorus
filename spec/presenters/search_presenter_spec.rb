@@ -96,6 +96,8 @@ describe SearchPresenter, :type => :view do
       hdfs_hash.should have_key(:results)
       first_result = hdfs_hash[:results][0]
       first_result.should have_key(:path)
+      first_result.should have_key(:name)
+      first_result.should have_key(:ancestors)
       first_result.should have_key(:highlighted_attributes)
     end
   end

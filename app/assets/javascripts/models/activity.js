@@ -49,6 +49,7 @@
             var path = _.first(pathArray, pathArray.length - 1).join('/');
             var name = _.last(pathArray);
             model.set({
+                id : hdfsFile.id,
                 hadoopInstance: hdfsFile.hadoopInstance,
                 path : path,
                 name : name

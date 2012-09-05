@@ -28,10 +28,9 @@ describe ModelMap do
       ModelMap.model_from_params("dataset", model.id).should == model
     end
 
-    it "works for HdfsEntry" do
-      model = ModelMap.model_from_params("hdfs_file", "1234|/data/test.csv")
-      model.hadoop_instance_id.should == 1234
-      model.path.should == "/data/test.csv"
+    it "works for hdfs_file" do
+      model = hdfs_entries(:hdfs_file)
+      ModelMap.model_from_params("hdfs_file", model.id).should == model
     end
 
     it "throws an error if the entity type is not known" do

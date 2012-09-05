@@ -24,11 +24,6 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
         return this.getPath() + '/' + this.get('name');
     },
 
-    getActivityStreamId: function() {
-        var path = (this.get("path") == "/") ? "" : this.get("path")
-        return this.getHadoopInstance().id + "|" + path + "/" + this.name();
-    },
-
     pathSegments: function() {
         return _.map(this.get("ancestors"), function(ancestor) {
             return new chorus.models.HdfsEntry(_.extend({isDir: true, hadoopInstance: this.get("hadoopInstance")}, ancestor));

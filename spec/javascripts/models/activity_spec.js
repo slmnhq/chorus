@@ -225,6 +225,7 @@ describe("chorus.models.Activity", function() {
             it("returns hdfs entry with the right data", function() {
                 activity = rspecFixtures.activity.hdfsExternalTableCreated({
                     hdfsFile: {
+                        id: 1234,
                         hadoopInstance: {id: 1},
                         path : "/data/test/test.csv"
                     }
@@ -235,6 +236,7 @@ describe("chorus.models.Activity", function() {
                 expect(hdfsEntry.get("path")).toBe("/data/test")
                 expect(hdfsEntry.name()).toBe("test.csv")
                 expect(hdfsEntry.get("hadoopInstance").id).toBe(1)
+                expect(hdfsEntry.get("id")).toBe(1234)
             });
 
         });

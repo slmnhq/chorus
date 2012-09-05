@@ -125,30 +125,6 @@ describe("chorus.models.HdfsEntry", function() {
         })
     });
 
-    describe("#getActivityStreamId", function() {
-        it("returns the right activity stream id", function() {
-             var model = new chorus.models.HdfsEntry({
-                hadoopInstance: {
-                    id: 111
-                },
-                path: "/test/foo",
-                name: "foo.csv"
-            })
-           expect(model.getActivityStreamId()).toBe("111|/test/foo/foo.csv")
-        });
-
-        it("does not prepend an extra slash when the file is in the root directory", function() {
-             var model = new chorus.models.HdfsEntry({
-                hadoopInstance: {
-                    id: 111
-                },
-                path: "/",
-                name: "foo.csv"
-            })
-           expect(model.getActivityStreamId()).toBe("111|/foo.csv")
-        });
-    });
-
     describe("getFullAbsolutePath", function() {
         context("path is not root", function() {
             it("returns the path including the filename", function() {

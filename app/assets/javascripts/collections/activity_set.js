@@ -19,7 +19,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     },
 
     urlForModel: function(model) {
-        var entityId = model.getActivityStreamId ? encodeURIComponent(model.getActivityStreamId()) : model.id;
+        var entityId = model.id;
         return "/activities?entity_type=" + model.entityType + "&entity_id=" + entityId;
     }
 });

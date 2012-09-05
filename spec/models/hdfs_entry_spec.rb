@@ -364,7 +364,7 @@ describe HdfsEntry do
 
   describe "#contents" do
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:entry) { HdfsEntry.new(:path => "/file.txt", :hadoop_instance_id => hadoop_instance.id) }
+    let(:entry) { hadoop_instance.hdfs_entries.build(:path => "/file.txt") }
     before do
       any_instance_of(Hdfs::QueryService) do |h|
         stub(h).show('/file.txt') { ["content"] }
@@ -400,14 +400,11 @@ describe HdfsEntry do
 
   describe ".from_param(param)" do
     it "uses the hadoop instance id and file-system path specified in the string" do
-      instance_id = hadoop_instances(:hadoop).id
-      path = "/foo/bar"
-      param = "#{instance_id}|#{path}"
-      hdfs_entry = HdfsEntry.from_param(param)
+      entry = hdfs_entries(:hdfs_file)
+      hdfs_entry = HdfsEntry.from_param(entry.id)
 
-      hdfs_entry.hadoop_instance_id.should == instance_id
-      hdfs_entry.path.should == path
+      hdfs_entry.hadoop_instance_id.should == entry.hadoop_instance.id
+      hdfs_entry.path.should == entry.path
     end
   end
-
 end

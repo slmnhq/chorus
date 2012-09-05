@@ -13,8 +13,7 @@ describe "Event types" do
   let(:workfile) { FactoryGirl.create(:workfile) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
-  let(:hdfs_entry) { HdfsEntry.create!({hadoop_instance_id: hadoop_instance.id,
-                                              path: "/any/path/should/work.csv"}) }
+  let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
   describe "GreenplumInstanceCreated" do
     subject do

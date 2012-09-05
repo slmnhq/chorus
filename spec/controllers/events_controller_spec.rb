@@ -83,7 +83,7 @@ describe EventsController do
 
       it "presents the workspace's activities" do
         mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "hdfs_file", :entity_id => "#{object.hadoop_instance_id.to_s}|#{object.path}"
+        get :index, :entity_type => "hdfs_file", :entity_id => object.id
         response.code.should == "200"
       end
     end

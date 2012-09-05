@@ -12,8 +12,8 @@ describe "Notes" do
   let(:workfile) { workfiles(:bob_public)}
   let(:dataset) { datasets(:bobs_table) }
   let(:hdfs_entry) do
-    HdfsEntry.create!({'path' => '/data/test.csv',
-                              'hadoop_instance_id' => hadoop_instance.id, 'modified_at' => "2010-10-24 22:00:00"})
+    hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
+                                         :modified_at => "2010-10-24 22:00:00")
   end
 
   it "requires an actor" do
@@ -241,7 +241,7 @@ describe "Notes" do
     it "creates a note on an hdfs file" do
       Events::Note.create_from_params({
         :entity_type => "hdfs_file",
-        :entity_id => "#{hadoop_instance.id}|/data/test.csv",
+        :entity_id => hdfs_entry.id,
         :body => "Some crazy content",
       }, user)
 
