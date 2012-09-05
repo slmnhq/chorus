@@ -28,7 +28,7 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
         if (this.length > 0) {
             $.ajax({
                 type: "PUT",
-                url: "/notification/read",
+                url: "/notifications/read",
                 success: options.success,
                 data: {
                     notification_ids: this.pluck("id")

@@ -1,10 +1,13 @@
 class NotificationsController < ApplicationController
   def index
-    present paginate(current_user.notification_events)
+    events = current_user.notification_events
+    events = events.where('read is false') if params['type'] == 'unread'
+    present paginate(events)
   end
 
   def read
-    Notification.where(:id => params[:notification_ids]).update_all(:read => true)
+    Notification.where(:event_id => params[:notification_ids],
+                       :recipient_id => current_user.id).update_all(:read => true)
     head :ok
   end
 end

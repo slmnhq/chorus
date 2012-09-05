@@ -103,7 +103,7 @@ describe("chorus.collections.NotificationSet", function() {
         });
 
         it("calls the correct API", function() {
-            expect(this.server.lastUpdate().url).toBe("/notification/read");
+            expect(this.server.lastUpdate().url).toBe("/notifications/read");
             expect(this.server.lastUpdate().params()["notification_ids[]"]).toEqual([
                 this.collection.models[0].get("id").toString(),
                 this.collection.models[1].get("id").toString(),
