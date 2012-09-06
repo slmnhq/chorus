@@ -706,6 +706,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 context("when the create succeeds", function() {
                     beforeEach(function() {
                         spyOn(chorus, 'toast');
+                        spyOn(this.dialog, "populateOwnerSelect").andCallThrough();
                         this.otherSavedSpy = jasmine.createSpy();
                         spyOn(this.dialog, "postRender").andCallThrough();
                         this.instance.sharing().bind("saved", this.otherSavedSpy);
@@ -724,7 +725,21 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("re-renders the dialog in the new individual account state", function() {
                         expect(this.dialog.postRender).toHaveBeenCalled();
-                    })
+                    });
+
+                    it("should populate the Owner Select", function () {
+                        expect(this.dialog.populateOwnerSelect).toHaveBeenCalled();
+                    });
+
+                    context("then clicking on the change owner link", function () {
+                        beforeEach(function () {
+                            this.dialog.$(".change_owner").click();
+                        });
+
+                        it("should populates the select options", function () {
+                            expect(this.dialog.$("select.name").length).toBeGreaterThan(0);
+                        });
+                    });
 
                     context("and the same model saves again", function() {
                         it("doesn't display a toast message", function() {

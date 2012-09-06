@@ -67,6 +67,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
+        this.populateSelect()
         this.$("form").bind("submit", _.bind(this.save, this));
     },
 
