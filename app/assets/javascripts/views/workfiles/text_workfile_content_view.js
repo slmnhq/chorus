@@ -44,7 +44,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     },
 
     versionConflict: function() {
-        if (this.model.serverErrors[0].msgkey == "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH") {
+        if (this.model.serverErrors[0].msgkey == "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH" || this.model.serverErrors[0].msgkey == 'WORKFILE.VERSION_NOT_EXIST') {
             this.alert = new chorus.alerts.WorkfileConflict({ launchElement: this, model: this.model });
             this.alert.launchModal();
         }
