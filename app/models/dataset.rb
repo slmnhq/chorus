@@ -24,6 +24,7 @@ class Dataset < ActiveRecord::Base
 
   scope :tables, where(:type => 'GpdbTable')
   scope :views, where(:type => 'GpdbView')
+  scope :views_tables, where(:type => ['GpdbTable', 'GpdbView'])
   scope :chorus_views, where(:type => 'ChorusView')
 
   delegate :with_gpdb_connection, :to => :schema

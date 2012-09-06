@@ -70,25 +70,24 @@ class Workspace < ActiveRecord::Base
   def datasets(current_user, type = nil)
     if sandbox
       account = sandbox.database.account_for_user!(current_user)
-      datasets = Dataset.refresh(account, sandbox)
-      dataset_ids = datasets.map(&:id).join(",")
-      query = dataset_ids.empty? ? "id IS NULL" : "id IN (#{dataset_ids})"
+      viewable_table_ids = Dataset.refresh(account, sandbox).map(&:id)
+      datasets = Dataset.where(:id => viewable_table_ids)
 
       case type
         when "SANDBOX_TABLE" then
-          query += " AND (type='GpdbTable')"
+          datasets = datasets.tables
         when "SANDBOX_DATASET" then
-          query += " AND (type='GpdbTable' OR type='GpdbView')"
+          datasets = datasets.views_tables
         when "CHORUS_VIEW" then
-          return Dataset.where("schema_id = ? AND (type='ChorusView')", sandbox.id)
+          datasets = Dataset.chorus_views.where(:schema_id => sandbox.id)
         when "SOURCE_TABLE" then
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-          return Dataset.where("schema_id != (?) AND id IN (?)", sandbox.id, associated_dataset_ids)
+          datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids)
         else
-          associated_dataset_ids = associated_datasets.map(&:dataset_id).join(",")
-          query += " OR id in (#{associated_dataset_ids})" unless associated_dataset_ids.empty?
+          associated_dataset_ids = associated_datasets.pluck(:dataset_id)
+          datasets = Dataset.where(:id => (associated_dataset_ids + viewable_table_ids))
       end
-      return Dataset.where(query)
+      return datasets
     else
       bound_datasets
     end
