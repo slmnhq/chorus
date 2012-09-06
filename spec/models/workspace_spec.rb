@@ -18,8 +18,23 @@ describe Workspace do
   end
 
   describe "validations" do
+    let(:workspace) { workspaces(:alice_public) }
+
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }
+
+
+    context "validate file sizes" do
+      it "gives an error when file is too big" do
+        stub(workspace.image).size { 9999999999999999999999999999999999999 }
+        workspace.should_not be_valid
+      end
+
+      it "is ok with reasonable file sizes" do
+        stub(workspace.image).size { 4 }
+        workspace.should be_valid
+      end
+    end
   end
 
   describe ".active" do

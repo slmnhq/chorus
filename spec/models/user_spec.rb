@@ -191,6 +191,18 @@ describe User do
         user2.should be_valid
       end
     end
+
+    context "validate file sizes" do
+      it "gives an error when file is too big" do
+        stub(@user.image).size { 9999999999999999999999999999999999999 }
+        @user.should_not be_valid
+      end
+
+      it "is ok with reasonable file sizes" do
+        stub(@user.image).size { 4 }
+        @user.should be_valid
+      end
+    end
   end
 
   describe "image" do

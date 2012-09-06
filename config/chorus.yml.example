@@ -13,6 +13,8 @@ timezone_offset: -8
 file_sizes_mb:
   workfiles:  10
   csv_imports:  1
+  user_icon: 5
+  workspace_icon: 5
 
 gpfdist:
   ssl: false

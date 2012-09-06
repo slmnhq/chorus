@@ -34,15 +34,21 @@ describe ConfigurationsController do
     it "includes the file size maximums" do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       get :show
       response.code.should == "200"
       decoded_response.file_sizes_mb_csv_imports.should == 1
       decoded_response.file_sizes_mb_workfiles.should == 10
+      decoded_response.file_sizes_mb_user_icon.should == 5
+      decoded_response.file_sizes_mb_workspace_icon.should == 5
     end
 
     generate_fixture "config.json" do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       get :show
     end
   end

@@ -25,6 +25,7 @@ class Workspace < ActiveRecord::Base
   validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update
   validate :archiver_is_set_when_archiving
+  validate :validate_maximum_file_size
 
   before_update :update_has_changed_settings, :clear_assigned_datasets_on_sandbox_assignment
   before_save :update_has_added_sandbox
@@ -44,6 +45,17 @@ class Workspace < ActiveRecord::Base
     { :type => :integer, :method => :member_ids, :options => { :multiple => true } },
     { :type => :boolean, :method => :public }
   ]
+
+
+  def validate_maximum_file_size
+    if image.size && (image.size / 1024.0 / 1024.0) > maximum_workspace_icon_size
+      errors.add(:base, :file_size_exceeded, { :count => maximum_workspace_icon_size })
+    end
+  end
+
+  def maximum_workspace_icon_size
+    Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon']
+  end
 
   def self.search_permissions(current_user, search)
     unless current_user.admin?
