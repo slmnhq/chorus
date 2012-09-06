@@ -178,6 +178,10 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.chorusView.get('sourceObjectId')).toBe(this.dataset.get('id'));
         });
 
+        it('sets the sourceObjectType to dataset', function() {
+           expect(this.chorusView.get("sourceObjectType")).toBe("dataset");
+        });
+
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({

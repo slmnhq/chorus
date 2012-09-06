@@ -84,21 +84,13 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     newChorusViewWithContent: function(content) {
         var executionSchema = this.model.executionSchema();
 
-        this.chorusView = new chorus.models.ChorusView();
-        this.chorusView.set({
-            workspace: this.model.workspace(),
-            instance: {
-                id: executionSchema.get("instanceId"),
-                name: executionSchema.get("instanceName")
-            },
-            schemaName: executionSchema.get("name"),
-            databaseId: executionSchema.get("databaseId"),
-            databaseName: executionSchema.get("databaseName"),
-            instanceId: executionSchema.get("instanceId"),
-            instanceName: executionSchema.get("instanceName"),
-            query: content,
-            sourceObjectId: this.model.id
+        this.chorusView = new chorus.models.ChorusView({
+            sourceObjectId: this.model.id,
+            sourceObjectType: "workfile",
+            schemaId: executionSchema.id,
+            query: content
         });
+        this.chorusView.sourceObject = this.model;
 
         var dialog = new chorus.dialogs.VerifyChorusView({model: this.chorusView});
         dialog.launchModal();

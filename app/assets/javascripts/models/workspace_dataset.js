@@ -34,6 +34,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     deriveChorusView: function() {
         var chorusView = new chorus.models.ChorusView({
             sourceObjectId: this.id,
+            sourceObjectType: "dataset",
             schemaId: this.schema().id,
             workspace: this.get("workspace")
         });

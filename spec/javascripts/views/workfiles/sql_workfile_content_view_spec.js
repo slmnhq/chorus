@@ -268,15 +268,12 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             it("sets the Chorus View with while sql content", function() {
                 chorus.PageEvents.broadcast("file:newChorusView");
 
-                expect(this.view.chorusView.get("instanceId")).toBe('51');
-                expect(this.view.chorusView.get("instanceName")).toBe('bob_the_instance');
-                expect(this.view.chorusView.get("instance").id).toBe('51');
-                expect(this.view.chorusView.get("instance").name).toBe('bob_the_instance');
-                expect(this.view.chorusView.get("databaseName")).toBe('bar');
-                expect(this.view.chorusView.get("schemaName")).toBe('wow');
-                expect(this.view.chorusView.get("query")).toBe('select * from table;');
-                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
                 expect(this.view.chorusView.get("objectType")).toBe("CHORUS_VIEW");
+                expect(this.view.chorusView.get("query")).toBe('select * from table;');
+                expect(this.view.chorusView.get("schemaId")).toBe(this.schema.id);
+                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.workfile.id);
+                expect(this.view.chorusView.get("sourceObjectType")).toBe("workfile");
+                expect(this.view.chorusView.sourceObject).toBe(this.workfile);
             });
         });
 
@@ -286,15 +283,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                 chorus.PageEvents.broadcast("file:newSelectionChorusView");
 
-                expect(this.view.chorusView.get("instanceId")).toBe('51');
-                expect(this.view.chorusView.get("instanceName")).toBe('bob_the_instance');
-                expect(this.view.chorusView.get("instance").id).toBe('51');
-                expect(this.view.chorusView.get("instance").name).toBe('bob_the_instance');
-                expect(this.view.chorusView.get("databaseName")).toBe('bar');
-                expect(this.view.chorusView.get("schemaName")).toBe('wow');
                 expect(this.view.chorusView.get("query")).toBe('select');
-                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
-                expect(this.view.chorusView.get("objectType")).toBe("CHORUS_VIEW");
+                expect(this.view.chorusView.get("schemaId")).toBe(this.schema.id);
+                expect(this.view.chorusView.sourceObject).toBe(this.workfile);
+                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.workfile.id);
             });
         });
     });

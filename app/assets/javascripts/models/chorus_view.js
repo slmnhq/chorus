@@ -3,7 +3,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     paramsToSave: ['id', 'objectName', 'schemaId', 'workspaceId', 'query'],
 
     urlTemplate: function(options) {
-        return "datasets/{{this.sourceObjectId}}/chorus_view";
+        return "chorus_views";
     },
 
     workspaceId: function() {

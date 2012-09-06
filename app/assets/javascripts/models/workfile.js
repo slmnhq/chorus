@@ -61,6 +61,10 @@
             return this.workspace().sandbox()
         },
 
+        schema: function() {
+            return this.executionSchema()
+        },
+
         executionSchema: function() {
             var executionSchema = this.get("executionSchema");
             if (executionSchema) {

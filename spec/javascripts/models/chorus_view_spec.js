@@ -8,7 +8,7 @@ describe("chorus.models.ChorusView", function() {
 
     it("has the right url", function() {
         this.model.attributes.sourceObjectId = "100";
-        expect(this.model.url()).toMatchUrl('/datasets/100/chorus_view');
+        expect(this.model.url()).toMatchUrl('/chorus_views');
     });
 
     it("delegates to the source object for #schema and #workspace", function() {

@@ -46,12 +46,13 @@ Chorus::Application.routes.draw do
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
     resource :download, :only => :show, :controller => 'dataset_downloads'
-    resource :chorus_view, :only => :create, :controller => 'chorus_views'
 
     collection do
       post :preview_sql, :controller => 'previews'
     end
   end
+
+  resources :chorus_views, :only => :create
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]
