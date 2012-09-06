@@ -143,11 +143,10 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:workspace_id/datasets/:id/import" do
+  post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
     let!(:bob_workspace) { workspaces(:bob_public) }
 
-    parameter :id, "Id of the source dataset"
-    parameter :workspace_id, "Id of the workspace you're importing into"
+    parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
@@ -155,11 +154,11 @@ resource "Workspaces" do
     parameter :import_type, "not yet implemented (currently oneTime)"
     parameter :sample_count, "Maximum number of rows to import"
 
-    required_parameters :id, :to_table, :new_table, :workspace_id
+    required_parameters :dataset_id, :to_table, :new_table
 
     scope_parameters :dataset_import, :all
 
-    let(:id) { datasets(:bobs_table).id }
+    let(:dataset_id) { datasets(:bobs_table).id }
     let(:workspace_id) { bob_workspace.id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
@@ -177,8 +176,46 @@ resource "Workspaces" do
       end
     end
 
-    example_request "Import an existing dataset into a workspace" do
+    example_request "Import an existing dataset into a workspace, or create an import for a dataset" do
       status.should == 201
+    end
+  end
+
+  put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+    let!(:bob_workspace) { workspaces(:bob_public) }
+
+    parameter :dataset_id, "Id of the source dataset"
+    parameter :to_table, "Table name of the destination table"
+    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
+    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
+    parameter :activate_schedule, "not implemented yet"
+    parameter :import_type, "not yet implemented (currently oneTime)"
+    parameter :sample_count, "Maximum number of rows to import"
+
+    required_parameters :dataset_id, :to_table, :new_table
+
+    scope_parameters :dataset_import, :all
+
+    let(:dataset_id) { datasets(:bobs_table).id }
+    let(:workspace_id) { bob_workspace.id }
+    let(:to_table) { "fancyTable" }
+    let(:truncate) { "false" }
+    let(:new_table) { "true" }
+    let(:activate_schedule) { "false" }
+    let(:import_type) { "oneTime" }
+    let(:sample_count) { "500" }
+    let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
+
+    before do
+      any_instance_of(Dataset) do |dataset|
+        stub(dataset).verify_in_source
+        stub(dataset).add_metadata!.with_any_args { statistics }
+        stub(dataset).statistics.with_any_args { statistics }
+      end
+    end
+
+    example_request "Update an import for a dataset" do
+      status.should == 200
     end
   end
 
