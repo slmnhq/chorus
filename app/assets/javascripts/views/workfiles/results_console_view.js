@@ -5,7 +5,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click a.maximize": "maximizeTable",
         "click a.minimize": "minimizeTable",
         "click .expander_button": "toggleExpand",
-        "click .close_errors": "closeError",
+        "click .close_errors": "clickCloseError",
         "click .sql_errors .view_details": "viewErrorDetails",
         "click .execution .view_details": "viewExecutionDetails",
         "click a.close": "clickClose",
@@ -177,6 +177,12 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     closeError: function(e) {
         e && e.preventDefault();
         this.$(".sql_errors").addClass("hidden");
+    },
+
+    clickCloseError: function(e) {
+        e && e.preventDefault();
+        this.closeError();
+        this.clickClose()
     },
 
     viewErrorDetails: function(e) {

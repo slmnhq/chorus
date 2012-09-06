@@ -180,15 +180,6 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
 
             describe("when the execution is completed", function() {
-                context("and the task does not have a result message", function() {
-                    beforeEach(function() {
-                        this.task = rspecFixtures.task({ result: null });
-                        this.view = new chorus.views.ResultsConsole({ model: this.task });
-                        this.view.execute(this.task);
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                    });
-                });
-
                 context("and there are results", function() {
                     beforeEach(function() {
                         this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
@@ -270,14 +261,19 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     describe("clicking on the close button", function() {
                         beforeEach(function() {
+                            spyOn(chorus.PageEvents, "broadcast");
                             this.view.$(".close_errors").click();
                         });
 
-                        it("should hide the sql_errors content", function() {
-                            expect(this.view.$(".sql_errors")).toHaveClass("hidden");
+                        it("broadcasts action:closePreview", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("action:closePreview");
                         });
 
-                        it("should show the execution content area", function() {
+                        it("hides the control section", function() {
+                            expect(this.view.$(".controls")).toHaveClass("hidden");
+                        });
+
+                        it("should hide the sql_errors content", function() {
                             expect(this.view.$(".sql_errors")).toHaveClass("hidden");
                         });
                     });
