@@ -3,8 +3,8 @@ require 'spec_helper'
 resource "Hadoop DB instances" do
   let!(:owner) { users(:bob) }
   let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'will_be_stubbed', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
-  let!(:entry1) { HdfsEntry.new({:path => '/files', :modified_at => Time.now.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
-  let!(:entry2) { HdfsEntry.new({:path => '/test.txt', :modified_at => Time.now.to_s, :size => "1234kB", :hadoop_instance => instance}, :without_protection => true ) }
+  let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.now.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
+  let!(:file_entry) { HdfsEntry.create!({:path => '/test.txt', :modified_at => Time.now.to_s, :size => "1234kB", :hadoop_instance => instance}, :without_protection => true ) }
   let!(:event) { FactoryGirl.create(:hadoop_instance_created_event, :hadoop_instance => instance) }
   let!(:activity) { Activity.create!(:entity => instance, :event => event) }
   let(:hadoop_instance_id) { instance.to_param }
@@ -17,9 +17,9 @@ resource "Hadoop DB instances" do
     service = Object.new
     stub(Hdfs::QueryService).new(instance.host, instance.port, instance.username, instance.version) { service }
     stub(service).show('/test.txt') { ["This is such a nice file.", "It's my favourite file.", "I could read this file all day.'"] }
-    stub(HdfsEntry).list('/', instance) { [entry1, entry2] }
-    stub(HdfsEntry).list('/files/', instance) { [entry1] }
-    stub(HdfsEntry).list('/test.txt', instance) { [entry2] }
+    stub(HdfsEntry).list('/', instance) { [dir_entry, file_entry] }
+    stub(HdfsEntry).list('/files/', instance) { [file_entry] }
+    stub(HdfsEntry).list('/test.txt', instance) { [file_entry] }
   end
 
   post "/hadoop_instances" do
@@ -89,16 +89,8 @@ resource "Hadoop DB instances" do
     end
   end
 
-  get "/hadoop_instances/:hadoop_instance_id/contents/:id" do
-    let(:id) { "%2Ftest.txt" }
-
-    example_request "Get the contents of a file for a specific hadoop instance"  do
-      status.should == 200
-    end
-  end
-
   get "/hadoop_instances/:hadoop_instance_id/files/:id" do
-    let(:id) { "%2Ffiles" }
+    let(:id) { dir_entry.id }
 
     example_request "Get a list of files for a subdirectory of a specific hadoop instance"  do
       status.should == 200

@@ -206,8 +206,7 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/external_tables" do
-    parameter :hadoop_instance_id, "Instance id of the hadoop instance", :scope => :hdfs_external_table
-    parameter :pathname, "Pathname to the CSV file containing the table data", :scope => :hdfs_external_table
+    parameter :hdfs_entry_id, "Id of the source HDFS entry"
     parameter :has_header, "'true' if data contains a header column, 'false' otherwise", :scope => :hdfs_external_table
     parameter :column_names, "Array of column names", :scope => :hdfs_external_table
     parameter :types, "Array of column types", :scope => :hdfs_external_table
@@ -215,10 +214,10 @@ resource "Workspaces" do
     parameter :table_name, "Name of the table to be created", :scope => :hdfs_external_table
     parameter :workspace_id, "Id of the workspace to create the table in"
 
-    scope_parameters :hdfs_external_table, [:hadoop_instance_id, :pathname, :has_header, :column_names, :column_types, :delimiter, :table_name]
+    required_parameters :hdfs_entry_id, :table_name, :workspace_id, :column_names, :delimiter, :types
+    scope_parameters :hdfs_external_table, [:hdfs_entry_id, :has_header, :column_names, :column_types, :delimiter, :table_name]
 
-    let(:hadoop_instance_id) { hadoop_instance.id }
-    let(:pathname) { "/foo_fighter/twisted_sisters/" }
+    let(:hdfs_entry_id) { hadoop_instance.hdfs_entries.create!(path: "/files/data.csv").id }
     let(:has_header) { true }
     let(:column_names) { ["field1", "field2"] }
     let(:types) { ["text", "text"] }
