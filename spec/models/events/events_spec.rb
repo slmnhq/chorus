@@ -392,7 +392,7 @@ describe "Event types" do
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
     its(:additional_data) { should == { 'source_dataset_id' => source_dataset.id, 'destination_table' => dataset.name } }
 
-    it_creates_activities_for { [actor, workspace, dataset] }
+    it_creates_activities_for { [actor, workspace, dataset, source_dataset] }
     it_does_not_create_a_global_activity
   end
 
