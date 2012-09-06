@@ -59,6 +59,8 @@
 
 .workfile_version_list {
     li {
+        position: relative;
+
         a {
             padding-top: 10px;
             display: inline-block;
@@ -101,6 +103,12 @@
 
         .spacer {
             border-bottom: $dotted-list-item-border;
+        }
+
+        a.delete_link {
+          position: absolute;
+          right: 0;
+          top: 0;
         }
     }
 }

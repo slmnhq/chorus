@@ -253,6 +253,17 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
                 });
             });
+
+            context("when you are replacing a deleted version", function() {
+                it("shows the version conflict alert", function() {
+                    this.server.lastUpdate().fail([{
+                        "message" : "Bad version, bro",
+                        "msgkey" : "WORKFILE.VERSION_NOT_EXIST"
+                    }]);
+
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                });
+            });
         });
 
         describe("event file:createNewVersion", function() {

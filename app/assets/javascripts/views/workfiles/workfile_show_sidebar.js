@@ -25,6 +25,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
 
         chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this);
         chorus.PageEvents.subscribe("dataset:back", this.recalculateScrolling, this);
+        chorus.PageEvents.subscribe("workfile_version:deleted", this.versionDestroyed, this);
 
         this.requiredResources.push(this.model);
         this.requiredResources.push(this.model.workspace());
@@ -54,6 +55,14 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             content:$(versionList.el)
         });
         this._super('postRender');
+    },
+
+    versionDestroyed: function(versionNumber) {
+        if(versionNumber == this.model.get("versionInfo").versionNum) {
+            chorus.router.navigate(this.model.baseShowUrl());
+        } else {
+            this.allVersions.fetch();
+        }
     },
 
     displayVersionList:function (e) {
