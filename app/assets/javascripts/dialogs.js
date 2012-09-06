@@ -1,7 +1,11 @@
 chorus.dialogs.Base = chorus.Modal.extend({
     constructorName: "Dialog",
 
-    render:function render() {
+    render: function() {
+        if(this.hasBeenClosed) {
+            return this;
+        }
+
         this.preRender();
 
         var header = $("<div class='dialog_header'/>");
@@ -33,7 +37,12 @@ chorus.dialogs.Base = chorus.Modal.extend({
         return this;
     },
 
-    revealed:function () {
+    modalClosed: function () {
+        this._super("modalClosed");
+        this.hasBeenClosed = true;
+    },
+
+    revealed: function () {
         $("#facebox").removeClass().addClass("dialog_facebox");
     }
 })

@@ -28,6 +28,18 @@ describe("chorus.views.Dialog", function() {
             expect(chorus.placeholder).toHaveBeenCalledWith(this.dialog.$("input[placeholder], textarea[placeholder]"));
         });
 
+        context("when the dialog has already been closed", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, 'preRender');
+                this.dialog.modalClosed();
+                this.dialog.render();
+            });
+
+            it("aborts", function() {
+                expect(this.dialog.preRender).not.toHaveBeenCalled();
+            });
+        });
+
         context("with a function as the title", function() {
             beforeEach(function() {
                 this.dialog.title = function() {return 'foo'};
