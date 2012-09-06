@@ -13,6 +13,9 @@ module Events
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
     has_many :notifications
+    has_one :notification_for_current_user, :class_name => 'Notification', :conditions => proc {
+      "recipient_id = #{ActiveRecord::Base.current_user.id}"
+    }, :foreign_key => :event_id
 
     # subclass associations on parent to facilitate .includes
     has_many :attachments, :class_name => 'NoteAttachment', :foreign_key => 'note_id'

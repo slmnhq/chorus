@@ -4,10 +4,16 @@ class EventPresenter < Presenter
       merge(targets_hash).
       merge(additional_data_hash).
       merge(note_action_type_hash).
-      merge(note_attachment_hash)
+      merge(note_attachment_hash).
+      merge(notification_hash)
   end
 
   private
+
+  def notification_hash
+    return { :unread => !model.notification_for_current_user.try(:read) } if @options[:read_receipts]
+    {}
+  end
 
   def basic_hash
     {

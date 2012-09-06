@@ -36,6 +36,21 @@ describe Events::Base do
     events[0].created_at.should > events[1].created_at
   end
 
+  describe '.notification_for_current_user' do
+    let(:notification) { notifications(:bobs_notification1) }
+    let(:event) { notification.notification_event }
+
+    it "retrieves the notification for the event" do
+      stub(ActiveRecord::Base).current_user { users(:bob) }
+      event.notification_for_current_user.should be_present
+    end
+
+    it "does not retrieve the notification for a user for whom there is none" do
+      stub(ActiveRecord::Base).current_user { users(:alice) }
+      event.notification_for_current_user.should be_nil
+    end
+  end
+
   describe ".for_dashboard_of(user)" do
     let(:user) { users(:alice) }
     let(:the_events) do

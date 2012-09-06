@@ -9,7 +9,7 @@ class WorkfilePresenter < Presenter
       :file_name => h(file_name),
       :file_type => h(content_type),
       :latest_version_id => latest_workfile_version.id,
-      :has_draft => has_draft(@view_context.current_user)
+      :has_draft => has_draft(ActiveRecord::Base.current_user)
     }
     workfile[:execution_schema] = present(execution_schema) if @options[:include_execution_schema]
     workfile

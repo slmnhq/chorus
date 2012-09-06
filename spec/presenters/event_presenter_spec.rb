@@ -14,7 +14,7 @@ describe EventPresenter, :type => :view do
       context "SourceTableCreated" do
         let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table) ) }
         it "does not render datasets with their schemas or associated workspaces" do
-          stub(view).current_user { current_user }
+          stub(ActiveRecord::Base).current_user { current_user }
           hash = subject.to_hash
           hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
           hash[:dataset][:schema].keys.size.should == 1
@@ -27,11 +27,27 @@ describe EventPresenter, :type => :view do
         let(:event) { FactoryGirl.create(:note_on_workspace_event, :workspace => workspace_with_sandbox) }
 
         it "only renders the sandbox id of a workspace" do
-          stub(view).current_user { current_user }
+          stub(ActiveRecord::Base).current_user { current_user }
           hash = subject.to_hash
           hash[:workspace].should have_key(:id)
           hash[:workspace].should have_key(:name)
           hash[:workspace].keys.size.should == 2
+        end
+      end
+    end
+
+    context "when rendering notifications" do
+      let(:options) { {:read_receipts => true} }
+      let(:current_user) { users(:bob) }
+
+      context "NoteOnWorkspace" do
+        let(:workspace_with_sandbox) { workspaces(:bob_public) }
+        let(:event) { notifications(:bobs_notification1).notification_event }
+
+        it "renders the event with a :read key based on the current user" do
+          stub(ActiveRecord::Base).current_user { current_user }
+          hash = subject.to_hash
+          hash[:read].should be_false
         end
       end
     end
@@ -123,7 +139,7 @@ describe EventPresenter, :type => :view do
         let(:current_user) { users(:bob) }
 
         it "contains the attachment" do
-          stub(view).current_user { current_user }
+          stub(ActiveRecord::Base).current_user { current_user }
           event.workspace.sandbox = dataset.schema
           event.workspace.save
           stub(event).attachments { [attachment] }
@@ -145,7 +161,7 @@ describe EventPresenter, :type => :view do
         let(:current_user) { users(:bob) }
 
         it "contains the images icon url" do
-          stub(view).current_user { current_user }
+          stub(ActiveRecord::Base).current_user { current_user }
           event.workspace.save
           stub(event).workfiles { [workfile] }
           hash = subject.to_hash

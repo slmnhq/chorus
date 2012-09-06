@@ -7,7 +7,7 @@ describe WorkfilePresenter, :type => :view do
   let(:presenter) { WorkfilePresenter.new(workfile, view) }
 
   before(:each) do
-    stub(view).current_user { user }
+    stub(ActiveRecord::Base).current_user { user }
   end
 
   describe "#to_hash" do

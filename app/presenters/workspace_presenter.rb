@@ -17,7 +17,7 @@ class WorkspacePresenter < Presenter
           :archived_at => archived_at,
           :public => public,
           :image => present(image),
-          :permission => permissions_for(@view_context.current_user),
+          :permission => permissions_for(ActiveRecord::Base.current_user),
           :has_added_member => has_added_member,
           :has_added_workfile => has_added_workfile,
           :has_added_sandbox => has_added_sandbox,

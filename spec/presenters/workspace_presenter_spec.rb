@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspacePresenter, :type => :view do
   before(:each) do
     @user = FactoryGirl.create :user
-    stub(view).current_user { @user }
+    stub(ActiveRecord::Base).current_user { @user }
     @archiver = FactoryGirl.create :user
     @schema = FactoryGirl.create :gpdb_schema
     @workspace = FactoryGirl.build :workspace, :owner => @user, :archiver => @archiver, :sandbox => @schema

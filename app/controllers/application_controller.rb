@@ -1,6 +1,7 @@
 require 'will_paginate/array'
 
 class ApplicationController < ActionController::Base
+  around_filter :set_current_user
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
   before_filter :extend_expiration
@@ -24,6 +25,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_current_user
+    Thread.current[:user] = User.find_by_id(session[:user_id])
+    yield
+    Thread.current[:user] = nil
+  end
 
   def render_not_valid(e)
     present_validation_errors e.record.errors, :status => :unprocessable_entity
@@ -50,7 +57,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @_current_user ||= User.find_by_id(session[:user_id])
+    Thread.current[:user]
   end
 
   def check_expiration

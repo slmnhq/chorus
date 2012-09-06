@@ -119,27 +119,30 @@ describe ApplicationController do
   describe "#current_user" do
     controller do
       def index
-        head :ok
+        render :text => current_user.present? ? current_user.id : nil
       end
     end
 
     before do
       @user = users(:alice)
+      log_in @user
     end
 
     it "returns the user based on the session's user id" do
-      session[:user_id] = @user.id
-      controller.send(:current_user).should == @user
+      get :index
+      response.body.should == @user.id.to_s
     end
 
     it "returns nil when there is no user_id stored in the session" do
       session[:user_id] = nil
-      controller.send(:current_user).should be_nil
+      get :index
+      response.body.should == ' '
     end
 
     it "returns nil when there is no user with the id stored in the session" do
       session[:user_id] = -1
-      controller.send(:current_user).should be_nil
+      get :index
+      response.body.should == ' '
     end
   end
 

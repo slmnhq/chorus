@@ -24,6 +24,7 @@ describe NotificationsController do
       first_event.action.include? bobs_event1.action
       first_event.greenplum_instance.id.should == bobs_event1.target1_id
       first_event.body.should == bobs_event1.body
+      first_event.should have_key(:unread)
     end
 
     it "should paginate notifications" do
@@ -40,6 +41,7 @@ describe NotificationsController do
     end
 
     generate_fixture "notificationSet.json" do
+      put :read, :notification_ids => [bobs_event1.id]
       get :index
     end
   end
