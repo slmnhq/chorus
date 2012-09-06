@@ -131,6 +131,15 @@ _.extend(sinon.fakeServer, {
         }
     },
 
+    completeDestroyFor: function(model, response) {
+        var destroy = this.lastDestroyFor(model);
+        if (destroy) {
+            destroy.succeed({});
+        } else {
+            throw "No destroy found for " + model.url() + ". Found destroys for: [" + _.pluck(this.destroys(), 'url').join(', ') + "]";
+        }
+    },
+
     completeFetchAllFor: function(model, results, options, pagination) {
         options = options || {page: 1, rows: 1000};
         pagination = pagination || {page: 1, total: 1, records: results ? results.length : 1};

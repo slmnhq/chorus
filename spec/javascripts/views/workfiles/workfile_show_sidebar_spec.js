@@ -212,12 +212,12 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         beforeEach(function() {
             spyOn(this.view, "postRender"); // check for #postRender because #render is bound
             this.view.allVersions.trigger("changed");
-        })
+        });
 
         it("re-renders", function() {
             expect(this.view.postRender).toHaveBeenCalled();
         })
-    })
+    });
 
     describe("when the user is not a workspace member", function() {
         beforeEach(function() {
@@ -239,6 +239,22 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("hides the link to delete the workfile", function() {
             var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
             expect(deleteLink).not.toExist();
+        });
+    });
+
+    describe("when a workfile version is destroyed", function() {
+        it("refetches the version list collection", function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("workfile_version:deleted", 3);
+            expect(this.server.lastFetchFor(this.view.allVersions)).toBeDefined();
+        });
+
+        context("when the version destroyed is the currently displayed version", function() {
+            it("redirects you to the workfile page", function() {
+                spyOn(chorus.router, "navigate");
+                chorus.PageEvents.broadcast("workfile_version:deleted", this.workfile.get("versionInfo").versionNum);
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.baseShowUrl());
+            });
         });
     });
 });

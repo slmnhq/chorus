@@ -14,6 +14,10 @@
         nameAttribute: 'fileName',
         entityType: "workfile",
 
+        baseShowUrl: function() {
+            return this.showUrl({baseOnly: true});
+        },
+
         urlTemplate: function(options) {
             var method = options && options.method;
 
@@ -30,7 +34,7 @@
 
         showUrlTemplate: function(options) {
             options || (options = {});
-            if (this.isLatestVersion() && !options.version) {
+            if ((this.isLatestVersion() && !options.version) || options.baseOnly) {
                 return "workspaces/{{workspace.id}}/workfiles/{{id}}"
             } else {
                 var version = options.version || this.get('versionInfo').id;

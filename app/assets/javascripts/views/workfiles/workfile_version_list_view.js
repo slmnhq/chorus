@@ -10,6 +10,7 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
         var date = Date.parseFromApi(versionInfo && versionInfo.updatedAt);
         var formattedDate = date && date.toString("MMMM dd, yyyy");
         return {
+            versionNumber: workfileVersion.get("versionInfo").versionNum,
             authorName: author.displayName(),
             formattedDate: formattedDate,
             showUrl: workfileVersion.showUrl()
