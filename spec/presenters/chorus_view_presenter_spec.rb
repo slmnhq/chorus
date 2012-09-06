@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ChorusViewPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
-    stub(view).current_user { @user }
+    stub(ActiveRecord::Base).current_user { @user }
   end
 
   let(:chorus_view) { datasets(:bob_chorus_view) }

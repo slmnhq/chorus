@@ -54,7 +54,7 @@ shared_examples "dataset presenter" do |dataset_factory_name|
     let(:presenter) { described_class.new(@dataset, view, :workspace => workspace) }
 
     before do
-      stub(view).current_user { FactoryGirl.build(:user) }
+      stub(ActiveRecord::Base).current_user { FactoryGirl.build(:user) }
     end
 
     it "includes the given workspace" do

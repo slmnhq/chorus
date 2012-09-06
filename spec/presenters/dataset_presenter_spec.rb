@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DatasetPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
-    stub(view).current_user { @user }
+    stub(ActiveRecord::Base).current_user { @user }
   end
 
   it_behaves_like "dataset presenter", :gpdb_table
