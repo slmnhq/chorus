@@ -106,15 +106,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if (toTableExists) {
             this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
             this.activeScheduleView = this.scheduleViewExisting;
-            this.changeSelectedDataset(model.get("toTable"));
+            this.changeSelectedDataset(model.get("scheduleInfo") && model.get("scheduleInfo").toTable);
         } else {
             this.activeScheduleView = this.scheduleViewNew;
-            this.$(".new_table input.name").val(model.get("toTable"));
+            this.$(".new_table input.name").val(model.get("scheduleInfo") && model.get("scheduleInfo").toTable);
             this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
         }
 
         if (this.model.get("scheduleInfo")) {
-            if (this.model.get("scheduleInfo").jobName) {
+            if (this.model.get("scheduleInfo").id) {
                 this.$("input[name='schedule']").prop("checked", true);
             } else {
                 this.$("input[name='schedule']").prop("checked", false);

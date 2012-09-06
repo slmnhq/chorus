@@ -275,12 +275,12 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     truncate: true,
                     sampleCount: 200,
                     scheduleInfo: {
-                        startTime: "2013-02-21 13:30:00.0",
-                        endTime: "2013-05-27",
-                        frequency: "HOURLY",
-                        jobName: "job123"
+                        id: 1234,
+                        startDatetime: "2013-02-21T13:30:00Z",
+                        endDate: "2013-05-27",
+                        frequency: "hourly",
+                        toTable: "my_table"
                     },
-                    toTable: "my_table",
                     destinationTable: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"my_table"',
                     sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"somebodys_table"'
                 });
@@ -365,9 +365,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
                     expect(this.dialog.activeScheduleView.$(".start input[name='day']").val()).toBe("21");
 
-                    expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("1");
+                    expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("5");
                     expect(this.dialog.activeScheduleView.$(".minutes").val()).toBe("30");
-                    expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("PM");
+                    expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("AM");
 
                     expect(this.dialog.activeScheduleView.$(".end input[name='year']").val()).toBe("2013");
                     expect(this.dialog.activeScheduleView.$(".end input[name='month']").val()).toBe("5");
@@ -448,8 +448,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     truncate: true,
                     sampleCount: 200,
                     scheduleInfo: {
-                        startTime: "2013-02-21 13:30:00.0",
-                        endTime: "2013-05-27",
+                        startDatetime: "2013-02-21T13:30:00Z",
+                        endDate: "2013-05-27",
                         frequency: "HOURLY"
                     },
                     toTable: "my_table",
@@ -480,9 +480,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
                     expect(this.dialog.activeScheduleView.$(".start input[name='day']").val()).toBe("21");
 
-                    expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("1");
+                    expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("5");
                     expect(this.dialog.activeScheduleView.$(".minutes").val()).toBe("30");
-                    expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("PM");
+                    expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("AM");
 
                     expect(this.dialog.activeScheduleView.$(".end input[name='year']").val()).toBe("2013");
                     expect(this.dialog.activeScheduleView.$(".end input[name='month']").val()).toBe("5");
@@ -527,7 +527,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("without an existing import", function() {
             beforeEach(function() {
-                this.datasetImport.unset("toTable");
+                this.datasetImport.get("scheduleInfo").toTable = null;
                 this.server.completeFetchFor(this.datasetImport);
                 this.dialog.render();
             });

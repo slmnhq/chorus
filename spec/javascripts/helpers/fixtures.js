@@ -412,10 +412,15 @@ beforeEach(function() {
                     creator: "InitialUser"
                 },
                 scheduleInfo: {
-                    endTime: "2013-06-02",
+                    id: 1234,
+                    endDate: "2013-06-02",
                     frequency: "WEEKLY",
-                    jobName: "ScheduleJob_1330719934443",
-                    startTime: "2012-02-29T14:23:58Z"
+                    toTable: 'someTable',
+                    startDatetime: "2012-02-29T14:23:58Z",
+                    truncate: false,
+                    nextImportAt: "2013-09-07T06:00:00Z"
+                    // To note: fields that are part of scheduleInfo but not in fixture:
+                    // lastScheduledAt, sampleCount
                 },
                 sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"_uspresident"',
                 sourceTable: null,

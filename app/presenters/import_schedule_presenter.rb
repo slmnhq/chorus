@@ -15,7 +15,7 @@ class ImportSchedulePresenter < Presenter
              :sample_count => sample_count,
              :last_scheduled_at => last_scheduled_at
          }
-    }
+    }.merge(:execution_info => {})
   end
 end
 

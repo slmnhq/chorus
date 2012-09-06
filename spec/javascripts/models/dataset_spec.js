@@ -829,7 +829,7 @@ describe("chorus.models.Dataset", function() {
 
         it("succeed if there is a config, but it has an id", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            importDataset.getImport().set({ id: "1234" });
+            importDataset.getImport().set({ scheduleInfo: {id: "1234" }});
             expect(importDataset.hasImport()).toBeTruthy();
         });
     });
@@ -941,7 +941,7 @@ describe("chorus.models.Dataset", function() {
     describe("#nextImportDestination", function() {
         it("returns the import destination", function() {
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            var anImport = new chorus.models.DatasetImport({ nextImportTime: "2012-12-21", id: 1337, toTable: "toronto" });
+            var anImport = new chorus.models.DatasetImport({ scheduleInfo: {nextImportAt: "2012-12-21", id: 1337, toTable: "toronto" }});
             this.dataset._datasetImport = anImport;
             expect(this.dataset.nextImportDestination().get("objectName")).toEqual("toronto");
         });
@@ -950,7 +950,7 @@ describe("chorus.models.Dataset", function() {
     describe("#importRunsAt", function() {
         it("returns the import run time", function() {
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            var anImport = new chorus.models.DatasetImport({ nextImportTime: Date.formatForApi((50).hours().ago()), id: 1337, toTable: "toronto" });
+            var anImport = new chorus.models.DatasetImport({ scheduleInfo: {nextImportAt: Date.formatForApi((50).hours().ago()), id: 1337, toTable: "toronto" }});
             this.dataset._datasetImport = anImport;
             expect(this.dataset.importRunsAt()).toEqual("2 days ago");
         });

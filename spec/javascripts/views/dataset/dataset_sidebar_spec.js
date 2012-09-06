@@ -409,10 +409,14 @@ describe("chorus.views.DatasetSidebar", function() {
                                 sourceId: this.dataset.id,
                                 executionInfo: {},
                                 scheduleInfo: {
-                                    endTime: "2013-06-02T00:00:00Z",
+                                    id: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
+                                    endDate: "2013-06-02T00:00:00Z",
                                     frequency: "WEEKLY",
-                                    jobName: "ScheduleJob_1330719934443",
-                                    startTime: "2012-02-29T14:23:58Z"
+                                    toTable: "our_destination",
+                                    startDatetime: "2012-02-29T14:23:58Z",
+                                    nextImportAt: "2013-09-07T06:00:00Z"
+                                    // Note: fields that are part of scheduleInfo but not defined in this instance:
+                                    // lastScheduledAt, sampleCount (not tested?)
                                 },
                                 workspaceId: this.dataset.workspace().id,
                                 toTable: "our_destination",

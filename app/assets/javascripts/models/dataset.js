@@ -59,7 +59,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     hasImport: function() {
-        return this.getImport() && this.getImport().has("id");
+        return this.getImport() && this.getImport().get("scheduleInfo") && this.getImport().get("scheduleInfo").id;
     },
 
     importRunsAt: function() {

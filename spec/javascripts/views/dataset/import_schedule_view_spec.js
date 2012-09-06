@@ -53,9 +53,11 @@ describe("chorus.views.ImportSchedule", function() {
                 id: '12',
                 truncate: true,
                 scheduleInfo: {
-                    endTime: "2013-05-27",
-                    startTime: "2013-02-21 13:30:00.0",
+                    endDate: "2013-05-27",
+                    startDatetime: "2013-02-21T13:30:00Z",
                     frequency: "MONTHLY"
+                    // Note: fields that are part of scheduleInfo but not defined (needed in future?)
+                    // id, frequency, toTable, nextImportAt, lastScheduledAt, sampleCount
                 }
             });
             this.view.setFieldValues(importModel);
@@ -69,9 +71,9 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".start input[name='year']").val()).toBe("2013");
             expect(this.view.$(".start input[name='month']").val()).toBe("2");
             expect(this.view.$(".start input[name='day']").val()).toBe("21");
-            expect(this.view.$("select.hours").val()).toBe("1");
+            expect(this.view.$("select.hours").val()).toBe("5");
             expect(this.view.$("select.minutes").val()).toBe("30");
-            expect(this.view.$("select.ampm").val()).toBe("PM");
+            expect(this.view.$("select.ampm").val()).toBe("AM");
         });
 
         it("selects the right end date", function() {

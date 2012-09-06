@@ -29,7 +29,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     startTime: function() {
         if (this.get("scheduleInfo")) {
-            return Date.parse(this.get("scheduleInfo").startTime.split(".")[0]);
+            return Date.parseFromApi(this.get("scheduleInfo").startDatetime);
         } else if (this.get("scheduleStartTime")) {
             return Date.parse(this.get("scheduleStartTime").split(".")[0]);
         } else {
@@ -39,7 +39,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     frequency: function() {
         if (this.get("scheduleInfo")) {
-            return this.get("scheduleInfo").frequency;
+            return this.get("scheduleInfo").frequency.toUpperCase();
         } else if (this.get("scheduleFrequency")) {
             return this.get("scheduleFrequency");
         }
@@ -47,7 +47,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     endTime: function() {
         if (this.get("scheduleInfo")) {
-            return Date.parse(this.get("scheduleInfo").endTime);
+            return Date.parse(this.get("scheduleInfo").endDate);
         } else if (this.get("scheduleEndTime")) {
             return Date.parse(this.get("scheduleEndTime"));
         }
@@ -62,11 +62,11 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     nextExecutionAt: function() {
-        return this.get("nextImportTime")
+        return this.get("scheduleInfo").nextImportAt
     },
 
     hasNextImport: function() {
-        return this.has("nextImportTime")
+        return !!this.get("scheduleInfo").nextImportAt
     },
 
     thisDatasetIsSource: function() {
@@ -79,8 +79,8 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     nextDestination: function() {
         return new chorus.models.WorkspaceDataset({
-            id: this.get("destinationTable"),
-            objectName: this.get("toTable"),
+            id: this.get("scheduleInfo").id, // TODO: need table ID
+            objectName: this.get("scheduleInfo").toTable,
             workspaceId: this.get("workspaceId")
         });
     },
@@ -111,6 +111,6 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     hasActiveSchedule: function() {
-        return this.has('scheduleInfo') && this.get('scheduleInfo').jobName
+        return this.has('scheduleInfo') && this.get('scheduleInfo').id
     }
 });

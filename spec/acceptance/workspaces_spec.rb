@@ -183,21 +183,23 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let(:dataset_id) { dataset.to_param }
+    let!(:dataset_id) { dataset.to_param }
+
+    parameter :workspace_id, "Id of the workspace that the dataset belongs to"
+    parameter :dataset_id, "Id of the dataset"
 
     before do
-      stub(ImportSchedule).find_by_workspace_id_and_source_dataset_id(workspace_id, dataset_id) {
-        ImportSchedule.new(
+        ImportSchedule.create!(
           :start_datetime => '2012-09-04 23:00:00-07',
           :end_date => '2012-12-04',
           :frequency => 'weekly',
-          :workspace_id => workspace.id,
+          :workspace_id => workspace_id,
           :to_table => "new_table_for_import",
-          :source_dataset_id => dataset.id,
+          :source_dataset_id => dataset_id,
           :truncate => 't',
           :new_table => 't',
           :user_id => user.id)
-      }
+
     end
 
     example_request "Show import schedule for a dataset" do
