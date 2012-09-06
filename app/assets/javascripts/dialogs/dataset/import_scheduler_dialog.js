@@ -232,7 +232,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             chorus.toast("import.schedule.toast");
         }
         chorus.PageEvents.broadcast('importSchedule:changed', this.model);
-        this.dataset.trigger('change');
         this.closeModal();
     },
 

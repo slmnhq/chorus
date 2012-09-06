@@ -433,10 +433,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         it("triggers a importSchedule:changed event", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("importSchedule:changed", this.dialog.model);
                         });
-
-                        it("triggers change on the dataset", function() {
-                            expect('change').toHaveBeenTriggeredOn(this.dataset);
-                        })
                     });
                 });
             });
