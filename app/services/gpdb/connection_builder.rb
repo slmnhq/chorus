@@ -15,7 +15,6 @@ module Gpdb
       Rails.logger.error(friendly_message + " - " + e.message)
       raise e, friendly_message
     rescue ActiveRecord::StatementInvalid => e
-      p e
       friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
       Rails.logger.info(friendly_message + " - " + e.message)
       raise e, friendly_message
