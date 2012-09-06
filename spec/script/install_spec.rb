@@ -162,6 +162,12 @@ describe "Install" do
           subject
           installer.do_legacy_upgrade.should be_true
         end
+
+        it "should set the legacy installation path" do
+          installer.destination_path = '/opt/chorus/thingy'
+          subject
+          installer.legacy_installation_path.should == '/opt/chorus/thingy'
+        end
       end
     end
 
@@ -199,7 +205,7 @@ describe "Install" do
     context "when the user types nothing" do
       let(:inputs) { [nil, "/foo/bar"] }
       before do
-        stub(installer).version {"2.2.2"}
+        stub(installer).version { "2.2.2" }
         stub(installer).get_input do
           inputs.shift
         end
@@ -674,6 +680,42 @@ describe "Install" do
     context "when localhost is defined" do
       it "does not raise an exception" do
         expect { installer.validate_localhost }.to_not raise_error()
+      end
+    end
+  end
+
+  describe "#migrate_legacy_data" do
+    subject { installer.migrate_legacy_data }
+
+    context "when legacy_installation_path is not set" do
+      before do
+        installer.legacy_installation_path = nil
+      end
+
+      it "should raise InstallationFailed" do
+        expect { subject }.to raise_error(Install::InstallationFailed)
+      end
+    end
+
+    context "when legacy_installation_path is set" do
+      before do
+        installer.legacy_installation_path = '/opt/old_chorus'
+        installer.destination_path = '/opt/chorus'
+        stub(installer).version { '2.2.0.0' }
+
+        @call_order = []
+
+        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && WORKFILE_PATH=/opt/old_chorus/runtime/data bin/rake legacy:migrate") { @call_order << "legacy_migration" }
+        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && pg_dump -p 8543 chorus > legacy_database.sql") { @call_order << "pg_dump" }
+        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && packaging/legacy_migrate_schema_setup.sh legacy_database.sql") { @call_order << "import_legacy_schema" }
+        mock(installer).chorus_exec("/opt/old_chorus/postgresql/bin/pg_ctl -D /opt/old_chorus/runtime/postgresql-data -m fast stop") { @call_order << "stop_old_postgres" }
+        mock(installer).chorus_exec("cd /opt/old_chorus/chorus-apps && ./stop-ofbiz.sh") { @call_order << "stop_app" }
+        mock(installer).start_postgres { @call_order << "start_new_postgres" }
+      end
+
+      it "should execute the data migrator" do
+        subject
+        @call_order.should == ["stop_app", "pg_dump", "stop_old_postgres", "start_new_postgres", "import_legacy_schema", "legacy_migration"]
       end
     end
   end

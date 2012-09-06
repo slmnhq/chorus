@@ -17,7 +17,7 @@ class Install
   UpgradeTo21Required = Class.new(StandardError)
   UpgradeUnsupported = Class.new(StandardError)
 
-  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade
+  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path
 
   DEFAULT_PATH = "/opt/chorus"
 
@@ -41,7 +41,8 @@ class Install
       run_server_control: "run ./server_control.sh start from %s to start everything up!",
       confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:",
       confirm_legacy_upgrade: "Chorus 2.1 installation detected, do you want to upgrade to 2.2? [y]:",
-      legacy_destination_path: "Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory"
+      legacy_destination_path: "Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory",
+      legacy_migration_failed: "Migrating data from 2.1 to 2.2 failed"
   }
 
   def initialize(installer_home, silent=false)
@@ -112,6 +113,7 @@ class Install
     end
 
     self.do_legacy_upgrade = true
+    self.legacy_installation_path = destination_path
     prompt_legacy_upgrade_destination
   end
 
@@ -277,6 +279,16 @@ class Install
     server_control "start"
   end
 
+  def migrate_legacy_data
+    raise InstallationFailed, MESSAGES[:installation_failed_with_reason] % MESSAGES[:legacy_migration_failed] unless legacy_installation_path
+    chorus_exec("cd #{legacy_installation_path}/chorus-apps && ./stop-ofbiz.sh")
+    chorus_exec("cd #{release_path} && pg_dump -p 8543 chorus > legacy_database.sql")
+    chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_installation_path}/runtime/postgresql-data -m fast stop")
+    start_postgres
+    chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
+    chorus_exec("cd #{release_path} && WORKFILE_PATH=#{legacy_installation_path}/runtime/data bin/rake legacy:migrate")
+  end
+
   def install
     log "Installing Chorus version #{version} to #{destination_path}"
     log "Copying files into #{destination_path}..."
@@ -303,6 +315,16 @@ class Install
     link_services
     setup_database
     log "Done"
+
+    if do_legacy_upgrade
+      #log "Migrating settings from previous version..."
+      #migrate_legacy_settings
+      #log "Done"
+
+      log "Migrating data from previous version..."
+      migrate_legacy_data
+      log "Done"
+    end
   rescue InvalidVersion => e
     raise InstallationFailed.new MESSAGES[:installation_failed_with_reason] % e.message
   rescue CommandFailed => e
