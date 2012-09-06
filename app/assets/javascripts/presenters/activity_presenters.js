@@ -93,7 +93,11 @@
             }
 
             if (this.presenter.versionName) {
-                header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName).toString()
+                if(this.presenter.hasOwnProperty('versionUrl')) {
+                    header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName).toString();
+                } else {
+                    header.versionName = this.presenter.versionName;
+                }
             }
 
             if (this.presenter.tableName && this.presenter.tableUrl) {
@@ -275,6 +279,15 @@
                 versionName: t("workfile.version_title", { versionNum: model.get("version").id}),
                 versionUrl: model.get("version").isDeleted == 'true' ? null : model.workfile().showUrl({version: model.get("version").id}),
                 body: model.get("commitMessage")
+            }
+        },
+
+        WORKFILE_VERSION_DELETED: function(model) {
+            return {
+                objectName: model.workfile().get("name"),
+                objectUrl: model.workfile().showUrl(),
+                iconHref: model.workfile().showUrl(),
+                versionName: t("workfile.version_title", { versionNum: model.get("version").id})
             }
         },
 
