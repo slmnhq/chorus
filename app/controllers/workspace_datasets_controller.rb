@@ -1,7 +1,7 @@
 class WorkspaceDatasetsController < ApplicationController
 
   def index
-    present paginate(workspace.datasets(params[:type]).with_name_like(params[:name_pattern]).order("lower(name)")), :presenter_options => { :workspace => workspace }
+    present paginate(workspace.datasets(current_user, params[:type]).with_name_like(params[:name_pattern]).order("lower(name)")), :presenter_options => { :workspace => workspace }
   end
 
   def create
@@ -18,7 +18,7 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def show
-    present workspace.datasets.find(params[:id]), :presenter_options => { :workspace => workspace }
+    present workspace.datasets(current_user).find(params[:id]), :presenter_options => { :workspace => workspace }
   end
 
   def destroy

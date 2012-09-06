@@ -120,35 +120,55 @@ describe Workspace do
     let(:chorus_view) {
       ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
     }
-
-    before do
-      workspace.bound_datasets << source_table
-    end
+    let!(:user) {users(:carly)}
+    let!(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => schema.database.gpdb_instance, :owner => user) }
 
     context "when the workspace has a sandbox" do
       before do
         chorus_view.save!(:validate => false)
         workspace.bound_datasets << chorus_view
+        workspace.bound_datasets << source_table
       end
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
-      it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-        workspace.datasets.should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
+      context "when the sandbox has tables" do
+        before do
+          stub(Dataset).refresh(account, schema) {[sandbox_table, sandbox_view] }
+        end
+
+
+        it "includes datasets in the workspace's sandbox and all of its bound datasets" do
+          workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
+        end
+
+        it "filters by type" do
+          workspace.datasets(user, "SANDBOX_TABLE").should =~ [sandbox_table]
+          workspace.datasets(user, "SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
+          workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view]
+          workspace.datasets(user, "SOURCE_TABLE").should =~ [source_table]
+        end
       end
 
-      it "filters by type" do
-        workspace.datasets("SANDBOX_TABLE").should =~ [sandbox_table]
-        workspace.datasets("SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
-        workspace.datasets("CHORUS_VIEW").should =~ [chorus_view]
-        workspace.datasets("SOURCE_TABLE").should =~ [source_table]
+      context "when there are no datasets for this workspace" do
+        before do
+          stub(Dataset).refresh(account, schema) { [] }
+        end
+
+        it "returns no results" do
+          workspace.datasets(user, "SANDBOX_TABLE" ).should =~ []
+          workspace.datasets(user, "SANDBOX_DATASET").should =~ []
+        end
       end
     end
 
     context "when the workspace does not have a sandbox" do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+      before do
+        workspace.bound_datasets << source_table
+      end
 
       it "includes the workspace's bound datasets" do
-        workspace.datasets.should =~ [source_table]
+        workspace.datasets(user).should =~ [source_table]
       end
     end
 
@@ -160,7 +180,7 @@ describe Workspace do
       end
 
       it "returns an empty relation" do
-        workspace.reload.datasets.should == []
+        workspace.reload.datasets(user).should == []
       end
     end
   end
