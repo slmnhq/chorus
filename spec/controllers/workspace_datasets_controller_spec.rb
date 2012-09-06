@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspaceDatasetsController do
   ignore_authorization!
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { users(:carly) }
   let(:workspace) { FactoryGirl.create(:workspace) }
   let(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
@@ -45,7 +45,7 @@ describe WorkspaceDatasetsController do
     end
 
     it "should filter db objects by type" do
-      mock(workspace).datasets("SANDBOX_TABLE") { datasets }
+      mock(workspace).datasets(user, "SANDBOX_TABLE") { datasets }
       get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
     end
   end
