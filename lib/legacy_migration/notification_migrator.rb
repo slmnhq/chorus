@@ -19,14 +19,16 @@ class NotificationMigrator < AbstractMigrator
           recipient_id,
           event_id,
           created_at,
-          updated_at
+          updated_at,
+          read
         )
         SELECT
           edc_alert.id,
           users.id,
           events.id,
           edc_alert.created_stamp,
-          edc_alert.last_updated_stamp
+          edc_alert.last_updated_stamp,
+          edc_alert.is_read
         FROM
           edc_alert
           INNER JOIN users

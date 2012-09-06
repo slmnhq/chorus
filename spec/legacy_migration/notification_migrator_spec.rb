@@ -36,6 +36,7 @@ describe NotificationMigrator do
 
         notification.created_at.should == legacy_comment["created_stamp"]
         notification.updated_at.should == legacy_comment["last_updated_stamp"]
+        notification.read.should == (legacy_comment["is_read"] == 't' ? true : false)
       end
       count.should > 0
       Notification.count.should == count
