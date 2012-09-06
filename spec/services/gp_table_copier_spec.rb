@@ -81,6 +81,13 @@ describe GpTableCopier, :database_integration => true do
           event.source_dataset_id.should == source_dataset.id
         end
 
+        it "creates a notification on a successful import" do
+          GpTableCopier.run_import(source_dataset.id, user.id, attributes)
+          notification = Notification.last
+          notification.recipient_id.should == user.id
+          notification.event_id.should == Events::DatasetImportSuccess.first.id
+        end
+
         it "creates a DatasetImportFailed on a failed import" do
           expect {
             GpTableCopier.run_import(-1, user.id, attributes)

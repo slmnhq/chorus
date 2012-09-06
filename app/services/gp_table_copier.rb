@@ -96,11 +96,13 @@ class GpTableCopier
       event.save!
     end
 
-    Events::DatasetImportSuccess.by(user).add(
+    event = Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
         :dataset => dst_table,
         :source_dataset => source_table
     )
+
+    Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
 
   def create_failed_event(error_message)

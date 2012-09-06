@@ -10,10 +10,7 @@ class NotesController < ApplicationController
 
     if note_params[:recipients]
       note_params[:recipients].each do |recipient_id|
-        notification = Notification.new
-        notification.recipient_id = recipient_id
-        notification.event_id = note.id
-        notification.save!
+        Notification.create!(:recipient_id => recipient_id, :event_id => note.id)
       end
     end
 

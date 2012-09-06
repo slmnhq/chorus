@@ -290,6 +290,12 @@ describe CsvImporter, :database_integration => true do
       it "deletes the file" do
         expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
+
+      it "generates notification to import actor" do
+        notification = Notification.last
+        notification.recipient_id.should == user.id
+        notification.event_id.should == Events::FileImportSuccess.first.id
+      end
     end
 
     describe "when the import fails" do
