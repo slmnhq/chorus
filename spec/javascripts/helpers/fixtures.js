@@ -264,8 +264,8 @@ beforeEach(function() {
                 });
             },
 
-            "WORKFILE_UPGRADED_VERSION": function() {
-                return new chorus.models.Activity({
+            "WORKFILE_UPGRADED_VERSION": function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: fixtures.authorJson(),
                     type: "WORKFILE_UPGRADED_VERSION",
                     timestamp: "2011-12-12 12:12:12",
@@ -286,7 +286,24 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ]
-                });
+                }, overrides));
+            },
+
+            "WORKFILE_VERSION_DELETED": function(overrides) {
+                return new chorus.models.Activity(_.extend({
+                    "timestamp": "2012-09-06 11:45:27",
+                    "id": 13753,
+                    author: fixtures.authorJson(),
+                    workfile: fixtures.nestedWorkfileJson(),
+                    workspace: fixtures.nestedWorkspaceJson(),
+                    "isDeleted": false,
+                    "type": "WORKFILE_VERSION_DELETED",
+                    "comments": [],
+                    "version": {
+                        "id": "2",
+                        "isDeleted": true
+                    }
+                }, overrides));
             },
 
             "NOTE_ON_INSTANCE": function(overrides) {

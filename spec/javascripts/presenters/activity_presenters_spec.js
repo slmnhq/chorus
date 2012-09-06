@@ -1082,7 +1082,9 @@ describe("chorus.presenters.Activity", function() {
     context(".WORKFILE_UPGRADED_VERSION", function() {
         beforeEach(function() {
             this.model = fixtures.activities.WORKFILE_UPGRADED_VERSION({
-                version: '3'
+                version: {
+                    id: '31'
+                }
             });
             this.workspace = this.model.workspace();
             this.workfile = this.model.workfile();
@@ -1110,7 +1112,7 @@ describe("chorus.presenters.Activity", function() {
         })
 
         it("has the right versionUrl", function() {
-            expect(this.presenter.versionUrl).toMatch(/versions\/3/);
+            expect(this.presenter.versionUrl).toMatch(/versions\/31/);
         })
 
         it("should have the right workspaceName", function() {
@@ -1147,6 +1149,76 @@ describe("chorus.presenters.Activity", function() {
             it("still constructs a versionLink, but with no href", function() {
                 expect(this.presenter.header.versionLink).toBeDefined();
                 expect(this.presenter.versionUrl).toBeFalsy();
+            });
+        });
+    });
+
+    context(".WORKFILE_VERSION_DELETED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.WORKFILE_VERSION_DELETED({
+                version: '31'
+            });
+            this.workspace = this.model.workspace();
+            this.workfile = this.model.workfile();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right iconHref", function() {
+            expect(this.presenter.iconHref).toBe(this.workfile.showUrl());
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.workfile.showUrl());
+        });
+
+        it("has the right versionName", function() {
+            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum: this.model.get('version').id });
+        });
+
+        it("should have the right workspaceName", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right workspaceUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("has no body", function() {
+            expect(this.presenter.body).toBeFalsy();
+        });
+
+        context("when the workfile has been deleted", function() {
+            beforeEach(function() {
+                this.model.workfile().set({ isDeleted: true });
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("should not have an iconHref", function() {
+                expect(this.presenter.iconHref).toBeFalsy();
+            });
+
+            it("should not have an objectUrl", function() {
+                expect(this.presenter.objectUrl).toBeFalsy();
+            });
+        });
+
+        context("when the workfile version has been deleted", function() {
+            beforeEach(function() {
+                this.model.get("version").isDeleted = 'true';
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("should have the right iconHref", function() {
+                expect(this.presenter.iconHref).toBe(this.workfile.showUrl());
+            });
+
+            it("should have the right objectUrl", function() {
+                expect(this.presenter.objectUrl).toBe(this.workfile.showUrl());
             });
         });
     });
