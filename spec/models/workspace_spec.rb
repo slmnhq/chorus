@@ -121,7 +121,6 @@ describe Workspace do
       ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
     }
     let!(:user) {users(:carly)}
-    let!(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => schema.database.gpdb_instance, :owner => user) }
 
     context "when the workspace has a sandbox" do
       before do
@@ -131,32 +130,41 @@ describe Workspace do
       end
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
-      context "when the sandbox has tables" do
-        before do
-          stub(Dataset).refresh(account, schema) {[sandbox_table, sandbox_view] }
-        end
-
-
-        it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-          workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
-        end
-
-        it "filters by type" do
-          workspace.datasets(user, "SANDBOX_TABLE").should =~ [sandbox_table]
-          workspace.datasets(user, "SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
-          workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view]
-          workspace.datasets(user, "SOURCE_TABLE").should =~ [source_table]
+      context "when the user does not have an instance account" do
+        it "lets them see associated datasets and chorus views only" do
+          workspace.datasets(user).should =~ [source_table, chorus_view]
         end
       end
 
-      context "when there are no datasets for this workspace" do
-        before do
-          stub(Dataset).refresh(account, schema) { [] }
+      context "when the user has an instance account" do
+        let!(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => schema.database.gpdb_instance, :owner => user) }
+
+        context "when the sandbox has tables" do
+          before do
+            stub(Dataset).refresh(account, schema) {[sandbox_table, sandbox_view] }
+          end
+
+          it "includes datasets in the workspace's sandbox and all of its bound datasets" do
+            workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
+          end
+
+          it "filters by type" do
+            workspace.datasets(user, "SANDBOX_TABLE").should =~ [sandbox_table]
+            workspace.datasets(user, "SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
+            workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view]
+            workspace.datasets(user, "SOURCE_TABLE").should =~ [source_table]
+          end
         end
 
-        it "returns no results" do
-          workspace.datasets(user, "SANDBOX_TABLE" ).should =~ []
-          workspace.datasets(user, "SANDBOX_DATASET").should =~ []
+        context "when there are no datasets for this workspace" do
+          before do
+            stub(Dataset).refresh(account, schema) { [] }
+          end
+
+          it "returns no results" do
+            workspace.datasets(user, "SANDBOX_TABLE" ).should =~ []
+            workspace.datasets(user, "SANDBOX_DATASET").should =~ []
+          end
         end
       end
     end

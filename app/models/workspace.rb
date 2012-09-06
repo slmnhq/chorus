@@ -69,9 +69,15 @@ class Workspace < ActiveRecord::Base
 
   def datasets(current_user, type = nil)
     if sandbox
-      account = sandbox.database.account_for_user!(current_user)
-      viewable_table_ids = Dataset.refresh(account, sandbox).map(&:id)
-      datasets = Dataset.where(:id => viewable_table_ids)
+      account = sandbox.database.account_for_user(current_user)
+
+      if account
+        viewable_table_ids = Dataset.refresh(account, sandbox).map(&:id)
+        datasets = Dataset.where(:id => viewable_table_ids)
+      else
+        viewable_table_ids = []
+        datasets = Dataset.where(:id => [])
+      end
 
       case type
         when "SANDBOX_TABLE" then
