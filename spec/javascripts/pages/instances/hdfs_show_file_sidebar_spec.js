@@ -2,7 +2,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
         var yesterday = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
-        this.file = rspecFixtures.hdfsFile({lastUpdatedStamp: yesterday});
+        this.file = rspecFixtures.hdfsFile({id: 8675309, lastUpdatedStamp: yesterday});
 
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
@@ -28,7 +28,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe(1000017);
+            expect(this.view.$("a.dialog").data("entity-id")).toBe(8675309);
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
         })
 
@@ -54,7 +54,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(1000017);
+                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(8675309);
             });
         });
 
