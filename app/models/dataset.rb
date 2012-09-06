@@ -7,6 +7,8 @@ class Dataset < ActiveRecord::Base
   include Stale
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
+  after_save :update_counter_cache
+
   has_many :import_schedules, :foreign_key => 'source_dataset_id'
   has_many :imports, :foreign_key => 'source_dataset_id'
   delegate :gpdb_instance, :account_for_user!, :to => :schema
@@ -309,6 +311,16 @@ class Dataset < ActiveRecord::Base
         :dataset => dst_table,
         :destination_table => params[:to_table]
     )
+  end
+
+  def update_counter_cache
+    if changed_attributes.include?('stale_at')
+      if stale?
+        GpdbSchema.decrement_counter(:datasets_count, schema_id)
+      else
+        GpdbSchema.increment_counter(:datasets_count, schema_id)
+      end
+    end
   end
 
 end

@@ -197,6 +197,12 @@ describe Dataset do
         Dataset.refresh(account, schema)
         dataset.reload.should_not be_stale
       end
+
+      it "increments the dataset counter on the schema" do
+        expect do
+          Dataset.refresh(account,schema)
+        end.to change { dataset.schema.reload.datasets_count }.by(1)
+      end
     end
 
     context "with records missing" do
@@ -209,6 +215,16 @@ describe Dataset do
 
         dataset.should be_stale
         dataset.stale_at.should be_within(5.seconds).of(Time.now)
+      end
+
+      it "decrements the dataset counter on the schema" do
+        not_stale_before = schema.datasets.not_stale.count
+        cached_before = dataset.schema.datasets_count
+        Dataset.refresh(account,schema, :mark_stale => true)
+        not_stale_after = schema.datasets.not_stale.count
+        cached_after = dataset.schema.reload.datasets_count
+
+        (not_stale_before - not_stale_after).should == cached_before - cached_after
       end
 
       it "does not update stale_at time" do
