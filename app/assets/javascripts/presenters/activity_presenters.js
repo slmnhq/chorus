@@ -272,8 +272,8 @@
                 iconSrc: "/images/new_version_icon.png",
                 iconHref: model.workfile().showUrl(),
                 iconClass: '',
-                versionName: t("workfile.version_title", { versionNum: model.get("version")}),
-                versionUrl: model.workfile().showUrl({version: model.get("version")}),
+                versionName: t("workfile.version_title", { versionNum: model.get("version").id}),
+                versionUrl: model.get("version").isDeleted == 'true' ? null : model.workfile().showUrl({version: model.get("version").id}),
                 body: model.get("commitMessage")
             }
         },

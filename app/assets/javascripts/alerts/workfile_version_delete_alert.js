@@ -12,11 +12,6 @@ chorus.alerts.WorkfileVersionDelete = chorus.alerts.ModelDelete.extend({
         this.model.get("versionInfo").versionNum = this.options.launchElement.data("versionNumber");
     },
 
-    render: function() {
-        console.debug(arguments);
-        return this._super('render', arguments)
-    },
-
     setup: function() {
         this.title = t("workfile_version.alert.delete.title", {version: this.model.get("versionInfo").versionNum});
     }

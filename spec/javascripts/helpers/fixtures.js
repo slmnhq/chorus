@@ -273,7 +273,10 @@ beforeEach(function() {
                     isPromoted: false,
                     promoteCount: 0,
                     commitMessage: "make file better",
-                    version: "3",
+                    version: {
+                        id: "3",
+                        isDeleted: "false"
+                    },
                     workfile: fixtures.nestedWorkfileJson(),
                     workspace: fixtures.nestedWorkspaceJson(),
                     comments: [
