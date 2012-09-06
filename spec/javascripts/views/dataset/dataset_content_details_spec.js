@@ -125,15 +125,15 @@ describe("chorus.views.DatasetContentDetails", function() {
                 describe("data preview bar", function() {
                     it("should display a close button", function() {
                         expect(this.view.$(".data_preview .close")).toExist();
-                    })
+                    });
 
                     it("should display an expander", function() {
                         expect(this.view.$(".data_preview .expander_button")).toExist();
-                    })
+                    });
 
                     it("should display a resize area", function() {
                         expect(this.view.$(".data_preview .minimize")).toExist();
-                    })
+                    });
 
                     context("when the close button is clicked", function() {
                         beforeEach(function() {
@@ -157,6 +157,18 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         it("should execute database preview model", function() {
                             expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.view.dataset.preview(), ["checkId"]);
+                        });
+
+                        context("when the close button is clicked and the 'Derive a Chorus View' is already open", function() {
+                            beforeEach(function() {
+                                this.view.$('button.derive').click();
+                                this.view.$('.data_preview .close').click();
+                            });
+
+                            it("should not display '.column_count' ", function() {
+                               expect(this.view.$(".column_count")).toHaveClass("hidden");
+                               expect(this.view.$(".data_preview")).toHaveClass("hidden");
+                            });
                         });
                     });
                 })
@@ -368,10 +380,6 @@ describe("chorus.views.DatasetContentDetails", function() {
                     this.view.$('button.derive').click();
                 });
 
-                it("unsubscribes from the action:closePreview broadcast", function() {
-                    expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeFalsy();
-                });
-
                 it("swap the green definition bar to Create Bar", function() {
                     expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
                     expect(this.view.$(".create_chart")).toHaveClass("hidden");
@@ -447,7 +455,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 describe("and the cancel link is clicked", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, "broadcast");
+                        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                         jasmine.JQuery.events.cleanUp();
                         spyOnEvent(".column_count input.search", "textchange");
                         spyOnEvent(".chorus_view_info input.search", "textchange");
@@ -481,6 +489,14 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     it("triggers 'cancel:sidebar'", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                    });
+
+                    context("and click on data preview close button when data preview was opened", function () {
+                        it("shows the search column count bar", function () {
+                            this.view.$(".column_count .preview").click();
+                            this.view.$(".data_preview .close").click();
+                            expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                        });
                     });
                 });
             })

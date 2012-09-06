@@ -57,13 +57,14 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     closeDataPreview: function() {
-        if (!this.options.inEditChorusView) {
-            this.$(".column_count").removeClass("hidden");
-            this.$(".data_preview").addClass("hidden");
-        } else {
-            this.$(".edit_chorus_view_info").removeClass("hidden");
-            this.$(".data_preview").addClass("hidden");
+        if (!this.inDeriveChorusView) {
+            if (!this.options.inEditChorusView) {
+                this.$(".column_count").removeClass("hidden");
+            } else {
+                this.$(".edit_chorus_view_info").removeClass("hidden");
+            }
         }
+        this.$(".data_preview").addClass("hidden");
     },
 
     postRender: function() {
@@ -136,8 +137,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.filters').removeClass("hidden");
         this.filterWizardView.options.showAliasedName = true;
         this.filterWizardView.resetFilters();
-
-        chorus.PageEvents.unsubscribe(this.closePreviewHandle);
+        this.inDeriveChorusView = true;
 
         this.$(".chorus_view_info input.search").trigger("textchange");
     },
@@ -153,6 +153,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
         this.$(".column_count input.search").trigger("textchange");
         this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
+        this.inDeriveChorusView = false;
     },
 
     startEditChorusViewWizard: function() {
