@@ -375,7 +375,9 @@ describe("chorus.models.Activity", function() {
                             id: 10001,
                             name: "my_workfile"
                         },
-                        version: "5"
+                        version: {
+                            id: "5"
+                        }
                     })
                 })
 
@@ -411,7 +413,9 @@ describe("chorus.models.Activity", function() {
                             id: 10001,
                             name: "my_workfile"
                         },
-                        version: "5"
+                        version: {
+                            id: "5"
+                        }
                     })
                 })
 

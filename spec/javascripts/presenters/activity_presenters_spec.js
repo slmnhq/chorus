@@ -1106,7 +1106,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("has the right versionName", function() {
-            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum: this.model.get('version') });
+            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum: this.model.get('version').id });
         })
 
         it("has the right versionUrl", function() {
@@ -1129,6 +1129,18 @@ describe("chorus.presenters.Activity", function() {
         context("when the workfile has been deleted", function() {
             beforeEach(function() {
                 this.model.workfile().set({ isDeleted: true });
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("still constructs a versionLink, but with no href", function() {
+                expect(this.presenter.header.versionLink).toBeDefined();
+                expect(this.presenter.versionUrl).toBeFalsy();
+            });
+        });
+
+        context("when the workfile version has been deleted", function() {
+            beforeEach(function() {
+                this.model.get("version").isDeleted = 'true';
                 this.presenter = new chorus.presenters.Activity(this.model)
             });
 

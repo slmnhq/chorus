@@ -102,7 +102,7 @@ chorus.models.Activity = chorus.models.Base.extend({
                 this._workfile = new chorus.models.Workfile(this.get("workfile"));
                 this._workfile.set({workfileId: this._workfile.get("id")})
                 if (this.get("version")) {
-                    this._workfile.set({versionNum: this.get("version")})
+                    this._workfile.set({versionNum: this.get("version").id})
                 }
 
                 if (this.workspace() && this.workspace().get("id")) {
