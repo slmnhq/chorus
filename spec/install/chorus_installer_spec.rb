@@ -1,61 +1,63 @@
-require_relative "../../packaging/install"
+require_relative "../../packaging/install/chorus_installer"
 require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
   config.mock_with :rr
 end
 
-describe "Install" do
+describe ChorusInstaller do
   include FakeFS::SpecHelpers
 
-  let(:installer) { Install.new('.', silent) }
-  let(:silent) { false }
+  let(:installer) { described_class.new(options) }
+  let(:options) do
+    {
+        installer_home: '.',
+        version_detector: version_detector,
+        logger: logger,
+        io: io
+    }
+  end
+
+  let(:version_detector) { Object.new }
+  let(:logger) { Object.new }
+  let(:io) { Object.new }
+
   before do
     ENV['CHORUS_HOME'] = nil
+    stub(logger).log(anything)
     stub(installer).prompt(anything)
+    stub(io).log(anything)
+    stub(io).silent? { false }
   end
 
   describe "#get_destination_path" do
     before do
       stub(installer).version { "2.2.0.1-8840ae71c" }
-      any_instance_of(VersionDetector) do |detector|
-        stub(detector).can_upgrade_2_2?(anything) { upgrade_2_2 }
-        stub(detector).can_upgrade_legacy? { upgrade_legacy }
-      end
+      stub(logger).logfile=(anything)
+      stub(version_detector).destination_path=(anything)
+      stub(version_detector).can_upgrade_2_2?(anything) { upgrade_2_2 }
+      stub(version_detector).can_upgrade_legacy? { upgrade_legacy }
+      mock(io).prompt_or_default(:destination_path, default_path) { destination_path }
     end
 
     let(:upgrade_2_2) { false }
     let(:upgrade_legacy) { false }
+    let(:default_path) { '/opt/chorus' }
+    let(:destination_path) { '/somewhere/chorus' }
 
-    context "silent install" do
-      let(:silent) { true }
-
-      it "should not prompt the user" do
-        dont_allow(installer).prompt
-        installer.get_destination_path
-        installer.destination_path.should == '/opt/chorus'
-      end
-    end
-
-    context "user types input" do
-      it "captures the path from the user" do
-        stub_input "/foo/bar"
-        installer.get_destination_path
-        installer.destination_path.should == "/foo/bar"
-      end
-    end
-
-    describe "user enters nothing" do
-      it "returns the default path" do
-        stub_input nil
-        installer.get_destination_path
-        installer.destination_path.should == "/opt/chorus"
-      end
+    it "should set relevant settings" do
+      mock(version_detector).destination_path=('/somewhere/chorus')
+      mock(logger).logfile=('/somewhere/chorus/install.log')
+      installer.get_destination_path
+      installer.destination_path.should == '/somewhere/chorus'
     end
 
     describe "when the user types a relative path" do
+      let(:destination_path) { "~/chorus" }
+
       it "returns the expanded path" do
-        stub_input "~/chorus"
+        mock(version_detector).destination_path=("#{ENV['HOME']}/chorus")
+        mock(logger).logfile=("#{ENV['HOME']}/chorus/install.log")
         installer.get_destination_path
         installer.destination_path.should == "#{ENV['HOME']}/chorus"
       end
@@ -63,21 +65,19 @@ describe "Install" do
 
     describe "when there is a CHORUS_HOME set" do
       before do
-        ENV["CHORUS_HOME"] = install_dir + "/current"
+        ENV["CHORUS_HOME"] = default_path + "/current"
       end
-      let(:install_dir) { "/not/standard/dir" }
+      let(:default_path) { "/not/standard/dir" }
 
-      it "should fall back to the CHORUS_HOME path when the user enters nothing" do
-        mock(installer).prompt("#{Install::MESSAGES[:default_chorus_path]} [#{install_dir}]:")
-        stub_input nil
+      it "should set that as the default" do
         installer.get_destination_path
-        installer.destination_path.should == install_dir
       end
     end
 
     context "when not upgrading" do
-      xit "should do a non-upgrade install" do
+      it "should do a non-upgrade install" do
         dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+        stub_input nil
         installer.get_destination_path
         installer.do_upgrade.should be_false
       end
@@ -86,48 +86,17 @@ describe "Install" do
     describe "when the user specifies a directory that looks like an upgradable Chorus 2.2 install" do
       let(:upgrade_2_2) { true }
 
-      context 'in silent mode' do
-        let(:silent) { true }
-
-        it "should set do_upgrade to true without user input" do
-          dont_allow(installer).prompt
-          installer.get_destination_path
-          installer.do_upgrade.should be_true
-        end
-      end
-
-      xit "should prompt the user to confirm downtime for upgrade" do
-        mock(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+      before do
+        mock(io).require_confirmation(:confirm_upgrade)
         installer.get_destination_path
       end
 
-      [nil, 'y', 'yEs'].each do |input|
-        context "when the user confirms upgrade with #{input}" do
-          before do
-            all_inputs = [nil, input]
-            stub(installer).get_input { all_inputs.shift }
-            installer.get_destination_path
-          end
-
-          it "should set the destination path" do
-            installer.destination_path.should == '/opt/chorus'
-          end
-
-          it "should set do_upgrade" do
-            installer.do_upgrade.should be_true
-          end
-        end
+      it "should set the destination path" do
+        installer.destination_path.should == '/somewhere/chorus'
       end
 
-      context "when the user cancels the upgrade" do
-        before do
-          all_inputs = [nil, 'this is not a yes']
-          stub(installer).get_input { all_inputs.shift }
-        end
-
-        it "should raise to cancel the install" do
-          expect { installer.get_destination_path }.to raise_error(Install::UpgradeCancelled)
-        end
+      it "should set do_upgrade" do
+        installer.do_upgrade.should be_true
       end
     end
 
@@ -148,79 +117,38 @@ describe "Install" do
     subject { installer.prompt_for_legacy_upgrade }
     before do
       stub(installer).version { '2.2.0.0' }
+      mock(io).require_confirmation(:confirm_legacy_upgrade)
+      mock(installer).prompt_legacy_upgrade_destination
     end
 
-    [nil, 'y', 'yEs'].each do |input|
-      context "when the user confirms upgrade with #{input}" do
-        before do
-          all_inputs = [input]
-          stub(installer).get_input { all_inputs.shift }
-          mock(installer).prompt_legacy_upgrade_destination
-        end
-
-        it "should set do_legacy_upgrade" do
-          subject
-          installer.do_legacy_upgrade.should be_true
-        end
-
-        it "should set the legacy installation path" do
-          installer.destination_path = '/opt/chorus/thingy'
-          subject
-          installer.legacy_installation_path.should == '/opt/chorus/thingy'
-        end
-      end
+    it "should set do_legacy_upgrade" do
+      subject
+      installer.do_legacy_upgrade.should be_true
     end
 
-    context "when the user cancels the upgrade" do
-      before do
-        all_inputs = ['this is not a yes']
-        stub(installer).get_input { all_inputs.shift }
-      end
-
-      it "should raise to cancel the install" do
-        expect { subject }.to raise_error(Install::UpgradeCancelled)
-      end
+    it "should set the legacy installation path" do
+      installer.destination_path = '/opt/chorus/thingy'
+      subject
+      installer.legacy_installation_path.should == '/opt/chorus/thingy'
     end
   end
 
   describe "#prompt_legacy_upgrade_destination" do
     subject { installer.prompt_legacy_upgrade_destination }
 
-    xit "should ask the user to specify a path to install 2.2" do
-      mock(installer).prompt("Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory")
+    it "should ask the user to specify a path to install 2.2" do
+      mock(io).prompt_until(:legacy_destination_path) do |symbol, proc|
+        proc.call(nil).should be_false
+        proc.call('foo').should be_true
+        "/home/chorus22"
+      end
       subject
-    end
-
-    context "when the user types something" do
-      before do
-        stub_input "/home/chorus22"
-
-      end
-      it "should set the destination path to that thing" do
-        subject
-        installer.destination_path.should == "/home/chorus22"
-      end
-    end
-
-    context "when the user types nothing" do
-      let(:inputs) { [nil, "/foo/bar"] }
-      before do
-        stub(installer).version { "2.2.2" }
-        stub(installer).get_input do
-          inputs.shift
-        end
-      end
-
-      it "should keep trying" do
-        mock(installer).prompt("Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory").times(2)
-        subject
-        installer.destination_path.should == "/foo/bar"
-      end
+      installer.destination_path.should == "/home/chorus22"
     end
 
     describe "when the user types a relative path" do
       it "returns the expanded path" do
-        stub_input "~/chorus"
+        mock(io).prompt_until(:legacy_destination_path) { "~/chorus" }
         subject
         installer.destination_path.should == "#{ENV['HOME']}/chorus"
       end
@@ -267,28 +195,32 @@ describe "Install" do
 
     context "when couldn't guess version/distribution" do
       before do
-        mock(installer).prompt("Could not detect your Linux version. Please select one of the following:").times(prompt_times)
-        mock(installer).prompt("[1] - RedHat (CentOS/RHEL) 5.5 or compatible").times(prompt_times)
-        mock(installer).prompt("[2] - RedHat (CentOS/RHEL) 6.2 or compatible").times(prompt_times)
-        mock(installer).prompt("[3] - SuSE Enterprise Linux Server 11 or compatible").times(prompt_times)
-        mock(installer).prompt("[4] - Abort install").times(prompt_times)
+        mock(io).prompt_until(:select_os).times(prompt_times) do |symbol, proc|
+          proc.call(nil).should be_false
+          proc.call(1).should be_true
+          proc.call(2).should be_true
+          proc.call(3).should be_true
+          proc.call(4).should be_true
+          proc.call('a').should be_false
+          result
+        end
       end
-
       let(:prompt_times) { 1 }
 
       context "in silent mode" do
-        let(:silent) { true }
         let(:prompt_times) { 0 }
 
+        before do
+          stub(io).silent? { true }
+        end
+
         it "should fail" do
-          expect { installer.get_postgres_build }.to raise_error(Install::InvalidOperatingSystem)
+          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /Version not supported/)
         end
       end
 
       context "when the user selects redhat 5.5" do
-        before do
-          stub_input("1")
-        end
+        let(:result) { "1" }
 
         it "returns the RedHat 5.5 build" do
           installer.get_postgres_build.should == 'postgres-redhat5.5-9.1.4.tar.gz'
@@ -296,9 +228,7 @@ describe "Install" do
       end
 
       context "when the user selects redhat 6.2" do
-        before do
-          stub_input("2")
-        end
+        let(:result) { "2" }
 
         it "returns the RedHat 6.2 build" do
           installer.get_postgres_build.should == 'postgres-redhat6.2-9.1.4.tar.gz'
@@ -306,9 +236,7 @@ describe "Install" do
       end
 
       context "when the user selects suse" do
-        before do
-          stub_input("3")
-        end
+        let(:result) { "3" }
 
         it "returns the Suse 11 build" do
           installer.get_postgres_build.should == 'postgres-suse11-9.1.4.tar.gz'
@@ -316,25 +244,10 @@ describe "Install" do
       end
 
       context "when the user selects abort" do
-        before do
-          stub_input("4")
-        end
+        let(:result) { "4" }
 
-        it "bails" do
-          expect { installer.get_postgres_build }.to raise_error(Install::InvalidOperatingSystem)
-        end
-      end
-
-      context "unsupported selected" do
-        before do
-          attempts = ["", "1"]
-          stub(installer).get_input() { attempts.shift }
-        end
-
-        let(:prompt_times) { 2 }
-
-        it "should show the menu again" do
-          installer.get_postgres_build
+        it "should fail" do
+          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /Version not supported/)
         end
       end
     end
@@ -651,8 +564,8 @@ describe "Install" do
     end
 
     it "raises an exception if exit code is different than zero" do
-      mock(installer).system("PATH=/opt/chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command >> /opt/chorus/install.log 2>&1") { false }
-      expect { installer.send(:chorus_exec, "silly command") }.to raise_error(Install::CommandFailed)
+      mock(logger).capture_output("PATH=/opt/chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command") { false }
+      expect { installer.send(:chorus_exec, "silly command") }.to raise_error(InstallerErrors::CommandFailed)
     end
   end
 
@@ -660,7 +573,7 @@ describe "Install" do
     context "when the script is being run by root"
     it "raises an exception" do
       mock(Process).uid() { 0 }
-      expect { installer.validate_non_root }.to raise_error(Install::NonRootValidationError)
+      expect { installer.validate_non_root }.to raise_error(InstallerErrors::InstallAborted, /Please run the installer as a non-root user./)
     end
 
     context "when the script is not run as root" do
@@ -674,7 +587,7 @@ describe "Install" do
     context "when localhost is undefined"
     it "raises an exception" do
       mock(installer).system("ping -c 1 localhost > /dev/null") { false }
-      expect { installer.validate_localhost }.to raise_error(Install::LocalhostUndefined)
+      expect { installer.validate_localhost }.to raise_error(InstallerErrors::InstallAborted, /Could not connect to 'localhost', please set in \/etc\/hosts/)
     end
 
     context "when localhost is defined" do
@@ -693,7 +606,7 @@ describe "Install" do
       end
 
       it "should raise InstallationFailed" do
-        expect { subject }.to raise_error(Install::InstallationFailed)
+        expect { subject }.to raise_error(InstallerErrors::InstallationFailed)
       end
     end
 
@@ -716,6 +629,31 @@ describe "Install" do
       it "should execute the data migrator" do
         subject
         @call_order.should == ["stop_app", "pg_dump", "stop_old_postgres", "start_new_postgres", "import_legacy_schema", "legacy_migration"]
+      end
+    end
+  end
+
+  describe "#remove_and_restart_previous!" do
+    before do
+      stub(installer).version { "2.2.0.0" }
+      installer.destination_path = "/opt/chorus"
+      FileUtils.mkdir_p "/opt/chorus/releases/2.2.0.0"
+    end
+
+    it "should remove the release folder" do
+      dont_allow(installer).chorus_exec
+      installer.remove_and_restart_previous!
+      File.exists?("/opt/chorus/releases/2.2.0.0").should == false
+    end
+
+    context "when upgrading" do
+      before do
+        installer.do_upgrade = true
+        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh start")
+      end
+
+      it "should start up the old install" do
+        installer.remove_and_restart_previous!
       end
     end
   end

@@ -1,55 +1,11 @@
-require_relative "../../packaging/install"
-require_relative "../../packaging/version_detector"
+require_relative "../../packaging/install/version_detector"
 require 'fakefs/spec_helpers'
 
 describe VersionDetector do
   include FakeFS::SpecHelpers
 
-  let(:detector) { VersionDetector.new(destination_path) }
+  let(:detector) { described_class.new(destination_path) }
   let(:destination_path) { '/opt/chorus' }
-
-  describe "#has_2_2_installed?" do
-    subject { detector.has_2_2_installed? }
-
-    context "when there is a releases folder" do
-      before do
-        FileUtils.mkdir_p(File.join(destination_path, "releases"))
-      end
-
-      context "but nothing in it" do
-        it { should be_false }
-      end
-
-      context "with a release in it" do
-        before do
-          FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.2.2"))
-        end
-        it { should be_true }
-      end
-    end
-
-    context "when there isn't a releases folder" do
-      it { should be_false }
-    end
-  end
-
-  describe "#most_recent_version" do
-    subject { detector.most_recent_version }
-
-    context "when there are multiple 2.2 releases" do
-      before do
-        FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.1-8840ae71c"))
-        FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.2-8840ae71c"))
-        FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.0-8840ae71c"))
-      end
-
-      it { should == "2.2.0.2-8840ae71c" }
-    end
-
-    context "when there are no 2.2 releases" do
-      it { should be_nil }
-    end
-  end
 
   describe "#can_upgrade_legacy?" do
     subject { detector.can_upgrade_legacy? }
@@ -82,7 +38,7 @@ describe VersionDetector do
       end
 
       it "should raise upgrade_to_2_1_required" do
-        expect { subject }.to raise_error(Install::UpgradeTo21Required)
+        expect { subject }.to raise_error(InstallerErrors::InstallAborted, /Chorus must be upgraded to 2.1 before it can be upgraded to 2.2/)
       end
     end
 
@@ -95,7 +51,7 @@ describe VersionDetector do
       end
 
       it "should raise upgrade_unsupported" do
-        expect { subject }.to raise_error(Install::UpgradeUnsupported)
+        expect { subject }.to raise_error(InstallerErrors::InstallAborted, /Chorus cannot upgrade from existing installation/)
       end
     end
 
@@ -110,11 +66,13 @@ describe VersionDetector do
 
     context "when the most recent installed version is more recent" do
       before do
+        FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.1-8840ae71c"))
         FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.2-8840ae71c"))
+        FileUtils.mkdir_p(File.join(destination_path, "releases", "2.2.0.0-8840ae71c"))
       end
 
       it "should raise InvalidVersion" do
-        expect { subject }.to raise_error(Install::InvalidVersion)
+        expect { subject }.to raise_error(InstallerErrors::InstallAborted, /Version .* is older than currently installed version \(.*\)./)
       end
     end
 
@@ -124,7 +82,7 @@ describe VersionDetector do
       end
 
       it "should raise AlreadyInstalled" do
-        expect { subject }.to raise_error(Install::AlreadyInstalled)
+        expect { subject }.to raise_error(InstallerErrors::AlreadyInstalled)
       end
     end
 
