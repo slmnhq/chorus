@@ -28,6 +28,16 @@ describe InstanceDatabasesController do
         get :index, :gpdb_instance_id => gpdb_instance.id
       end
 
+      context "when the instance is currently being provisioned" do
+        let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true, :state => "provisioning" }
+
+        it "returns 422 and a warning message" do
+          get :index, :gpdb_instance_id => gpdb_instance.id
+          response.code.should == "422"
+          decoded_errors.record.should == "INSTANCE_STILL_PROVISIONING"
+        end
+      end
+
       context "when the refresh of the db fails" do
         before do
           stub(GpdbDatabase).refresh { raise ActiveRecord::JDBCError.new }

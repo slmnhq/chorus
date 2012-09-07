@@ -63,6 +63,15 @@ describe ApplicationController do
       decoded_errors.fields.query.INVALID.message.should == "broken!"
     end
 
+    it "returns error 422 when an Gpdb::InstanceStillProvisioning error is raised" do
+      stub(controller).index { raise Gpdb::InstanceStillProvisioning }
+
+      get :index
+
+      response.code.should == "422"
+      decoded_errors.record.should == "INSTANCE_STILL_PROVISIONING"
+    end
+
     describe "when an access denied error is raised" do
       let(:object_to_present) { gpdb_instances(:greenplum) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }

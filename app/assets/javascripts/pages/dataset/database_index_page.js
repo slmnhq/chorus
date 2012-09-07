@@ -4,13 +4,6 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
     constructorName: "DatabaseIndexPage",
     helpId: "instances",
 
-    failurePageOptions: function() {
-        return {
-            title: t("invalid_route.database_index.title"),
-            text: t("invalid_route.database_index.content")
-        };
-    },
-
     setup: function(instanceId) {
         this.instance = new chorus.models.GreenplumInstance({id: instanceId});
         this.collection = this.instance.databases();

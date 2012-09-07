@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'SecurityTransgression', :with => :render_forbidden
   rescue_from 'ActiveRecord::JDBCError', :with => :render_pg_error
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_pg_error
+  rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
   rescue_from 'CancelableQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
 
@@ -42,6 +43,10 @@ class ApplicationController < ActionController::Base
 
   def render_query_error(e)
     present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :unprocessable_entity)
+  end
+
+  def render_instance_still_provisioning_error(e)
+    present_errors({:record => :INSTANCE_STILL_PROVISIONING}, :status => :unprocessable_entity)
   end
 
   def render_not_found(e)

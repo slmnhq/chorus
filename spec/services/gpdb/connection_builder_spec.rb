@@ -18,26 +18,26 @@ describe Gpdb::ConnectionBuilder do
 
   let(:expected_database) { gpdb_instance.maintenance_db }
 
-  before do
-    mock(ActiveRecord::Base).postgresql_connection(expected_connection_params) { fake_connection_adapter }
-  end
-
-  describe "#connect!" do
-    context "when a database name is passed" do
-      let(:expected_database) { "john_the_database" }
-
-      it "connections to the given database and instance, with the given account" do
-        Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account, "john_the_database")
-      end
-    end
-
-    context "when no database name is passed" do
-      it "connects to the given instance's 'maintenance db''" do
-        Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
-      end
+  describe ".connect!" do
+    before do
+      stub(ActiveRecord::Base).postgresql_connection(expected_connection_params) { fake_connection_adapter }
     end
 
     context "when connection is successful" do
+      context "when a database name is passed" do
+        let(:expected_database) { "john_the_database" }
+
+        it "connections to the given database and instance, with the given account" do
+          Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account, "john_the_database")
+        end
+      end
+
+      context "when no database name is passed" do
+        it "connects to the given instance's 'maintenance db''" do
+          Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+        end
+      end
+
       it "calls the given block with the postgres connection" do
         mock(fake_connection_adapter).query("foo")
         Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account) do |conn|
@@ -70,6 +70,16 @@ describe Gpdb::ConnectionBuilder do
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
         }.to raise_error(ActiveRecord::JDBCError, "#{raised_message}")
         Timecop.return
+      end
+
+      context "when instance has not finished provisioning" do
+        let!(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :state => "provisioning") }
+
+        it "raises an InstanceStillProvisioning exception" do
+          expect {
+            Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+          }.to raise_error(Gpdb::InstanceStillProvisioning)
+        end
       end
     end
 

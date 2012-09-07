@@ -13,9 +13,25 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/unauthorized");
     },
 
+    unprocessableEntity: function(model) {
+        var prefix = "unprocessable_entity.";
+        if (model.serverErrors) {
+            _.each(model.serverErrors, function(error) {
+                var code = prefix + _.underscored(error);
+                chorus.pageOptions = {
+                    title: t(code + ".title"),
+                    text: t(code + ".text")
+                }
+            })
+        }
+
+        Backbone.history.loadUrl("/unprocessableEntity");
+    },
+
     dependOn: function(model, functionToCallWhenLoaded) {
         this.bindings.add(model, "resourceNotFound", this.dependentResourceNotFound);
         this.bindings.add(model, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, model));
+        this.bindings.add(model, "unprocessableEntity", _.bind(this.unprocessableEntity, this, model));
         this.bindings.add(model, "change", this.render);
         if (functionToCallWhenLoaded) {
             if (model.loaded) {

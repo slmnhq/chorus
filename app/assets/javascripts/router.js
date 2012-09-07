@@ -12,6 +12,7 @@
             ["*path", "InvalidRoute"],
             ["/unauthorized", "Unauthorized"],
             ["/invalidRoute", "InvalidRoute"],
+            ["/unprocessableEntity", "UnprocessableEntity"],
             ["", "Dashboard"],
             ["/", "Dashboard"],
             ["/login", "Login"],

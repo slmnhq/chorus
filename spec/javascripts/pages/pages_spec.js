@@ -80,6 +80,35 @@ describe("chorus.pages.Base", function() {
                 });
             });
         });
+
+        context("when the entity is unprocessable", function() {
+            beforeEach(function() {
+                this.page = new chorus.pages.Bare();
+                this.model = new chorus.models.Base();
+                spyOn(this.page, "unprocessableEntity");
+                this.page.dependOn(this.model);
+            });
+
+            it("calls unprocessableEntity", function() {
+                this.model.trigger("unprocessableEntity");
+                expect(this.page.unprocessableEntity).toHaveBeenCalled();
+            });
+
+            context("when given a special error message", function() {
+                beforeEach(function() {
+                    this.page = new chorus.pages.Bare();
+                    chorus.pageOptions = {};
+                    this.model.serverErrors = { record: "INSTANCE_STILL_PROVISIONING" }
+                    this.page.dependOn(this.model);
+                });
+
+                it("has the right translations", function() {
+                    this.model.trigger("unprocessableEntity");
+                    expect(chorus.pageOptions.title).toBe(t("unprocessable_entity.instance_still_provisioning.title"));
+                    expect(chorus.pageOptions.text).toBe(t("unprocessable_entity.instance_still_provisioning.text"));
+                });
+            });
+        });
     });
 
     describe("#render", function() {
@@ -146,6 +175,19 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
+                })
+            });
+
+            context("when the fetch returns unprocessableEntity", function() {
+                beforeEach(function() {
+                    spyOn(Backbone.history, "loadUrl");
+                    spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
+                    this.resource.trigger("unprocessableEntity");
+                });
+
+                it("navigates to the UnprocessableEntityPage if requiredResource fetch returns 422", function() {
+                    expect(chorus.pageOptions).toEqual({ foo: "bar" });
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unprocessableEntity");
                 })
             });
         });

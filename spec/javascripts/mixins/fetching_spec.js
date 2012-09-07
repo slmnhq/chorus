@@ -317,6 +317,20 @@ describe("chorus.Mixins.Fetching", function() {
             });
         });
 
+        context("when the response is '422 unprocessable entity'", function() {
+            beforeEach(function() {
+                spyOn(this.resource, "trigger");
+                this.data = {};
+            });
+
+            itHandlesFailure();
+
+            it("triggers unprocessableEntity on the resource", function() {
+                this.resource.respondToErrors(422);
+                expect(this.resource.trigger).toHaveBeenCalledWith("unprocessableEntity");
+            });
+        });
+
         context("when the response is any other error", function() {
             beforeEach(function() {
                 spyOn(chorus, "toast");
