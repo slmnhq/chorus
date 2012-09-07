@@ -477,7 +477,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     context("with the show download dialog option", function() {
                         beforeEach(function() {
                             this.modalSpy = stubModals();
-                            spyOn($, "download");
+                            spyOn($, "fileDownload");
                             this.view.showDownloadDialog = true;
                             this.view.tabularData = new chorus.models.TabularData();
                             this.view.$("a.download_csv").click();
@@ -487,8 +487,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
                         });
 
-                        it("should not have called $.download", function() {
-                            expect($.download).not.toHaveBeenCalled();
+                        it("should not have called $.fileDownload", function() {
+                            expect($.fileDownload).not.toHaveBeenCalled();
                         });
 
                         it("should have a page model for the dataset download dialog", function() {
@@ -498,19 +498,21 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     context("without the show download dialog option", function() {
                         beforeEach(function() {
-                            spyOn($, "download");
+                            spyOn($, "fileDownload");
                             this.view.showDownloadDialog = false;
                             this.view.$("a.download_csv").click();
                         });
 
                         it("starts the file download", function() {
-                            expect($.download).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
+                            expect($.fileDownload).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
                             {
-                                columnData: this.view.resource.getColumns(),
-                                rowsData: this.view.resource.getRows(),
-                                datasetName: this.view.resource.name()
-                            }
-                            , "post");
+                                data: {
+                                    columnData: this.view.resource.getColumns(),
+                                    rowsData: this.view.resource.getRows(),
+                                    datasetName: this.view.resource.name()
+                                },
+                                httpMethod: "post"
+                            });
                         });
                     });
                 });

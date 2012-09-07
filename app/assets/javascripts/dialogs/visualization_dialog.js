@@ -244,11 +244,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveToDesktop: function() {
-        $.download("/downloadChart.jsp", {
-            svg: this.makeSvgData(),
-            "chart-name": this.options.chartOptions.name,
-            "chart-type": this.options.chartOptions.type
-        }, "post");
+        $.fileDownload("/downloadChart.jsp", {
+            data: {
+                svg: this.makeSvgData(),
+                "chart-name": this.options.chartOptions.name,
+                "chart-type": this.options.chartOptions.type
+            },
+            httpMethod: "post"
+        });
     },
 
     saveAsNoteAttachment: function() {

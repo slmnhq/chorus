@@ -39,7 +39,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
             };
 
-            $.download("/edc/data/cvsResultDownload", data, "post");
+            $.fileDownload("/edc/data/cvsResultDownload", { data: data, httpMethod: "post" });
         }
     },
 
