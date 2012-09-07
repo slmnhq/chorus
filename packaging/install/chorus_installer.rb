@@ -100,7 +100,7 @@ class ChorusInstaller
     end
 
     if input.nil?
-      input = @io.prompt_until(:select_os) { |input| (1..4).include?(input) }.to_i
+      input = @io.prompt_until(:select_os) { |input| (1..4).include?(input.to_i) }.to_i
     end
 
     case input

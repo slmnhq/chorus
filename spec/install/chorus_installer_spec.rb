@@ -197,10 +197,10 @@ describe ChorusInstaller do
       before do
         mock(io).prompt_until(:select_os).times(prompt_times) do |symbol, proc|
           proc.call(nil).should be_false
-          proc.call(1).should be_true
-          proc.call(2).should be_true
-          proc.call(3).should be_true
-          proc.call(4).should be_true
+          proc.call('1').should be_true
+          proc.call('2').should be_true
+          proc.call('3').should be_true
+          proc.call('4').should be_true
           proc.call('a').should be_false
           result
         end
