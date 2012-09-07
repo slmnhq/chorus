@@ -9,9 +9,6 @@ describe Gppipe, :database_integration => true do
   end
 
   before do
-    refresh_chorus
-    create_source_table
-    refresh_chorus
     stub(Gppipe).gpfdist_url { Socket.gethostname }
     stub(Gppipe).grace_period_seconds { 1 }
   end
@@ -78,20 +75,16 @@ describe Gppipe, :database_integration => true do
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
   let(:sandbox) { workspace.sandbox }
 
-  let(:create_source_table) do
-    gpdb1.exec_query("drop table if exists #{source_table_name};")
-    gpdb1.exec_query("create table #{source_table_name}(#{table_def}) #{distrib_def};")
-  end
-
   it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
     Gppipe.protocol.should == 'gpfdist'
   end
 
   context "for a table with 0 columns" do
+    let(:source_table) { 'candy_empty' }
     let(:table_def) { '' }
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition" do
@@ -105,9 +98,11 @@ describe Gppipe, :database_integration => true do
 
   context "for a table with 1 column and no primary key, distributed randomly" do
     let(:table_def) { '"2id" integer' }
+    let(:source_table) { 'candy_one_column' }
     let(:distrib_def) { "DISTRIBUTED RANDOMLY" }
+
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition" do
@@ -125,9 +120,10 @@ describe Gppipe, :database_integration => true do
 
   context "for a table with a composite primary key" do
     let(:table_def) { '"id" integer, "id2" integer, PRIMARY KEY("id", "id2")' }
+    let(:source_table) { 'candy_composite' }
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
     end
 
     it "should have the correct table definition with keys" do
@@ -139,7 +135,7 @@ describe Gppipe, :database_integration => true do
   context "actually running the query" do
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
@@ -378,13 +374,12 @@ describe Gppipe, :database_integration => true do
 
   context "when the source table is empty" do
     before do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
-      gpdb1.exec_query("create table #{gp_pipe.source_table_fullname}(#{table_def});")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 
     after do
-      gpdb1.exec_query("drop table if exists #{gp_pipe.source_table_fullname};")
+      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
     end
 

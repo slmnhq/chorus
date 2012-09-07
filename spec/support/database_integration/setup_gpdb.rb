@@ -78,11 +78,10 @@ module GpdbIntegration
     GpdbDatabase.refresh(account)
     database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
 
-    if !database
+
       GpdbIntegration.setup_gpdb
       GpdbDatabase.refresh(account)
       database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
-    end
 
     GpdbSchema.refresh(account, database)
     gpdb_schema = database.schemas.find_by_name('test_schema')
