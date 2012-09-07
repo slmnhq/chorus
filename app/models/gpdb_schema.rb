@@ -61,7 +61,7 @@ class GpdbSchema < ActiveRecord::Base
       end
     end
     found_schemas
-  rescue ActiveRecord::JDBCError => e
+  rescue ActiveRecord::JDBCError, ActiveRecord::StatementInvalid => e
     Rails.logger.error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
   ensure
     if options[:mark_stale]
