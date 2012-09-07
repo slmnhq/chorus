@@ -109,12 +109,14 @@ class GpTableCopier
     user = User.find_by_id(user_id)
     source_table = Dataset.find_by_id(source_table_id)
     workspace = Workspace.find_by_id(attributes[:workspace_id])
-    Events::DatasetImportFailed.by(user).add(
+    event = Events::DatasetImportFailed.by(user).add(
         :workspace => workspace,
         :destination_table => attributes[:to_table],
         :error_message => error_message,
         :source_dataset => source_table
     )
+
+    Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
 
   def create_new_table?

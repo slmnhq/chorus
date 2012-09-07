@@ -66,13 +66,15 @@ class CsvImporter
   end
 
   def create_failure_event(error_message)
-    Events::FileImportFailed.by(csv_file.user).add(
+    event = Events::FileImportFailed.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :file_name => csv_file.contents_file_name,
         :import_type => 'file',
         :destination_table => csv_file.to_table,
         :error_message => error_message
     )
+
+    Notification.create!(:recipient_id => csv_file.user.id, :event_id => event.id)
   end
 
   def destination_dataset

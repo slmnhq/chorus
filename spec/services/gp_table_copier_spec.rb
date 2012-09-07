@@ -100,6 +100,16 @@ describe GpTableCopier, :database_integration => true do
           event.destination_table.should == destination_table_name
         end
 
+        it "creates a notification on a failed import" do
+          expect {
+            GpTableCopier.run_import(-1, user.id, attributes)
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+
+          notification = Notification.last
+          notification.recipient_id.should == user.id
+          notification.event_id.should == Events::DatasetImportFailed.first.id
+        end
+
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
           event = Events::DatasetImportCreated.first
