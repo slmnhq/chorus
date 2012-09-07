@@ -54,7 +54,7 @@ describe("chorus.models.Workspace", function() {
             this.model.set({ public: false });
             expect(this.model.isPublic()).toBeFalsy();
         });
-    })
+    });
 
     describe("#defaultIconUrl", function() {
         it("links to the active url when workspace is active", function() {
@@ -279,12 +279,12 @@ describe("chorus.models.Workspace", function() {
     describe("#displayName", function() {
         beforeEach(function() {
             this.model = rspecFixtures.workspace();
-        })
+        });
 
         it("returns the name", function() {
             expect(this.model.displayName()).toBe(this.model.get("name"));
         })
-    })
+    });
 
     describe("#displayShortName", function() {
         context("with a short name", function() {
@@ -311,7 +311,7 @@ describe("chorus.models.Workspace", function() {
     describe("#createImageUrl", function() {
         beforeEach(function() {
             this.model = rspecFixtures.workspace({id: 10013});
-        })
+        });
 
         it("uses the right URL", function() {
             expect(this.model.createImageUrl()).toBe("/workspaces/10013/image");
@@ -453,6 +453,15 @@ describe("chorus.models.Workspace", function() {
                 this.model.set({permission: ['update']});
                 expect(this.model.workspaceAdmin()).toBeFalsy();
             });
+        });
+    });
+
+    describe("#maxImageSize",function() {
+        it("returns the max file size for workspace icons from the config", function() {
+            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
+            var maxImgSize = chorus.models.Config.instance().get("fileSizesMbWorkspaceIcon");
+            expect(maxImgSize).toBeDefined();
+            expect(this.model.maxImageSize()).toBe(maxImgSize);
         });
     });
 });

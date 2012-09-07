@@ -160,5 +160,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     _hasPermission:function (validPermissions) {
         return _.intersection(this.get("permission"), validPermissions).length > 0;
+    },
+
+    maxImageSize:function () {
+        return chorus.models.Config.instance().get("fileSizesMbWorkspaceIcon");
     }
 });

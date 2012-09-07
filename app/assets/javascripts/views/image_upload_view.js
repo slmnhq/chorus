@@ -16,7 +16,8 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         this.addImageKey = options.addImageKey;
         this.changeImageKey = options.changeImageKey;
         this.spinnerSmall = options.spinnerSmall;
-        this.editable = options.editable || !("editable" in options)
+        this.editable = options.editable || !("editable" in options);
+        this.config = chorus.models.Config.instance();
     },
 
     postRender: function() {
@@ -38,6 +39,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         }
 
         function fileSelected(e, data) {
+            self.uploadObj = data;
             if (self.spinnerSmall) {
                 self.spinner = new Spinner({
                     lines: 14,
@@ -65,7 +67,12 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             self.$("input[type=file]").prop("disabled", true);
             self.$("a.action").addClass("disabled");
 
-            data.submit();
+            if (self.validFileSize()) {
+                data.submit();
+            } else {
+                self.model.trigger("validationFailed");
+                reEnableUpload();
+            }
         }
 
         function reEnableUpload() {
@@ -90,8 +97,28 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
 
         function uploadFailed(e, data) {
             reEnableUpload();
-            self.resource.serverErrors = JSON.parse(data.result).errors;
+            if(data.result) {
+                self.resource.serverErrors = JSON.parse(data.result).errors;
+            }
             self.resource.trigger("saveFailed");
         }
+    },
+
+    validFileSize: function() {
+        this.clearErrors();
+        if (!this.model) return;
+        var maxImageSize = this.model.maxImageSize();
+        delete this.model.serverErrors;
+
+        var valid = true;
+        _.each( this.uploadObj.files, function(file) {
+            if (file.size > (maxImageSize * 1024 * 1024) ) {
+                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxImageSize }}}}
+                this.showErrors(this.model);
+                valid = false;
+            }
+        }, this);
+
+        return valid;
     }
 });

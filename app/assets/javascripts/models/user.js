@@ -96,6 +96,10 @@ chorus.models.User = chorus.models.Base.extend({
         return (name.length < length) ? name : this.get("firstName") + " " + this.get("lastName")[0] + ".";
     },
 
+    maxImageSize:function () {
+      return chorus.models.Config.instance().get("fileSizesMbUserIcon");
+    },
+
     attrToLabel:{
         "email":"users.email",
         "firstName":"users.first_name",

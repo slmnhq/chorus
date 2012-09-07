@@ -291,16 +291,16 @@ describe("chorus.models.User", function() {
             var user = rspecFixtures.user({username: 'foo', id: "bar"});
             expect(user.picklistImageUrl()).toBe(user.fetchImageUrl({ size: "original" }));
         });
-    })
+    });
 
     describe("#displayName", function() {
         beforeEach(function() {
             this.model.set({ firstName: "Danny", lastName: "Burkes" });
-        })
+        });
 
         it("returns the full name", function() {
             expect(this.model.displayName()).toBe("Danny Burkes");
-        })
+        });
 
         context("when firstName and lastName are blank, but fullName exists", function() {
             it("uses fullName", function() {
@@ -312,13 +312,13 @@ describe("chorus.models.User", function() {
                 expect(user.displayName()).toBe('SomeGuy');
             });
         })
-    })
+    });
 
-    describe("displayShortName", function() {
+    describe("#displayShortName", function() {
         context("with a short user name", function() {
             beforeEach(function() {
                 this.model.set({firstName: "Party", lastName: "Man"});
-            })
+            });
             it("displays the normal display name", function() {
                 expect(this.model.displayShortName(20)).toBe(this.model.displayName());
             });
@@ -327,10 +327,19 @@ describe("chorus.models.User", function() {
         context("where the full name is longer than the allowed length", function() {
             beforeEach(function() {
                 this.model.set({firstName: "Party", lastName: "ManiManiManiManiManiManiMani"});
-            })
+            });
             it("displays the normal display name", function() {
                 expect(this.model.displayShortName(20)).toBe("Party M.");
             });
         });
-    })
+    });
+
+    describe("#maxImageSize", function() {
+        it("returns the max file size for user icons from the config", function() {
+            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
+            var maxImgSize = chorus.models.Config.instance().get("fileSizesMbUserIcon");
+            expect(maxImgSize).toBeDefined();
+            expect(this.model.maxImageSize()).toBe(maxImgSize);
+        });
+    });
 });
