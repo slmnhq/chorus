@@ -377,16 +377,18 @@ describe("chorus.models.TabularData", function() {
         beforeEach(function() {
             this.tabularData.set({ id: '"foo"|"bar"|"baz"',
             workspace: {id: "234", name: "abc"}});
-            spyOn(jQuery, "download");
+            spyOn($, "fileDownload");
         });
 
         context("when no number of rows is passed", function() {
             it("includes the number of rows", function() {
                 this.tabularData.download();
-                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
-                    datasetId: this.tabularData.id,
-                    workspaceId: this.tabularData.workspace().id
-                }, "get");
+                expect($.fileDownload).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                    data: {
+                        datasetId: this.tabularData.id,
+                        workspaceId: this.tabularData.workspace().id
+                    }
+                });
             });
         });
 
@@ -394,11 +396,13 @@ describe("chorus.models.TabularData", function() {
             it("makes a request to the tabular data download api", function() {
 
                 this.tabularData.download({ rows: "345" });
-                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
-                    datasetId: this.tabularData.id,
-                    workspaceId: this.tabularData.workspace().id,
-                    numOfRows: "345"
-                }, "get");
+                expect($.fileDownload).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                    data: {
+                        datasetId: this.tabularData.id,
+                        workspaceId: this.tabularData.workspace().id,
+                        numOfRows: "345"
+                    }
+                });
             });
         });
     });

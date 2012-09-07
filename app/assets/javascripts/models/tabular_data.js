@@ -162,9 +162,12 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (options && options.rows) {
                 data.numOfRows = options.rows;
             }
-           data.workspaceId = this.get("workspace").id
+            var workspace = this.get('workspace');
+            if(workspace) {
+                data.workspaceId = workspace.id
+            }
 
-            $.download("/edc/data/csvDownload", data, "get");
+            $.fileDownload("/edc/data/csvDownload", {data: data});
         },
 
         isChorusView: function() {
