@@ -11,24 +11,26 @@ resource "Chorus Views" do
     log_in owner
   end
 
-  post "/datasets/:dataset_id/chorus_view" do
+  post "/chorus_views" do
     before do
       any_instance_of(GpdbSchema) do |schema|
         mock(schema).with_gpdb_connection.with_any_args
       end
     end
 
-    parameter :id, "Id of the source dataset"
+    parameter :source_object_id, "Id of the source dataset/workfile"
+    parameter :source_object_type, "'dataset' or 'workfile'"
     parameter :object_name, "Name of the Chorus View to be created"
     parameter :schema_id, "Id of the schema to run the view in"
     parameter :workspace_id, "Id of the workspace the Chorus View belongs to"
     parameter :query, "Sql statement of the Chorus View, must start with SELECT or WITH"
 
-    required_parameters :id, :object_name, :schema_id, :workspace_id, :query
+    required_parameters :source_object_id, :source_object_type, :object_name, :schema_id, :workspace_id, :query
 
     scope_parameters :chorus_view, :all
 
-    let(:id) { dataset_id }
+    let(:source_object_id) { dataset_id }
+    let(:source_object_type) { "dataset" }
     let(:workspace_id) { workspace.id }
     let(:object_name) {"MyChorusView"}
     let(:schema_id) {workspace.sandbox.id}
