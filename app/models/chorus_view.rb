@@ -15,7 +15,4 @@ class ChorusView < Dataset
       errors.add(:query, :too_many_statements)
     end
   end
-
-  def column_name
-  end
 end
