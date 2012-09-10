@@ -53,12 +53,12 @@ describe AuroraProvider do
   describe ".provide!" do
     let(:gpdb_instance) { gpdb_instances(:aurora) }
     let(:database) { Object.new }
-    let(:schema_name) {"schema_name"}
+    let(:schema_name) { "schema_name" }
     let(:attributes) { {"template" => "small",
                         "size" => 1,
                         "database_name" => "database",
                         "schema_name" => schema_name} }
-    let(:new_database) {GpdbDatabase.create({:name => 'database', :gpdb_instance => gpdb_instance}, :without_protection => true)}
+    let(:new_database) { GpdbDatabase.create({:name => 'database', :gpdb_instance => gpdb_instance}, :without_protection => true) }
 
     context "when provisioning succeeds" do
       before do
@@ -139,6 +139,7 @@ describe AuroraProvider do
     context "when provisioning fails" do
       before do
         any_instance_of(Aurora::Service) do |service|
+          stub(service).find_template_by_name { 'template' }
           mock(service).create_database(anything) { raise StandardError.new("server cannot be reached") }
         end
       end
