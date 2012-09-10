@@ -639,5 +639,15 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(this.view.executionFailed.mostRecentCall.args[0]).toBe(this.executionModel);
             });
         });
+
+        context("when file:executionCancelled event is broadcast", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast('file:executionCancelled');
+            });
+
+            it("stops the spinner", function() {
+                expect(this.view.$('.spinner')).toHaveClass('hidden');
+            });
+        });
     });
-})
+});

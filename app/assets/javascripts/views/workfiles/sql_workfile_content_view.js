@@ -14,14 +14,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     setup: function() {
         this._super("setup");
 
-        this.task = new chorus.models.SqlExecutionTask({ });
-
-        this.bindings.add(this.task, "saved", this.executionSucceeded);
-        this.bindings.add(this.task, "saveFailed", this.executionFailed);
-
         this.textContent = new chorus.views.TextWorkfileContent({ model: this.model, hotkeys: this.hotkeys })
         this.resultsConsole = new chorus.views.ResultsConsole({
-            model: this.task,
             enableResize: true,
             enableExpander: true
         });
@@ -30,6 +24,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);
         chorus.PageEvents.subscribe("file:newChorusView", this.newChorusView, this);
         chorus.PageEvents.subscribe("file:newSelectionChorusView", this.newSelectionChorusView, this);
+        chorus.PageEvents.subscribe("file:runAndDownload", this.runAndDownload, this);
     },
 
     runInSchema: function(options) {
@@ -51,33 +46,50 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         }
     },
 
-    runInDefault: function() {
+    runInDefault: function(options) {
+        options = options || {};
         if (!this.model.executionSchema()) return;
-        this.run({
+        this.run(_.extend(options, {
             instance: this.model.executionSchema().get('instanceId'),
             database: this.model.executionSchema().get('databaseId'),
             schema: this.model.executionSchema().get('id')
-        })
+        }));
+    },
+
+    runAndDownload: function(numOfRows) {
+        this.runInDefault({taskClass: chorus.models.SqlExecutionAndDownloadTask, numOfRows: numOfRows });
     },
 
     run: function(options) {
-        if (!this.executing) {
-            this.executing = true;
-
-            this.task.clear({ silent: true });
-            this.task.set({
-                taskType: "workfileSQLExecution",
-                sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
-                entityId: this.model.get("id"),
-                schemaId: options.schema,
-                instanceId: options.instance,
-                databaseId: options.database,
-                checkId: (new Date().getTime().toString())
-            }, { silent: true });
-
-            this.task.save({}, { method: "create" });
-            chorus.PageEvents.broadcast("file:executionStarted", this.task);
+        options = options || {};
+        if (this.executing) {
+            return;
         }
+
+        this.createTask(options.taskClass || chorus.models.SqlExecutionTask);
+
+        this.executing = true;
+        this.task.set({
+            sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
+            entityId: this.model.get("id"),
+            schemaId: options.schema,
+            instanceId: options.instance,
+            databaseId: options.database,
+            checkId: (new Date().getTime().toString()),
+            numOfRows: options.numOfRows
+        }, { silent: true });
+
+        this.task.save({}, { method: "create" });
+        chorus.PageEvents.broadcast("file:executionStarted", this.task);
+    },
+
+    createTask: function(taskClass) {
+        this.task = new taskClass({ });
+        this.bindings.remove(undefined, 'saved', this.executionSucceeded);
+        this.bindings.remove(undefined, 'saveFailed', this.executionFailed);
+        this.bindings.add(this.task, "saved", this.executionSucceeded);
+        this.bindings.add(this.task, "saveFailed", this.executionFailed);
+        this.resultsConsole.model = this.task;
     },
 
     newChorusView: function() {

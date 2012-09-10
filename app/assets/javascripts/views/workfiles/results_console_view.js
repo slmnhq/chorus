@@ -18,6 +18,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this);
         chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
+        chorus.PageEvents.subscribe("file:executionCancelled", this.hideSpinner, this);
     },
 
     beforeNavigateAway: function() {
