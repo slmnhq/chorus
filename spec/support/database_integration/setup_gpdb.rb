@@ -109,5 +109,9 @@ module GpdbIntegration
     host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
     GpdbInstance.find_by_name(host_name.gsub("-", "_"))
   end
+
+  def self.real_database
+    real_gpdb_instance.databases.find_by_name!(self.database_name)
+  end
 end
 

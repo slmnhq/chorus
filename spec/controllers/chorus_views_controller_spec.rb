@@ -48,6 +48,8 @@ describe ChorusViewsController, :database_integration => true do
       it "should handle error" do
         post :create, :chorus_view => options
         response.code.should == "422"
+        decoded = JSON.parse(response.body)
+        decoded['errors']['fields']['query']['generic'].should be_present
       end
     end
 

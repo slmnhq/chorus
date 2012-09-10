@@ -5,14 +5,26 @@ class ChorusView < Dataset
 
   def validate_query
     return unless changes.include?(:query)
-    raise ActiveRecord::StatementInvalid unless query.upcase.start_with?("SELECT", "WITH")
+    unless query.upcase.start_with?("SELECT", "WITH")
+      errors.add(:query, :start_with_keywords)
+    end
+
     account = account_for_user!(schema.database.gpdb_instance.owner)
-    resultSet = []
-    schema.with_gpdb_connection(account, true) do |conn|
-      resultSet = conn.exec_query("EXPLAIN #{query}")
+    schema.with_gpdb_connection(account, true) do |connection|
+      jdbc_conn = connection.instance_variable_get(:"@connection").connection
+      s = jdbc_conn.prepareStatement(query)
+      begin
+        flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
+        s.executeWithFlags(flag)
+      rescue => e
+        errors.add(:query, :generic, {:message => e.message})
+      end
+      if s.getMoreResults
+        errors.add(:query, :multiple_result_sets)
+      end
     end
-    if (resultSet[0].class != Hash)  #This means there is more than one sql statement
-      errors.add(:query, :too_many_statements)
-    end
+  end
+
+  def column_name
   end
 end
