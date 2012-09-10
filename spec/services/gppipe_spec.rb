@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Gppipe, :database_integration => true do
 
   def setup_data
+    gpdb1.exec_query("delete from #{source_table_name};")
     gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
     gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
     gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")

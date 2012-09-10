@@ -71,10 +71,6 @@ describe GpdbInstance do
       let(:account) { GpdbIntegration.real_gpdb_account }
       let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
 
-      before do
-        refresh_chorus
-      end
-
       after do
         exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
       end
@@ -261,11 +257,9 @@ describe GpdbInstance do
       let(:gpdb_instance) { account_with_access.gpdb_instance }
       let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
       let(:account_with_access) { GpdbIntegration.real_gpdb_account }
-      before do
-        refresh_chorus
-      end
 
       it "adds new database_instance_accounts" do
+        database.instance_accounts = []
         database.instance_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_instance.refresh_databases
         database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access

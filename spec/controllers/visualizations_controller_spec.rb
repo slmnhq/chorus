@@ -27,8 +27,8 @@ describe VisualizationsController do
       end
 
       describe "fixtures", :database_integration => true do
+        let(:account) { GpdbIntegration.real_gpdb_account }
         before do
-          account = refresh_chorus
           log_in account.owner
         end
 

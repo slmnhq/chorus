@@ -8,10 +8,6 @@ describe SqlExecutor do
     let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
     let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
 
-    before do
-      refresh_chorus
-    end
-
     subject { SqlExecutor.preview_dataset(table, account, check_id) }
 
     it "returns a SqlResult object with the correct rows" do
@@ -137,10 +133,6 @@ describe SqlExecutor do
     let(:schema) { GpdbSchema.find_by_name!('test_schema') }
     let(:sql) { 'select 1' }
     let(:check_id) { '42' }
-
-    before do
-      refresh_chorus
-    end
 
     it "returns a SqlResult" do
       result = SqlExecutor.execute_sql(schema, account, check_id, sql)

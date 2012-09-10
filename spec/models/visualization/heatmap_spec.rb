@@ -22,7 +22,6 @@ describe Visualization::Heatmap do
     let(:instance_account) { GpdbIntegration.real_gpdb_account }
 
     before do
-      refresh_chorus
       visualization.fetch!(instance_account, 12345)
     end
 

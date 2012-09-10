@@ -108,10 +108,6 @@ describe HdfsExternalTable do
         }
       end
 
-      before do
-        refresh_chorus
-      end
-
       after do
         schema.with_gpdb_connection(account) do |conn|
           conn.exec_query("DROP EXTERNAL TABLE top_songs")

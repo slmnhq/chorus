@@ -52,7 +52,6 @@ describe DatasetImportsController do
 
     before(:each) do
       log_in account.owner
-      refresh_chorus
     end
 
     after(:each) do
@@ -261,8 +260,7 @@ describe DatasetImportsController do
     let(:start_time) { "2012-08-23 23:00:00.0" }
 
     let(:create_source_table) do
-      gpdb1.exec_query("drop table if exists #{source_table_name};")
-      gpdb1.exec_query("create table #{source_table_name}(#{table_def});")
+      gpdb1.exec_query("delete from #{source_table_name};")
     end
 
     def setup_data
@@ -273,9 +271,8 @@ describe DatasetImportsController do
 
     before do
       log_in user
-      refresh_chorus
       create_source_table
-      refresh_chorus
+
       stub(Gppipe).gpfdist_url { Socket.gethostname }
       stub(Gppipe).grace_period_seconds { 1 }
       setup_data
@@ -319,7 +316,6 @@ describe DatasetImportsController do
     end
 
     after do
-      gpdb1.exec_query("drop table if exists #{source_table_name};")
       gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
       gpdb1.try(:disconnect!)
       gpdb2.try(:disconnect!)

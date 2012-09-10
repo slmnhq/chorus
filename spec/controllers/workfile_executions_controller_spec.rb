@@ -67,7 +67,6 @@ describe WorkfileExecutionsController do
       let(:schema) { GpdbSchema.find_by_name!('test_schema') }
       before do
         log_in users(:admin)
-        refresh_chorus
       end
 
       generate_fixture "workfileExecutionResults.json" do

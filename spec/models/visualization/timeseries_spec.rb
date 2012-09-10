@@ -17,7 +17,6 @@ describe Visualization::Timeseries, :database_integration => true do
 
   describe "#fetch!" do
     before do
-      refresh_chorus
       visualization.fetch!(account, 12345)
     end
 

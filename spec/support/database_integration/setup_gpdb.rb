@@ -75,14 +75,11 @@ module GpdbIntegration
 
   def self.refresh_chorus
     account = GpdbIntegration.real_gpdb_account
+
+    GpdbIntegration.setup_gpdb
     GpdbDatabase.refresh(account)
+
     database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
-
-
-      GpdbIntegration.setup_gpdb
-      GpdbDatabase.refresh(account)
-      database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
-
     GpdbSchema.refresh(account, database)
     gpdb_schema = database.schemas.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)

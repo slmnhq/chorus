@@ -90,10 +90,6 @@ describe GpdbDatabase do
       let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
       let(:instance) { database.gpdb_instance }
 
-      before do
-        refresh_chorus
-      end
-
       after do
         exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
       end
@@ -138,7 +134,8 @@ describe GpdbDatabase do
 
       it "raises an error" do
         expect {
-          database.create_schema("test_schema", user) }.to raise_error(ActiveRecord::JDBCError) { |exception|
+          database.create_schema("test_schema", user)
+        }.to raise_error(ActiveRecord::JDBCError) { |exception|
           exception.message.should match("quack")
         }
       end

@@ -6,10 +6,6 @@ describe DatasetStreamer, :database_integration => true do
   let(:user) { GpdbIntegration.real_gpdb_account.owner }
   let(:streamer) { DatasetStreamer.new(dataset, user) }
 
-  before do
-    refresh_chorus
-  end
-
   describe "#initialize" do
     it "takes a dataset and user" do
       streamer.user.should == user

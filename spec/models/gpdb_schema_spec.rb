@@ -106,10 +106,6 @@ describe GpdbSchema do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
 
-    before do
-      refresh_chorus
-    end
-
     it "returns the sorted list of schemas" do
       schemas = GpdbSchema.refresh(account, database)
       schemas.should be_a(Array)
@@ -123,10 +119,6 @@ describe GpdbSchema do
     let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
     let(:user) { GpdbIntegration.real_gpdb_account.owner }
     let(:restricted_user) { users(:restricted_user) }
-
-    before do
-      refresh_chorus
-    end
 
     context "when it exists in the source database" do
       context "when the user has access" do
@@ -167,7 +159,6 @@ describe GpdbSchema do
       )
     end
 
-
     it "returns the GpdbSchemaFunctions" do
       functions = schema.stored_functions(account)
 
@@ -193,7 +184,7 @@ describe GpdbSchema do
       describe "#mark_datasets_as_stale" do
         it "if the schema has become stale, datasets will also be marked as stale" do
           schema.update_attributes!({:stale_at => Time.now}, :without_protection => true)
-          dataset = schema.datasets.first
+          dataset = schema.datasets.views_tables.first
           dataset.should be_stale
           dataset.stale_at.should be_within(5.seconds).of(Time.now)
         end

@@ -5,7 +5,6 @@ describe CsvImporter, :database_integration => true do
   describe "actually performing the import" do
 
     before do
-      refresh_chorus
       any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { datasets(:bobs_table) } }
     end
 

@@ -8,7 +8,6 @@ describe ChorusViewsController, :database_integration => true do
 
   before do
     log_in account.owner
-    refresh_chorus
   end
 
   context "#create" do

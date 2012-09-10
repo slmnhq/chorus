@@ -39,10 +39,6 @@ describe GpTableCopier, :database_integration => true do
   end
   let(:extra_attributes) { {:dataset_import_created_event_id => dataset_import_created_event_id} }
 
-  before do
-    refresh_chorus
-  end
-
   after do
     call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{source_table_name}\";")
     call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{destination_table_name}\";") unless (
@@ -63,7 +59,6 @@ describe GpTableCopier, :database_integration => true do
 
     context ".run_import" do
       context "in new table" do
-
         it "creates a new table copier and runs it" do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
           dest_rows = call_sql("SELECT * FROM #{destination_table_name}", sandbox)
@@ -310,8 +305,8 @@ describe GpTableCopier, :database_integration => true do
     end
 
     context "tables have weird characters" do
-      let(:source_table_name) { "2candy" }
-      let(:destination_table_name) { "2dst_candy" }
+      let(:source_table_name) { "2dandy" }
+      let(:destination_table_name) { "2dst_dandy" }
 
       it "single quotes table and schema names if they have weird chars" do
         copier.run

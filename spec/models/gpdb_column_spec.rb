@@ -5,9 +5,7 @@ describe GpdbColumn do
     subject { GpdbColumn.columns_for(account, dataset) }
 
     context "with real data", :database_integration do
-      before do
-        refresh_chorus
-      end
+
       let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
       let(:account) { GpdbIntegration.real_gpdb_account }
       let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }

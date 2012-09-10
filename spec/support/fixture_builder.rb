@@ -231,11 +231,9 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
     fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
 
-
-      puts "Refreshing chorus..."
-      GpdbIntegration.refresh_chorus
-      chorus_gpdb42_instance.refresh_databases
-      GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name("ChorusAnalytics"))
+    GpdbIntegration.refresh_chorus
+    chorus_gpdb42_instance.refresh_databases
+    GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name("ChorusAnalytics"))
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
