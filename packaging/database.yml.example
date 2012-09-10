@@ -1,7 +1,7 @@
 production:
   adapter: jdbcpostgresql
   encoding: unicode
-  database: chorus_production
+  database: chorus_rails_production
   username: postgres_chorus
   password: PASSWORD
   min_messages: warning

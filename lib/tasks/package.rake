@@ -9,8 +9,8 @@ namespace :package do
   end
 
   task :prepare_app => :check_clean_working_tree do
-    Rake::Task[:'api_docs:package'].invoke
-    system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
+    #Rake::Task[:'api_docs:package'].invoke
+    #system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
     system "bundle exec jetpack ."
     PackageMaker.write_version
   end
@@ -24,30 +24,10 @@ namespace :package do
     deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
     PackageMaker.deploy(deploy_configuration)
   end
-  
-  desc 'Deploy PACKAGE_FILE to staging'
-  task :deploy_stage do
-    unless ENV['PACKAGE_FILE']
-      puts "You have to specify PACKAGE_FILE to deploy"
-      exit(1)
-    end
-    deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
-    PackageMaker.deploy(deploy_configuration, ENV['PACKAGE_FILE'])
-  end
-
-  task :prepare_remote do
-    deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
-    PackageMaker.prepare_remote(deploy_configuration)
-  end
 
   task :cleanup do
     PackageMaker.clean_workspace
   end
-end
-
-desc 'Generate new package'
-task :package => 'package:prepare_app' do
-  PackageMaker.make
 end
 
 packaging_tasks = Rake.application.top_level_tasks.select { |task| task.to_s.match(/^package:/) }
@@ -56,6 +36,18 @@ last_packaging_task = packaging_tasks.last
 Rake::Task[last_packaging_task].enhance do
   Rake::Task[:'package:cleanup'].invoke
 end if last_packaging_task
+
+desc "Deploy an installer package file to a server"
+task :deploy, [:server, :package_file] do |t, args|
+  server = args[:server]
+  package_file = args[:package_file]
+  unless package_file && server
+    puts "You have to specify package_file to deploy and server to deploy to"
+    exit 1
+  end
+  deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))[server]
+  PackageMaker.deploy(deploy_configuration, package_file)
+end
 
 
 module PackageMaker
@@ -97,20 +89,47 @@ module PackageMaker
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
 
-    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
+    system("#{rails_root}/packaging/makeself/makeself.sh --nocomp --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
   def upload(filename, config)
     host = config['host']
-    path = config['path']
+    path = config['install_path']
     postgres_build = config['postgres_build']
+    legacy_path = config['legacy_path']
 
-    answers_file = "~/install_answers.txt"
+    File.open('install_answers.txt', 'w') do |f|
+      # where the existing install lives
+      if legacy_path.present?
+        f.puts(legacy_path)
+      else
+        f.puts(path)
+      end
 
+      # confirm the upgrade
+      f.puts('y')
+
+      # where to install 2.2
+      if legacy_path.present?
+        f.puts(path)
+      end
+      f.puts(postgres_build)
+    end
+
+    # start old postgres
+    run "ssh #{host} 'killall -9 -w postgres || true'"
+    run "ssh #{host} 'killall -9 -w java || true'"
+    run "ssh #{host} 'rm -rf ~/chorusrails'"
+    edc_start = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 bin/edcsvrctl start"
+    # run edc_start twice because it fails the first time
+    run "ssh #{host} 'cd ~/chorus;. edc_path.sh; #{edc_start} && #{edc_start}'"
+
+    # run upgrade scripts
     run "scp #{filename} #{host}:~"
-    run "ssh #{host} 'echo \"#{path}\" > #{answers_file} && echo \"y\" >> #{answers_file} && echo \"#{postgres_build}\" >> #{answers_file}'"
+    run "ssh #{host} rm ~/install_answers.txt"
+    run "scp install_answers.txt #{host}:~"
     run "ssh #{host} 'cat /dev/null > #{path}/install.log'"
-    install_success = run "ssh #{host} 'cd ~ && ./#{filename} #{answers_file}'"
+    install_success = run "ssh #{host} 'cd ~ && ./#{filename} ~/install_answers.txt'"
     run "scp #{host}:#{path}/install.log install.log"
 
     run "ssh #{host} 'cd ~; rm #{filename}'"
@@ -129,15 +148,6 @@ module PackageMaker
 
   def clean_workspace
     run "rm -r .bundle"
-  end
-
-  def prepare_remote(config)
-    path = config['path']
-    host = config['host']
-    shared_path = config['path'] + '/shared'
-
-    run "ssh #{host} 'mkdir -p #{path}/releases'"
-    run "ssh #{host} 'mkdir -p #{shared_path}/tmp/pids && mkdir -p #{shared_path}/log && mkdir -p #{shared_path}/system && mkdir -p #{shared_path}/solr/data'"
   end
 
   def head_sha

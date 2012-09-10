@@ -1,8 +1,10 @@
 stage:
   host: chorus-staging
-  path: ~/chorusrails-deploy-new
+  install_path: ~/chorusrails-deploy-new
   postgres_build: 2
 
-chorus21:
-  host: chorus-chorus21
-  path: ~/test/chorusrails
+upgrade21:
+  host: chorus-chorus21-upgrade
+  legacy_path: ~/chorus
+  postgres_build: 2
+  install_path: ~/chorusrails

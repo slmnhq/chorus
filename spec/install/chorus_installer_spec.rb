@@ -107,7 +107,8 @@ describe ChorusInstaller do
       end
 
       it "should confirm legacy upgrade" do
-        mock(installer).prompt_for_legacy_upgrade
+        mock(installer).prompt_for_legacy_upgrade { installer.destination_path = 'foo' }
+        mock(logger).logfile=('foo/install.log')
         installer.get_destination_path
       end
     end
@@ -442,32 +443,24 @@ describe ChorusInstaller do
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
       @call_order = []
-      mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start postgres") { @call_order << 'start' }
-      mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres") { @call_order << 'stop' }
+      stub_chorus_exec(installer)
     end
 
     context "when installing fresh" do
-      before do
-        mock(installer).chorus_exec("/opt/chorus/releases/2.2.0.0/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db") { @call_order << "create_database" }
-        mock(installer).chorus_exec(%Q{/opt/chorus/releases/2.2.0.0/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}) { @call_order << "create_user" }
-        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed") { @call_order << "migrate" }
-      end
-
       it "creates the database structure" do
         installer.setup_database
-        @call_order.should == ["create_database", "start", "create_user", "migrate", "stop"]
+        @call_order.should == [:create_database, :start_postgres, :create_user, :rake_db_create, :rake_db_migrate, :rake_db_seed, :stop_postgres]
       end
     end
 
     context "when upgrading" do
       before do
         installer.do_upgrade = true
-        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:migrate") { @call_order << "migrate" }
       end
 
-      it "should migrate the existing database" do
+      it "migrates the existing database" do
         installer.setup_database
-        @call_order.should == %w(start migrate stop)
+        @call_order.should == [:start_postgres, :rake_db_migrate, :stop_postgres]
       end
     end
   end
@@ -597,39 +590,58 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#dump_and_shutdown_legacy" do
+    subject { installer.dump_and_shutdown_legacy }
+
+    before do
+      installer.legacy_installation_path = '/opt/old_chorus'
+      installer.destination_path = '/opt/chorus'
+      stub(installer).version { '2.2.0.0' }
+      stub_chorus_exec(installer)
+
+      @call_order = []
+    end
+
+    it "should dump the old database and shut it down" do
+      subject
+      @call_order.should == [:stop_old_app, :pg_dump, :stop_old_postgres]
+    end
+  end
+
   describe "#migrate_legacy_data" do
     subject { installer.migrate_legacy_data }
 
-    context "when legacy_installation_path is not set" do
-      before do
-        installer.legacy_installation_path = nil
-      end
+    before do
+      installer.legacy_installation_path = '/opt/old_chorus'
+      installer.destination_path = '/opt/chorus'
+      stub(installer).version { '2.2.0.0' }
 
-      it "should raise InstallationFailed" do
-        expect { subject }.to raise_error(InstallerErrors::InstallationFailed)
-      end
+      @call_order = []
+
+      mock(installer).start_postgres { @call_order << :start_new_postgres }
+      stub_chorus_exec(installer)
     end
 
-    context "when legacy_installation_path is set" do
-      before do
-        installer.legacy_installation_path = '/opt/old_chorus'
-        installer.destination_path = '/opt/chorus'
-        stub(installer).version { '2.2.0.0' }
+    it "should execute the data migrator" do
+      subject
+      @call_order.should == [:start_new_postgres, :import_legacy_schema, :legacy_migration]
+    end
+  end
 
-        @call_order = []
-
-        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && WORKFILE_PATH=/opt/old_chorus/runtime/data bin/rake legacy:migrate") { @call_order << "legacy_migration" }
-        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && pg_dump -p 8543 chorus > legacy_database.sql") { @call_order << "pg_dump" }
-        mock(installer).chorus_exec("cd /opt/chorus/releases/2.2.0.0 && packaging/legacy_migrate_schema_setup.sh legacy_database.sql") { @call_order << "import_legacy_schema" }
-        mock(installer).chorus_exec("/opt/old_chorus/postgresql/bin/pg_ctl -D /opt/old_chorus/runtime/postgresql-data -m fast stop") { @call_order << "stop_old_postgres" }
-        mock(installer).chorus_exec("cd /opt/old_chorus/chorus-apps && ./stop-ofbiz.sh") { @call_order << "stop_app" }
-        mock(installer).start_postgres { @call_order << "start_new_postgres" }
-      end
-
-      it "should execute the data migrator" do
-        subject
-        @call_order.should == ["stop_app", "pg_dump", "stop_old_postgres", "start_new_postgres", "import_legacy_schema", "legacy_migration"]
-      end
+  def stub_chorus_exec(installer)
+    stub(installer).chorus_exec.with_any_args do |cmd|
+      @call_order << :import_legacy_schema if cmd =~ /legacy_migrate_schema_setup.sh/
+      @call_order << :legacy_migration if cmd =~ /rake legacy:migrate/
+      @call_order << :stop_old_app if cmd =~ /stopofbiz.sh/
+      @call_order << :pg_dump if cmd =~ /pg_dump/
+      @call_order << :stop_old_postgres if cmd =~ /postgresql-data -m fast stop/
+      @call_order << :rake_db_create if cmd =~ /rake.* db:create/
+      @call_order << :rake_db_seed if cmd =~ /rake.* db:seed/
+      @call_order << :rake_db_migrate if cmd =~ /rake.* db:migrate/
+      @call_order << :start_postgres if cmd =~ /server_control.sh start postgres/
+      @call_order << :stop_postgres if cmd =~ /server_control.sh stop postgres/
+      @call_order << :create_user if cmd =~ /CREATE ROLE/
+      @call_order << :create_database if cmd =~ /initdb/
     end
   end
 

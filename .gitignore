@@ -11,6 +11,14 @@ app/assets/javascripts/environment.js
 # Ignore paperclip's attachment directory
 /public/system
 
+# ignore precompiled assets
+/public/assets
+
+# ignore install related files
+greenplum-chorus.*.sh
+install.log
+install_answers.txt
+
 # Ignore API doc directory
 /public/api
 /doc/api_documentation.tar.gz

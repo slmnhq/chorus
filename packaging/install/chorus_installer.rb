@@ -63,10 +63,10 @@ class ChorusInstaller
     relative_path = @io.prompt_or_default(:destination_path, default_path)
 
     @destination_path = File.expand_path(relative_path)
-    @logger.logfile = File.join(@destination_path, 'install.log')
     @version_detector.destination_path = @destination_path
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
+    @logger.logfile = File.join(@destination_path, 'install.log')
   end
 
   def prompt_for_legacy_upgrade
@@ -178,6 +178,7 @@ class ChorusInstaller
 
     self.database_password = SecureRandom.hex
     self.database_user = database_config['production']['username']
+    self.database = database_config['production']['database']
 
     database_config['production']['password'] = database_password
 
@@ -195,7 +196,14 @@ class ChorusInstaller
       chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
       start_postgres
       chorus_exec %Q{#{release_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
-      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate db:seed"
+      log "Starting rake db:create"
+      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create"
+      log "Starting rake db:migrate"
+      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
+      unless do_legacy_upgrade
+        log "Starting rake db:seed"
+        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:seed"
+      end
       stop_postgres
     end
   end
@@ -223,14 +231,23 @@ class ChorusInstaller
     log "Done"
   end
 
+  def dump_and_shutdown_legacy
+    log "Shutting down Chorus..."
+    chorus_exec("cd #{legacy_installation_path}/chorus-apps && ./stopofbiz.sh")
+    legacy_pg_data = "#{legacy_installation_path}/runtime/postgresql-data"
+    # need to start postgres here
+    #chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_pg_data}")
+    log "Dumping previous Chorus data..."
+    chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
+    chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_pg_data} -m fast stop")
+  end
+
   def migrate_legacy_data
-    raise InstallerErrors::InstallationFailed, "Migrating data from 2.1 to 2.2 failed" unless legacy_installation_path
-    chorus_exec("cd #{legacy_installation_path}/chorus-apps && ./stop-ofbiz.sh")
-    chorus_exec("cd #{release_path} && pg_dump -p 8543 chorus > legacy_database.sql")
-    chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_installation_path}/runtime/postgresql-data -m fast stop")
     start_postgres
+    log "Loading legacy data into postgres..."
     chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
-    chorus_exec("cd #{release_path} && WORKFILE_PATH=#{legacy_installation_path}/runtime/data bin/rake legacy:migrate")
+    log "Running legacy migrations..."
+    chorus_exec("cd #{release_path} && RAILS_ENV=production WORKFILE_PATH=#{legacy_installation_path}/chorus-apps/runtime/data bin/rake legacy:migrate")
   end
 
   def install
@@ -258,6 +275,9 @@ class ChorusInstaller
       log "Done"
       log "Updating database..."
     else
+      if do_legacy_upgrade
+        dump_and_shutdown_legacy
+      end
       log "Creating database..."
     end
 
