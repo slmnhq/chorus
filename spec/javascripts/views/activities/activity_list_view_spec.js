@@ -16,7 +16,7 @@ describe("chorus.views.ActivityList", function() {
 
         it("adds additionalClass to the top-level element", function() {
             expect($(this.view.el)).toHaveClass("foo_class");
-        })
+        });
 
         it("renders an li for each item in the collection", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);
@@ -34,7 +34,7 @@ describe("chorus.views.ActivityList", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
 
                     expect(this.view.$(".no_activity")).toContainTranslation("activity.none", {type: "Foo"});
-                })
+                });
             });
 
             context("and there is no type", function() {
@@ -47,9 +47,9 @@ describe("chorus.views.ActivityList", function() {
                 it("displays the 'no notes' message", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
                     expect(this.view.$(".no_activity")).toContainTranslation("activity.no_recent");
-                })
+                });
             });
-        })
+        });
 
         describe("the isNotification option", function() {
             it("passes the option through to the activity views", function() {
@@ -99,11 +99,11 @@ describe("chorus.views.ActivityList", function() {
 
                 it("adds the 'more' class to the comments section", function() {
                     expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toHaveClass("more");
-                })
+                });
 
                 it("triggers a content:changed event", function() {
                     expect("content:changed").toHaveBeenTriggeredOn(this.view);
-                })
+                });
 
                 describe("when the less link is clicked", function() {
                     beforeEach(function() {
@@ -113,7 +113,7 @@ describe("chorus.views.ActivityList", function() {
 
                     it("removes the 'more' class to the comments section", function() {
                         expect(this.view.$("li[data-activity-id]:eq(0) .comments")).not.toHaveClass("more");
-                    })
+                    });
 
                     it("triggers a content:changed event", function() {
                         expect("content:changed").toHaveBeenTriggeredOn(this.view);
@@ -134,13 +134,13 @@ describe("chorus.views.ActivityList", function() {
 
                 context("when there is no next page", function() {
                     itDoesNotShowAMoreLink();
-                })
+                });
 
                 context("when there is a next page", function() {
                     beforeEach(function() {
                         this.collection.pagination.total = "4";
                         this.view.render();
-                    })
+                    });
 
                     itShowsAMoreLink(2);
                 });
@@ -222,7 +222,7 @@ describe("chorus.views.ActivityList", function() {
         beforeEach(function() {
             spyOn(chorus, "log");
             spyOn(this.collection.at(0), 'get').andCallFake(function() {throw 'an error during rendering'})
-        })
+        });
 
         it("does not raise an exception", function() {
             this.view.render();
