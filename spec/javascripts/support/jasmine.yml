@@ -53,6 +53,7 @@ src_files:
   - js/models/tabular_data.js
   - js/models/dataset.js
   - js/models/tasks/task.js
+  - js/models/tasks/sql_execution_task.js
   - js/models/tasks/chart_task.js
   - js/models/csv_import.js
   - js/models/**/*.js

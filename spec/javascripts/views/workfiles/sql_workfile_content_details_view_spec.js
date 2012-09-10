@@ -161,57 +161,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
             });
 
-            describe("when the workfile has been run in a schema other than its sandbox's schema", function() {
-                beforeEach(function() {
-                    _.extend(this.model.get("executionInfo"), {
-                        instanceId: '51',
-                        instanceName: "bob_the_instance",
-                        databaseId: '52',
-                        databaseName: "bar",
-                        schemaId: '53',
-                        schemaName: "wow"
-                    });
-                    this.view.render();
-                    this.view.$(".run_file").click();
-                });
-
-                it("shows that schema's canonical name in the default 'run' link", function() {
-                    var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toBe("a");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_in_last_schema", {
-                        schemaName: this.model.executionSchema().canonicalName()
-                    });
-                });
-            });
-
-            describe("when the workspace has a sandbox, and hasn't been executed", function() {
-                it("shows 'Run in the workspace sandbox'", function() {
-                    var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
-                    expect(runLink).toBe("a");
-                });
-            });
-
-            describe("when the workfile was last executed in its workspace's sandbox", function() {
-                beforeEach(function() {
-                    _.extend(this.model.get("versionInfo"), {
-                        databaseId: '3',
-                        databaseName: "db",
-                        instanceId: '2',
-                        instanceName: "instance",
-                        schemaId: '4',
-                        schemaName: "schema"
-                    });
-                    this.view.render();
-                    this.view.$(".run_file").click();
-                });
-
-                it("shows 'Run in the workspace sandbox'", function() {
-                    var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
-                    expect(runLink).toBe("a");
-                });
-            });
 
             describe("when the workspace does not have a sandbox", function() {
                 beforeEach(function() {
@@ -220,9 +169,9 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     this.view.$(".run_file").click();
                 });
 
-                it("disables the 'run in sandbox' link", function() {
+                it("disables the 'run file' link", function() {
                     var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
+                    expect(runLink).toContainTranslation("workfile.content_details.run");
                     expect(runLink).toBe("span");
                 });
 
@@ -233,7 +182,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            context("clicking on 'Run in sandbox'", function() {
+            context("clicking on 'Run file'", function() {
                 beforeEach(function() {
                     spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                     this.qtipElement.find('.run_default').click();
@@ -241,6 +190,14 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
                 it("broadcasts the 'file:runCurrent' event on the view", function() {
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runCurrent");
+                });
+            });
+
+            context("clicking on 'Run file and '", function() {
+                it("launches the RunAndDownload dialog", function() {
+                    var modalSpy = stubModals();
+                    this.qtipElement.find('.run_and_download').click();
+                    expect(modalSpy).toHaveModal(chorus.dialogs.RunAndDownload);
                 });
             });
 

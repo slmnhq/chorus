@@ -231,6 +231,37 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 });
             });
 
+            describe("running and downloading all rows", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:runAndDownload");
+                });
+
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("instanceId")).toBe("2");
+                    expect(this.view.task.get("databaseId")).toBe("3");
+                    expect(this.view.task.get("schemaId")).toBe("4");
+                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                });
+            });
+
+            describe("running and downloading some rows", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:runAndDownload", "867");
+                });
+
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("instanceId")).toBe("2");
+                    expect(this.view.task.get("databaseId")).toBe("3");
+                    expect(this.view.task.get("schemaId")).toBe("4");
+                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                    expect(this.view.task.get("numOfRows")).toBe("867");
+                });
+            });
+
             context("when an execution is already outstanding", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("file:runCurrent");
