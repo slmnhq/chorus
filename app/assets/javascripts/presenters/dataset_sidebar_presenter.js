@@ -76,7 +76,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         return chorus.helpers.safeT("import.next_import", {
             nextTime: this.resource.importRunsAt(),
-            tableName: this.resource.nextImportDestination().get("objectName")
+            tableName: this.ellipsize(this.resource.nextImportDestination().get("objectName"))
         });
     },
 

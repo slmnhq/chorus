@@ -429,15 +429,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                             expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
                                 nextTime: "in 1 year",
-                                tableLink: "our_destinat..."
+                                tableName: "our_destinat..."
                             });
-                            expect(this.view.$(".next_import a")).toContainText("our_destinat...");
-
-                            var destTable = new chorus.models.WorkspaceDataset({
-                                id: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
-                                workspaceId: this.dataset.get("workspace").id
-                            });
-                            expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());
                         });
 
                         context("when the import has been successfully executed", function() {
