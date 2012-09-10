@@ -59,6 +59,7 @@
 //= require models/tasks/chart_task
 //= require models/csv_import
 //= require models/tasks/data_preview_task
+//= require models/tasks/workfile_execution_task
 //= require_tree ./models
 //= require collections/instance_set
 //= require collections/hdfs_entry_set

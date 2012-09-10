@@ -18,13 +18,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
         stubDefer();
+        spyOn($, 'fileDownload');
     });
 
     describe("initialization", function() {
         it("has a TextWorkfileContent view", function() {
             expect(this.view.textContent).toBeA(chorus.views.TextWorkfileContent);
             expect(this.view.textContent.options.hotkeys).toBe(this.view.hotkeys);
-        })
+        });
 
         it("has a ResultsConsole view", function() {
             expect(this.view.resultsConsole).toBeA(chorus.views.ResultsConsole);
@@ -225,6 +226,31 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         expect(this.server.creates().length).toBe(1);
                         expect(this.server.lastCreate().url).toBe(this.view.task.url());
                     });
+                });
+            });
+
+            describe("running and downloading all rows", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:runAndDownload");
+                });
+
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("schemaId")).toBe("4");
+                });
+            });
+
+            describe("running and downloading some rows", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:runAndDownload", "867");
+                });
+
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("schemaId")).toBe("4");
+                    expect(this.view.task.get("numOfRows")).toBe("867");
                 });
             });
 

@@ -1,6 +1,7 @@
 chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     constructorName: "DatasetDownload",
     templateName: "dataset_download",
+    submitText: t("actions.download"),
 
     events: {
         "click button.submit": "submitDownload"
@@ -10,7 +11,17 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
         this._super("setup", arguments);
         this.dataset = this.options.pageModel;
         this.model = this.resource = new chorus.models.DatasetDownloadConfiguration();
+        this.setTitle();
+    },
+
+    setTitle: function() {
         this.title = t("dataset.download.title", {datasetName: this.dataset.name()});
+    },
+
+    additionalContext: function() {
+        return {
+            submitText: this.submitText
+        }
     },
 
     submitDownload: function(e) {
@@ -19,8 +30,18 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
         if (this.specifyAll()) {
             this.downloadAll();
         } else {
-            this.downloadSome();
+            if(this.validateInput()) {
+                this.downloadSome();
+            }
         }
+    },
+
+    validateInput: function() {
+        this.model.set({ rowLimit: this.rowLimit() }, { silent: true });
+        if (this.model.performValidation()) {
+            return true
+        }
+        this.showErrors();
     },
 
     downloadAll: function() {
@@ -29,14 +50,8 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     },
 
     downloadSome: function() {
-        this.model.set({ rowLimit: this.rowLimit() }, { silent: true });
-
-        if (this.model.performValidation()) {
-            this.dataset.download({ rowLimit: this.rowLimit() });
-            this.closeModal();
-        } else {
-            this.showErrors();
-        }
+        this.dataset.download({ rowLimit: this.rowLimit() });
+        this.closeModal();
     },
 
     rowLimit: function() {

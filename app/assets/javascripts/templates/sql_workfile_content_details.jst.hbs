@@ -12,15 +12,14 @@
             {{#if schemaName}}
                 <span class="menu_shortcut">{{hotKeyName "r"}}</span>
                 <a href="#" class="run_default">
-                {{#if executionSchemaIsSandbox}}
-                    {{t "workfile.content_details.run_workspace_sandbox"}}
-                {{else}}
-                    {{t "workfile.content_details.run_in_last_schema" schemaName=schemaName}}
-                {{/if}}
+                    {{t "workfile.content_details.run"}}
                 </a>
             {{else}}
-                <span class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</span>
+                <span class="run_default">{{t "workfile.content_details.run"}}</span>
             {{/if}}
+        </li>
+        <li>
+            <a href="#" class="run_and_download">{{t "workfile.content_details.run_and_download"}}</a>
         </li>
 
         <li>

@@ -167,7 +167,7 @@ chorus.models.Dataset = chorus.models.Base.include(
             data.row_limit = options.rowLimit;
         }
 
-        $.download(this.url({download: true}), data, "get");
+        $.fileDownload(this.url({download: true}), {data: data});
     },
 
     isChorusView: function() {

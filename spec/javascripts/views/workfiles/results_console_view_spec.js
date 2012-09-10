@@ -469,7 +469,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     context("with the show download dialog option", function() {
                         beforeEach(function() {
                             this.modalSpy = stubModals();
-                            spyOn($, "download");
+                            spyOn($, "fileDownload");
                             this.view.showDownloadDialog = true;
                             this.view.dataset = rspecFixtures.dataset();
                             this.view.$("a.download_csv").click();
@@ -479,8 +479,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
                         });
 
-                        it("should not have called $.download", function() {
-                            expect($.download).not.toHaveBeenCalled();
+                        it("should not have called $.fileDownload", function() {
+                            expect($.fileDownload).not.toHaveBeenCalled();
                         });
 
                         it("should have a page model for the dataset download dialog", function() {
@@ -490,19 +490,22 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     context("without the show download dialog option", function() {
                         beforeEach(function() {
-                            spyOn($, "download");
+                            spyOn($, "fileDownload");
                             this.view.showDownloadDialog = false;
                             this.view.$("a.download_csv").click();
                         });
 
                         it("starts the file download", function() {
-                            expect($.download).toHaveBeenCalledWith("/data/cvsResultDownload",
+                            expect($.fileDownload).toHaveBeenCalledWith("/data/cvsResultDownload",
                             {
-                                columnData: JSON.stringify(this.view.resource.getColumns()),
-                                rowsData: JSON.stringify(this.view.resource.getRows()),
-                                datasetName: this.view.resource.name(),
-                                workspaceId: this.view.resource.get("workspaceId")
-                            }, "post");
+                                data: {
+                                    columnData: JSON.stringify(this.view.resource.getColumns()),
+                                    rowsData: JSON.stringify(this.view.resource.getRows()),
+                                    datasetName: this.view.resource.name(),
+                                    workspaceId: this.view.resource.get("workspaceId")
+                                },
+                                httpMethod: "post"
+                            });
                         });
                     });
                 });
@@ -625,6 +628,16 @@ describe("chorus.views.ResultsConsoleView", function() {
             it("calls executionFailed", function() {
                 expect(this.view.executionFailed).toHaveBeenCalled();
                 expect(this.view.executionFailed.mostRecentCall.args[0]).toBe(this.executionModel);
+            });
+        });
+
+        context("when file:executionCancelled event is broadcast", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast('file:executionCancelled');
+            });
+
+            it("stops the spinner", function() {
+                expect(this.view.$('.spinner')).toHaveClass('hidden');
             });
         });
     });
