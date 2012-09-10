@@ -51,6 +51,17 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.lastImport()).not.toBeEmpty();
                 expect(presenter.canAnalyze()).not.toBeEmpty();
             });
+
+            describe("#nextImport", function(){
+                beforeEach(function() {
+                    spyOn(resource, 'nextImportDestination').andReturn(new chorus.models.WorkspaceDataset({ objectName: 'My New Table'}));
+                })
+
+                it("displays the tablename", function() {
+                    this.nextImportText = presenter.nextImport().string;
+                    expect(this.nextImportText).toContain('My New Table');
+                });
+            });
         });
 
         context("with a workspace table", function() {
