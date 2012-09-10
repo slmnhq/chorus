@@ -49,7 +49,7 @@ describe ChorusViewsController, :database_integration => true do
         post :create, :chorus_view => options
         response.code.should == "422"
         decoded = JSON.parse(response.body)
-        decoded['errors']['fields']['query']['generic'].should be_present
+        decoded['errors']['fields']['query']['GENERIC'].should be_present
       end
     end
 
