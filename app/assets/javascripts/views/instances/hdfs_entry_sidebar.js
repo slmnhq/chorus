@@ -82,7 +82,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         hdfsFile.onLoaded(function(){
             var externalTable = new chorus.models.HdfsExternalTable({
                 path: hdfsFile.get('path'),
-                hadoopInstanceId: hadoopInstance.get('id')
+                hadoopInstanceId: hadoopInstance.get('id'),
+                hdfs_entry_id: hdfsFile.get('id')
             });
 
             var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
