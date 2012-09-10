@@ -103,6 +103,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
                     expect(chorus.modal.model.get("path")).toBe("/foo");
+                    expect(chorus.modal.model.get("hdfs_entry_id")).toBe('55');
                 });
             });
         });
