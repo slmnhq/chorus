@@ -340,7 +340,7 @@ describe GpdbInstance do
     subject { account.gpdb_instance }
 
     it "should not include the 'template0' database" do
-      subject.databases.map(&:name).tap { |x| puts x }.should_not include "template0"
+      subject.databases.map(&:name).should_not include "template0"
     end
   end
 end
