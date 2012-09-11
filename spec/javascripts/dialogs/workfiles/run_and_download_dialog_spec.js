@@ -2,7 +2,7 @@ describe("chorus.dialogs.RunAndDownload", function() {
     beforeEach(function() {
         chorus.page = { workspace: newFixtures.workspace({ id: 999 }) };
         this.workfile = fixtures.workfile({ fileType: "SQL", workspaceId: chorus.page.workspace.get("id") });
-        this.dialog = new chorus.dialogs.RunAndDownload({ pageModel: this.workfile });
+        this.dialog = new chorus.dialogs.RunAndDownload({ pageModel: this.workfile, selection: true });
     });
 
     it("does not re-render when the model changes", function() {
@@ -41,8 +41,8 @@ describe("chorus.dialogs.RunAndDownload", function() {
                     submitButton.click();
                 });
 
-                it("broadcasts the file:runAndDownload event", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload");
+                it("broadcasts the file:runAndDownload event with the view options", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload", this.dialog.options);
                 });
 
                 it("dismisses the dialog", function() {
@@ -61,8 +61,8 @@ describe("chorus.dialogs.RunAndDownload", function() {
                     submitButton.click();
                 });
 
-                it("broadcasts the file:runAndDownload event and limit", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload", "867");
+                it("broadcasts the file:runAndDownload event with limit and view options", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload", _.extend({numOfRows: '867'}, this.dialog.options));
                 });
 
                 it("dismisses the dialog", function() {

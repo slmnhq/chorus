@@ -62,8 +62,9 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     this.view.$(".run_file").click()
                 });
 
-                it("disables the 'run selected sql' link in the menu", function() {
+                it("disables the 'run selected sql' links in the menu", function() {
                     expect(this.qtipElement.find(".run_selection")).toHaveClass("disabled");
+                    expect(this.qtipElement.find(".run_selection_and_download")).toHaveClass("disabled");
                 });
             });
 
@@ -117,11 +118,21 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
                     it("enables the 'run selected sql' link in the menu", function() {
                         expect(this.qtipElement.find(".run_selection")).not.toHaveClass("disabled");
+                        expect(this.qtipElement.find(".run_selection_and_download")).not.toHaveClass("disabled");
                     });
 
                     it("runs the selected sql when the user says to", function() {
                         this.qtipElement.find(".run_selection").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runSelected");
+                    });
+
+                    context("clicking on 'Run selection and download'", function() {
+                        it("launches the RunAndDownload dialog", function() {
+                            var modalSpy = stubModals();
+                            this.qtipElement.find('.run_selection_and_download').click();
+                            expect(this.view.dialog.options.selection).toBeTruthy();
+                            expect(modalSpy).toHaveModal(chorus.dialogs.RunAndDownload);
+                        });
                     });
                 });
             });
@@ -193,10 +204,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            context("clicking on 'Run file and '", function() {
+            context("clicking on 'Run file and download'", function() {
                 it("launches the RunAndDownload dialog", function() {
                     var modalSpy = stubModals();
                     this.qtipElement.find('.run_and_download').click();
+                    expect(this.view.dialog.options.selection).toBeFalsy();
                     expect(modalSpy).toHaveModal(chorus.dialogs.RunAndDownload);
                 });
             });
