@@ -797,8 +797,8 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>159}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>65}}'
     http_version:
-  recorded_at: Mon, 10 Sep 2012 22:32:13 GMT
+  recorded_at: Mon, 10 Sep 2012 22:31:12 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -21,7 +21,7 @@ if __FILE__ == $0
     puts "Installation completed."
     puts "run ./server_control.sh start from #{installer.destination_path} to start everything up!" unless installer.do_upgrade
   rescue InstallerErrors::InstallationFailed => e
-    installer.remove_and_restart_previous!
+    #installer.remove_and_restart_previous!
     exit 1
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }

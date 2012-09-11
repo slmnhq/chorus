@@ -9,8 +9,8 @@ namespace :package do
   end
 
   task :prepare_app => :check_clean_working_tree do
-    #Rake::Task[:'api_docs:package'].invoke
-    #system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
+    Rake::Task[:'api_docs:package'].invoke
+    system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
     system "bundle exec jetpack ."
     PackageMaker.write_version
   end
@@ -89,7 +89,7 @@ module PackageMaker
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
 
-    system("#{rails_root}/packaging/makeself/makeself.sh --nocomp --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
+    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
   def upload(filename, config)
@@ -116,13 +116,16 @@ module PackageMaker
       f.puts(postgres_build)
     end
 
-    # start old postgres
-    run "ssh #{host} 'killall -9 -w postgres || true'"
-    run "ssh #{host} 'killall -9 -w java || true'"
-    run "ssh #{host} 'rm -rf ~/chorusrails'"
-    edc_start = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 bin/edcsvrctl start"
-    # run edc_start twice because it fails the first time
-    run "ssh #{host} 'cd ~/chorus;. edc_path.sh; #{edc_start} && #{edc_start}'"
+    # establish a known state for legacy postgres and chorus
+    if legacy_path.present? # TODO : fix this
+      run "ssh #{host} 'killall -9 -w postgres || true'"
+      run "ssh #{host} 'killall -9 -w java || true'"
+      run "ssh #{host} 'rm -rf ~/chorusrails'"
+
+      edc_start = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 bin/edcsvrctl start"
+      # run edc_start twice because it fails the first time
+      run "ssh #{host} 'cd ~/chorus;. edc_path.sh; #{edc_start} && #{edc_start}'"
+    end
 
     # run upgrade scripts
     run "scp #{filename} #{host}:~"

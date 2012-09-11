@@ -15,7 +15,7 @@ app/assets/javascripts/environment.js
 /public/assets
 
 # ignore install related files
-greenplum-chorus.*.sh
+greenplum-chorus-*.sh
 install.log
 install_answers.txt
 
