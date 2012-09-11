@@ -224,8 +224,9 @@ class ChorusInstaller
 
   def stop_old_install
     return unless do_upgrade
-    log "Stopping Chorus..."
-    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
+    log "Stopping Chorus..." do
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
+    end
   end
 
   def startup
