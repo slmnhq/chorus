@@ -8,10 +8,6 @@ describe ChorusView, :database_integration => true do
     let(:schema) { database.schemas.find_by_name('public') }
     let(:account) { GpdbIntegration.real_gpdb_account }
 
-    before do
-      GpdbIntegration.refresh_chorus
-    end
-
     it "can be valid" do
       chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;"}, :without_protection => true)
       chorus_view.should be_valid
