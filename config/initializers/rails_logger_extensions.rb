@@ -23,3 +23,8 @@ module Rails
   end
 end
 
+module Kernel
+  def pa(args)
+    Rails.logger.debug(args)
+  end
+end
