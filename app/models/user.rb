@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
 
   has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
-                    :default_url => '/images/default-user-icon.png', :styles => {:original => "", :icon => "50x50>"}
+                    :default_url => '/images/default-user-icon.png', :styles => {:icon => "50x50>"}
 
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   validates_length_of :password, :minimum => 6, :maximum => 256, :if => :password
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
-  validate :validate_maximum_file_size
+  validates_attachment_size :image, :less_than => 5.megabytes, :message => :file_size_exceeded
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
@@ -49,12 +49,6 @@ class User < ActiveRecord::Base
     text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
-  end
-
-  def validate_maximum_file_size
-    if image.size && (image.size / 1024.0 / 1024.0) > maximum_user_icon_size
-      errors.add(:base, :file_size_exceeded, { :count => maximum_user_icon_size })
-    end
   end
 
   def maximum_user_icon_size

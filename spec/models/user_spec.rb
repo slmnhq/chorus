@@ -81,6 +81,7 @@ describe User do
     it { should validate_presence_of :last_name }
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
+    it { should validate_attachment_size(:image).less_than(5.megabytes) }
 
     describe "field length" do
       it { should ensure_length_of(:username).is_at_most(256) }
@@ -189,18 +190,6 @@ describe User do
         @user.destroy
         user2 = FactoryGirl.create(:user, :username => @user.username)
         user2.should be_valid
-      end
-    end
-
-    context "validate file sizes" do
-      it "gives an error when file is too big" do
-        stub(@user.image).size { 9999999999999999999999999999999999999 }
-        @user.should_not be_valid
-      end
-
-      it "is ok with reasonable file sizes" do
-        stub(@user.image).size { 4 }
-        @user.should be_valid
       end
     end
   end

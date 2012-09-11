@@ -93,7 +93,6 @@ chorus.models = {
 
         setValidationError: function(attr, message_key, custom_key, vars) {
             vars = vars || {};
-            debugger;
             vars["fieldName"] = this._textForAttr(attr);
             this.errors[attr] = this.errors[attr] || t((custom_key || message_key), vars);
         },
