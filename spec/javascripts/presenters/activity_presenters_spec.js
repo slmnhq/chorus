@@ -142,6 +142,23 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
         })
+
+        describe("isNotification and isReadOnly", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                presenter_options = {
+                    isNotification: true,
+                    isReadOnly: true
+                };
+                presenter = new chorus.presenters.Activity(model, presenter_options);
+            });
+            it('when isNotification is true', function() {
+                expect(presenter.isNotification()).toEqual(true);
+            });
+            it('when isReadOnly is true', function() {
+                expect(presenter.isReadOnly()).toEqual(true);
+            });
+        });
     });
 
     context("greenplum instance created", function() {

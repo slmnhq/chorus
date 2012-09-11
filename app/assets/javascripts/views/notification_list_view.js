@@ -38,7 +38,11 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         this.activities = [];
         this.collection.each(function(model) {
             try {
-                var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
+                var view = new chorus.views.Activity({
+                    model: model.activity(),
+                    isNotification: true,
+                    isReadOnly: true
+                });
                 view.render();
                 this.activities.push(view);
 

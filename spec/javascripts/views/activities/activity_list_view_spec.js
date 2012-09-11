@@ -51,17 +51,6 @@ describe("chorus.views.ActivityList", function() {
             });
         });
 
-        describe("the isNotification option", function() {
-            it("passes the option through to the activity views", function() {
-                spyOn(chorus.views.Activity.prototype, "initialize").andCallThrough();
-                this.view.options.isNotification = true;
-                this.view.render();
-
-                var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
-                expect(viewOptions.isNotification).toBeTruthy();
-            });
-        });
-
         describe("comment rendering", function() {
             beforeEach(function() {
                 spyOn(chorus, "cachebuster").andReturn(555);
