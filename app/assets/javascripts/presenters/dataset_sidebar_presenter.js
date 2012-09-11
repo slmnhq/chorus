@@ -74,9 +74,17 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     nextImport: function() {
         if(!this.resource || !this.resource.nextImportDestination()) return "";
 
+        next_time = this.resource.importRunsAt();
+        if(this.resource.nextImportDestination().get("id") == null) {
+            return chorus.helpers.safeT("import.next_import", {
+                nextTime: next_time,
+                tableRef: this.ellipsize(this.resource.nextImportDestination().get("objectName"))
+            });
+        }
+
         return chorus.helpers.safeT("import.next_import", {
-            nextTime: this.resource.importRunsAt(),
-            tableName: this.ellipsize(this.resource.nextImportDestination().get("objectName"))
+            nextTime: next_time,
+            tableRef: this._linkToModel(this.resource.nextImportDestination())
         });
     },
 

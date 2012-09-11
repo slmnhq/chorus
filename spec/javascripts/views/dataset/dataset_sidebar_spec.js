@@ -429,7 +429,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                             expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
                                 nextTime: "in 1 year",
-                                tableName: "our_destinat..."
+                                tableRef: "our_destinat..."
                             });
                         });
 

@@ -53,13 +53,52 @@ describe("chorus.presenters.DatasetSidebar", function() {
             });
 
             describe("#nextImport", function(){
-                beforeEach(function() {
-                    spyOn(resource, 'nextImportDestination').andReturn(new chorus.models.WorkspaceDataset({ objectName: 'My New Table'}));
-                })
+                context("The destination dataset exists", function() {
+                    beforeEach(function() {
+                        spyOn(resource, 'nextImportDestination').andReturn(
+                            new chorus.models.WorkspaceDataset({
+                                objectName: 'My New Table',
+                                workspace: {id: 13},
+                                id: 234 //id of dataset
+                            })
+                        );
+                        spyOn(resource, 'importRunsAt').andReturn(
+                            chorus.helpers.relativeTimestamp(
+                                "2013-09-07T06:00:00Z"
+                            )
+                        );
+                    });
 
-                it("displays the tablename", function() {
-                    this.nextImportText = presenter.nextImport().string;
-                    expect(this.nextImportText).toContain('My New Table');
+                    it("displays the tablename", function() {
+                        workspace_dataset_model = presenter.nextImport();
+                        this.nextImportLink = presenter.nextImport().string;
+                        expect(this.nextImportLink).toEqual(
+                            "Next import scheduled " + chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z") +
+                                " into <a href=\"#/workspaces/13/datasets/234\" title=\"My New Table\">My New Table</a>");
+
+                    });
+                });
+                context("The destination dataset does not yet exist", function() {
+                    beforeEach(function() {
+                        spyOn(resource, 'nextImportDestination').andReturn(
+                            new chorus.models.WorkspaceDataset({
+                                objectName: 'My New Table',
+                                workspace: {id: 13},
+                                id: null
+                            })
+                        );
+                        spyOn(resource, 'importRunsAt').andReturn(
+                            chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z")
+                        );
+                    });
+
+                    it("displays the tablename without the link", function() {
+                        workspace_dataset_model = presenter.nextImport();
+                        this.nextImportLink = presenter.nextImport().string;
+                        expect(this.nextImportLink).toEqual(
+                            "Next import scheduled " + chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z") +
+                                " into My New Table");
+                    });
                 });
             });
         });

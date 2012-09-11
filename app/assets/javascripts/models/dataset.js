@@ -6,6 +6,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     entityType: "dataset",
 
     showUrlTemplate: "datasets/{{id}}",
+
     urlTemplate: function(options) {
         if(options && options.download) {
             return "datasets/{{id}}/download.csv"
@@ -70,7 +71,6 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     nextImportDestination: function() {
         if (!this.hasImport() || !this.getImport().hasNextImport()) return;
-
         return this.getImport().nextDestination();
     },
 

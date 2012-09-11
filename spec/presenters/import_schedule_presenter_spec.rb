@@ -19,6 +19,7 @@ describe ImportSchedulePresenter, :type => :view do
         hash[:schedule_info][:truncate].should == import_schedule.truncate
         hash[:schedule_info][:last_scheduled_at].should == import_schedule.last_scheduled_at
         hash[:schedule_info][:next_import_at].should == import_schedule.next_import_at
+        hash[:schedule_info][:destination_dataset_id].should == import_schedule.target_dataset_id
       end
     end
   end
