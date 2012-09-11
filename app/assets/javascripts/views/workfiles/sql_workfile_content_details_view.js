@@ -18,7 +18,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             qtipArgs: {
                 events: {
                     show: _.bind(function(e) {
-                        $(".run_workfile .run_selection").toggleClass("disabled", !this.enableRunSelection());
+                        $(".run_workfile .run_selection, .run_workfile .run_selection_and_download").toggleClass("disabled", !this.enableRunSelection());
                     }, this)
                 }
             },
@@ -26,7 +26,8 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
                 "a.run_default": _.bind(this.runInExecutionSchema, this),
                 "a.run_selection": _.bind(this.runSelectedInExecutionSchema, this),
                 "a.run_other_schema": _.bind(this.runOtherSchema, this),
-                "a.run_and_download": _.bind(this.runAndDownloadInExecutionSchema, this)
+                "a.run_and_download": _.bind(this.runAndDownloadInExecutionSchema, this),
+                "a.run_selection_and_download": _.bind(this.runSelectionAndDownloadInExecutionSchema, this)
             }
         });
 
@@ -108,12 +109,17 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     runAndDownloadInExecutionSchema: function() {
-        this.dialog = new chorus.dialogs.RunAndDownload({model: this.model});
+        this.dialog = new chorus.dialogs.RunAndDownload({ model: this.model });
+        this.dialog.launchModal();
+    },
+
+    runSelectionAndDownloadInExecutionSchema: function() {
+        this.dialog = new chorus.dialogs.RunAndDownload({ model: this.model, selection: true });
         this.dialog.launchModal();
     },
 
     runOtherSchema: function() {
-        this.dialog = new chorus.dialogs.RunFileInSchema({model: this.model});
+        this.dialog = new chorus.dialogs.RunFileInSchema({ model: this.model });
         this.dialog.launchModal();
     },
 

@@ -206,25 +206,57 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 });
             });
 
-            describe("running selected text", function() {
+            describe("with selected text", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
                         this.schema = rspecFixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
                         spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
-                        chorus.PageEvents.broadcast("file:runSelected");
                     });
 
-                    it("creates a task with the right parameters", function() {
-                        expect(this.view.task.get("sql")).toBe("select 1 from table");
-                        expect(this.view.task.get("workfile")).toBe(this.workfile);
-                        expect(this.view.task.has("checkId")).toBeTruthy();
-                        expect(this.view.task.get("schemaId")).toBe("77");
+                    context("running selected", function() {
+                        beforeEach(function() {
+                            chorus.PageEvents.broadcast("file:runSelected");
+                        });
+
+                        it("creates a task with the right parameters", function() {
+                            expect(this.view.task.get("sql")).toBe("select 1 from table");
+                            expect(this.view.task.has("checkId")).toBeTruthy();
+                            expect(this.view.task.get("schemaId")).toBe("77");
+                        });
+
+                        it("saves the task", function() {
+                            expect(this.server.creates().length).toBe(1);
+                            expect(this.server.lastCreate().url).toBe(this.view.task.url());
+                        });
                     });
 
-                    it("saves the task", function() {
-                        expect(this.server.creates().length).toBe(1);
-                        expect(this.server.lastCreate().url).toBe(this.view.task.url());
+                    context("running and downloading", function() {
+                        context("all rows", function() {
+                            beforeEach(function() {
+                                chorus.PageEvents.broadcast("file:runAndDownload", {selection: true});
+                            });
+
+                            it("creates a task with the right parameters", function() {
+                                expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                                expect(this.view.task.get("sql")).toBe("select 1 from table");
+                                expect(this.view.task.get("schemaId")).toBe("77");
+                                expect(this.view.task.get("numOfRows")).toBeUndefined();
+                            });
+                        });
+
+                        context("some rows", function() {
+                            beforeEach(function() {
+                                chorus.PageEvents.broadcast("file:runAndDownload", {numOfRows: "867", selection: true});
+                            });
+
+                            it("creates a task with the right parameters", function() {
+                                expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
+                                expect(this.view.task.get("sql")).toBe("select 1 from table");
+                                expect(this.view.task.get("schemaId")).toBe("77");
+                                expect(this.view.task.get("numOfRows")).toBe("867");
+                            });
+                        });
                     });
                 });
             });
@@ -238,12 +270,13 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     expect(this.view.task).toBeA(chorus.models.SqlExecutionAndDownloadTask);
                     expect(this.view.task.get("sql")).toBe("select * from foos");
                     expect(this.view.task.get("schemaId")).toBe("4");
+                    expect(this.view.task.get("numOfRows")).toBeUndefined();
                 });
             });
 
             describe("running and downloading some rows", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("file:runAndDownload", "867");
+                    chorus.PageEvents.broadcast("file:runAndDownload", {numOfRows: "867"});
                 });
 
                 it("creates a task with the right parameters", function() {

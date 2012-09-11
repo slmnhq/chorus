@@ -32,16 +32,13 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     },
 
     runSelected: function() {
-        var selectedText = this.getSelectedText();
-        if (selectedText) {
-            var runOptions = {selection: selectedText};
-            var schema = this.model.executionSchema();
-            if (schema) {
-                runOptions.schemaId = schema.get("id");
-            }
-
-            this.run(runOptions);
+        var runOptions = {selection: true};
+        var schema = this.model.executionSchema();
+        if(schema){
+            runOptions.schemaId = schema.get("id");
         }
+
+        this.run(runOptions);
     },
 
     runInDefault: function(options) {
@@ -52,14 +49,17 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         }));
     },
 
-    runAndDownload: function(numOfRows) {
-        this.runInDefault({taskClass: chorus.models.SqlExecutionAndDownloadTask, numOfRows: numOfRows });
+    runAndDownload: function(options) {
+        this.runInDefault(_.extend({taskClass: chorus.models.SqlExecutionAndDownloadTask}, options));
     },
 
     run: function(options) {
         options = options || {};
         if (this.executing) {
             return;
+        }
+        if(options.selection) {
+            options.selection = this.getSelectedText();
         }
 
         this.createTask(options.taskClass || chorus.models.WorkfileExecutionTask);
