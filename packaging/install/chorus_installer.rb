@@ -4,7 +4,7 @@ require 'yaml'
 require_relative 'installer_errors'
 
 class ChorusInstaller
-  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path
+  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
 
   DEFAULT_PATH = "/opt/chorus"
 
@@ -13,15 +13,21 @@ class ChorusInstaller
     @version_detector = options[:version_detector]
     @logger = options[:logger]
     @io = options[:io]
+    @log_stack = []
   end
 
   def prompt(message)
     print "\n#{message} "
   end
 
-  def log(message)
+  def log(message, &block)
+    message = "  " * log_stack.count + message
     @io.log message
-    @logger.log(message)
+    @logger.log message
+    if block_given?
+      log_stack.push(nil).tap { yield block }.pop
+      log "...done."
+    end
   end
 
   def validate_non_root
@@ -189,21 +195,21 @@ class ChorusInstaller
   def setup_database
     if do_upgrade
       start_postgres
-      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
-      stop_postgres
-    else
-      chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
-      start_postgres
-      chorus_exec %Q{#{release_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
-      log "Starting rake db:create"
-      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create"
-      log "Starting rake db:migrate"
-      chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
-      unless do_legacy_upgrade
-        log "Starting rake db:seed"
-        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:seed"
+      log "Running database migrations..." do
+        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
+        stop_postgres
       end
-      stop_postgres
+    else
+      log "Initializing database..." do
+        chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
+        start_postgres
+        chorus_exec %Q{#{release_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+        db_commands = "db:create db:migrate"
+        db_commands += " db:seed" unless do_legacy_upgrade
+        log "Running rake #{db_commands}"
+        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake #{db_commands}"
+        stop_postgres
+      end
     end
   end
 
@@ -218,35 +224,46 @@ class ChorusInstaller
 
   def stop_old_install
     return unless do_upgrade
-
+    log "Stopping Chorus..."
     chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
   end
 
   def startup
     return unless do_upgrade
 
-    log "Starting up Chorus..."
-    server_control "start"
-    log "Done"
+    log "Starting up Chorus..." do
+      server_control "start"
+    end
   end
 
   def dump_and_shutdown_legacy
-    log "Shutting down Chorus..."
-    chorus_exec("cd #{legacy_installation_path}/chorus-apps && ./stopofbiz.sh")
-    legacy_pg_data = "#{legacy_installation_path}/runtime/postgresql-data"
-    # need to start postgres here
-    #chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_pg_data}")
-    log "Dumping previous Chorus data..."
-    chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
-    chorus_exec("#{legacy_installation_path}/postgresql/bin/pg_ctl -D #{legacy_pg_data} -m fast stop")
+    set_env = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 EDCHOME=~/chorus"
+    log "Shutting down Chorus..." do
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop")
+    end
+    log "Starting legacy Chorus services (i.e. postgres)..." do
+    # run twice because someties this fails the first time
+      chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} ./edcsvrctl start || #{set_env} ./edcsvrctl start)")
+    end
+    log "Dumping previous Chorus data..." do
+      legacy_pg_data = "#{legacy_installation_path}/runtime/postgresql-data"
+      chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
+    end
+    log "Stopping legacy Chorus services (i.e. postgres)..." do
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop")
+    end
   end
 
   def migrate_legacy_data
-    start_postgres
-    log "Loading legacy data into postgres..."
-    chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
-    log "Running legacy migrations..."
-    chorus_exec("cd #{release_path} && RAILS_ENV=production WORKFILE_PATH=#{legacy_installation_path}/chorus-apps/runtime/data bin/rake legacy:migrate")
+    log "Migrating data from previous version..." do
+      start_postgres
+      log "Loading legacy data into postgres..." do
+        chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
+      end
+      log "Running legacy migrations..." do
+        chorus_exec("cd #{release_path} && RAILS_ENV=production WORKFILE_PATH=#{legacy_installation_path}/chorus-apps/runtime/data bin/rake legacy:migrate")
+      end
+    end
   end
 
   def install
@@ -256,42 +273,37 @@ class ChorusInstaller
     determine_postgres_installer
 
     log "Installing Chorus version #{version} to #{destination_path}"
-    log "Copying files into #{destination_path}..."
-    copy_chorus_to_destination
-    create_shared_structure
-    copy_config_files
-    create_database_config
-    link_shared_files
-    log "Done"
-
-    log "Extracting postgres..."
-    extract_postgres
-    log "Done"
-
-    if do_upgrade
-      log "Shutting down previous Chorus install..."
-      stop_old_install
-      log "Done"
-      log "Updating database..."
-    else
-      if do_legacy_upgrade
-        dump_and_shutdown_legacy
-      end
-      log "Creating database..."
+    log "Copying files into #{destination_path}..." do
+      copy_chorus_to_destination
+      create_shared_structure
+      copy_config_files
+      create_database_config
+      link_shared_files
     end
 
-    link_services
-    setup_database
-    log "Done"
+    log "Extracting postgres..." do
+      extract_postgres
+    end
+
+    if do_upgrade
+      log "Shutting down previous Chorus install..." do
+        stop_old_install
+      end
+    elsif do_legacy_upgrade
+      dump_and_shutdown_legacy
+    end
+
+    log "#{do_upgrade ? "Updating" : "Creating"} database..." do
+      link_services
+      setup_database
+    end
 
     if do_legacy_upgrade
       #log "Migrating settings from previous version..."
       #migrate_legacy_settings
       #log "Done"
 
-      log "Migrating data from previous version..."
       migrate_legacy_data
-      log "Done"
     end
 
     link_current_to_release
@@ -305,13 +317,15 @@ class ChorusInstaller
     log "#{e.class}: #{e.message}"
     raise
   rescue => e
+    server_control "stop" if do_legacy_upgrade rescue # rescue in case server_control blows up
     log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
   end
 
   def remove_and_restart_previous!
+    log "Restarting server..."
     FileUtils.rm_rf release_path
-    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh start" if do_upgrade
+    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/server_control.sh start" if do_upgrade
   end
 
   private
@@ -334,10 +348,12 @@ class ChorusInstaller
   end
 
   def stop_postgres
+    log "Stopping postgres..."
     server_control "stop postgres"
   end
 
   def start_postgres
+    log "Starting postgres..."
     server_control "start postgres"
   end
 

@@ -9,8 +9,8 @@ namespace :package do
   end
 
   task :prepare_app => :check_clean_working_tree do
-    Rake::Task[:'api_docs:package'].invoke
-    system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
+    #Rake::Task[:'api_docs:package'].invoke
+    #system "rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace"
     system "bundle exec jetpack ."
     PackageMaker.write_version
   end
@@ -78,23 +78,23 @@ module PackageMaker
   def make_installer
     rails_root = File.expand_path(File.dirname(__FILE__) + '/../../')
     install_root = rails_root + '/tmp/installer/'
-    installer_path = install_root + 'chorus_installation'
+    installation_path = install_root + 'chorus_installation'
 
     FileUtils.rm_rf(install_root)
-    FileUtils.mkdir_p(installer_path)
+    FileUtils.mkdir_p(installation_path)
 
     PATHS_TO_PACKAGE.each do |path|
-      FileUtils.ln_s File.join(rails_root, path), File.join(installer_path, path)
+      FileUtils.ln_s File.join(rails_root, path), File.join(installation_path, path)
     end
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
 
-    system("#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
+    system("GZIP='--fast' #{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
-  def upload(filename, config)
+  def upload(package_file, config)
     host = config['host']
-    path = config['install_path']
+    install_path = config['install_path']
     postgres_build = config['postgres_build']
     legacy_path = config['legacy_path']
 
@@ -103,7 +103,7 @@ module PackageMaker
       if legacy_path.present?
         f.puts(legacy_path)
       else
-        f.puts(path)
+        f.puts(install_path)
       end
 
       # confirm the upgrade
@@ -111,42 +111,39 @@ module PackageMaker
 
       # where to install 2.2
       if legacy_path.present?
-        f.puts(path)
+        f.puts(install_path)
       end
       f.puts(postgres_build)
     end
 
-    # establish a known state for legacy postgres and chorus
-    if legacy_path.present? # TODO : fix this
-      run "ssh #{host} 'killall -9 -w postgres || true'"
-      run "ssh #{host} 'killall -9 -w java || true'"
-      run "ssh #{host} 'rm -rf ~/chorusrails'"
-
-      edc_start = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 bin/edcsvrctl start"
-      # run edc_start twice because it fails the first time
-      run "ssh #{host} 'cd ~/chorus;. edc_path.sh; #{edc_start} && #{edc_start}'"
+    # remove previous chorusrails install
+    if legacy_path.present?
+      chorus_home = #{install_path}/current
+      run "ssh #{host} 'test -e #{install_path} || CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/server_control.sh stop'"
+      run "ssh #{host} 'killall -w postgres'"
+      run "ssh #{host} 'rm -rf #{install_path}'"
     end
 
-    # run upgrade scripts
-    run "scp #{filename} #{host}:~"
-    run "ssh #{host} rm ~/install_answers.txt"
-    run "scp install_answers.txt #{host}:~"
-    run "ssh #{host} 'cat /dev/null > #{path}/install.log'"
-    install_success = run "ssh #{host} 'cd ~ && ./#{filename} ~/install_answers.txt'"
-    run "scp #{host}:#{path}/install.log install.log"
+    # run upgrade script
+    installer_dir = "~/chorusrails-installer"
+    run "ssh #{host} 'rm -rf #{installer_dir} && mkdir -p #{installer_dir}'"
+    run "scp #{package_file} install_answers.txt '#{host}:#{installer_dir}'"
+    run "ssh #{host} 'cat /dev/null > #{installer_dir}/install.log'"
+    install_success = run "ssh #{host} 'cd #{installer_dir} && ./#{package_file} #{installer_dir}/install_answers.txt'"
+    run "scp '#{host}:#{installer_dir}/install.log' install.log" # copy installation log back from target
+    run "ssh #{host} 'cd #{installer_dir} && rm -f #{package_file}'" # remove installer script from target
 
-    run "ssh #{host} 'cd ~; rm #{filename}'"
     if install_success
       builds_to_keep = 5
-      run "ssh #{host} 'test `ls #{path}/releases | wc -l` -gt #{builds_to_keep} && find #{path}/releases -maxdepth 1 -not -newer \"`ls -t | head -#{builds_to_keep + 1} | tail -1`\" -not -name \".\" -exec rm -rf {} \\;'"
+      run "ssh #{host} 'test `ls #{install_path}/releases | wc -l` -gt #{builds_to_keep} && find #{install_path}/releases -maxdepth 1 -not -newer \"`ls -t | head -#{builds_to_keep + 1} | tail -1`\" -not -name \".\" -exec rm -rf {} \\;'"
     end
 
     raise StandardError.new("Installation failed!") unless install_success
   end
 
-  def deploy(config, filename=nil)
-    filename ||= "greenplum-chorus-#{version_name}.sh"
-    upload(filename, config)
+  def deploy(config, package_file=nil)
+    package_file ||= "greenplum-chorus-#{version_name}.sh"
+    upload(package_file, config)
   end
 
   def clean_workspace

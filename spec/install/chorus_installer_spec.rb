@@ -604,7 +604,7 @@ describe ChorusInstaller do
 
     it "should dump the old database and shut it down" do
       subject
-      @call_order.should == [:stop_old_app, :pg_dump, :stop_old_postgres]
+      @call_order.should == [:stop_old_app, :start_old_app, :pg_dump, :stop_old_app]
     end
   end
 
@@ -632,12 +632,12 @@ describe ChorusInstaller do
     stub(installer).chorus_exec.with_any_args do |cmd|
       @call_order << :import_legacy_schema if cmd =~ /legacy_migrate_schema_setup.sh/
       @call_order << :legacy_migration if cmd =~ /rake legacy:migrate/
-      @call_order << :stop_old_app if cmd =~ /stopofbiz.sh/
+      @call_order << :stop_old_app if cmd =~ /edcsvrctl stop/
+      @call_order << :start_old_app if cmd =~ /edcsvrctl start/
       @call_order << :pg_dump if cmd =~ /pg_dump/
-      @call_order << :stop_old_postgres if cmd =~ /postgresql-data -m fast stop/
-      @call_order << :rake_db_create if cmd =~ /rake.* db:create/
-      @call_order << :rake_db_seed if cmd =~ /rake.* db:seed/
-      @call_order << :rake_db_migrate if cmd =~ /rake.* db:migrate/
+      cmd =~ /rake/ and cmd.scan /db:(\S+)/ do |targets|
+        @call_order << :"rake_db_#{targets[0]}"
+      end
       @call_order << :start_postgres if cmd =~ /server_control.sh start postgres/
       @call_order << :stop_postgres if cmd =~ /server_control.sh stop postgres/
       @call_order << :create_user if cmd =~ /CREATE ROLE/
@@ -661,7 +661,7 @@ describe ChorusInstaller do
     context "when upgrading" do
       before do
         installer.do_upgrade = true
-        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh start")
+        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/packaging/server_control.sh start")
       end
 
       it "should start up the old install" do
