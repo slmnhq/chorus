@@ -67,4 +67,25 @@ describe HadoopInstance do
       end
     end
   end
+
+  describe "after being created" do
+    before do
+      @new_instance = HadoopInstance.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
+    end
+
+    it "creates an HDFS root entry" do
+      @new_instance.hdfs_entries.where(:path => "/").should be_present
+    end
+  end
+
+  describe "after being updated" do
+    let(:instance) { HadoopInstance.first }
+
+    it "it doesn't create any entries" do
+      expect {
+        instance.name += "_updated"
+        instance.save!
+      }.not_to change(HdfsEntry, :count)
+    end
+  end
 end

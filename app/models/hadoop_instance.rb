@@ -6,6 +6,8 @@ class HadoopInstance < ActiveRecord::Base
   has_many :hdfs_entries
   validates_presence_of :name, :host, :port
 
+  after_create :create_root_entry
+
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -26,5 +28,9 @@ class HadoopInstance < ActiveRecord::Base
     hdfs_entries.each do |hdfs_entry|
       hdfs_entry.mark_stale!
     end
+  end
+
+  def create_root_entry
+    hdfs_entries.create({:hadoop_instance => self, :path => "/"}, { :without_protection => true })
   end
 end
