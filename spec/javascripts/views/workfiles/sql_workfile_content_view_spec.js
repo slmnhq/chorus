@@ -62,6 +62,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
     describe("executing the workfile", function() {
         beforeEach(function() {
+            spyOn($, 'fileDownload');
             spyOn(chorus.PageEvents, "broadcast").andCallThrough();
             this.view.render();
             this.view.textContent.editor.setValue("select * from foos");
