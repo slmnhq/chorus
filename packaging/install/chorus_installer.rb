@@ -178,7 +178,6 @@ class ChorusInstaller
 
     self.database_password = SecureRandom.hex
     self.database_user = database_config['production']['username']
-    self.database = database_config['production']['database']
 
     database_config['production']['password'] = database_password
 
