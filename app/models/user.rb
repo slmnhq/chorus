@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
 
   # override has_secure_password so that our old SHA1 password hashes work
   def authenticate(unencrypted_password)
-    if Digest::SHA1.hexdigest(unencrypted_password) == password_digest
+    if Digest::SHA1.hexdigest(unencrypted_password + password_salt) == password_digest
       self
     else
       false
@@ -114,9 +114,10 @@ class User < ActiveRecord::Base
   end
 
   def password=(unencrypted_password)
+    self.password_salt = SecureRandom.hex(20)
     @password = unencrypted_password
     unless unencrypted_password.blank? || unencrypted_password.length < 6
-      self.password_digest = Digest::SHA1.hexdigest(unencrypted_password)
+      self.password_digest = Digest::SHA1.hexdigest(unencrypted_password + password_salt)
     else
       self.password_digest = nil
     end

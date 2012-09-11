@@ -47,6 +47,14 @@ describe UserMigrator do
       end
     end
 
+    context "authenticating as a legacy user" do
+      it "allows authentication without a password salt" do
+        u = User.find_by_username('edcadmin')
+        u.password_salt.should be_empty
+        u.authenticate('secret').should be_present
+      end
+    end
+
     context "when there is already a non-legacy user in the database" do
       before do
         Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)

@@ -164,7 +164,7 @@ describe User do
 
           @user.password = "654321"
           @user.save!
-          User.named('jimmy').password_digest.should == Digest::SHA1.hexdigest("654321")
+          User.named('jimmy').password_digest.should == Digest::SHA1.hexdigest("654321" + @user.password_salt)
         end
       end
     end
@@ -237,6 +237,19 @@ describe User do
       @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
       @user.should be_valid
       lambda { @user.bogus }.should raise_error
+    end
+
+    it "should create a random password salt on creation" do
+      @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+      @user.password_salt.should_not be_empty
+    end
+
+    describe "when creating a second user with the same password" do
+      it "has a different password digest" do
+        @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+        @another_user = User.create :bogus => 'field', :username => 'hacker_guy', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+        @another_user.password_digest.should_not equal(@user.password_digest)
+      end
     end
   end
 
