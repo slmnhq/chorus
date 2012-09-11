@@ -19,6 +19,11 @@ describe("chorus.views.NotificationList", function() {
             expect(this.view.$("li").length).toBe(4);
         });
 
+        it("does not render the links section in the handlebars template", function() {
+            expect(this.view.$('li').find('.comment').length).toEqual(0);
+            expect(this.view.$('li').find('.publish').length).toEqual(0);
+        });
+
         it("highlights the unread notifications", function() {
             expect(this.view.$("li:eq(0)")).not.toHaveClass("unread");
             expect(this.view.$("li:eq(1)")).toHaveClass("unread");
@@ -29,6 +34,11 @@ describe("chorus.views.NotificationList", function() {
         it("passes the 'isNotification' option to the activity views", function() {
             var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
             expect(viewOptions.isNotification).toBeTruthy();
+        });
+
+        it("passes the 'isReadOnly' option to the activity views", function() {
+            var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
+            expect(viewOptions.isReadOnly).toBeTruthy();
         });
 
         it("skips broken notifications", function() {

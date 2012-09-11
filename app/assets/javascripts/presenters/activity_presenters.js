@@ -66,6 +66,14 @@
             } else {
                 return "profile";
             }
+        },
+
+        isNotification: function() {
+            return this.options.isNotification || false;
+        },
+
+        isReadOnly: function() {
+            return this.options.isReadOnly || false;
         }
     });
 
