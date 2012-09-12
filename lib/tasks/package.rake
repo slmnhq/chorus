@@ -118,7 +118,7 @@ module PackageMaker
 
     # remove previous chorusrails install
     if legacy_path.present?
-      chorus_home = #{install_path}/current
+      chorus_home = "#{install_path}/current"
       run "ssh #{host} 'test -e #{install_path} || CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/server_control.sh stop'"
       run "ssh #{host} 'killall -w postgres'"
       run "ssh #{host} 'rm -rf #{install_path}'"
