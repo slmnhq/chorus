@@ -3,6 +3,10 @@ class ChorusViewMigrator < AbstractMigrator
     def prerequisites
       DatabaseObjectMigrator.migrate
       ensure_legacy_id :datasets
+
+      unless ActiveRecord::Base.connection.column_exists?(:datasets, :edc_workspace_id)
+        ActiveRecord::Base.connection.add_column :datasets, :edc_workspace_id, :string
+      end
     end
 
     def classes_to_validate
@@ -35,11 +39,13 @@ class ChorusViewMigrator < AbstractMigrator
 
           dataset = schema.datasets.new
           dataset.legacy_id = dataset_string
+
           dataset.name = dataset_name
           dataset.type = 'ChorusView'
           dataset.query = row_hash['query']
           dataset.created_at = row_hash['created_tx_stamp']
           dataset.updated_at = row_hash['last_updated_tx_stamp']
+          dataset.edc_workspace_id = row_hash['workspace_id']
 
           # check to see if this chorus view's name conflicts with any tables/views or other chorus views.
           unless dataset.valid?

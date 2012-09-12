@@ -26,6 +26,56 @@ describe ActivityMigrator do
         Events::SourceTableCreated.count.should == count
       end
 
+      # ones that come from datasets
+      #select eas.* from legacy_migrate.edc_activity_stream eas inner join legacy_migrate.edc_activity_stream_object easo on eas.id = easo.activity_stream_id where type = 'CHORUS_VIEW_CREATED' AND object_id LIKE '%|%' AND easo.entity_type = 'sourceObject';
+
+      # ones that come from workfiles
+      #select eas.* from legacy_migrate.edc_activity_stream eas inner join legacy_migrate.edc_activity_stream_object easo on eas.id = easo.activity_stream_id where type = 'CHORUS_VIEW_CREATED' AND object_id NOT LIKE '%|%' AND easo.entity_type = 'sourceObject';
+
+      it "copies CHORUS VIEW CREATED data fields from the legacy activity, for chorus views created from workfiles" do
+        count = 0
+        Legacy.connection.select_all("
+          SELECT eas.*, easo.object_id AS workfile_id FROM legacy_migrate.edc_activity_stream eas
+          INNER JOIN legacy_migrate.edc_activity_stream_object easo
+            ON eas.id = easo.activity_stream_id
+          WHERE type = 'CHORUS_VIEW_CREATED'
+          AND object_id NOT LIKE '%|%'
+          AND easo.entity_type = 'sourceObject';
+          ").each do |row|
+          count +=1
+          event = Events::ChorusViewCreatedFromWorkfile.find_by_legacy_id!(row["id"])
+          event.workspace.should be_instance_of(Workspace)
+          event.actor.should be_instance_of(User)
+          event.dataset.should be_a(Dataset)
+          event.workfile.should == Workfile.find_by_legacy_id(row['workfile_id'])
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        count.should > 0
+        Events::ChorusViewCreatedFromWorkfile.count.should == count
+      end
+
+      it "copies CHORUS VIEW CREATED data fields from the legacy activity, for chorus views created from datasets" do
+        count = 0
+        Legacy.connection.select_all("
+          SELECT eas.* FROM legacy_migrate.edc_activity_stream eas
+          INNER JOIN legacy_migrate.edc_activity_stream_object easo
+            ON eas.id = easo.activity_stream_id
+          WHERE type = 'CHORUS_VIEW_CREATED'
+          AND object_id LIKE '%|%'
+          AND easo.entity_type = 'sourceObject';
+          ").each do |row|
+          count +=1
+          event = Events::ChorusViewCreatedFromDataset.find_by_legacy_id!(row["id"])
+          event.workspace.should be_instance_of(Workspace)
+          event.actor.should be_instance_of(User)
+          event.dataset.should be_a(Dataset)
+          #event.workfile.should == Workfile.find_by_legacy_id(row['workfile_id'])
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        count.should > 0
+        Events::ChorusViewCreatedFromDataset.count.should == count
+      end
+
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
       #  #expect {
       #  #  ActivityMigrator.migrate

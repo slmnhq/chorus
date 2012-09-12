@@ -76,6 +76,13 @@ class DatabaseObjectMigrator < AbstractMigrator
               FROM edc_import
               WHERE source_type = 'dataset'
             )
+            UNION
+            (
+              SELECT normalize_key(object_id) AS dataset_string
+              FROM edc_activity_stream_object
+              WHERE entity_type = 'sourceObject'
+              AND object_id LIKE '%|%|%|%|%'
+            )
           ) a
         WHERE dataset_string NOT IN (select legacy_id from datasets);
       ))

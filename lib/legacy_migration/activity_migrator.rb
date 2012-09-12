@@ -30,7 +30,9 @@ class ActivityMigrator < AbstractMigrator
           Events::MembersAdded,
           Events::ProvisioningFail,
           Events::ProvisioningSuccess,
-          Events::WorkfileUpgradedVersion
+          Events::WorkfileUpgradedVersion,
+          Events::ChorusViewCreatedFromWorkfile,
+          Events::ChorusViewCreatedFromDataset
       ]
     end
 
@@ -293,9 +295,106 @@ class ActivityMigrator < AbstractMigrator
       end
     end
 
+    def migrate_chorus_view_created_from_workfile
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      legacy_type,
+      action,
+      target1_id,
+      target1_type,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::ChorusViewCreatedFromWorkfile',
+      datasets.id,
+      'Dataset',
+      workfiles.id,
+      'Workfile',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object chorus_view
+        ON streams.id = chorus_view.activity_stream_id
+        AND chorus_view.entity_type = 'chorusView'
+      INNER JOIN datasets
+        ON normalize_key(chorus_view.object_id) = datasets.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      INNER JOIN edc_activity_stream_object source_workfile
+        ON streams.id = source_workfile.activity_stream_id
+        AND source_workfile.entity_type = 'sourceObject'
+      INNER JOIN workfiles
+        ON source_workfile.object_id = workfiles.legacy_id
+    WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_workfile.object_id NOT LIKE '%|%'
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreatedFromWorkfile');
+    ))
+    end
 
-  def migrate_file_import_created
-    Legacy.connection.exec_query(%Q(
+    def migrate_chorus_view_created_from_dataset
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      legacy_type,
+      action,
+      target1_id,
+      target1_type,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::ChorusViewCreatedFromDataset',
+      chorus_view_dataset.id,
+      'Dataset',
+      datasets.id,
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object chorus_view
+        ON streams.id = chorus_view.activity_stream_id
+        AND chorus_view.entity_type = 'chorusView'
+      INNER JOIN datasets chorus_view_dataset
+        ON normalize_key(chorus_view.object_id) = chorus_view_dataset.legacy_id
+        AND chorus_view_dataset.edc_workspace_id = streams.workspace_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      INNER JOIN edc_activity_stream_object source_dataset
+        ON streams.id = source_dataset.activity_stream_id
+        AND source_dataset.entity_type = 'sourceObject'
+      INNER JOIN datasets
+        ON normalize_key(source_dataset.object_id) = datasets.legacy_id
+    WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreatedFromDataset');
+    ))
+    end
+
+
+    def migrate_file_import_created
+      Legacy.connection.exec_query(%Q(
     INSERT INTO events(
       legacy_id,
       legacy_type,
@@ -332,20 +431,20 @@ class ActivityMigrator < AbstractMigrator
     AND streams.id NOT IN (SELECT legacy_id from events);
     ))
 
-    backfill_file_import_created_additional_data
-  end
+      backfill_file_import_created_additional_data
+    end
 
-  def backfill_file_import_created_additional_data
+    def backfill_file_import_created_additional_data
 
-    Events::FileImportCreated.where('additional_data IS NULL').each do |event|
-      row = Legacy.connection.exec_query("SELECT aso1.object_name as file_name, aso2.object_name as table_name FROM edc_activity_stream_object aso1
+      Events::FileImportCreated.where('additional_data IS NULL').each do |event|
+        row = Legacy.connection.exec_query("SELECT aso1.object_name as file_name, aso2.object_name as table_name FROM edc_activity_stream_object aso1
                                       INNER JOIN edc_activity_stream_object aso2 ON aso2.activity_stream_id  = '#{event.legacy_id}' AND aso2.entity_type = 'table'
                                       WHERE aso1.activity_stream_id = '#{event.legacy_id}'
                                       AND aso1.entity_type = 'file';").first
-      event.additional_data = {:filename => row['file_name'], :import_type => 'file', :destination_table => row['table_name']}
-      event.save!
+        event.additional_data = {:filename => row['file_name'], :import_type => 'file', :destination_table => row['table_name']}
+        event.save!
+      end
     end
-  end
 
     def migrate_public_workspace_created
       Legacy.connection.exec_query(%Q(
@@ -567,8 +666,8 @@ class ActivityMigrator < AbstractMigrator
         ))
     end
 
-  def migrate_dataset_import_created
-    Legacy.connection.exec_query(%Q(
+    def migrate_dataset_import_created
+      Legacy.connection.exec_query(%Q(
   INSERT INTO events(
     legacy_id,
     legacy_type,
@@ -605,18 +704,18 @@ class ActivityMigrator < AbstractMigrator
   AND streams.id NOT IN (SELECT legacy_id from events);
   ))
 
-    backfill_dataset_import_created_additional_data
-  end
+      backfill_dataset_import_created_additional_data
+    end
 
-  def backfill_dataset_import_created_additional_data
-    Events::DatasetImportCreated.where('additional_data IS NULL').each do |event|
-      row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
+    def backfill_dataset_import_created_additional_data
+      Events::DatasetImportCreated.where('additional_data IS NULL').each do |event|
+        row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                     WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                     AND aso.entity_type = 'table';").first
-      event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
-      event.save!
+        event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
+        event.save!
+      end
     end
-  end
 
     def migrate_greenplum_instance_created
       Legacy.connection.exec_query(%Q(
@@ -932,6 +1031,8 @@ class ActivityMigrator < AbstractMigrator
       migrate_provision_failed
       migrate_provision_success
       migrate_workfile_upgrade_success
+      migrate_chorus_view_created_from_workfile
+      migrate_chorus_view_created_from_dataset
 
       Events::Base.find_each { |event| event.create_activities }
 

@@ -34,6 +34,13 @@ describe ChorusViewsController, :database_integration => true do
       decoded_response[:workspace][:id].should == workspace.id
     end
 
+    it "creates an event" do
+      post :create, :chorus_view => options
+
+      the_event = Events::Base.last
+      the_event.action.should == "CHORUS_VIEW_CREATED"
+    end
+
     context "query is invalid" do
       let(:options) {
         HashWithIndifferentAccess.new(
