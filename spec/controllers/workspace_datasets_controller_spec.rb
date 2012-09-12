@@ -17,6 +17,12 @@ describe WorkspaceDatasetsController do
       find(workspace.to_param) { workspace }
 
     stub(workspace).datasets { datasets }
+    any_instance_of(GpdbTable) do |table|
+      stub(table).accessible_to(user) { true }
+    end
+    any_instance_of(GpdbView) do |view|
+      stub(view).accessible_to(user) { true }
+    end
   end
 
   describe "#index" do

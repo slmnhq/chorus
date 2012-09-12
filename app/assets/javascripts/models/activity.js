@@ -87,6 +87,7 @@
                 case "NoteOnWorkspaceDataset":
                     model = new chorus.models.WorkspaceDataset();
                     model.set(this.get("dataset"));
+                    model.setWorkspace(this.get("workspace"));
                     break;
                 case "NoteOnWorkfile":
                     model = new chorus.models.Workfile();

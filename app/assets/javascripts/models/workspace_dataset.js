@@ -115,7 +115,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     setWorkspace: function(workspace) {
-        this.set({workspace: {id: workspace.get('id')}});
+        this.set({workspace: {id: workspace.id}});
     },
 
     activities: function() {
