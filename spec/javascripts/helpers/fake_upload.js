@@ -41,6 +41,14 @@
             });
         },
 
+        done: function(e, data) {
+          this.options.done(e, data);
+        },
+
+        always: function() {
+            this.options.always();
+        },
+
         fakeEvent: function() {
             return { preventDefault: $.noop };
         },
@@ -71,7 +79,8 @@
             });
         },
 
-        HTTPResponseFail: function(bodyText, status, statusText) {
+        HTTPResponseFail: function(bodyText, status, statusText, options) {
+            options = options || {};
             this.options.fail(this.fakeEvent(), {
                 jqXHR: {
                     status: status || 404,
@@ -79,7 +88,7 @@
                     responseText: bodyText
                 },
 
-                result: bodyText
+                result: options.noResult ? undefined : bodyText
             });
         },
     });

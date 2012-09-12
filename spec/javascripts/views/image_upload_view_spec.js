@@ -45,11 +45,11 @@ describe("chorus.views.ImageUpload", function() {
 
             it("does assign a 'src' attribute to the image", function() {
                 expect(this.view.$("img").attr('src')).toBeUndefined();
-            })
+            });
 
             it("the image is hidden", function() {
                 expect(this.view.$("img")).toHaveClass('hidden')
-            })
+            });
         });
 
         context("when the model has an image", function() {
@@ -162,13 +162,12 @@ describe("chorus.views.ImageUpload", function() {
                 context("when the upload gives a server error", function() {
                     beforeEach(function() {
                         spyOnEvent(this.user, "saveFailed");
-                        this.fakeFileUpload.fail({
-                            errors: { fields: { a: { BLANK: {} } } }
-                        });
+                        var errors = { errors: { fields: { image_file_size: { LESS_THAN: { message: "file_size_exceeded", count: "5242880 Bytes"}}}}};
+                        this.fakeFileUpload.HTTPResponseFail(JSON.stringify(errors), 422, "Unprocessable Entity", {noResult: true});
                     });
 
                     it("sets the server errors on the model", function() {
-                        expect(_.first(this.user.serverErrorMessages())).toBe("A can't be blank");
+                        expect(_.first(this.user.serverErrorMessages())).toBe("Image file size must be less than 5 MB");
                     });
 
                     it("triggers saveFailed on the model", function() {

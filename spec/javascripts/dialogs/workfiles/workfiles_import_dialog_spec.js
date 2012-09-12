@@ -146,6 +146,19 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
             });
 
+            context("when the upload gives a server error", function() {
+                beforeEach(function() {
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 }];
+                    this.fakeUpload.add(this.fileList);
+                    var errors = { errors: { fields: { contents_file_size: { LESS_THAN: { message: "file_size_exceeded", count: "5242880 Bytes"}}}}};
+                    this.fakeUpload.HTTPResponseFail(JSON.stringify(errors), 422, "Unprocessable Entity", {noResult: true});
+                });
+
+                it("sets the server errors on the model", function() {
+                    expect(this.dialog.$('.errors')).toContainText("Contents file size must be less than 5 MB");
+                });
+            });
+
             context("when it is within the limit", function() {
                 it("doesn't show an error", function() {
                     this.fakeUpload.add([{ name: "foo.bar", size: 10 * 1024 * 1024 -1 }]);
@@ -157,7 +170,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 it("shows the file too large error message", function() {
                     this.fakeUpload.add([{ name: "invalid.bar", size: 10 * 1024 * 1024 - 1 }]);
                     html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
-                    this.fakeUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large");
+                    this.fakeUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large", {});
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
                     expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
                     expect(this.dialog.$("button.choose").prop("disabled")).toBeFalsy();

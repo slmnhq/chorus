@@ -137,7 +137,12 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".file-wrapper a").removeClass("hidden");
         this.$(".import_controls input[type=radio]").prop("disabled", false);
         try {
-            this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
+            var errors = JSON.parse(response.jqXHR.responseText).errors;
+            if(errors.fields.contents_file_size && errors.fields.contents_file_size.LESS_THAN) {
+                var count = errors.fields.contents_file_size.LESS_THAN.count;
+                errors.fields.contents_file_size.LESS_THAN.count = count.split(" ")[0]/1024/1024 + " MB";
+            }
+            this.model.serverErrors = errors;
         } catch(error) {
             var status = response.jqXHR.status;
             var statusText = response.jqXHR.statusText;

@@ -114,16 +114,20 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             chorus.router.navigate(self.model.showUrl());
         }
 
-        function uploadFailed(e, json) {
+        function uploadFailed(e, response) {
             e.preventDefault();
-            if (json.jqXHR.status == '413') {
+            if (response.jqXHR.status == '413') {
                 self.displayNginxError();
             } else {
-                if (json.jqXHR.responseText)  {
-                    self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
+                if (response.jqXHR.responseText)  {
+                    var errors = JSON.parse(response.jqXHR.responseText).errors;
+                    if(errors.fields.contents_file_size && errors.fields.contents_file_size.LESS_THAN) {
+                        var count = errors.fields.contents_file_size.LESS_THAN.count;
+                        errors.fields.contents_file_size.LESS_THAN.count = count.split(" ")[0]/1024/1024 + " MB";
+                    }
+                    self.resource.serverErrors = errors;
                 }
             }
-
             self.showErrorAndDisableButton();
         }
     },

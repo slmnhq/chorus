@@ -56,6 +56,9 @@ describe WorkfileVersion do
   end
 
   describe "validations" do
+    let(:max_file_size) {  Chorus::Application.config.chorus['file_sizes_mb']['workfiles'] }
+    it { should validate_attachment_size(:contents).less_than(max_file_size.megabytes) }
+
     # Workaround for paperclip's lack of proper I18n in error messages
     context "when content has error message with exception message" do
       let(:user) { FactoryGirl.create(:user) }
@@ -73,20 +76,6 @@ describe WorkfileVersion do
 
         flattened_messages.should include(:invalid)
         flattened_messages.join.should_not match(/not recognized by the 'identify' command/)
-      end
-    end
-
-    context "validate file sizes" do
-      let(:user) { FactoryGirl.create(:user) }
-
-      it "gives an error when file is too big" do
-        stub(version.contents).size { 9999999999999999999999999999999999999 }
-        version.should_not be_valid
-      end
-
-      it "is ok with reasonable file sizes" do
-        stub(version.contents).size { 1 }
-        version.should be_valid
       end
     end
   end

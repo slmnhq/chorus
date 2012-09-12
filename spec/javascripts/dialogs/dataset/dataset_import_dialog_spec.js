@@ -3,7 +3,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         chorus.page = {};
         chorus.page.workspace = rspecFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
-        spyOn($.fn, 'fileupload');
+        this.fakeFileUpload = stubFileUpload();
         this.validDatasets = [
             newFixtures.workspaceDataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
             newFixtures.workspaceDataset.sandboxTable({objectName: "1_table_b", workspace: {id: 243}})
@@ -70,15 +70,9 @@ describe("chorus.dialogs.DatasetImport", function() {
 
     context("when a file is chosen", function() {
         beforeEach(function() {
-            this.fileList = [
-                {
-                    name: 'foo Bar Baz.csv'
-                }
-            ];
-            expect($.fn.fileupload).toHaveBeenCalled();
-            this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
+            this.fileList = [{ name: 'foo Bar Baz.csv' }];
             this.request = jasmine.createSpyObj('request', ['abort']);
-            this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+            this.fakeFileUpload.add(this.fileList);
         });
 
         describe("default settings", function() {
@@ -106,15 +100,13 @@ describe("chorus.dialogs.DatasetImport", function() {
 
         describe("file size validation", function() {
             beforeEach(function() {
-                expect($.fn.fileupload).toHaveBeenCalled();
                 this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
                 this.request = jasmine.createSpyObj('request', ['abort']);
             });
             describe("when the file size is within limits", function() {
                 beforeEach(function() {
                     this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];
-                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                    this.fakeFileUpload.add(this.fileList);
                 });
 
                 it("does not show a file size error", function() {
@@ -126,7 +118,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             describe("when the file size exceeds the maximum allowed size", function() {
                 beforeEach(function() {
                     this.fileList = [{ name: 'foo Bar Baz.csv', size: 999999999999999999 }];
-                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                    this.fakeFileUpload.add(this.fileList);
                 });
 
                 it("shows an error", function() {
@@ -137,24 +129,32 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 it("removes the error when a valid file is then selected", function() {
                     this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];
-                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                    this.fakeFileUpload.add(this.fileList);
                     chorus.modal.validateFileSize();
                     expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                     expect(this.dialog.$('button.submit')).toBeEnabled();
                 });
             });
 
+            context("when the upload gives a server error", function() {
+                beforeEach(function() {
+                    this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 }];
+                    this.fakeFileUpload.add(this.fileList);
+                    var errors = { errors: { fields: { contents_file_size: { LESS_THAN: { message: "file_size_exceeded", count: "5242880 Bytes"}}}}};
+                    this.fakeFileUpload.HTTPResponseFail(JSON.stringify(errors), 422, "Unprocessable Entity", {noResult: true});
+                });
+
+                it("sets the server errors on the model", function() {
+                    expect(this.dialog.$('.errors')).toContainText("Contents file size must be less than 5 MB");
+                });
+            });
+
             describe("when nginx returns a 413 (body too large) error", function() {
                 it("shows that error", function() {
                     this.fileList = [{ name: 'finefile.bar', size: 1 * 1024 * 1024 - 1 }];
-                    html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
-                    var errorResponse = {
-                        jqXHR: {
-                            status: 413,
-                            statusText: '413: Request Entity Too Large'
-                        }
-                    };
-                    this.fileUploadOptions.fail(null, errorResponse);
+                    var html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
+
+                    this.fakeFileUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large", {noResult: true});
                     expect(this.dialog.$(".errors")).toContainText("413: Request Entity Too Large");
                 });
             });
@@ -332,7 +332,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                         context("and the workfile is showable", function() {
                             beforeEach(function() {
-                                this.fileUploadOptions.done(null, this.data);
+                                this.fakeFileUpload.done(null, this.data)
                             });
 
                             it("presents a toast message", function() {
@@ -347,7 +347,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         context("and the workfile is not showable", function() {
                             beforeEach(function() {
                                 spyOn(chorus.models.Workfile.prototype, "hasOwnPage").andReturn(false);
-                                this.fileUploadOptions.done(null, this.data);
+                                this.fakeFileUpload.done(null, this.data);
                             });
 
                             it("presents a toast message", function() {
@@ -364,12 +364,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
                             this.workfile = rspecFixtures.workfile.text({id: "23", fileName: "myFile"});
-                            var errorResponse = {
-                                jqXHR: {
-                                    responseText: '{"errors":{"fields":{"a":{"BLANK":{}}}}}'
-                                }
-                            };
-                            this.fileUploadOptions.fail(null, errorResponse);
+                            this.fakeFileUpload.HTTPResponseFail('{"errors":{"fields":{"someField":{"BLANK":{}}}}}', 422, "Unprocessable Entity", {noResult: true});
                         });
 
                         it("does not present a toast message", function() {
@@ -377,7 +372,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$('.errors')).toContainText("A can't be blank");
+                            expect(this.dialog.$('.errors')).toContainText("Some field can't be blank");
                         });
                     });
                 });
@@ -399,7 +394,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 it("uploads the specified file", function() {
                     expect(this.dialog.uploadObj.url).toEqual("/workspaces/242/csv");
-                    expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                    expect(this.fakeFileUpload.wasSubmitted).toBeTruthy();
                 });
 
                 it("Should disable the change file link", function() {
@@ -420,8 +415,8 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data);
-                            this.fileUploadOptions.always();
+                            this.fakeFileUpload.done(null, this.data);
+                            this.fakeFileUpload.always();
                         });
 
                         it("stops the spinner", function() {
@@ -462,8 +457,8 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data);
-                            this.fileUploadOptions.always();
+                            this.fakeFileUpload.done(null, this.data);
+                            this.fakeFileUpload.always();
                         });
 
                         it("stops the spinner", function() {
@@ -493,7 +488,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data);
+                            this.fakeFileUpload.done(null, this.data);
                         });
 
                         it("still launches the import new table dialog", function() {
@@ -509,7 +504,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("cancels the upload", function() {
-                        expect(this.dialog.request.abort).toHaveBeenCalled();
+                        expect(this.fakeFileUpload.wasAborted).toBeTruthy();
                     });
 
                     it("closes the dialog", function() {
@@ -519,12 +514,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 context("when the upload fails", function() {
                     beforeEach(function() {
-                        var errorResponse = {
-                            jqXHR: {
-                                responseText: '{"errors":{"fields":{"a":{"BLANK":{}}}}}'
-                            }
-                        };
-                        this.fileUploadOptions.fail(null, errorResponse);
+                        this.fakeFileUpload.HTTPResponseFail('{"errors":{"fields":{"someField":{"BLANK":{}}}}}', 422, "Unprocessable Entity", {noResult: true});
                     });
 
                     it("does not launch the new table configuration dialog", function() {
@@ -532,7 +522,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("fills the error field", function() {
-                        expect(this.dialog.$(".errors li")).toHaveText("A can't be blank");
+                        expect(this.dialog.$(".errors li")).toHaveText("Some field can't be blank");
                     });
 
                     it("does not hide the import controls or change file link", function() {

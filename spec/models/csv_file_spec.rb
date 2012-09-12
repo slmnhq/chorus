@@ -8,25 +8,9 @@ describe CsvFile do
 
     describe "validations" do
       context "validate file sizes" do
-        let(:user) { FactoryGirl.create(:user) }
+        let(:max_csv_import_size) {Chorus::Application.config.chorus['file_sizes_mb']['csv_imports']}
 
-        before do
-          @csv_file = described_class.new({
-              :contents => test_file('test.csv'),
-              :owner => user,
-              :modifier => user
-          })
-        end
-
-        it "gives an error when file is too big" do
-          stub(@csv_file.contents).size { 9999999999999999999999999999999999999 }
-          @csv_file.should_not be_valid
-        end
-
-        it "is ok with reasonable file sizes" do
-          stub(@csv_file.contents).size { 1 }
-          @csv_file.should be_valid
-        end
+        it { should validate_attachment_size(:contents).less_than(max_csv_import_size.megabytes) }
       end
     end
 

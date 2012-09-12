@@ -77,11 +77,13 @@ describe User do
       @user = FactoryGirl.create :user #, :username => 'aDmin'
     end
 
+    let(:max_user_icon_size) {Chorus::Application.config.chorus['file_sizes_mb']['user_icon']}
+
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
-    it { should validate_attachment_size(:image).less_than(5.megabytes) }
+    it { should validate_attachment_size(:image).less_than(max_user_icon_size.megabytes) }
 
     describe "field length" do
       it { should ensure_length_of(:username).is_at_most(256) }

@@ -19,22 +19,11 @@ describe Workspace do
 
   describe "validations" do
     let(:workspace) { workspaces(:alice_public) }
+    let(:max_workspace_icon_size) {Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon']}
 
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }
-
-
-    context "validate file sizes" do
-      it "gives an error when file is too big" do
-        stub(workspace.image).size { 9999999999999999999999999999999999999 }
-        workspace.should_not be_valid
-      end
-
-      it "is ok with reasonable file sizes" do
-        stub(workspace.image).size { 4 }
-        workspace.should be_valid
-      end
-    end
+    it { should validate_attachment_size(:image).less_than(max_workspace_icon_size.megabytes) }
   end
 
   describe ".active" do

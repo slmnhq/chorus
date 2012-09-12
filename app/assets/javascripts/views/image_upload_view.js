@@ -95,10 +95,15 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             self.$("img").removeClass("hidden");
         }
 
-        function uploadFailed(e, data) {
+        function uploadFailed(e, json, xhr) {
             reEnableUpload();
-            if(data.result) {
-                self.resource.serverErrors = JSON.parse(data.result).errors;
+            if (json.jqXHR.responseText)  {
+                var errors = JSON.parse(json.jqXHR.responseText).errors;
+                if(errors.fields.image_file_size && errors.fields.image_file_size.LESS_THAN) {
+                    var count = errors.fields.image_file_size.LESS_THAN.count;
+                    errors.fields.image_file_size.LESS_THAN.count = count.split(" ")[0]/1024/1024 + " MB";
+                }
+                self.resource.serverErrors = errors;
             }
             self.resource.trigger("saveFailed");
         }

@@ -10,17 +10,7 @@ class CsvFile < ActiveRecord::Base
   has_attached_file :contents, :path => Chorus::Application.config.chorus['csv_import_file_storage_path']+ ":class/:id/:basename.:extension"
 
   validates :contents, :attachment_presence => true
-  validate :validate_maximum_file_size
-
-  def validate_maximum_file_size
-    if contents.size && ((contents.size / 1024.0 / 1024.0) > maximum_csv_imports_size)
-      errors.add(:base, :file_size_exceeded, { :count => maximum_csv_imports_size })
-    end
-  end
-
-  def maximum_csv_imports_size
-    Chorus::Application.config.chorus['file_sizes_mb']['csv_imports']
-  end
+  validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes, :message => :file_size_exceeded
 
   def self.delete_old_files!
     age_limit = Chorus::Application.config.chorus['delete_unimported_csv_files_after_hours']
