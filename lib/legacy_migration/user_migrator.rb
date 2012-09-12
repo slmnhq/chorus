@@ -21,6 +21,7 @@ class UserMigrator < AbstractMigrator
                                 title,
                                 dept,
                                 notes,
+                                admin,
                                 created_at,
                                 updated_at,
                                 deleted_at,
@@ -34,6 +35,7 @@ class UserMigrator < AbstractMigrator
                                 title,
                                 ou,
                                 notes,
+                                admin,
                                 created_tx_stamp,
                                 last_updated_tx_stamp,
                                 CASE is_deleted

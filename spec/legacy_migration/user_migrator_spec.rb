@@ -27,6 +27,7 @@ describe UserMigrator do
             user.title.should == legacy_user["title"]
             user.dept.should == legacy_user["ou"]
             user.notes.should == legacy_user["notes"]
+            user.admin.should == (legacy_user["admin"] == 't' ? true : false)
             if legacy_user["is_deleted"] == "f"
               user.deleted_at.should be_nil
             else
