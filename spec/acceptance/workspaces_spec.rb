@@ -185,6 +185,7 @@ resource "Workspaces" do
     let!(:bob_workspace) { workspaces(:bob_public) }
 
     parameter :dataset_id, "Id of the source dataset"
+    parameter :id, "id of the import schedule"
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
@@ -201,9 +202,10 @@ resource "Workspaces" do
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
-    let(:is_active) { "false" }
+    let(:is_active) { "true" }
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
+    let(:id) { import_schedules(:bob_schedule).id }
     let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
     before do
