@@ -232,7 +232,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when the dataset is a sandbox table or view", function() {
                 beforeEach(function() {
-                    this.dataset = newFixtures.workspaceDataset.sandboxTable();
+                    this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                     this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] })
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
@@ -405,22 +405,15 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("when the dataset has an import schedule", function() {
                         beforeEach(function() {
-                            this.importResponse = fixtures.datasetImport({
-                                sourceId: this.dataset.id,
+                            this.importResponse = rspecFixtures.importSchedule({
                                 executionInfo: {},
                                 scheduleInfo: {
-                                    id: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                     endDate: "2013-06-02T00:00:00Z",
-                                    frequency: "WEEKLY",
+                                    frequency: "weekly",
                                     toTable: "our_destination",
                                     startDatetime: "2012-02-29T14:23:58Z",
                                     nextImportAt: Date.formatForApi(Date.today().add(1).year())
-                                    // Note: fields that are part of scheduleInfo but not defined in this instance:
-                                    // lastScheduledAt, sampleCount (not tested?)
-                                },
-                                workspaceId: this.dataset.workspace().id,
-                                toTable: "our_destination",
-                                destinationTable: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"'
+                                }
                             });
                             this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, id: 6000, permission: ["update"] })
                         });
@@ -507,7 +500,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                         state: "failed",
                                         creator: "InitialUser"
                                     }
-                                })
+                                });
 
                                 this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                             });
@@ -558,7 +551,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                         state: "success",
                                         creator: "InitialUser"
                                     }
-                                })
+                                });
                                 this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                             });
 
@@ -588,7 +581,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                         creator: "InitialUser"
                                     }
-                                })
+                                });
 
                                 this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                             });
@@ -888,7 +881,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when two datasets are checked", function() {
             beforeEach(function() {
-                this.checkedDatasets.add(newFixtures.workspaceDataset.sandboxTable());
+                this.checkedDatasets.add(rspecFixtures.workspaceDataset.datasetTable());
                 chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
             });
 
@@ -935,20 +928,17 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("column statistics", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.column = fixtures.databaseColumn({
+            this.column = rspecFixtures.databaseColumnSet([{
                 dataType: "int8",
                 typeCategory: "WHOLE_NUMBER",
                 statistics: {
-                    avg: 719719.111,
                     commonValues: [46, 38],
                     distinctValue: 998710,
                     max: "1199961.0",
-                    median: "725197.0",
                     min: "200075.0",
-                    nullFraction: 0.103678,
-                    stdDeviation: 309104.997
+                    nullFraction: 0.103678
                 }
-            });
+            }]).at(0);
 
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
             this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24T12:25:11Z"});
@@ -1082,7 +1072,7 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("when importSchedule:changed is triggered", function() {
         beforeEach(function() {
             this.view.resource = rspecFixtures.workspaceDataset.datasetTable();
-            this.newImport = fixtures.datasetImport();
+            this.newImport = rspecFixtures.importSchedule();
             spyOn(this.view, 'render').andCallThrough();
             chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
         });

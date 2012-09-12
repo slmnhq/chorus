@@ -60,6 +60,13 @@ window.rspecFixtureDefinitions = {
         }
     },
 
+    databaseColumnSet: {},
+
+    importSchedule: {
+        model: 'DatasetImport',
+        unique: ["scheduleInfo.id"]
+    },
+
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
 
