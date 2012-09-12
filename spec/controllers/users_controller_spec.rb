@@ -209,7 +209,8 @@ describe UsersController do
       it "lets users change their own password" do
         put :update, :id => non_admin.to_param, :user => {:password => '987654'}
         response.code.should == "200"
-        User.find(non_admin.to_param).password_digest.should == Digest::SHA1.hexdigest("987654")
+        user = User.find(non_admin.to_param)
+        user.password_digest.should == Digest::SHA1.hexdigest("987654" + user.password_salt)
       end
     end
   end
