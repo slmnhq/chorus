@@ -57,6 +57,12 @@ chorus.models = {
             }
         },
 
+        parse: function(data) {
+            var attrs = this._super("parse", arguments);
+            this._savedAttributes = _.clone(attrs);
+            return attrs;
+        },
+
         destroy: function(options) {
             options || (options = {});
             if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
@@ -218,6 +224,20 @@ chorus.models = {
 
         _textForAttr: function(attr) {
             return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
+        },
+
+        unsavedChanges: function() {
+            this._savedAttributes = this._savedAttributes || {};
+            var changes = {};
+            var allKeys = _.union(_.keys(this._savedAttributes), _.keys(this.attributes));
+            _.each(allKeys, function(key) {
+                var oldValue = this._savedAttributes[key];
+                var newValue = this.attributes[key];
+                if(oldValue != newValue) {
+                    changes[key] = {old: oldValue, new: newValue}
+                }
+            }, this);
+            return changes;
         }
     })
 };
