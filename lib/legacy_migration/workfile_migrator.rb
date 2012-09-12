@@ -33,7 +33,7 @@ class WorkfileMigrator < AbstractMigrator
       raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options['workfile_path']
       prerequisites
 
-      #TODO deal with latest_workfile_version_id, content_type
+      #TODO deal with content_type
       Legacy.connection.exec_query("
         INSERT INTO public.workfiles(
           legacy_id,
@@ -116,6 +116,15 @@ class WorkfileMigrator < AbstractMigrator
           ON edc_workfile_draft.workfile_id = workfiles.legacy_id
         WHERE is_deleted = 'f'
         AND edc_workfile_draft.id NOT IN (SELECT legacy_id FROM workfile_drafts);")
+
+      Legacy.connection.exec_query("
+        UPDATE public.workfiles
+          SET latest_workfile_version_id = (SELECT public.workfile_versions.id
+            FROM public.workfile_versions
+            JOIN edc_workfile_version on public.workfile_versions.legacy_id = edc_workfile_version.id
+            JOIN edc_work_file on edc_work_file.latest_version_num = edc_workfile_version.version_num
+                 AND edc_work_file.id = edc_workfile_version.workfile_id
+            WHERE edc_work_file.id = public.workfiles.legacy_id)")
 
       silence_activerecord do
         #TODO Optimize this to one query

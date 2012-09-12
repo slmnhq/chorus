@@ -129,6 +129,22 @@ describe WorkfileMigrator do
             new_version.contents_file_name.should == Workfile.unscoped.find(new_version.workfile_id).file_name
           end
         end
+
+        it "should associate the latest version" do
+          @legacy_workfiles.each do |legacy_workfile|
+            new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])
+            legacy_latest_version_sql = <<-SQL
+SELECT edc_workfile_version.id
+FROM edc_workfile_version
+JOIN edc_work_file on edc_work_file.latest_version_num = edc_workfile_version.version_num
+     AND edc_work_file.id = edc_workfile_version.workfile_id
+WHERE edc_work_file.id = '#{legacy_workfile["id"]}'
+            SQL
+            legacy_version_id = Legacy.connection.select_value(legacy_latest_version_sql)
+            latest_version = WorkfileVersion.find_by_legacy_id(legacy_version_id)
+            new_workfile.latest_workfile_version.should == latest_version
+          end
+        end
       end
 
       describe "draft" do
