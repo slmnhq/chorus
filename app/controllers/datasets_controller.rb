@@ -5,7 +5,7 @@ class DatasetsController < GpdbController
 
     options = {:sort => [ {:relname => 'asc' } ]}
     options[:filter] = [:relname => params[:filter]] if params[:filter]
-    datasets = Dataset.refresh(account, schema, options)
+    datasets = Dataset.visible_to(account, schema, options)
 
     present paginate(datasets)
   end

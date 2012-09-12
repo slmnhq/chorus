@@ -72,6 +72,10 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
+  def self.visible_to(*args)
+    refresh(*args)
+  end
+
   def self.find_and_verify_in_source(schema_id, user)
     schema = GpdbSchema.find(schema_id)
     schema.verify_in_source(user)

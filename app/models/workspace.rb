@@ -84,7 +84,7 @@ class Workspace < ActiveRecord::Base
       account = sandbox.database.account_for_user(current_user)
 
       if account
-        viewable_table_ids = Dataset.refresh(account, sandbox).map(&:id)
+        viewable_table_ids = Dataset.visible_to(account, sandbox).map(&:id)
         datasets = Dataset.where(:id => viewable_table_ids)
       else
         viewable_table_ids = []

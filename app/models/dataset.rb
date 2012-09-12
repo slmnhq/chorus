@@ -92,6 +92,10 @@ class Dataset < ActiveRecord::Base
     found_datasets
   end
 
+  def self.visible_to(*args)
+    refresh(*args)
+  end
+
   def self.find_and_verify_in_source(dataset_id, user)
     dataset = Dataset.find(dataset_id)
     dataset.verify_in_source(user)

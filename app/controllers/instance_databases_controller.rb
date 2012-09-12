@@ -1,7 +1,7 @@
 class InstanceDatabasesController < GpdbController
   def index
     gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
-    databases = GpdbDatabase.refresh(authorized_gpdb_account(gpdb_instance))
+    databases = GpdbDatabase.visible_to(authorized_gpdb_account(gpdb_instance))
 
     present databases
   end

@@ -34,6 +34,10 @@ class GpdbDatabase < ActiveRecord::Base
     results
   end
 
+  def self.visible_to(*args)
+    refresh(*args)
+  end
+
   def create_schema(name, current_user)
     raise ActiveRecord::StatementInvalid, "Schema '#{name}' already exists." unless schemas.where(:name => name).empty?
     create_schema_in_gpdb(name, current_user)
