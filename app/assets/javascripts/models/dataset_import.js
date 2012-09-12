@@ -78,9 +78,12 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     nextDestination: function() {
+        var schedule_info = this.get("scheduleInfo");
+        var dataset_id = schedule_info && schedule_info.destinationDatasetId;
+        var to_table = schedule_info && schedule_info.toTable;
         return new chorus.models.WorkspaceDataset({
-            id: this.get("scheduleInfo").destinationDatasetId,
-            objectName: this.get("scheduleInfo").toTable,
+            id: dataset_id,
+            objectName: to_table,
             workspace: {id: this.get("workspaceId")}
         });
     },

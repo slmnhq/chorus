@@ -527,7 +527,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("without an existing import", function() {
             beforeEach(function() {
-                this.datasetImport.get("scheduleInfo").toTable = null;
+                this.datasetImport.unset("scheduleInfo");
                 this.server.completeFetchFor(this.datasetImport);
                 this.dialog.render();
             });
