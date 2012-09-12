@@ -78,6 +78,7 @@ describe DatasetStreamer, :database_integration => true do
 
         enumerator = streamer.enum
         enumerator.next.should == "Some friendly error message"
+        finish_enumerator enumerator
       end
     end
 
