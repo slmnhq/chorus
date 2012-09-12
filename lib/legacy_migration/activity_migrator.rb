@@ -31,8 +31,7 @@ class ActivityMigrator < AbstractMigrator
           Events::ProvisioningFail,
           Events::ProvisioningSuccess,
           Events::WorkfileUpgradedVersion,
-          Events::ChorusViewCreatedFromWorkfile,
-          Events::ChorusViewCreatedFromDataset
+          Events::ChorusViewCreated
       ]
     end
 
@@ -312,7 +311,7 @@ class ActivityMigrator < AbstractMigrator
     SELECT
       streams.id,
       'edc_activity_stream',
-      'Events::ChorusViewCreatedFromWorkfile',
+      'Events::ChorusViewCreated',
       datasets.id,
       'Dataset',
       workfiles.id,
@@ -339,7 +338,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN workfiles
         ON source_workfile.object_id = workfiles.legacy_id
     WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_workfile.object_id NOT LIKE '%|%'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreatedFromWorkfile');
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreated');
     ))
     end
 
@@ -360,7 +359,7 @@ class ActivityMigrator < AbstractMigrator
     SELECT
       streams.id,
       'edc_activity_stream',
-      'Events::ChorusViewCreatedFromDataset',
+      'Events::ChorusViewCreated',
       chorus_view_dataset.id,
       'Dataset',
       datasets.id,
@@ -388,7 +387,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN datasets
         ON normalize_key(source_dataset.object_id) = datasets.legacy_id
     WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreatedFromDataset');
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreated');
     ))
     end
 

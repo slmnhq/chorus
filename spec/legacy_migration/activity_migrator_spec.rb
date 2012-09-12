@@ -43,15 +43,15 @@ describe ActivityMigrator do
           AND easo.entity_type = 'sourceObject';
           ").each do |row|
           count +=1
-          event = Events::ChorusViewCreatedFromWorkfile.find_by_legacy_id!(row["id"])
+          event = Events::ChorusViewCreated.find_by_legacy_id!(row["id"])
           event.workspace.should be_instance_of(Workspace)
           event.actor.should be_instance_of(User)
           event.dataset.should be_a(Dataset)
-          event.workfile.should == Workfile.find_by_legacy_id(row['workfile_id'])
+          event.source_object.should == Workfile.find_by_legacy_id(row['workfile_id'])
           event.created_at.should == row["created_tx_stamp"]
         end
         count.should > 0
-        Events::ChorusViewCreatedFromWorkfile.count.should == count
+        Events::ChorusViewCreated.where(:target2_type => 'Workfile').count.should == 2
       end
 
       it "copies CHORUS VIEW CREATED data fields from the legacy activity, for chorus views created from datasets" do
@@ -65,15 +65,15 @@ describe ActivityMigrator do
           AND easo.entity_type = 'sourceObject';
           ").each do |row|
           count +=1
-          event = Events::ChorusViewCreatedFromDataset.find_by_legacy_id!(row["id"])
+          event = Events::ChorusViewCreated.find_by_legacy_id!(row["id"])
           event.workspace.should be_instance_of(Workspace)
           event.actor.should be_instance_of(User)
           event.dataset.should be_a(Dataset)
-          #event.workfile.should == Workfile.find_by_legacy_id(row['workfile_id'])
+          event.source_object.should be_a(Dataset)
           event.created_at.should == row["created_tx_stamp"]
         end
         count.should > 0
-        Events::ChorusViewCreatedFromDataset.count.should == count
+        Events::ChorusViewCreated.where(:target2_type => 'Dataset').count.should == count
       end
 
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
