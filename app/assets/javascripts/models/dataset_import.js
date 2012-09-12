@@ -95,6 +95,6 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     hasActiveSchedule: function() {
-        return this.has("id") && this.get("isActive");
+        return this.has("id") ;
     }
 });
