@@ -135,7 +135,7 @@ describe GpdbInstance do
     end
   end
 
-  describe ".accessible_to" do
+  describe "access control" do
     before(:each) do
       @user = FactoryGirl.create :user
       @gpdb_instance_owned = FactoryGirl.create :gpdb_instance, :owner => @user
@@ -144,20 +144,41 @@ describe GpdbInstance do
       @gpdb_instance_forbidden = FactoryGirl.create :gpdb_instance
     end
 
-    it "returns owned gpdb instances" do
-      GpdbInstance.accessible_to(@user).should include @gpdb_instance_owned
+    describe '.accessible_to' do
+      it "returns owned gpdb instances" do
+        GpdbInstance.accessible_to(@user).should include @gpdb_instance_owned
+      end
+
+      it "returns shared gpdb instances" do
+        GpdbInstance.accessible_to(@user).should include @gpdb_instance_shared
+      end
+
+      it "returns gpdb instances to which user has membership" do
+        GpdbInstance.accessible_to(@user).should include @gpdb_instance_with_membership
+      end
+
+      it "does not return instances the user has no access to" do
+        GpdbInstance.accessible_to(@user).should_not include(@gpdb_instance_forbidden)
+      end
     end
 
-    it "returns shared gpdb instances" do
-      GpdbInstance.accessible_to(@user).should include @gpdb_instance_shared
-    end
+    describe '#accessible_to' do
+      it 'returns true if the instance is shared' do
+        @gpdb_instance_shared.accessible_to(@user).should be_true
+      end
 
-    it "returns gpdb instances to which user has membership" do
-      GpdbInstance.accessible_to(@user).should include @gpdb_instance_with_membership
-    end
+      it 'returns true if the instance is owned by the user' do
+        @gpdb_instance_owned.accessible_to(@user).should be_true
+      end
 
-    it "does not return instances the user has no access to" do
-      GpdbInstance.accessible_to(@user).should_not include(@gpdb_instance_forbidden)
+      it 'returns true if the user has an instance account' do
+        @gpdb_instance_with_membership.accessible_to(@user).should be_true
+      end
+
+      it 'returns false otherwise' do
+        @gpdb_instance_forbidden.accessible_to(@user).should be_false
+      end
+
     end
   end
 

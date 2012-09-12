@@ -2,19 +2,27 @@ require 'spec_helper'
 
 describe Presenter, :type => :view do
   before do
-    @user = FactoryGirl.build :user
-    @presenter = Presenter.new(@user, view)
+    @model = FactoryGirl.build :user
+    @presenter = Presenter.new(@model, view)
   end
 
   describe "#model" do
     it "returns the model" do
-      @presenter.model.should == @user
+      @presenter.model.should == @model
+    end
+  end
+
+  describe '#current_user' do
+    it "returns the ActiveRecord's current user" do
+      viewer = User.new
+      mock(ActiveRecord::Base).current_user { viewer }
+      @presenter.current_user.should == viewer
     end
   end
 
   describe ".present_collection" do
     it "serializes an array" do
-      Presenter.present_collection([@user], view, {}).should be_a(Array)
+      Presenter.present_collection([@model], view, {}).should be_a(Array)
     end
   end
 
@@ -36,8 +44,8 @@ describe Presenter, :type => :view do
 
     context "with a paperclip attachment" do
       it "creates an ImagePresenter" do
-        mock.proxy(ImagePresenter).new(@user.image, view, {})
-        Presenter.present(@user.image, view)
+        mock.proxy(ImagePresenter).new(@model.image, view, {})
+        Presenter.present(@model.image, view)
       end
     end
 

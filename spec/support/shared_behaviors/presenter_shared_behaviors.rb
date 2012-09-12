@@ -43,6 +43,10 @@ shared_examples "dataset presenter" do |dataset_factory_name|
     instance[:name].should == "instance1"
   end
 
+  it "checks if the user is allowed to access" do
+    hash[:hasCredentials].should_not be_nil
+  end
+
   context "when the 'workspace' option is not passed" do
     it "does not include the 'workspace' key" do
       hash.should_not have_key(:workspace)

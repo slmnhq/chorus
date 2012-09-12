@@ -39,6 +39,10 @@ class GpdbInstance < ActiveRecord::Base
     )
   end
 
+  def accessible_to(user)
+    GpdbInstance.accessible_to(user).include?(self)
+  end
+
   def refresh_databases(options ={})
     found_databases = []
     rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }

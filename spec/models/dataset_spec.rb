@@ -364,6 +364,17 @@ describe Dataset do
       end
     end
   end
+
+  describe '#accessible_to' do
+    it 'returns true if the user can access the gpdb instance' do
+      bob = account.owner
+      any_instance_of(GpdbInstance) do |instance|
+        mock(instance).accessible_to(bob) { true }
+      end
+
+      dataset.accessible_to(bob).should be_true
+    end
+  end
 end
 
 describe Dataset::Query, :database_integration => true do

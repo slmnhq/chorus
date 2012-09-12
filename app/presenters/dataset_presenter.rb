@@ -6,9 +6,12 @@ class DatasetPresenter < Presenter
       :id => id,
       :type => thetype,
       :object_name => h(name),
-      :schema => schema_hash
+      :schema => schema_hash,
+      :hasCredentials => model.accessible_to(current_user)
     }.merge(workspace_hash).merge(associated_workspaces_hash).merge(frequency)
   end
+
+  private
 
   def schema_hash
     rendering_activities? ? {:id => model.schema_id } : present(schema)

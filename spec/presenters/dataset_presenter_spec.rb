@@ -7,13 +7,13 @@ describe DatasetPresenter, :type => :view do
   end
 
   it_behaves_like "dataset presenter", :gpdb_table
+
   let(:workspace) { FactoryGirl.create :workspace }
   let(:presenter) { described_class.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
   let(:activity_stream) { nil }
   let(:hash) { presenter.to_hash }
 
   describe ".associated_workspaces_hash" do
-
     let(:dataset) { FactoryGirl.create :gpdb_table }
     let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
 

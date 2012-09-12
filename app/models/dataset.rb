@@ -50,6 +50,10 @@ class Dataset < ActiveRecord::Base
     schema.database.instance_account_ids
   end
 
+  def accessible_to(user)
+    schema.database.gpdb_instance.accessible_to(user)
+  end
+
   def self.search_permissions(current_user, search)
     search.build do
       any_of do
