@@ -238,12 +238,12 @@ class ChorusInstaller
   end
 
   def dump_and_shutdown_legacy
-    set_env = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 EDCHOME=~/chorus"
+    set_env = "JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64 EDCHOME=#{legacy_installation_path}"
     log "Shutting down Chorus..." do
-      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop")
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop; true")
     end
     log "Starting legacy Chorus services (i.e. postgres)..." do
-    # run twice because someties this fails the first time
+    # run twice because sometimes this fails the first time
       chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} ./edcsvrctl start || #{set_env} ./edcsvrctl start)")
     end
     log "Dumping previous Chorus data..." do

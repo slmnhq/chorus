@@ -119,8 +119,7 @@ module PackageMaker
     # remove previous chorusrails install
     if legacy_path.present?
       chorus_home = "#{install_path}/current"
-      run "ssh #{host} 'test -e #{install_path} || CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/server_control.sh stop'"
-      run "ssh #{host} 'killall -w postgres'"
+      run "ssh #{host} 'test -e #{install_path} && CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/server_control.sh stop'"
       run "ssh #{host} 'rm -rf #{install_path}'"
     end
 
@@ -136,6 +135,7 @@ module PackageMaker
     if install_success
       builds_to_keep = 5
       run "ssh #{host} 'test `ls #{install_path}/releases | wc -l` -gt #{builds_to_keep} && find #{install_path}/releases -maxdepth 1 -not -newer \"`ls -t | head -#{builds_to_keep + 1} | tail -1`\" -not -name \".\" -exec rm -rf {} \\;'"
+      run "ssh #{host} 'CHORUS_HOME=~/chorusrails/current ~/chorusrails/server_control.sh start'"
     end
 
     raise StandardError.new("Installation failed!") unless install_success
@@ -162,7 +162,8 @@ module PackageMaker
 
   def run(cmd)
     puts cmd
-    system cmd
+    puts %x{#{cmd}}
+    $? == 0
   end
 
   def relative(path)
