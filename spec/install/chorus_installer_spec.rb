@@ -398,7 +398,7 @@ describe ChorusInstaller do
     end
 
     it "links solr" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/solr').should == '/opt/chorus/shared/solr'
+      File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
     end
 
     it "links log" do

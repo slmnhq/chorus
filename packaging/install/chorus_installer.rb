@@ -171,7 +171,7 @@ class ChorusInstaller
 
     FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
-    FileUtils.ln_sf("#{destination_path}/shared/solr", "#{release_path}/solr")
+    FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")
     FileUtils.ln_sf("#{destination_path}/shared/system", "#{release_path}/system")
   end

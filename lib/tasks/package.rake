@@ -61,6 +61,7 @@ module PackageMaker
       "packaging/",
       "public/",
       "script/",
+      "solr/conf/",
       "vendor/",
       "WEB-INF/",
       "Gemfile",
@@ -84,6 +85,7 @@ module PackageMaker
     FileUtils.mkdir_p(installation_path)
 
     PATHS_TO_PACKAGE.each do |path|
+      FileUtils.mkdir_p(File.join(installation_path, File.dirname(path)))
       FileUtils.ln_s File.join(rails_root, path), File.join(installation_path, path)
     end
 

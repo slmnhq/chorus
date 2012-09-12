@@ -44,7 +44,7 @@ echo "java.util.logging.FileHandler.pattern = $SOLR_LOG_FILE" >> $LOG_CONFIG_FIL
 echo "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter" >> $LOG_CONFIG_FILE
 
 cd $CHORUS_HOME/vendor/solr
-java -Djetty.host=localhost -Djetty.port=$SOLR_PORT -Dsolr.data.dir=$DATA_DIR -Djava.util.logging.config.file=$LOG_CONFIG_FILE -jar start.jar &> /dev/null &
+java -Djetty.host=localhost -Dsolr.solr.home=$CHORUS_HOME/solr -Djetty.port=$SOLR_PORT -Dsolr.data.dir=$DATA_DIR -Djava.util.logging.config.file=$LOG_CONFIG_FILE -jar start.jar &> /dev/null &
 solr_pid=$!
 echo $solr_pid > $SOLR_PID_FILE
 log "Solr started as pid $solr_pid on port $SOLR_PORT"
