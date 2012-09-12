@@ -128,9 +128,9 @@ module PackageMaker
     installer_dir = "~/chorusrails-installer"
     run "ssh #{host} 'rm -rf #{installer_dir} && mkdir -p #{installer_dir}'"
     run "scp #{package_file} install_answers.txt '#{host}:#{installer_dir}'"
-    run "ssh #{host} 'cat /dev/null > #{installer_dir}/install.log'"
+    run "ssh #{host} 'cat /dev/null > #{install_path}/install.log'" unless legacy_path.present?
     install_success = run "ssh #{host} 'cd #{installer_dir} && ./#{package_file} #{installer_dir}/install_answers.txt'"
-    run "scp '#{host}:#{installer_dir}/install.log' install.log" # copy installation log back from target
+    run "scp '#{host}:#{install_path}/install.log' install.log" # copy installation log back from target
     run "ssh #{host} 'cd #{installer_dir} && rm -f #{package_file}'" # remove installer script from target
 
     if install_success
