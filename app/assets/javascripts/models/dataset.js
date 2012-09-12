@@ -150,7 +150,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     preview: function() {
-        if (this.isChorusView()) {
+        if (this.isChorusView() && (this.isNew() || this.unsavedChanges().query)) {
             return new chorus.models.ChorusViewPreviewTask({
                 query: this.query(),
                 schemaId: this.schema().id,

@@ -1,7 +1,7 @@
 module SqlExecutor
   class << self
     def preview_dataset(dataset, account, check_id)
-      execute_sql(dataset.schema, account, check_id, dataset.preview_sql)
+      execute_sql(dataset.schema, account, check_id, dataset.preview_sql, :limit => 100)
     end
 
     def execute_sql(schema, account, check_id, sql, options = {})

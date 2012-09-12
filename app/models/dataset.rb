@@ -199,7 +199,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def preview_sql
-    all_rows_sql(100)
+    all_rows_sql
   end
 
   def all_rows_sql(limit = nil)

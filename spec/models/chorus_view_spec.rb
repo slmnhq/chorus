@@ -61,4 +61,11 @@ describe ChorusView, :database_integration => true do
 
     end
   end
+
+  describe "preview_sql" do
+    it "returns the query" do
+      chorus_view = ChorusView.first
+      chorus_view.preview_sql.should == chorus_view.query
+    end
+  end
 end

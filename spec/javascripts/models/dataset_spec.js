@@ -1,6 +1,6 @@
 describe("chorus.models.Dataset", function() {
     var objectWithEncodingIssues = {
-        schema : {
+        schema: {
             name: "b/a/r",
             id: 3,
             database: {
@@ -326,41 +326,57 @@ describe("chorus.models.Dataset", function() {
             });
         });
 
-        context("with a chorus view", function() {
+        context("with a saved chorus view", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.chorusView({
-                    query: "select * from hello_world",
-                    objectName: "my_chorusview"
-                });
+                this.dataset = rspecFixtures.workspaceDataset.chorusView();
                 this.preview = this.dataset.preview();
             });
 
             checkPreview();
 
             it("should return a dataset preview", function() {
-                expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
-                expect(this.preview.get("schemaId")).toBe(this.dataset.schema().get("id"));
-                expect(this.preview.get("query")).toBe("select * from hello_world");
+                expect(this.preview).toBeA(chorus.models.DataPreviewTask);
+                expect(this.preview.get("dataset").id).toBe(this.dataset.id);
+            });
+
+            context("when the query has been modified", function() {
+                beforeEach(function() {
+                    this.dataset.set({query: 'select bananas'});
+                    this.preview = this.dataset.preview();
+                });
+
+                checkPreview();
+
+                it("should return a chorus view preview", function() {
+                    expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
+                    expect(this.preview.get("objectName")).toBe(this.dataset.get("objectName"));
+                    expect(this.preview.get("schemaId")).toBe(this.dataset.schema().get("id"));
+                    expect(this.preview.get("query")).toBe("select bananas");
+                });
             });
         });
 
-        context("with a chorus view (from search API)", function() {
+        context("with a new chorus view", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.workspaceDataset.chorusViewSearchResult({
-                    content: "select * from hello_world",
+                var sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.dataset = new chorus.models.ChorusView({
+                    query: "select * from hello_world",
                     objectName: "my_chorusview"
                 });
-                this.dataset.set({ type: "CHORUS_VIEW" });
+                this.dataset.sourceObject = sourceDataset;
+
                 this.preview = this.dataset.preview();
             });
 
             checkPreview();
 
-            it("should return a dataset preview", function() {
+            it("should return a chorus view preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
-                expect(this.preview.get("query")).toBe("select * from hello_world");
+                expect(this.preview.get("objectName")).toBe("my_chorusview");
                 expect(this.preview.get("schemaId")).toBe(this.dataset.schema().get("id"));
+                expect(this.preview.get("query")).toBe("select * from hello_world");
             });
+
         });
 
         function checkPreview() {
@@ -567,11 +583,10 @@ describe("chorus.models.Dataset", function() {
     describe("#workspacesAssociated", function() {
         context("when there are workspaces associated", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.dataset({associatedWorkspaces:
-                    [
-                        {id: "43", name: "working_hard"},
-                        {id: "54", name: "hardly_working"}
-                    ]
+                this.dataset = rspecFixtures.dataset({associatedWorkspaces: [
+                    {id: "43", name: "working_hard"},
+                    {id: "54", name: "hardly_working"}
+                ]
                 });
 
             });
@@ -604,11 +619,10 @@ describe("chorus.models.Dataset", function() {
                 this.oldWorkspaces = this.dataset.workspacesAssociated();
                 expect(this.oldWorkspaces.length).toBe(0);
 
-                this.dataset.set({associatedWorkspaces:
-                    [
-                        {id: "43", name: "working_hard"},
-                        {id: "54", name: "hardly_working"}
-                    ]
+                this.dataset.set({associatedWorkspaces: [
+                    {id: "43", name: "working_hard"},
+                    {id: "54", name: "hardly_working"}
+                ]
                 });
             });
 
@@ -836,7 +850,9 @@ describe("chorus.models.Dataset", function() {
 
     describe("#canExport", function() {
         var inheritedModelClass = chorus.models.Dataset.extend({
-            canBeImportSource: function() { return true; }
+            canBeImportSource: function() {
+                return true;
+            }
         });
 
         var dataset;
@@ -894,43 +910,43 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#workspaceArchived", function () {
+    describe("#workspaceArchived", function() {
         beforeEach(function() {
             this.dataset._workspace = rspecFixtures.workspace();
         });
 
-        it("returns false for no workspace", function () {
+        it("returns false for no workspace", function() {
             this.dataset._workspace = undefined;
             expect(this.dataset.workspaceArchived()).toBeFalsy();
         });
 
-        it("returns false for active workspace", function () {
+        it("returns false for active workspace", function() {
             expect(this.dataset.workspaceArchived()).toBeFalsy();
         });
 
-        it("returns true for archived workspace", function () {
+        it("returns true for archived workspace", function() {
             this.dataset.workspace().set({ archivedAt: "2012-12-12" });
             expect(this.dataset.workspaceArchived()).toBeTruthy();
         });
     });
 
-    describe("#analyzableObjectType", function () {
-        it("returns true when user has credentials, object type is table and workspace is not archived", function () {
+    describe("#analyzableObjectType", function() {
+        it("returns true when user has credentials, object type is table and workspace is not archived", function() {
             this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
             expect(this.dataset.canAnalyze()).toBeTruthy();
         });
 
-        it("returns false when hasCredentials is falsy", function () {
+        it("returns false when hasCredentials is falsy", function() {
             this.dataset.set({ hasCredentials: false, objectType: "TABLE" })
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
-        it("returns false when analyzableObjectType is falsy", function () {
+        it("returns false when analyzableObjectType is falsy", function() {
             this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" })
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
-        it("returns false when workspaceArchived is not falsy", function () {
+        it("returns false when workspaceArchived is not falsy", function() {
             this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
             this.dataset._workspace = rspecFixtures.workspace({ archivedAt: "2012-12-12"});
             expect(this.dataset.canAnalyze()).toBeFalsy();

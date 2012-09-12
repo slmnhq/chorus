@@ -25,6 +25,10 @@ class ChorusView < Dataset
     end
   end
 
+  def preview_sql
+    query
+  end
+
   def column_name
   end
 end

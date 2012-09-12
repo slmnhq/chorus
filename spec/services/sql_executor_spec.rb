@@ -3,54 +3,55 @@ require 'spec_helper'
 describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
-  describe "#preview_dataset", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
-    let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
+  describe "#preview_dataset" do
+    context "with live data", :database_integration do
+      let(:account) { GpdbIntegration.real_gpdb_account }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+      let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
 
-    subject { SqlExecutor.preview_dataset(table, account, check_id) }
+      subject { SqlExecutor.preview_dataset(table, account, check_id) }
 
-    it "returns a SqlResult object with the correct rows" do
-      subject.rows.should == [[
-                                  "(1,2)",
-                                  "1.2",
-                                  "{1,2,3}",
-                                  "1",
-                                  "1",
-                                  "10101",
-                                  "101",
-                                  "t",
-                                  "(2,2),(1,1)",
-                                  "xDEADBEEF",
-                                  "var char",
-                                  "char      ",
-                                  "192.168.100.128/25",
-                                  "<(1,2),3>",
-                                  "2011-01-01",
-                                  "10.01",
-                                  "192.168.100.128",
-                                  "10",
-                                  "3 days 04:05:06",
-                                  "[(1,1),(2,2)]",
-                                  "08:00:2b:01:02:03",
-                                  "$1,000.00",
-                                  "0.02000",
-                                  "[(1,1),(2,2),(3,3)]",
-                                  "(0,0)",
-                                  "((10,10),(20,20),(30,30))",
-                                  "1.1",
-                                  "1",
-                                  "2",
-                                  "text",
-                                  "04:05:06",
-                                  "01:02:03-08",
-                                  "1999-01-08 04:05:06",
-                                  "1999-01-08 04:05:06-08"
-                              ]]
-    end
+      it "returns a SqlResult object with the correct rows" do
+        subject.rows.should == [[
+                                    "(1,2)",
+                                    "1.2",
+                                    "{1,2,3}",
+                                    "1",
+                                    "1",
+                                    "10101",
+                                    "101",
+                                    "t",
+                                    "(2,2),(1,1)",
+                                    "xDEADBEEF",
+                                    "var char",
+                                    "char      ",
+                                    "192.168.100.128/25",
+                                    "<(1,2),3>",
+                                    "2011-01-01",
+                                    "10.01",
+                                    "192.168.100.128",
+                                    "10",
+                                    "3 days 04:05:06",
+                                    "[(1,1),(2,2)]",
+                                    "08:00:2b:01:02:03",
+                                    "$1,000.00",
+                                    "0.02000",
+                                    "[(1,1),(2,2),(3,3)]",
+                                    "(0,0)",
+                                    "((10,10),(20,20),(30,30))",
+                                    "1.1",
+                                    "1",
+                                    "2",
+                                    "text",
+                                    "04:05:06",
+                                    "01:02:03-08",
+                                    "1999-01-08 04:05:06",
+                                    "1999-01-08 04:05:06-08"
+                                ]]
+      end
 
-    it "gives each column the right 'name' attribute" do
-      subject.columns.map(&:name).should == %w{
+      it "gives each column the right 'name' attribute" do
+        subject.columns.map(&:name).should == %w{
         t_composite
         t_decimal
         t_array
@@ -86,10 +87,10 @@ describe SqlExecutor do
         t_timestamp_without_time_zone
         t_timestamp_with_time_zone
       }
-    end
+      end
 
-    it "gives each column the right 'data_type' attribute" do
-      subject.columns.map(&:data_type).should == %w{
+      it "gives each column the right 'data_type' attribute" do
+        subject.columns.map(&:data_type).should == %w{
           complex
           numeric
           _int4
@@ -125,6 +126,14 @@ describe SqlExecutor do
           timestamp
           timestamptz
       }
+      end
+    end
+
+    context "without live data" do
+      it "limits the preview to 100 rows" do
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 100)
+        SqlExecutor.preview_dataset(Dataset.first, Object.new, Object.new)
+      end
     end
   end
 
