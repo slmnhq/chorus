@@ -1,4 +1,4 @@
-class InstanceMigrator < AbstractMigrator
+class GpdbInstanceMigrator < AbstractMigrator
   class << self
     def prerequisites
       UserMigrator.migrate
@@ -21,6 +21,7 @@ class InstanceMigrator < AbstractMigrator
                               instance_provider,
                               maintenance_db,
                               owner_id,
+                              state,
                               created_at,
                               updated_at
                               )
@@ -34,6 +35,7 @@ class InstanceMigrator < AbstractMigrator
                               i.instance_provider,
                               i.maintenance_db,
                               u.id,
+                              i.state,
                               i.created_tx_stamp,
                               i.last_updated_tx_stamp
                             FROM edc_instance i

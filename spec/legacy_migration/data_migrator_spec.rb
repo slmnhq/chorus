@@ -22,7 +22,7 @@ describe DataMigrator do
       mock.proxy(HadoopInstanceMigrator).validate
       mock.proxy(HdfsEntryMigrator).validate
       mock.proxy(InstanceAccountMigrator).validate
-      mock.proxy(InstanceMigrator).validate
+      mock.proxy(GpdbInstanceMigrator).validate
       mock.proxy(MembershipMigrator).validate
       mock.proxy(NoteAttachmentMigrator).validate
       mock.proxy(NoteMigrator).validate

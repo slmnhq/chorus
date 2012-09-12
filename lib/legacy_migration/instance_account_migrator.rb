@@ -1,7 +1,7 @@
 class InstanceAccountMigrator < AbstractMigrator
   class << self
     def prerequisites
-      InstanceMigrator.migrate
+      GpdbInstanceMigrator.migrate
       HadoopInstanceMigrator.migrate
       ensure_legacy_id :instance_accounts
     end

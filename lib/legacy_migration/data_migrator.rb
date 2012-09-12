@@ -22,7 +22,7 @@ class DataMigrator
     HadoopInstanceMigrator.validate
     HdfsEntryMigrator.validate
     InstanceAccountMigrator.validate
-    InstanceMigrator.validate
+    GpdbInstanceMigrator.validate
     MembershipMigrator.validate
     NoteAttachmentMigrator.validate
     NoteMigrator.validate
