@@ -414,7 +414,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                     frequency: "WEEKLY",
                                     toTable: "our_destination",
                                     startDatetime: "2012-02-29T14:23:58Z",
-                                    nextImportAt: "2013-09-07T06:00:00Z"
+                                    nextImportAt: Date.formatForApi(Date.today().add(1).year())
                                     // Note: fields that are part of scheduleInfo but not defined in this instance:
                                     // lastScheduledAt, sampleCount (not tested?)
                                 },
