@@ -48,9 +48,9 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         });
 
         return {
-            scheduleStartTime : startTime.toString("yyyy-MM-dd HH:mm" + ":00.0"),
-            scheduleEndTime   : endTime.toString("yyyy-MM-dd"),
-            scheduleFrequency : this.$("select.frequency").val()
+            startDatetime : startTime.toString("yyyy-MM-dd HH:mm" + ":00.0"),
+            endDate   : endTime.toString("yyyy-MM-dd"),
+            frequency : this.$("select.frequency").val()
         }
     },
 

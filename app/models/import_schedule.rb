@@ -2,6 +2,8 @@ class ImportSchedule < ActiveRecord::Base
   belongs_to :workspace
   belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
+  attr_accessible :start_datetime, :end_date, :sample_count, :truncate, :new_table, :to_table, :frequency, :source_dataset_id,
+                  :workspace_id, :is_active
 
   def target_dataset_id
     if dataset_import_created_event_id

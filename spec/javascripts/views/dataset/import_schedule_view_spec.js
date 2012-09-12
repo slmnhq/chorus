@@ -24,41 +24,39 @@ describe("chorus.views.ImportSchedule", function() {
         });
 
         it("returns a properly formatted start time and end time", function() {
-            expect(this.attrs.scheduleStartTime).toBe("2012-02-29 13:09:00.0");
-            expect(this.attrs.scheduleEndTime).toBe("2012-03-21")
+            expect(this.attrs.startDatetime).toBe("2012-02-29 13:09:00.0");
+            expect(this.attrs.endDate).toBe("2012-03-21")
         });
 
         it("handles the case of '12 pm' correctly", function() {
             this.view.$("select.ampm option").val("PM");
             this.view.$("select.hours option").val("12");
 
-            expect(this.view.fieldValues().scheduleStartTime).toBe("2012-02-29 12:09:00.0");
+            expect(this.view.fieldValues().startDatetime).toBe("2012-02-29 12:09:00.0");
         });
 
         it("handles the case of '12 am' correctly", function() {
             this.view.$("select.ampm option").val("AM");
             this.view.$("select.hours option").val("12");
 
-            expect(this.view.fieldValues().scheduleStartTime).toBe("2012-02-29 00:09:00.0");
+            expect(this.view.fieldValues().startDatetime).toBe("2012-02-29 00:09:00.0");
         });
 
         it("has the right frequency value", function() {
-            expect(this.attrs.scheduleFrequency).toBe("MONTHLY");
+            expect(this.attrs.frequency).toBe("MONTHLY");
         });
     });
 
     describe("#setFieldValues(model)", function() {
         beforeEach(function() {
-            var importModel = fixtures.datasetImport({
-                id: '12',
-                truncate: true,
-                scheduleInfo: {
-                    endDate: "2013-05-27",
-                    startDatetime: "2013-02-21T13:30:00Z",
-                    frequency: "MONTHLY"
-                    // Note: fields that are part of scheduleInfo but not defined (needed in future?)
-                    // id, frequency, toTable, nextImportAt, lastScheduledAt, sampleCount
-                }
+            var importModel = rspecFixtures.importSchedule({
+                id:'12',
+                truncate:true,
+                endDate:"2013-05-27",
+                startDatetime:"2013-02-21T13:30:00Z",
+                frequency:"MONTHLY"
+                // Note: fields that are part of importSchedule but not defined (needed in future?)
+                // id, frequency, toTable, nextImportAt, lastScheduledAt, sampleCount
             });
             this.view.setFieldValues(importModel);
         });
@@ -88,7 +86,9 @@ describe("chorus.views.ImportSchedule", function() {
                     id: '12',
                     truncate: true
                 });
-                this.importModel.unset('scheduleInfo');
+                this.importModel.unset('startDatetime');
+                this.importModel.unset('endDate');
+                this.importModel.unset('isActive');
             })
 
             it("does not blow up", function() {

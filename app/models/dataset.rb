@@ -187,9 +187,9 @@ class Dataset < ActiveRecord::Base
 
     if params[:import_type] == "schedule" # scheduled imports
       import_schedules.create!(import_attributes, :without_protection => true) do |schedule|
-        schedule.start_datetime = Time.parse(params[:schedule_start_time]) # adds local timezone
-        schedule.end_date = params[:schedule_end_time]
-        schedule.frequency = params[:schedule_frequency].downcase
+        schedule.start_datetime = Time.parse(params[:start_datetime]) # adds local timezone
+        schedule.end_date = params[:end_date]
+        schedule.frequency = params[:frequency].downcase
         schedule.set_next_import
       end
     else # immediate imports

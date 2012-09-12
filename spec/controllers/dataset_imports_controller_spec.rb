@@ -16,8 +16,8 @@ describe DatasetImportsController do
         get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
 
         response.code.should == "200"
-        decoded_response.schedule_info.to_table.should == import_schedule.to_table
-        decoded_response.schedule_info.frequency.should == import_schedule.frequency
+        decoded_response.to_table.should == import_schedule.to_table
+        decoded_response.frequency.should == import_schedule.frequency
       end
 
       generate_fixture "importSchedule.json" do
@@ -168,9 +168,9 @@ describe DatasetImportsController do
         attributes[:new_table] = 'true'
         attributes[:truncate] = 'true'
         attributes[:import_type] = 'schedule'
-        attributes[:schedule_frequency] = 'weekly'
-        attributes[:schedule_start_time] = "2012-08-23 23:00:00.0"
-        attributes[:schedule_end_time] = "2012-08-24"
+        attributes[:frequency] = 'weekly'
+        attributes[:start_datetime] = "2012-08-23 23:00:00.0"
+        attributes[:end_date] = "2012-08-24"
       end
 
       it "makes a new import schedule and returns success" do
@@ -204,6 +204,63 @@ describe DatasetImportsController do
       end
     end
   end
+
+  describe "#update", :database_integration => true do
+
+    let(:user) { users(:bob) }
+    let(:import_schedule) { import_schedules(:bob_schedule) }
+    let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
+    let(:is_active) {false}
+
+    before do
+      log_in user
+    end
+
+    context "Unscheduling an Import" do
+      it "unschedule the import schedule and returns success" do
+        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id, :dataset_import =>
+            {:id => import_schedule.id , :is_active => is_active, :to_table => import_schedule.to_table , :new_table => true}
+        response.code.should == "200"
+        src_table.import_schedules.last.tap do |schedule|
+          schedule.is_active.should == is_active
+        end
+      end
+    end
+
+    context "updating other values of Import schedule" do
+      let(:frequency) {"DAILY"}
+      let(:to_table) {import_schedule.workspace.sandbox.datasets.first}
+
+      it "updates the import's frequency only and returns success " do
+        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id, :dataset_import =>
+            {:id => import_schedule.id , :frequency => frequency, :to_table => import_schedule.to_table, :new_table => true }
+        response.code.should == "200"
+        src_table.import_schedules.last.tap do |schedule|
+          schedule.frequency.should == frequency
+          schedule.end_date.should == import_schedule.end_date
+          schedule.start_datetime.should == import_schedule.start_datetime
+        end
+      end
+
+      it " when create_new_table is true, to_table is changed and to_table exists it raises the error" do
+        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id,
+            :dataset_import => {:id => import_schedule.id,
+                                :to_table => to_table.name, :new_table => true}
+        response.code.should == '422'
+        decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
+      end
+
+
+      it " when create_new_table is false and change in the name of to_table" do
+        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id,
+            :dataset_import => {:id => import_schedule.id,
+                                :to_table => "non_existent"}
+        response.code.should == '422'
+        decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
+      end
+    end
+  end
+
 
   describe "smoke test for import schedules", :database_integration => true do
     # In the test, use gpfdist to move data between tables in the same schema and database
@@ -295,9 +352,9 @@ describe DatasetImportsController do
       before do
         import_attributes.merge!(
             :import_type => 'schedule',
-            :schedule_frequency => 'weekly',
-            :schedule_start_time => start_time,
-            :schedule_end_time => "2012-08-24")
+            :frequency => 'weekly',
+            :start_datetime => start_time,
+            :end_date => "2012-08-24")
       end
 
       it "copies data when the start time has passed" do

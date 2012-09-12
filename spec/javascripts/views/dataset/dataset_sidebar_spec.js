@@ -407,13 +407,11 @@ describe("chorus.views.DatasetSidebar", function() {
                         beforeEach(function() {
                             this.importResponse = rspecFixtures.importSchedule({
                                 executionInfo: {},
-                                scheduleInfo: {
                                     endDate: "2013-06-02T00:00:00Z",
                                     frequency: "weekly",
                                     toTable: "our_destination",
                                     startDatetime: "2012-02-29T14:23:58Z",
                                     nextImportAt: Date.formatForApi(Date.today().add(1).year())
-                                }
                             });
                             this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, id: 6000, permission: ["update"] })
                         });

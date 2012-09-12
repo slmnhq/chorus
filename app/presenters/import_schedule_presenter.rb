@@ -1,11 +1,13 @@
 class ImportSchedulePresenter < Presenter
-  delegate :id, :start_datetime, :end_date, :frequency, :next_import_at,
-           :truncate, :sample_count, :last_scheduled_at, :to_table, :target_dataset_id, :to => :model
+  delegate :id, :start_datetime, :end_date, :frequency, :next_import_at, :workspace_id,
+           :truncate, :sample_count, :source_dataset_id, :target_dataset_id, :last_scheduled_at,
+           :to_table, :new_table, :is_active, :to => :model
 
   def to_hash
-    {:schedule_info =>
          {
              :id => id,
+             :dataset_id => source_dataset_id,
+             :workspace_id => workspace_id,
              :start_datetime => start_datetime,
              :end_date => end_date,
              :frequency => frequency,
@@ -13,10 +15,11 @@ class ImportSchedulePresenter < Presenter
              :to_table => to_table,
              :truncate => truncate,
              :sample_count => sample_count,
+             :destination_dataset_id => target_dataset_id,
+             :new_table => new_table,
              :last_scheduled_at => last_scheduled_at,
-             :destination_dataset_id => target_dataset_id
-         }
-    }.merge(:execution_info => {})
+             :is_active => is_active
+         }.merge(:execution_info => {})
   end
 end
 

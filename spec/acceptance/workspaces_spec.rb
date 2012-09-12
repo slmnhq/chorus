@@ -150,7 +150,7 @@ resource "Workspaces" do
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :activate_schedule, "not implemented yet"
+    parameter :is_active, "True/false: if true, import schedule is active"
     parameter :import_type, "not yet implemented (currently oneTime)"
     parameter :sample_count, "Maximum number of rows to import"
 
@@ -163,7 +163,7 @@ resource "Workspaces" do
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
-    let(:activate_schedule) { "false" }
+    let(:is_active) { "false" }
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
     let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
@@ -188,7 +188,7 @@ resource "Workspaces" do
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :activate_schedule, "not implemented yet"
+    parameter :is_active, "True/false: if true , the schedule is active"
     parameter :import_type, "not yet implemented (currently oneTime)"
     parameter :sample_count, "Maximum number of rows to import"
 
@@ -201,7 +201,7 @@ resource "Workspaces" do
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
-    let(:activate_schedule) { "false" }
+    let(:is_active) { "false" }
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
     let!(:statistics) { FactoryGirl.build(:dataset_statistics) }

@@ -14,46 +14,30 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
             this.requirePositiveInteger("sampleCount", newAttrs, 'import.validation.sampleCount.positive');
         }
 
-        if (newAttrs.activateSchedule) {
+        if (newAttrs.isActive) {
             if (newAttrs.scheduleStartTime > newAttrs.scheduleEndTime) {
                 this.setValidationError("year", "import.schedule.error.start_date_must_precede_end_date", null, newAttrs);
             }
         }
     },
 
-    beforeSave: function(attrs) {
-        if (attrs.sampleCount || this.has("sampleCount")) {
-            attrs.sampleMethod = "RANDOM_COUNT";
-        }
-    },
-
-    startTime: function() {
-        if (this.get("scheduleInfo")) {
-            return Date.parseFromApi(this.get("scheduleInfo").startDatetime);
-        } else if (this.get("scheduleStartTime")) {
-            return Date.parse(this.get("scheduleStartTime").split(".")[0]);
+    startTime:function () {
+        if (this.get("startDatetime")) {
+            return Date.parseFromApi(this.get("startDatetime").split(".")[0]);
         } else {
-            return Date.today().set({hour: 23});
+            return Date.today().set({hour:23});
         }
     },
 
-    frequency: function() {
-        if (this.get("scheduleInfo")) {
-            return this.get("scheduleInfo").frequency.toUpperCase();
-        } else if (this.get("scheduleFrequency")) {
-            return this.get("scheduleFrequency");
-        }
+    frequency:function () {
+        return this.get("frequency") && this.get("frequency").toUpperCase();
     },
 
-    endTime: function() {
-        if (this.get("scheduleInfo")) {
-            return Date.parse(this.get("scheduleInfo").endDate);
-        } else if (this.get("scheduleEndTime")) {
-            return Date.parse(this.get("scheduleEndTime"));
-        }
+    endTime:function () {
+        return  this.get("endDate") && Date.parse(this.get("endDate"));
     },
 
-    lastExecutionAt: function() {
+    lastExecutionAt:function () {
         return this.get("executionInfo").completedStamp
     },
 
@@ -62,11 +46,11 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     nextExecutionAt: function() {
-        return this.get("scheduleInfo").nextImportAt
+        return this.get("nextImportAt")
     },
 
     hasNextImport: function() {
-        return !!this.get("scheduleInfo").nextImportAt
+        return !!this.get("nextImportAt")
     },
 
     thisDatasetIsSource: function() {
@@ -78,12 +62,9 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     nextDestination: function() {
-        var schedule_info = this.get("scheduleInfo");
-        var dataset_id = schedule_info && schedule_info.destinationDatasetId;
-        var to_table = schedule_info && schedule_info.toTable;
         return new chorus.models.WorkspaceDataset({
-            id: dataset_id,
-            objectName: to_table,
+            id: this.get("destinationDatasetId"),
+            objectName: this.get("toTable"),
             workspace: {id: this.get("workspaceId")}
         });
     },
@@ -114,6 +95,6 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     hasActiveSchedule: function() {
-        return this.has('scheduleInfo') && this.get('scheduleInfo').id
+        return this.has("id") && this.get("isActive");
     }
 });

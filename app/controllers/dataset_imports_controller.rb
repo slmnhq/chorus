@@ -16,13 +16,24 @@ class DatasetImportsController < ApplicationController
   end
 
   def update
-    # TODO: not working yet
-    render :json => {}, :status => :ok
+    schedule_attributes = params[:dataset_import]
+
+    src_table = Dataset.find(params[:dataset_id])
+    schedule_id = schedule_attributes[:id]
+    schedule_attributes[:workspace_id] = params[:workspace_id]
+
+    import_config = ImportSchedule.find(schedule_id)
+    to_table_change = (import_config[:to_table] != schedule_attributes[:to_table])
+    validate_import_attributes(src_table, schedule_attributes, to_table_change)
+    import_config.attributes = schedule_attributes
+
+    import_config.save!
+    present import_config
   end
 
   private
 
-  def validate_import_attributes(src_table, attributes)
+  def validate_import_attributes(src_table, attributes, to_table_change = true)
     workspace = Workspace.find(attributes[:workspace_id])
     if workspace.archived?
       workspace.errors.add(:archived, "Workspace cannot be archived for import.")
@@ -33,10 +44,10 @@ class DatasetImportsController < ApplicationController
     dst_table_name = attributes[:to_table]
     dst_table = workspace.sandbox.datasets.find_by_name(dst_table_name)
 
-    if create_new_table
+    if create_new_table && to_table_change
       raise ApiValidationError.new(:base, :table_exists,
                                    { :table_name => dst_table_name }) if dst_table
-    else
+    elsif to_table_change
       raise ApiValidationError.new(:base, :table_not_exists,
                                    { :table_name => dst_table_name }) unless dst_table
       raise ApiValidationError.new(:base, :table_not_consistent,
@@ -44,5 +55,4 @@ class DatasetImportsController < ApplicationController
                                      :dest_table_name => dst_table_name }) unless src_table.dataset_consistent?(dst_table)
     end
   end
-
 end

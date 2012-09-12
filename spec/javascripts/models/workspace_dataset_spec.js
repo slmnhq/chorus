@@ -243,7 +243,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         context("when dataset's import is loaded", function() {
             beforeEach(function() {
                 this.dataset.getImport().fetch();
-                this.server.completeFetchFor(this.dataset.getImport(), { scheduleInfo: { frequency: "DAILY" }});
+                this.server.completeFetchFor(this.dataset.getImport(), {frequency: "DAILY" });
             });
 
             context("and its schedule is active", function() {

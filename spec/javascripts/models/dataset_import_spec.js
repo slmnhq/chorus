@@ -1,6 +1,6 @@
 describe("chorus.models.DatasetImport", function() {
     beforeEach(function() {
-        this.model = fixtures.datasetImport({
+        this.model = rspecFixtures.importSchedule({
             datasetId: '102',
             workspaceId: '1'
         });
@@ -51,32 +51,13 @@ describe("chorus.models.DatasetImport", function() {
     });
 
     describe("#startTime, #endTime, #frequency", function() {
-        context("when the import has the 'scheduleStartTime' attribute (as required by the POST api)", function() {
+        context("when the import has the 'startDatetime' attribute (as required by the POST api)", function() {
             beforeEach(function() {
-                this.model.unset("scheduleInfo");
                 this.model.set({
-                    scheduleStartTime: "2012-05-27 14:30:00.0",
-                    scheduleEndTime: "2012-08-28",
-                    scheduleFrequency: "MONTHLY"
-                });
-            });
-
-            itReturnsTheCorrectTimes();
-            it("returns the import's scheduled start time, without the milliseconds", function() {
-                expect(this.model.startTime().compareTo(Date.parse("2012-05-27 14:30:00"))).toBe(0);
-            });
-
-        });
-
-        context("when the import has a 'scheduleInfo' attribute (as returned by the GET api)", function() {
-            beforeEach(function() {
-                this.model.unset("scheduleStartTime");
-                this.model.unset("scheduleEndTime");
-                this.model.set({ scheduleInfo: {
                     startDatetime: "2012-05-27T14:30:00Z",
                     endDate: "2012-08-28",
                     frequency: "MONTHLY"
-                }});
+                });
             });
 
             itReturnsTheCorrectTimes();
@@ -86,12 +67,29 @@ describe("chorus.models.DatasetImport", function() {
 
         });
 
-        context("when the import doesn't have a 'scheduleInfo' or a 'scheduleStartTime''", function() {
+        context("when the import has a 'scheduleInfo' attribute (as returned by the GET api)", function() {
             beforeEach(function() {
-                this.model.unset("scheduleStartTime");
-                this.model.unset("scheduleEndTime");
-                this.model.unset("scheduleInfo");
-                this.model.unset("scheduleFrequency");
+                this.model.unset("startDatetime");
+                this.model.unset("endDate");
+                this.model.set({
+                    startDatetime: "2012-05-27T14:30:00Z",
+                    endDate: "2012-08-28",
+                    frequency: "MONTHLY"
+                });
+            });
+
+            itReturnsTheCorrectTimes();
+            it("returns the import's scheduled start time, without the milliseconds", function() {
+                expect(this.model.startTime().compareTo(Date.parseFromApi("2012-05-27T14:30:00Z"))).toBe(0);
+            });
+
+        });
+
+        context("when the import doesn't have a 'scheduleStartTime''", function() {
+            beforeEach(function() {
+                this.model.unset("startDatetime");
+                this.model.unset("endDate");
+                this.model.unset("frequency");
             });
 
             it("returns undefined for endTime and frequency", function() {
@@ -130,7 +128,6 @@ describe("chorus.models.DatasetImport", function() {
                 this.model.save();
                 var params = this.server.lastCreate().params();
                 expect(params["dataset_import[sample_count]"]).toBe('477');
-                expect(params["dataset_import[sample_method]"]).toBe("RANDOM_COUNT");
             });
         });
     });
@@ -223,7 +220,7 @@ describe("chorus.models.DatasetImport", function() {
 
     it("demands that the start date is before the end date", function() {
         this.attrs = {
-            activateSchedule: true,
+            isActive: true,
             scheduleStartTime: "y",
             scheduleEndTime: "x",
             toTable: "Foo",

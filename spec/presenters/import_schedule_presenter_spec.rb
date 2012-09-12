@@ -11,15 +11,17 @@ describe ImportSchedulePresenter, :type => :view do
     let(:hash) { @presenter.to_hash }
     context "when rendering an activity stream" do
       it "includes the right keys" do
-        hash[:schedule_info][:start_datetime].should == import_schedule.start_datetime
-        hash[:schedule_info][:end_date].should == import_schedule.end_date
-        hash[:schedule_info][:to_table].should == import_schedule.to_table
-        hash[:schedule_info][:frequency].should == import_schedule.frequency
-        hash[:schedule_info][:sample_count].should == import_schedule.sample_count
-        hash[:schedule_info][:truncate].should == import_schedule.truncate
-        hash[:schedule_info][:last_scheduled_at].should == import_schedule.last_scheduled_at
-        hash[:schedule_info][:next_import_at].should == import_schedule.next_import_at
-        hash[:schedule_info][:destination_dataset_id].should == import_schedule.target_dataset_id
+        hash[:start_datetime].should == import_schedule.start_datetime
+        hash[:end_date].should == import_schedule.end_date
+        hash[:to_table].should == import_schedule.to_table
+        hash[:frequency].should == import_schedule.frequency
+        hash[:sample_count].should == import_schedule.sample_count
+        hash[:truncate].should == import_schedule.truncate
+        hash[:last_scheduled_at].should == import_schedule.last_scheduled_at
+        hash[:next_import_at].should == import_schedule.next_import_at
+        hash[:new_table].should == import_schedule.new_table
+        hash[:destination_dataset_id].should == import_schedule.target_dataset_id
+        hash[:is_active].should == import_schedule.is_active
       end
     end
   end

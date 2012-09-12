@@ -163,6 +163,9 @@ window.rspecFixtureDefinitions = {
     boxplotTask: {},
     timeseriesTask: {},
     histogramTask: {},
+    importSchedule: {
+        model: "DatasetImport"
+    },
 
 //    activity: {
 //        unique: [ "id" ],

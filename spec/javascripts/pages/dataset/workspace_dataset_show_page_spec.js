@@ -363,8 +363,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             context("when the dataset has an import schedule", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.page.dataset.getImport(), fixtures.datasetImport());
-                    expect(this.page.dataset.getImport().get('scheduleInfo').frequency).toBe("WEEKLY");
+                    this.server.completeFetchFor(this.page.dataset.getImport(), rspecFixtures.importSchedule());
+                    expect(this.page.dataset.getImport().frequency()).toBe("WEEKLY");
                     this.page.render();
                 });
 

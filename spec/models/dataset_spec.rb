@@ -544,10 +544,10 @@ describe Dataset::Query, :database_integration => true do
         HashWithIndifferentAccess.new(
             "workspace_id" => workspace.id,
             "remote_copy" => "true",
-            "activate_schedule" => "true",
-            "schedule_start_time" => start_time,
-            "schedule_end_time" => "2012-11-24",
-            "schedule_frequency"=>"WEEKLY",
+            "is_active" => "true",
+            "start_datetime" => start_time,
+            "end_date" => "2012-11-24",
+            "frequency"=>"WEEKLY",
             "sample_count" => 1,
             "truncate" => "false",
             "import_type"=>"schedule"
