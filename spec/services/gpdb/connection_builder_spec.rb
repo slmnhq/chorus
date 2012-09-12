@@ -68,7 +68,7 @@ describe Gpdb::ConnectionBuilder do
         mock(Rails.logger).error("#{raised_message} - #{exception1.message}")
         expect {
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
-        }.to raise_error(ActiveRecord::JDBCError, "#{raised_message}")
+        }.to raise_error(ActiveRecord::JDBCError, exception1.message)
         Timecop.return
       end
 

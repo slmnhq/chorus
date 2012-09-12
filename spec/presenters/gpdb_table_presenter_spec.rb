@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe GpdbTablePresenter, :type => :view do
   before(:each) do
+    @user = FactoryGirl.create :user
+    stub(ActiveRecord::Base).current_user { @user }
+
     gpdb_instance = FactoryGirl.build(:gpdb_instance, :id => 123, :name => "instance1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :gpdb_instance => gpdb_instance)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)

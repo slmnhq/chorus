@@ -2,6 +2,11 @@ require "spec_helper"
 
 describe EventPresenter, :type => :view do
   let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
+  let(:current_user) { users(:bob) }
+
+  before do
+    stub(ActiveRecord::Base).current_user { current_user }
+  end
 
   describe "#to_hash" do
     subject { EventPresenter.new(event, view, options) }
@@ -9,12 +14,10 @@ describe EventPresenter, :type => :view do
 
     context "when rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
-      let(:current_user) { users(:bob) }
 
       context "SourceTableCreated" do
-        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table) ) }
+        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table)) }
         it "does not render datasets with their schemas or associated workspaces" do
-          stub(ActiveRecord::Base).current_user { current_user }
           hash = subject.to_hash
           hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
           hash[:dataset][:schema].keys.size.should == 1
@@ -27,7 +30,6 @@ describe EventPresenter, :type => :view do
         let(:event) { FactoryGirl.create(:note_on_workspace_event, :workspace => workspace_with_sandbox) }
 
         it "only renders the sandbox id of a workspace" do
-          stub(ActiveRecord::Base).current_user { current_user }
           hash = subject.to_hash
           hash[:workspace].should have_key(:id)
           hash[:workspace].should have_key(:name)
@@ -38,14 +40,12 @@ describe EventPresenter, :type => :view do
 
     context "when rendering notifications" do
       let(:options) { {:read_receipts => true} }
-      let(:current_user) { users(:bob) }
 
       context "NoteOnWorkspace" do
         let(:workspace_with_sandbox) { workspaces(:bob_public) }
         let(:event) { notifications(:bobs_notification1).notification_event }
 
         it "renders the event with a :read key based on the current user" do
-          stub(ActiveRecord::Base).current_user { current_user }
           hash = subject.to_hash
           hash[:read].should be_false
         end
@@ -60,7 +60,7 @@ describe EventPresenter, :type => :view do
         hash[:id].should == event.id
         hash[:timestamp].should == event.created_at
         hash[:action].should == "GreenplumInstanceCreated"
-        hash[:actor].should  == Presenter.present(event.actor, view)
+        hash[:actor].should == Presenter.present(event.actor, view)
       end
 
       it "presents all of the event's 'targets', using the same names" do
@@ -136,10 +136,8 @@ describe EventPresenter, :type => :view do
         let(:attachment) { NoteAttachment.first }
         let(:dataset) { datasets(:bobs_table) }
         let(:workfile) { workfiles(:bob_public) }
-        let(:current_user) { users(:bob) }
 
         it "contains the attachment" do
-          stub(ActiveRecord::Base).current_user { current_user }
           event.workspace.sandbox = dataset.schema
           event.workspace.save
           stub(event).attachments { [attachment] }
@@ -158,10 +156,8 @@ describe EventPresenter, :type => :view do
       context "with a workfile image attachment" do
         let(:event) { FactoryGirl.create(:note_on_workspace_event) }
         let(:workfile) { Workfile.find_by_file_name("image.png") }
-        let(:current_user) { users(:bob) }
 
         it "contains the images icon url" do
-          stub(ActiveRecord::Base).current_user { current_user }
           event.workspace.save
           stub(event).workfiles { [workfile] }
           hash = subject.to_hash
