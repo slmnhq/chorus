@@ -933,6 +933,8 @@ class ActivityMigrator < AbstractMigrator
       migrate_provision_success
       migrate_workfile_upgrade_success
 
+      Events::Base.find_each { |event| event.create_activities }
+
       ActiveRecord::Base.record_timestamps = true
     end
 

@@ -40,7 +40,7 @@ describe ActivityMigrator do
       #  event.hdfs_file.path.should == "/data/Top_1_000_Songs_To_Hear_Before_You_Die.csv"
       #end
 
-      it "copies FILE IMPORT CREATED activities" do
+      it "copies FILE IMPORT CREATED events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id  from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
@@ -59,7 +59,7 @@ describe ActivityMigrator do
         Events::FileImportCreated.count.should == count
       end
 
-      it "copies FILE IMPORT SUCCESS activities" do
+      it "copies FILE IMPORT SUCCESS events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id  from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
@@ -76,7 +76,7 @@ describe ActivityMigrator do
         Events::FileImportSuccess.count.should == count
       end
 
-      it "copies FILE IMPORT FAILED activities" do
+      it "copies FILE IMPORT FAILED events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id, et.result as result  from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
@@ -96,7 +96,7 @@ describe ActivityMigrator do
         Events::FileImportFailed.count.should == count
       end
 
-      it "copies DATASET IMPORT CREATED activities" do
+      it "copies DATASET IMPORT CREATED events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
@@ -112,7 +112,7 @@ describe ActivityMigrator do
         Events::DatasetImportCreated.count.should == count
       end
 
-      it "copies DATASET IMPORT SUCCESS activities" do
+      it "copies DATASET IMPORT SUCCESS events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table' where
@@ -127,7 +127,7 @@ describe ActivityMigrator do
         Events::DatasetImportSuccess.count.should == count
       end
 
-      it "copies DATASET IMPORT FAILED activities" do
+      it "copies DATASET IMPORT FAILED events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id, et.result as result from legacy_migrate.edc_activity_stream ed INNER JOIN
           legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
@@ -148,7 +148,7 @@ describe ActivityMigrator do
       end
     end
 
-    context "migrating activities that do not reference datasets" do
+    context "migrating events that do not reference datasets" do
       it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
         count = 0
         Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed INNER JOIN
@@ -360,6 +360,9 @@ describe ActivityMigrator do
         Events::WorkfileUpgradedVersion.count.should == count
       end
     end
-    #
+
+    it "should create activities" do
+      Activity.count.should > 0
+    end
   end
 end
