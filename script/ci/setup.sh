@@ -1,6 +1,3 @@
-if [ "$JENKINS_HOME" != "" ]; then
-    git clean -fd
-fi
 export JRUBY_OPTS="--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m"
 export PATH="$HOME/phantomjs/bin:/opt/postgres/9.1/bin:$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
