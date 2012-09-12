@@ -61,6 +61,7 @@ group :test, :development, :integration, :packaging do
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder'
   gem 'spork-rails'
+  gem 'ci_reporter'
 end
 
 group :development do

@@ -99,6 +99,8 @@ GEM
       ffi (~> 1.0.6)
     choice (0.1.6)
     chunky_png (1.2.5)
+    ci_reporter (1.7.2)
+      builder (>= 2.1.2)
     clockwork (0.4.0)
       tzinfo
     cocaine (0.2.1)
@@ -296,6 +298,7 @@ DEPENDENCIES
   capybara-screenshot
   capybara-webkit
   chunky_png
+  ci_reporter
   clockwork
   compass-rails
   database_cleaner

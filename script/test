@@ -10,7 +10,7 @@ fi
 
 command="ruby -S bundle exec rspec"
 if [ "$JENKINS_HOME" != "" ]; then
-    command="$command --options .rspec-ci"
+    command="$command --options .rspec-ci --require `bundle show ci_reporter`/lib/ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec"
 fi
 
 args=("$@")
