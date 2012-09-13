@@ -20,9 +20,6 @@ class WorkfileMigrator < AbstractMigrator
       UserMigrator.migrate
       WorkspaceMigrator.migrate
       MembershipMigrator.migrate
-      ensure_legacy_id :workfiles
-      ensure_legacy_id :workfile_versions
-      ensure_legacy_id :workfile_drafts
     end
 
     def classes_to_validate

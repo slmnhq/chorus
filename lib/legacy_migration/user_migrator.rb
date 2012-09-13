@@ -3,7 +3,6 @@ require_relative 'legacy'
 class UserMigrator < AbstractMigrator
   class << self
     def prerequisites
-      ensure_legacy_id :users
     end
 
     def classes_to_validate

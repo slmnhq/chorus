@@ -3,7 +3,6 @@ class DatabaseObjectMigrator < AbstractMigrator
     def prerequisites
       GpdbInstanceMigrator.migrate
       HadoopInstanceMigrator.migrate
-      ensure_legacy_id :datasets
     end
 
     def classes_to_validate

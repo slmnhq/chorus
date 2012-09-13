@@ -6,8 +6,6 @@ class ActivityMigrator < AbstractMigrator
       WorkspaceMigrator.migrate
       WorkfileMigrator.migrate(options)
       SandboxMigrator.migrate #workaround for broken composite keys in DATASET_IMPORT activities
-      ensure_legacy_id :events
-      ensure_legacy_type :events
     end
 
     def classes_to_validate

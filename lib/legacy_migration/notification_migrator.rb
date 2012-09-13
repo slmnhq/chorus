@@ -3,7 +3,6 @@ class NotificationMigrator < AbstractMigrator
     def prerequisites(options)
       UserMigrator.migrate
       NoteMigrator.migrate(options)
-      ensure_legacy_id :notifications
     end
 
     def classes_to_validate

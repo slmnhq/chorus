@@ -3,7 +3,6 @@ class ImportScheduleMigrator < AbstractMigrator
     def prerequisites
       DatabaseObjectMigrator.migrate
       WorkspaceMigrator.migrate
-      ensure_legacy_id :import_schedules
     end
 
     def migrate

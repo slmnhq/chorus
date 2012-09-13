@@ -1,16 +1,5 @@
 class AbstractMigrator
   class MigratorValidationError < Exception; end
-  def self.ensure_legacy_id(sym)
-    unless ActiveRecord::Base.connection.column_exists?(sym, :legacy_id)
-      ActiveRecord::Base.connection.add_column sym, :legacy_id, :string
-    end
-  end
-
-  def self.ensure_legacy_type(sym)
-    unless ActiveRecord::Base.connection.column_exists?(sym, :legacy_type)
-      ActiveRecord::Base.connection.add_column sym, :legacy_type, :string
-    end
-  end
 
   def self.validate
     classes_to_validate.each do |klass|

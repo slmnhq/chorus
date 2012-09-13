@@ -3,7 +3,6 @@ class InstanceAccountMigrator < AbstractMigrator
     def prerequisites
       GpdbInstanceMigrator.migrate
       HadoopInstanceMigrator.migrate
-      ensure_legacy_id :instance_accounts
     end
 
     def classes_to_validate

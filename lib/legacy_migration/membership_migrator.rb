@@ -2,7 +2,6 @@ class MembershipMigrator < AbstractMigrator
   class << self
     def prerequisites
       WorkspaceMigrator.migrate
-      ensure_legacy_id :memberships
     end
 
     def classes_to_validate

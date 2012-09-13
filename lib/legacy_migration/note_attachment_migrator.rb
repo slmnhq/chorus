@@ -2,9 +2,6 @@ class NoteAttachmentMigrator < AbstractMigrator
   class << self
     def prerequisites(options)
       NoteMigrator.migrate(options)
-      ensure_legacy_id :notes_workfiles
-      ensure_legacy_id :datasets_notes
-      ensure_legacy_id :note_attachments
     end
 
     def classes_to_validate

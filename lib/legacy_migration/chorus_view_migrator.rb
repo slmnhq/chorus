@@ -2,11 +2,6 @@ class ChorusViewMigrator < AbstractMigrator
   class << self
     def prerequisites
       DatabaseObjectMigrator.migrate
-      ensure_legacy_id :datasets
-
-      unless ActiveRecord::Base.connection.column_exists?(:datasets, :edc_workspace_id)
-        ActiveRecord::Base.connection.add_column :datasets, :edc_workspace_id, :string
-      end
     end
 
     def classes_to_validate

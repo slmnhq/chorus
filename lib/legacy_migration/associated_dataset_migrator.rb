@@ -4,7 +4,6 @@ class AssociatedDatasetMigrator < AbstractMigrator
     def prerequisites
       WorkspaceMigrator.migrate
       DatabaseObjectMigrator.migrate
-      ensure_legacy_id :associated_datasets
     end
 
     def classes_to_validate

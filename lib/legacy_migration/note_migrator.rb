@@ -4,8 +4,6 @@ class NoteMigrator < AbstractMigrator
       HdfsEntryMigrator.migrate
       WorkfileMigrator.migrate(options)
       DatabaseObjectMigrator.migrate
-      ensure_legacy_id :events
-      ensure_legacy_type :events
     end
 
     def classes_to_validate
