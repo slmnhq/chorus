@@ -34,8 +34,8 @@
         {{/eachFunctionResult}}
         </ul>
         <div class="actions">
-            {{#if detailsLink}}
-                <div class="details">{{detailsLink}}</div>
+            {{#if isFailure}}
+                <div class="error_details"></div>
             {{/if}}
             <span class="timestamp">{{timestamp}}</span>
             {{#if isNotification}}

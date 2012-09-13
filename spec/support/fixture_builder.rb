@@ -213,6 +213,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_alice_private, Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
     #Events
+    Timecop.travel(-1.day)
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
     Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
     Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
@@ -229,6 +230,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => bobs_table)
     Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => bobs_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
     Events::ChorusViewCreated.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace, :source_object => bobs_table)
+    Timecop.return
 
     #NotesAttachment
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))

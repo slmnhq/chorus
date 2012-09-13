@@ -61,9 +61,10 @@ describe("chorus.views.Activity", function() {
             });
 
             it("displays a link to the error message", function() {
+                expect(this.view.$(".timestamp")).toContainText("ago");
                 expect(this.view.$(".activity_content .actions")).toExist();
-                expect(this.view.$(".activity_content .actions .details")).toExist();
-                expect(this.view.$(".activity_content .actions .details")).toContainText(t("activity.view_error_details"));
+                expect(this.view.$(".activity_content .actions .error_details .details")).toExist();
+                expect(this.view.$(".activity_content .actions .error_details .details")).toContainText(t("activity.view_error_details"));
                 expect(this.view.failureContent).toBeA(chorus.views.ErrorDetails);
             });
         });

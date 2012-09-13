@@ -648,6 +648,10 @@ describe("chorus.presenters.Activity", function() {
                 }
             )
         });
+
+        it("has the error link", function() {
+            expect(presenter.isFailure()).toBe(true);
+        });
     });
 
     context("dataset import failed", function() {

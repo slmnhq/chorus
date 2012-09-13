@@ -74,6 +74,10 @@
 
         isReadOnly: function() {
             return this.options.isReadOnly || false;
+        },
+
+        isFailure: function() {
+            return this.model.isFailure();
         }
     });
 

@@ -12,7 +12,7 @@ chorus.views.Activity = chorus.views.Base.extend({
     subviews:{
         ".comment_list":"commentList",
         ".activity_content > .truncated_text": "htmlContent",
-        ".activity_content > .actions": "failureContent"
+        ".activity_content > .actions > .error_details": "failureContent"
     },
 
     context: function () {
@@ -27,9 +27,7 @@ chorus.views.Activity = chorus.views.Base.extend({
         if (this.model.hasCommitMessage()) {
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "commitMessage", attributeIsHtmlSafe: true});
         }
-        if (this.model.isFailure()) {
-            this.failureContent = new chorus.views.ErrorDetails({model: this.model});
-        }
+        this.failureContent = new chorus.views.ErrorDetails({model: this.model});
     },
 
     promote: function(e) {
