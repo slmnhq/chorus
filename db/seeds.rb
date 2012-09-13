@@ -17,13 +17,13 @@ end
 
 Sunspot.session = BlackholeSession.new
 
-unless User.where(:username => "edcadmin").present?
-  puts "Creating edcadmin user..."
+unless User.where(:username => "chorusadmin").present?
+  puts "Creating chorusadmin user..."
   user = User.new(
-    :username => "edcadmin",
-    :first_name => "EDC",
+    :username => "chorusadmin",
+    :first_name => "Chorus",
     :last_name => "Admin",
-    :email => "edcadmin@example.com",
+    :email => "chorusadmin@example.com",
     :password => "secret",
     :password_confirmation => "secret"
   )

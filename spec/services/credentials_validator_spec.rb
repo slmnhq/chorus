@@ -66,12 +66,14 @@ describe CredentialsValidator do
         it "authenticates the edcadmin user with the in-database credentials" do
           edcadmin = FactoryGirl.create(:admin, :username => 'edcadmin')
           stub(LdapClient).enabled? { true }
+          dont_allow(LdapClient).authenticate
           CredentialsValidator.user('edcadmin', edcadmin.password).should == edcadmin
         end
 
         it "authenticates the edcadmin user with invalid in-database credentials" do
           edcadmin = FactoryGirl.create(:admin, :username => 'edcadmin')
           stub(LdapClient).enabled? { true }
+          dont_allow(LdapClient).authenticate
           expect { CredentialsValidator.user('edcadmin', "wrongpassword") }.to raise_error(CredentialsValidator::Invalid)
         end
       end
