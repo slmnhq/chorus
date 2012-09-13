@@ -59,16 +59,17 @@ describe Gpdb::ConnectionBuilder do
     end
 
     context "when the connection fails" do
-      let(:exception1) { ActiveRecord::JDBCError.new }
-      let(:fake_connection_adapter) { raise exception1 }
+      let(:adapter_exception) { ActiveRecord::JDBCError.new }
+      let(:nice_exception) { ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment") }
+      let(:fake_connection_adapter) { raise adapter_exception }
       let(:raised_message) { "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
 
-      it "does not catch the error" do
+      it "re-raises the error with a nice message" do
         Timecop.freeze(DateTime.now)
-        mock(Rails.logger).error("#{raised_message} - #{exception1.message}")
+        mock(Rails.logger).error("#{raised_message} - #{adapter_exception.message}")
         expect {
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
-        }.to raise_error(ActiveRecord::JDBCError, exception1.message)
+        }.to raise_error(ActiveRecord::JDBCError, nice_exception.message)
         Timecop.return
       end
 
@@ -81,22 +82,37 @@ describe Gpdb::ConnectionBuilder do
           }.to raise_error(Gpdb::InstanceStillProvisioning)
         end
       end
+
+      context "with an invalid password" do
+        let(:adapter_exception) { ActiveRecord::JDBCError.new("org.postgresql.util.PSQLException: FATAL: password authentication failed for user 'user1'") }
+        let(:nice_exception) { ActiveRecord::JDBCError.new("Password authentication failed for user 'user1'") }
+        let(:raised_message) { "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
+
+        it "raises an InvalidLogin exception" do
+          Timecop.freeze(DateTime.now)
+          mock(Rails.logger).error("#{raised_message} - #{adapter_exception.message}")
+          expect {
+            Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+          }.to raise_error(ActiveRecord::JDBCError, nice_exception.message)
+          Timecop.return
+        end
+      end
     end
 
     context "when the sql command fails" do
-      let(:exception1) { ActiveRecord::StatementInvalid.new }
+      let(:adapter_exception) { ActiveRecord::StatementInvalid.new }
       let(:log_message) { "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid" }
       let(:sql_command) { "SELECT * FROM BOGUS_TABLE;" }
 
       it "does not catch the error" do
         Timecop.freeze(DateTime.now)
-        mock(Rails.logger).info("#{log_message} - #{exception1.message}")
+        mock(Rails.logger).info("#{log_message} - #{adapter_exception.message}")
         mock(fake_connection_adapter).query.with_any_args { raise ActiveRecord::StatementInvalid }
         expect {
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account) do |conn|
             conn.query sql_command
           end
-        }.to raise_error(ActiveRecord::StatementInvalid, exception1.message)
+        }.to raise_error(ActiveRecord::StatementInvalid, adapter_exception.message)
         Timecop.return
       end
     end
