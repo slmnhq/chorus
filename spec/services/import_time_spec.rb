@@ -97,4 +97,24 @@ describe ImportTime do
       t.next_import_time.should == dt("2012-08-21 11:00:00")
     end
   end
+
+  context "scheduled in the future" do
+    let(:current_time) { dt("2012-08-08 12:00:00") }
+    it "should have a next import time in the future" do
+      start_datetime = dt("2015-08-05 11:00:00")
+      end_date       =  d("2070-08-05")
+      t = ImportTime.new(start_datetime, end_date, :monthly, current_time)
+      t.next_import_time.should == dt("2015-08-05 11:00:00")
+    end
+  end
+
+  context "scheduled in the past" do
+    let(:current_time) { dt("2012-08-08 12:00:00") }
+    it "should have a next import time in the future" do
+      start_datetime = dt("1970-08-05 11:00:00")
+      end_date       =  d("2070-08-05")
+      t = ImportTime.new(start_datetime, end_date, :monthly, current_time)
+      t.next_import_time.should == dt("2012-09-05 11:00:00")
+    end
+  end
 end

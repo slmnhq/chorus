@@ -11,14 +11,17 @@ class ImportTime
   end
 
   def next_import_time
-    time_since_start_of_period = start_datetime - start_of_period(start_datetime)
+    if(start_datetime > current_time)
+      next_time = start_datetime
+    else
+      time_since_start_of_period = start_datetime - start_of_period(start_datetime)
+      next_time = start_of_period(current_time) + time_since_start_of_period
 
-    next_time = start_of_period(current_time) + time_since_start_of_period
-
-    # clamp days that are not in the current month to the last day of the month
-    if frequency == 'monthly' and next_time > current_time.end_of_month
-      time_of_day = (start_datetime - start_datetime.beginning_of_day)
-      next_time = current_time.end_of_month.beginning_of_day + time_of_day
+      if frequency == 'monthly' and next_time > current_time.end_of_month
+        # clamp days that are not in the current month to the last day of the month
+        time_of_day = (start_datetime - start_datetime.beginning_of_day)
+        next_time = current_time.end_of_month.beginning_of_day + time_of_day
+      end
     end
 
     next_time += interval if next_time < current_time
