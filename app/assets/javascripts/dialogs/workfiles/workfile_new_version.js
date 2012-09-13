@@ -21,11 +21,13 @@ chorus.dialogs.WorkfileNewVersion = chorus.dialogs.Base.extend({
 
     saveWorkfileNewVersion:function (e) {
         e.preventDefault();
+        this.$("button.submit").startLoading("actions.saving");
         this.model.set({"commitMessage":this.$("[name=commitMessage]").val()}, {silent:true});
         this.model.saveAsNewVersion();
     },
 
     saved:function () {
+        this.$("button.submit").stopLoading();
         this.closeModal();
         this.pageModel.trigger("invalidated");
     }

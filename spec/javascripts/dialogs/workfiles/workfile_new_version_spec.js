@@ -37,6 +37,11 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
             expect(this.server.lastCreate().url).toBe("/workfiles/55/versions");
         });
 
+        it("sets a spinner", function() {
+            expect(this.dialog.$("button.submit")).toContainTranslation("actions.saving");
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+        });
+
         describe("when the save completes", function() {
             beforeEach(function() {
                 spyOn(this.dialog, 'closeModal');
