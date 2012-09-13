@@ -189,9 +189,7 @@ describe ActivityMigrator do
           event.workspace.legacy_id.should == row["workspace_id"]
           event.actor.username.should == row["author"]
           event.additional_data['destination_table'].should == row["table_name"]
-          event.additional_data['source_dataset_id'].should_not be_nil
           event.additional_data['error_message'].should == row["result"]
-
         end
         count.should > 0
         Events::DatasetImportFailed.count.should == count
