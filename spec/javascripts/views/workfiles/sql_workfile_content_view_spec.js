@@ -91,6 +91,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("running in the default schema", function() {
                 context("when the workfile has a schema in which to execute", function() {
                     beforeEach(function() {
+                        spyOn(this.view.resultsConsole, 'render').andCallThrough();
                         this.executionInfo = {
                             instanceId: '4',
                             instanceName: "ned",
@@ -121,6 +122,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionStarted", jasmine.any(chorus.models.SqlExecutionTask));
                     });
 
+                    it("sets the task as the model on the results console", function() {
+                        expect(this.view.resultsConsole.model).toBe(this.view.task);
+                    });
+
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
                             this.server.lastCreate().succeed([
@@ -146,6 +151,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         it("broadcasts workfile:executed", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
                         })
+
+                        it("renders the resultsConsole", function() {
+                            expect(this.view.resultsConsole.render).toHaveBeenCalled();
+                        });
 
                         describe("executing again", function() {
                             beforeEach(function() {
