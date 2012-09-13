@@ -161,10 +161,10 @@ class WorkfileMigrator < AbstractMigrator
           workfile_draft.content = StringIO.new(File.read(path.path))
           workfile_draft.save!
         end
-      end
 
-      Workfile.unscoped.where(:content_type => nil).find_each do |wf|
-        wf.update_attributes({:content_type => wf.latest_workfile_version.file_type}, :without_protection => true)
+        Workfile.unscoped.where(:content_type => nil).find_each do |wf|
+          wf.update_attributes({:content_type => wf.latest_workfile_version.file_type}, :without_protection => true)
+        end
       end
     end
   end
