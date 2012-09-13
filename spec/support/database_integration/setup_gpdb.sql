@@ -63,6 +63,11 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
        time_stamp_with_precision timestamp(3) with time zone,
        PRIMARY KEY(id2, id3, id));
 
+    CREATE TABLE allcaps_candy
+      (id numeric(4, 0),
+      "STUFF" integer,
+      "KITKAT" integer,
+      "SNICKERS" text);
 
     CREATE TABLE "2candy"
       (id numeric(4,0),
