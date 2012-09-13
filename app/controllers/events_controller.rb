@@ -11,6 +11,6 @@ class EventsController < ApplicationController
   end
 
   def show
-    present Events::Base.for_dashboard_of(current_user).find(params[:id])
+    present Events::Base.for_dashboard_of(current_user).find(params[:id]), :presenter_options => {:activity_stream => true}
   end
 end
