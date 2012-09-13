@@ -30,7 +30,6 @@ class WorkfileMigrator < AbstractMigrator
       raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options['workfile_path']
       prerequisites
 
-      #TODO deal with content_type
       Legacy.connection.exec_query("
         INSERT INTO public.workfiles(
           legacy_id,
@@ -162,6 +161,10 @@ class WorkfileMigrator < AbstractMigrator
           workfile_draft.content = StringIO.new(File.read(path.path))
           workfile_draft.save!
         end
+      end
+
+      Workfile.unscoped.where(:content_type => nil).find_each do |wf|
+        wf.update_attributes({:content_type => wf.latest_workfile_version.file_type}, :without_protection => true)
       end
     end
   end

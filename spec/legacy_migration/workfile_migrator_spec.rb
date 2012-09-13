@@ -145,6 +145,13 @@ WHERE edc_work_file.id = '#{legacy_workfile["id"]}'
             new_workfile.latest_workfile_version.should == latest_version
           end
         end
+
+        it "should cache content type from the latest version" do
+          @legacy_workfiles.each do |legacy_workfile|
+            new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])
+            new_workfile.content_type.should == new_workfile.latest_workfile_version.file_type
+          end
+        end
       end
 
       describe "draft" do
