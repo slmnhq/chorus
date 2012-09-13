@@ -38,7 +38,7 @@ require "#{Rails.root}/spec/support/database_integration/setup_gpdb.rb"
 
 RSpec.configure do |config|
   config.mock_with :rr
-  config.fixture_path = "#{Rails.root}/spec/integration/fixtures"
+  config.fixture_path = "#{Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.global_fixtures = :all
   config.include Capybara::DSL
