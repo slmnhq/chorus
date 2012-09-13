@@ -14,29 +14,8 @@ describe DatasetStreamer, :database_integration => true do
   end
 
   describe "#enum" do
-    let(:table_data) { ["0,0,0,apple,2012-03-01 00:00:02\n",
-                        "1,1,1,apple,2012-03-02 00:00:02\n",
-                        "2,0,2,orange,2012-04-01 00:00:02\n",
-                        "3,1,3,orange,2012-03-05 00:00:02\n",
-                        "4,1,4,orange,2012-03-04 00:02:02\n",
-                        "5,0,5,papaya,2012-05-01 00:02:02\n",
-                        "6,1,6,papaya,2012-04-08 00:10:02\n",
-                        "7,1,7,papaya,2012-05-11 00:10:02\n",
-                        "8,1,8,papaya,2012-04-09 00:00:02\n"] }
-
     it "returns an enumerator that yields the header and rows from the dataset in csv" do
-      enumerator = streamer.enum
-
-      next_result = enumerator.next
-      header_row = next_result.split("\n").first
-      header_row.should == "id,column1,column2,category,time_value"
-
-      first_result = next_result.split("\n").last+"\n"
-      table_data.delete(first_result).should_not be_nil
-      8.times do
-        table_data.delete(enumerator.next).should_not be_nil
-      end
-      finish_enumerator(enumerator)
+      check_enumerator(streamer.enum)
     end
 
     context "with quotes in the data" do
@@ -98,6 +77,45 @@ describe DatasetStreamer, :database_integration => true do
         finish_enumerator(enum)
         ActiveRecord::Base.connection_pool.send(:active_connections).size.should == conn_size
       end
+    end
+
+    context "when dataset is a chorus view" do
+      let(:chorus_view) do
+        ChorusView.create(
+            {
+                :name => "chorus_view",
+                :schema => dataset.schema,
+                :query => "select * from #{dataset.name};"
+            }, :without_protection => true)
+      end
+      let(:streamer) { DatasetStreamer.new(chorus_view, user) }
+
+      it "returns an enumerator that yields the header and rows from the dataset in csv" do
+        check_enumerator(streamer.enum)
+      end
+    end
+
+    let(:table_data) { ["0,0,0,apple,2012-03-01 00:00:02\n",
+                        "1,1,1,apple,2012-03-02 00:00:02\n",
+                        "2,0,2,orange,2012-04-01 00:00:02\n",
+                        "3,1,3,orange,2012-03-05 00:00:02\n",
+                        "4,1,4,orange,2012-03-04 00:02:02\n",
+                        "5,0,5,papaya,2012-05-01 00:02:02\n",
+                        "6,1,6,papaya,2012-04-08 00:10:02\n",
+                        "7,1,7,papaya,2012-05-11 00:10:02\n",
+                        "8,1,8,papaya,2012-04-09 00:00:02\n"] }
+
+    def check_enumerator(enumerator)
+      next_result = enumerator.next
+      header_row = next_result.split("\n").first
+      header_row.should == "id,column1,column2,category,time_value"
+
+      first_result = next_result.split("\n").last+"\n"
+      table_data.delete(first_result).should_not be_nil
+      8.times do
+        table_data.delete(enumerator.next).should_not be_nil
+      end
+      finish_enumerator(enumerator)
     end
   end
 

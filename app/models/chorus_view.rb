@@ -31,4 +31,10 @@ class ChorusView < Dataset
 
   def column_name
   end
+
+  def all_rows_sql(limit = nil)
+    sql = "SELECT * FROM (#{query.gsub(';', '');}) AS cv_query"
+    sql += " LIMIT #{limit}" if limit
+    sql
+  end
 end
