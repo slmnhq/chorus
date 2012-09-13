@@ -23,7 +23,7 @@ class WorkfileMigrator < AbstractMigrator
     end
 
     def classes_to_validate
-      [Workfile]
+      [Workfile, WorkfileVersion, WorkfileDraft]
     end
 
     def migrate(options = {})
