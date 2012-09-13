@@ -23,7 +23,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    `psql -p 8543 chorus_rails_test -c 'drop schema if exists legacy_migrate cascade'`
+    #`psql -p 8543 chorus_rails_test -c 'drop schema if exists legacy_migrate cascade'`
   end
 
   config.include FileHelper
