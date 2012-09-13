@@ -155,13 +155,15 @@ describe EventsController do
         "datasetImportCreated" => Events::DatasetImportCreated,
         "datasetImportSuccess" => Events::DatasetImportSuccess,
         "datasetImportFailed" => Events::DatasetImportFailed,
-        "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion
+        "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion,
+        "chorusViewCreatedFromWorkfile" => Events::ChorusViewCreated.from_workfile,
+        "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset
     }
 
-    FIXTURE_FILES.each do |filename, event_class_name|
+    FIXTURE_FILES.each do |filename, event_relation|
 
       generate_fixture "activity/#{filename}.json" do
-        event = event_class_name.first
+        event = event_relation.first
         Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end

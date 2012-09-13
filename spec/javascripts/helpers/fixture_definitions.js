@@ -144,7 +144,9 @@ window.rspecFixtureDefinitions = {
             noteOnWorkspaceDatasetCreated: {},
             noteOnWorkfileCreated: {},
             membersAdded: {},
-            workfileUpgradedVersion: {}
+            workfileUpgradedVersion: {},
+            chorusViewCreatedFromDataset: {},
+            chorusViewCreatedFromWorkfile: {}
         }
     },
 

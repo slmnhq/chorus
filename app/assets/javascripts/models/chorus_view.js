@@ -1,6 +1,6 @@
 chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     constructorName: "ChorusView",
-    paramsToSave: ['id', 'objectName', 'schemaId', 'workspaceId', 'query'],
+    paramsToSave: ['id', 'objectName', 'schemaId', 'workspaceId', 'query', 'sourceObjectId', 'sourceObjectType'],
 
     urlTemplate: function(options) {
         return "chorus_views";

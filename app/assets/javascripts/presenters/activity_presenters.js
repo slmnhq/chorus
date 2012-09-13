@@ -77,6 +77,19 @@
         }
     });
 
+    function chorusViewSourceModel(self) {
+        var object = self.model.get("sourceObject");
+        var model;
+        if (object.fileName) {
+            model = new chorus.models.Workfile(object);
+        } else {
+            model = new chorus.models.WorkspaceDataset(object);
+            var workspace = self.model.workspace();
+            model.set({workspace: workspace});
+        }
+        return model;
+    };
+
     var hidden = {
 
         headerParamOptions: {
@@ -205,6 +218,11 @@
             WorkfileUpgradedVersion: {
                 links: [ "actor", "workfile", "workspace" ],
                 computed: ["versionLink"]
+            },
+
+            ChorusViewCreated: {
+                links: [ "actor", "workspace", "dataset"],
+                computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
             }
         },
 
@@ -314,6 +332,15 @@
             dataset.workspace = workspace;
             var dataset_model = new chorus.models.WorkspaceDataset(dataset);
             return dataset_model.showLink();
+        },
+
+        chorusViewSourceLink: function(self) {
+            return chorusViewSourceModel(self).showLink();
+        },
+
+        chorusViewSourceType: function(self) {
+            var model = chorusViewSourceModel(self);
+            return model.get("fileName") ? "workfile" : chorusViewSourceModel(self).metaType();
         },
 
         versionLink: function(self) {

@@ -339,11 +339,15 @@ describe("chorus.models.ChorusView", function() {
         it("only returns necessary attributes", function() {
             this.model.set({
                 objectName: 'my_chorus_view',
+                sourceObjectId: 'source-object-id',
+                sourceObjectType: 'source-object_type',
                 query: 'SELECT potato FROM pants;'
             });
             expect(this.model.toJSON()['chorus_view']).toEqual({
                 object_name: 'my_chorus_view',
                 schema_id: this.model.get("schemaId"),
+                source_object_id: this.model.get("sourceObjectId"),
+                source_object_type: this.model.get("sourceObjectType"),
                 workspace_id: this.model.workspace().get('id'),
                 query: "SELECT potato FROM pants;"
             });

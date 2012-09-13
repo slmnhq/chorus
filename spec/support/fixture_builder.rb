@@ -169,6 +169,8 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :note_on_bob_public_workfile, Events::NoteOnWorkfile.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
       fbuilder.name :note_on_alice_private_workfile, Events::NoteOnWorkfile.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
       fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
+
+      Events::ChorusViewCreated.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace, :source_object => bob_public)
     end
 
     text_workfile = Workfile.create!({:file_name => "text.txt", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
@@ -226,6 +228,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::DatasetImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :source_dataset => bobs_table, :destination_table => 'other_table')
     Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => bobs_table)
     Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => bobs_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
+    Events::ChorusViewCreated.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace, :source_object => bobs_table)
 
     #NotesAttachment
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
