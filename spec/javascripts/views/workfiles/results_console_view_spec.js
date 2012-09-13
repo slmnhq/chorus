@@ -143,7 +143,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(this.view.$(".execution")).not.toHaveClass("hidden");
             });
 
-
             it("closes the errors", function() {
                 expect(this.view.closeError).toHaveBeenCalled();
             });
@@ -198,6 +197,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                             var alert = fakeModal.lastModal();
                             expect(alert).toBeA(chorus.alerts.ExecutionMessage);
                             expect($(alert.el)).toContainTranslation('sql_execution.success');
+                        });
+                    });
+
+                    describe("starting another execution", function() {
+                        beforeEach(function() {
+                            chorus.PageEvents.broadcast("file:executionStarted", this.task);
+                        });
+
+                        it("hides the control section", function() {
+                            expect(this.view.$(".controls")).toHaveClass("hidden");
                         });
                     });
                 });

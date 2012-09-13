@@ -53,6 +53,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     executionStarted: function() {
         this.executionStartedTime = $.now();
+        this.$('.controls').addClass('hidden');
         this.$(".right").addClass("executing")
 
         this.$(".spinner").addClass("hidden").startLoading();
