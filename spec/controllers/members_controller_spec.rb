@@ -106,6 +106,16 @@ describe MembersController do
 
         Events::MembersAdded.limit(1).order('id desc').first.num_added.should == "2"
       end
+
+      it "creates a notification for each member of the workspace" do
+        parameters = {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, member3.id, member4.id]}
+
+        expect {
+          post :create, parameters
+        }.to change(Notification, :count).by(2)
+
+        Notification.last.recipient.id == member4.id
+      end
     end
 
     context "change some of the members for the workspace" do
@@ -122,6 +132,12 @@ describe MembersController do
           post :create, parameters
         }.not_to change(Events::Base, :count)
       end
+
+      it "does not create any notifications" do
+        expect {
+          post :create, parameters
+        }.not_to change(Notification, :count)
+      end
     end
 
     context "change some of the members for the workspace without passing owner's id in member array'" do
@@ -131,6 +147,18 @@ describe MembersController do
         lambda {
           post :create, parameters
         }.should_not change(Membership, :count)
+      end
+
+      it "does not create any events" do
+        expect {
+          post :create, parameters
+        }.not_to change(Events::Base, :count)
+      end
+
+      it "does not create any notifications" do
+        expect {
+          post :create, parameters
+        }.not_to change(Notification, :count)
       end
 
       it "throws an error" do
