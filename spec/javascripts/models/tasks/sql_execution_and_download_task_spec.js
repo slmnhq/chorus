@@ -19,6 +19,7 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             fileDownloadArgs = $.fileDownload.mostRecentCall.args;
             spyOnEvent(this.model, 'saved');
             spyOnEvent(this.model, 'saveFailed');
+            spyOnEvent(this.model, 'change');
         });
 
         it("starts a file download to the correct url and params", function() {
@@ -58,6 +59,10 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             it("triggers the saved callback", function() {
                 expect('saved').toHaveBeenTriggeredOn(this.model, [this.model]);
                 expect('saveFailed').not.toHaveBeenTriggeredOn(this.model, this.model);
+            });
+
+            it("triggers a changed event", function() {
+                expect('change').toHaveBeenTriggeredOn(this.model);
             });
         });
 

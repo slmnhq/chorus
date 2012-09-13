@@ -311,6 +311,16 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
+    unbindCallbacks: function() {
+        if(this.resource) {
+            this.bindings.remove(this.resource, "saveFailed", this.showErrors);
+            this.bindings.remove(this.resource, "validationFailed", this.showErrors);
+            this.bindings.remove(this.resource, "validated", this.clearErrors);
+            this.bindings.remove(this.resource, "change", this.render);
+            this.bindings.remove(this.resource, "reset", this.render);
+        }
+    },
+
     context: function context(resource) {
         resource = resource || this.resource;
         var ctx;
@@ -404,6 +414,12 @@ chorus.views.Base = chorus.views.Bare.extend({
         errors.qtip("destroy");
         errors.removeData("qtip");
         errors.removeClass("has_error");
+    },
+
+    setModel: function(model) {
+        this.unbindCallbacks();
+        this.resource = this.model = model;
+        this.bindCallbacks();
     }
 });
 

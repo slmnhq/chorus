@@ -11,10 +11,15 @@
         <span class="controls hidden">
             {{#if result}}
                 <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
-                <span class="separator">|</span>
             {{/if}}
 
-            <a href="#" class="download_csv">{{t "actions.download"}}</a>
+            {{#if hasResult}}
+                {{#if result}}
+                    <span class="separator">|</span>
+                {{/if}}
+                <a href="#" class="download_csv">{{t "actions.download"}}</a>
+            {{/if}}
+
 
             {{#if enableResize}}
                 <span class="separator">|</span>

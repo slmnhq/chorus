@@ -25,11 +25,11 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         it("does not display the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
-        })
+        });
 
-        it("displays save to csv file download link", function() {
-            expect(this.view.$("a.download_csv")).toExist();
-        })
+        it("does not display save to csv file download link", function() {
+            expect(this.view.$("a.download_csv")).not.toExist();
+        });
 
         it("hides the bottom gutter", function() {
             expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
@@ -213,13 +213,19 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
                         expect(this.view.$('.data_table').css("height")).toBe("0px");
                     });
+
+                    it("does not have a download link", function() {
+                        expect(this.view.$('.download_csv')).not.toExist();
+                    });
                 });
 
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithResult();
+                        this.view.setModel(this.task);
+                        this.task.trigger("change");
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                    })
+                    });
 
                     itRemovesExecutionUI(true);
                     itShowsExecutionResults();
@@ -229,6 +235,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.task = fixtures.taskWithResult();
+                        this.view.setModel(this.task);
+                        this.task.trigger("change");
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                     })
 
@@ -507,9 +515,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect($.fileDownload).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
                             {
                                 data: {
-                                    columnData: this.view.resource.getColumns(),
-                                    rowsData: this.view.resource.getRows(),
-                                    datasetName: this.view.resource.name()
+                                    columnData: JSON.stringify(this.view.resource.getColumns()),
+                                    rowsData: JSON.stringify(this.view.resource.getRows()),
+                                    datasetName: this.view.resource.name(),
+                                    workspaceId: this.view.resource.get("workspaceId")
                                 },
                                 httpMethod: "post"
                             });
