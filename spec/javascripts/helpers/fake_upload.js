@@ -7,6 +7,7 @@
         var self = this;
         spyOn($.fn, 'fileupload').andCallFake(function(uploadOptions) {
             self.options = uploadOptions;
+            _.defaults(self, uploadOptions);
             if(uploadOptions.type == "PUT") {
                 throw("The HTTP PUT method will break in Internet Explorer 9!");
             }

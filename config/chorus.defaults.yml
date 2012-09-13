@@ -13,7 +13,9 @@ server_port: 8080
 provision_max_size_in_gb: 100
 timezone_offset: -8
 file_sizes_mb:
-  workfiles:  10
-  csv_imports:  1
+  workfiles: 10
+  csv_imports: 10
   user_icon: 5
   workspace_icon: 5
+  note_attachment: 10
+  max_upload_size_megabytes: 100

@@ -14,8 +14,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             model: this.model
         });
         $('#jasmine_content').append(this.dialog.el);
-
-        spyOn($.fn, 'fileupload');
+        this.fakeFileUpload = stubFileUpload();
         spyOn(this.dialog, "launchSubModal");
         spyOn(this.dialog, "makeEditor").andCallThrough();
         this.qtip = stubQtip()
@@ -348,8 +347,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
         });
 
-        context("when a desktop files have been chosen", function() {
+        context("when desktop files have been chosen", function() {
             beforeEach(function() {
+                spyOn(this.dialog, "validateFileSize").andCallThrough();
                 this.dialog.$('.show_options').click();
                 this.dialog.$("a.show_options").click();
                 this.fileList = [
@@ -363,24 +363,27 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 expect($.fn.fileupload).toHaveBeenCalled();
                 expect($.fn.fileupload).toHaveBeenCalledOnSelector('input[type=file]');
                 spyOn(this.dialog.model, 'addFileUpload').andCallThrough();
-                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
                 this.request = jasmine.createSpyObj('request', ['abort']);
                 _.each(this.fileList, _.bind(function(file) {
-                    this.fileUploadOptions.add(null, {files: [file], submit: jasmine.createSpy().andReturn(this.request)});
+                    this.fakeFileUpload.add([file]);
                 }, this));
             });
 
+            it("validates the file size", function() {
+               expect(this.dialog.validateFileSize).toHaveBeenCalled();
+            });
+
             it("has a dataType of 'json'", function() {
-                expect(this.fileUploadOptions.dataType).toBe('json');
+                expect(this.fakeFileUpload.dataType).toBe('json');
             });
 
             it("uses updateProgressBar as a progress function", function() {
-                expect(this.fileUploadOptions.progress).toBe(this.dialog.updateProgressBar);
+                expect(this.fakeFileUpload.progress).toBe(this.dialog.updateProgressBar);
             });
 
             it("points the dropzone to the file input to avoid insanity", function() {
-                expect(this.fileUploadOptions.dropZone).toBe(this.dialog.$("input[type=file]"))
-            })
+                expect(this.fakeFileUpload.dropZone).toBe(this.dialog.$("input[type=file]"))
+            });
 
             it("unhides the file_details area", function() {
                 expect(this.dialog.$('.file_details')).toBeVisible();
@@ -415,7 +418,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     this.dialog.updateProgressBar("", data);
                 });
 
-                it("adjusts the visiblity of the progress bar", function() {
+                it("adjusts the visibility of the progress bar", function() {
                     var loadingBar = this.dialog.$('.file_details:eq(0) .progress_bar span');
                     expect(loadingBar.css('right')).toBe('75px');
                 });
@@ -426,7 +429,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                             fileDetailsElement: this.dialog.$('.file_details:eq(0)'),
                             total: 100,
                             loaded: 100
-                        }
+                        };
                         this.dialog.updateProgressBar("", data);
                     });
 
@@ -436,7 +439,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         expect(fileRow.find('.upload_finished')).toBeVisible();
                     })
                 });
-            })
+            });
 
             context("when a selected file is removed", function() {
                 beforeEach(function() {
@@ -534,7 +537,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     it("does trigger the progress bar initialization", function() {
                         expect(this.dialog.initProgressBars).toHaveBeenCalled();
-                    })
+                    });
 
                     context("when the file upload succeeds", function() {
                         beforeEach(function() {
@@ -556,15 +559,20 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     context("when the file upload fails", function() {
                         beforeEach(function() {
+                            this.dialog.model.serverErrors = { fields: { contents_file_size: { LESS_THAN: { message: "file_size_exceeded", count: "5 MB"}}}};
                             this.dialog.model.trigger("fileUploadFailed");
                         });
 
                         it("does not close the dialog box", function() {
                             expect(this.dialog.closeModal).not.toHaveBeenCalled();
-                        })
+                        });
 
                         it("does not trigger the 'invalidated' event on the model", function() {
                             expect("invalidated").not.toHaveBeenTriggeredOn(this.dialog.pageModel);
+                        });
+
+                        it("displays the server errors on the model", function() {
+                            expect(this.dialog.$('.errors')).toContainText("Contents file size must be less than 5 MB");
                         });
 
                         it("removes the spinner from the button", function() {
@@ -587,6 +595,34 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                             this.dialog.$(".add_workfile").click();
                             expect(this.dialog.launchSubModal).toHaveBeenCalled();
                         })
+                    });
+
+                    context("when the file size exceeds the maximum allowed size", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
+                            this.numFilesStart = this.dialog.model.files.length;
+                            this.fileList = [{ name: 'foo Bar Baz.csv', size: 999999999999999999 }];
+                            this.fakeFileUpload.add(this.fileList);
+                            this.dialog.desktopFileChosen({}, {files: this.fileList})
+                        });
+
+                        it("shows an error", function() {
+                            expect(this.dialog.$('.errors')).toContainText("file exceeds");
+                            expect(this.dialog.$('button.submit')).not.toBeEnabled();
+                        });
+
+                        it("does not add the file to model or UI", function() {
+                            expect(this.dialog.model.files.length).toEqual(this.numFilesStart);
+                            expect(this.dialog.$(".row.desktopfile").length).toEqual(this.numFilesStart);
+                        });
+
+                        it("removes the error when a valid file is then selected", function() {
+                            this.fileList = [{ name: 'foo Bar Baz.csv', size: 10 * 1024 * 1024 - 1 }];
+                            this.fakeFileUpload.add(this.fileList);
+                            this.dialog.desktopFileChosen({}, {files: this.fileList})
+                            expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
+                            expect(this.dialog.$('button.submit')).toBeEnabled();
+                        });
                     });
 
                     context("when the upload is cancelled by clicking 'cancel upload button'", function() {
@@ -750,9 +786,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         context("while uploading is going on", function() {
             beforeEach(function() {
                 spyOn(this.dialog.model, 'saveFiles');
-                this.dialog.model.files = [
-                    {}
-                ];
+                this.dialog.model.files = [{}];
                 this.dialog.modelSaved();
             });
 

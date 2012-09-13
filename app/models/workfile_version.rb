@@ -1,7 +1,7 @@
 class WorkfileVersion < ActiveRecord::Base
   attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
   has_attached_file :contents,
-                    :styles => {:original => "", :icon => "50x50>"},
+                    :styles => {:icon => "50x50>"},
                     :path => Chorus::Application.config.chorus['workfile_storage_path'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style"
 

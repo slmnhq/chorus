@@ -18,6 +18,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.notifications = new chorus.views.NotificationRecipient();
         this.subviews[".notification_recipients"] = "notifications";
         this.subviews[".recipients_menu"] = "recipients";
+        this.config = chorus.models.Config.instance();
     },
 
     onSelectRecipients: function(selection) {
@@ -210,8 +211,31 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         var extension = _.last(file.name.split('.'));
         var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
 
-        file.isUpload = true
-        this.showFile(file, file.name, iconSrc, uploadModel);
+        file.isUpload = true;
+        if (this.validateFileSize()) {
+            this.showFile(file, file.name, iconSrc, uploadModel);
+        } else {
+            this.model.removeFileUpload(uploadModel);
+        }
+    },
+
+    validateFileSize: function() {
+        this.clearErrors();
+        this.$("button.submit").removeAttr("disabled");
+        if (!this.model) return;
+
+        var maxFileSize = this.config.get("fileSizesMbNoteAttachment");
+
+        var isValid = true;
+        _.each( this.model.files, function(file) {
+            if (file.get("files")[0].size > (maxFileSize * 1024 * 1024) ) {
+                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
+                this.$("button.submit").prop("disabled", true);
+                this.showErrors(this.model);
+                isValid = false;
+            }
+        }, this);
+        return isValid;
     },
 
     workfileChosen: function(workfiles) {

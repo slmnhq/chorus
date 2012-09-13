@@ -38,11 +38,14 @@ chorus.models.Note = chorus.models.Activity.extend({
         this.filesToBeSaved--;
         this.fileUploadErrors++;
         if (response == "abort") {
-            this.message = this.message || t('notes.new_dialog.upload_cancelled')
+            this.message = this.message || t('notes.new_dialog.upload_cancelled');
             this.serverErrors = {fields: {file_upload: {GENERIC: {message: this.message}}}};
         } else {
-            this.serverErrors = response.errors;
-            file.serverErrors = response.errors;
+            var errors = JSON.parse(e.responseText).errors;
+            var count = errors.fields.contents_file_size.LESS_THAN.count;
+            errors.fields.contents_file_size.LESS_THAN.count = count.split(" ")[0]/1024/1024 + " MB";
+            this.serverErrors = errors;
+            file.serverErrors = errors;
         }
         this.uploadComplete();
     },

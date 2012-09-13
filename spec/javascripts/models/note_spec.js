@@ -93,14 +93,17 @@ describe("chorus.models.Note", function() {
         });
 
         describe("saveFiles", function() {
-            var errorResponse = {
+            var errorResponse = JSON.stringify({
                 errors: {
                     fields: {
-                        file_upload: {TOO_LONG: {count: 10485760}}
+                        contents_file_size: {
+                            LESS_THAN: {
+                                message: "file_size_exceeded",
+                                count: "5242880 Bytes"}
+                        }
                     }
-                },
-                response: []
-            };
+                }
+            });
 
             beforeEach(function() {
                 this.model.addFileUpload(this.fileUpload2);
@@ -135,23 +138,23 @@ describe("chorus.models.Note", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.done.mostRecentCall.args[0]();
                     this.submitObject2.promise.done.mostRecentCall.args[0]();
-                })
+                });
 
                 it("triggers fileUploadSuccess", function() {
                     expect(this.fileUploadSuccessSpy).toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).not.toHaveBeenCalled();
                     expect(this.fileUploadSuccessSpy.callCount).toBe(1);
-                })
+                });
 
                 it("triggers fileUploadDone", function() {
                     expect(this.fileUploadDoneSpy).toHaveBeenCalled();
-                })
+                });
             });
 
             describe("when some of the saves have api failure", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.fail.mostRecentCall.args[0]({}, errorResponse);
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, errorResponse);
+                    this.submitObject1.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
                 });
                 it("triggers fileUploadFailed", function() {
                     expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
@@ -161,17 +164,17 @@ describe("chorus.models.Note", function() {
 
                 it("triggers fileUploadDone", function() {
                     expect(this.fileUploadDoneSpy).toHaveBeenCalled();
-                })
+                });
 
                 it("puts the error on the file object", function() {
                     expect(_.first(this.fileUpload2.serverErrorMessages())).toEqual(
-                        'The file exceeds its maximum permitted size of 10485760 bytes.'
+                        'Contents file size must be less than 5 MB'
                     );
                 });
 
                 it("copies the errors to the model", function() {
                     expect(_.first(this.model.serverErrorMessages())).toEqual(
-                        'The file exceeds its maximum permitted size of 10485760 bytes.'
+                        'Contents file size must be less than 5 MB'
                     );
                 });
             });
@@ -179,38 +182,38 @@ describe("chorus.models.Note", function() {
             describe("when some of the saves have failed", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, errorResponse);
-                })
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
+                });
 
                 it("triggers fileUploadFailed", function() {
                     expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy.callCount).toBe(1);
 
-                })
-            })
+                });
+            });
 
             describe("when the file upload is cancelled", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.done.mostRecentCall.args[0]();
                     this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
-                })
+                });
 
                 it("sets serverErrors on the model", function() {
                     expect(this.model.serverErrorMessages()[0]).toMatchTranslation('notes.new_dialog.upload_cancelled');
-                })
-            })
+                });
+            });
 
             describe("when both uploads are cancelled", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.fail.mostRecentCall.args[0]({}, 'abort');
                     this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
-                })
+                });
 
                 it("only has the cancel message once", function() {
                     expect(_.keys(this.model.serverErrors).length).toBe(1);
-                })
-            })
+                });
+            });
         });
     })
 
