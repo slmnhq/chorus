@@ -10,9 +10,12 @@
     <div class="right">
         <span class="controls hidden">
             <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
-            <span class="separator">|</span>
-            <a href="#" class="download_csv">{{t "actions.download"}}</a>
-
+            
+            {{#if hasResults}}
+                <span class="separator">|</span>
+                <a href="#" class="download_csv">{{t "actions.download"}}</a>
+            {{/if}}
+            
             {{#if enableResize}}
                 <span class="separator collapsable">|</span>
                 <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>

@@ -24,6 +24,7 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
 
     saved: function() {
         this.trigger("saved", this);
+        this.trigger("change");
     },
 
     saveFailed: function() {

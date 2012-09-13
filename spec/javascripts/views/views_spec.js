@@ -96,6 +96,58 @@ describe("chorus.views.Base", function() {
         });
     });
 
+    describe("unbindCallbacks", function() {
+        beforeEach(function() {
+            spyOn(chorus.views.Base.prototype, 'showErrors');
+            spyOn(chorus.views.Base.prototype, 'clearErrors');
+            spyOn(chorus.views.Base.prototype, 'render');
+            this.model = new chorus.models.Base();
+            this.view = new chorus.views.Base({model: this.model});
+            this.view.unbindCallbacks();
+        });
+
+        it("unbinds the default callbacks", function() {
+            this.model.trigger("saveFailed");
+            this.model.trigger("validationFailed");
+            this.model.trigger("saveFailed");
+            this.model.trigger("validated");
+            this.model.trigger("change");
+            this.model.trigger("reset");
+            expect(this.view.showErrors).not.toHaveBeenCalled();
+            expect(this.view.clearErrors).not.toHaveBeenCalled();
+            expect(this.view.render).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("setModel", function() {
+        beforeEach(function() {
+            this.oldModel = new chorus.models.Base();
+            this.newModel = new chorus.models.Base();
+            this.randomModel = new chorus.models.Base();
+            this.view = new chorus.views.Base();
+            spyOn(this.view, 'render');
+            this.view.resource = this.view.model = this.oldModel;
+            this.view.bindCallbacks();
+            this.view.bindings.add(this.randomModel, "change", this.view.render);
+            this.view.setModel(this.newModel);
+        });
+
+        it("unbinds the default model events from the old model", function() {
+            this.oldModel.trigger("change");
+            expect(this.view.render).not.toHaveBeenCalled();
+        });
+
+        it("binds the default model events to the new model", function() {
+            this.newModel.trigger("change");
+            expect(this.view.render).toHaveBeenCalled();
+        });
+
+        it("does not affect other model bindings ", function() {
+            this.randomModel.trigger("change");
+            expect(this.view.render).toHaveBeenCalled();
+        });
+    });
+
     describe(".extended", function() {
         it("sets the view's className based on its templateName", function() {
             var Klass = chorus.views.Bare.extend({ templateName: "users/something/else" });

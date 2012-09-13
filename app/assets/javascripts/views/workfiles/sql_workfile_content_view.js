@@ -83,7 +83,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.bindings.remove(undefined, 'saveFailed', this.executionFailed);
         this.bindings.add(this.task, "saved", this.executionSucceeded);
         this.bindings.add(this.task, "saveFailed", this.executionFailed);
-        this.resultsConsole.model = this.task;
+        this.resultsConsole.setModel(this.task);
     },
 
     newChorusView: function() {

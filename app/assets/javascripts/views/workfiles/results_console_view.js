@@ -44,7 +44,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     execute: function(task) {
-        this.resource = this.model = task;
+        this.setModel(task);
         task.save();
         this.executionStarted();
         this.bindings.add(task, "saved", _.bind(this.executionSucceeded, this, task));
@@ -226,7 +226,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
             enableResize: this.options.enableResize,
-            enableExpander: this.options.enableExpander
+            enableExpander: this.options.enableExpander,
+            hasResults: this.model && this.model.hasResults()
         }
     }
 });

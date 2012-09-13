@@ -24,8 +24,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         });
 
-        it("displays save to csv file download link", function() {
-            expect(this.view.$("a.download_csv")).toExist();
+        it("does not display save to csv file download link", function() {
+            expect(this.view.$("a.download_csv")).not.toExist();
         });
 
         it("hides the bottom gutter", function() {
@@ -223,6 +223,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
                         expect(this.view.$('.data_table').css("height")).toBe("0px");
+                    });
+
+                    it("does not have a download link", function() {
+                        expect(this.view.$('.download_csv')).not.toExist();
                     });
                 });
 
