@@ -212,6 +212,10 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
     fbuilder.name :note_on_alice_private, Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
+    #Comments
+    fbuilder.name :comment_on_note_on_greenplum,
+                  Comment.create!({:body => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
+
     #Events
     Timecop.travel(-1.day)
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
