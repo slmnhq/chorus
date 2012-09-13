@@ -136,7 +136,7 @@ module PackageMaker
 
     if install_success
       builds_to_keep = 5
-      run "ssh #{host} 'test `ls #{install_path}/releases | wc -l` -gt #{builds_to_keep} && find #{install_path}/releases -maxdepth 1 -not -newer \"`ls -t | head -#{builds_to_keep + 1} | tail -1`\" -not -name \".\" -exec rm -rf {} \\;'"
+      run "ssh #{host} 'cd #{install_path}/releases && test `ls | wc -l` -gt 5 && find . -maxdepth 1 -not -newer \"`ls -t | head -6 | tail -1`\" -not -name \".\" -exec rm -rf {} \;'"
       run "ssh #{host} 'CHORUS_HOME=~/chorusrails/current ~/chorusrails/server_control.sh start'"
     end
 
