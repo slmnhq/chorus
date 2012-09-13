@@ -5,7 +5,6 @@ describe GpdbColumn do
     subject { GpdbColumn.columns_for(account, dataset) }
 
     context "with real data", :database_integration do
-
       let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
       let(:account) { GpdbIntegration.real_gpdb_account }
       let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
@@ -39,15 +38,16 @@ describe GpdbColumn do
           view = ChorusView.new
           view.name = "myChorusView"
           view.schema = schema
-          view.query = "SELECT * FROM base_table1"
+          view.query = "SELECT * FROM base_table1;"
           view.save!
           view
         }
 
         it "gets the column information" do
+          subject.count.should == 5
           row = subject.first
           row.name.should eq('id')
-          row.data_type.should eq('integer')
+          row.data_type.should eq('int4')
         end
 
         it "deletes the temporary table when it is done" do

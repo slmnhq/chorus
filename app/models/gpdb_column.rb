@@ -32,22 +32,20 @@ class GpdbColumn
   end
 
   def self.columns_for_chorusview(account, view)
-    columns_with_stats = view.with_gpdb_connection(account) do |conn|
+    view.with_gpdb_connection(account) do |connection|
       query = view.query
-      if (query =~ /limit *\d *[;] *$/i) == nil
-        query += " LIMIT 1"
+      jdbc_conn = connection.instance_variable_get(:"@connection").connection
+      s = jdbc_conn.prepareStatement(query)
+      flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
+      s.executeWithFlags(flag)
+      metaData = s.getResultSet.getMetaData
+      numColumns = metaData.getColumnCount
+      (1..numColumns).map do |index|
+        GpdbColumn.new({
+          :name => metaData.getColumnName(index),
+          :data_type => metaData.getColumnTypeName(index)
+        })
       end
-
-      conn.exec_query("CREATE TEMP TABLE tmp_tbl AS #{query}")
-
-      table = GpdbTable.new
-      table.name = "tmp_tbl"
-      table.schema = view.schema
-
-      result = self.columns_for_table(account, table, conn)
-
-      conn.exec_query("DROP TABLE IF EXISTS tmp_tbl")
-      result
     end
   end
 
