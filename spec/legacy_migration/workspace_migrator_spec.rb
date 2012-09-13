@@ -45,6 +45,17 @@ describe WorkspaceMigrator do
         invalids = Workspace.all.reject { |workspace| workspace.valid? }
         invalids.should be_empty
       end
+
+      it "sets the quickstart fields to true" do
+        Legacy.connection.select_all("SELECT * FROM edc_workspace where is_deleted is false").each do |legacy_workspace|
+          workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])
+
+          workspace.has_added_member.should == true
+          workspace.has_added_sandbox.should == true
+          workspace.has_added_workfile.should == true
+          workspace.has_changed_settings.should == true
+        end
+      end
     end
   end
 end

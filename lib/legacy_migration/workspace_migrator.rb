@@ -23,6 +23,10 @@ class WorkspaceMigrator < AbstractMigrator
           archiver_id,
           summary,
           owner_id,
+          has_added_member,
+          has_added_sandbox,
+          has_added_workfile,
+          has_changed_settings,
           deleted_at,
           created_at,
           updated_at)
@@ -37,6 +41,10 @@ class WorkspaceMigrator < AbstractMigrator
           archivers.id,
           summary,
           owners.id,
+          true,
+          true,
+          true,
+          true,
           CASE is_deleted
             WHEN 't' THEN last_updated_tx_stamp
             ELSE null
