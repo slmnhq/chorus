@@ -280,13 +280,11 @@ class ActivityMigrator < AbstractMigrator
           event.additional_data[:error_message] = ''
         end
 
-        additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table, aso2.object_id as source_dataset FROM edc_activity_stream_object aso1,
-                                        edc_activity_stream_object aso2
-                                        WHERE aso1.activity_stream_id = '#{event.legacy_id}' and aso2.activity_stream_id = '#{event.legacy_id}'
-                                        AND aso1.entity_type = 'table' AND aso2.entity_type IN ('databaseObject', 'chorusView');").first
+        additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table FROM edc_activity_stream_object aso1
+                                        WHERE aso1.activity_stream_id = '#{event.legacy_id}'
+                                        AND aso1.entity_type = 'table';").first
         # TODO Remove this line once we have chorus views
         next unless additional_data
-        event.additional_data[:source_dataset_id] = Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(additional_data['source_dataset'])).id
         event.additional_data[:destination_table] = additional_data['destination_table']
         event.save!
       end
