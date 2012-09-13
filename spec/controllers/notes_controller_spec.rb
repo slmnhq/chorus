@@ -17,6 +17,17 @@ describe NotesController do
       response.code.should == "201"
     end
 
+    it "sanitizes the body of note" do
+      mock(Events::Note).create_from_params(
+          {
+              "entity_type" => "greenplum_instance",
+              "entity_id" => "3",
+              "body" => "<b>not evil</b> ",
+          }, @user)
+      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "<b>not evil</b> <script>alert('Evil!')</script>" }
+      response.code.should == "201"
+    end
+
     it "uses authorization" do
       id = gpdb_instances(:greenplum).to_param
       mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
@@ -69,8 +80,8 @@ describe NotesController do
   end
 
   describe "#update" do
+    let(:note) { FactoryGirl.create(:note_on_greenplum_instance_event) }
     context "as the note owner" do
-      let(:note) { FactoryGirl.create(:note_on_greenplum_instance_event) }
       before do
         log_in note.actor
       end
@@ -84,7 +95,6 @@ describe NotesController do
     end
 
     context "not as the note owner" do
-      let(:note) { FactoryGirl.create(:note_on_greenplum_instance_event) }
       let(:other_user) { FactoryGirl.create(:user) }
       before do
         log_in other_user
@@ -96,6 +106,14 @@ describe NotesController do
 
         Events::Note.first.body.should_not == "Some crazy content"
       end
+    end
+
+    it "sanitize the Note body before update" do
+      log_in note.actor
+      post :update, :id => note.id, :note => {:body => "Hi there<script>alert('haha I am evil')</script>"}
+      response.code.should == "200"
+
+      Events::Note.first.body.should == "Hi there"
     end
 
   end
