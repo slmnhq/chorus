@@ -350,20 +350,6 @@ describe Workspace do
     end
 
     describe "before_update" do
-      describe "update_has_changed_settings" do
-        it "sets if changing random attributes" do
-          workspace.name = 'new name'
-          workspace.save!
-          workspace.should have_changed_settings
-        end
-
-        it "does not set if changing sandbox_id" do
-          workspace.sandbox_id = sandbox.id
-          workspace.save!
-          workspace.should_not have_changed_settings
-        end
-      end
-
       describe "clear_assigned_datasets_on_sandbox_assignment" do
         let(:sandbox_dataset) { sandbox.datasets.first }
         let(:other_dataset) { datasets(:other_table) }

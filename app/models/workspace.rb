@@ -1,7 +1,7 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
   attr_accessor :archived
-  attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived
+  attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings
 
   has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
@@ -27,7 +27,7 @@ class Workspace < ActiveRecord::Base
   validate :archiver_is_set_when_archiving
   validates_attachment_size :image, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
-  before_update :update_has_changed_settings, :clear_assigned_datasets_on_sandbox_assignment
+  before_update :clear_assigned_datasets_on_sandbox_assignment
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
@@ -187,11 +187,6 @@ class Workspace < ActiveRecord::Base
 
   def update_has_added_sandbox
     self.has_added_sandbox = true if sandbox_id_changed? && sandbox
-    true
-  end
-
-  def update_has_changed_settings
-    self.has_changed_settings = true if (changed - ['sandbox_id', 'has_added_sandbox']).present?
     true
   end
 

@@ -428,22 +428,26 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect(this.dialog.$("button.submit")).toHaveSpinner();
                     });
 
+                    it("always sends the has_changed_settings on save", function() {
+                        expect(this.dialog.pageModel.get("hasChangedSettings")).toBe(true);
+                    });
+
                     context("when the public checkbox is checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input[name=public]").prop("checked", true);
                             this.dialog.$('form').submit();
-                        })
+                        });
 
                         it("sets the public model attribute to true", function() {
                             expect(this.dialog.pageModel.get("public")).toBe(true);
-                        })
-                    })
+                        });
+                    });
 
                     context("when the public checkbox is not checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input[name=public]").prop("checked", false);
                             this.dialog.$('form').submit();
-                        })
+                        });
 
                         it("sets the public model attribute to false", function() {
                             expect(this.dialog.pageModel.get("public")).toBe(false);
