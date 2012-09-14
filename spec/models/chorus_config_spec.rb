@@ -3,13 +3,13 @@ require "spec_helper"
 describe ChorusConfig do
   let(:config) { ChorusConfig.new }
   before do
-    stub(YAML).load_file(Rails.root + 'config/chorus.yml') do
+    stub(YAML).load_file(Rails.root.join('config/chorus.yml').to_s) do
       {
           'parent' => {'child' => 'yes'},
           'simple' => 'no',
       }
     end
-    stub(YAML).load_file(Rails.root + 'config/chorus.defaults.yml') do
+    stub(YAML).load_file(Rails.root.join('config/chorus.defaults.yml').to_s) do
       {
           'simple' => 'yes!',
           'a_default' => 'maybe'

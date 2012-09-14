@@ -13,6 +13,7 @@ server_port: 8080
 provision_max_size_in_gb: 100
 timezone_offset: -8
 worker_threads: 5
+webserver_threads: 20
 file_sizes_mb:
   workfiles: 10
   csv_imports: 10

@@ -7,3 +7,4 @@ production:
   min_messages: warning
   host: 127.0.0.1
   port: 8543
+  pool: 20

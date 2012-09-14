@@ -44,6 +44,10 @@ case $RAILS_ENV in
         fi
         ;;
     * )
+        log "updating jetty config..."
+        $RUBY packaging/update_jetty_xml.rb
+        $RUBY packaging/update_database_pool_size.rb
+
         log "starting jetty..."
         cd $CHORUS_HOME/vendor/jetty/
         JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV ./jetty-init start &>/dev/null &

@@ -1,9 +1,14 @@
+require 'erb'
+require 'yaml'
+require 'active_support/core_ext/hash/deep_merge'
+
 class ChorusConfig
   attr_accessor :config
 
-  def initialize
+  def initialize(root_dir=nil)
+    set_root_dir(root_dir)
     app_config = YAML.load_file(config_file_path)
-    defaults = YAML.load_file(Rails.root + 'config/chorus.defaults.yml')
+    defaults = YAML.load_file(File.join(@root_dir, 'config/chorus.defaults.yml'))
 
     @config = defaults.deep_merge(app_config)
   end
@@ -22,11 +27,18 @@ class ChorusConfig
         self['gpfdist.data_dir'] && self['gpfdist.ssl'] != nil && true)
   end
 
-  def self.config_file_path
-    Rails.root + 'config/chorus.yml'
+  def self.config_file_path(root_dir=nil)
+    root_dir = Rails.root unless root_dir
+    File.join root_dir, 'config/chorus.yml'
   end
 
   def config_file_path
-    self.class.config_file_path
+    self.class.config_file_path(@root_dir)
+  end
+
+  private
+
+  def set_root_dir(root_dir)
+    @root_dir = root_dir || Rails.root
   end
 end
