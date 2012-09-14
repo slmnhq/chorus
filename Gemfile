@@ -27,6 +27,7 @@ group :assets do
   gem 'handlebars_assets'
   gem 'therubyrhino'
   gem 'uglifier', '>= 1.0.3'
+  gem 'yui-compressor'
 end
 
 group :integration do
