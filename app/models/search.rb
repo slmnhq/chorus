@@ -33,7 +33,7 @@ class Search
       with :type_name, models_to_search.collect(&:name)
     end
     models_to_search.each do |model_to_search|
-      model_to_search.search_permissions(current_user, @search) if model_to_search.respond_to? :search_permissions
+      model_to_search.add_search_permissions(current_user, @search) if model_to_search.respond_to? :add_search_permissions
     end
 
     @search.execute

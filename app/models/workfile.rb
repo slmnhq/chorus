@@ -32,7 +32,7 @@ class Workfile < ActiveRecord::Base
     string :type_name
   end
 
-  def self.search_permissions(current_user, search)
+  def self.add_search_permissions(current_user, search)
     unless current_user.admin?
       search.build do
         any_of do

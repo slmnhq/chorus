@@ -96,6 +96,8 @@ FixtureBuilder.configure do |fbuilder|
     bobsearch_database = GpdbDatabase.create!({ :gpdb_instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
     bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
     bobssearch_table = GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
+    bobsearch_chorus_view = ChorusView.new({:name => "bobsearch_chorus_view", :schema => bobsearch_schema, :query => "select bobsearch from a_table"}, :without_protection => true)
+    bobsearch_chorus_view.save!(:validate => false)
 
     shared_search_database = GpdbDatabase.create!({ :gpdb_instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
     shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)

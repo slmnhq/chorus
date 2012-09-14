@@ -46,7 +46,7 @@ class Workspace < ActiveRecord::Base
     { :type => :boolean, :method => :public }
   ]
 
-  def self.search_permissions(current_user, search)
+  def self.add_search_permissions(current_user, search)
     unless current_user.admin?
       search.build do
         any_of do

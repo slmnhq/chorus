@@ -2,7 +2,7 @@ require "spec_helper"
 describe Search do
 
   describe "with solr disabled" do
-    let(:user) {users(:bob)}
+    let(:user) { users(:bob) }
 
     describe "new" do
       it "takes current user and search params" do
@@ -119,6 +119,7 @@ describe Search do
     let(:public_workfile_bob) { workfiles(:bob_public) }
     let(:dataset) { datasets(:bobsearch_table) }
     let(:shared_dataset) { datasets(:bobsearch_shared_table) }
+    let(:chorus_view) { datasets(:bobsearch_chorus_view) }
 
     before do
       reindex_solr_fixtures
@@ -130,7 +131,7 @@ describe Search do
           search = Search.new(bob, :query => 'bobsearch')
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 1
-          search.num_found[:datasets].should == 2
+          search.num_found[:datasets].should == 3
         end
       end
 
@@ -211,10 +212,18 @@ describe Search do
         end
       end
 
+      it "includes the highlighted query for a chorus view" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          chorus_view = search.datasets.find { |dataset| dataset.is_a? ChorusView }
+          chorus_view.highlighted_attributes[:query][0].should == "select <em>bobsearch</em> from a_table"
+        end
+      end
+
       it "returns the Dataset objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
-          search.datasets.should =~ [dataset, shared_dataset]
+          search.datasets.should =~ [dataset, shared_dataset, chorus_view]
         end
       end
 

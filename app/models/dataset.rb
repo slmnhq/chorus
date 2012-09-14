@@ -38,6 +38,7 @@ class Dataset < ActiveRecord::Base
     s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    s.text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.string :grouping_id
     s.string :type_name
   end
@@ -54,7 +55,7 @@ class Dataset < ActiveRecord::Base
     schema.database.gpdb_instance.accessible_to(user)
   end
 
-  def self.search_permissions(current_user, search)
+  def self.add_search_permissions(current_user, search)
     search.build do
       any_of do
         without :type_name, Dataset.type_name
