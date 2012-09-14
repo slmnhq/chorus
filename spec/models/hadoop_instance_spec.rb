@@ -74,7 +74,9 @@ describe HadoopInstance do
     end
 
     it "creates an HDFS root entry" do
-      @new_instance.hdfs_entries.where(:path => "/").should be_present
+      root_entry = @new_instance.hdfs_entries.find_by_path("/")
+      root_entry.should be_present
+      root_entry.is_directory.should be_true
     end
   end
 
