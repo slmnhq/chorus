@@ -1,7 +1,8 @@
-require 'nokogiri'
-require 'app/models/chorus_config'
-
 chorus_home = File.expand_path(File.dirname(__FILE__) + '/../')
+require File.join(chorus_home, 'config', 'boot')
+require 'nokogiri'
+require File.join(chorus_home, 'app/models/chorus_config')
+
 jetty_xml_file = File.join(chorus_home, 'vendor', 'jetty', 'jetty.xml')
 
 chorus_config = ChorusConfig.new(chorus_home)

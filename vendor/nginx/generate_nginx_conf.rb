@@ -1,8 +1,10 @@
 require 'erb'
 require 'yaml'
-require 'app/models/chorus_config'
 
 chorus_home = File.expand_path(File.dirname(__FILE__) + '/../../')
+require File.join(chorus_home, 'config', 'boot')
+require File.join(chorus_home, 'app/models/chorus_config')
+
 destination_path = chorus_home + '/vendor/nginx/nginx_dist/nginx_data/conf'
 nginx_template_path = chorus_home + '/vendor/nginx/nginx.conf.erb'
 chorus_config = ChorusConfig.new chorus_home
