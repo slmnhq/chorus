@@ -3,7 +3,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
         chorus._navigated();
         this.textfile = rspecFixtures.workfile.text();
         spyOn(this.textfile.workspace(), 'isActive').andReturn(true);
-        this.textfile.content("select * from foos where bar_id = 1;");
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
@@ -124,8 +123,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         it("puts the cursor at the end of the file", function() {
             var coords = this.view.editor.getCursor();
-            expect(coords.line).toBe(0);
-            expect(coords.ch).toBe(36);
+            expect(coords.line).toBe(9);
+            expect(coords.ch).toBe(0);
         });
 
         it("adds the editable class to the CodeMirror div", function() {

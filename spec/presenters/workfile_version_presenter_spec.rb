@@ -43,69 +43,82 @@ describe WorkfileVersionPresenter, :type => :view do
       json[:commit_message].should_not match "<"
     end
 
-    context "when the file is an image" do
-      let(:workfile) { workfiles(:'image.png') }
-
-      it "includes the url of the original file" do
-        hash[:content_url].should == version.contents.url
-      end
-
-      it "uses the thumbnail of the original file for the icon" do
-        hash[:icon_url].should == version.contents.url(:icon)
-      end
-
-      it "does not include the file's content" do
-        hash[:content].should be_nil
-      end
-    end
-
-    context "when the file is binary" do
-      let(:workfile) { workfiles(:'binary.tar.gz') }
-
-      it "includes the url of the file" do
-        hash[:content_url].should == version.contents.url
-      end
-
-      it "uses a static image for the icon (based on the filetype)" do
-        hash[:icon_url].should be_nil
-      end
-
-      it "does not include the file's content" do
-        hash[:content].should be_nil
-      end
-    end
-
-    context "when the file is text" do
+    context "when not on the workfile page" do
       let(:workfile) { workfiles(:'text.txt') }
 
-      it "includes the url of the file" do
-        hash[:content_url].should == version.contents.url
-      end
-
-      it "uses a static image for the icon (based on the filetype)" do
-        hash[:icon_url].should be_nil
-      end
-
-      it "includes the text of the file" do
-        hash[:content].should == File.read(version.contents.path)
+      it "should not include the :contents key" do
+        hash[:content].should be_nil
       end
     end
 
-    context "when the file is sql" do
-      let(:workfile) { workfiles(:'sql.sql') }
+    context "when rendering a single workfile version (the contents option is true)" do
+      let(:options) { {contents: true} }
 
-      it "includes the url of the file" do
-        hash[:content_url].should == version.contents.url
+      context "when the file is an image" do
+        let(:workfile) { workfiles(:'image.png') }
+
+        it "includes the url of the original file" do
+          hash[:content_url].should == version.contents.url
+        end
+
+        it "uses the thumbnail of the original file for the icon" do
+          hash[:icon_url].should == version.contents.url(:icon)
+        end
+
+        it "does not include the file's content" do
+          hash[:content].should be_nil
+        end
       end
 
-      it "uses a static image for the icon (based on the filetype)" do
-        hash[:icon_url].should be_nil
+      context "when the file is binary" do
+        let(:workfile) { workfiles(:'binary.tar.gz') }
+
+        it "includes the url of the file" do
+          hash[:content_url].should == version.contents.url
+        end
+
+        it "uses a static image for the icon (based on the filetype)" do
+          hash[:icon_url].should be_nil
+        end
+
+        it "does not include the file's content" do
+          hash[:content].should be_nil
+        end
       end
 
-      it "includes the text of the file" do
-        hash[:content].should == File.read(version.contents.path)
+      context "when the file is text" do
+        let(:workfile) { workfiles(:'text.txt') }
+
+        it "includes the url of the file" do
+          hash[:content_url].should == version.contents.url
+        end
+
+        it "uses a static image for the icon (based on the filetype)" do
+          hash[:icon_url].should be_nil
+        end
+
+        it "includes the text of the file" do
+          hash[:content].should == File.read(version.contents.path)
+        end
+      end
+
+      context "when the file is sql" do
+        let(:workfile) { workfiles(:'sql.sql') }
+
+        it "includes the url of the file" do
+          hash[:content_url].should == version.contents.url
+        end
+
+        it "uses a static image for the icon (based on the filetype)" do
+          hash[:icon_url].should be_nil
+        end
+
+        it "includes the text of the file" do
+          hash[:content].should == File.read(version.contents.path)
+        end
       end
     end
+
 
     context "when rendering the activity stream" do
       let(:options) { {:activity_stream => true} }

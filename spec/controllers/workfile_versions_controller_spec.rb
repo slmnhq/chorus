@@ -44,7 +44,6 @@ describe WorkfileVersionsController do
       workfile.reload
 
       File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
-      decoded_response[:version_info][:content].should == 'New content'
 
       decoded_response[:version_info][:commit_message].should == 'A new version'
       decoded_response[:version_info][:version_num].should == 2
@@ -82,6 +81,7 @@ describe WorkfileVersionsController do
 
       decoded_response[:version_info][:version_num].should == 1
       decoded_response[:version_info][:version_num].should_not == another_version.version_num
+      decoded_response[:version_info][:content].should_not be_nil
     end
 
     generate_fixture "workfileVersion.json" do

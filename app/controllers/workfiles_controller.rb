@@ -4,7 +4,7 @@ class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
-    present workfile.latest_workfile_version
+    present workfile.latest_workfile_version, :presenter_options => { :contents => true }
   end
 
   def create

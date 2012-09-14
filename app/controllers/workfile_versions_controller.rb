@@ -31,7 +31,7 @@ class WorkfileVersionsController < ApplicationController
     authorize! :show, workfile.workspace
 
     workfile_version = WorkfileVersion.find(params[:id])
-    present workfile_version
+    present workfile_version, :presenter_options => {:contents => true}
   end
 
   def index

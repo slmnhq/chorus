@@ -14,9 +14,13 @@ class WorkfileVersionPresenter < Presenter
         :updated_at => updated_at,
         :content_url => contents.url,
         :icon_url => icon_url,
-        :content => get_content
+        :content => content_value
       }
     })
+  end
+
+  def content_value
+    @options[:contents] ? get_content : nil
   end
 
   def owner_hash

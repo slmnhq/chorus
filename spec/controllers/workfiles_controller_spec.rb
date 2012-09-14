@@ -118,7 +118,11 @@ describe WorkfilesController do
         end
 
         it "presents the workfile" do
-          mock.proxy(controller).present(private_workfile.latest_workfile_version)
+          mock_present do |model, _, options|
+            model.should == private_workfile.latest_workfile_version
+            options[:contents].should be_present
+          end
+
           get :show, {:id => private_workfile}
         end
       end
