@@ -194,6 +194,16 @@ describe ChorusInstaller do
       end
     end
 
+    context "when OSX" do
+      before do
+        stub(installer).system('uname') { 'Darwin' }
+      end
+
+      it "should return the OSX build" do
+        installer.get_postgres_build.should == 'postgres-osx-9.1.4.tar.gz'
+      end
+    end
+
     context "when couldn't guess version/distribution" do
       before do
         mock(io).prompt_until(:select_os).times(prompt_times) do |symbol, proc|

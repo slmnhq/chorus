@@ -96,6 +96,7 @@ class ChorusInstaller
   def get_postgres_build
     input = nil
     input = 3 if is_supported_suse?
+    input = 5 if is_supported_mac?
 
     redhat_version = supported_redhat_version
     input = 1 if redhat_version == '5.5'
@@ -116,6 +117,8 @@ class ChorusInstaller
         "postgres-redhat6.2-9.1.4.tar.gz"
       when 3
         "postgres-suse11-9.1.4.tar.gz"
+      when 5
+        "postgres-osx-9.1.4.tar.gz"
       else
         raise InstallerErrors::InstallAborted, "Version not supported."
     end
@@ -136,6 +139,10 @@ class ChorusInstaller
     File.open('/etc/SuSE-release').readlines.any? do |release|
       release.match(/^VERSION = 11$/)
     end
+  end
+
+  def is_supported_mac?
+    system("uname") == 'Darwin'
   end
 
   def copy_chorus_to_destination
