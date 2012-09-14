@@ -84,46 +84,7 @@ beforeEach(function() {
                     type: "NOTE_COMMENT",
                     text: "How about that note on that table.",
                     timestamp: "2011-12-01 00:00:00",
-                    id: fixtures.nextId().toString(),
-                    parentComment: {
-                        author: fixtures.authorJson(),
-                        type: "NOTE",
-                        text: "How about that view.",
-                        timestamp: "2011-12-01 00:00:00",
-                        id: fixtures.nextId().toString(),
-                        comments: [
-                            {
-                                text: "sub-comment 1",
-                                author: fixtures.authorJson(),
-                                timestamp: "2011-12-15 12:34:56"
-                            }
-                        ],
-                        dataset: {
-                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
-                            name: '__a_table_name',
-                            objectType: "TABLE",
-                            type: "dataset",
-                            databaseName: "dca_demo",
-                            schemaName: "public",
-                            instance: rspecFixtures.greenplumInstanceJson().response
-                        },
-                        attachments: [
-                            {
-                                entityId: "10101",
-                                entityType: "file",
-                                id: "10101",
-                                name: "something.sql",
-                                type: "SQL"
-                            },
-                            {
-                                entityId: "10102",
-                                entityType: "file",
-                                id: "10102",
-                                name: "something.txt",
-                                type: "TXT"
-                            }
-                        ]
-                    }
+                    id: fixtures.nextId().toString()
                 }, overrides);
                 return new chorus.models.Activity(attrs);
             },

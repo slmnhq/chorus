@@ -1,7 +1,8 @@
 class CommentsController < ApplicationController
 
   def show
-    present @comment
+    comment = Comment.find(params[:id])
+    present comment
   end
 
   def create
@@ -9,7 +10,6 @@ class CommentsController < ApplicationController
 
     attributes = params[:comment]
     attributes[:author_id] = current_user[:id]
-    attributes[:event_id] = params[:comment][:event]
     comment.attributes = attributes
 
     comment.save!

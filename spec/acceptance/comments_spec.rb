@@ -10,13 +10,13 @@ resource "Comments" do
 
   post "/comments" do
     parameter :text, "Text of the comment"
-    parameter :event, "Event id"
+    parameter :event_id, "Event id"
 
-    required_parameters :text, :event
+    required_parameters :text, :event_id
     scope_parameters :comment, :all
 
     let(:text) { "cookiemonster" }
-    let(:event) { "12323029" }
+    let(:event_id) { "12323029" }
 
     example_request "Create a comment" do
       status.should == 201
@@ -24,7 +24,7 @@ resource "Comments" do
   end
 
   get "/comments/:id" do
-    let(:id) { comments(:comment_on_note_on_greenplum).id }  # TODO: Fixtures to create comments?
+    let(:id) { comments(:comment_on_note_on_greenplum).id }
 
     example_request "Get a comment" do
       status.should == 200

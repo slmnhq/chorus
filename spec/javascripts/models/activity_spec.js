@@ -435,8 +435,11 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    xdescribe("#author", function() {
+    describe("#author", function() {
         context("when author information is present", function() {
+            beforeEach(function() {
+               this.model = rspecFixtures.comment();
+            });
             it("creates a user", function() {
                 expect(this.model.author()).toBeA(chorus.models.User);
             });
@@ -459,7 +462,6 @@ describe("chorus.models.Activity", function() {
 
     describe("#comments", function() {
         beforeEach(function() {
-            this.activitySet = new chorus.collections.ActivitySet([this.model], {entityType: "workspace", entityId: 10000})
             this.model.set({
                 comments: [
                     {
@@ -493,29 +495,10 @@ describe("chorus.models.Activity", function() {
             expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
         });
 
-        it("sets the entityType and entityId as attributes of the CommentSet", function() {
+        xit("sets the entityType and entityId as attributes of the CommentSet", function() {
             expect(this.comments.attributes.entityType).toBe("workspace");
             expect(this.comments.attributes.entityId).toBe(10000);
         });
-    });
-
-    describe("#parentComment", function() {
-        beforeEach(function() {
-            this.model = fixtures.activities.COMMENT_ON_NOTE_ON_DATABASE_TABLE();
-            this.parentComment = this.model.parentComment();
-        });
-
-        it("should return a comment activity", function() {
-            expect(this.parentComment).toBeA(chorus.models.Activity);
-        });
-
-        xit("should retain the data", function() {
-           expect(this.parentComment.dataset().name()).toBe(this.model.get("parentComment").dataset.name);
-        });
-
-        it("memoizes", function() {
-            expect(this.parentComment).toBe(this.model.parentComment());
-        })
     });
 
     describe("#attachments", function() {

@@ -107,14 +107,6 @@
             return this._comments;
         },
 
-        parentComment: function() {
-            if (this.get("parentComment")) {
-                this._parentComment || (this._parentComment = new chorus.models.Activity(this.get("parentComment")));
-            }
-
-            return this._parentComment;
-        },
-
         promoteToInsight: function(options) {
             var insight = new chorus.models.CommentInsight({
                 id: this.get("id"),

@@ -5,7 +5,7 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     submitButton: t("notes.button.create"),
 
     makeModel:function () {
-        this.model = new chorus.models.Comment({
+        this.model = new chorus.models.Note({
             entityId:this.options.entityId,
             entityType:this.options.entityType,
             workspaceId: this.options.workspaceId

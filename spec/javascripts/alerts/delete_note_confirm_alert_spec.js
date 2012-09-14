@@ -64,17 +64,17 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
             it("sets the text correctly", function() {
                 expect(this.alert.text).toMatchTranslation("insight.delete.alert.text");
-            })
+            });
 
             it("sets the ok button text correctly", function() {
                 expect(this.alert.ok).toMatchTranslation("insight.delete.alert.ok");
-            })
+            });
 
             it("sets the delete message correctly", function() {
                 expect(this.alert.deleteMessage).toBe("insight.delete.alert.delete_message");
-            })
+            });
         });
-    })
+    });
 
     describe("delete confirmation clicked from comment", function() {
         beforeEach(function() {
@@ -85,12 +85,12 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
                 commentId: 12345,
                 pageModel: this.pageModel
             });
-            this.alert.render()
-            this.alert.$('button.submit').click()
+            this.alert.render();
+            this.alert.$('button.submit').click();
         });
 
         it("destroys a model with the right entityId, entityType, and id", function() {
-            expect(this.server.lastDestroy().url).toMatchUrl("/comment/workspace/10000/12345");
+            expect(this.server.lastDestroy().url).toMatchUrl("/comments/12345");
         });
 
         it("sets the alert title correctly", function() {

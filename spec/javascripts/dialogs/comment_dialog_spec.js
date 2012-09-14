@@ -2,7 +2,7 @@ describe("chorus.dialogs.CommentDialog", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.Comment({
             entityType: "note",
-            entityId: 1,
+            eventId: 1,
             entityTitle: 'note',
             pageModel : new chorus.models.Workfile()
         });
@@ -17,7 +17,7 @@ describe("chorus.dialogs.CommentDialog", function() {
     describe("#setup", function() {
         it("configures the entity", function() {
             expect(this.dialog.model.get("entityType")).toBe("note");
-            expect(this.dialog.model.get("entityId")).toBe(1);
+            expect(this.dialog.model.get("eventId")).toBe(1);
         });
     });
 
@@ -31,7 +31,7 @@ describe("chorus.dialogs.CommentDialog", function() {
         });
 
         it("renders the body", function(){
-            this.dialog.model.set({body : "cats"});
+            this.dialog.model.set({text : "cats"});
             this.dialog.render();
             expect(this.dialog.$("textarea[name=body]").val()).toBe("cats");
         });
@@ -56,7 +56,7 @@ describe("chorus.dialogs.CommentDialog", function() {
         });
 
         it("saves the data", function(){
-            expect(this.dialog.model.get("body")).toBe("The body of a note");
+            expect(this.dialog.model.get("text")).toBe("The body of a note");
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
@@ -73,7 +73,7 @@ describe("chorus.dialogs.CommentDialog", function() {
         it("trims the comment", function(){
             this.dialog.$("textarea[name=body]").val("trim me<div><br></div>");
             this.dialog.$("form").trigger("submit");
-            expect(this.dialog.model.get("body")).toBe("trim me");
+            expect(this.dialog.model.get("text")).toBe("trim me");
         });
 
         it("triggers the 'invalidated' event on the model", function() {

@@ -13,7 +13,7 @@ class EventPresenter < Presenter
 
   def comments_hash
     {
-        :comments => present(model.comments)
+      :comments => present(model.comments)
     }
   end
 

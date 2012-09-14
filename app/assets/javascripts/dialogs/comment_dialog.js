@@ -14,7 +14,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
         this.model = new chorus.models.Comment({
             entityType: this.options.entityType,
-            entityId: this.options.entityId
+            eventId: this.options.eventId
         });
         this.bindings.add(this.model, "saved", this.saved);
     },
@@ -31,7 +31,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     save:function (e) {
         e.preventDefault();
-        this.model.save({ body: this.getNormalizedText(this.$("textarea[name=body]")) });
+        this.model.save({ text: this.getNormalizedText(this.$("textarea[name=body]")) });
     },
 
     saved:function () {

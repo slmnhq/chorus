@@ -53,7 +53,7 @@
         </div>
         {{#unless isReadOnly}}
             <div class="links">
-                <a class="comment dialog" data-dialog="Comment" data-entity-title="{{entityTitle}}" href="#">{{t "activity.comment"}}</a>
+                <a class="comment dialog" data-dialog="Comment" data-event-id="{{id}}" href="#">{{t "activity.comment"}}</a>
                 {{#if isNote}}
                     <span class="separator">|</span> <a class="promote" href="#">{{t "activity.promote"}}</a>
                 {{/if}}

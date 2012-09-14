@@ -189,32 +189,36 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        xdescribe("comment rendering", function() {
+        describe("comment rendering", function() {
             beforeEach(function() {
                 spyOn(chorus, "cachebuster").andReturn(555);
                 var comments = this.model.comments();
-                comments.add([
-                    new chorus.models.Comment({
-                        author: {
-                            id: 10101,
-                            fullName: "John Commenter"
-                        },
-                        text: 'I love you all'
-                    })
-                ]);
+                var comment1 = new chorus.models.Comment({
+                    author: {
+                        id: 10101,
+                        fullName: "John Commenter",
+                        image: {icon: "foo"}
+                    },
+                    text: 'I love you all'
+                });
 
-                // right now, activities and comments don't include their
-                // author's image urls
-                comments.at(0).author().set({ image: { icon: "foo" } });
-                comments.at(1).author().set({ image: { icon: "bar" } });
+                var comment2 = new chorus.models.Comment({
+                    author: {
+                        id: 10102,
+                        fullName: "Jane Commenter",
+                        image: {icon: "bar"}
+                    },
+                    text: 'I do too'
+                });
+                comments.add([ comment1, comment2 ]);
 
                 this.view.render();
-            })
+            });
 
             it("displays comments", function() {
                 expect(this.view.$(".comments")).toExist();
                 expect(this.view.$(".comments li").length).toBe(2);
-            })
+            });
 
             it("displays information for each comment", function() {
                 var commentLis = this.view.$(".comments li");
@@ -260,16 +264,17 @@ describe("chorus.views.Activity", function() {
                         })
                     ]);
                     this.view.render();
-                })
+                });
 
                 it("renders a 'more comments' link", function() {
                     expect(this.view.$(".comments a.more")).toExist();
                 });
 
                 it("applies the 'more' class to trailing elements", function() {
-                    expect(this.view.$(".comments li:eq(0)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(1)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(2)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(0)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(1)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(2)")).not.toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(3)")).not.toHaveClass("more");
                 });
             });
         });
@@ -277,6 +282,7 @@ describe("chorus.views.Activity", function() {
         it("displays a comment link", function() {
             var link = this.view.$(".links a.comment.dialog");
             expect(link.data("dialog")).toBe("Comment");
+            expect(link.data("event-id").toString()).toEqual(this.model.id);
         });
 
         xcontext("isReadOnly", function() {

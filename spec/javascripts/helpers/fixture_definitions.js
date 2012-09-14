@@ -46,6 +46,7 @@ window.fixtureDefinitions = {
 };
 
 window.rspecFixtureDefinitions = {
+    comment: { model: "Comment" },
     csvImport: {  model: "CSVImport" },
     user:    { unique: [ "id" ] },
     userWithErrors: { model:'User' },

@@ -78,6 +78,10 @@
 
         isFailure: function() {
             return this.model.isFailure();
+        },
+
+        id: function() {
+            return this.model.id;
         }
     });
 
