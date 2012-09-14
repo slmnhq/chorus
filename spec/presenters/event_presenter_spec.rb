@@ -167,5 +167,23 @@ describe EventPresenter, :type => :view do
         end
       end
     end
+
+    context "Event with comments" do
+      let(:event) { events(:note_on_greenplum) }
+
+      it "has a comments array on it" do
+        hash = subject.to_hash
+        hash[:comments].should_not be_nil
+      end
+
+      it "has correct formatting of comments" do
+        hash = subject.to_hash
+        hash[:comments].count.should > 1
+        hash[:comments].each do | comment |
+          comment[:text].should_not be_nil
+          comment[:author].should_not be_nil
+        end
+      end
+    end
   end
 end

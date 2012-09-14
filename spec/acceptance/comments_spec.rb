@@ -9,13 +9,13 @@ resource "Comments" do
   end
 
   post "/comments" do
-    parameter :body, "Text body of the comment"
+    parameter :text, "Text of the comment"
     parameter :event, "Event id"
 
-    required_parameters :body, :event
+    required_parameters :text, :event
     scope_parameters :comment, :all
 
-    let(:body) { "cookiemonster" }
+    let(:text) { "cookiemonster" }
     let(:event) { "12323029" }
 
     example_request "Create a comment" do

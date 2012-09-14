@@ -12,7 +12,7 @@ describe CommentsController do
     before do
       @params = {
           event: event,
-          body: "hello world in jasmine test!"
+          text: "hello world in jasmine test!"
       }
       post :create, { :comment => @params }
     end
@@ -22,7 +22,7 @@ describe CommentsController do
     end
 
     it "should create make the current user the author" do
-      Comment.find_by_body(@params[:body]).author.should == author
+      Comment.find_by_text(@params[:text]).author.should == author
     end
   end
 end

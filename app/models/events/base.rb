@@ -17,6 +17,8 @@ module Events
       "recipient_id = #{ActiveRecord::Base.current_user.id}"
     }, :foreign_key => :event_id
 
+    has_many :comments, :foreign_key => :event_id
+
     # subclass associations on parent to facilitate .includes
     has_many :attachments, :class_name => 'NoteAttachment', :foreign_key => 'note_id'
     has_many :notes_workfiles, :foreign_key => 'note_id'

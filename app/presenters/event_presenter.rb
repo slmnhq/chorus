@@ -5,10 +5,17 @@ class EventPresenter < Presenter
       merge(additional_data_hash).
       merge(note_action_type_hash).
       merge(note_attachment_hash).
-      merge(notification_hash)
+      merge(notification_hash).
+      merge(comments_hash)
   end
 
   private
+
+  def comments_hash
+    {
+        :comments => present(model.comments)
+    }
+  end
 
   def notification_hash
     return { :unread => !model.notification_for_current_user.try(:read) } if @options[:read_receipts]

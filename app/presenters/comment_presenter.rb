@@ -1,10 +1,10 @@
 class CommentPresenter < Presenter
-  delegate :author, :body, :to => :model
+  delegate :author, :text, :to => :model
 
   def to_hash
     {
         :author => present(author),
-        :body => body
+        :text => text
     }
   end
 end

@@ -214,7 +214,9 @@ FixtureBuilder.configure do |fbuilder|
 
     #Comments
     fbuilder.name :comment_on_note_on_greenplum,
-                  Comment.create!({:body => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
+                  Comment.create!({:text => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
+    fbuilder.name :second_comment_on_note_on_greenplum,
+                  Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
 
     #Events
     Timecop.travel(-1.day)
