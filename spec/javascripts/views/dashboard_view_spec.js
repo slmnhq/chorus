@@ -13,7 +13,13 @@ describe("chorus.views.Dashboard", function(){
         it("sets page size information on the activity list", function() {
             expect(this.view.activityList.collection.attributes.pageSize).toBe(50);
         });
-    })
+
+        it("will re-fetch the activity list if a comment is added", function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("comment:added");
+            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function () {
