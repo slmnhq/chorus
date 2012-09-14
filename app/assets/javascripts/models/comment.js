@@ -14,7 +14,7 @@ chorus.models.Comment = chorus.models.Activity.extend({
     },
 
     attrToLabel:{
-        "text":"notes.body"
+        "text":"notes.text"
     },
 
     note: function() {
