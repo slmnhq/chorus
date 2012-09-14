@@ -10,6 +10,7 @@ image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
 server_port: 8080
 provision_max_size_in_gb: 100
+passphrase: "secret0123456789"
 timezone_offset: -8
 file_sizes_mb:
   workfiles: 10
