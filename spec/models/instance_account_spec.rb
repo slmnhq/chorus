@@ -31,20 +31,24 @@ describe InstanceAccount do
     end
 
     it "encrypts the password with the phrasekey" do
-      get_password_from_database(instance_account.id).should == encrypt_cipher('apass').unpack("H*").first
+      get_password_from_database(instance_account.id).should == encrypt_cipher('apass', instance_account.salt).unpack("H*").first
     end
 
     it "decrypts the password with the phrasekey" do
       InstanceAccount.find(instance_account.id).db_password.should == 'apass'
     end
 
+    it "saves a salt with the password" do
+      InstanceAccount.find(instance_account.id).salt.should_not be_nil
+    end
+
     def get_password_from_database(account_id)
       ActiveRecord::Base.connection.select_values("select encrypted_db_password from instance_accounts where id = #{account_id}").first
     end
 
-    def encrypt_cipher(password)
+    def encrypt_cipher(password, salt)
       cipher = OpenSSL::Cipher::AES.new("128-CBC").encrypt
-      cipher.key = passphrase
+      cipher.pkcs5_keyivgen(passphrase, salt)
       cipher.update(password) + cipher.final
     end
   end

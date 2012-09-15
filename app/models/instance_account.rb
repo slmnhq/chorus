@@ -14,6 +14,7 @@ class InstanceAccount < ActiveRecord::Base
   private
 
   def encrypt_password
+    self.salt = SecureRandom.base64(8)[0..7] # has to be 8 bytes
     self.encrypted_db_password = encrypt_cipher(db_password).unpack("H*").first if db_password
   end
 
@@ -35,7 +36,7 @@ class InstanceAccount < ActiveRecord::Base
 
   def do_cipher(method, password)
     cipher = OpenSSL::Cipher::AES.new("128-CBC").send(method)
-    cipher.key = passphrase
+    cipher.pkcs5_keyivgen(passphrase, self.salt)
     cipher.update(password) + cipher.final
   end
 end
