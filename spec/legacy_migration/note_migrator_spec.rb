@@ -176,7 +176,5 @@ describe NoteMigrator do
         WHERE entity_type NOT IN ('comment', 'activitystream')
       ").first["count"].should == Events::Note.unscoped.count
     end
-
-    it "migrates comments and notes on activitystream items"
   end
 end

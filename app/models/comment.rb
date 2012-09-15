@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  include SoftDelete
+
   attr_accessible :author_id, :text, :event_id
   belongs_to :event, :class_name => 'Events::Base'
   belongs_to :author, :class_name => 'User'
