@@ -6,7 +6,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     typeString: function() {
-        return Handlebars.helpers.humanizedDatasetType(this.resource && this.resource.attributes);
+        return Handlebars.helpers.humanizedDatasetType(this.resource && this.resource.attributes, this.resource && this.resource.statistics().attributes);
     },
 
     deleteMsgKey: function() {

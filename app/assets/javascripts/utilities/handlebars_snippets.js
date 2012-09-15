@@ -368,11 +368,10 @@
             return modelOrAttributes;
         },
 
-        humanizedDatasetType: function(dataset) {
+        humanizedDatasetType: function(dataset, statistics) {
             if (!dataset) { return ""; }
-
             var keys = ["dataset.types", dataset.type];
-            if (dataset.objectType) { keys.push(dataset.objectType); }
+            if (statistics && statistics.objectType) { keys.push(statistics.objectType); }
             var key = keys.join(".");
             return t(key);
         },
