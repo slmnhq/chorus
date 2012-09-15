@@ -19,10 +19,6 @@ describe("chorus.collections.DatasetSet", function() {
             });
         });
 
-        it("knows that it does not have a name pattern", function() {
-            expect(this.collection.hasFilter()).toBeFalsy();
-        });
-
         context("with name pattern", function() {
             beforeEach(function() {
                 this.collection.attributes.namePattern = "Foo";
@@ -34,10 +30,6 @@ describe("chorus.collections.DatasetSet", function() {
                     rows: "10",
                     page: "1"
                 });
-            });
-
-            it("knows that it has a name pattern", function() {
-                expect(this.collection.hasFilter()).toBeTruthy();
             });
         });
 
@@ -98,6 +90,34 @@ describe("chorus.collections.DatasetSet", function() {
             it("does not sort", function() {
                 expect(this.collection.at(0).get("objectName")).toBe("zTable");
                 expect(this.collection.at(1).get("objectName")).toBe("aTable");
+            });
+        });
+    });
+
+    describe("#hasFilter", function () {
+        describe("when there is a name filter", function () {
+            beforeEach(function () {
+                this.collection.attributes.namePattern = "foo";
+            });
+
+            it("should be true", function () {
+                expect(this.collection.hasFilter()).toBeTruthy();
+            });
+        });
+
+        describe("when there is a type filter", function () {
+            beforeEach(function () {
+                this.collection.attributes.type = "foo";
+            });
+
+            it("should be true", function () {
+                expect(this.collection.hasFilter()).toBeTruthy();
+            });
+        });
+
+        describe("when there is not name or type filter", function () {
+            it("should be false", function () {
+                expect(this.collection.hasFilter()).toBeFalsy();
             });
         });
     });
