@@ -279,11 +279,17 @@ describe GpdbInstance do
       let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
       let(:account_with_access) { GpdbIntegration.real_gpdb_account }
 
-      it "adds new database_instance_accounts" do
+      it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
+        mock(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
         database.instance_accounts = []
         database.instance_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_instance.refresh_databases
         database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
+      end
+
+      it "does not enqueue GpdbDatabase.reindexDatasetPermissions if the instance accounts for a database have not changed" do
+        dont_allow(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", anything)
+        gpdb_instance.refresh_databases
       end
     end
 

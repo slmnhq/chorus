@@ -8,8 +8,8 @@ describe GpdbDatabase do
 
     before(:each) do
       stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
-                    {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
-                ]
+          {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
+      ]
       )
     end
 
@@ -65,8 +65,44 @@ describe GpdbDatabase do
     end
   end
 
+  describe "reindexDatasetPermissions" do
+    let(:database) { gpdb_databases(:bobs_database) }
+
+    it "calls solr_index on all datasets" do
+      database.datasets.each do |dataset|
+        mock(Sunspot).index(dataset)
+      end
+      GpdbDatabase.reindexDatasetPermissions(database.id)
+    end
+
+    it "does not call solr_index on stale datasets" do
+      dataset = database.datasets.first
+      dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+      stub(Sunspot).index(anything)
+      dont_allow(Sunspot).index(dataset)
+      GpdbDatabase.reindexDatasetPermissions(database.id)
+    end
+
+    it "does a solr commit" do
+      mock(Sunspot).commit
+      GpdbDatabase.reindexDatasetPermissions(database.id)
+    end
+
+    it "continues if exceptions are raised" do
+      database.datasets.each do |dataset|
+        mock(Sunspot).index(dataset) { raise "error!" }
+      end
+      mock(Sunspot).commit
+      GpdbDatabase.reindexDatasetPermissions(database.id)
+    end
+  end
+
   context "association" do
     it { should have_many :schemas }
+
+    it "has many datasets" do
+      gpdb_databases(:bobs_database).datasets.should include(datasets(:bobs_table))
+    end
   end
 
   describe "callbacks" do
@@ -87,7 +123,7 @@ describe GpdbDatabase do
   describe ".create_schema" do
     context "using a real greenplum instance", :database_integration => true do
       let(:account) { GpdbIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
       let(:instance) { database.gpdb_instance }
 
       after do

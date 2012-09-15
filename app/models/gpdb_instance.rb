@@ -56,7 +56,10 @@ class GpdbInstance < ActiveRecord::Base
       database = databases.find_or_create_by_name!(database_name)
       database.update_attributes!({:stale_at => nil}, :without_protection => true)
       database_accounts = accounts.where(:db_username => db_usernames)
-      database.instance_accounts = database_accounts
+      if database.instance_accounts.sort != database_accounts.sort
+        database.instance_accounts = database_accounts
+        QC.enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
+      end
       found_databases << database
     end
   rescue ActiveRecord::JDBCError => e

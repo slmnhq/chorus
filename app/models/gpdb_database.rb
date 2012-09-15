@@ -3,6 +3,7 @@ class GpdbDatabase < ActiveRecord::Base
 
   belongs_to :gpdb_instance
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
+  has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
   delegate :account_for_user!, :account_for_user, :to => :gpdb_instance
 
@@ -32,6 +33,17 @@ class GpdbDatabase < ActiveRecord::Base
     end
 
     results
+  end
+
+  def self.reindexDatasetPermissions(database_id)
+    GpdbDatabase.find(database_id).datasets.not_stale.each do |dataset|
+      begin
+        dataset.solr_index
+      rescue => e
+        Rails.logger.error("Error in GpdbDataset.reindexDatasetPermissions: #{e.message}")
+      end
+    end
+    Sunspot.commit
   end
 
   def self.visible_to(*args)
