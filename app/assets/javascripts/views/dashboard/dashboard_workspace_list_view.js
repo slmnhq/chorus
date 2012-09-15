@@ -10,6 +10,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     },
 
     fetchWorkspaces: function() {
+        this.collection.attributes.active = true;
         this.collection.fetch();
     },
 

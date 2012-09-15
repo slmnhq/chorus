@@ -159,6 +159,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             });
 
             it("re-fetches the collection", function() {
+                expect(this.view.collection.attributes.active).toBe(true);
                 expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
             });
         });

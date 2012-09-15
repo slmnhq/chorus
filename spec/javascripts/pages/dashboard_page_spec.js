@@ -89,15 +89,19 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("fetches active workspaces for the current user, including recent comments", function() {
             expect(this.page.workspaceSet.attributes.showLatestComments).toBeTruthy();
-        })
+        });
 
         it("should sort the workspaceSet by name ascending", function() {
             expect(this.page.workspaceSet.order).toBe("name");
-        })
+        });
+
+        it("passes the active to workspaceSet", function() {
+            expect(this.page.workspaceSet.attributes.active).toBe(true);
+        });
 
         it("passes the userId to workspaceSet", function() {
             expect(this.page.workspaceSet.attributes.userId).toBe("foo");
-        })
+        });
 
         it("fetches only the chorus instances where the user has permissions", function() {
             expect(this.page.instanceSet).toBeA(chorus.collections.InstanceSet);
