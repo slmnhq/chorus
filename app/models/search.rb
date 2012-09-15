@@ -1,6 +1,9 @@
 class Search
+  include ActiveModel::Validations
   attr_accessor :query, :page, :per_page
   attr_reader :models_to_search, :per_type, :current_user
+
+  validate :valid_entity_type
 
   def initialize(current_user, params = {})
     @current_user = current_user
@@ -18,6 +21,8 @@ class Search
 
   def search
     return @search if @search
+    pa errors.class
+    raise ApiValidationError.new(errors) unless valid?
     @search = Sunspot.new_search(*(models_to_search + [Events::Note])) do
       group :grouping_id do
         limit 3
@@ -130,6 +135,10 @@ class Search
         models[model_key] = model_search.models[model_key]
       end
     end
+  end
+
+  def valid_entity_type
+    errors.add(:entity_type, :invalid_entity_type) if models_to_search.blank?
   end
 
 end

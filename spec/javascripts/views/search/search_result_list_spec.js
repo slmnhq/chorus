@@ -8,7 +8,7 @@ describe("chorus.views.SearchResultList", function() {
             instances.pagination.records = 24;
 
             this.view = new chorus.views.SearchResultList({
-                entityType: "instance",
+                entityType: "gpdb_instance",
                 collection: instances,
                 search: this.result
             });

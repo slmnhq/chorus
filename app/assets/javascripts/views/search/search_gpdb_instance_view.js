@@ -1,6 +1,6 @@
-chorus.views.SearchInstance = chorus.views.SearchItemBase.extend({
-    constructorName: "SearchInstanceView",
-    templateName: "search_instance",
+chorus.views.SearchGpdbInstance = chorus.views.SearchItemBase.extend({
+    constructorName: "SearchGpdbInstanceView",
+    templateName: "search_gpdb_instance",
     eventType: "instance",
 
     additionalContext: function () {

@@ -41,13 +41,13 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
 
             it("has filtered result links", function() {
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hadoop_instance")
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.gpdb_instance");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hadoop_instance");
             });
 
             describe("filtering by result type", function() {
@@ -67,10 +67,10 @@ describe("chorus.pages.SearchIndexPage", function() {
                 var searchInMenu = this.page.$(".default_content_header .search_in");
                 var searchInOptions = searchInMenu.find(".menu a");
                 expect(searchInMenu.find(".chosen")).toContainTranslation("search.in.all");
-                expect(searchInMenu.find(".title")).toContainTranslation("search.search_in")
+                expect(searchInMenu.find(".title")).toContainTranslation("search.search_in");
                 expect(searchInOptions.length).toBe(2);
-                expect(searchInOptions).toContainTranslation("search.in.all")
-                expect(searchInOptions).toContainTranslation("search.in.my_workspaces")
+                expect(searchInOptions).toContainTranslation("search.in.all");
+                expect(searchInOptions).toContainTranslation("search.in.my_workspaces");
             });
 
             it("navigates to the right page when 'my workspaces' is selected from the 'search in' menu", function() {

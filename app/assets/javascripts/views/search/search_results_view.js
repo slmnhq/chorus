@@ -35,7 +35,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             this.datasetList = this.buildListView('dataset', this.model.datasets());
         }
         if (this.model.instances().length) {
-            this.instanceList = this.buildListView('instance', this.model.instances());
+            this.instanceList = this.buildListView('gpdb_instance', this.model.instances());
         }
         if (this.model.hadoopInstances().length) {
             this.hadoopInstanceList = this.buildListView('hadoop_instance', this.model.hadoopInstances());
