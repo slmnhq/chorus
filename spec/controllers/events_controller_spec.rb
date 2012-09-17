@@ -160,7 +160,8 @@ describe EventsController do
         "datasetImportFailed" => Events::DatasetImportFailed,
         "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion,
         "chorusViewCreatedFromWorkfile" => Events::ChorusViewCreated.from_workfile,
-        "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset
+        "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset,
+        "datasetChangedQuery" => Events::DatasetChangedQuery
     }
 
     FIXTURE_FILES.each do |filename, event_relation|

@@ -1137,6 +1137,42 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("dataset changed query event", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.datasetChangedQuery();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+
+            this.translation_params = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+            };
+        });
+
+        context("without workspace", function() {
+            it("has the right header html", function() {
+                presenter.options.displayStyle = ["without_workspace"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.DatasetChangedQuery.without_workspace", this.translation_params
+                );
+            });
+        });
+
+        context("with workspace", function() {
+            it("has the right header html", function() {
+                presenter.options.displayStyle = ["default"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.DatasetChangedQuery.default", this.translation_params
+                );
+            });
+        });
+
+        itHasTheActorIcon();
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

@@ -231,6 +231,10 @@
             ChorusViewCreated: {
                 links: [ "actor", "workspace", "dataset"],
                 computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
+            },
+
+            DatasetChangedQuery: {
+                links: ["actor", "workspace", "dataset"]
             }
         },
 
@@ -240,7 +244,6 @@
 
             var params = {};
             var options = hidden.headerParamOptions[action];
-
             _.each(options.links, function(name) {
                 var associatedModel = model[name]();
                 params[name + "Link"] = hidden.modelLink(associatedModel);
