@@ -29,7 +29,8 @@ class ActivityMigrator < AbstractMigrator
           Events::ProvisioningFail,
           Events::ProvisioningSuccess,
           Events::WorkfileUpgradedVersion,
-          Events::ChorusViewCreated
+          Events::ChorusViewCreated,
+          Events::DatasetChangedQuery
       ]
     end
 
@@ -387,6 +388,45 @@ class ActivityMigrator < AbstractMigrator
     ))
     end
 
+    def migrate_chorus_view_changed
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      legacy_type,
+      action,
+      target1_id,
+      target1_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::DatasetChangedQuery',
+      chorus_view_dataset.id,
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object chorus_view
+        ON streams.id = chorus_view.activity_stream_id
+        AND chorus_view.entity_type = 'chorusView'
+      INNER JOIN datasets chorus_view_dataset
+        ON normalize_key(chorus_view.object_id) = chorus_view_dataset.legacy_id
+        AND chorus_view_dataset.edc_workspace_id = streams.workspace_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE streams.type = 'DATASET_CHANGED_QUERY'
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetChangedQuery');
+    ))
+    end
 
     def migrate_file_import_created
       Legacy.connection.exec_query(%Q(
@@ -1028,6 +1068,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_workfile_upgrade_success
       migrate_chorus_view_created_from_workfile
       migrate_chorus_view_created_from_dataset
+      migrate_chorus_view_changed
 
       Events::Base.find_each { |event| event.create_activities }
 

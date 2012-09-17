@@ -76,6 +76,25 @@ describe ActivityMigrator do
         Events::ChorusViewCreated.where(:target2_type => 'Dataset').count.should == count
       end
 
+      it "copies DATASET CHANGED QUERY events for when users edit chorus views" do
+        count = 0
+        Legacy.connection.select_all("
+          SELECT eas.*, normalize_key(easo.object_id) as legacy_dataset_id FROM legacy_migrate.edc_activity_stream eas
+          INNER JOIN legacy_migrate.edc_activity_stream_object easo
+            ON eas.id = easo.activity_stream_id
+            AND easo.object_type = 'object'
+          WHERE type = 'DATASET_CHANGED_QUERY';
+          ").each do |row|
+          count +=1
+          event = Events::DatasetChangedQuery.find_by_legacy_id!(row["id"])
+          event.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
+          event.actor.username == row['author']
+          event.dataset.should == Dataset.find_by_legacy_id(row['legacy_dataset_id'])
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        count.should == Events::DatasetChangedQuery.count
+      end
+
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
       #  #expect {
       #  #  ActivityMigrator.migrate
