@@ -26,6 +26,9 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
     },
 
     saveModel: function() {
+        // Don't want to navigate away on invalid model
+        chorus.page.bindings.remove(this.model, "unprocessableEntity");
+
         var query = this.editor.getValue();
 
         this.model.set({query: query}, {silent: true});

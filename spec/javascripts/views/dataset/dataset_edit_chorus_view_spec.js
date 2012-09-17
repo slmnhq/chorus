@@ -70,6 +70,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
     describe("#saveChanges", function() {
         beforeEach(function() {
+            chorus.page = new chorus.pages.Base();
             this.view.render();
             spyOn(chorus.router, "navigate");
             this.view.editor.setValue("select * from table_abc");

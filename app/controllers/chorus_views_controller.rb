@@ -26,4 +26,12 @@ class ChorusViewsController < ApplicationController
 
     present chorus_view, :presenter_options => {:workspace => workspace}, :status => :created
   end
+
+  def update
+    chorus_view = ChorusView.find(params[:workspace_dataset][:id])
+    authorize! :can_edit_sub_objects, chorus_view.workspace
+    chorus_view.query = params[:workspace_dataset][:query]
+    chorus_view.save!
+    present chorus_view
+  end
 end

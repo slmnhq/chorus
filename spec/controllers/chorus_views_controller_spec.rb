@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe ChorusViewsController, :database_integration => true do
   let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:user) { account.owner }
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:bob_public)}
@@ -9,7 +10,7 @@ describe ChorusViewsController, :database_integration => true do
   let(:workfile) { workfiles(:bob_public) }
 
   before do
-    log_in account.owner
+    log_in user
   end
 
   context "#create" do
@@ -108,6 +109,39 @@ describe ChorusViewsController, :database_integration => true do
         response.code.should == "422"
         decoded = JSON.parse(response.body)
         decoded['errors']['fields']['query']['GENERIC'].should be_present
+      end
+    end
+  end
+
+  describe "#update" do
+    let(:chorus_view) do
+      FactoryGirl.create(:chorus_view,
+        :schema => schema,
+        :query => 'select 1;').tap { |c| c.bound_workspaces << workspace }
+    end
+
+    it "updates the definition of chorus view" do
+      put :update, :workspace_dataset => {
+          :id => chorus_view.to_param,
+          :workspace_id => workspace.to_param,
+          :query => 'select 2;'
+      }
+      response.should be_success
+      decoded_response[:query].should == 'select 2;'
+      chorus_view.reload.query.should == 'select 2;'
+    end
+
+    context "as a user who is not a workspace member" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "does not allow updating the chorus view" do
+        put :update, :workspace_dataset => {
+            :id => chorus_view.to_param,
+            :workspace_id => chorus_view.bound_workspaces.first,
+            :query => 'select 2;'
+        }
+        response.should be_forbidden
+        chorus_view.reload.query.should_not == 'select 2;'
       end
     end
   end

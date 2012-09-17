@@ -42,6 +42,18 @@ describe ChorusView do
       end
     end
 
+    it "returns the cause" do
+      chorus_view = described_class.new(
+          {
+              :name => 'multiple result sets',
+              :schema => schema,
+              :query => "select potato"
+          },
+          :without_protection => true)
+      chorus_view.validate_query
+      chorus_view.errors[:query][0][1][:message].should_not =~ /postgres/
+    end
+
     it "should be invalid if it references a nonexistent table" do
       described_class.new({:name => "invalid_query",
                            :schema => schema,

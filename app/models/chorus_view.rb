@@ -17,7 +17,7 @@ class ChorusView < Dataset
         flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
         s.executeWithFlags(flag)
       rescue => e
-        errors.add(:query, :generic, {:message => e.message})
+        errors.add(:query, :generic, {:message => "Cannot execute SQL query. #{e.cause}"})
       end
       if s.getMoreResults
         errors.add(:query, :multiple_result_sets)
@@ -30,6 +30,10 @@ class ChorusView < Dataset
   end
 
   def column_name
+  end
+
+  def workspace
+    bound_workspaces.first
   end
 
   def all_rows_sql(limit = nil)

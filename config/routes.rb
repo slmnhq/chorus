@@ -52,7 +52,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :chorus_views, :only => :create
+  resources :chorus_views, :only => [:create, :update]
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]
@@ -60,6 +60,9 @@ Chorus::Application.routes.draw do
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
+      member do
+        put :update, :controller => 'chorus_views'
+      end
       resource :import, :only => [:show, :create, :update], :controller => "dataset_imports"
     end
 
