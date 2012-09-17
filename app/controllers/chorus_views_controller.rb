@@ -28,7 +28,7 @@ class ChorusViewsController < ApplicationController
   end
 
   def update
-    chorus_view = ChorusView.find(params[:workspace_dataset][:id])
+    chorus_view = ChorusView.find(params[:id])
     authorize! :can_edit_sub_objects, chorus_view.workspace
     chorus_view.query = params[:workspace_dataset][:query]
     chorus_view.save!

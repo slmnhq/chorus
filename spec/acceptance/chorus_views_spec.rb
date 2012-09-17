@@ -41,6 +41,31 @@ resource "Chorus Views" do
     end
   end
 
+  put "/workspaces/:workspace_id/datasets/:id" do
+    before do
+      any_instance_of(GpdbSchema) do |schema|
+        mock(schema).with_gpdb_connection.with_any_args
+      end
+    end
+
+    parameter :workspace_id, "Id of the workspace the Chorus View belongs to"
+    parameter :id, "Id of the chorus view to update"
+    parameter :query, "Sql statement of the Chorus View, must start with SELECT or WITH"
+
+    scope_parameters :workspace_dataset, :all
+
+    required_parameters :id, :workspace_id, :query
+
+    let(:workspace_id) { workspace.id }
+    let(:query) {"select 1;"}
+    let!(:chorus_view) { datasets(:bob_chorus_view) }
+    let(:id) { chorus_view.id }
+
+    example_request "Update a Chorus View" do
+      status.should == 200
+    end
+  end
+
   post "/datasets/preview_sql" do
     let(:sql_result) {
       SqlResult.new.tap do |r|

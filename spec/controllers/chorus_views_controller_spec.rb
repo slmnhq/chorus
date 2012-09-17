@@ -121,11 +121,11 @@ describe ChorusViewsController, :database_integration => true do
     end
 
     it "updates the definition of chorus view" do
-      put :update, :workspace_dataset => {
+      put :update,
           :id => chorus_view.to_param,
-          :workspace_id => workspace.to_param,
-          :query => 'select 2;'
-      }
+          :workspace_dataset => {
+            :query => 'select 2;'
+          }
       response.should be_success
       decoded_response[:query].should == 'select 2;'
       chorus_view.reload.query.should == 'select 2;'
@@ -135,11 +135,10 @@ describe ChorusViewsController, :database_integration => true do
       let(:user) { FactoryGirl.create(:user) }
 
       it "does not allow updating the chorus view" do
-        put :update, :workspace_dataset => {
-            :id => chorus_view.to_param,
-            :workspace_id => chorus_view.bound_workspaces.first,
-            :query => 'select 2;'
-        }
+        put :update, :id => chorus_view.to_param,
+            :workspace_dataset => {
+              :query => 'select 2;'
+            }
         response.should be_forbidden
         chorus_view.reload.query.should_not == 'select 2;'
       end
