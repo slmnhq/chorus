@@ -120,15 +120,30 @@ describe ChorusViewsController, :database_integration => true do
         :query => 'select 1;').tap { |c| c.bound_workspaces << workspace }
     end
 
-    it "updates the definition of chorus view" do
-      put :update,
-          :id => chorus_view.to_param,
-          :workspace_dataset => {
+    let(:options) do
+      {
+        :id => chorus_view.to_param,
+        :workspace_dataset => {
             :query => 'select 2;'
-          }
+        }
+      }
+    end
+
+    it "updates the definition of chorus view" do
+      put :update, options
       response.should be_success
       decoded_response[:query].should == 'select 2;'
       chorus_view.reload.query.should == 'select 2;'
+    end
+
+    it "creates an event" do
+      put :update, options
+
+      the_event = Events::Base.first
+      the_event.action.should == "DatasetChangedQuery"
+      the_event.dataset.should == chorus_view
+      the_event.actor.should == user
+      the_event.workspace.should == workspace
     end
 
     context "as a user who is not a workspace member" do

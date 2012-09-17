@@ -15,6 +15,39 @@ describe "Event types" do
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
   let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
+  let(:chorus_view) { datasets(:bob_chorus_view) }
+
+  describe "ChorusViewCreated" do
+    subject do
+      Events::ChorusViewCreated.add(
+          :actor => actor,
+          :dataset => chorus_view,
+          :source_object => dataset,
+          :workspace => workspace
+      )
+    end
+
+    its(:action) { should == "ChorusViewCreated" }
+    its(:targets) { should == {:dataset => chorus_view, :source_object => dataset, :workspace => workspace} }
+
+    it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
+  end
+
+  describe "DatasetChangedQuery" do
+    subject do
+      Events::DatasetChangedQuery.add(
+          :actor => actor,
+          :workspace => workspace,
+          :dataset => chorus_view
+      )
+    end
+
+    its(:action) { should == "DatasetChangedQuery" }
+    its(:targets) { should == {:dataset => chorus_view, :workspace => workspace} }
+
+    it_creates_activities_for { [actor, workspace, chorus_view] }
+  end
+
   describe "GreenplumInstanceCreated" do
     subject do
       Events::GreenplumInstanceCreated.add(

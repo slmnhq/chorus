@@ -32,6 +32,11 @@ class ChorusViewsController < ApplicationController
     authorize! :can_edit_sub_objects, chorus_view.workspace
     chorus_view.query = params[:workspace_dataset][:query]
     chorus_view.save!
+
+    Events::DatasetChangedQuery.by(current_user).add(
+        :workspace => chorus_view.workspace,
+        :dataset => chorus_view
+    )
     present chorus_view
   end
 end
