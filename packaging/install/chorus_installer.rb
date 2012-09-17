@@ -210,7 +210,7 @@ class ChorusInstaller
       log "Initializing database..." do
         chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
         start_postgres
-        chorus_exec %Q{#{release_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+        chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
         db_commands = "db:create db:migrate"
         db_commands += " db:seed" unless do_legacy_upgrade
         log "Running rake #{db_commands}"
@@ -263,7 +263,7 @@ class ChorusInstaller
   end
 
   def migrate_legacy_data
-    log "Migrating data from previous version..." do
+    log "Migrating data from previous versi on..." do
       start_postgres
       log "Loading legacy data into postgres..." do
         chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
