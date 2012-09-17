@@ -31,15 +31,12 @@ describe InstanceAccount do
     end
 
     it "encrypts the password with the phrasekey" do
-      get_password_from_database(instance_account.id).should == encrypt_cipher('apass', instance_account.salt).unpack("H*").first
+      (password, salt) = get_password_from_database(instance_account.id).split
+      password.should == Base64.strict_encode64(encrypt_cipher('apass', Base64.strict_decode64(salt)))
     end
 
     it "decrypts the password with the phrasekey" do
       InstanceAccount.find(instance_account.id).db_password.should == 'apass'
-    end
-
-    it "saves a salt with the password" do
-      InstanceAccount.find(instance_account.id).salt.should_not be_nil
     end
 
     def get_password_from_database(account_id)

@@ -14,6 +14,7 @@ gem 'sunspot_solr', '2.0.0.pre.120720'
 gem 'quiet_assets'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
+gem 'attr_encrypted'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
