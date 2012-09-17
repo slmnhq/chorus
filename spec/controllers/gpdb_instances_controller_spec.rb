@@ -14,6 +14,7 @@ describe GpdbInstancesController do
       FactoryGirl.create(:gpdb_instance, :owner => @user)
       FactoryGirl.create(:gpdb_instance, :shared => true)
       FactoryGirl.create(:instance_account, :owner => @user) # Creates a gpdb_instance too
+      FactoryGirl.create(:gpdb_instance, :owner => @user, :state => 'offline')
     end
 
     it "returns all gpdb instances" do
@@ -25,7 +26,7 @@ describe GpdbInstancesController do
     it "returns gpdb instances to which the user has access, if requested" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.size.should == GpdbInstanceAccess.gpdb_instances_for(@user).count
+      decoded_response.size.should == GpdbInstanceAccess.gpdb_instances_for(@user).count - 1
     end
   end
 

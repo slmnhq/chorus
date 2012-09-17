@@ -1,7 +1,7 @@
 class GpdbInstancesController < GpdbController
   def index
     gpdb_instances = if params[:accessible]
-                       GpdbInstanceAccess.gpdb_instances_for(current_user)
+                       GpdbInstanceAccess.gpdb_instances_for(current_user).where(:state => 'online')
                      else
                        GpdbInstance.scoped
                      end
