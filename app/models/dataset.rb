@@ -232,6 +232,7 @@ class Dataset < ActiveRecord::Base
 
     TABLE_TYPE = <<-SQL
     CASE WHEN pg_catalog.pg_class.relhassubclass = 't' THEN 'MASTER_TABLE'
+         WHEN pg_catalog.pg_class.relkind = 'v' THEN 'VIEW'
          WHEN pg_exttable.location is NULL THEN 'BASE_TABLE'
          WHEN position('gphdfs' in pg_exttable.location[1]) > 0 THEN 'HD_EXT_TABLE'
          WHEN position('gpfdist' in pg_exttable.location[1]) > 0 THEN 'EXT_TABLE'
