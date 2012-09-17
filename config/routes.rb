@@ -90,7 +90,7 @@ Chorus::Application.routes.draw do
     resources :attachments, :only => [:create, :show], :controller => 'note_attachments'
   end
 
-  resources :comments, :only => [:create, :show]
+  resources :comments, :only => [:create, :show, :destroy]
 
   resources :notifications, :only => [:index] do
     collection do

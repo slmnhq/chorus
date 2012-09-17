@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 resource "Comments" do
-  let(:author) { users(:bob) }
-  let(:event) { events(:note_on_bob_public_workfile) }
+  let(:author) { users(:admin) }
+  let(:event) { events(:note_on_alice_private) }
+  let(:comment) { comments(:comment_on_note_on_alice_private) }
 
   before do
     log_in author
@@ -16,7 +17,7 @@ resource "Comments" do
     scope_parameters :comment, :all
 
     let(:text) { "cookiemonster" }
-    let(:event_id) { "12323029" }
+    let(:event_id) { event.id }
 
     example_request "Create a comment" do
       status.should == 201
@@ -24,9 +25,21 @@ resource "Comments" do
   end
 
   get "/comments/:id" do
-    let(:id) { comments(:comment_on_note_on_greenplum).id }
+    let(:id) { comment.id }
+
+    parameter :id, "Comment id"
 
     example_request "Get a comment" do
+      status.should == 200
+    end
+  end
+
+  delete "/comments/:id" do
+    let(:id) { comment.id }
+
+    parameter :id, "Comment id"
+
+    example_request "Delete a comment" do
       status.should == 200
     end
   end

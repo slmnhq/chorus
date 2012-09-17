@@ -8,11 +8,9 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
         var entityType = this.options.entityType;
         var commentId = this.options.commentId;
 
-        if (entityId && entityType) {
+        if (commentId) {
             this.model = new chorus.models.Comment({
                 id: commentId,
-                entityType: entityType,
-                entityId: entityId
             });
             this.setComment()
         } else {

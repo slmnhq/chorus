@@ -212,13 +212,16 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
-    fbuilder.name :note_on_alice_private, Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
+    note_on_alice_private = Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
+    fbuilder.name :note_on_alice_private, note_on_alice_private
 
     #Comments
     fbuilder.name :comment_on_note_on_greenplum,
                   Comment.create!({:text => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
     fbuilder.name :second_comment_on_note_on_greenplum,
                   Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
+    fbuilder.name :comment_on_note_on_alice_private,
+                  Comment.create!({:text => "Comment on alice private", :event_id => note_on_alice_private.id, :author_id => alice.id})
 
     #Events
     Timecop.travel(-1.day)
