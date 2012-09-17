@@ -2,6 +2,8 @@ require 'fileutils'
 require 'securerandom'
 require 'yaml'
 require_relative 'installer_errors'
+require 'base64'
+require 'openssl'
 
 class ChorusInstaller
   attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
@@ -73,6 +75,10 @@ class ChorusInstaller
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
     @logger.logfile = File.join(@destination_path, 'install.log')
+  end
+
+  def prompt_for_passphrase
+    @io.prompt_or_default(:passphrase, "")
   end
 
   def prompt_for_legacy_upgrade
@@ -306,6 +312,8 @@ class ChorusInstaller
       setup_database
     end
 
+    configure_secret_key
+
     if do_legacy_upgrade
       #log "Migrating settings from previous version..."
       #migrate_legacy_settings
@@ -334,6 +342,23 @@ class ChorusInstaller
     log "Restarting server..."
     FileUtils.rm_rf release_path
     chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/server_control.sh start" if do_upgrade
+  end
+
+  def configure_secret_key
+    chorus_config_file = "#{destination_path}/shared/chorus.yml"
+    unless YAML.load_file(chorus_config_file) && YAML.load_file(chorus_config_file)['secret_key']
+      passphrase = prompt_for_passphrase
+      if passphrase.nil? || passphrase.strip.empty?
+        passphrase = Random.new.bytes(32)
+      end
+      # only a subset of openssl is available built-in to jruby, so this is the best we could do without including the full jruby-openssl gem
+      secret_key = Base64.strict_encode64(OpenSSL::Digest.new("SHA-256", passphrase).digest)
+      File.open(chorus_config_file, 'a') do |f|
+        f.puts "\n"
+        f.puts "# do not change the secret key or you will not be able to retrieve your old passwords"
+        f.puts "secret_key: #{secret_key}"
+      end
+    end
   end
 
   private

@@ -116,6 +116,8 @@ module PackageMaker
         f.puts(install_path)
       end
       f.puts(postgres_build)
+
+      f.puts("this is a secret passphrase")
     end
 
     # remove previous chorusrails install

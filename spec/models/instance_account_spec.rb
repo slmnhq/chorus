@@ -22,7 +22,7 @@ describe InstanceAccount do
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
     let(:instance) { gpdb_instances(:greenplum) }
-    let(:passphrase) {"secret0123456789"}
+    let(:secret_key) {'\0' * 32}
     let(:password) {"apass"}
     let!(:instance_account) do
       instance.accounts.create!(
@@ -44,8 +44,8 @@ describe InstanceAccount do
     end
 
     def encrypt_cipher(password, salt)
-      cipher = OpenSSL::Cipher::AES.new("128-CBC").encrypt
-      cipher.pkcs5_keyivgen(passphrase, salt)
+      cipher = OpenSSL::Cipher::AES.new("256-CBC").encrypt
+      cipher.pkcs5_keyivgen(secret_key, salt)
       cipher.update(password) + cipher.final
     end
   end

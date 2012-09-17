@@ -351,6 +351,51 @@ describe ChorusInstaller do
       end
     end
 
+    context "configuring the secret key" do
+      before do
+        installer.copy_config_files
+      end
+
+      context "when key is not already present in chorus.yml" do
+        let(:passphrase) { 'secret_key' }
+        before do
+          mock(installer).prompt_for_passphrase { passphrase }
+        end
+        it "generates the key from a passphrase and stores it in chorus.yml" do
+          installer.configure_secret_key
+          YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should_not be_nil
+        end
+      end
+
+      context "when key is already present in chorus.yml" do
+        let(:secret_key) { "its secret" }
+        before do
+          File.open('/opt/chorus/shared/chorus.yml', 'a') { |f| f.puts "secret_key: #{secret_key}" }
+        end
+
+        it "does not change the existing key" do
+          installer.configure_secret_key
+          YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should == secret_key
+        end
+      end
+
+      context "when the default key is used" do
+        let(:passphrase) { 'secret_key' }
+        before do
+          mock(installer).prompt_for_passphrase.times(2) { "" }
+        end
+
+        it "generates a different random key on each run" do
+          installer.configure_secret_key
+          key1 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
+          File.open('/opt/chorus/shared/chorus.yml', 'w') {}
+          installer.configure_secret_key
+          key2 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
+          key1.should_not == key2
+        end
+      end
+    end
+
     context "when database.yml doesn't exist in shared path" do
       it "creates database.yml file in shared path" do
         File.exists?('/opt/chorus/shared/database.yml').should be_false
