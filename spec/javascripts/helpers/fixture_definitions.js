@@ -148,7 +148,7 @@ window.rspecFixtureDefinitions = {
             workfileUpgradedVersion: {},
             chorusViewCreatedFromDataset: {},
             chorusViewCreatedFromWorkfile: {},
-            datasetChangedQuery: {}
+            chorusViewChanged: {}
         }
     },
 

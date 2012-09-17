@@ -33,16 +33,16 @@ describe "Event types" do
     it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
   end
 
-  describe "DatasetChangedQuery" do
+  describe "ChorusViewChanged" do
     subject do
-      Events::DatasetChangedQuery.add(
+      Events::ChorusViewChanged.add(
           :actor => actor,
           :workspace => workspace,
           :dataset => chorus_view
       )
     end
 
-    its(:action) { should == "DatasetChangedQuery" }
+    its(:action) { should == "ChorusViewChanged" }
     its(:targets) { should == {:dataset => chorus_view, :workspace => workspace} }
 
     it_creates_activities_for { [actor, workspace, chorus_view] }

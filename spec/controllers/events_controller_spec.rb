@@ -161,7 +161,7 @@ describe EventsController do
         "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion,
         "chorusViewCreatedFromWorkfile" => Events::ChorusViewCreated.from_workfile,
         "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset,
-        "datasetChangedQuery" => Events::DatasetChangedQuery
+        "chorusViewChanged" => Events::ChorusViewChanged
     }
 
     FIXTURE_FILES.each do |filename, event_relation|

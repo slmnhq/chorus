@@ -140,7 +140,7 @@ describe ChorusViewsController, :database_integration => true do
       put :update, options
 
       the_event = Events::Base.first
-      the_event.action.should == "DatasetChangedQuery"
+      the_event.action.should == "ChorusViewChanged"
       the_event.dataset.should == chorus_view
       the_event.actor.should == user
       the_event.workspace.should == workspace

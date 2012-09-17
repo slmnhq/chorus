@@ -86,13 +86,13 @@ describe ActivityMigrator do
           WHERE type = 'DATASET_CHANGED_QUERY';
           ").each do |row|
           count +=1
-          event = Events::DatasetChangedQuery.find_by_legacy_id!(row["id"])
+          event = Events::ChorusViewChanged.find_by_legacy_id!(row["id"])
           event.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
           event.actor.username == row['author']
           event.dataset.should == Dataset.find_by_legacy_id(row['legacy_dataset_id'])
           event.created_at.should == row["created_tx_stamp"]
         end
-        count.should == Events::DatasetChangedQuery.count
+        count.should == Events::ChorusViewChanged.count
       end
 
       #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do

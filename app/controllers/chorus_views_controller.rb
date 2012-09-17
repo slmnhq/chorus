@@ -33,7 +33,7 @@ class ChorusViewsController < ApplicationController
     chorus_view.query = params[:workspace_dataset][:query]
     chorus_view.save!
 
-    Events::DatasetChangedQuery.by(current_user).add(
+    Events::ChorusViewChanged.by(current_user).add(
         :workspace => chorus_view.workspace,
         :dataset => chorus_view
     )

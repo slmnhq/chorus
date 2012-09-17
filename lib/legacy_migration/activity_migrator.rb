@@ -30,7 +30,7 @@ class ActivityMigrator < AbstractMigrator
           Events::ProvisioningSuccess,
           Events::WorkfileUpgradedVersion,
           Events::ChorusViewCreated,
-          Events::DatasetChangedQuery
+          Events::ChorusViewChanged
       ]
     end
 
@@ -403,7 +403,7 @@ class ActivityMigrator < AbstractMigrator
     SELECT
       streams.id,
       'edc_activity_stream',
-      'Events::DatasetChangedQuery',
+      'Events::ChorusViewChanged',
       chorus_view_dataset.id,
       'Dataset',
       streams.created_tx_stamp,
@@ -424,7 +424,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'DATASET_CHANGED_QUERY'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetChangedQuery');
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewChanged');
     ))
     end
 

@@ -233,7 +233,7 @@
                 computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
             },
 
-            DatasetChangedQuery: {
+            ChorusViewChanged: {
                 links: ["actor", "workspace", "dataset"]
             }
         },

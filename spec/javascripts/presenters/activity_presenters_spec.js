@@ -1139,7 +1139,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("dataset changed query event", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.datasetChangedQuery();
+            model = rspecFixtures.activity.chorusViewChanged();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -1156,7 +1156,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html", function() {
                 presenter.options.displayStyle = ["without_workspace"];
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.DatasetChangedQuery.without_workspace", this.translation_params
+                    "activity.header.ChorusViewChanged.without_workspace", this.translation_params
                 );
             });
         });
@@ -1165,7 +1165,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html", function() {
                 presenter.options.displayStyle = ["default"];
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.DatasetChangedQuery.default", this.translation_params
+                    "activity.header.ChorusViewChanged.default", this.translation_params
                 );
             });
         });

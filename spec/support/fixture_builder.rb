@@ -172,7 +172,7 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
 
       Events::ChorusViewCreated.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace, :source_object => bob_public)
-      Events::DatasetChangedQuery.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace)
+      Events::ChorusViewChanged.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace)
     end
 
     text_workfile = Workfile.create!({:file_name => "text.txt", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
