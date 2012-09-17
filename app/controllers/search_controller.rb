@@ -6,7 +6,7 @@ class SearchController < ApplicationController
   end
 
   def reindex
-    QC.enqueue("SolrIndexer.refresh_and_index", params.fetch(:types) { 'all' })
+    QC.enqueue("SolrIndexer.refresh_and_reindex", params.fetch(:types) { 'all' })
     render :json => {}
   end
 end

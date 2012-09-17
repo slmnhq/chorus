@@ -1,19 +1,17 @@
 module SolrIndexer
-  def self.refresh_and_index(types)
-    refresh
-    index(types)
+  def self.refresh_and_reindex(types)
+    self.refresh_external_data
+    self.reindex(types)
   end
 
-  def self.index(types)
-    Rails.logger.info("Starting Solr Index")
-    types_to_index(types).each(&:solr_index)
+  def self.reindex(types)
+    Rails.logger.info("Starting Solr Re-Index")
+    types_to_index(types).each(&:solr_reindex)
     Sunspot.commit
-    Rails.logger.info("Solr Index Completed")
+    Rails.logger.info("Solr Re-Index Completed")
   end
 
-  private
-
-  def self.refresh
+  def self.refresh_external_data
     Rails.logger.info("Starting Solr Refresh")
     GpdbInstance.find_each do |gpdb_instance|
       gpdb_instance.refresh_databases(:mark_stale => true)
@@ -27,6 +25,8 @@ module SolrIndexer
     end
     Rails.logger.info("Solr Refresh Completed")
   end
+
+  private
 
   def self.types_to_index(types)
     types = Array(types)
