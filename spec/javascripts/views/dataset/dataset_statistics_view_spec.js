@@ -18,6 +18,7 @@ describe("chorus.views.DatasetStatistics", function() {
                 lastAnalyzedTime: "2011-12-12 12:34:56",
                 onDiskSize: "1 GB",
                 description: "foo",
+                objectType: "BASE_TABLE",
                 partitions: 2
             });
             this.server.completeFetchFor(this.stats);
@@ -25,6 +26,10 @@ describe("chorus.views.DatasetStatistics", function() {
 
         it("displays the dataset's name", function() {
             expect(this.view.$(".table_name").text()).toBe(this.dataset.get("objectName"));
+        });
+
+        it("displays the dataset's translated type", function() {
+            expect(this.view.$(".table_type").text()).toBe(Handlebars.helpers.humanizedDatasetType(this.dataset.attributes, this.dataset.statistics().attributes));
         });
 
         it("displays rows when the value is 0", function() {
@@ -49,7 +54,7 @@ describe("chorus.views.DatasetStatistics", function() {
 
         it("displays the partitions", function() {
             expect(this.view.$(".partitions .value").text()).toBe("2")
-        })
+        });
 
         it("displays the statistics in the correct order", function() {
             expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");

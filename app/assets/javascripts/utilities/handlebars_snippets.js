@@ -371,7 +371,11 @@
         humanizedDatasetType: function(dataset, statistics) {
             if (!dataset) { return ""; }
             var keys = ["dataset.types", dataset.type];
-            if (statistics && statistics.objectType) { keys.push(statistics.objectType); }
+            if (statistics && statistics.objectType) {
+                keys.push(statistics.objectType);
+            } else {
+                return t("loading");
+            }
             var key = keys.join(".");
             return t(key);
         },

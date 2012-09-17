@@ -1,4 +1,4 @@
-    chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
+chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     constructorName: "DatasetSidebarView",
     templateName: "dataset_sidebar",
 
@@ -70,6 +70,10 @@
                 model: dataset,
                 column: this.selectedColumn
             });
+
+            var statistics = dataset.statistics();
+            statistics.fetchIfNotLoaded();
+            statistics.onLoaded(this.render, this);
 
             if (dataset.canBeImportSourceOrDestination()) {
                 this.importConfiguration = dataset.getImport();

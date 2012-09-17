@@ -886,9 +886,23 @@ describe("handlebars", function () {
                 spyOn(window, "t");
             });
 
-            it("loads the correct message key", function () {
-                Handlebars.helpers.humanizedDatasetType({ type:"type", objectType:"objectType"})
-                expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
+            context("when statistics is not present", function() {
+                it("returns a loading message", function () {
+                    Handlebars.helpers.humanizedDatasetType({ type: "type" });
+                    expect(window.t).toHaveBeenCalledWith("loading");
+                });
+            });
+
+            context("when the statistics object is present", function() {
+                it("should return a loading message if statistics has no objectType", function() {
+                    Handlebars.helpers.humanizedDatasetType({ type: "type" }, { otherStuff: "hi" });
+                    expect(window.t).toHaveBeenCalledWith("loading");
+                });
+
+                it("returns the correct dataset type translation", function() {
+                    Handlebars.helpers.humanizedDatasetType({ type: "type" }, { objectType: "objectType" });
+                    expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
+                });
             });
         });
 

@@ -15,7 +15,7 @@ chorus.views.DatasetStatistics = chorus.views.Base.extend({
         };
 
         ctx.objectName = this.model.get("objectName");
-        ctx.typeString = Handlebars.helpers.humanizedDatasetType(this.model && this.model.attributes)
+        ctx.typeString = Handlebars.helpers.humanizedDatasetType(this.model && this.model.attributes, this.model.statistics().attributes);
 
         if (!this.statistics) { return ctx; }
 

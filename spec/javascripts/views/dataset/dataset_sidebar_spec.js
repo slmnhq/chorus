@@ -38,8 +38,22 @@ describe("chorus.views.DatasetSidebar", function() {
             expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"));
         });
 
-        it("displays the selected dataset type", function() {
-            expect(this.view.$(".type").text().trim()).toBe(Handlebars.helpers.humanizedDatasetType(this.dataset.attributes));
+        context("when the statistics has not yet loaded", function() {
+            it("displays the selected dataset type", function() {
+                expect(this.view.$(".type").text().trim()).toBe(t('loading'));
+            });
+        });
+
+        context("when the statistics finish loading", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'postRender');
+                this.dataset.statistics().fetch();
+                this.server.completeFetchFor(this.dataset.statistics());
+            });
+
+            it("should update the selected dataset type", function() {
+                expect(this.view.postRender).toHaveBeenCalled();
+            });
         });
 
         describe("activities", function() {
