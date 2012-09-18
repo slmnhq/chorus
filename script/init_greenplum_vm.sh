@@ -75,6 +75,18 @@ function stop() {
 	echo "Done."
 }
 
+function snapshot() {
+	echo "Creating a snapshot..."
+	"$FUSION_BIN_PATH/vmrun" -T fusion snapshot gpdb421ee/Greenplum\ 4.2.1.vmx clean
+	echo "Done."
+}
+
+function revert() {
+	echo "Reverting a snapshot..."
+	"$FUSION_BIN_PATH/vmrun" -T fusion revertToSnapshot gpdb421ee/Greenplum\ 4.2.1.vmx clean
+	echo "VM reverted and shut down."
+}
+
 function status() {
 	"$FUSION_BIN_PATH/vmrun" list
 }
@@ -111,6 +123,12 @@ case $command in
 		;;
 	status )
 		status
+		;;
+	snapshot )
+		snapshot
+		;;
+	revert )
+		revert
 		;;
     * )
         usage
