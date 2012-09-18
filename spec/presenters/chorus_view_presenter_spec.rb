@@ -16,6 +16,7 @@ describe ChorusViewPresenter, :type => :view do
     hash[:type].should == "CHORUS_VIEW"
     hash[:object_type].should == "CHORUS_VIEW"
     hash[:query].should == "select * from a_table"
+    hash[:is_deleted].should be_false
 
     schema = hash[:schema]
     schema[:id].should == chorus_view.schema.id

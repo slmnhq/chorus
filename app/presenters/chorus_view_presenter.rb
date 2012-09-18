@@ -2,7 +2,11 @@ class ChorusViewPresenter < DatasetPresenter
   delegate :id, :name, :schema, :query, :to => :model
 
   def to_hash
-    super.merge({:object_type => "CHORUS_VIEW", :query => query})
+    super.merge({
+        :object_type => "CHORUS_VIEW",
+        :query => query,
+        :is_deleted => !model.deleted_at.nil?
+    })
   end
 
   def thetype
