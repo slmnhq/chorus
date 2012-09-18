@@ -406,51 +406,6 @@ describe ChorusInstaller do
       end
     end
 
-    context "configuring the secret key" do
-      before do
-        installer.copy_config_files
-      end
-
-      context "when key is not already present in chorus.yml" do
-        let(:passphrase) { 'secret_key' }
-        before do
-          mock(installer).prompt_for_passphrase { passphrase }
-        end
-        it "generates the key from a passphrase and stores it in chorus.yml" do
-          installer.configure_secret_key
-          YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should_not be_nil
-        end
-      end
-
-      context "when key is already present in chorus.yml" do
-        let(:secret_key) { "its secret" }
-        before do
-          File.open('/opt/chorus/shared/chorus.yml', 'a') { |f| f.puts "secret_key: #{secret_key}" }
-        end
-
-        it "does not change the existing key" do
-          installer.configure_secret_key
-          YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should == secret_key
-        end
-      end
-
-      context "when the default key is used" do
-        let(:passphrase) { 'secret_key' }
-        before do
-          mock(installer).prompt_for_passphrase.times(2) { "" }
-        end
-
-        it "generates a different random key on each run" do
-          installer.configure_secret_key
-          key1 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
-          File.open('/opt/chorus/shared/chorus.yml', 'w') {}
-          installer.configure_secret_key
-          key2 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
-          key1.should_not == key2
-        end
-      end
-    end
-
     context "when database.yml doesn't exist in shared path" do
       it "creates database.yml file in shared path" do
         File.exists?('/opt/chorus/shared/database.yml').should be_false
@@ -469,6 +424,99 @@ describe ChorusInstaller do
       it "should not overwrite existing database.yml" do
         installer.copy_config_files
         File.read('/opt/chorus/shared/database.yml').strip.should == "some yaml stuff"
+      end
+    end
+  end
+
+  describe "#configure_secret_key" do
+    before do
+      installer.destination_path = "/opt/chorus"
+
+      FileUtils.mkdir_p './chorus_installation/config'
+      FileUtils.mkdir_p './chorus_installation/packaging'
+      FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      installer.copy_config_files
+    end
+
+    context "when key is not already present in chorus.yml" do
+      let(:passphrase) { 'secret_key' }
+      before do
+        mock(installer).prompt_for_passphrase { passphrase }
+      end
+      it "generates the key from a passphrase and stores it in chorus.yml" do
+        installer.configure_secret_key
+        YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should_not be_nil
+      end
+    end
+
+    context "when key is already present in chorus.yml" do
+      let(:secret_key) { "its secret" }
+      before do
+        File.open('/opt/chorus/shared/chorus.yml', 'a') { |f| f.puts "secret_key: #{secret_key}" }
+      end
+
+      it "does not change the existing key" do
+        installer.configure_secret_key
+        YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should == secret_key
+      end
+    end
+
+    context "when the default key is used" do
+      let(:passphrase) { 'secret_key' }
+      before do
+        mock(installer).prompt_for_passphrase.times(2) { "" }
+      end
+
+      it "generates a different random key on each run" do
+        installer.configure_secret_key
+        key1 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
+        File.open('/opt/chorus/shared/chorus.yml', 'w') {}
+        installer.configure_secret_key
+        key2 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
+        key1.should_not == key2
+      end
+    end
+  end
+
+  describe "#configure_file_storage_directories" do
+    before do
+      installer.destination_path = destination_path
+      installer.data_path = data_path
+
+      FileUtils.mkdir_p './chorus_installation/config'
+      FileUtils.mkdir_p './chorus_installation/packaging'
+      FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      installer.copy_config_files
+      FileUtils.mkdir_p('/opt/chorus/shared')
+      File.open('/opt/chorus/shared/chorus.yml', 'a') do |f|
+        f.puts "csv_import_file_storage_path: old.value"
+      end
+    end
+    let(:data_path) {"/data/chorus"}
+    let(:destination_path) {"/opt/chorus"}
+
+    it "updates the chorus.yml file to reflect the data path" do
+      installer.copy_config_files
+
+      installer.configure_file_storage_directories
+      YAML.load_file('/opt/chorus/shared/chorus.yml')['csv_import_file_storage_path'].should == "#{data_path}/system/"
+      YAML.load_file('/opt/chorus/shared/chorus.yml')['workfile_storage_path'].should == "#{data_path}/system/"
+      YAML.load_file('/opt/chorus/shared/chorus.yml')['image_storage'].should == "#{data_path}/system/"
+      YAML.load_file('/opt/chorus/shared/chorus.yml')['attachment_storage'].should == "#{data_path}/system/"
+    end
+
+    context "when the data path is the default" do
+      let(:data_path) { "#{destination_path}//shared/" }
+
+      it "does nothing" do
+        installer.copy_config_files
+
+        installer.configure_file_storage_directories
+        YAML.load_file('/opt/chorus/shared/chorus.yml')['csv_import_file_storage_path'].should == "old.value"
       end
     end
   end
