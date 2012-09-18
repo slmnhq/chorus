@@ -9,7 +9,7 @@ describe ColumnController do
 
   context "#index" do
     context "with mock data" do
-      let(:user) { users(:alice) }
+      let(:user) { users(:no_collaborators) }
       let!(:table) { datasets(:bobs_table) }
 
       before do

@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Sandbox" do
 
-  let(:workspace) { workspaces(:alice_private) }
+  let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:instance) { GpdbIntegration.real_gpdb_instance }
   let(:database) { instance.databases.find_by_name("ChorusAnalytics") }
   let(:schema) { database.schemas.first }

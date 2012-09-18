@@ -3,11 +3,11 @@ require 'spec_helper'
 describe MembersController do
   ignore_authorization!
 
-  let(:member) { users(:alice) }
+  let(:member) { users(:no_collaborators) }
   let(:non_member) { users(:bob) }
   let(:admin) { users(:admin) }
-  let(:public_workspace) { workspaces(:alice_public) }
-  let(:private_workspace) { workspaces(:alice_private) }
+  let(:public_workspace) { workspaces(:public_with_no_collaborators) }
+  let(:private_workspace) { workspaces(:private_with_no_collaborators) }
 
   describe "#index" do
     context "user is not a member of the workspace" do
@@ -64,9 +64,9 @@ describe MembersController do
   end
 
   describe "#create" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:member1) { users(:bob) }
-    let(:member2) { users(:alice) }
+    let(:member2) { users(:no_collaborators) }
     let(:member3) { users(:carly) }
     let(:member4) { users(:admin) }
     let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, member3.id]} }

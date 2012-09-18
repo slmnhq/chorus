@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchController do
   describe "#show" do
-    let(:user) { users(:alice) }
+    let(:user) { users(:no_collaborators) }
 
     before do
       log_in user
@@ -41,7 +41,7 @@ describe SearchController do
 
     context "not admin" do
       before do
-        log_in users(:alice)
+        log_in users(:no_collaborators)
       end
 
       it "should refuse" do

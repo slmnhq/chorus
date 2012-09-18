@@ -39,7 +39,7 @@ describe GpdbInstanceAccess do
   describe "show_contents?" do
     context "for public gpdb instances" do
       it "shows for everybody, including non-owner, non-admin users" do
-        @user = users(:alice)
+        @user = users(:no_collaborators)
         gpdb_instance = gpdb_instances(:purple_banana)
         gpdb_instance.shared.should be_true
         instance_access.can?(:show_contents, gpdb_instance).should be_true
@@ -58,7 +58,7 @@ describe GpdbInstanceAccess do
       end
 
       it "prevents non-members from showing" do
-        @user = users(:alice)
+        @user = users(:no_collaborators)
         gpdb_instance.account_for_user(@user).should be_nil
         instance_access.can?(:show_contents, gpdb_instance).should be_false
       end

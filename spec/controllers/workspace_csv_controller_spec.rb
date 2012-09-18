@@ -4,7 +4,7 @@ describe WorkspaceCsvController do
   ignore_authorization!
 
   let(:user) { users(:bob) }
-  let(:non_auth_user) { users(:alice) }
+  let(:non_auth_user) { users(:no_collaborators) }
   let(:file) { test_file("test.csv", "text/csv") }
   let(:workspace) { workspaces(:bob_public) }
   let(:csv_file_params) do

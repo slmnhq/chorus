@@ -6,7 +6,7 @@ describe HadoopInstancesController do
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
 
   before do
-    @user = users(:alice)
+    @user = users(:no_collaborators)
     log_in @user
   end
 

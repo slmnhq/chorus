@@ -16,7 +16,7 @@ describe "Workspaces" do
       end
       click_link "Dismiss the workspace quick start guide"
       logout
-      login(users(:alice))
+      login(users(:no_collaborators))
       visit('#/workspaces')
       page.should_not have_content ("Private Workspace")
     end

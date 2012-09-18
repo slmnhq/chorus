@@ -340,7 +340,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/image" do
-    let(:workspace_id) { workspaces(:alice_api).to_param }
+    let(:workspace_id) { workspaces(:api).to_param }
 
     parameter :style, "Size of image ( original, icon )"
 

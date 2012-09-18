@@ -5,7 +5,7 @@ describe WorkfileCopyController do
   let(:workspace) { workspaces(:bob_public) }
   let(:workfile) { workfiles(:bob_public) }
   let(:workfile_version) { workfile.versions.first }
-  let(:target_workspace) { workspaces(:alice_public) }
+  let(:target_workspace) { workspaces(:public_with_no_collaborators) }
 
 
   describe "#create" do

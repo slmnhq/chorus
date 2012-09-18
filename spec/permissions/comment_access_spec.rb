@@ -4,9 +4,9 @@ describe CommentAccess do
   let(:user_without_access) { users(:bob) }
   let(:user_with_access) { users(:carly) }
   let(:admin) { users(:admin) }
-  let(:comment_author) { users(:alice) }
-  let(:event) { events(:note_on_alice_private)}
-  let(:comment) { comments(:comment_on_note_on_alice_private) }
+  let(:comment_author) { users(:no_collaborators) }
+  let(:event) { events(:note_on_no_collaborators_private)}
+  let(:comment) { comments(:comment_on_note_on_no_collaborators_private) }
   let(:comment_access) {
     controller = CommentsController.new
     stub(controller).current_user { user }

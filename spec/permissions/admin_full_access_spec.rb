@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe AdminFullAccess do
-  let(:user) { users(:alice) }
+  let(:user) { users(:no_collaborators) }
   let(:context) { ApplicationController.new }
   let(:access) do
     stub(context).current_user { user }

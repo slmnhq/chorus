@@ -22,25 +22,25 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>4,''groups''=>[{''groupValue''=>''Workspace
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2472.404,''docs''=>[{''id''=>''Workspace
-        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>2472.404}]}},{''groupValue''=>''Workspace
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2472.404,''docs''=>[{''id''=>''Workspace
-        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>2472.404}]}},{''groupValue''=>''Workspace
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1059.6018,''docs''=>[{''id''=>''Workspace
-        1000000'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''BobSearch
-        can see I guess''],''score''=>1059.6018}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1059.6018,''docs''=>[{''id''=>''Workspace
-        1000001'',''name_texts''=>[''Alice Private''],''summary_texts''=>[''Not for
-        bobsearch, ha ha''],''score''=>1059.6018}]}}]}},''highlighting''=>{''Workspace
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4073.4514,''docs''=>[{''id''=>''Workspace
+        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>4073.4514}]}},{''groupValue''=>''Workspace
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4073.4514,''docs''=>[{''id''=>''Workspace
+        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>4073.4514}]}},{''groupValue''=>''Workspace
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1745.7649,''docs''=>[{''id''=>''Workspace
+        1000000'',''name_texts''=>[''Public with no collaborators''],''summary_texts''=>[''BobSearch
+        can see I guess''],''score''=>1745.7649}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1745.7649,''docs''=>[{''id''=>''Workspace
+        1000001'',''name_texts''=>[''Private with no collaborators''],''summary_texts''=>[''Not
+        for bobsearch, ha ha''],''score''=>1745.7649}]}}]}},''highlighting''=>{''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000004''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000000''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@ can see I guess'']},''Workspace
         1000001''=>{''summary_texts''=>[''Not for @@@hl@@@bobsearch@@@endhl@@@, ha
         ha'']}}}'
     http_version:
-  recorded_at: Wed, 29 Aug 2012 21:55:21 GMT
+  recorded_at: Tue, 18 Sep 2012 22:38:45 GMT
 recorded_with: VCR 2.1.1
 ...

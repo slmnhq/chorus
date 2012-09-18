@@ -25,8 +25,8 @@ FixtureBuilder.configure do |fbuilder|
     evil_admin = User.create!({:first_name => 'Evil', :last_name => 'AlphaSearch', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
     Events::UserAdded.by(admin).add(:new_user => evil_admin)
 
-    alice = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'alice', :email => 'alice@example.com', :password => FixtureBuilder.password)
-    Events::UserAdded.by(admin).add(:new_user => alice)
+    no_collaborators = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'no_collaborators', :email => 'alice@example.com', :password => FixtureBuilder.password)
+    Events::UserAdded.by(admin).add(:new_user => no_collaborators)
 
     bob = User.create!(:first_name => 'BobSearch', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
     bob.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
@@ -68,17 +68,13 @@ FixtureBuilder.configure do |fbuilder|
     # Instance Accounts
     shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
     fbuilder.name(:admin, shared_instance_account)
-    carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :gpdb_instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
-    fbuilder.name(:iamcarly, carly_bobs_instance_account)
+    fbuilder.name(:iamcarly, InstanceAccount.create!({:owner => carly, :gpdb_instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true))
     bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :gpdb_instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:bobo, bob_bobs_instance_account)
-    aurora_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true)
-    fbuilder.name(:aurora, aurora_instance_account)
+    fbuilder.name(:aurora, InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true))
 
-    chorus_gpdb40_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :gpdb_instance => chorus_gpdb40_instance}), :without_protection => true)
-    fbuilder.name(:chorus_gpdb40_test_superuser, chorus_gpdb40_instance_account)
-    chorus_gpdb41_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :gpdb_instance => chorus_gpdb41_instance}), :without_protection => true)
-    fbuilder.name(:chorus_gpdb41_test_superuser, chorus_gpdb41_instance_account)
+    fbuilder.name(:chorus_gpdb40_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :gpdb_instance => chorus_gpdb40_instance}), :without_protection => true))
+    fbuilder.name(:chorus_gpdb41_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :gpdb_instance => chorus_gpdb41_instance}), :without_protection => true))
     chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :gpdb_instance => chorus_gpdb42_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
 
@@ -113,14 +109,15 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workspaces
     workspaces = []
-    workspaces << alice_public_workspace = alice.owned_workspaces.create!(:name => "Alice Public", :summary => 'BobSearch can see I guess')
-    workspaces << alice_private_workspace = alice.owned_workspaces.create!(:name => "Alice Private", :summary => "Not for bobsearch, ha ha", :public => false)
-    workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => alice}, :without_protection => true)
+    workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators", :summary => 'BobSearch can see I guess')
+    workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for bobsearch, ha ha", :public => false)
+    workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators}, :without_protection => true)
     workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
-    workspaces << alice_api_workspace = bob.owned_workspaces.create!({:name => "Alice Api", :summary => "aliceIsCool", :sandbox => bob_schema}, :without_protection => true)
-    alice_api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
-    alice_api_workspace.save!
+
+    workspaces << api_workspace = bob.owned_workspaces.create!({:name => "Api", :summary => "APIs Are Cool", :sandbox => bob_schema}, :without_protection => true)
+    api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
+    api_workspace.save!
     workspaces.each do |workspace|
       workspace.members << carly
     end
@@ -145,31 +142,31 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
-      alice_private = Workfile.create!({:file_name => "Alice Private", :description => "BobSearch", :owner => alice, :workspace => alice_private_workspace}, :without_protection => true)
-      alice_public = Workfile.create!({:file_name => "Alice Public", :description => "AliceSearch", :owner => alice, :workspace => alice_public_workspace}, :without_protection => true)
+      no_collaborators_private = Workfile.create!({:file_name => "no collaborators Private", :description => "BobSearch", :owner => no_collaborators, :workspace => no_collaborators_private_workspace}, :without_protection => true)
+      no_collaborators_public = Workfile.create!({:file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace}, :without_protection => true)
       bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace, :execution_schema => bob_schema}, :without_protection => true)
       bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
-      archived_workfile = Workfile.create!({:file_name => "archived", :owner => alice, :workspace => alice_archived_workspace}, :without_protection => true)
+      archived_workfile = Workfile.create!({:file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace}, :without_protection => true)
 
       sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
       fbuilder.name :sql, sql_workfile
 
-      alice_workfile_version = WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      no_collaborators_workfile_version = WorkfileVersion.create!({:workfile => no_collaborators_private, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => sql_workfile, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => archived_workfile, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
 
-      fbuilder.name :alice_creates_private_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
+      fbuilder.name :no_collaborators_creates_private_workfile, Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace)
       fbuilder.name :bob_creates_public_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
       fbuilder.name :bob_creates_private_workfile, Events::WorkfileCreated.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
-      fbuilder.name :alice_creates_public_workfile, Events::WorkfileCreated.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
+      Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_public, :workspace => no_collaborators_public_workspace)
 
       fbuilder.name :note_on_bob_public_workfile, Events::NoteOnWorkfile.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
-      fbuilder.name :note_on_alice_private_workfile, Events::NoteOnWorkfile.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
-      fbuilder.name :alice_creates_new_workfile_version, Events::WorkfileUpgradedVersion.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :commit_message => 'commit message', :version_id => "#{alice_workfile_version.id}", :version_num => "1")
+      fbuilder.name :note_on_no_collaborators_private_workfile, Events::NoteOnWorkfile.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :body => 'notesearch never')
+      Events::WorkfileUpgradedVersion.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :commit_message => 'commit message', :version_id => no_collaborators_workfile_version.id.to_s, :version_num => "1")
 
       Events::ChorusViewCreated.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace, :source_object => bob_public)
       Events::ChorusViewChanged.by(bob).add(:dataset => bob_chorus_view, :workspace => bob_public_workspace)
@@ -212,20 +209,20 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
-    note_on_alice_private = Events::NoteOnWorkspace.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
-    fbuilder.name :note_on_alice_private, note_on_alice_private
+    note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
+    fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
 
     #Comments
     fbuilder.name :comment_on_note_on_greenplum,
                   Comment.create!({:text => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
     fbuilder.name :second_comment_on_note_on_greenplum,
                   Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => bob.id})
-    fbuilder.name :comment_on_note_on_alice_private,
-                  Comment.create!({:text => "Comment on alice private", :event_id => note_on_alice_private.id, :author_id => alice.id})
+    fbuilder.name :comment_on_note_on_no_collaborators_private,
+                  Comment.create!({:text => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
 
     #Events
     Timecop.travel(-1.day)
-    Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
+    Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => no_collaborators)
     Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
     Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
     Events::SourceTableCreated.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)

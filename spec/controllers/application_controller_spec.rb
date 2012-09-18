@@ -15,7 +15,7 @@ describe ApplicationController do
     end
 
     before do
-      log_in users(:alice)
+      log_in users(:no_collaborators)
     end
 
     it "renders 'not found' JSON when record not found" do
@@ -107,7 +107,7 @@ describe ApplicationController do
     end
 
     context "when user has no admin rights" do
-      let(:user) { users(:alice) }
+      let(:user) { users(:no_collaborators) }
 
       it "returns error 403" do
         get :index
@@ -133,7 +133,7 @@ describe ApplicationController do
     end
 
     before do
-      @user = users(:alice)
+      @user = users(:no_collaborators)
       log_in @user
     end
 
@@ -164,7 +164,7 @@ describe ApplicationController do
 
     before do
       stub(controller).object_to_present { object_to_present }
-      log_in users(:alice)
+      log_in users(:no_collaborators)
     end
 
     context "with a single model" do
@@ -208,7 +208,7 @@ describe ApplicationController do
     end
 
     before do
-      log_in users(:alice)
+      log_in users(:no_collaborators)
       session[:expires_at] = 1.hour.from_now
     end
 
@@ -260,7 +260,7 @@ describe ApplicationController do
     end
 
     before do
-      log_in users(:alice)
+      log_in users(:no_collaborators)
     end
 
     context "when the request is for application/json" do

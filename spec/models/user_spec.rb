@@ -63,7 +63,7 @@ describe User do
     end
 
     context "to non-members of a private workspace" do
-      let(:current_user) { users(:alice) }
+      let(:current_user) { users(:no_collaborators) }
 
       it "returns all the public events to a non-member of the private workspace" do
         bob.accessible_events(current_user).should include(instance_event, public_workspace_event, user_added_event)

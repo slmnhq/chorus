@@ -127,10 +127,10 @@ describe Search do
     let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
-    let(:public_workspace) { workspaces(:alice_public) }
+    let(:public_workspace) { workspaces(:public_with_no_collaborators) }
     let(:private_workspace) { workspaces(:bob_private) }
-    let(:private_workspace_not_a_member) { workspaces(:alice_private) }
-    let(:private_workfile_hidden_from_bob) { workfiles(:alice_private) }
+    let(:private_workspace_not_a_member) { workspaces(:private_with_no_collaborators) }
+    let(:private_workfile_hidden_from_bob) { workfiles(:no_collaborators_private) }
     let(:private_workfile_bob) { workfiles(:bob_private) }
     let(:public_workfile_bob) { workfiles(:bob_public) }
     let(:dataset) { datasets(:bobsearch_table) }
@@ -349,7 +349,7 @@ describe Search do
       end
 
       it "excludes notes on workspaces you can't see" do
-        events(:note_on_alice_private).body.should == "notesearch never"
+        events(:note_on_no_collaborators_private).body.should == "notesearch never"
         VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
           search = Search.new(bob, :query => 'notesearch')
           workspace = search.workspaces.should_not include private_workspace_not_a_member
@@ -386,7 +386,7 @@ describe Search do
       end
 
       it "excludes notes on workfiles you can't see" do
-        events(:note_on_alice_private_workfile).body.should == "notesearch never"
+        events(:note_on_no_collaborators_private_workfile).body.should == "notesearch never"
         VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
           search = Search.new(bob, :query => 'notesearch')
           workfile = search.workfiles.should_not include private_workfile_hidden_from_bob

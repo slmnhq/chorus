@@ -35,7 +35,7 @@ describe "Search" do
       click_link 'Workspaces'
       wait_for_ajax
       current_route.should == "/search/all/workspace/bobsearch"
-      page.find(".workspace_list").should have_content(workspaces(:alice_public).name)
+      page.find(".workspace_list").should have_content(workspaces(:public_with_no_collaborators).name)
     end
   end
 

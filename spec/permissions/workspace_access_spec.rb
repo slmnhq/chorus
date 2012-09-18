@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe WorkspaceAccess do
-  let(:non_member) { users(:alice) }
+  let(:non_member) { users(:no_collaborators) }
   let(:admin) { users(:admin) }
   let(:member) { users(:carly) }
   let(:owner) { users(:bob) }

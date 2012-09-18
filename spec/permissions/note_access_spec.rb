@@ -23,7 +23,7 @@ describe Events::NoteAccess do
 
     context "when the note is on a workspace and the current user is the workspace owner" do
       let(:note) do
-        Events::NoteOnWorkspace.by(users(:alice)).create(
+        Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
           :workspace => workspaces(:bob_public),
           :body => "hi"
         )

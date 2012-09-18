@@ -22,15 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         database_name_texts schema_name_texts column_name_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note)'',''type_name_s:(Dataset)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000001))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Dataset
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2583265.2,''docs''=>[{''id''=>''GpdbTable
-        1000004'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>2583265.2}]}}]}},''highlighting''=>{''GpdbTable
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2587380.5,''docs''=>[{''id''=>''GpdbTable
+        1000004'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bobsearch'',''non-search''],''score''=>2587380.5}]}}]}},''highlighting''=>{''GpdbTable
         1000004''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_shared_table''],''column_name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Fri, 14 Sep 2012 21:23:07 GMT
+  recorded_at: Tue, 18 Sep 2012 22:38:14 GMT
 recorded_with: VCR 2.1.1
 ...

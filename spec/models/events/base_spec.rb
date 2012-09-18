@@ -46,25 +46,25 @@ describe Events::Base do
     end
 
     it "does not retrieve the notification for a user for whom there is none" do
-      stub(ActiveRecord::Base).current_user { users(:alice) }
+      stub(ActiveRecord::Base).current_user { users(:no_collaborators) }
       event.notification_for_current_user.should be_nil
     end
   end
 
   describe ".for_dashboard_of(user)" do
-    let(:user) { users(:alice) }
+    let(:user) { users(:no_collaborators) }
     let(:the_events) do
       [
-        events(:alice_creates_private_workfile),
+        events(:no_collaborators_creates_private_workfile),
         events(:bob_creates_private_workfile),
         events(:bob_creates_public_workfile),
-        events(:alice_creates_private_workfile)
+        events(:no_collaborators_creates_private_workfile)
       ]
     end
 
     let(:other_workspace1) { workspaces(:bob_public) }
     let(:other_workspace2) { workspaces(:bob_private) }
-    let(:user_workspace) { workspaces(:alice_public) }
+    let(:user_workspace) { workspaces(:public_with_no_collaborators) }
 
     let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0] ) }
 

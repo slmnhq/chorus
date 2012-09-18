@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GpdbInstances::OwnerController do
   let(:gpdb_instance) { gpdb_instances(:purple_banana) }
   let(:user) { gpdb_instance.owner }
-  let(:new_owner) { users(:alice) }
+  let(:new_owner) { users(:no_collaborators) }
 
   ignore_authorization!
 

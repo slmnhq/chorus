@@ -67,14 +67,14 @@ describe NotesController do
 
     context "with 'notify users'" do
       let(:bob) { users(:bob) }
-      let(:alice) { users(:alice) }
+      let(:no_collaborators) { users(:no_collaborators) }
 
       it "notifies the recipients" do
         workspace = workspaces(:bob_public)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => [bob.id, alice.id] }
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => [bob.id, no_collaborators.id] }
         response.code.should == "201"
         bob.notification_events.last.body = "Notify people note"
-        alice.notification_events.last.body = "Notify people note"
+        no_collaborators.notification_events.last.body = "Notify people note"
       end
     end
   end

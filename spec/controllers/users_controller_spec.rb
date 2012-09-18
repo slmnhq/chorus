@@ -130,7 +130,7 @@ describe UsersController do
   end
 
   describe "#update" do
-    let(:other_user) { users(:alice) }
+    let(:other_user) { users(:no_collaborators) }
     let(:admin) { users(:admin) }
     let(:non_admin) { users(:bob) }
 

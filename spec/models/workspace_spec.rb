@@ -11,14 +11,14 @@ describe Workspace do
 
   describe "create" do
     it "creates a membership for the owner" do
-      owner = users(:alice)
+      owner = users(:no_collaborators)
       workspace = owner.owned_workspaces.create!(:name => 'new workspace!')
       workspace.members.should include(owner)
     end
   end
 
   describe "validations" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:max_workspace_icon_size) {Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon']}
 
     it { should validate_presence_of :name }
@@ -27,7 +27,7 @@ describe Workspace do
   end
 
   describe ".active" do
-    let!(:active_workspace) { workspaces(:alice_public) }
+    let!(:active_workspace) { workspaces(:public_with_no_collaborators) }
     let!(:archived_workspace) { workspaces(:archived) }
 
     it "returns only active workspaces" do
@@ -59,10 +59,10 @@ describe Workspace do
 
   describe ".accessible_to" do
     let!(:public_workspace) { workspaces(:bob_public) }
-    let!(:owned_workspace) { workspaces(:alice_private) }
+    let!(:owned_workspace) { workspaces(:private_with_no_collaborators) }
     let!(:private_workspace) { workspaces(:bob_private) }
-    let!(:private_workspace_with_membership) { workspaces(:alice_private) }
-    let(:user) { users(:alice) }
+    let!(:private_workspace_with_membership) { workspaces(:private_with_no_collaborators) }
+    let(:user) { users(:no_collaborators) }
 
     it "returns public workspaces" do
       Workspace.accessible_to(user).should include public_workspace
@@ -82,11 +82,11 @@ describe Workspace do
   end
 
   describe "#members_accessible_to" do
-    let(:private_workspace) { workspaces(:alice_private) }
-    let(:workspace) { workspaces(:alice_public) }
+    let(:private_workspace) { workspaces(:private_with_no_collaborators) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
 
     let(:bob) { users(:bob) }
-    let(:user) { users(:alice) }
+    let(:user) { users(:no_collaborators) }
     let(:admin) { users(:admin) }
 
     context "public workspace" do
@@ -199,7 +199,7 @@ describe Workspace do
 
   describe "#image" do
     it "should have a nil image instead of a default missing image" do
-      workspace = workspaces(:alice_public)
+      workspace = workspaces(:public_with_no_collaborators)
       workspace.update_attributes!(:image => nil)
       workspace.image.url.should == ""
     end
@@ -209,9 +209,9 @@ describe Workspace do
 
   describe "permissions_for" do
     it "should have the correct permissions per user" do
-      owner = users(:alice)
-      private_workspace = workspaces(:alice_private)
-      public_workspace = workspaces(:alice_public)
+      owner = users(:no_collaborators)
+      private_workspace = workspaces(:private_with_no_collaborators)
+      public_workspace = workspaces(:public_with_no_collaborators)
       member = users(:carly)
       admin = users(:admin)
       anon = users(:bob)
@@ -229,7 +229,7 @@ describe Workspace do
   end
 
   describe "#archived?" do
-    let(:active_workspace) { workspaces(:alice_public) }
+    let(:active_workspace) { workspaces(:public_with_no_collaborators) }
     let(:archived_workspace) { workspaces(:archived) }
 
     it "says that active workspace is not archived" do
@@ -242,7 +242,7 @@ describe Workspace do
   end
 
   describe "#destroy" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
 
     before do
       workspace.destroy
@@ -262,7 +262,7 @@ describe Workspace do
   end
 
   describe "#has_dataset" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
     it "returns true if the dataset is in the workspace's sandbox" do
@@ -293,7 +293,7 @@ describe Workspace do
     end
 
     it "is false for non members" do
-      workspaces(:bob_public).member?(users(:alice)).should be_false
+      workspaces(:bob_public).member?(users(:no_collaborators)).should be_false
     end
   end
 
@@ -323,7 +323,7 @@ describe Workspace do
   end
 
   describe "callbacks" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:sandbox) { gpdb_schemas(:bobs_schema) }
 
     describe "before_save" do

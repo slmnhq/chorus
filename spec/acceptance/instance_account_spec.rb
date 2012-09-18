@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Greenplum DB account for current user" do
   let!(:owner) { users(:bob) }
-  let!(:non_owner) { users(:alice) }
+  let!(:non_owner) { users(:no_collaborators) }
   let!(:member) { users(:carly) }
 
   let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }

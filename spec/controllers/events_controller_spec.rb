@@ -56,7 +56,7 @@ describe EventsController do
     end
 
     context "when getting the activities for a workspace" do
-      let(:object) { workspaces(:alice_public) }
+      let(:object) { workspaces(:public_with_no_collaborators) }
 
       it "presents the workspace's activities" do
         mock_present { |models| models.should include(event) }
@@ -107,14 +107,14 @@ describe EventsController do
   end
 
   describe "#show" do
-    let(:event) { events(:note_on_alice_private) }
+    let(:event) { events(:note_on_no_collaborators_private) }
 
     it "shows the particular event " do
       mock_present do |model, view, options|
         model.should == event
         options[:activity_stream].should be_true
       end
-      log_in users(:alice)
+      log_in users(:no_collaborators)
       get :show, :id => event.to_param
       response.code.should == "200"
     end

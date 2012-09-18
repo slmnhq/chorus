@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ConfigurationsController do
   describe "#show" do
     before do
-      @user = users(:alice)
+      @user = users(:no_collaborators)
       log_in @user
       mock(LdapClient).enabled? { true }
       stub(File).directory? { true }

@@ -39,7 +39,7 @@ describe DatasetDownloadsController do
     end
 
     context "for a user without an account" do
-      let(:user) {users(:alice)}
+      let(:user) {users(:no_collaborators)}
 
       it "sets the response body to an error message, but still delivers a csv" do
         get :show, :dataset_id => table.to_param, :format => 'csv'

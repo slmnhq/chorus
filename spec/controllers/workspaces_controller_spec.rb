@@ -3,14 +3,14 @@ require 'spec_helper'
 describe WorkspacesController do
   ignore_authorization!
 
-  let(:owner) { users(:alice) }
+  let(:owner) { users(:no_collaborators) }
   let(:other_user) { users(:carly) }
   before do
     log_in owner
   end
 
   describe "#index" do
-    let(:private_workspace) { workspaces(:alice_private) }
+    let(:private_workspace) { workspaces(:private_with_no_collaborators) }
 
     it "returns workspaces that are public" do
       get :index
@@ -158,7 +158,7 @@ describe WorkspacesController do
   end
 
   describe "#update" do
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
 
     context "when the current user has update authorization" do
       it "uses authentication" do
@@ -183,7 +183,7 @@ describe WorkspacesController do
       end
 
       it "makes the right event when making the workspace public" do
-        workspace = workspaces(:alice_private)
+        workspace = workspaces(:private_with_no_collaborators)
         parameters = {:id => workspace.id, :workspace => {:public => true, :archived => workspace.archived?.to_s}}
         lambda {
           lambda {

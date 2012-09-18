@@ -2,8 +2,8 @@ require 'spec_helper'
 
 resource "Comments" do
   let(:author) { users(:admin) }
-  let(:event) { events(:note_on_alice_private) }
-  let(:comment) { comments(:comment_on_note_on_alice_private) }
+  let(:event) { events(:note_on_no_collaborators_private) }
+  let(:comment) { comments(:comment_on_note_on_no_collaborators_private) }
 
   before do
     log_in author

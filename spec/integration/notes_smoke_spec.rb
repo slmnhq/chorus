@@ -27,7 +27,7 @@ describe "Notes" do
 
   describe "creating a note on a workspace" do
     it "creates the note" do
-      workspace = workspaces(:alice_public)
+      workspace = workspaces(:public_with_no_collaborators)
       visit("#/workspaces/#{workspace.id}")
       wait_for_ajax
       click_link "Add a note"
@@ -65,7 +65,7 @@ describe "Notes" do
 
   describe "creating a note on a workfile" do
     it "creates the note" do
-      workfile = workfiles(:alice_public)
+      workfile = workfiles(:no_collaborators_public)
       workspace = workfile.workspace
       visit("#/workspaces/#{workspace.id}/workfiles")
       within ".workfile_list" do

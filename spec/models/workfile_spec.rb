@@ -53,7 +53,7 @@ describe Workfile do
 
   describe ".create_from_file_upload" do
     let(:user) { users(:admin) }
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
 
 
     shared_examples "file upload" do
@@ -156,7 +156,7 @@ describe Workfile do
 
   describe ".create_from_svg" do
     let(:user) { users(:admin) }
-    let(:workspace) { workspaces(:alice_public) }
+    let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:filename) { 'svg_img.png' }
     subject { described_class.create_from_svg({:svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>', :file_name => filename}, workspace, user) }
 

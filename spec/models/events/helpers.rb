@@ -24,10 +24,10 @@ module EventHelpers
 end
 
 shared_examples 'event associated with a workspace' do
-  let(:private_workspace) { workspaces(:alice_private) }
-  let(:public_workspace)  { workspaces(:alice_public) }
+  let(:private_workspace) { workspaces(:private_with_no_collaborators) }
+  let(:public_workspace)  { workspaces(:public_with_no_collaborators) }
   let(:not_a_member)      { users(:bob) }
-  let(:member)            { users(:alice) }
+  let(:member)            { users(:no_collaborators) }
 
   it "does not appear on a non-member's dashboard" do
     subject.workspace = private_workspace

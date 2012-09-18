@@ -25,7 +25,7 @@ describe CsvFileAccess do
     end
 
     context "regular user" do
-      let(:current_user) { users(:alice) }
+      let(:current_user) { users(:no_collaborators) }
 
       it "does not allow access" do
         subject.can?(:import, csv_file).should be_false

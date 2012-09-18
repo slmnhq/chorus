@@ -251,7 +251,7 @@ describe GpdbInstance do
       let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
 
       it "raises an exception" do
-        expect { gpdb_instance.account_for_user!(users(:alice)) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { gpdb_instance.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -261,7 +261,7 @@ describe GpdbInstance do
 
     context "missing account" do
       it "returns nil" do
-        gpdb_instance.account_for_user(users(:alice)).should be_nil
+        gpdb_instance.account_for_user(users(:no_collaborators)).should be_nil
       end
     end
   end

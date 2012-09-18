@@ -8,7 +8,7 @@ describe "Notes" do
   let(:actor) { users(:not_a_member) }
   let(:greenplum_instance) { gpdb_instances(:greenplum) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
-  let(:workspace) { workspaces(:alice_private) }
+  let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:workfile) { workfiles(:bob_public)}
   let(:dataset) { datasets(:bobs_table) }
   let(:hdfs_entry) do

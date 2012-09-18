@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Users" do
   let(:user) { users(:admin) }
   let(:other_user) { users(:not_a_member) }
-  let(:workspace_owner) { users(:alice) }
+  let(:workspace_owner) { users(:no_collaborators) }
 
   before do
     login(user)
