@@ -1,10 +1,6 @@
 describe("chorus.dialogs.WorkspaceInstanceAccount", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace();
-
-        // TODO - remove me once we have sandboxes
-        this.workspace.get("sandboxInfo").instanceName = "backfill";
-
         this.account = rspecFixtures.instanceAccount();
         this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({ model: this.account, pageModel: this.workspace});
         this.dialog.render();
@@ -20,7 +16,7 @@ describe("chorus.dialogs.WorkspaceInstanceAccount", function() {
         });
 
         it("has the right body text", function() {
-            expect(this.dialog.$('label')).toContainTranslation("workspace.instance.account.body", {instanceName: this.workspace.sandbox().get('instanceName')})
+            expect(this.dialog.$('label')).toContainTranslation("workspace.instance.account.body", {instanceName: this.workspace.sandbox().database().instance().get("name")})
         });
     });
 });
