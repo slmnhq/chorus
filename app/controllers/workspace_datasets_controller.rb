@@ -8,7 +8,9 @@ class WorkspaceDatasetsController < ApplicationController
     datasets = Dataset.where(:id => params[:dataset_ids].split(","))
 
     datasets.each do |dataset|
-      unless workspace.has_dataset?(dataset)
+      if workspace.has_dataset?(dataset)
+        raise ApiValidationError.new(:base, :dataset_already_associated)
+      else
         workspace.bound_datasets << dataset
         create_event_for_dataset(dataset, workspace)
       end

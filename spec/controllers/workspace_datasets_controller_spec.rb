@@ -89,13 +89,10 @@ describe WorkspaceDatasetsController do
         workspace.bound_datasets << gpdb_table2
       end
 
-      it "should associate all workspaces even if some are already associated" do
+      it "shows an error if some datasets are already associated" do
         table_ids = [gpdb_table.to_param, gpdb_table2.to_param]
         post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
-        response.code.should == "201"
-
-        workspace.bound_datasets.should include(gpdb_table)
-        workspace.bound_datasets.should include(gpdb_table2)
+        response.code.should == "422"
       end
     end
   end
