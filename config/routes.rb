@@ -52,7 +52,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :chorus_views, :only => [:create]
+  resources :chorus_views, :only => [:create, :destroy]
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]

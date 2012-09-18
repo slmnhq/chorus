@@ -66,6 +66,19 @@ resource "Chorus Views" do
     end
   end
 
+  delete "/chorus_views/:id" do
+    parameter :id, "Id of the chorus view to update"
+
+    required_parameters :id
+
+    let!(:chorus_view) { datasets(:bob_chorus_view) }
+    let(:id) { chorus_view.id }
+
+    example_request "Delete a Chorus View" do
+      status.should == 200
+    end
+  end
+
   post "/datasets/preview_sql" do
     let(:sql_result) {
       SqlResult.new.tap do |r|
