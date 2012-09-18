@@ -19,6 +19,12 @@ describe("chorus.views.Dashboard", function(){
             chorus.PageEvents.broadcast("comment:added");
             expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
         });
+
+        it("will re-fetch the activity list if a comment is deleted", function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("comment:deleted");
+            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
+        });
     });
 
     describe("#render", function() {

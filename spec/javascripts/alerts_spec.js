@@ -171,6 +171,12 @@ describe("chorus.alerts.ModelDelete", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, this.deleteParams);
             });
 
+            it("broadcasts a pageevent comment:deleted", function() {
+                spyOn(chorus.PageEvents, 'broadcast');
+                this.alert.model.trigger("destroy", this.alert.model);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("comment:deleted");
+            });
+
             context("when the alert does NOT have a redirect url", function() {
                 it("does not navigate", function() {
                     delete this.alert.redirectUrl;
