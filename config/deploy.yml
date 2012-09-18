@@ -8,3 +8,9 @@ upgrade21:
   legacy_path: ~/chorus
   postgres_build: 2
   install_path: ~/chorusrails
+
+fresh_install:
+  host: chorus-freshinstall
+  postgres_build: 2
+  install_path: ~/chorusrails_freshinstall
+  clean_install: true
