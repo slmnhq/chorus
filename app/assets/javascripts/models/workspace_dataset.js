@@ -2,8 +2,12 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     constructorName: "WorkspaceDataset",
 
     urlTemplate: function(options) {
-        if(options && options.download) {
+        options = options || {};
+        if(options.download) {
             return this._super("urlTemplate", arguments);
+        } else if(this.isChorusView() &&
+            (_.indexOf(["update", "delete"], options.method) > -1)) {
+            return "chorus_views/{{id}}"
         } else {
             return "workspaces/{{workspace.id}}/datasets/{{id}}";
         }

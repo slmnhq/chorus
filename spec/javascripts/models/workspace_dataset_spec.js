@@ -27,6 +27,13 @@ describe("chorus.models.WorkspaceDataset", function() {
         expect(this.dataset.url({ download: true })).toMatchUrl('/datasets/1011/download.csv');
     });
 
+    it("has the right chorus view url", function() {
+        this.dataset.set({type: "CHORUS_VIEW"});
+        expect(this.dataset.url({ method : "delete"})).toMatchUrl("/chorus_views/1011");
+        expect(this.dataset.url({ method : "update"})).toMatchUrl("/chorus_views/1011");
+        expect(this.dataset.url({ method : "get"})).toMatchUrl("/workspaces/44/datasets/1011");
+    });
+
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {

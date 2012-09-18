@@ -42,6 +42,7 @@ class ChorusViewsController < ApplicationController
 
   def destroy
     ChorusView.find(params[:id]).destroy
+    AssociatedDataset.find_by_dataset_id(params[:id]).destroy
     render :json => {}
   end
 end

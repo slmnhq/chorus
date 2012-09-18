@@ -172,5 +172,12 @@ describe ChorusViewsController, :database_integration => true do
       response.should be_success
       chorus_view.reload.deleted?.should be_true
     end
+
+    it "deletes the workspace association" do
+      AssociatedDataset.find_by_dataset_id(chorus_view.id).should_not be_nil
+      delete :destroy, :id => chorus_view.to_param
+      response.should be_success
+      AssociatedDataset.find_by_dataset_id(chorus_view.id).should be_nil
+    end
   end
 end
