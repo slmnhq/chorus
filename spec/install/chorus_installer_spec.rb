@@ -114,6 +114,54 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#get_data_path" do
+    before do
+      stub(installer).version { "2.2.0.1-8840ae71c" }
+      installer.destination_path = destination_path
+      stub(version_detector).can_upgrade_2_2?(anything) { do_2_2_upgrade }
+    end
+    let(:default_path) { "#{destination_path}/shared" }
+    let(:data_path) { '/large_disk/data/' }
+    let(:destination_path) { '/destination' }
+    let(:do_2_2_upgrade) { false }
+
+    context "for a fresh install" do
+      before do
+        mock(io).prompt_or_default(:data_path, default_path) { data_path }
+      end
+
+      it "should set the data path when the user enters one" do
+        installer.get_data_path
+        installer.data_path.should == '/large_disk/data'
+      end
+
+      describe "when the user does not enter a path" do
+        let(:data_path) { nil }
+        it "should default correctly" do
+          installer.get_data_path
+          installer.data_path.should == default_path
+        end
+      end
+
+      describe "when the user types a relative path" do
+        let(:data_path) { "~/data" }
+        it "returns the expanded path" do
+          installer.get_data_path
+          installer.data_path.should == "#{ENV['HOME']}/data"
+        end
+      end
+    end
+
+    context "When doing a 2_2 upgrade" do
+      let(:do_2_2_upgrade) { true }
+
+      it "should not prompt data directory" do
+        installer.get_data_path
+        installer.data_path.should == default_path
+      end
+    end
+  end
+
   describe "#prompt_for_legacy_upgrade" do
     subject { installer.prompt_for_legacy_upgrade }
     before do

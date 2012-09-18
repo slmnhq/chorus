@@ -6,7 +6,7 @@ require 'base64'
 require 'openssl'
 
 class ChorusInstaller
-  attr_accessor :destination_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
+  attr_accessor :destination_path, :data_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
 
   DEFAULT_PATH = "/opt/chorus"
 
@@ -75,6 +75,24 @@ class ChorusInstaller
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
     @logger.logfile = File.join(@destination_path, 'install.log')
+  end
+
+  def get_data_path
+    default_path = "#{@destination_path}/shared"
+    if @version_detector.can_upgrade_2_2?(version)
+      self.data_path = File.expand_path(default_path)
+    else
+      relative_path = @io.prompt_or_default(:data_path, default_path) || default_path
+      self.data_path = File.expand_path(relative_path)
+    end
+
+    log "Data path = #{@data_path}"
+  end
+
+  def prompt_for_data_path
+    default_path = "#{@destination_path}/shared"
+    relative_path = @io.prompt_or_default(:data_path, default_path) || default_path
+    File.expand_path(relative_path)
   end
 
   def prompt_for_passphrase
@@ -284,6 +302,7 @@ class ChorusInstaller
     validate_non_root
     validate_localhost
     get_destination_path
+    get_data_path
     determine_postgres_installer
 
     log "Installing Chorus version #{version} to #{destination_path}"
@@ -313,6 +332,7 @@ class ChorusInstaller
     end
 
     configure_secret_key
+    configure_file_storage_directories
 
     if do_legacy_upgrade
       #log "Migrating settings from previous version..."
@@ -359,6 +379,10 @@ class ChorusInstaller
         f.puts "secret_key: #{secret_key}"
       end
     end
+  end
+
+  def configure_file_storage_directories
+
   end
 
   private
