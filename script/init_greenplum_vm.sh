@@ -32,11 +32,27 @@ function start () {
 
 		echo "Generating SSH identity..."
 		ssh-keygen -f gpdb421ee/id_rsa -N ''
-		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromHostToGuest gpdb421ee/Greenplum\ 4.2.1.vmx ./gpdb421ee/id_rsa.pub /home/gpadmin/.ssh/authorized_keys
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromHostToGuest gpdb421ee/Greenplum\ 4.2.1.vmx ./gpdb421ee/id_rsa.pub /home/gpadmin/vmware_host_id_rsa.pub
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "cat /home/gpadmin/vmware_host_id_rsa.pub >> /home/gpadmin/.ssh/authorized_keys"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "chmod 400 /home/gpadmin/.ssh/authorized_keys"
 
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print \$1}' > ~/GREENPLUM_IP"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromGuestToHost gpdb421ee/Greenplum\ 4.2.1.vmx /home/gpadmin/GREENPLUM_IP ./GREENPLUM_IP
+
+		#sudo /sbin/service iptables stop
+		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/service iptables stop"
+		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/chkconfig iptables off"
+
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         chorus         172.16.241.30/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
+
+
+
+		echo "starting Greenplum database"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "source /home/gpadmin/.profile; /usr/local/greenplum-db/bin/gpstart -a"
+		echo "Creating chorus user"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "createuser -s chorus"
+		echo "Creating chorus password"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "psql postgres -c \"alter user chorus with password 'password';\""
 
 		GREENPLUM_IP=`cat ./GREENPLUM_IP`
 		echo "Add the following to /etc/hosts with sudo:"
