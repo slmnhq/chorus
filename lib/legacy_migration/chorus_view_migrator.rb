@@ -13,7 +13,12 @@ class ChorusViewMigrator < AbstractMigrator
 
       silence_activerecord do
         dataset_rows = Legacy.connection.exec_query(%Q(
-          SELECT normalize_key(composite_id) AS dataset_string, workspace_id, query, created_tx_stamp, last_updated_tx_stamp
+          SELECT normalize_key(composite_id) AS dataset_string,
+            workspace_id,
+            query,
+            created_tx_stamp,
+            last_updated_tx_stamp,
+            is_deleted
           FROM edc_dataset
           WHERE type = 'CHORUS_VIEW'
           AND normalize_key(composite_id) NOT IN (select legacy_id from datasets);
@@ -41,6 +46,7 @@ class ChorusViewMigrator < AbstractMigrator
           dataset.created_at = row_hash['created_tx_stamp']
           dataset.updated_at = row_hash['last_updated_tx_stamp']
           dataset.edc_workspace_id = row_hash['workspace_id']
+          dataset.deleted_at = dataset.updated_at if row_hash['is_deleted'] == 't'
 
           # check to see if this chorus view's name conflicts with any tables/views or other chorus views.
           unless dataset.valid?

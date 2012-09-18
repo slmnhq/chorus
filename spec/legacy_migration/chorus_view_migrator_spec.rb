@@ -18,7 +18,7 @@ describe ChorusViewMigrator do
       select count(*) from edc_dataset WHERE type = 'CHORUS_VIEW'
                                 AND is_deleted = 't'").first['count']
     deleted_count.should > 0
-    #deleted_count.should == Dataset.unscoped.where('deleted_at IS NOT NULL').count
+    deleted_count.should == Dataset.unscoped.where('deleted_at IS NOT NULL').count
   end
 
   it "should have a query for every migrated chorus view" do
