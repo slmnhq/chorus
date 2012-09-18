@@ -179,5 +179,23 @@ describe ChorusViewsController, :database_integration => true do
       response.should be_success
       AssociatedDataset.find_by_dataset_id(chorus_view.id).should be_nil
     end
+
+    it "deletes any imports from that chorus view" do
+      ImportSchedule.create!({
+         :start_datetime => '2012-09-04 23:00:00-07',
+         :end_date => '2012-12-04',
+         :frequency => 'weekly',
+         :workspace_id => workspace.id,
+         :to_table => "new_table_for_import",
+         :source_dataset_id => chorus_view.id,
+         :truncate => 't',
+         :new_table => 't',
+         :user_id => user.id} , :without_protection => true)
+
+      ImportSchedule.find_by_source_dataset_id(chorus_view.id).should_not be_nil
+      delete :destroy, :id => chorus_view.to_param
+      response.should be_success
+      ImportSchedule.find_by_source_dataset_id(chorus_view.id).should be_nil
+    end
   end
 end

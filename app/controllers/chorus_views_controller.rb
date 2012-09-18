@@ -43,6 +43,9 @@ class ChorusViewsController < ApplicationController
   def destroy
     ChorusView.find(params[:id]).destroy
     AssociatedDataset.find_by_dataset_id(params[:id]).destroy
+    schedule = ImportSchedule.find_by_source_dataset_id(params[:id])
+    schedule.destroy unless schedule.nil?
+
     render :json => {}
   end
 end
