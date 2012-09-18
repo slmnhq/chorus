@@ -78,3 +78,9 @@ nginx.conf
 # Ignore nginx logs
 /vendor/nginx/nginx_dist/nginx_data/logs/*.log
 /vendor/nginx/nginx_dist/nginx_data/logs/*.pid
+
+# Ignore Greenplum VM related files
+/gpdb421ee
+GREENPLUM_IP
+
+
