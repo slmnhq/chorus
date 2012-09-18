@@ -1,14 +1,11 @@
 class ChorusEncryptor
   class << self
     def encrypt_password(options = {})
-      salt = SecureRandom.random_bytes(8)
-      value = Base64.strict_encode64(encrypt_cipher(options[:value], salt))
-      value + " " + Base64.strict_encode64(salt)
+      Base64.strict_encode64(encrypt_cipher(options[:value]))
     end
 
     def decrypt_password(options = {})
-      (value, salt) = options[:value].split
-      decrypt_cipher(Base64.strict_decode64(value), Base64.strict_decode64(salt))
+      decrypt_cipher(Base64.strict_decode64(options[:value]))
     end
 
     private
@@ -17,18 +14,18 @@ class ChorusEncryptor
       Base64.strict_decode64(Chorus::Application.config.chorus['secret_key'] || ("0" * 32))
     end
 
-    def decrypt_cipher(password, salt)
-      do_cipher(:decrypt, password, salt)
+    def decrypt_cipher(password)
+      do_cipher(:decrypt, password)
     end
 
-    def encrypt_cipher(password, salt)
-      do_cipher(:encrypt, password, salt)
+    def encrypt_cipher(password)
+      do_cipher(:encrypt, password)
     end
 
-    def do_cipher(method, password, salt)
+    def do_cipher(method, password)
       cipher = OpenSSL::Cipher::AES.new("256-CBC").send(method)
       # pkcs5 is supposedly deprecated but jruby does not have support for pbkdf2_hmac
-      cipher.pkcs5_keyivgen(secret_key, salt)
+      cipher.pkcs5_keyivgen(secret_key)
       cipher.update(password) + cipher.final
     end
   end
