@@ -159,4 +159,18 @@ describe ChorusViewsController, :database_integration => true do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:chorus_view) do
+      FactoryGirl.create(:chorus_view,
+                         :schema => schema,
+                         :query => 'select 1;').tap { |c| c.bound_workspaces << workspace }
+    end
+
+    it "lets a workspace member soft delete a chorus view" do
+      delete :destroy, :id => chorus_view.to_param
+      response.should be_success
+      chorus_view.reload.deleted?.should be_true
+    end
+  end
 end

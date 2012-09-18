@@ -39,4 +39,9 @@ class ChorusViewsController < ApplicationController
     )
     present chorus_view
   end
+
+  def destroy
+    ChorusView.find(params[:id]).destroy
+    render :json => {}
+  end
 end
