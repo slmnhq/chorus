@@ -6,7 +6,7 @@ end
 
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
-  fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb"]
+  fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb", "db/structure.sql", "spec/support/database_integration/setup_gpdb.sql"]
 
   fbuilder.name_model_with(Workfile) do |record|
     record['file_name'].gsub(/\s+/, '_').downcase
