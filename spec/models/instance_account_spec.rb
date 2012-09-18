@@ -22,31 +22,20 @@ describe InstanceAccount do
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
     let(:instance) { gpdb_instances(:greenplum) }
-    let(:secret_key) {'\0' * 32}
-    let(:password) {"apass"}
+    let(:secret_key) { '\0' * 32 }
+    let(:password) { "apass" }
     let!(:instance_account) do
       instance.accounts.create!(
           {:db_password => password, :db_username => 'aname', :owner => owner},
           :without_protection => true)
     end
 
-    it "encrypts the password with the phrasekey" do
-      (password, salt) = get_password_from_database(instance_account.id).split
-      password.should == Base64.strict_encode64(encrypt_cipher('apass', Base64.strict_decode64(salt)))
-    end
-
-    it "decrypts the password with the phrasekey" do
-      InstanceAccount.find(instance_account.id).db_password.should == 'apass'
-    end
-
-    def get_password_from_database(account_id)
-      ActiveRecord::Base.connection.select_values("select encrypted_db_password from instance_accounts where id = #{account_id}").first
-    end
-
-    def encrypt_cipher(password, salt)
-      cipher = OpenSSL::Cipher::AES.new("256-CBC").encrypt
-      cipher.pkcs5_keyivgen(secret_key, salt)
-      cipher.update(password) + cipher.final
+    it "stores db_password as encrypted_db_password using the attr_encrypted gem" do
+      ActiveRecord::Base.connection.select_values("select encrypted_db_password
+                                                  from instance_accounts where id = #{instance_account.id}") do |db_password|
+        db_password.should_not be_nil
+        db_password.should_not == password
+      end
     end
   end
 end
