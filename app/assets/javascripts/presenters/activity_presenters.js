@@ -2,7 +2,7 @@
     chorus.presenters.Activity = chorus.presenters.Base.extend({
 
         headerHtml: function() {
-            var string = t(hidden.headerTranslationKey(this), hidden.headerParams(this));
+            var string = t(hidden.headerTranslationKey(this, this.isNotification()), hidden.headerParams(this));
             return new Handlebars.SafeString(string);
         },
 
@@ -260,8 +260,10 @@
             return params;
         },
 
-        defaultStyle: function(self) {
+        defaultStyle: function(self, isNotification) {
             if (self.get("action") == "MembersAdded") {
+                if (isNotification == true) return "default.notification";
+
                 switch(self.get("numAdded")) {
                     case "1":
                         return 'default.one';
@@ -277,8 +279,10 @@
             }
         },
 
-        displayStyle: function(self, style) {
+        displayStyle: function(self, style, isNotification) {
             if (self.get("action") == "MembersAdded") {
+                if (isNotification == true) return (style + ".notification");
+
                 switch(self.get("numAdded")) {
                     case "1":
                         return (style + '.one');
@@ -295,9 +299,9 @@
             }
         },
 
-        headerTranslationKey: function(self) {
+        headerTranslationKey: function(self, isNotification) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
-            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle), hidden.defaultStyle(self.model), 'default']));
+            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {
                      key = [mainKey, possibleStyles[i]].join(".");

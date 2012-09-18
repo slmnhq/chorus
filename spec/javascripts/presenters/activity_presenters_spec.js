@@ -911,6 +911,15 @@ describe("chorus.presenters.Activity", function() {
                     activity_without_workspace_data
                 );
             });
+
+            it("choose right header for notification if isNotification is set to true", function() {
+                presenter.options.isNotification = true;
+                presenter.options.displayStyle = ['default'];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MembersAdded.default.notification",
+                    activity_data
+                );
+            })
         });
 
         context("more than two members are added", function() {
