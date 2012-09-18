@@ -42,7 +42,7 @@ function do_ssh() {
 
 function stop() {
 	echo "Stopping greenplum."
-	# not yet implemented
+	"$FUSION_BIN_PATH/vmrun" -T fusion stop gpdb421ee/Greenplum\ 4.2.1.vmx soft
 }
 
 function usage () {
