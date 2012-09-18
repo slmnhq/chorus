@@ -51,7 +51,7 @@ describe ActivityMigrator do
           event.created_at.should == row["created_tx_stamp"]
         end
         count.should > 0
-        Events::ChorusViewCreated.where(:target2_type => 'Workfile').count.should == 2
+        Events::ChorusViewCreated.where(:target2_type => 'Workfile').count.should == count
       end
 
       it "copies CHORUS VIEW CREATED data fields from the legacy activity, for chorus views created from datasets" do

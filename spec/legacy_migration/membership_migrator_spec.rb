@@ -9,7 +9,7 @@ describe MembershipMigrator do
     describe "copying the data" do
       it "creates new membership for legacy GPDB instances, including new owner-workspaces associations that did not exist and be idempotent" do
         count = Legacy.connection.select_all("SELECT count(*) FROM edc_member").first["count"]
-        count_owner = Legacy.connection.select_all("select count(distinct owner) from legacy_migrate.edc_workspace w where
+        count_owner = Legacy.connection.select_all("select count(owner) from legacy_migrate.edc_workspace w where
          owner NOT IN (select member_name from legacy_migrate.edc_member  em where em.workspace_id = w.id) ;").first["count"]
         Membership.count.should == count + count_owner
         MembershipMigrator.migrate
