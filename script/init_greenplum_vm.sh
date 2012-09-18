@@ -38,12 +38,13 @@ function start () {
 
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print \$1}' > ~/GREENPLUM_IP"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromGuestToHost gpdb421ee/Greenplum\ 4.2.1.vmx /home/gpadmin/GREENPLUM_IP ./GREENPLUM_IP
+		GREENPLUM_IP=`cat ./GREENPLUM_IP`
 
 		#sudo /sbin/service iptables stop
 		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/service iptables stop"
 		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/chkconfig iptables off"
 
-		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         chorus         172.16.241.30/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         chorus         $GREENPLUM_IP/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
 
 
 
@@ -54,7 +55,7 @@ function start () {
 		echo "Creating chorus password"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "psql postgres -c \"alter user chorus with password 'password';\""
 
-		GREENPLUM_IP=`cat ./GREENPLUM_IP`
+
 		echo "Add the following to /etc/hosts with sudo:"
 		echo "$GREENPLUM_IP local-greenplum"
 	else
