@@ -148,7 +148,7 @@ class ChorusInstaller
   end
 
   def is_supported_mac?
-    system("uname") == 'Darwin'
+    `uname`.strip == "Darwin"
   end
 
   def copy_chorus_to_destination

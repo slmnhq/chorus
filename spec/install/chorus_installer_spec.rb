@@ -157,46 +157,52 @@ describe ChorusInstaller do
   end
 
   describe "#get_postgres_build" do
-    context "when Linux is CentOS/RHEL 5.5" do
+    context "when Linux" do
       before do
-        FileUtils.mkdir_p("/etc/")
-        File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 5.5 (Final)" }
+        stub(installer).is_supported_mac? { false }
       end
 
-      it "returns the RedHat 5.5 build" do
-        installer.get_postgres_build.should == 'postgres-redhat5.5-9.1.4.tar.gz'
-      end
-    end
+      context "when Linux is CentOS/RHEL 5.5" do
+        before do
+          FileUtils.mkdir_p("/etc/")
+          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 5.5 (Final)" }
+        end
 
-    context "when Linux is CentOS/RHEL 6.2" do
-      before do
-        FileUtils.mkdir_p("/etc/")
-        File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 6.2 (Final)" }
-      end
-
-      it "returns the RedHat 6.2 build" do
-        installer.get_postgres_build.should == 'postgres-redhat6.2-9.1.4.tar.gz'
-      end
-    end
-
-    context "when Linux is SLES 11" do
-      before do
-        FileUtils.mkdir_p("/etc/")
-        File.open("/etc/SuSE-release", "w") do |f|
-          f.puts "SuSE"
-          f.puts "VERSION = 11"
-          f.puts "PATCHLEVEL = 1"
+        it "returns the RedHat 5.5 build" do
+          installer.get_postgres_build.should == 'postgres-redhat5.5-9.1.4.tar.gz'
         end
       end
 
-      it "returns the suse11 build" do
-        installer.get_postgres_build.should == 'postgres-suse11-9.1.4.tar.gz'
+      context "when Linux is CentOS/RHEL 6.2" do
+        before do
+          FileUtils.mkdir_p("/etc/")
+          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 6.2 (Final)" }
+        end
+
+        it "returns the RedHat 6.2 build" do
+          installer.get_postgres_build.should == 'postgres-redhat6.2-9.1.4.tar.gz'
+        end
+      end
+
+      context "when Linux is SLES 11" do
+        before do
+          FileUtils.mkdir_p("/etc/")
+          File.open("/etc/SuSE-release", "w") do |f|
+            f.puts "SuSE"
+            f.puts "VERSION = 11"
+            f.puts "PATCHLEVEL = 1"
+          end
+        end
+
+        it "returns the suse11 build" do
+          installer.get_postgres_build.should == 'postgres-suse11-9.1.4.tar.gz'
+        end
       end
     end
 
     context "when OSX" do
       before do
-        stub(installer).system('uname') { 'Darwin' }
+        stub(installer).is_supported_mac? { true }
       end
 
       it "should return the OSX build" do
@@ -206,6 +212,7 @@ describe ChorusInstaller do
 
     context "when couldn't guess version/distribution" do
       before do
+        stub(installer).is_supported_mac? { false }
         mock(io).prompt_until(:select_os).times(prompt_times) do |symbol, proc|
           proc.call(nil).should be_false
           proc.call('1').should be_true

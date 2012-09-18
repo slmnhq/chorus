@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# on mac, use homebrew recipe with:
-#  ./configure --prefix=./nginx_data --with-http_ssl_module --with-pcre --with-ipv6 --with-cc-opt=-I/usr/local/include --with-ld-opt=-L/usr/local/lib --with-http_gzip_static_module
-
 mkdir build
 pushd build
 
@@ -22,23 +19,29 @@ tar xzf nginx-1.2.2.tar.gz
 
 pushd nginx-1.2.2
 
-./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module
+#os_friendly_name=""
+unamestr=`uname`
+if [[ "$unamestr" == 'Darwin' ]]; then
+    os_friendly_name='OSX'
+   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -lc" --with-http_gzip_static_module
+else
+    os_friendly_name='Linux'
+   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module
+fi
 
 make
 
+rm -rf ../../nginx_dist
 mkdir -p ../nginx_dist/nginx_data/logs
 cp -r conf ../nginx_dist/nginx_data
 cp objs/nginx ../nginx_dist
-
+mv ../nginx_dist ../..
 popd
 
 rm -f nginx_dist/nginx_data/conf/nginx.conf
-
-tar czf nginx_dist-1.2.2.tar.gz nginx_dist
-mv nginx_dist-1.2.2.tar.gz ..
 
 popd
 
 rm -rf build
 
-echo "Package nginx_dist-1.2.2.tar.gz built."
+echo "Nginx package for $os_friendly_name built."
