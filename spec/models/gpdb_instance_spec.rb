@@ -239,7 +239,7 @@ describe GpdbInstance do
     context "individual gpdb instance" do
       let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
       let!(:owner_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
-      let!(:user_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, users(:carly).id) }
+      let!(:user_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
 
       it "should return the account for the user" do
         gpdb_instance.account_for_user!(gpdb_instance.owner).should == owner_account
@@ -298,7 +298,7 @@ describe GpdbInstance do
       let(:database) { gpdb_databases(:bobs_database) }
       let(:missing_database) { gpdb_instance.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_instance.owner_account }
-      let(:account_without_access) { instance_accounts(:iamcarly) }
+      let(:account_without_access) { instance_accounts(:not_bob) }
 
       before do
         stub_gpdb(gpdb_instance.owner_account, gpdb_instance.send(:database_and_role_sql) => [

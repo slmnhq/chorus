@@ -3,7 +3,7 @@ require './spec/acceptance/image_hack'
 
 resource "Users" do
   let!(:user) { users(:admin) }
-  let!(:other_user) { users(:carly) }
+  let!(:other_user) { users(:the_collaborator) }
 
   before do
     log_in user

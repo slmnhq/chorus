@@ -55,7 +55,7 @@ describe User do
     let(:user_added_event) { events(:bob_user_added_event) }
 
     context "to members of a private workspace" do
-      let(:current_user) { users(:carly) }
+      let(:current_user) { users(:the_collaborator) }
 
       it "returns all the events to a member of the private workspace" do
         bob.accessible_events(current_user).should include(instance_event, public_workspace_event, private_workspace_event, user_added_event)

@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe EventsController do
-  let(:current_user) { users(:carly) }
+  let(:current_user) { users(:the_collaborator) }
 
   before do
     log_in current_user

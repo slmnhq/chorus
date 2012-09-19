@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe AnalyzeController do
   ignore_authorization!
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
   let(:gpdb_table) { datasets(:bobs_table) }
   let(:gpdb_instance) { gpdb_table.gpdb_instance }
-  let(:account) { instance_accounts(:iamcarly) }
+  let(:account) { gpdb_instance.account_for_user!(user) }
 
   before do
     log_in user

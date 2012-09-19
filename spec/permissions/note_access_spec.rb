@@ -44,7 +44,7 @@ describe Events::NoteAccess do
 
   describe "#create?(params)" do
     before do
-      stub(fake_controller).current_user { users(:carly) }
+      stub(fake_controller).current_user { users(:the_collaborator) }
     end
 
     context "when there is an access class for the specified model" do

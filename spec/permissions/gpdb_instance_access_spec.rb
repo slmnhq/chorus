@@ -21,7 +21,7 @@ describe GpdbInstanceAccess do
 
   describe "#edit?" do
     it "prevents regular users from editing" do
-      @user = users(:carly)
+      @user = users(:the_collaborator)
       instance_access.can?(:edit, gpdb_instance).should be_false
     end
 
@@ -52,7 +52,7 @@ describe GpdbInstanceAccess do
       end
 
       it "allows members to show (which includes owner)" do
-        @user = users(:carly)
+        @user = users(:the_collaborator)
         gpdb_instance.account_for_user(@user).should_not be_nil
         instance_access.can?(:show_contents, gpdb_instance).should be_true
       end

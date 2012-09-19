@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe WorkfileCopyController do
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
   let(:workspace) { workspaces(:bob_public) }
   let(:workfile) { workfiles(:bob_public) }
   let(:workfile_version) { workfile.versions.first }

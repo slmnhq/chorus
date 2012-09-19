@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CommentsController do
   let(:event) { events(:note_on_bob_public_workfile) }
   let(:event_author) { users(:bob) }
-  let(:first_commenter) { users(:carly) }
+  let(:first_commenter) { users(:the_collaborator) }
   let(:second_commenter) { users(:admin) }
 
   before do

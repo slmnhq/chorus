@@ -123,7 +123,7 @@ describe Search do
   context "with solr enabled" do
     let(:admin) { users(:admin) }
     let(:bob) { users(:bob) }
-    let(:carly) { users(:carly) }
+    let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
@@ -244,9 +244,9 @@ describe Search do
       end
 
       it "excludes datasets you don't have permissions to" do
-        VCR.use_cassette('search_solr_query_datasets_bobsearch_as_carly') do
-          carly.instance_accounts.joins(:gpdb_databases).should be_empty
-          search = Search.new(carly, :query => 'bobsearch', :entity_type => :dataset)
+        VCR.use_cassette('search_solr_query_datasets_bobsearch_as_the_collaborator') do
+          the_collaborator.instance_accounts.joins(:gpdb_databases).should be_empty
+          search = Search.new(the_collaborator, :query => 'bobsearch', :entity_type => :dataset)
           search.datasets.should == [shared_dataset]
         end
       end
@@ -262,8 +262,8 @@ describe Search do
 
       it "excludes notes on datasets you can't see" do
         events(:note_on_dataset).body.should == "notesearch ftw"
-        VCR.use_cassette('search_solr_notes_query_all_types_bob_as_carly') do
-          search = Search.new(carly, :query => 'notesearch')
+        VCR.use_cassette('search_solr_notes_query_all_types_bob_as_the_collaborator') do
+          search = Search.new(the_collaborator, :query => 'notesearch')
           search.datasets.should be_empty
         end
       end

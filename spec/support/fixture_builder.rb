@@ -34,8 +34,8 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :bob_user_added_event, Events::UserAdded.by(admin).add(:new_user => bob)
 
-    carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)
-    Events::UserAdded.by(admin).add(:new_user => carly)
+    the_collaborator = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'the_collaborator', :email => 'carly@example.com', :password => FixtureBuilder.password)
+    Events::UserAdded.by(admin).add(:new_user => the_collaborator)
 
     not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
     Events::UserAdded.by(admin).add(:new_user => not_a_member)
@@ -68,7 +68,7 @@ FixtureBuilder.configure do |fbuilder|
     # Instance Accounts
     shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
     fbuilder.name(:admin, shared_instance_account)
-    fbuilder.name(:iamcarly, InstanceAccount.create!({:owner => carly, :gpdb_instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true))
+    fbuilder.name(:not_bob, InstanceAccount.create!({:owner => the_collaborator, :gpdb_instance => bobs_instance, :db_username => "the_collaborator_account", :db_password => "corvette"}, :without_protection => true))
     bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :gpdb_instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:bobo, bob_bobs_instance_account)
     fbuilder.name(:aurora, InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true))
@@ -119,7 +119,7 @@ FixtureBuilder.configure do |fbuilder|
     api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
     api_workspace.save!
     workspaces.each do |workspace|
-      workspace.members << carly
+      workspace.members << the_collaborator
     end
 
     # Workspace / Dataset associations
@@ -190,7 +190,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_schedule, import_schedule
 
     #CSV File
-    csv_file = CsvFile.new({:user => carly, :workspace => bob_public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'bobs_table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file = CsvFile.new({:user => the_collaborator, :workspace => bob_public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'bobs_table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)
 
     #Notes
@@ -205,7 +205,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
     Events::NoteOnDataset.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
-    Events::FileImportSuccess.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    Events::FileImportSuccess.by(the_collaborator).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
@@ -233,7 +233,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::FileImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'bobs_table')
     Events::FileImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FileImportFailed.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
-    Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
+    Events::MembersAdded.by(bob).add(:workspace => bob_public_workspace, :member => the_collaborator, :num_added => '5')
     Events::DatasetImportCreated.by(bob).add(:workspace => bob_public_workspace, :dataset => nil, :source_dataset => bobs_table, :destination_table => 'other_table')
     Events::DatasetImportSuccess.by(bob).add(:workspace => bob_public_workspace, :dataset => other_table, :source_dataset => bobs_table)
     Events::DatasetImportFailed.by(bob).add(:workspace => bob_public_workspace, :source_dataset => bobs_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")

@@ -67,7 +67,7 @@ describe MembersController do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:member1) { users(:bob) }
     let(:member2) { users(:no_collaborators) }
-    let(:member3) { users(:carly) }
+    let(:member3) { users(:the_collaborator) }
     let(:member4) { users(:admin) }
     let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, member3.id]} }
 

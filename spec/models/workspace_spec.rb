@@ -124,7 +124,7 @@ describe Workspace do
     let(:chorus_view) {
       ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
     }
-    let!(:user) {users(:carly)}
+    let!(:user) {users(:the_collaborator)}
 
     context "when the workspace has a sandbox" do
       before do
@@ -212,7 +212,7 @@ describe Workspace do
       owner = users(:no_collaborators)
       private_workspace = workspaces(:private_with_no_collaborators)
       public_workspace = workspaces(:public_with_no_collaborators)
-      member = users(:carly)
+      member = users(:the_collaborator)
       admin = users(:admin)
       anon = users(:bob)
 

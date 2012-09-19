@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AttachmentDownloadsController do
 
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
 
   before do
     log_in user

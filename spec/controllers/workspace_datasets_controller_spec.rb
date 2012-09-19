@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspaceDatasetsController do
   ignore_authorization!
 
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
   let(:workspace) { FactoryGirl.create(:workspace) }
   let(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }

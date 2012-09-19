@@ -4,7 +4,7 @@ describe WorkspacesController do
   ignore_authorization!
 
   let(:owner) { users(:no_collaborators) }
-  let(:other_user) { users(:carly) }
+  let(:other_user) { users(:the_collaborator) }
   before do
     log_in owner
   end
@@ -170,7 +170,7 @@ describe WorkspacesController do
       end
 
       it "allows updating the workspace's privacy and owner" do
-        member = users(:carly)
+        member = users(:the_collaborator)
         put :update, :id => workspace.id, :workspace => {
             :owner_id => member.id.to_s,
             :public => "false"

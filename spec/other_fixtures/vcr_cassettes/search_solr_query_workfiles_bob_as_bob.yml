@@ -27,13 +27,13 @@ http_interactions:
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workfile
         OR Events\\:\\:Note)'',''type_name_s:(Workfile)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''Workfile
-        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3419.8306,''docs''=>[{''id''=>''Workfile
-        1000002'',''file_name_texts''=>[''Bob Private''],''description_texts''=>[''BobSearch''],''score''=>3419.8306}]}},{''groupValue''=>''Workfile
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3419.8306,''docs''=>[{''id''=>''Workfile
-        1000003'',''file_name_texts''=>[''Bob Public''],''description_texts''=>[''BobSearch''],''score''=>3419.8306}]}}]}},''highlighting''=>{''Workfile
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3426.4246,''docs''=>[{''id''=>''Workfile
+        1000002'',''file_name_texts''=>[''Bob Private''],''description_texts''=>[''BobSearch''],''score''=>3426.4246}]}},{''groupValue''=>''Workfile
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3426.4246,''docs''=>[{''id''=>''Workfile
+        1000003'',''file_name_texts''=>[''Bob Public''],''description_texts''=>[''BobSearch''],''score''=>3426.4246}]}}]}},''highlighting''=>{''Workfile
         1000002''=>{''description_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
         1000003''=>{''description_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 18 Sep 2012 22:38:55 GMT
+  recorded_at: Wed, 19 Sep 2012 00:11:17 GMT
 recorded_with: VCR 2.1.1
 ...

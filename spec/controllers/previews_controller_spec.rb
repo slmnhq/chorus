@@ -5,7 +5,7 @@ describe PreviewsController do
 
   let(:gpdb_table) { datasets(:bobs_table) }
   let(:gpdb_instance) { gpdb_table.gpdb_instance }
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
   let(:account) { gpdb_instance.account_for_user!(user) }
 
   before do

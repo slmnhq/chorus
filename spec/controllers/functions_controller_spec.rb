@@ -3,20 +3,17 @@ require 'spec_helper'
 describe FunctionsController do
   ignore_authorization!
 
-  let(:user) { users(:carly) }
+  let(:user) { users(:the_collaborator) }
 
   before do
     log_in user
   end
 
   describe "#index" do
-    let(:instanceAccount) { instance_accounts(:iamcarly) }
-
     let(:database) { gpdb_databases(:bobs_database) }
     let!(:schema) { gpdb_schemas(:bobs_schema) }
 
     before do
-      stub(subject).gpdb_account_for_current_user(schema) { instanceAccount }
       @functions = [
           GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", nil, "{text}", "Hi!!", "awesome"),
           GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", "{arg1, arg2}", "{text, int4}", "Hi2", "awesome2"),

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe DatasetsController do
-  let(:user) { users(:carly) }
-  let(:instance_account) { instance_accounts(:iamcarly) }
-  let(:gpdb_instance) { instance_account.gpdb_instance }
+  let(:user) { users(:the_collaborator) }
+  let(:instance_account) { gpdb_instance.account_for_user!(user) }
+  let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema(options).to_sql }
   let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:bobs_schema) }
