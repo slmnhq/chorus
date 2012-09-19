@@ -597,12 +597,17 @@ describe ChorusInstaller do
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = destination_path
+      FileUtils.mkdir_p "#{destination_path}/shared"
+
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
+      installer.data_path = "/data/chorus"
       @call_order = []
       stub_chorus_exec(installer)
     end
+
+    let(:destination_path) {"/opt/chorus"}
 
     context "when installing fresh" do
       it "creates the database structure" do

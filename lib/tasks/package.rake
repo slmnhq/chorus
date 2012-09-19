@@ -108,6 +108,9 @@ module PackageMaker
         f.puts(install_path)
       end
 
+      #give the data directory
+      f.puts(install_path + "/shared") unless File.exists?("#{install_path}/releases")
+
       # confirm the upgrade
       f.puts('y')
 

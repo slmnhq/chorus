@@ -21,7 +21,7 @@ fi
 
 POSTGRES_PORT=8543
 
-$CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DIR/server.log -D $POSTGRES_DIR -w -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>/dev/null
+$CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DIR/server.log -D $POSTGRES_DIR -w -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>$POSTGRES_DIR/pg_ctl.log
 POSTGRES_START=$?
 
 if [ $POSTGRES_START -eq 0 ]; then

@@ -200,6 +200,10 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
 
+    if File.expand_path("#{data_path}") != File.expand_path("#{destination_path}/shared")
+      FileUtils.ln_sf("#{data_path}/db", "#{destination_path}/shared/db")
+      FileUtils.ln_sf("#{data_path}/system", "#{destination_path}/shared/system")
+    end
     FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
@@ -232,7 +236,7 @@ class ChorusInstaller
       end
     else
       log "Initializing database..." do
-        chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
+        chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 -D #{data_path}/db"
         start_postgres
         chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
         db_commands = "db:create db:migrate"
