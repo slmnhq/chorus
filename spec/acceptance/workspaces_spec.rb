@@ -235,6 +235,22 @@ resource "Workspaces" do
     end
   end
 
+  delete "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+    let!(:dataset_id) { dataset.to_param }
+
+    parameter :workspace_id, "Id of the workspace that the dataset belongs to"
+    parameter :dataset_id, "Id of the dataset"
+    parameter :id, "id of the import schedule"
+    scope_parameters :dataset_import, :all
+
+    required_parameters :dataset_id , :id , :workspace_id
+    let(:id) { import_schedules(:bob_schedule).id }
+
+    example_request "Delete import schedule for a dataset" do
+      status.should == 200
+    end
+  end
+
   post "/workspaces/:workspace_id/external_tables" do
     parameter :hdfs_entry_id, "Id of the source HDFS entry"
     parameter :has_header, "'true' if data contains a header column, 'false' otherwise", :scope => :hdfs_external_table

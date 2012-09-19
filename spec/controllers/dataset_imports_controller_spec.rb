@@ -272,6 +272,26 @@ describe DatasetImportsController do
     end
   end
 
+  describe "#destroy" do
+    let(:user) { users(:owner) }
+    let(:import_schedule) { import_schedules(:bob_schedule) }
+    let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
+    let(:import_params) { import_schedule.attributes }
+    before do
+      log_in user
+    end
+    it "deletes the import schedule and returns success" do
+      delete :destroy, :dataset_id => src_table.id,
+             :workspace_id => import_schedule.workspace_id,
+             :dataset_import => import_params
+
+      response.code.should == "200"
+      import_schedule.reload.deleted_at.should_not be_nil
+      import_schedule.is_active.should be_false
+      ImportSchedule.find_by_workspace_id_and_source_dataset_id(import_schedule.workspace_id, src_table.id).should be_nil
+    end
+  end
+
   describe "smoke test for import schedules", :database_integration => true do
     # In the test, use gpfdist to move data between tables in the same schema and database
     let(:instance_account1) { GpdbIntegration.real_gpdb_account }

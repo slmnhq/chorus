@@ -34,6 +34,15 @@ class DatasetImportsController < ApplicationController
     present import_schedule
   end
 
+  def destroy
+    schedule_id = params[:dataset_import][:id]
+
+    import_schedule = ImportSchedule.find(schedule_id)
+    import_schedule.destroy
+
+    render :json => {}
+  end
+
   private
 
   def normalize_import_attributes!(attributes)
