@@ -30,10 +30,10 @@ if [[ "$unamestr" == 'Darwin' ]]; then
     ./configure --with-pcre="../dependencies/pcre-8.31" --with-pcre-opt="-arch i386" --with-zlib="../dependencies/zlib-1.2.7" --with-zlib-opt="-arch i386" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0 -arch i386" --with-ld-opt="-static-libgcc -lc -lcrypto -arch i386" --with-http_gzip_static_module --with-http_ssl_module
 else
     os_friendly_name='Linux'
-   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module
+   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module --with-http_ssl_module
 fi
 
-CFLAGS="-m32" make
+make
 
 rm -rf ../../nginx_dist
 mkdir -p ../nginx_dist/nginx_data/logs

@@ -9,7 +9,7 @@ workfile_storage_path : ":rails_root/system/"
 image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
 server_port: 8080
-ssl: "on"
+ssl: "off"
 ssl_certificate: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.crt"
 ssl_certificate_key: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.key"
 provision_max_size_in_gb: 100
