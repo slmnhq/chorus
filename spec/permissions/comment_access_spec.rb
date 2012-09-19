@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe CommentAccess do
-  let(:user_without_access) { users(:bob) }
+  let(:user_without_access) { users(:owner) }
   let(:user_with_access) { users(:the_collaborator) }
   let(:admin) { users(:admin) }
   let(:comment_author) { users(:no_collaborators) }

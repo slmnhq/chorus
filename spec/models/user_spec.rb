@@ -48,7 +48,7 @@ describe User do
   end
 
   describe "#accessible_events" do
-    let(:bob) { users(:bob) }
+    let(:bob) { users(:owner) }
     let(:instance_event) { events(:bob_creates_greenplum_instance) }
     let(:public_workspace_event) { events(:bob_creates_public_workspace) }
     let(:private_workspace_event) { events(:bob_creates_private_workspace) }
@@ -307,7 +307,7 @@ describe User do
 
   describe "#accessible_account_ids" do
     it "includes the users individual instance accounts plus all shared instance accounts" do
-      user = users(:bob)
+      user = users(:owner)
       shared_ids = InstanceAccount.joins(:gpdb_instance).where("gpdb_instances.shared = true").collect(&:id)
       user_ids = user.instance_account_ids
       user.accessible_account_ids.should =~ (shared_ids + user_ids).uniq

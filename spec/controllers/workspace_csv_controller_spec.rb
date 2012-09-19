@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspaceCsvController do
   ignore_authorization!
 
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
   let(:non_auth_user) { users(:no_collaborators) }
   let(:file) { test_file("test.csv", "text/csv") }
   let(:workspace) { workspaces(:bob_public) }

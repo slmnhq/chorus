@@ -26,7 +26,7 @@ describe DefaultAccess do
 
     context "when there is no access class for the given model" do
       it "returns a default access class" do
-        user = users(:bob)
+        user = users(:owner)
         other_access = access.access_for(user)
         other_access.should be_a(DefaultAccess)
         other_access.context.should == context

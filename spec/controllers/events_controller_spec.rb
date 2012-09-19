@@ -35,7 +35,7 @@ describe EventsController do
     end
 
     context "when getting the activities for a user" do
-      let(:object) { users(:bob) }
+      let(:object) { users(:owner) }
 
       it "presents the user's activities" do
         any_instance_of(User) { |u| mock.proxy(u).accessible_events(current_user) }
@@ -120,7 +120,7 @@ describe EventsController do
     end
 
     it "returns an error when trying to show an activity for which the user doesn't have access" do
-      log_in users(:bob)
+      log_in users(:owner)
       get :show, :id => event.to_param
       response.code.should == "404"
     end

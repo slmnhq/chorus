@@ -1,15 +1,16 @@
 require 'spec_helper'
 
 resource "Workspaces" do
-  let!(:user) { users(:admin) }
+  let(:workspace) { workspaces(:api) }
+  let(:workspace_id) { workspace.to_param }
+  let(:id) { workspace_id }
+  let(:user) { workspace.owner }
 
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => user) }
   let(:greenplum_instance) { FactoryGirl.create(:greenplum_instance, :owner => user) }
   let!(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => greenplum_instance) }
   let!(:sandbox) { FactoryGirl.create(:gpdb_schema, :database => database) }
-  let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
   let!(:instance_account) { FactoryGirl.create(:instance_account, :owner => user, :gpdb_instance => sandbox.gpdb_instance) }
-  let(:workspace_id) { workspace.to_param }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
   let!(:associated_dataset) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
 
@@ -29,16 +30,12 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:id" do
-    let(:id) { workspace.to_param }
-
     example_request "Show workspace details" do
       status.should == 200
     end
   end
 
   put "/workspaces/:id" do
-    let(:id) { workspace.to_param }
-
     parameter :name, "Workspace name"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
     parameter :sandbox_id, "Id of the schema to be used as the workspace's sandbox"
@@ -58,8 +55,6 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:id" do
-    let(:id) { workspace.to_param }
-
     parameter :name, "Workspace name"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
     parameter :summary, "Notes about the workspace"
@@ -82,8 +77,6 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:id" do
-    let(:id) { workspace.to_param }
-
     parameter :name, "Workspace name"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
     parameter :summary, "Notes about the workspace"
@@ -122,8 +115,6 @@ resource "Workspaces" do
   end
 
   delete "/workspaces/:workspace_id/quickstart" do
-    let(:workspace_id) { workspace.to_param }
-
     example_request "Dismiss the quickstart for a workspace" do
       status.should == 200
     end
@@ -144,7 +135,7 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let!(:bob_workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:bob_public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
@@ -159,7 +150,6 @@ resource "Workspaces" do
     scope_parameters :dataset_import, :all
 
     let(:dataset_id) { datasets(:bobs_table).id }
-    let(:workspace_id) { bob_workspace.id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
@@ -182,7 +172,7 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let!(:bob_workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:bob_public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
@@ -198,7 +188,6 @@ resource "Workspaces" do
     scope_parameters :dataset_import, :all
 
     let(:dataset_id) { datasets(:bobs_table).id }
-    let(:workspace_id) { bob_workspace.id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
@@ -264,13 +253,11 @@ resource "Workspaces" do
     let(:types) { ["text", "text"] }
     let(:delimiter) { ',' }
     let(:table_name) { "highway_to_heaven" }
-    let(:workspace_with_sandbox) do
-      workspace.sandbox = sandbox
-      workspace.save
-      workspace
-    end
 
-    let(:workspace_id) { workspace_with_sandbox.id }
+    before do
+      workspace.sandbox = sandbox
+      workspace.save!
+    end
 
     example_request "Create external table from CSV file on hadoop" do
       status.should == 200
@@ -281,15 +268,13 @@ resource "Workspaces" do
     parameter :workspace_id, "ID of the workspace with which to associate the datasets"
     parameter :dataset_ids, "Comma-delimited list of dataset IDs to associate with the workspace"
 
-    let(:workspace_with_sandbox) do
+    before do
       workspace.sandbox = sandbox
       workspace.save
-      workspace
     end
 
     let(:view) { FactoryGirl.create(:gpdb_view) }
     let(:table) { FactoryGirl.create(:gpdb_table) }
-    let(:workspace_id) { workspace_with_sandbox.id }
     let(:dataset_ids) { view.to_param + "," + table.to_param }
 
     example_request "Associate the specified datasets with the workspace" do
@@ -306,7 +291,6 @@ resource "Workspaces" do
     scope_parameters :csv, [:contents]
 
     let(:file_name) { "test.csv"}
-    let(:workspace_id) { workspace.id }
     let(:contents) { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
 
     example_request "Upload a CSV file for import" do
@@ -327,7 +311,6 @@ resource "Workspaces" do
 
     let(:csv_file) { CsvFile.last }
 
-    let(:workspace_id) { workspace.id }
     let(:id)           { csv_file.id}
     let(:type)         { "existingTable"}
     let(:to_table)     { "a_fine_table" }
@@ -340,8 +323,6 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/image" do
-    let(:workspace_id) { workspaces(:api).to_param }
-
     parameter :style, "Size of image ( original, icon )"
 
     example_request "Show workspace image" do

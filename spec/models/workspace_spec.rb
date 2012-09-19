@@ -48,7 +48,7 @@ describe Workspace do
     end
 
     context "user is not admin" do
-      let(:user) { users(:bob) }
+      let(:user) { users(:owner) }
       it "returns limited workspaces" do
         mock(Workspace).accessible_to(user)
 
@@ -85,7 +85,7 @@ describe Workspace do
     let(:private_workspace) { workspaces(:private_with_no_collaborators) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }
 
-    let(:bob) { users(:bob) }
+    let(:bob) { users(:owner) }
     let(:user) { users(:no_collaborators) }
     let(:admin) { users(:admin) }
 
@@ -214,7 +214,7 @@ describe Workspace do
       public_workspace = workspaces(:public_with_no_collaborators)
       member = users(:the_collaborator)
       admin = users(:admin)
-      anon = users(:bob)
+      anon = users(:owner)
 
       [
           [private_workspace, owner, [:admin]],
@@ -289,7 +289,7 @@ describe Workspace do
 
   describe "#member?" do
     it "is true for members" do
-      workspaces(:bob_public).member?(users(:bob)).should be_true
+      workspaces(:bob_public).member?(users(:owner)).should be_true
     end
 
     it "is false for non members" do
@@ -300,7 +300,7 @@ describe Workspace do
   describe "#archived=" do
     context "when setting to 'true'" do
       let(:workspace) { workspaces(:bob_public) }
-      let(:archiver) { users(:bob) }
+      let(:archiver) { users(:owner) }
       it "sets the archived_at timestamp" do
         workspace.update_attributes!(:archiver => archiver, :archived => 'true')
         workspace.archived_at.should be_within(1.minute).of(Time.current)

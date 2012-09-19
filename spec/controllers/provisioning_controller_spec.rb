@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ProvisioningController do
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
   let(:template) { Aurora::Template.new }
 
   before(:each) do

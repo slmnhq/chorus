@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Search" do
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
 
   before do
     reindex_solr_fixtures

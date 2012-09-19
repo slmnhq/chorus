@@ -4,7 +4,7 @@ describe MembersController do
   ignore_authorization!
 
   let(:member) { users(:no_collaborators) }
-  let(:non_member) { users(:bob) }
+  let(:non_member) { users(:owner) }
   let(:admin) { users(:admin) }
   let(:public_workspace) { workspaces(:public_with_no_collaborators) }
   let(:private_workspace) { workspaces(:private_with_no_collaborators) }
@@ -65,7 +65,7 @@ describe MembersController do
 
   describe "#create" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
-    let(:member1) { users(:bob) }
+    let(:member1) { users(:owner) }
     let(:member2) { users(:no_collaborators) }
     let(:member3) { users(:the_collaborator) }
     let(:member4) { users(:admin) }

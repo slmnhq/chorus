@@ -9,7 +9,7 @@ describe Import do
   end
 
   describe ".run" do
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let (:import) do
       Import.create!(
           {:user => user },
@@ -26,7 +26,7 @@ describe Import do
   end
 
   describe "#run" do
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let(:source_table) { datasets(:bobs_table) }
     let(:workspace) { workspaces(:bob_public) }
     let(:import) do

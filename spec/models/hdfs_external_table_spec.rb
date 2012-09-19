@@ -6,7 +6,7 @@ describe HdfsExternalTable do
 
   describe ".create" do
     let(:account) {instance_accounts(:admin)}
-    let(:user) {users(:bob)}
+    let(:user) {users(:owner)}
     let(:workspace) { workspaces(:bob_public)}
     let(:hdfs_file) { hadoop_instance.hdfs_entries.create!({:path => "/foo_fighter/twisted_sisters/"}, :without_protection => true) }
     let(:parameters) do

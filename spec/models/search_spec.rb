@@ -2,7 +2,7 @@ require "spec_helper"
 describe Search do
 
   describe "with solr disabled" do
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
 
     describe "new" do
       it "takes current user and search params" do
@@ -122,7 +122,7 @@ describe Search do
 
   context "with solr enabled" do
     let(:admin) { users(:admin) }
-    let(:bob) { users(:bob) }
+    let(:bob) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }

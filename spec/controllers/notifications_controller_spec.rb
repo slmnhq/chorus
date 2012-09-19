@@ -5,7 +5,7 @@ describe NotificationsController do
   let(:bobs_notification2) { notifications(:bobs_notification2) }
   let(:bobs_event1) { bobs_notification1.notification_event }
   let(:bobs_event2) { bobs_notification2.notification_event }
-  let(:current_user) { users(:bob) }
+  let(:current_user) { users(:owner) }
 
   before do
     log_in current_user

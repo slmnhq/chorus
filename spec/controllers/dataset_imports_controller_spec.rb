@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DatasetImportsController do
   describe "#show" do
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let(:import_schedule) { import_schedules(:bob_schedule) }
 
     before do
@@ -202,7 +202,7 @@ describe DatasetImportsController do
   end
 
   describe "#update", :database_integration => true do
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let(:import_schedule) { import_schedules(:bob_schedule) }
     let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
     let(:import_params) { import_schedule.attributes.merge(:import_type => "schedule") }

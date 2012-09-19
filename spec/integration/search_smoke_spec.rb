@@ -12,7 +12,7 @@ describe "Search" do
   end
 
   before do
-    login(users(:bob))
+    login(users(:owner))
   end
 
   describe "global search" do
@@ -21,7 +21,7 @@ describe "Search" do
       find('.chorus_search_container>input').native.send_keys(:return)
       wait_for_ajax
       page.find(".dataset_list").should have_content(datasets(:searchquery_table).name)
-      found_user = users(:bob)
+      found_user = users(:owner)
       page.find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
     end
   end

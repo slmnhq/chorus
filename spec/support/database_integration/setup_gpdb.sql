@@ -16,6 +16,7 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
     CREATE TABLE base_table1
       (id integer PRIMARY KEY, column1 integer, column2 integer, category text, time_value timestamp )
       DISTRIBUTED BY (id);
+    COMMENT ON COLUMN base_table1.column1 IS 'comment on column1';
     COMMENT ON TABLE base_table1 IS 'comment on base_table1';
     INSERT INTO base_table1 VALUES ( 0,0,0, 'apple', '2012-03-01 00:00:02' );
     INSERT INTO base_table1 VALUES ( 1,1,1, 'apple', '2012-03-02 00:00:02' );

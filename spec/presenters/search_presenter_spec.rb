@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchPresenter, :type => :view do
 
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
 
   before(:each) do
     reindex_solr_fixtures

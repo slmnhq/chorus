@@ -162,7 +162,7 @@ describe GpdbDatabase do
 
     context "when gpdb connection is broken" do
       let(:database) { gpdb_databases(:bobs_database) }
-      let(:user) { users(:bob) }
+      let(:user) { users(:owner) }
 
       before do
         stub(Gpdb::ConnectionBuilder).connect!.with_any_args { raise ActiveRecord::JDBCError.new('quack') }
