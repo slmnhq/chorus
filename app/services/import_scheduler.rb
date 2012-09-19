@@ -2,7 +2,6 @@ class ImportScheduler
   def self.run
     ImportSchedule.ready_to_run.each do |schedule|
       attributes = {
-          :import_schedule_id => schedule.id,
           :workspace_id => schedule.workspace_id,
           :to_table => schedule.to_table,
           :source_dataset_id => schedule.source_dataset_id,
@@ -13,11 +12,11 @@ class ImportScheduler
           :dataset_import_created_event_id => schedule.dataset_import_created_event_id
       }
 
-      import = Import.create!(attributes, :without_protection => true)
-      QC.enqueue("Import.run", import.id)
-      schedule.last_scheduled_at = Time.now
-      schedule.set_next_import
-      schedule.save!
+      Import.transaction do
+        import = schedule.imports.create!(attributes, :without_protection => true)
+        schedule.update_attributes!({:last_scheduled_at => Time.now}, :without_protection => true)
+        QC.enqueue("Import.run", import.id)
+      end
     end
   end
 end

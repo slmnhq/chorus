@@ -9,6 +9,8 @@ class ImportSchedule < ActiveRecord::Base
 
   before_save :set_next_import
 
+  has_many :imports
+
   scope :ready_to_run, lambda { where('next_import_at <= ?', Time.current) }
 
   def target_dataset_id
