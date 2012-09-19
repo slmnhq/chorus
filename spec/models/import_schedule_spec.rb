@@ -92,4 +92,26 @@ describe ImportSchedule do
       end
     end
   end
+
+  describe "default scope" do
+    it "does not show deleted schedules" do
+      active_schedule = ImportSchedule.create!({start_datetime: Time.now, end_date: Time.now + 1.year, frequency: 'monthly'}, :without_protection => true)
+      deleted_schedule = ImportSchedule.create!({deleted_at: Time.now, start_datetime: Time.now, end_date: Time.now + 1.year, frequency: 'monthly'}, :without_protection => true)
+      ImportSchedule.all.should include(active_schedule)
+      ImportSchedule.all.should_not include(deleted_schedule)
+    end
+  end
+
+  describe ".ready_to_run scope" do
+    it "shows import schedules that should be run" do
+      ready_schedule = ImportSchedule.create!({start_datetime: Time.now + 1.minute, end_date: Time.now + 1.year, frequency: 'monthly'}, :without_protection => true)
+      deleted_schedule = ImportSchedule.create!({deleted_at: Time.now, start_datetime: Time.now + 1.minute, end_date: Time.now + 1.year, frequency: 'monthly'}, :without_protection => true)
+      not_ready_schedule = ImportSchedule.create!({start_datetime: Time.now + 1.year, end_date: Time.now + 1.year, frequency: 'monthly'}, :without_protection => true)
+
+      Timecop.freeze(Time.now + 1.day) do
+        ImportSchedule.ready_to_run.should include(ready_schedule)
+        ImportSchedule.ready_to_run.should_not include(deleted_schedule, not_ready_schedule)
+      end
+    end
+  end
 end

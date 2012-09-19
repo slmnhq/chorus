@@ -1,6 +1,6 @@
 class ImportScheduler
   def self.run
-    ImportSchedule.where('next_import_at < ?', Time.current).each do |schedule|
+    ImportSchedule.ready_to_run.each do |schedule|
       attributes = {
           :import_schedule_id => schedule.id,
           :workspace_id => schedule.workspace_id,

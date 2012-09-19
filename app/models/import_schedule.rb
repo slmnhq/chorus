@@ -1,4 +1,6 @@
 class ImportSchedule < ActiveRecord::Base
+  include SoftDelete
+
   belongs_to :workspace
   belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
@@ -7,7 +9,7 @@ class ImportSchedule < ActiveRecord::Base
 
   before_save :set_next_import
 
-  default_scope where(:deleted_at => nil)
+  scope :ready_to_run, lambda { where('next_import_at <= ?', Time.current) }
 
   def target_dataset_id
     if dataset_import_created_event_id
