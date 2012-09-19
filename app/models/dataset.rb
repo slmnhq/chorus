@@ -5,6 +5,7 @@ end
 
 class Dataset < ActiveRecord::Base
   include Stale
+  include SoftDelete
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   after_save :update_counter_cache
@@ -14,7 +15,7 @@ class Dataset < ActiveRecord::Base
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :schema_id
+  validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
   attr_accessor :statistics
 
@@ -86,7 +87,7 @@ class Dataset < ActiveRecord::Base
 
     if options[:mark_stale]
       (schema.datasets.not_stale - found_datasets).each do |dataset|
-        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true) unless dataset.type == 'ChorusView'
+        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true) unless dataset.is_a? ChorusView
       end
     end
 

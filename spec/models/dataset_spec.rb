@@ -4,6 +4,7 @@ describe Dataset do
   let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
   let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:bobs_schema) }
+  let(:other_schema) { gpdb_schemas(:other_schema) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
   let(:dataset) { datasets(:bobs_table) }
   let(:dataset_view) { datasets(:bobs_view) }
@@ -24,12 +25,53 @@ describe Dataset do
   describe "validations" do
     it { should validate_presence_of :name }
 
-    it "should validate uniqueness of name scoped to schema id" do
-      duplicate_dataset = Dataset.new
+    it "validates uniqueness of name in the database" do
+      duplicate_dataset = GpdbTable.new
       duplicate_dataset.schema = dataset.schema
       duplicate_dataset.name = dataset.name
-      duplicate_dataset.should_not be_valid
-      duplicate_dataset.errors.count.should == 1
+      expect {
+        duplicate_dataset.save!(:validate => false)
+      }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "does not bother validating uniqueness of name in the database if the record is deleted" do
+      duplicate_dataset = GpdbTable.new
+      duplicate_dataset.schema = dataset.schema
+      duplicate_dataset.name = dataset.name
+      duplicate_dataset.deleted_at = Time.now
+      duplicate_dataset.save(:validate => false).should be_true
+    end
+
+    it "validates uniqueness of name, scoped to schema id" do
+      duplicate_dataset = GpdbTable.new
+      duplicate_dataset.schema = dataset.schema
+      duplicate_dataset.name = dataset.name
+      duplicate_dataset.should have_at_least(1).error_on(:name)
+      duplicate_dataset.schema = other_schema
+      duplicate_dataset.should have(:no).errors_on(:name)
+    end
+
+    it "validates uniqueness of name, scoped to type" do
+      duplicate_dataset = ChorusView.new
+      duplicate_dataset.name = dataset.name
+      duplicate_dataset.schema = dataset.schema
+      duplicate_dataset.should have(:no).errors_on(:name)
+    end
+
+    describe "default scope" do
+      it "does not contain deleted datasets" do
+        deleted_view = ChorusView.create!({:deleted_at => Time.now, :schema_id => schema.id, :name => "deleted-table"}, :without_protection => true)
+        Dataset.all.should_not include(deleted_view)
+      end
+    end
+
+    it "validate uniqueness of name, scoped to deleted_at" do
+      duplicate_dataset = GpdbTable.new
+      duplicate_dataset.name = dataset.name
+      duplicate_dataset.schema = dataset.schema
+      duplicate_dataset.should have_at_least(1).error_on(:name)
+      duplicate_dataset.deleted_at = Time.now
+      duplicate_dataset.should have(:no).errors_on(:name)
     end
   end
 

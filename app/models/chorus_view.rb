@@ -2,7 +2,6 @@ require 'dataset'
 
 class ChorusView < Dataset
   validate :validate_query
-  include SoftDelete
 
   def validate_query
     return unless changes.include?(:query)
