@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe DatasetImportsController do
-
   describe "#show" do
     let(:user) { users(:bob) }
     let(:import_schedule) { import_schedules(:bob_schedule) }
@@ -12,7 +11,6 @@ describe DatasetImportsController do
 
     context "the import schedule" do
       it "should retrieve the db object for a schema" do
-
         get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
 
         response.code.should == "200"
@@ -125,19 +123,17 @@ describe DatasetImportsController do
             end
           end
 
-          it "passes the form attributes to import (with some id)" do
-            any_instance_of(Dataset) do |instance|
-              mock.proxy(instance).import(attributes, user)
-            end
-            post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
-          end
-
           it "creates an import for the correct dataset and returns success" do
             expect {
               post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
             }.to change(Import, :count).by(1)
-            Import.last.source_dataset.id == src_table.id
             response.should be_success
+            last_import = Import.last
+            last_import.source_dataset.id.should == src_table.id
+            last_import.new_table.should be_false
+            last_import.to_table.should_not be_nil
+            last_import.sample_count.should == 12
+            last_import.truncate.should be_false
           end
 
           it "makes a DATASET_IMPORT_CREATED event" do
@@ -206,61 +202,75 @@ describe DatasetImportsController do
   end
 
   describe "#update", :database_integration => true do
-
     let(:user) { users(:bob) }
     let(:import_schedule) { import_schedules(:bob_schedule) }
     let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
-    let(:is_active) {false}
+    let(:import_params) { import_schedule.attributes.merge(:import_type => "schedule") }
 
     before do
       log_in user
     end
 
-    context "Unscheduling an Import" do
+    describe "unscheduling an import" do
+
       it "unschedule the import schedule and returns success" do
-        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id, :dataset_import =>
-            {:id => import_schedule.id , :is_active => is_active, :to_table => import_schedule.to_table , :new_table => true}
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:is_active => 'false')
         response.code.should == "200"
-        src_table.import_schedules.last.tap do |schedule|
-          schedule.is_active.should == is_active
-        end
+        import_schedule.reload.deleted_at.should_not be_nil
+        import_schedule.is_active.should be_false
+        ImportSchedule.find_by_workspace_id_and_source_dataset_id(import_schedule.workspace_id, src_table.id).should be_nil
+      end
+
+      it "presents a null object" do
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:is_active => 'false')
+        response.body
       end
     end
 
-    context "updating other values of Import schedule" do
+    describe "updating other values of Import schedule" do
       let(:frequency) {"DAILY"}
       let(:to_table) {import_schedule.workspace.sandbox.datasets.first}
 
-      it "updates the import's frequency only and returns success " do
-        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id, :dataset_import =>
-            {:id => import_schedule.id , :frequency => frequency, :to_table => import_schedule.to_table, :new_table => true }
-        response.code.should == "200"
-        src_table.import_schedules.last.tap do |schedule|
-          schedule.frequency.should == frequency
-          schedule.end_date.should == import_schedule.end_date
-          schedule.start_datetime.should == import_schedule.start_datetime
-        end
+      it "updates the start time for the import schedule" do
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:start_datetime => '2012-01-01 0:00')
+        import_schedule.reload.start_datetime.should == Time.parse('2012-01-01 0:00')
       end
 
-      it " when create_new_table is true, to_table is changed and to_table exists it raises the error" do
-        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id,
-            :dataset_import => {:id => import_schedule.id,
-                                :to_table => to_table.name, :new_table => true}
+      it "updates the import's frequency only and returns success" do
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:frequency => frequency)
+        response.code.should == "200"
+        import_schedule.reload
+
+        import_schedule.frequency.should == frequency
+        import_schedule.end_date.should == import_schedule.end_date
+        import_schedule.start_datetime.should == import_schedule.start_datetime
+      end
+
+      it "returns an error when importing into a new table but name already exists" do
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:new_table => 'true', :to_table => to_table.name)
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
       end
 
-
-      it " when create_new_table is false and change in the name of to_table" do
-        put :update, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id,
-            :dataset_import => {:id => import_schedule.id,
-                                :to_table => "non_existent"}
+      it "returns an error when importing into an existing table but name doesnt exist" do
+        put :update, :dataset_id => src_table.id,
+            :workspace_id => import_schedule.workspace_id,
+            :dataset_import => import_params.merge(:new_table => 'false', :to_table => "non_existent")
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
       end
     end
   end
-
 
   describe "smoke test for import schedules", :database_integration => true do
     # In the test, use gpfdist to move data between tables in the same schema and database
@@ -385,5 +395,4 @@ describe DatasetImportsController do
       gpdb2.exec_query("SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
-
 end

@@ -5,10 +5,63 @@ describe ImportSchedule do
   let(:future_import_schedule) { import_schedules(:future_import_schedule) }
   let(:bob_schedule) { import_schedules(:bob_schedule) }
 
+  describe "callbacks:" do
+    describe "before saving, automatically updating the next_import_at attribute" do
+      context "when the start date is changed to be sooner in the future" do
+        let(:start_day) { Time.now + 2.days }
+        let(:next_year) { Time.now + 1.year }
+        let(:import_schedule) do
+          FactoryGirl.create(:import_schedule, start_datetime: next_year, end_date: next_year + 1.year)
+        end
+
+        it "updates the next_import_at attribute" do
+          import_schedule.next_import_at.should == next_year
+          import_schedule.update_attributes(start_datetime: start_day, end_date: next_year, frequency: 'daily')
+          import_schedule.next_import_at.should == start_day
+        end
+      end
+    end
+  end
+
   describe "associations" do
     it { should belong_to :workspace }
     it { should belong_to(:source_dataset).class_name('Dataset') }
     it { should belong_to :user }
+  end
+
+  describe "default scope" do
+    it "excludes deleted import schedules" do
+      new_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: nil)
+      deleted_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: Time.now)
+      ImportSchedule.all.should include(new_import_schedule)
+      ImportSchedule.all.should_not include(deleted_import_schedule)
+    end
+  end
+
+  describe "#is_active" do
+    it "returns true for new schedules" do
+      new_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: nil)
+      new_import_schedule.is_active.should be_true
+    end
+
+    it "returns false for deleted schedules" do
+      deleted_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: Time.now)
+      deleted_import_schedule.is_active.should be_false
+    end
+  end
+
+  describe "#is_active=" do
+    it "sets the deleted_at attribute" do
+      import_schedule = FactoryGirl.create(:import_schedule)
+      import_schedule.is_active = false
+      import_schedule.deleted_at.should_not be_nil
+    end
+
+    it "clears the deleted at attribute" do
+      import_schedule = FactoryGirl.create(:import_schedule, deleted_at: Time.now)
+      import_schedule.is_active = true
+      import_schedule.deleted_at.should be_nil
+    end
   end
 
   describe "#target_dataset_id" do

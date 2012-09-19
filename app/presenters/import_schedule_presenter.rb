@@ -5,7 +5,7 @@ class ImportSchedulePresenter < Presenter
 
   def to_hash
          {
-             :id => id,
+             :id => (id if is_active),
              :dataset_id => source_dataset_id,
              :workspace_id => workspace_id,
              :start_datetime => start_datetime,

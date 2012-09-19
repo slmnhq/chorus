@@ -5,10 +5,26 @@ class ImportSchedule < ActiveRecord::Base
   attr_accessible :start_datetime, :end_date, :sample_count, :truncate, :new_table, :to_table, :frequency, :source_dataset_id,
                   :workspace_id, :is_active
 
+  before_save :set_next_import
+
+  default_scope where(:deleted_at => nil)
+
   def target_dataset_id
     if dataset_import_created_event_id
       event = Events::DatasetImportCreated.find(dataset_import_created_event_id)
       event.target2_id if event
+    end
+  end
+
+  def is_active
+    deleted_at.nil?
+  end
+
+  def is_active=(value)
+    if value
+      self.deleted_at = nil
+    else
+      self.deleted_at = Time.now
     end
   end
 
@@ -20,6 +36,5 @@ class ImportSchedule < ActiveRecord::Base
         Time.current
     ).next_import_time
     self.next_import_at = val
-    save!
   end
 end

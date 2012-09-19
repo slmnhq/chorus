@@ -9,6 +9,7 @@ describe ImportSchedulePresenter, :type => :view do
 
   describe "#to_hash" do
     let(:hash) { @presenter.to_hash }
+
     context "when rendering an activity stream" do
       it "includes the right keys" do
         hash[:start_datetime].should == import_schedule.start_datetime
@@ -22,6 +23,14 @@ describe ImportSchedulePresenter, :type => :view do
         hash[:new_table].should == import_schedule.new_table
         hash[:destination_dataset_id].should == import_schedule.target_dataset_id
         hash[:is_active].should == import_schedule.is_active
+      end
+    end
+
+    context "when deleted" do
+      let(:import_schedule) { FactoryGirl.create(:import_schedule, deleted_at: Time.now)}
+
+      it "does not include an id" do
+        hash[:id].should be_nil
       end
     end
   end

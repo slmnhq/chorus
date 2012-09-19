@@ -246,8 +246,13 @@ FactoryGirl.define do
     end
   end
 
-  factory :import_schedule, :class => ImportSchedule do
+  factory :import_schedule do
     association :source_dataset, :factory => :gpdb_table
+    start_datetime Time.now
+    end_date Time.now + 1.year
+    frequency 'monthly'
+    truncate false
+    sample_count 1
     workspace
   end
 end

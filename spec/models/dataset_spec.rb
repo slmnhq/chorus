@@ -467,7 +467,7 @@ describe Dataset::Query, :database_integration => true do
         HashWithIndifferentAccess.new(
             "workspace_id" => workspace.id,
             "to_table" => "the_new_table",
-            "new_table" => "true",
+            "new_table" => true,
             "truncate" => "false",
             "sample_count" => "12"
         )
@@ -511,7 +511,7 @@ describe Dataset::Query, :database_integration => true do
         before do
           attributes.merge!(
               "to_table" => dst_table_name,
-              "new_table" => "false")
+              "new_table" => false)
         end
 
         it "creates a DATASET_IMPORT_CREATED event with a properly set destination dataset field" do
@@ -531,26 +531,24 @@ describe Dataset::Query, :database_integration => true do
           end
         end
       end
-
     end
 
     context "when creating a scheduled import" do
       let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-      let(:start_time) { "Thu, 23 Aug 2012 23:00:00" }
+      let(:start) { Time.parse("Thu, 23 Aug 2012 23:00:00") }
       let(:workspace) { workspaces(:bob_public) }
       let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
       let(:dst_table_name) { "the_new_table" }
       let(:options) {
         HashWithIndifferentAccess.new(
             "workspace_id" => workspace.id,
-            "remote_copy" => "true",
-            "is_active" => "true",
-            "start_datetime" => start_time,
-            "end_date" => "2012-11-24",
-            "frequency"=>"WEEKLY",
+            "is_active" => true,
+            "start_datetime" => start,
+            "end_date" => Date.parse("2012-11-24"),
+            "frequency"=> "weekly",
             "sample_count" => 1,
-            "truncate" => "false",
-            "import_type"=>"schedule"
+            "truncate" => false,
+            "import_type"=> "schedule"
         )
       }
 
@@ -558,16 +556,16 @@ describe Dataset::Query, :database_integration => true do
         before do
           options.merge!(
             "to_table" => "the_new_table",
-            "new_table" => "true")
+            "new_table" => true)
         end
 
         it "creates an import schedule" do
-          Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
+          Timecop.freeze(start - 1.hour) do
             expect {
               source_table.import(options, user)
             }.to change(ImportSchedule, :count).by(1)
             ImportSchedule.last.tap do |import_schedule|
-              import_schedule.start_datetime.should == Time.parse(start_time)
+              import_schedule.start_datetime.should == start
               import_schedule.end_date.should == Date.parse("2012-11-24")
               import_schedule.workspace.should == workspace
               import_schedule.source_dataset.should == source_table
@@ -578,7 +576,7 @@ describe Dataset::Query, :database_integration => true do
               import_schedule.last_scheduled_at.should == nil
               import_schedule.user.should == user
               import_schedule.truncate.should == false
-              import_schedule.next_import_at.should == Time.parse(start_time)
+              import_schedule.next_import_at.should == start
             end
           end
         end
@@ -607,7 +605,7 @@ describe Dataset::Query, :database_integration => true do
         before do
           options.merge!(
               "to_table" => dst_table_name,
-              "new_table" => "false")
+              "new_table" => false)
         end
 
         it "creates a DATASET_IMPORT_CREATED event with a properly set destination dataset field" do

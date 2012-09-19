@@ -9,6 +9,8 @@ class DatasetImportsController < ApplicationController
 
     attributes = params[:dataset_import].dup
     attributes[:workspace_id] = params[:workspace_id]
+
+    normalize_import_attributes!(attributes)
     validate_import_attributes(src_table, attributes)
     src_table.import(attributes, current_user)
 
@@ -16,38 +18,48 @@ class DatasetImportsController < ApplicationController
   end
 
   def update
-    schedule_attributes = params[:dataset_import]
-
     src_table = Dataset.find(params[:dataset_id])
-    schedule_id = schedule_attributes[:id]
-    schedule_attributes[:workspace_id] = params[:workspace_id]
 
-    import_config = ImportSchedule.find(schedule_id)
-    to_table_change = (import_config[:to_table] != schedule_attributes[:to_table])
-    validate_import_attributes(src_table, schedule_attributes, to_table_change)
-    import_config.attributes = schedule_attributes
+    attributes = params[:dataset_import].dup
+    attributes[:workspace_id] = params[:workspace_id]
+    schedule_id = attributes[:id]
 
-    import_config.save!
-    present import_config
+    import_schedule = ImportSchedule.find(schedule_id)
+    destination_table_change = (import_schedule[:to_table] != attributes[:to_table])
+
+    normalize_import_attributes!(attributes)
+    validate_import_attributes(src_table, attributes, destination_table_change)
+    import_schedule.update_attributes!(attributes)
+
+    present import_schedule
   end
 
   private
 
-  def validate_import_attributes(src_table, attributes, to_table_change = true)
+  def normalize_import_attributes!(attributes)
+    attributes[:new_table] = attributes[:new_table].to_s == 'true'
+    if attributes[:import_type] == 'schedule'
+      attributes[:frequency].downcase!
+      attributes[:is_active] = attributes[:is_active].to_s == 'true'
+      attributes[:start_datetime] = Time.parse(attributes[:start_datetime])
+    end
+    attributes
+  end
+
+  def validate_import_attributes(src_table, attributes, destination_change = true)
     workspace = Workspace.find(attributes[:workspace_id])
     if workspace.archived?
       workspace.errors.add(:archived, "Workspace cannot be archived for import.")
       raise ActiveRecord::RecordInvalid.new(workspace)
     end
 
-    create_new_table = attributes[:new_table].to_s == "true"
     dst_table_name = attributes[:to_table]
     dst_table = workspace.sandbox.datasets.find_by_name(dst_table_name)
 
-    if create_new_table && to_table_change
+    if attributes[:new_table] && destination_change
       raise ApiValidationError.new(:base, :table_exists,
                                    { :table_name => dst_table_name }) if dst_table
-    elsif to_table_change
+    elsif destination_change
       raise ApiValidationError.new(:base, :table_not_exists,
                                    { :table_name => dst_table_name }) unless dst_table
       raise ApiValidationError.new(:base, :table_not_consistent,

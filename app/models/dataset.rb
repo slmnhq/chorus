@@ -187,12 +187,8 @@ class Dataset < ActiveRecord::Base
             :dataset_import_created_event_id => event.id)
 
     if params[:import_type] == "schedule" # scheduled imports
-      import_schedules.create!(import_attributes, :without_protection => true) do |schedule|
-        schedule.start_datetime = Time.parse(params[:start_datetime]) # adds local timezone
-        schedule.end_date = params[:end_date]
-        schedule.frequency = params[:frequency].downcase
-        schedule.set_next_import
-      end
+      import_attributes.merge!(params.slice(:start_datetime, :end_date, :frequency))
+      import_schedules.create!(import_attributes, :without_protection => true)
     else # immediate imports
       import = imports.create!(import_attributes, :without_protection => true)
       QC.enqueue("Import.run", import.id)
