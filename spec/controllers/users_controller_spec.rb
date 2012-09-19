@@ -210,7 +210,7 @@ describe UsersController do
         put :update, :id => non_admin.to_param, :user => {:password => '987654'}
         response.code.should == "200"
         user = User.find(non_admin.to_param)
-        user.password_digest.should == Digest::SHA1.hexdigest("987654" + user.password_salt)
+        user.password_digest.should == Digest::SHA256.hexdigest("987654" + user.password_salt)
       end
     end
   end
