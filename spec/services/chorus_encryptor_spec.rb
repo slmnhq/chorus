@@ -20,7 +20,7 @@ describe ChorusEncryptor do
   end
 
   def encrypt_cipher(password)
-    cipher = OpenSSL::Cipher::AES.new("256-CBC").encrypt
+    cipher = OpenSSL::Cipher::AES.new("128-CBC").encrypt
     cipher.pkcs5_keyivgen(secret_key)
     cipher.update(password) + cipher.final
   end
