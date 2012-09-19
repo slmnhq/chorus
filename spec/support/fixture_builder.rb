@@ -115,7 +115,7 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "searchquery", :sandbox => bob_schema}, :without_protection => true)
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "searchquery", :public => false)
 
-    workspaces << api_workspace = bob.owned_workspaces.create!({:name => "Api", :summary => "APIs Are Cool", :sandbox => bob_schema}, :without_protection => true)
+    workspaces << api_workspace = admin.owned_workspaces.create!({:name => "Api", :summary => "APIs Are Cool"}, :without_protection => true)
     api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
     api_workspace.save!
     workspaces.each do |workspace|
