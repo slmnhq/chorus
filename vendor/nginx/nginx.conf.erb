@@ -34,6 +34,14 @@ http {
 
     server {
         listen       <%= chorus_config['server_port'] %>;
+	ssl <%= chorus_config['ssl'] %>;
+
+    <% if chorus_config['ssl'] == 'on' %>
+	ssl_certificate <%= chorus_config['ssl_certificate'] %>;
+	ssl_certificate_key <%= chorus_config['ssl_certificate_key'] %>;
+	keepalive_timeout 70;
+    <% end %>
+
         server_name  localhost;
 
         #charset koi8-r;
