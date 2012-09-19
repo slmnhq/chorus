@@ -99,6 +99,7 @@ module PackageMaker
     install_path = config['install_path']
     postgres_build = config['postgres_build']
     legacy_path = config['legacy_path']
+    clean_install = config['clean_install']
 
     File.open('install_answers.txt', 'w') do |f|
       # where the existing install lives
