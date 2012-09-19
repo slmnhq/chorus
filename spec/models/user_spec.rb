@@ -166,7 +166,7 @@ describe User do
 
           @user.password = "654321"
           @user.save!
-          User.named('jimmy').password_digest.should == Digest::SHA1.hexdigest("654321" + @user.password_salt)
+          User.named('jimmy').password_digest.should == Digest::SHA256.hexdigest("654321" + @user.password_salt)
         end
       end
     end

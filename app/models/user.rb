@@ -1,4 +1,4 @@
-require 'digest/sha1'
+require 'digest'
 require 'soft_delete'
 
 class User < ActiveRecord::Base
@@ -102,9 +102,10 @@ class User < ActiveRecord::Base
     write_attribute(:admin, value)
   end
 
-  # override has_secure_password so that our old SHA1 password hashes work
+  # TODO: if user doesn't have sha256 digest but encrypted password + key,
+  #       it's his first login and the password should be converted to sha256
   def authenticate(unencrypted_password)
-    if Digest::SHA1.hexdigest(unencrypted_password + password_salt) == password_digest
+    if Digest::SHA256.hexdigest(unencrypted_password + password_salt) == password_digest
       self
     else
       false
@@ -115,7 +116,7 @@ class User < ActiveRecord::Base
     self.password_salt = SecureRandom.hex(20)
     @password = unencrypted_password
     unless unencrypted_password.blank? || unencrypted_password.length < 6
-      self.password_digest = Digest::SHA1.hexdigest(unencrypted_password + password_salt)
+      self.password_digest = Digest::SHA256.hexdigest(unencrypted_password + password_salt)
     else
       self.password_digest = nil
     end
