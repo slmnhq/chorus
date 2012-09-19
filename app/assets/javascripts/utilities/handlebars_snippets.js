@@ -373,7 +373,12 @@
             var keys = ["dataset.types", dataset.type];
             if (statistics && statistics.objectType) {
                 keys.push(statistics.objectType);
-            } else {
+            }
+            else if (dataset && dataset.type === "CHORUS_VIEW")
+            {
+                keys.push(dataset.type)
+            }
+            else {
                 return t("loading");
             }
             var key = keys.join(".");

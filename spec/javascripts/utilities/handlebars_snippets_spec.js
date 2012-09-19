@@ -887,9 +887,14 @@ describe("handlebars", function () {
             });
 
             context("when statistics is not present", function() {
-                it("returns a loading message", function () {
+                it("returns a loading message normally", function () {
                     Handlebars.helpers.humanizedDatasetType({ type: "type" });
                     expect(window.t).toHaveBeenCalledWith("loading");
+                });
+
+                it("returns Chorus view if dataset is Chorus_view", function () {
+                    Handlebars.helpers.humanizedDatasetType({ type: "CHORUS_VIEW" });
+                    expect(window.t).toHaveBeenCalledWith( 'dataset.types.CHORUS_VIEW.CHORUS_VIEW');
                 });
             });
 
