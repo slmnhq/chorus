@@ -37,8 +37,9 @@ describe ImportScheduler do
 
     context "when next import time is set" do
       before do
+        ImportSchedule.delete_all # don't run import schedule on fixtures
         Timecop.freeze(start_time - 1.hour) do
-          import_schedule.set_next_import
+          import_schedule.save!
         end
         expect_qc_enqueue
       end
