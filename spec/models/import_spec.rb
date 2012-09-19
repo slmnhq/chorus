@@ -56,7 +56,7 @@ describe Import do
 
     context "when copying between different databases" do
       before do
-        workspace.sandbox = gpdb_schemas(:bobsearch_schema)
+        workspace.sandbox = gpdb_schemas(:searchquery_schema)
         workspace.save!
         workspace.sandbox.database.id.should_not == source_table.schema.database.id
       end

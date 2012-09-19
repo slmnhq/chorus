@@ -17,10 +17,10 @@ describe "Search" do
 
   describe "global search" do
     it "searches all types of objects" do
-      fill_in 'search_text', :with => 'bobsearch'
+      fill_in 'search_text', :with => 'searchquery'
       find('.chorus_search_container>input').native.send_keys(:return)
       wait_for_ajax
-      page.find(".dataset_list").should have_content(datasets(:bobsearch_table).name)
+      page.find(".dataset_list").should have_content(datasets(:searchquery_table).name)
       found_user = users(:bob)
       page.find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
     end
@@ -28,13 +28,13 @@ describe "Search" do
 
   describe "model specific search" do
     it "searches for workspaces" do
-      fill_in 'search_text', :with => 'bobsearch'
+      fill_in 'search_text', :with => 'searchquery'
       find('.chorus_search_container>input').native.send_keys(:return)
       wait_for_ajax
       click_link 'All Results'
       click_link 'Workspaces'
       wait_for_ajax
-      current_route.should == "/search/all/workspace/bobsearch"
+      current_route.should == "/search/all/workspace/searchquery"
       page.find(".workspace_list").should have_content(workspaces(:public_with_no_collaborators).name)
     end
   end

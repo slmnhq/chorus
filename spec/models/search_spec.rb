@@ -126,16 +126,16 @@ describe Search do
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:hdfs_entry) { HdfsEntry.find_by_path("/bobsearch/result.txt") }
+    let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
     let(:private_workspace) { workspaces(:bob_private) }
     let(:private_workspace_not_a_member) { workspaces(:private_with_no_collaborators) }
     let(:private_workfile_hidden_from_bob) { workfiles(:no_collaborators_private) }
     let(:private_workfile_bob) { workfiles(:bob_private) }
     let(:public_workfile_bob) { workfiles(:bob_public) }
-    let(:dataset) { datasets(:bobsearch_table) }
-    let(:shared_dataset) { datasets(:bobsearch_shared_table) }
-    let(:chorus_view) { datasets(:bobsearch_chorus_view) }
+    let(:dataset) { datasets(:searchquery_table) }
+    let(:shared_dataset) { datasets(:searchquery_shared_table) }
+    let(:chorus_view) { datasets(:searchquery_chorus_view) }
 
     before do
       reindex_solr_fixtures
@@ -144,7 +144,7 @@ describe Search do
     describe "num_found" do
       it "returns a hash with the number found of each type" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 1
           search.num_found[:datasets].should == 3
@@ -153,7 +153,7 @@ describe Search do
 
       it "returns a hash with the total count for the given type" do
         VCR.use_cassette('search_solr_query_user_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch', :entity_type => 'user')
+          search = Search.new(bob, :query => 'searchquery', :entity_type => 'user')
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 0
         end
@@ -163,15 +163,15 @@ describe Search do
     describe "users" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           user = search.users.first
-          user.highlighted_attributes[:first_name][0].should == '<em>BobSearch</em>'
+          user.highlighted_attributes[:first_name][0].should == '<em>searchquery</em>'
         end
       end
 
       it "returns the User objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           search.users.length.should == 1
           search.users.first.should == bob
         end
@@ -181,16 +181,16 @@ describe Search do
     describe "gpdb_instances" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           gpdb_instance = search.gpdb_instances.first
           gpdb_instance.highlighted_attributes.length.should == 1
-          gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>bobsearch</em> and greenplumsearch"
+          gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>searchquery</em> and greenplumsearch"
         end
       end
 
       it "returns the GpdbInstance objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           search.gpdb_instances.length.should == 1
           search.gpdb_instances.first.should == gpdb_instance
         end
@@ -200,10 +200,10 @@ describe Search do
     describe "hadoop_instances" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           hadoop_instance = search.hadoop_instances.first
           hadoop_instance.highlighted_attributes.length.should == 1
-          hadoop_instance.highlighted_attributes[:description][0].should == "<em>bobsearch</em> for the hadoop instance"
+          hadoop_instance.highlighted_attributes[:description][0].should == "<em>searchquery</em> for the hadoop instance"
         end
       end
 
@@ -219,34 +219,34 @@ describe Search do
     describe "datasets" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           dataset = search.datasets.first
           dataset.highlighted_attributes.length.should == 4
-          dataset.highlighted_attributes[:name][0].should == "<em>bobsearch</em>_table"
-          dataset.highlighted_attributes[:database_name][0].should == "<em>bobsearch</em>_database"
-          dataset.highlighted_attributes[:schema_name][0].should == "<em>bobsearch</em>_schema"
+          dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
+          dataset.highlighted_attributes[:database_name][0].should == "<em>searchquery</em>_database"
+          dataset.highlighted_attributes[:schema_name][0].should == "<em>searchquery</em>_schema"
         end
       end
 
       it "includes the highlighted query for a chorus view" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           chorus_view = search.datasets.find { |dataset| dataset.is_a? ChorusView }
-          chorus_view.highlighted_attributes[:query][0].should == "select <em>bobsearch</em> from a_table"
+          chorus_view.highlighted_attributes[:query][0].should == "select <em>searchquery</em> from a_table"
         end
       end
 
       it "returns the Dataset objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           search.datasets.should =~ [dataset, shared_dataset, chorus_view]
         end
       end
 
       it "excludes datasets you don't have permissions to" do
-        VCR.use_cassette('search_solr_query_datasets_bobsearch_as_the_collaborator') do
+        VCR.use_cassette('search_solr_query_datasets_searchquery_as_the_collaborator') do
           the_collaborator.instance_accounts.joins(:gpdb_databases).should be_empty
-          search = Search.new(the_collaborator, :query => 'bobsearch', :entity_type => :dataset)
+          search = Search.new(the_collaborator, :query => 'searchquery', :entity_type => :dataset)
           search.datasets.should == [shared_dataset]
         end
       end
@@ -281,17 +281,17 @@ describe Search do
     describe "hdfs_entries" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           hdfs = search.hdfs_entries.first
           hdfs.highlighted_attributes.length.should == 2
-          hdfs.highlighted_attributes[:parent_name][0].should == "<em>bobsearch</em>"
-          hdfs.highlighted_attributes[:path][0].should == "/<em>bobsearch</em>"
+          hdfs.highlighted_attributes[:parent_name][0].should == "<em>searchquery</em>"
+          hdfs.highlighted_attributes[:path][0].should == "/<em>searchquery</em>"
         end
       end
 
       it "returns the HadoopInstance objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch')
+          search = Search.new(bob, :query => 'searchquery')
           search.hdfs_entries.length.should == 1
           search.hdfs_entries.first.should == hdfs_entry
         end
@@ -323,7 +323,7 @@ describe Search do
     describe "workspace permissions" do
       it "returns public and member workspaces, but not private ones" do
         VCR.use_cassette('search_solr_query_workspaces_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch', :entity_type => :workspace)
+          search = Search.new(bob, :query => 'searchquery', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should_not include(private_workspace_not_a_member)
@@ -332,7 +332,7 @@ describe Search do
 
       it "returns everything for admins" do
         VCR.use_cassette('search_solr_query_workspaces_bob_as_admin') do
-          search = Search.new(admin, :query => 'bobsearch', :entity_type => :workspace)
+          search = Search.new(admin, :query => 'searchquery', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should include(private_workspace_not_a_member)
@@ -360,7 +360,7 @@ describe Search do
     describe "workfile permissions" do
       it "returns workfiles for public and member workspaces, but not private ones" do
         VCR.use_cassette('search_solr_query_workfiles_bob_as_bob') do
-          search = Search.new(bob, :query => 'bobsearch', :entity_type => :workfile)
+          search = Search.new(bob, :query => 'searchquery', :entity_type => :workfile)
           search.workfiles.should include(public_workfile_bob)
           search.workfiles.should include(private_workfile_bob)
           search.workfiles.should_not include(private_workfile_hidden_from_bob)
@@ -369,7 +369,7 @@ describe Search do
 
       it "returns workfiles for every workspace for admins" do
         VCR.use_cassette('search_solr_query_workfiles_bob_as_admin') do
-          search = Search.new(admin, :query => 'bobsearch', :entity_type => :workfile)
+          search = Search.new(admin, :query => 'searchquery', :entity_type => :workfile)
           search.workfiles.should include(public_workfile_bob)
           search.workfiles.should include(private_workfile_bob)
           search.workfiles.should include(private_workfile_hidden_from_bob)

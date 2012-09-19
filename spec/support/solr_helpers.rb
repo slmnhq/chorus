@@ -2,7 +2,7 @@ module SolrHelpers
 
   def reindex_solr_fixtures
     stub(GpdbColumn).columns_for.with_any_args {
-      [ GpdbColumn.new(:name => 'bobsearch'),
+      [ GpdbColumn.new(:name => 'searchquery'),
         GpdbColumn.new(:name => 'non-search')
       ]
     }

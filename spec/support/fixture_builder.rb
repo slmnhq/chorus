@@ -28,7 +28,7 @@ FixtureBuilder.configure do |fbuilder|
     no_collaborators = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'no_collaborators', :email => 'alice@example.com', :password => FixtureBuilder.password)
     Events::UserAdded.by(admin).add(:new_user => no_collaborators)
 
-    bob = User.create!(:first_name => 'BobSearch', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
+    bob = User.create!(:first_name => 'searchquery', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
     bob.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
     bob.save!
 
@@ -44,7 +44,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    greenplum_instance = GpdbInstance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
+    greenplum_instance = GpdbInstance.create!({ :name => "Greenplum", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     aurora_instance = GpdbInstance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
@@ -56,10 +56,10 @@ FixtureBuilder.configure do |fbuilder|
     bobs_instance = GpdbInstance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
     fbuilder.name :bob_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(bob).add(:greenplum_instance => bobs_instance)
 
-    hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "bobsearch for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    HdfsEntry.create!({:path => "/bobsearch/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
+    HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
     chorus_gpdb40_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
     chorus_gpdb41_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
@@ -89,31 +89,31 @@ FixtureBuilder.configure do |fbuilder|
     bobs_table = GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
     GpdbView.create!({ :name => "bobs_view", :schema => bob_schema }, :without_protection => true)
 
-    bobsearch_database = GpdbDatabase.create!({ :gpdb_instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
-    bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
-    bobssearch_table = GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
-    bobsearch_chorus_view = ChorusView.new({:name => "bobsearch_chorus_view", :schema => bobsearch_schema, :query => "select bobsearch from a_table"}, :without_protection => true)
-    bobsearch_chorus_view.save!(:validate => false)
+    searchquery_database = GpdbDatabase.create!({ :gpdb_instance => bobs_instance, :name => 'searchquery_database' }, :without_protection => true)
+    searchquery_schema = GpdbSchema.create!({ :name => "searchquery_schema", :database => searchquery_database }, :without_protection => true)
+    searchquery_table = GpdbTable.create!({ :name => "searchquery_table", :schema => searchquery_schema }, :without_protection => true)
+    searchquery_chorus_view = ChorusView.new({:name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table"}, :without_protection => true)
+    searchquery_chorus_view.save!(:validate => false)
 
     shared_search_database = GpdbDatabase.create!({ :gpdb_instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
     shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
-    GpdbTable.create!({ :name => "bobsearch_shared_table", :schema => shared_search_schema }, :without_protection => true)
+    GpdbTable.create!({ :name => "searchquery_shared_table", :schema => shared_search_schema }, :without_protection => true)
 
     other_schema = GpdbSchema.create!({ :name => "other_schema", :database => bob_database}, :without_protection => true)
     other_table = GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
     GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)
 
     # Database Instance Accounts
-    bobsearch_database.instance_accounts << bob_bobs_instance_account
+    searchquery_database.instance_accounts << bob_bobs_instance_account
     shared_search_database.instance_accounts << shared_instance_account
 
     #Workspaces
     workspaces = []
-    workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators", :summary => 'BobSearch can see I guess')
-    workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for bobsearch, ha ha", :public => false)
+    workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators", :summary => 'searchquery can see I guess')
+    workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for searchquery, ha ha", :public => false)
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators}, :without_protection => true)
-    workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
-    workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
+    workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "searchquery", :sandbox => bob_schema}, :without_protection => true)
+    workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "searchquery", :public => false)
 
     workspaces << api_workspace = bob.owned_workspaces.create!({:name => "Api", :summary => "APIs Are Cool", :sandbox => bob_schema}, :without_protection => true)
     api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
@@ -142,10 +142,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
-      no_collaborators_private = Workfile.create!({:file_name => "no collaborators Private", :description => "BobSearch", :owner => no_collaborators, :workspace => no_collaborators_private_workspace}, :without_protection => true)
+      no_collaborators_private = Workfile.create!({:file_name => "no collaborators Private", :description => "searchquery", :owner => no_collaborators, :workspace => no_collaborators_private_workspace}, :without_protection => true)
       no_collaborators_public = Workfile.create!({:file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace}, :without_protection => true)
-      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace, :execution_schema => bob_schema}, :without_protection => true)
-      bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "searchquery", :owner => bob, :workspace => bob_private_workspace, :execution_schema => bob_schema}, :without_protection => true)
+      bob_public = Workfile.create!({:file_name => "Bob Public", :description => "searchquery", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
 
       archived_workfile = Workfile.create!({:file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace}, :without_protection => true)
 
@@ -196,7 +196,7 @@ FixtureBuilder.configure do |fbuilder|
     #Notes
     note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
     fbuilder.name :note_on_greenplum, note_on_greenplum
-    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love searchquery', :created_at => '2010-01-01 02:01'}, :without_protection => true)
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
@@ -206,8 +206,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnDataset.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => bobs_table, :workspace => bob_public_workspace)
-    fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
-    fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
+    fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(bob).add(:dataset => searchquery_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(bob).add(:dataset => searchquery_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NoteOnWorkspace.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private

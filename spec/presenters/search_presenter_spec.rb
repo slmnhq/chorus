@@ -7,7 +7,7 @@ describe SearchPresenter, :type => :view do
   before(:each) do
     reindex_solr_fixtures
     stub(ActiveRecord::Base).current_user { user }
-    search = Search.new(user, :query => 'bobsearch')
+    search = Search.new(user, :query => 'searchquery')
 
     VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
       search.search
@@ -66,7 +66,7 @@ describe SearchPresenter, :type => :view do
       gpdb_instance_result = gpdb_instance_hash[:results][0]
       gpdb_instance_result.should have_key(:comments)
       gpdb_instance_result[:comments].length.should == 1
-      gpdb_instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bobsearch</em>"
+      gpdb_instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>searchquery</em>"
     end
 
     it "includes the right dataset keys" do

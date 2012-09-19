@@ -13,7 +13,7 @@ resource "Search" do
     parameter :per_type, "Number of each entity to return"
     example "Global Search" do
       VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-        do_request(:query => 'bobsearch', :per_type => 3)
+        do_request(:query => 'searchquery', :per_type => 3)
         status.should == 200
       end
     end
@@ -26,7 +26,7 @@ resource "Search" do
     parameter :per_page, "Results per page"
     example "Entity Search" do
       VCR.use_cassette('search_solr_query_user_bob_as_bob') do
-        do_request(:query => 'bobsearch', :entity_type => 'User', :page => 1, :per_page => 50)
+        do_request(:query => 'searchquery', :entity_type => 'User', :page => 1, :per_page => 50)
         status.should == 200
       end
     end

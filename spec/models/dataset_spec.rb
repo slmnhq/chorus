@@ -312,7 +312,7 @@ describe Dataset do
   end
 
   describe "search fields" do
-    let(:dataset) { datasets(:bobsearch_table) }
+    let(:dataset) { datasets(:searchquery_table) }
     it "indexes text fields" do
       Dataset.should have_searchable_field :name
       Dataset.should have_searchable_field :database_name
