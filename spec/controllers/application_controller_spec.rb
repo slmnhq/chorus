@@ -77,7 +77,7 @@ describe ApplicationController do
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }
 
       before do
-        log_in users(:bob)
+        log_in users(:owner)
         stub(controller).index { raise exception }
       end
 
@@ -168,7 +168,7 @@ describe ApplicationController do
     end
 
     context "with a single model" do
-      let(:object_to_present) { users(:bob) }
+      let(:object_to_present) { users(:owner) }
 
       it "sets the response to a hash of the model" do
         get :index

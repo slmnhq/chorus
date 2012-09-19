@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NoteAttachmentsController do
   ignore_authorization!
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
 
   before do
     log_in user

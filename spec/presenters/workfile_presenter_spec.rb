@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe WorkfilePresenter, :type => :view do
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
   let(:workfile) { workfiles(:bob_private) }
   let(:workspace) { workfile.workspace }
   let(:presenter) { WorkfilePresenter.new(workfile, view) }

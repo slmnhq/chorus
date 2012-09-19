@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe EventPresenter, :type => :view do
   let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
-  let(:current_user) { users(:bob) }
+  let(:current_user) { users(:owner) }
 
   before do
     stub(ActiveRecord::Base).current_user { current_user }

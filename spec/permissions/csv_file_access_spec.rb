@@ -7,7 +7,7 @@ describe CsvFileAccess do
   end
 
   describe "#import?" do
-    let(:owner) { users(:bob) }
+    let(:owner) { users(:owner) }
     let(:csv_file) do
       c = CsvFile.new
       c.contents = test_file("test.csv", "text/csv")

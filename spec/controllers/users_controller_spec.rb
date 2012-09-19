@@ -132,7 +132,7 @@ describe UsersController do
   describe "#update" do
     let(:other_user) { users(:no_collaborators) }
     let(:admin) { users(:admin) }
-    let(:non_admin) { users(:bob) }
+    let(:non_admin) { users(:owner) }
 
     it_behaves_like "an action that requires authentication", :put, :update
 

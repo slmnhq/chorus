@@ -41,7 +41,7 @@ describe Events::Base do
     let(:event) { notification.notification_event }
 
     it "retrieves the notification for the event" do
-      stub(ActiveRecord::Base).current_user { users(:bob) }
+      stub(ActiveRecord::Base).current_user { users(:owner) }
       event.notification_for_current_user.should be_present
     end
 

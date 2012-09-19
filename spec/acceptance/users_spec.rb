@@ -115,7 +115,7 @@ resource "Users" do
   end
 
   get "/users/:user_id/image" do
-    let(:user_id) { users(:bob).to_param }
+    let(:user_id) { users(:owner).to_param }
 
     parameter :style, "Size of image ( original, icon )"
 

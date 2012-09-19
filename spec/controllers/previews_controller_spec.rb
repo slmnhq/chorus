@@ -66,7 +66,7 @@ describe PreviewsController do
   describe "#preview_sql" do
     let(:schema) { gpdb_schemas(:bobs_schema) }
     let(:query) { "SELECT * FROM bobs_table;" }
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let(:check_id) {'0.43214321' }
     let(:expected_sql) { "SELECT * FROM (SELECT * FROM bobs_table) AS chorus_view LIMIT 500;" }
 

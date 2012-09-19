@@ -9,7 +9,7 @@ describe ImportScheduler do
            :end_date => Date.parse("2012-08-25"),
            :last_scheduled_at => nil,
            :frequency => 'daily',
-           :user => users(:bob),
+           :user => users(:owner),
            :sample_count => 1,
            :truncate => true,
            :workspace => workspaces(:bob_public),

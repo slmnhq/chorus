@@ -66,7 +66,7 @@ describe ImportSchedule do
 
   describe "#target_dataset_id" do
     let(:workspace) { workspaces(:bob_public) }
-    let(:user) { users(:bob) }
+    let(:user) { users(:owner) }
     let(:dest_dataset) { datasets(:bobs_table) }
     let(:dest_dataset_name) { dest_dataset.name }
     let(:my_event) { Events::DatasetImportCreated.by(user).add(

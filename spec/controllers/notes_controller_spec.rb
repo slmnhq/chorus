@@ -66,7 +66,7 @@ describe NotesController do
     end
 
     context "with 'notify users'" do
-      let(:bob) { users(:bob) }
+      let(:bob) { users(:owner) }
       let(:no_collaborators) { users(:no_collaborators) }
 
       it "notifies the recipients" do

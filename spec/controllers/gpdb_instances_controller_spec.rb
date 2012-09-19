@@ -4,7 +4,7 @@ describe GpdbInstancesController do
   ignore_authorization!
 
   before do
-    @user = users(:bob)
+    @user = users(:owner)
     log_in @user
   end
 

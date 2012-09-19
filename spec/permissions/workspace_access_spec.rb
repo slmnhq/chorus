@@ -4,7 +4,7 @@ describe WorkspaceAccess do
   let(:non_member) { users(:no_collaborators) }
   let(:admin) { users(:admin) }
   let(:member) { users(:the_collaborator) }
-  let(:owner) { users(:bob) }
+  let(:owner) { users(:owner) }
   let(:workspace) { workspaces(:bob_public) }
   let(:private_workspace) { workspaces(:bob_private) }
   let(:workspace_access) {

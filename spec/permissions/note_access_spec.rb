@@ -8,7 +8,7 @@ describe Events::NoteAccess do
   describe "#destroy?" do
     context " when the current user is the note's actor" do
       it "returns true" do
-        stub(fake_controller).current_user { users(:bob) }
+        stub(fake_controller).current_user { users(:owner) }
         access.destroy?(note).should be_true
       end
     end
@@ -59,7 +59,7 @@ describe Events::NoteAccess do
 
     context "when there is no access class for the model" do
       it "delegates to the default access for creating notes" do
-        user = users(:bob)
+        user = users(:owner)
         any_instance_of(DefaultAccess) do |workspace_access|
           mock(workspace_access).create_note_on?(user) { "delegated_return_value" }
         end

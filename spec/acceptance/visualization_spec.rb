@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Visualizations" do
   let(:dataset) { datasets(:bobs_table) }
-  let(:owner) { users(:bob) }
+  let(:owner) { users(:owner) }
 
   before do
     log_in owner

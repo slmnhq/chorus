@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Notifications" do
-  let(:user) { users(:bob) }
+  let(:user) { users(:owner) }
   let(:event1) { notifications(:bobs_notification1).notification_event }
   let(:event2) { notifications(:bobs_notification2).notification_event }
 

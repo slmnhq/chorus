@@ -4,7 +4,7 @@ describe ModelMap do
   describe "#model_from_params(entity_type, entity_id)" do
 
     it "works for users" do
-      model = users(:bob)
+      model = users(:owner)
       ModelMap.model_from_params("user", model.id).should == model
     end
 
