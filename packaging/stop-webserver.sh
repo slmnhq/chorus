@@ -10,7 +10,7 @@ bin=`cd "$bin"; pwd`
 
 log_inline "stopping nginx "
 cd $CHORUS_HOME/vendor/nginx/nginx_dist/
-./$NGINX -s stop
+OPENSSL_CONF=$OPENSSL_CONF ./$NGINX -s stop
 wait_for_stop $NGINX_PID_FILE
 cd $CHORUS_HOME
 

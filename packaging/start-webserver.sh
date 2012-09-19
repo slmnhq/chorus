@@ -23,7 +23,7 @@ else
     $RUBY vendor/nginx/generate_nginx_conf.rb
     cd $CHORUS_HOME/vendor/nginx/nginx_dist/
 
-    ./$NGINX
+    OPENSSL_CONF=$OPENSSL_CONF ./$NGINX
     wait_for_start $NGINX_PID_FILE
     log "nginx started as pid `cat $NGINX_PID_FILE`"
 fi

@@ -39,6 +39,9 @@ else
    NGINX=nginx_linux
 fi
 
+##### nginx built with ssl support needs the environment variable OPENSSL_CONF #####
+OPENSSL_CONF=$CHORUS_HOME/packaging/ssl/openssl.cnf
+
 ##### support functions #####
 
 function log () {
