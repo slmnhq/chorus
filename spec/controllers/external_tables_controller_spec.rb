@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe ExternalTablesController do
   let(:user) { users(:the_collaborator) }
-  let(:sandbox) { gpdb_schemas(:bobs_schema) }
-  let(:workspace) { workspaces(:bob_public) }
-  let(:workspace_without_sandbox) { workspaces(:bob_private) }
+  let(:sandbox) { gpdb_schemas(:default) }
+  let(:workspace) { workspaces(:public) }
+  let(:workspace_without_sandbox) { workspaces(:private) }
 
   let!(:instance_account) { sandbox.gpdb_instance.account_for_user!(user) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }

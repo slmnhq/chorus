@@ -27,8 +27,8 @@ describe Import do
 
   describe "#run" do
     let(:user) { users(:owner) }
-    let(:source_table) { datasets(:bobs_table) }
-    let(:workspace) { workspaces(:bob_public) }
+    let(:source_table) { datasets(:table) }
+    let(:workspace) { workspaces(:public) }
     let(:import) do
       Import.create!(
           {

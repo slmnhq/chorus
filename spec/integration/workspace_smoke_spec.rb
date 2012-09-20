@@ -34,7 +34,7 @@ describe "Workspaces" do
   end
 
   describe "Delete a workspace" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
 
     xit "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")

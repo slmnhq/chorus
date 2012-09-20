@@ -12,9 +12,9 @@ describe ImportScheduler do
            :user => users(:owner),
            :sample_count => 1,
            :truncate => true,
-           :workspace => workspaces(:bob_public),
+           :workspace => workspaces(:public),
            :dataset_import_created_event_id => 'dataset-import-created-event-id',
-           :source_dataset => datasets(:bobs_table),
+           :source_dataset => datasets(:table),
            :to_table => 'destination-table'
           },
           :without_protection => true)

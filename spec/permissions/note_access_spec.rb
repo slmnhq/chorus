@@ -24,7 +24,7 @@ describe Events::NoteAccess do
     context "when the note is on a workspace and the current user is the workspace owner" do
       let(:note) do
         Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
-          :workspace => workspaces(:bob_public),
+          :workspace => workspaces(:public),
           :body => "hi"
         )
       end
@@ -49,7 +49,7 @@ describe Events::NoteAccess do
 
     context "when there is an access class for the specified model" do
       it "delegates to that access class's :create_note_on? method" do
-        workspace = workspaces(:bob_public)
+        workspace = workspaces(:public)
         any_instance_of(WorkspaceAccess) do |workspace_access|
           mock(workspace_access).create_note_on?(workspace) { "delegated_return_value" }
         end

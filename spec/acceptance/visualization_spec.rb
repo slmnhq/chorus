@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Visualizations" do
-  let(:dataset) { datasets(:bobs_table) }
+  let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 
   before do

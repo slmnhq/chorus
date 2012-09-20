@@ -9,8 +9,8 @@ describe "Notes" do
   let(:greenplum_instance) { gpdb_instances(:greenplum) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
-  let(:workfile) { workfiles(:bob_public)}
-  let(:dataset) { datasets(:bobs_table) }
+  let(:workfile) { workfiles(:public)}
+  let(:dataset) { datasets(:table) }
   let(:hdfs_entry) do
     hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
                                          :modified_at => "2010-10-24 22:00:00")

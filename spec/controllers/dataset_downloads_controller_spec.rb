@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DatasetDownloadsController do
   let(:user) { users(:the_collaborator) }
   let(:instance_account) { table.gpdb_instance.account_for_user!(user) }
-  let(:table) { datasets(:bobs_table) }
+  let(:table) { datasets(:table) }
 
   before do
     log_in user

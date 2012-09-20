@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DatasetImportsController do
   describe "#show" do
     let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:bob_schedule) }
+    let(:import_schedule) { import_schedules(:default) }
 
     before do
       log_in user
@@ -31,7 +31,7 @@ describe DatasetImportsController do
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
-    let(:active_workspace) { workspaces(:bob_public) }
+    let(:active_workspace) { workspaces(:public) }
 
     let(:attributes) {
       HashWithIndifferentAccess.new(
@@ -203,7 +203,7 @@ describe DatasetImportsController do
 
   describe "#update", :database_integration => true do
     let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:bob_schedule) }
+    let(:import_schedule) { import_schedules(:default) }
     let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
     let(:import_params) { import_schedule.attributes.merge(:import_type => "schedule") }
 

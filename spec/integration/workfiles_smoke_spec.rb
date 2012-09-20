@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Workfiles" do
 
-  let(:workspace) { workspaces(:bob_public) }
+  let(:workspace) { workspaces(:public) }
 
   describe "add a workfile" do
     it "creates a simple workfile" do

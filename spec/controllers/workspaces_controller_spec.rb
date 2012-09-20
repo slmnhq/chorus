@@ -15,7 +15,7 @@ describe WorkspacesController do
     it "returns workspaces that are public" do
       get :index
       response.code.should == "200"
-      decoded_response.map(&:name).should include workspaces(:bob_public).name
+      decoded_response.map(&:name).should include workspaces(:public).name
     end
 
     it "returns workspaces the user is a member of" do
@@ -26,7 +26,7 @@ describe WorkspacesController do
     end
 
     it "does not return private workspaces user is not a member of" do
-      other_private = workspaces(:bob_private)
+      other_private = workspaces(:private)
       get :index
       decoded_response.collect(&:name).should_not include other_private.name
     end
@@ -49,7 +49,7 @@ describe WorkspacesController do
     it "scopes by memberships" do
       get :index, :user_id => other_user.id
       decoded_response.size.should == other_user.workspaces.count - 1
-      decoded_response.map(&:name).should_not include(workspaces(:bob_private).name)
+      decoded_response.map(&:name).should_not include(workspaces(:private).name)
     end
 
     it "shows admins all workspaces scoped by membership" do
@@ -126,7 +126,7 @@ describe WorkspacesController do
   end
 
   describe "#show" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
 
     context "with a valid workspace id" do
       it "uses authentication" do
@@ -281,7 +281,7 @@ describe WorkspacesController do
     end
 
     context "when new sandbox is a new schema in an existing database" do
-      let!(:database) { gpdb_schemas(:other_schema).database }
+      let(:database) { gpdb_databases(:default) }
 
       before do
         stub(GpdbSchema).refresh(anything, anything) { }
@@ -323,7 +323,7 @@ describe WorkspacesController do
     end
 
     context "when new sandbox is a new schema in a new database" do
-      let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:owners) }
 
       before do
         stub(GpdbSchema).refresh(anything, anything) { }

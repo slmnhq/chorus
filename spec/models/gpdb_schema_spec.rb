@@ -9,10 +9,10 @@ describe GpdbSchema do
   end
 
   context ".refresh" do
-    let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+    let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:account) { gpdb_instance.owner_account }
-    let(:database) { gpdb_databases(:bobs_database) }
-    let(:schema) { gpdb_schemas(:bobs_schema) }
+    let(:database) { schema.database }
+    let(:schema) { gpdb_schemas(:default) }
     before(:each) do
       stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
           {"schema_name" => "new_schema"},
@@ -178,7 +178,7 @@ describe GpdbSchema do
   end
 
   describe "callbacks" do
-    let(:schema) { gpdb_schemas(:bobs_schema) }
+    let(:schema) { gpdb_schemas(:default) }
 
     describe "before_save" do
       describe "#mark_datasets_as_stale" do

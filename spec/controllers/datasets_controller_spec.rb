@@ -3,12 +3,12 @@ require 'spec_helper'
 describe DatasetsController do
   let(:user) { users(:the_collaborator) }
   let(:instance_account) { gpdb_instance.account_for_user!(user) }
-  let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+  let(:gpdb_instance) { gpdb_instances(:owners) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema(options).to_sql }
   let(:database) { gpdb_instance.databases.first }
-  let(:schema) { gpdb_schemas(:bobs_schema) }
+  let(:schema) { gpdb_schemas(:default) }
   let(:table) { schema.datasets.tables.first }
-  let(:dataset) { datasets(:bobs_table) }
+  let(:dataset) { datasets(:table) }
   let(:view) { schema.datasets.views.first }
 
   before do
@@ -31,7 +31,7 @@ describe DatasetsController do
 
         response.code.should == "200"
         decoded_response.length.should == 3
-        decoded_response.map(&:object_name).should match_array(['bobs_table', 'new_table', 'new_view'])
+        decoded_response.map(&:object_name).should match_array(['table', 'new_table', 'new_view'])
         schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
       end
 

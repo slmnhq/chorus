@@ -46,7 +46,7 @@ describe EventsController do
     end
 
     context "when getting the activities for a workfile" do
-      let(:object) { workfiles(:bob_public) }
+      let(:object) { workfiles(:public) }
 
       it "presents the workfile's activities" do
         mock_present { |models| models.should include(event) }
@@ -66,7 +66,7 @@ describe EventsController do
     end
 
     context "when getting the activities for a gpdb_table" do
-      let(:object) { datasets(:bobs_table) }
+      let(:object) { datasets(:table) }
 
       it "presents the gpdb_table's activities" do
         mock_present { |models| models.should include(event) }
@@ -89,7 +89,7 @@ describe EventsController do
     end
 
     context "when getting the activities for the current user's home page" do
-      let(:object) { datasets(:bobs_table) }
+      let(:object) { datasets(:table) }
 
       before do
         mock(Events::Base).for_dashboard_of(current_user) { fake_relation [event] }

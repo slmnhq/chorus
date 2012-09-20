@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 resource "Chorus Views" do
-  let(:dataset) { datasets(:bobs_table) }
+  let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
-  let(:workspace) { workspaces(:bob_public) }
+  let(:workspace) { workspaces(:public) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => dataset.gpdb_instance, :owner => owner) }
   let(:dataset_id) { dataset.id }
 
@@ -56,7 +56,7 @@ resource "Chorus Views" do
     required_parameters :id, :query
 
     let(:query) {"select 1;"}
-    let!(:chorus_view) { datasets(:bob_chorus_view) }
+    let(:chorus_view) { datasets(:chorus_view) }
     let(:id) { chorus_view.id }
 
     example_request "Update a Chorus View" do
@@ -69,7 +69,7 @@ resource "Chorus Views" do
 
     required_parameters :id
 
-    let!(:chorus_view) { datasets(:bob_chorus_view) }
+    let(:chorus_view) { datasets(:chorus_view) }
     let(:id) { chorus_view.id }
 
     example_request "Delete a Chorus View" do
@@ -98,9 +98,9 @@ resource "Chorus Views" do
 
     required_parameters :schema_id, :query, :check_id
 
-    let(:schema) { gpdb_schemas(:bobs_schema) }
+    let(:schema) { gpdb_schemas(:default) }
     let(:schema_id) { schema.id }
-    let(:query) { "SELECT * FROM bobs_table;" }
+    let(:query) { "SELECT * FROM table;" }
     let(:check_id) {'0.43214321' }
 
     example_request "Preview a Chorus View" do

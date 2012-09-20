@@ -3,7 +3,7 @@ require 'spec_helper'
 describe PreviewsController do
   ignore_authorization!
 
-  let(:gpdb_table) { datasets(:bobs_table) }
+  let(:gpdb_table) { datasets(:table) }
   let(:gpdb_instance) { gpdb_table.gpdb_instance }
   let(:user) { users(:the_collaborator) }
   let(:account) { gpdb_instance.account_for_user!(user) }
@@ -64,11 +64,11 @@ describe PreviewsController do
   end
 
   describe "#preview_sql" do
-    let(:schema) { gpdb_schemas(:bobs_schema) }
-    let(:query) { "SELECT * FROM bobs_table;" }
+    let(:schema) { gpdb_schemas(:default) }
+    let(:query) { "SELECT * FROM table;" }
     let(:user) { users(:owner) }
     let(:check_id) {'0.43214321' }
-    let(:expected_sql) { "SELECT * FROM (SELECT * FROM bobs_table) AS chorus_view LIMIT 500;" }
+    let(:expected_sql) { "SELECT * FROM (SELECT * FROM table) AS chorus_view LIMIT 500;" }
 
     it "returns the results of the sql" do
       mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql) { SqlResult.new }

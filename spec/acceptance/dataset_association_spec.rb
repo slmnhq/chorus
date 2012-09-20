@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Dataset Association" do
-  let!(:user) { users(:owner) }
+  let(:user) { users(:owner) }
   let!(:gpdb_table) { FactoryGirl.create :gpdb_table }
   let!(:workspace) { FactoryGirl.create :workspace }
   let!(:membership) { FactoryGirl.create :membership, :workspace => workspace, :user => user}

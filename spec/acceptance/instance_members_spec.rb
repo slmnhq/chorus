@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 resource "Greenplum DB members" do
-  let!(:owner) { users(:owner) }
+  let(:owner) { users(:owner) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner) }
-  let!(:non_member) { users(:no_collaborators) }
+  let(:non_member) { users(:no_collaborators) }
   let!(:member_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
   let!(:member) { member_account.owner }
 

@@ -5,7 +5,7 @@ describe CsvImporter, :database_integration => true do
   describe "actually performing the import" do
 
     before do
-      any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { datasets(:bobs_table) } }
+      any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { datasets(:table) } }
     end
 
     after do
@@ -247,7 +247,7 @@ describe CsvImporter, :database_integration => true do
   describe "without connecting to GPDB" do
     let(:csv_file) { CsvFile.first }
     let(:user) { csv_file.user }
-    let(:dataset) { datasets(:bobs_table) }
+    let(:dataset) { datasets(:table) }
     let(:instance_account) { csv_file.workspace.sandbox.gpdb_instance.account_for_user!(csv_file.user) }
     let(:file_import_created_event) { Events::FileImportCreated.first }
 
@@ -279,7 +279,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "makes sure the FileImportSuccess event object is linked to the dataset" do
-        dataset = datasets(:bobs_table)
+        dataset = datasets(:table)
         file_import_created_event.reload
         file_import_created_event.dataset.should == dataset
         file_import_created_event.target2_type.should == "Dataset"

@@ -5,7 +5,7 @@ describe ImportSchedulePresenter, :type => :view do
     @user = FactoryGirl.create :user
     @presenter = ImportSchedulePresenter.new(import_schedule, view)
   end
-  let(:import_schedule) { import_schedules(:bob_schedule) }
+  let(:import_schedule) { import_schedules(:default) }
 
   describe "#to_hash" do
     let(:hash) { @presenter.to_hash }

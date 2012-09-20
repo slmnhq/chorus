@@ -2,8 +2,6 @@ require 'spec_helper'
 
 resource "Notifications" do
   let(:user) { users(:owner) }
-  let(:event1) { notifications(:bobs_notification1).notification_event }
-  let(:event2) { notifications(:bobs_notification2).notification_event }
 
   before do
     log_in user
@@ -18,7 +16,7 @@ resource "Notifications" do
   put "/notifications/read" do
     parameter :notification_ids, "IDs of events to be marked as read"
 
-    let(:notification_ids) { [event1.id, event2.id] }
+    let(:notification_ids) { user.notification_events[0..1].map(&:id) }
 
     required_parameters :notification_ids
 

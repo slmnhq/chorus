@@ -36,7 +36,7 @@ describe NotesController do
 
     context "with datasets" do
       it "associates the datasets to the Note" do
-        workspace = workspaces(:bob_public)
+        workspace = workspaces(:public)
         associated_datasets = workspace.bound_datasets[0..1]
         associated_dataset_ids = associated_datasets.map(&:id)
         post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :dataset_ids => associated_dataset_ids }
@@ -48,7 +48,7 @@ describe NotesController do
 
     context "with workfiles" do
       it "associates the workfiles to the Note" do
-        workspace = workspaces(:bob_public)
+        workspace = workspaces(:public)
         associated_workfiles = workspace.workfiles[0..1]
         associated_workfile_ids = associated_workfiles.map(&:id)
         post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :workfile_ids => associated_workfile_ids }
@@ -66,15 +66,15 @@ describe NotesController do
     end
 
     context "with 'notify users'" do
-      let(:bob) { users(:owner) }
-      let(:no_collaborators) { users(:no_collaborators) }
+      let(:users_to_notify) { [users(:owner), users(:no_collaborators)] }
 
       it "notifies the recipients" do
-        workspace = workspaces(:bob_public)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => [bob.id, no_collaborators.id] }
+        workspace = workspaces(:public)
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => users_to_notify.map(&:id) }
         response.code.should == "201"
-        bob.notification_events.last.body = "Notify people note"
-        no_collaborators.notification_events.last.body = "Notify people note"
+        users_to_notify.each do |user|
+          user.notification_events.first.body.should == "Notify people note"
+        end
       end
     end
   end

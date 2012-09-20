@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe WorkfileVersionPresenter, :type => :view do
-  let(:workfile) { workfiles(:bob_public) }
+  let(:workfile) { workfiles(:public) }
   let(:owner) { workfile.owner }
   let(:version) { workfile.latest_workfile_version }
   let(:presenter) { WorkfileVersionPresenter.new(version, view, options) }

@@ -258,7 +258,7 @@ describe Workfile do
     it { should have_many :events }
 
     it "belongs to an execution_schema" do
-      workfile = workfiles(:bob_private)
+      workfile = workfiles(:private)
       workfile.execution_schema.should be_a GpdbSchema
     end
   end

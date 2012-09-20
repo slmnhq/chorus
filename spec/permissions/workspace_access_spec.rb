@@ -5,8 +5,8 @@ describe WorkspaceAccess do
   let(:admin) { users(:admin) }
   let(:member) { users(:the_collaborator) }
   let(:owner) { users(:owner) }
-  let(:workspace) { workspaces(:bob_public) }
-  let(:private_workspace) { workspaces(:bob_private) }
+  let(:workspace) { workspaces(:public) }
+  let(:private_workspace) { workspaces(:private) }
   let(:workspace_access) {
     controller = WorkspacesController.new
     stub(controller).current_user { user }

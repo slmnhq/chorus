@@ -16,17 +16,17 @@ describe EventPresenter, :type => :view do
       let(:options) { {:activity_stream => true} }
 
       context "SourceTableCreated" do
-        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:bobs_table)) }
+        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:table)) }
         it "does not render datasets with their schemas or associated workspaces" do
           hash = subject.to_hash
-          hash[:dataset][:schema][:id].should == datasets(:bobs_table).schema_id
+          hash[:dataset][:schema][:id].should == datasets(:table).schema_id
           hash[:dataset][:schema].keys.size.should == 1
           hash[:dataset][:associated_workspaces].should be_empty
         end
       end
 
       context "NoteOnWorkspace" do
-        let(:workspace_with_sandbox) { workspaces(:bob_public) }
+        let(:workspace_with_sandbox) { workspaces(:public) }
         let(:event) { FactoryGirl.create(:note_on_workspace_event, :workspace => workspace_with_sandbox) }
 
         it "only renders the sandbox id of a workspace" do
@@ -42,8 +42,8 @@ describe EventPresenter, :type => :view do
       let(:options) { {:read_receipts => true} }
 
       context "NoteOnWorkspace" do
-        let(:workspace_with_sandbox) { workspaces(:bob_public) }
-        let(:event) { notifications(:bobs_notification1).notification_event }
+        let(:workspace_with_sandbox) { workspaces(:public) }
+        let(:event) { current_user.notification_events.first }
 
         it "renders the event with a :read key based on the current user" do
           hash = subject.to_hash
@@ -88,7 +88,7 @@ describe EventPresenter, :type => :view do
           }
         end
         mock(event).additional_data_key(:some_id) { :some }
-        mock(event).additional_data_value(:some_id) { datasets(:bobs_table) }
+        mock(event).additional_data_value(:some_id) { datasets(:table) }
 
         hash = subject.to_hash
         hash[:some_key].should == "foo"
@@ -134,8 +134,8 @@ describe EventPresenter, :type => :view do
       context "with an attachment" do
         let(:event) { FactoryGirl.create(:note_on_workspace_event) }
         let(:attachment) { NoteAttachment.first }
-        let(:dataset) { datasets(:bobs_table) }
-        let(:workfile) { workfiles(:bob_public) }
+        let(:dataset) { datasets(:table) }
+        let(:workfile) { workfiles(:public) }
 
         it "contains the attachment" do
           event.workspace.sandbox = dataset.schema

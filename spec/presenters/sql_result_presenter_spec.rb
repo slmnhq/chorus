@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SqlResultPresenter, :type => :view do
-  let(:schema) { gpdb_schemas(:bobs_schema) }
+  let(:schema) { gpdb_schemas(:default) }
   let(:result) do
     SqlResult.new.tap do |result|
       result.add_column("size", "real")

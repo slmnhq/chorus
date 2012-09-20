@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe WorkfileExecutionsController do
-  let(:workspace) { workspaces(:bob_public) }
+  let(:workspace) { workspaces(:public) }
   let(:workspace_member) { users(:the_collaborator) }
-  let(:workfile) { workfiles(:bob_public) }
+  let(:workfile) { workfiles(:public) }
   let(:archived_workspace) { workspaces(:archived) }
   let(:archived_workfile) { workfiles(:archived) }
   let(:sql) { "Select something from somewhere" }

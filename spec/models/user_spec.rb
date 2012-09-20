@@ -48,17 +48,17 @@ describe User do
   end
 
   describe "#accessible_events" do
-    let(:bob) { users(:owner) }
-    let(:instance_event) { events(:bob_creates_greenplum_instance) }
-    let(:public_workspace_event) { events(:bob_creates_public_workspace) }
-    let(:private_workspace_event) { events(:bob_creates_private_workspace) }
-    let(:user_added_event) { events(:bob_user_added_event) }
+    let(:owner) { users(:owner) }
+    let(:instance_event) { events(:owner_creates_greenplum_instance) }
+    let(:public_workspace_event) { events(:owner_creates_public_workspace) }
+    let(:private_workspace_event) { events(:owner_creates_private_workspace) }
+    let(:user_added_event) { events(:admin_creates_owner) }
 
     context "to members of a private workspace" do
       let(:current_user) { users(:the_collaborator) }
 
       it "returns all the events to a member of the private workspace" do
-        bob.accessible_events(current_user).should include(instance_event, public_workspace_event, private_workspace_event, user_added_event)
+        owner.accessible_events(current_user).should include(instance_event, public_workspace_event, private_workspace_event, user_added_event)
       end
     end
 
@@ -66,8 +66,8 @@ describe User do
       let(:current_user) { users(:no_collaborators) }
 
       it "returns all the public events to a non-member of the private workspace" do
-        bob.accessible_events(current_user).should include(instance_event, public_workspace_event, user_added_event)
-        bob.accessible_events(current_user).should_not include(private_workspace_event)
+        owner.accessible_events(current_user).should include(instance_event, public_workspace_event, user_added_event)
+        owner.accessible_events(current_user).should_not include(private_workspace_event)
       end
     end
   end

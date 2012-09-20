@@ -55,18 +55,18 @@ describe Events::Base do
     let(:user) { users(:no_collaborators) }
     let(:the_events) do
       [
-          events(:no_collaborators_creates_private_workfile),
-          events(:bob_creates_private_workfile),
-          events(:bob_creates_public_workfile),
-          events(:no_collaborators_creates_private_workfile)
+        events(:no_collaborators_creates_private_workfile),
+        events(:private_workfile_created),
+        events(:public_workfile_created),
+        events(:no_collaborators_creates_private_workfile)
       ]
     end
 
-    let(:other_workspace1) { workspaces(:bob_public) }
-    let(:other_workspace2) { workspaces(:bob_private) }
+    let(:other_workspace1) { workspaces(:public) }
+    let(:other_workspace2) { workspaces(:private) }
     let(:user_workspace) { workspaces(:public_with_no_collaborators) }
 
-    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0]) }
+    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0] ) }
 
     let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => the_events[1]) }
     let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => the_events[2]) }

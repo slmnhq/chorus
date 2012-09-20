@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Greenplum Table" do
   let(:owner) { users(:owner) }
-  let(:gpdb_table) { datasets(:bobs_table) }
+  let(:gpdb_table) { datasets(:table) }
   let(:table_id) { gpdb_table.to_param }
   let(:owner_account) { gpdb_table.gpdb_instance.owner_account }
 

@@ -17,7 +17,7 @@ describe DefaultAccess do
   describe "#access_for(model)" do
     context "when there is an access class for the given model" do
       it "returns an access class for that model" do
-        workspace = workspaces(:bob_public)
+        workspace = workspaces(:public)
         other_access = access.access_for(workspace)
         other_access.should be_a(WorkspaceAccess)
         other_access.context.should == context

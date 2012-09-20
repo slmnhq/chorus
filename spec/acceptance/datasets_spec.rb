@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Greenplum Tables / Views" do
-  let(:dataset) { datasets(:bobs_table) }
+  let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 
   let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => dataset.gpdb_instance, :owner => owner) }

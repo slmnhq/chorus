@@ -4,7 +4,7 @@ resource "Notes" do
   let(:user) { users(:owner) }
   let(:note) { FactoryGirl.create :note_on_hdfs_file_event, :actor => user }
   let(:hdfs_file) { HdfsEntry.files.first }
-  let!(:attachment) { note_attachments(:sql) }
+  let(:attachment) { note_attachments(:sql) }
 
   before do
     log_in user
@@ -19,7 +19,7 @@ resource "Notes" do
 
 
     let(:body) { note.body }
-    let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+    let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:entity_type) { "greenplum_instance" }
     let(:entity_id) { gpdb_instance.id }
 

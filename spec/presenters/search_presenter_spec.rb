@@ -9,7 +9,7 @@ describe SearchPresenter, :type => :view do
     stub(ActiveRecord::Base).current_user { user }
     search = Search.new(user, :query => 'searchquery')
 
-    VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+    VCR.use_cassette('search_solr_query_all_types_as_owner') do
       search.search
     end
     @presenter = SearchPresenter.new(search, view)

@@ -66,7 +66,7 @@ describe GpdbDatabase do
   end
 
   describe "reindexDatasetPermissions" do
-    let(:database) { gpdb_databases(:bobs_database) }
+    let(:database) { gpdb_databases(:default) }
 
     it "calls solr_index on all datasets" do
       database.datasets.each do |dataset|
@@ -101,12 +101,12 @@ describe GpdbDatabase do
     it { should have_many :schemas }
 
     it "has many datasets" do
-      gpdb_databases(:bobs_database).datasets.should include(datasets(:bobs_table))
+      gpdb_databases(:default).datasets.should include(datasets(:table))
     end
   end
 
   describe "callbacks" do
-    let(:database) { gpdb_databases(:bobs_database) }
+    let(:database) { gpdb_databases(:default) }
 
     describe "before_save" do
       describe "#mark_schemas_as_stale" do
@@ -161,7 +161,7 @@ describe GpdbDatabase do
     end
 
     context "when gpdb connection is broken" do
-      let(:database) { gpdb_databases(:bobs_database) }
+      let(:database) { gpdb_databases(:default) }
       let(:user) { users(:owner) }
 
       before do

@@ -101,7 +101,7 @@ describe GpdbInstance do
     end
 
     context "when gpdb connection is broken" do
-      let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:owners) }
       let(:user) { users(:owner) }
 
       before do
@@ -237,7 +237,7 @@ describe GpdbInstance do
     end
 
     context "individual gpdb instance" do
-      let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:owners) }
       let!(:owner_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
       let!(:user_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
 
@@ -248,7 +248,7 @@ describe GpdbInstance do
     end
 
     context "missing account" do
-      let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+      let(:gpdb_instance) { gpdb_instances(:owners) }
 
       it "raises an exception" do
         expect { gpdb_instance.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -257,7 +257,7 @@ describe GpdbInstance do
   end
 
   describe "#account_for_user" do
-    let!(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+    let(:gpdb_instance) { gpdb_instances(:owners) }
 
     context "missing account" do
       it "returns nil" do
@@ -294,11 +294,11 @@ describe GpdbInstance do
     end
 
     context "with database stubbed" do
-      let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
-      let(:database) { gpdb_databases(:bobs_database) }
+      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:database) { gpdb_databases(:default) }
       let(:missing_database) { gpdb_instance.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_instance.owner_account }
-      let(:account_without_access) { instance_accounts(:not_bob) }
+      let(:account_without_access) { instance_accounts(:unauthorized) }
 
       before do
         stub_gpdb(gpdb_instance.owner_account, gpdb_instance.send(:database_and_role_sql) => [

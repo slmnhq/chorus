@@ -9,12 +9,12 @@ describe ModelMap do
     end
 
     it "works for workspaces" do
-      model = workspaces(:bob_public)
+      model = workspaces(:public)
       ModelMap.model_from_params("workspace", model.id).should == model
     end
 
     it "works for workfiles" do
-      model = workfiles(:bob_public)
+      model = workfiles(:public)
       ModelMap.model_from_params("workfile", model.id).should == model
     end
 
@@ -24,7 +24,7 @@ describe ModelMap do
     end
 
     it "works for datasets" do
-      model = datasets(:bobs_table)
+      model = datasets(:table)
       ModelMap.model_from_params("dataset", model.id).should == model
     end
 

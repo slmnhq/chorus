@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Workfiles" do
-  let!(:owner) { users(:owner) }
+  let(:owner) { users(:owner) }
   let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
   let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
   let!(:file) { test_file("workfile.sql", "text/sql") }
@@ -100,7 +100,7 @@ resource "Workfiles" do
 
     required_parameters :workfile_id, :schema_id, :check_id
 
-    let(:schema_id) { gpdb_schemas(:bobs_schema).id }
+    let(:schema_id) { gpdb_schemas(:default).id }
     let(:check_id) { "12345" }
 
     let(:result) do
@@ -123,7 +123,7 @@ resource "Workfiles" do
     required_parameters :id, :workfile_id, :schema_id
 
     let(:id) { 0 }
-    let(:schema_id) { gpdb_schemas(:bobs_schema).id }
+    let(:schema_id) { gpdb_schemas(:default).id }
 
     example_request "Cancels execution of a workfile" do
       status.should == 200

@@ -15,7 +15,7 @@ describe "Event types" do
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
   let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
-  let(:chorus_view) { datasets(:bob_chorus_view) }
+  let(:chorus_view) { datasets(:chorus_view) }
 
   describe "ChorusViewCreated" do
     subject do
@@ -409,7 +409,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportCreated" do
-    let(:source_dataset) { datasets(:bobs_table) }
+    let(:source_dataset) { datasets(:table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportCreated.add(
@@ -430,7 +430,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportSuccess" do
-    let(:source_dataset) { datasets(:bobs_table) }
+    let(:source_dataset) { datasets(:table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportSuccess.add(
@@ -474,7 +474,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportFailed" do
-    let(:source_dataset) {datasets(:bobs_table)}
+    let(:source_dataset) {datasets(:table)}
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportFailed.add(

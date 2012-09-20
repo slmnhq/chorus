@@ -5,9 +5,9 @@ describe HdfsExternalTable do
   subject { described_class.new('/file', hadoop_instance) }
 
   describe ".create" do
-    let(:account) {instance_accounts(:admin)}
+    let(:account) {instance_accounts(:shared_instance_account)}
     let(:user) {users(:owner)}
-    let(:workspace) { workspaces(:bob_public)}
+    let(:workspace) { workspaces(:public)}
     let(:hdfs_file) { hadoop_instance.hdfs_entries.create!({:path => "/foo_fighter/twisted_sisters/"}, :without_protection => true) }
     let(:parameters) do
       {

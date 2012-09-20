@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ImportSchedule do
   let(:pending_import_schedule) { import_schedules(:pending_import_schedule) }  # TODO: orphaned?
   let(:future_import_schedule) { import_schedules(:future_import_schedule) }
-  let(:bob_schedule) { import_schedules(:bob_schedule) }
+  let(:import_schedule) { import_schedules(:default) }
 
   describe "callbacks:" do
     describe "before saving, automatically updating the next_import_at attribute" do
@@ -66,9 +66,9 @@ describe ImportSchedule do
   end
 
   describe "#target_dataset_id" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
     let(:user) { users(:owner) }
-    let(:dest_dataset) { datasets(:bobs_table) }
+    let(:dest_dataset) { datasets(:table) }
     let(:dest_dataset_name) { dest_dataset.name }
     let(:my_event) { Events::DatasetImportCreated.by(user).add(
         :workspace => workspace,
@@ -78,8 +78,8 @@ describe ImportSchedule do
 
     context "when the destination table exists" do
       it "should return the ID" do
-        bob_schedule.dataset_import_created_event_id = my_event.id
-        bob_schedule.target_dataset_id.should == dest_dataset.id
+        import_schedule.dataset_import_created_event_id = my_event.id
+        import_schedule.target_dataset_id.should == dest_dataset.id
       end
     end
 
@@ -88,8 +88,8 @@ describe ImportSchedule do
       let(:dest_dataset_name) { nil }
 
       it "should return nil" do
-        bob_schedule.dataset_import_created_event_id = my_event.id
-        bob_schedule.target_dataset_id.should == nil
+        import_schedule.dataset_import_created_event_id = my_event.id
+        import_schedule.target_dataset_id.should == nil
       end
     end
   end

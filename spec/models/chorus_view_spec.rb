@@ -75,7 +75,7 @@ describe ChorusView do
   describe "#preview_sql" do
     let(:chorus_view) do
       ChorusView.new({:name => "query",
-                      :schema => gpdb_schemas(:bobs_schema),
+                      :schema => gpdb_schemas(:default),
                       :query => "select 1"},
                      :without_protection => true)
     end
@@ -88,7 +88,7 @@ describe ChorusView do
   describe "#all_row_sql" do
     let(:chorus_view) do
       ChorusView.new({:name => "query",
-                      :schema => gpdb_schemas(:bobs_schema),
+                      :schema => gpdb_schemas(:default),
                       :query => "select 1"},
                      :without_protection => true)
     end

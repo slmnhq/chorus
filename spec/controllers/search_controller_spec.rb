@@ -23,7 +23,7 @@ describe SearchController do
     generate_fixture "searchResult.json" do
       reindex_solr_fixtures
 
-      VCR.use_cassette "search_solr_query_all_types_bob" do
+      VCR.use_cassette "search_solr_query_all_types_as_owner" do
         get :show, :query => 'searchquery'
       end
     end

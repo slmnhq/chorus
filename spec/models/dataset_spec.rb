@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:gpdb_instance) { gpdb_instances(:bobs_instance) }
+  let(:gpdb_instance) { gpdb_instances(:owners) }
   let(:account) { gpdb_instance.owner_account }
-  let(:schema) { gpdb_schemas(:bobs_schema) }
+  let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
-  let(:dataset) { datasets(:bobs_table) }
-  let(:dataset_view) { datasets(:bobs_view) }
+  let(:dataset) { datasets(:table) }
+  let(:dataset_view) { datasets(:view) }
 
   describe "associations" do
     it { should belong_to(:schema) }
@@ -15,7 +15,7 @@ describe Dataset do
   end
 
   describe "workspace association" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
 
     it "can be bound to workspaces" do
       dataset.bound_workspaces.should include workspace
@@ -111,10 +111,6 @@ describe Dataset do
   end
 
   describe ".with_name_like" do
-    it "scopes objects by name" do
-      Dataset.with_name_like(dataset.name).count.should == 1
-    end
-
     it "matches anywhere in the name, regardless of case" do
       dataset.update_attributes!({:name => "amatCHingtable"}, :without_protection => true)
 
@@ -134,10 +130,6 @@ describe Dataset do
     let(:dataset_list) {
       [dataset, second_dataset]
     }
-
-    it "scopes objects by name" do
-      Dataset.filter_by_name(dataset_list, dataset.name).size.should == 1
-    end
 
     it "matches anywhere in the name, regardless of case" do
       dataset.update_attributes!({:name => "amatCHingtable"}, :without_protection => true)
@@ -173,7 +165,7 @@ describe Dataset do
 
       it "returns the list of datasets" do
         datasets = Dataset.refresh(account, schema)
-        datasets.map(&:name).should match_array(['bobs_table','new_table','new_view'])
+        datasets.map(&:name).should match_array(['table','new_table','new_view'])
       end
 
       context "when trying to create a duplicate record" do
@@ -395,13 +387,13 @@ describe Dataset do
 
   describe "#all_rows_sql" do
     it "returns the correct sql" do
-      dataset = datasets(:bobs_table)
+      dataset = datasets(:table)
       dataset.all_rows_sql().strip.should == %Q{SELECT * FROM "#{dataset.name}"}
     end
 
     context "with a limit" do
       it "uses the limit" do
-        dataset = datasets(:bobs_table)
+        dataset = datasets(:table)
         dataset.all_rows_sql(10).should match "LIMIT 10"
       end
     end
@@ -409,12 +401,12 @@ describe Dataset do
 
   describe '#accessible_to' do
     it 'returns true if the user can access the gpdb instance' do
-      bob = account.owner
+      owner = account.owner
       any_instance_of(GpdbInstance) do |instance|
-        mock(instance).accessible_to(bob) { true }
+        mock(instance).accessible_to(owner) { true }
       end
 
-      dataset.accessible_to(bob).should be_true
+      dataset.accessible_to(owner).should be_true
     end
   end
 end
@@ -502,7 +494,7 @@ describe Dataset::Query, :database_integration => true do
 
     context "when doing an immediate import" do
       let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
-      let(:workspace) { workspaces(:bob_public) }
+      let(:workspace) { workspaces(:public) }
       let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
       let(:dst_table_name) { "the_new_table" }
       let(:attributes) {
@@ -578,7 +570,7 @@ describe Dataset::Query, :database_integration => true do
     context "when creating a scheduled import" do
       let(:source_table) { database.find_dataset_in_schema("base_table1", "test_schema") }
       let(:start) { Time.parse("Thu, 23 Aug 2012 23:00:00") }
-      let(:workspace) { workspaces(:bob_public) }
+      let(:workspace) { workspaces(:public) }
       let(:sandbox) { workspace.sandbox } # For testing purposes, src schema = sandbox
       let(:dst_table_name) { "the_new_table" }
       let(:options) {

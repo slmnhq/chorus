@@ -10,7 +10,7 @@ describe ColumnController do
   context "#index" do
     context "with mock data" do
       let(:user) { users(:no_collaborators) }
-      let!(:table) { datasets(:bobs_table) }
+      let(:table) { datasets(:table) }
 
       before do
         fake_account = Object.new

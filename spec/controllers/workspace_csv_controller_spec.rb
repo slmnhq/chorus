@@ -6,7 +6,7 @@ describe WorkspaceCsvController do
   let(:user) { users(:owner) }
   let(:non_auth_user) { users(:no_collaborators) }
   let(:file) { test_file("test.csv", "text/csv") }
-  let(:workspace) { workspaces(:bob_public) }
+  let(:workspace) { workspaces(:public) }
   let(:csv_file_params) do
     {
         :workspace_id => workspace.to_param,
@@ -148,7 +148,7 @@ describe WorkspaceCsvController do
           end
 
           it "makes a FILE_IMPORT_CREATED event with associated dataset" do
-            dataset = datasets(:bobs_table)
+            dataset = datasets(:table)
 
             put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params.merge(:to_table => dataset.name)
 
@@ -158,7 +158,7 @@ describe WorkspaceCsvController do
             event.workspace.should == workspace
             event.file_name.should == @csv_file.contents_file_name
             event.import_type.should == 'file'
-            event.destination_table.should == 'bobs_table'
+            event.destination_table.should == 'table'
           end
         end
       end

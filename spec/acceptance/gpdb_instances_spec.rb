@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Greenplum DB instances" do
-  let!(:owner) { users(:no_collaborators) }
+  let(:owner) { users(:no_collaborators) }
   let(:owned_instance) { FactoryGirl.create(:gpdb_instance, :owner => owner) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => owned_instance, :owner => owner)}
   let!(:other_instance) { FactoryGirl.create(:gpdb_instance) }

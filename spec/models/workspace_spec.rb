@@ -27,8 +27,8 @@ describe Workspace do
   end
 
   describe ".active" do
-    let!(:active_workspace) { workspaces(:public_with_no_collaborators) }
-    let!(:archived_workspace) { workspaces(:archived) }
+    let(:active_workspace) { workspaces(:public_with_no_collaborators) }
+    let(:archived_workspace) { workspaces(:archived) }
 
     it "returns only active workspaces" do
       workspaces = Workspace.active
@@ -58,10 +58,10 @@ describe Workspace do
   end
 
   describe ".accessible_to" do
-    let!(:public_workspace) { workspaces(:bob_public) }
-    let!(:owned_workspace) { workspaces(:private_with_no_collaborators) }
-    let!(:private_workspace) { workspaces(:bob_private) }
-    let!(:private_workspace_with_membership) { workspaces(:private_with_no_collaborators) }
+    let(:public_workspace) { workspaces(:public) }
+    let(:owned_workspace) { workspaces(:private_with_no_collaborators) }
+    let(:private_workspace) { workspaces(:private) }
+    let(:private_workspace_with_membership) { workspaces(:private_with_no_collaborators) }
     let(:user) { users(:no_collaborators) }
 
     it "returns public workspaces" do
@@ -85,31 +85,31 @@ describe Workspace do
     let(:private_workspace) { workspaces(:private_with_no_collaborators) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }
 
-    let(:bob) { users(:owner) }
+    let(:owner) { users(:owner) }
     let(:user) { users(:no_collaborators) }
     let(:admin) { users(:admin) }
 
     context "public workspace" do
       it "returns all members" do
-        workspace.members << bob
+        workspace.members << owner
 
         members = workspace.members_accessible_to(user)
-        members.should include(bob, user)
+        members.should include(owner, user)
       end
     end
 
     context "user is a member of a private workspace" do
       it "returns all members" do
-        private_workspace.members << bob
+        private_workspace.members << owner
 
-        members = private_workspace.members_accessible_to(bob)
-        members.should include(bob, user)
+        members = private_workspace.members_accessible_to(owner)
+        members.should include(owner, user)
       end
     end
 
     context "user is not a member of a private workspace" do
       it "returns nothing" do
-        private_workspace.members_accessible_to(bob).should be_empty
+        private_workspace.members_accessible_to(owner).should be_empty
       end
     end
   end
@@ -124,7 +124,7 @@ describe Workspace do
     let(:chorus_view) {
       ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
     }
-    let!(:user) {users(:the_collaborator)}
+    let(:user) {users(:the_collaborator)}
 
     context "when the workspace has a sandbox" do
       before do
@@ -289,17 +289,17 @@ describe Workspace do
 
   describe "#member?" do
     it "is true for members" do
-      workspaces(:bob_public).member?(users(:owner)).should be_true
+      workspaces(:public).member?(users(:owner)).should be_true
     end
 
     it "is false for non members" do
-      workspaces(:bob_public).member?(users(:no_collaborators)).should be_false
+      workspaces(:public).member?(users(:no_collaborators)).should be_false
     end
   end
 
   describe "#archived=" do
     context "when setting to 'true'" do
-      let(:workspace) { workspaces(:bob_public) }
+      let(:workspace) { workspaces(:public) }
       let(:archiver) { users(:owner) }
       it "sets the archived_at timestamp" do
         workspace.update_attributes!(:archiver => archiver, :archived => 'true')
@@ -324,7 +324,7 @@ describe Workspace do
 
   describe "callbacks" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
-    let(:sandbox) { gpdb_schemas(:bobs_schema) }
+    let(:sandbox) { gpdb_schemas(:default) }
 
     describe "before_save" do
       describe "update_has_added_sandbox" do
@@ -341,7 +341,7 @@ describe Workspace do
         end
 
         it "does not unset it if sandbox is removed" do
-          workspace = workspaces(:bob_public)
+          workspace = workspaces(:public)
           workspace.sandbox_id = nil
           workspace.save!
           workspace.should have_added_sandbox

@@ -122,17 +122,17 @@ describe Search do
 
   context "with solr enabled" do
     let(:admin) { users(:admin) }
-    let(:bob) { users(:owner) }
+    let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_instance) { gpdb_instances(:greenplum) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
-    let(:private_workspace) { workspaces(:bob_private) }
+    let(:private_workspace) { workspaces(:private) }
     let(:private_workspace_not_a_member) { workspaces(:private_with_no_collaborators) }
-    let(:private_workfile_hidden_from_bob) { workfiles(:no_collaborators_private) }
-    let(:private_workfile_bob) { workfiles(:bob_private) }
-    let(:public_workfile_bob) { workfiles(:bob_public) }
+    let(:private_workfile_hidden_from_owner) { workfiles(:no_collaborators_private) }
+    let(:private_workfile) { workfiles(:private) }
+    let(:public_workfile) { workfiles(:public) }
     let(:dataset) { datasets(:searchquery_table) }
     let(:shared_dataset) { datasets(:searchquery_shared_table) }
     let(:chorus_view) { datasets(:searchquery_chorus_view) }
@@ -143,8 +143,8 @@ describe Search do
 
     describe "num_found" do
       it "returns a hash with the number found of each type" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 1
           search.num_found[:datasets].should == 3
@@ -152,8 +152,8 @@ describe Search do
       end
 
       it "returns a hash with the total count for the given type" do
-        VCR.use_cassette('search_solr_query_user_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery', :entity_type => 'user')
+        VCR.use_cassette('search_solr_query_user_as_owner') do
+          search = Search.new(owner, :query => 'searchquery', :entity_type => 'user')
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 0
         end
@@ -162,26 +162,26 @@ describe Search do
 
     describe "users" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           user = search.users.first
           user.highlighted_attributes[:first_name][0].should == '<em>searchquery</em>'
         end
       end
 
       it "returns the User objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           search.users.length.should == 1
-          search.users.first.should == bob
+          search.users.first.should == owner
         end
       end
     end
 
     describe "gpdb_instances" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           gpdb_instance = search.gpdb_instances.first
           gpdb_instance.highlighted_attributes.length.should == 1
           gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>searchquery</em> and greenplumsearch"
@@ -189,8 +189,8 @@ describe Search do
       end
 
       it "returns the GpdbInstance objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           search.gpdb_instances.length.should == 1
           search.gpdb_instances.first.should == gpdb_instance
         end
@@ -199,8 +199,8 @@ describe Search do
 
     describe "hadoop_instances" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           hadoop_instance = search.hadoop_instances.first
           hadoop_instance.highlighted_attributes.length.should == 1
           hadoop_instance.highlighted_attributes[:description][0].should == "<em>searchquery</em> for the hadoop instance"
@@ -208,8 +208,8 @@ describe Search do
       end
 
       it "returns the HadoopInstance objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'hadoop instance')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'hadoop instance')
           search.hadoop_instances.length.should == 1
           search.hadoop_instances.first.should == hadoop_instance
         end
@@ -218,8 +218,8 @@ describe Search do
 
     describe "datasets" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           dataset = search.datasets.first
           dataset.highlighted_attributes.length.should == 4
           dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
@@ -229,16 +229,16 @@ describe Search do
       end
 
       it "includes the highlighted query for a chorus view" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           chorus_view = search.datasets.find { |dataset| dataset.is_a? ChorusView }
           chorus_view.highlighted_attributes[:query][0].should == "select <em>searchquery</em> from a_table"
         end
       end
 
       it "returns the Dataset objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           search.datasets.should =~ [dataset, shared_dataset, chorus_view]
         end
       end
@@ -253,8 +253,8 @@ describe Search do
 
       it "includes notes" do
         events(:note_on_dataset).body.should == "notesearch ftw"
-        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
-          search = Search.new(bob, :query => 'notesearch')
+        VCR.use_cassette('search_solr_notes_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'notesearch')
           dataset = search.datasets.first
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> ftw"
         end
@@ -262,7 +262,7 @@ describe Search do
 
       it "excludes notes on datasets you can't see" do
         events(:note_on_dataset).body.should == "notesearch ftw"
-        VCR.use_cassette('search_solr_notes_query_all_types_bob_as_the_collaborator') do
+        VCR.use_cassette('search_solr_notes_query_all_types_as_the_collaborator') do
           search = Search.new(the_collaborator, :query => 'notesearch')
           search.datasets.should be_empty
         end
@@ -271,7 +271,7 @@ describe Search do
       it "includes notes created in the workspace context" do
         events(:note_on_workspace_dataset).body.should == "workspacedatasetnotesearch"
         VCR.use_cassette('search_solr_ws_dataset_notes_query') do
-          search = Search.new(bob, :query => 'workspacedatasetnotesearch')
+          search = Search.new(owner, :query => 'workspacedatasetnotesearch')
           dataset = search.datasets.first
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>workspacedatasetnotesearch</em>"
         end
@@ -280,8 +280,8 @@ describe Search do
 
     describe "hdfs_entries" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           hdfs = search.hdfs_entries.first
           hdfs.highlighted_attributes.length.should == 2
           hdfs.highlighted_attributes[:parent_name][0].should == "<em>searchquery</em>"
@@ -290,8 +290,8 @@ describe Search do
       end
 
       it "returns the HadoopInstance objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery')
+        VCR.use_cassette('search_solr_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'searchquery')
           search.hdfs_entries.length.should == 1
           search.hdfs_entries.first.should == hdfs_entry
         end
@@ -300,8 +300,8 @@ describe Search do
 
     describe "highlighted notes" do
       it "includes highlighted notes in the highlighted_attributes" do
-        VCR.use_cassette('search_solr_query_all_types_greenplum_as_bob') do
-          search = Search.new(bob, :query => 'greenplumsearch')
+        VCR.use_cassette('search_solr_query_all_types_greenplum_as_owner') do
+          search = Search.new(owner, :query => 'greenplumsearch')
           search.gpdb_instances.length.should == 2
           gpdb_instance_with_notes = search.gpdb_instances[1]
           gpdb_instance_with_notes.search_result_notes.length.should == 2
@@ -312,8 +312,8 @@ describe Search do
 
     describe "per_type" do
       it "does not return more than per_type of any model" do
-        VCR.use_cassette('search_solr_query_all_per_type_1_as_bob') do
-          search = Search.new(bob, :query => 'alphasearch', :per_type => 1)
+        VCR.use_cassette('search_solr_query_all_per_type_1_as_owner') do
+          search = Search.new(owner, :query => 'alphasearch', :per_type => 1)
           search.users.length.should == 1
           search.num_found[:users].should > 1
         end
@@ -322,8 +322,8 @@ describe Search do
 
     describe "workspace permissions" do
       it "returns public and member workspaces, but not private ones" do
-        VCR.use_cassette('search_solr_query_workspaces_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery', :entity_type => :workspace)
+        VCR.use_cassette('search_solr_query_workspaces_as_owner') do
+          search = Search.new(owner, :query => 'searchquery', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should_not include(private_workspace_not_a_member)
@@ -331,7 +331,7 @@ describe Search do
       end
 
       it "returns everything for admins" do
-        VCR.use_cassette('search_solr_query_workspaces_bob_as_admin') do
+        VCR.use_cassette('search_solr_query_workspaces_as_admin') do
           search = Search.new(admin, :query => 'searchquery', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
@@ -340,9 +340,9 @@ describe Search do
       end
 
       it "includes notes" do
-        events(:note_on_bob_public).body.should == "notesearch forever"
-        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
-          search = Search.new(bob, :query => 'notesearch')
+        events(:note_on_public_workspace).body.should == "notesearch forever"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'notesearch')
           workspace = search.workspaces.first
           workspace.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> forever"
         end
@@ -350,8 +350,8 @@ describe Search do
 
       it "excludes notes on workspaces you can't see" do
         events(:note_on_no_collaborators_private).body.should == "notesearch never"
-        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
-          search = Search.new(bob, :query => 'notesearch')
+        VCR.use_cassette('search_solr_notes_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'notesearch')
           workspace = search.workspaces.should_not include private_workspace_not_a_member
         end
       end
@@ -359,27 +359,27 @@ describe Search do
 
     describe "workfile permissions" do
       it "returns workfiles for public and member workspaces, but not private ones" do
-        VCR.use_cassette('search_solr_query_workfiles_bob_as_bob') do
-          search = Search.new(bob, :query => 'searchquery', :entity_type => :workfile)
-          search.workfiles.should include(public_workfile_bob)
-          search.workfiles.should include(private_workfile_bob)
-          search.workfiles.should_not include(private_workfile_hidden_from_bob)
+        VCR.use_cassette('search_solr_query_workfiles_as_owner') do
+          search = Search.new(owner, :query => 'searchquery', :entity_type => :workfile)
+          search.workfiles.should include(public_workfile)
+          search.workfiles.should include(private_workfile)
+          search.workfiles.should_not include(private_workfile_hidden_from_owner)
         end
       end
 
       it "returns workfiles for every workspace for admins" do
-        VCR.use_cassette('search_solr_query_workfiles_bob_as_admin') do
+        VCR.use_cassette('search_solr_query_workfiles_as_admin') do
           search = Search.new(admin, :query => 'searchquery', :entity_type => :workfile)
-          search.workfiles.should include(public_workfile_bob)
-          search.workfiles.should include(private_workfile_bob)
-          search.workfiles.should include(private_workfile_hidden_from_bob)
+          search.workfiles.should include(public_workfile)
+          search.workfiles.should include(private_workfile)
+          search.workfiles.should include(private_workfile_hidden_from_owner)
         end
       end
 
       it "includes notes" do
-        events(:note_on_bob_public_workfile).body.should == "notesearch forever"
-        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
-          search = Search.new(bob, :query => 'notesearch')
+        events(:note_on_public_workfile).body.should == "notesearch forever"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'notesearch')
           workfiles = search.workfiles.first
           workfiles.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> forever"
         end
@@ -387,9 +387,9 @@ describe Search do
 
       it "excludes notes on workfiles you can't see" do
         events(:note_on_no_collaborators_private_workfile).body.should == "notesearch never"
-        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
-          search = Search.new(bob, :query => 'notesearch')
-          workfile = search.workfiles.should_not include private_workfile_hidden_from_bob
+        VCR.use_cassette('search_solr_notes_query_all_types_as_owner') do
+          search = Search.new(owner, :query => 'notesearch')
+          workfile = search.workfiles.should_not include private_workfile_hidden_from_owner
         end
       end
     end

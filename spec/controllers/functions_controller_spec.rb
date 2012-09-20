@@ -10,8 +10,8 @@ describe FunctionsController do
   end
 
   describe "#index" do
-    let(:database) { gpdb_databases(:bobs_database) }
-    let!(:schema) { gpdb_schemas(:bobs_schema) }
+    let(:database) { schema.database }
+    let(:schema) { gpdb_schemas(:default) }
 
     before do
       @functions = [

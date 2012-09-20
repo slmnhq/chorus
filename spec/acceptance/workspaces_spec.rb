@@ -135,7 +135,7 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
@@ -149,7 +149,7 @@ resource "Workspaces" do
 
     scope_parameters :dataset_import, :all
 
-    let(:dataset_id) { datasets(:bobs_table).id }
+    let(:dataset_id) { datasets(:table).id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
@@ -172,7 +172,7 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let(:workspace) { workspaces(:bob_public) }
+    let(:workspace) { workspaces(:public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
@@ -187,14 +187,14 @@ resource "Workspaces" do
 
     scope_parameters :dataset_import, :all
 
-    let(:dataset_id) { datasets(:bobs_table).id }
+    let(:dataset_id) { datasets(:table).id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
     let(:is_active) { "true" }
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
-    let(:id) { import_schedules(:bob_schedule).id }
+    let(:id) { import_schedules(:default).id }
     let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
     before do

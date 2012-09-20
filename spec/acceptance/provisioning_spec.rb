@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Provisioning" do
-  let!(:user) { users(:admin) }
+  let(:user) { users(:admin) }
 
   before do
     log_in user
