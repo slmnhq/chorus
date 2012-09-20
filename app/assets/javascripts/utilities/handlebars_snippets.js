@@ -374,9 +374,9 @@
             if (statistics && statistics.objectType) {
                 keys.push(statistics.objectType);
             }
-            else if (dataset && dataset.type === "CHORUS_VIEW")
+            else if (dataset.type === "CHORUS_VIEW" || dataset.type === "SOURCE_TABLE")
             {
-                keys.push(dataset.type)
+                keys.push(dataset.objectType);
             }
             else {
                 return t("loading");

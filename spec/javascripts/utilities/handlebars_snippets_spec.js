@@ -887,15 +887,28 @@ describe("handlebars", function () {
             });
 
             context("when statistics is not present", function() {
-                it("returns a loading message normally", function () {
-                    Handlebars.helpers.humanizedDatasetType({ type: "type" });
+                it("returns a loading message when dataset has not loaded", function () {
+                    Handlebars.helpers.humanizedDatasetType({});
                     expect(window.t).toHaveBeenCalledWith("loading");
                 });
 
                 it("returns Chorus view if dataset is Chorus_view", function () {
-                    Handlebars.helpers.humanizedDatasetType({ type: "CHORUS_VIEW" });
-                    expect(window.t).toHaveBeenCalledWith( 'dataset.types.CHORUS_VIEW.CHORUS_VIEW');
+                    this.chorusView = rspecFixtures.workspaceDataset.chorusView();
+                    Handlebars.helpers.humanizedDatasetType(this.chorusView.attributes);
+                    expect(window.t).toHaveBeenCalledWith('dataset.types.CHORUS_VIEW.CHORUS_VIEW');
                 });
+
+                it("returns Source Table", function() {
+                    this.sourceTable = rspecFixtures.workspaceDataset.datasetTable();
+                    Handlebars.helpers.humanizedDatasetType(this.sourceTable.attributes);
+                    expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.TABLE');
+                })
+
+                it("returns Source View", function() {
+                    this.sourceView = rspecFixtures.workspaceDataset.datasetView();
+                    Handlebars.helpers.humanizedDatasetType(this.sourceView.attributes);
+                    expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.VIEW');
+                })
             });
 
             context("when the statistics object is present", function() {

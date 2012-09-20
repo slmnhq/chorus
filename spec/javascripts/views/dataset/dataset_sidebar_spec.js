@@ -40,7 +40,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when the statistics has not yet loaded", function() {
             it("displays the selected dataset type", function() {
-                expect(this.view.$(".type").text().trim()).toBe(t('loading'));
+                expect(this.view.$(".type").text().trim()).toBe('Source Table');
             });
         });
 
