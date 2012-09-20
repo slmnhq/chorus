@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ChorusEncryptor do
-  let(:secret_key) { Base64.strict_decode64('\0' * 32) }
+  let(:secret_key) { Base64.strict_decode64(Rails.application.config.chorus['secret_key']) }
   let(:password) { "secret-password" }
 
   describe ".encrypt_password" do
