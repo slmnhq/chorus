@@ -11,7 +11,7 @@ class ChorusConfig
     defaults = YAML.load_file(File.join(@root_dir, 'config/chorus.defaults.yml'))
 
     @config = defaults.deep_merge(app_config)
-    @config['secret_key'] = File.read(File.join(@root_dir, 'config/secret.key'))
+    @config['secret_key'] = File.read(File.join(@root_dir, 'config/secret.key')).strip
   end
 
   def [](key_string)

@@ -16,7 +16,7 @@ describe ChorusConfig do
       }
     end
     stub(File).read(Rails.root.join('config/secret.key').to_s) do
-      "secret_key_goes_here"
+      "secret_key_goes_here\n"
     end
   end
 
