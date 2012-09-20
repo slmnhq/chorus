@@ -71,9 +71,9 @@ describe NotesController do
       it "notifies the recipients" do
         workspace = workspaces(:public)
         post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => users_to_notify.map(&:id) }
-        response.code.should == "201"
+        response.code.should == "201"                
         users_to_notify.each do |user|
-          user.notification_events.first.body.should == "Notify people note"
+          user.notifications.last.notification_event.body.should == "Notify people note"
         end
       end
     end

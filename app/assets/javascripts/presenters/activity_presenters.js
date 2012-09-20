@@ -262,15 +262,15 @@
 
         defaultStyle: function(self, isNotification) {
             if (self.get("action") == "MembersAdded") {
-                if (isNotification == true) return "default.notification";
+                if (isNotification == true) return "notification.default";
 
                 switch(self.get("numAdded")) {
                     case "1":
-                        return 'default.one';
+                        return 'one.default';
                     case "2":
-                        return 'default.two';
+                        return 'two.default';
                     default:
-                        return 'default.many';
+                        return 'many.default';
                 }
             } else if (self.workspace().id && self.get("actionType") != "NoteOnWorkspace") {
                 return 'default';
@@ -281,15 +281,15 @@
 
         displayStyle: function(self, style, isNotification) {
             if (self.get("action") == "MembersAdded") {
-                if (isNotification == true) return (style + ".notification");
+                if (isNotification == true) return ("notification." + style);
 
                 switch(self.get("numAdded")) {
                     case "1":
-                        return (style + '.one');
+                        return ('one.' + style);
                     case "2":
-                        return (style + '.two');
+                        return ('two.' + style);
                     default:
-                        return (style + '.many');
+                        return ('many.' + style);
                 }
             } else if (self.get("action").lastIndexOf("FileImport", 0) === 0 ||
                        self.get("action").lastIndexOf("DatasetImport", 0) === 0) {
@@ -301,6 +301,9 @@
 
         headerTranslationKey: function(self, isNotification) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
+            if (isNotification) {
+                mainKey += ".notification";
+            }
             var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {

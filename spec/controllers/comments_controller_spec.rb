@@ -43,8 +43,12 @@ describe CommentsController do
       end
 
       it "notifies the other commenters" do
-        Notification.where(:recipient_id => first_commenter.id, :event_id => event.id).should exist
-        Notification.where(:recipient_id => second_commenter.id, :event_id => event.id).should exist
+        [first_commenter, second_commenter].each do |recipient|
+          Notification.where(:recipient_id => recipient.id,
+                             :event_id => event.id,
+                             :comment_id => Comment.last.id
+          ).should exist
+        end
       end
 
       it "doesn't notify the event author" do

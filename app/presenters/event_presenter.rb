@@ -9,6 +9,13 @@ class EventPresenter < Presenter
       merge(comments_hash)
   end
 
+  def simple_hash
+    basic_hash.merge(targets_hash).
+        merge(additional_data_hash).
+        merge(note_action_type_hash).
+        merge(note_attachment_hash)
+  end
+
   private
 
   def comments_hash

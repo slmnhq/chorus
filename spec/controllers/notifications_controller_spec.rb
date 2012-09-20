@@ -19,12 +19,13 @@ describe NotificationsController do
 
     it "shows list of notifications" do
       get :index
-      first_event = decoded_response.first
-      first_event.actor.id.should == event1.actor_id
-      first_event.action.include? event1.action
-      first_event.greenplum_instance.id.should == event1.target1_id
-      first_event.body.should == event1.body
-      first_event.should have_key(:unread)
+      notification = decoded_response.last
+      event = notification.event
+      event.actor.id.should == event1.actor_id
+      event.action.include? event1.action
+      event.greenplum_instance.id.should == event1.target1_id
+      event.body.should == event1.body
+      notification.should have_key(:unread)
     end
 
     it "should paginate notifications" do
@@ -34,14 +35,14 @@ describe NotificationsController do
 
     context "when the unread parameter is passed" do
       it "only returns unread notifications" do
-        put :read, :notification_ids => [event1.id]
+        put :read, :notification_ids => [notification1.id]
         get :index, :type => 'unread'
-        decoded_response.length.should == current_user.notification_events.length - 1
+        decoded_response.length.should == current_user.notifications.length - 1
       end
     end
 
     generate_fixture "notificationSet.json" do
-      put :read, :notification_ids => [event1.id]
+      put :read, :notification_ids => [notification1.id]
       get :index
     end
   end
@@ -49,7 +50,7 @@ describe NotificationsController do
   describe '#read' do
     it "marks all notifications passed as read" do
       notification1.read.should be_false
-      put :read, :notification_ids => [event1.id]
+      put :read, :notification_ids => [notification1.id]
       notification1.reload.read.should be_true
       response.code.should == '200'
     end

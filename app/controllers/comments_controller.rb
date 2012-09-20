@@ -23,7 +23,8 @@ class CommentsController < ApplicationController
     users_to_notify.each do |user_id|
       Notification.create!(
           :recipient_id => user_id,
-          :event_id => event_id
+          :event_id => event_id,
+          :comment_id => comment.id
       )
     end
 

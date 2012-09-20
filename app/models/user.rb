@@ -22,8 +22,6 @@ class User < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :notifications, :foreign_key => 'recipient_id'
 
-  has_many :notification_events, :through => :notifications, :class_name => 'Events::Base'
-
   has_many :comments
 
   has_many :instance_accounts, :foreign_key => :owner_id

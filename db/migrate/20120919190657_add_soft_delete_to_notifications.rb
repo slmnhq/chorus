@@ -1,0 +1,5 @@
+class AddSoftDeleteToNotifications < ActiveRecord::Migration
+  def change
+    add_column :notifications, :deleted_at, :timestamp
+  end
+end

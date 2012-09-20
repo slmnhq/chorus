@@ -875,7 +875,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.default.one",
+                    "activity.header.MembersAdded.one.default",
                     activity_data
                 );
             });
@@ -884,7 +884,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.without_workspace.one",
+                    "activity.header.MembersAdded.one.without_workspace",
                     activity_without_workspace_data
                 );
             });
@@ -898,7 +898,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the default style", function() {
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.default.two",
+                    "activity.header.MembersAdded.two.default",
                     activity_data
                 );
             });
@@ -907,7 +907,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
 
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.without_workspace.two",
+                    "activity.header.MembersAdded.two.without_workspace",
                     activity_without_workspace_data
                 );
             });
@@ -916,10 +916,10 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.isNotification = true;
                 presenter.options.displayStyle = ['default'];
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.default.notification",
+                    "activity.header.MembersAdded.notification.default",
                     activity_data
                 );
-            })
+            });
         });
 
         context("more than two members are added", function() {
@@ -931,7 +931,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html for the default style", function() {
                 activity_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.default.many",
+                    "activity.header.MembersAdded.many.default",
                     activity_data
                 );
             });
@@ -940,7 +940,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter.options.displayStyle = ["without_workspace"];
                 activity_without_workspace_data["count"] = model.get("numAdded");
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.MembersAdded.without_workspace.many",
+                    "activity.header.MembersAdded.many.without_workspace",
                         activity_without_workspace_data
                 );
             });

@@ -8,6 +8,18 @@ describe EventPresenter, :type => :view do
     stub(ActiveRecord::Base).current_user { current_user }
   end
 
+  describe "#simple_hash" do
+    subject { EventPresenter.new(event, view, options) }
+    let(:options) { {} }
+    let(:event) { events(:note_on_greenplum) }
+
+    it "has targets and additional_data values in it" do
+      hash = subject.simple_hash
+      hash[:greenplum_instance].should be
+      hash["body"].should == 'i am a comment with greenplumsearch in me'
+    end
+  end
+
   describe "#to_hash" do
     subject { EventPresenter.new(event, view, options) }
     let(:options) { {} }
