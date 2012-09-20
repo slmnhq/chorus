@@ -219,9 +219,10 @@ FixtureBuilder.configure do |fbuilder|
     #Comments
     comment_on_note_on_greenplum = Comment.create!({:text => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})             
     fbuilder.name :comment_on_note_on_greenplum, comment_on_note_on_greenplum
-    
-    fbuilder.name :second_comment_on_note_on_greenplum,
-                  Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})
+
+    second_comment_on_note_on_greenplum = Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => the_collaborator.id})
+    fbuilder.name :second_comment_on_note_on_greenplum, second_comment_on_note_on_greenplum
+
     fbuilder.name :comment_on_note_on_no_collaborators_private,
                   Comment.create!({:text => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
 
@@ -257,7 +258,7 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner)
-    fbuilder.name(:notification1, Notification.create!({:recipient => owner, :notification_event => notes[0], :comment => comment_on_note_on_greenplum}, :without_protection => true) )
+    fbuilder.name(:notification1, Notification.create!({:recipient => owner, :notification_event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true) )
     fbuilder.name(:notification2, Notification.create!({:recipient => owner, :notification_event => notes[1]}, :without_protection => true) )
     fbuilder.name(:notification3, Notification.create!({:recipient => owner, :notification_event => notes[2]}, :without_protection => true) )
     fbuilder.name(:notification4, Notification.create!({:recipient => owner, :notification_event => notes[3]}, :without_protection => true) )

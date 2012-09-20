@@ -60,6 +60,10 @@ describe("chorus.models.Notification", function() {
                 expect(this.notification.get("comment").text).toBeDefined();
                 expect(this.activity.get("body")).toBe(this.notification.get("comment").text);
             });
+            it("has the right author data", function() {
+                expect(this.activity.get("actor").firstName).toBe("Carly");
+                expect(this.activity.get("actor").lastName).toBe("Carlson");
+            });
         });
         context("when there is not a comment", function() {
             it("has the right body", function() {
