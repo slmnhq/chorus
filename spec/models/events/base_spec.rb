@@ -55,10 +55,10 @@ describe Events::Base do
     let(:user) { users(:no_collaborators) }
     let(:the_events) do
       [
-        events(:no_collaborators_creates_private_workfile),
-        events(:bob_creates_private_workfile),
-        events(:bob_creates_public_workfile),
-        events(:no_collaborators_creates_private_workfile)
+          events(:no_collaborators_creates_private_workfile),
+          events(:bob_creates_private_workfile),
+          events(:bob_creates_public_workfile),
+          events(:no_collaborators_creates_private_workfile)
       ]
     end
 
@@ -66,7 +66,7 @@ describe Events::Base do
     let(:other_workspace2) { workspaces(:bob_private) }
     let(:user_workspace) { workspaces(:public_with_no_collaborators) }
 
-    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0] ) }
+    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0]) }
 
     let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => the_events[1]) }
     let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => the_events[2]) }
@@ -139,6 +139,26 @@ describe Events::Base do
       context "when the attribute can not be translated" do
         let(:attr) { :destination_table }
         it { should be_a(String) }
+      end
+    end
+  end
+
+  describe "with deleted" do
+    describe "workspace" do
+      it "still has access to the workspace" do
+        workspace = Workspace.first
+        event = Events::Base.create!(:workspace => workspace)
+        workspace.destroy
+        event.reload.workspace.should == workspace
+      end
+    end
+
+    describe "actor" do
+      it "still has access to the actor" do
+        actor = users(:not_a_member)
+        event = Events::Base.create!(:actor => actor)
+        actor.destroy
+        event.reload.actor.should == actor
       end
     end
   end

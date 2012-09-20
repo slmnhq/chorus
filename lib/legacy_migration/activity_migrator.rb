@@ -219,7 +219,7 @@ class ActivityMigrator < AbstractMigrator
         row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                       WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                       AND aso.entity_type = 'table';").first
-        event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id}
+        event.additional_data = {:source_dataset_id => Dataset.unscoped.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id}
         event.save!
       end
     end
@@ -747,7 +747,7 @@ class ActivityMigrator < AbstractMigrator
         row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                     WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                     AND aso.entity_type = 'table';").first
-        event.additional_data = {:source_dataset_id => Dataset.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
+        event.additional_data = {:source_dataset_id => Dataset.unscoped.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
         event.save!
       end
     end

@@ -89,7 +89,7 @@ describe GpTableCopier, :database_integration => true do
           }.to raise_exception(ActiveRecord::RecordNotFound)
           event = Events::DatasetImportFailed.first
           event.actor.should == user
-          event.error_message.should == "Couldn't find Dataset with id=-1"
+          event.error_message.should match "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace
           event.source_dataset.should == nil
           event.destination_table.should == destination_table_name
@@ -201,7 +201,7 @@ describe GpTableCopier, :database_integration => true do
           }.to raise_exception(ActiveRecord::RecordNotFound)
           event = Events::DatasetImportFailed.first
           event.actor.should == user
-          event.error_message.should == "Couldn't find Dataset with id=-1"
+          event.error_message.should match "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace
           event.source_dataset.should == nil
           event.destination_table.should == destination_table_name

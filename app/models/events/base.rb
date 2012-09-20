@@ -31,6 +31,20 @@ module Events
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
+    {:actor => "User", :workspace => "Workspace", :target1 => nil, :target2 => nil}.each do |method, class_name|
+      define_method("#{method}_with_deleted") do
+        original = send(:"#{method}_without_deleted")
+        return original if original
+        type = class_name || send(:"#{method}_type")
+        if type
+          type.constantize.unscoped do
+            send(:"#{method}_without_deleted", true)
+          end
+        end
+      end
+      alias_method_chain method, :deleted
+    end
+
     default_scope { order("id DESC") }
 
     def self.by(actor)
@@ -54,21 +68,21 @@ module Events
 
     def self.for_dashboard_of(user)
       memberships = Membership.arel_table
-      activities  = Activity.arel_table
+      activities = Activity.arel_table
 
       workspace_ids =
-        memberships.
-        where(memberships[:user_id].eq(user.id)).
-        project(memberships[:workspace_id])
+          memberships.
+              where(memberships[:user_id].eq(user.id)).
+              project(memberships[:workspace_id])
       entity_is_global =
-        activities[:entity_type].eq(Activity::GLOBAL)
+          activities[:entity_type].eq(Activity::GLOBAL)
 
       entity_in_user_workspaces =
-        activities[:entity_type].eq("Workspace").
-        and(activities[:entity_id].in(workspace_ids))
+          activities[:entity_type].eq("Workspace").
+              and(activities[:entity_id].in(workspace_ids))
 
       dashboard_activities = activities.where(entity_is_global.or(entity_in_user_workspaces))
-      event_ids = ActiveRecord::Base.connection.execute(dashboard_activities.project(:event_id).to_sql).map{ |h| h['event_id'] }
+      event_ids = ActiveRecord::Base.connection.execute(dashboard_activities.project(:event_id).to_sql).map { |h| h['event_id'] }
       where(:id => event_ids)
     end
 
@@ -118,12 +132,7 @@ module Events
       return if new_name == :workspace
 
       alias_method("#{new_name}=", "#{existing_name}=")
-      if options[:access_deleted]
-        association_class = new_name.to_s.classify
-        class_eval "def #{new_name}() #{association_class}.unscoped { #{existing_name} }; end"
-      else
-        alias_method(new_name, existing_name)
-      end
+      alias_method(new_name, existing_name)
     end
 
     def self.has_activities(*entity_names)

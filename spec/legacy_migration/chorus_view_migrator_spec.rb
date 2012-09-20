@@ -8,9 +8,9 @@ describe ChorusViewMigrator do
 
   it "should migrate all chorus views and be idempotent" do
     legacy_chorus_views = Legacy.connection.exec_query(%Q(select * from edc_dataset where type = 'CHORUS_VIEW'))
-    Dataset.chorus_views.count.should == legacy_chorus_views.count
+    Dataset.unscoped.chorus_views.count.should == legacy_chorus_views.count
     ChorusViewMigrator.migrate
-    Dataset.chorus_views.count.should == legacy_chorus_views.count
+    Dataset.unscoped.chorus_views.count.should == legacy_chorus_views.count
   end
 
   it "should migrate deleted chorus views" do

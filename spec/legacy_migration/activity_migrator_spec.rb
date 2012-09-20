@@ -89,7 +89,7 @@ describe ActivityMigrator do
           event = Events::ChorusViewChanged.find_by_legacy_id!(row["id"])
           event.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
           event.actor.username == row['author']
-          event.dataset.should == Dataset.find_by_legacy_id(row['legacy_dataset_id'])
+          event.dataset.should == Dataset.unscoped.find_by_legacy_id(row['legacy_dataset_id'])
           event.created_at.should == row["created_tx_stamp"]
         end
         count.should == Events::ChorusViewChanged.count
