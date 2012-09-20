@@ -110,7 +110,7 @@ module PackageMaker
       end
 
       #give the data directory
-      f.puts(install_path + "/shared") if (legacy_path.present? || clean_install.present?)
+      f.puts(install_path + "/shared") if clean_install.present?
 
       # confirm the upgrade
       f.puts('y')
