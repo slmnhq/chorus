@@ -125,16 +125,17 @@ module PackageMaker
         f.puts(install_path)
       end
 
-      #give the data directory
-      f.puts(install_path + "/shared") if clean_install.present?
-
-      # confirm the upgrade
-      f.puts('y')
+      # confirm the upgrade/install
+      f.puts('y') unless clean_install.present?
 
       # where to install 2.2
       if legacy_path.present?
         f.puts(install_path)
       end
+
+      #give the data directory
+      f.puts(install_path + "/shared") if clean_install.present? || legacy_path.present?
+
       f.puts(postgres_build)
 
       f.puts("this is a secret passphrase")
