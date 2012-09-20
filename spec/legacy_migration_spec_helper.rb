@@ -19,7 +19,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.clean
-    `cd #{Rails.root} && RAILS_ENV=test packaging/legacy_migrate_schema_setup.sh db/legacy/legacy.sql`
+    `cd #{Rails.root} && RAILS_ENV=test spec/legacy_migrate_schema_setup.sh db/legacy/legacy.sql`
   end
 
   config.after(:suite) do

@@ -71,5 +71,5 @@ pg_dump --ignore-version -p 8543 chorus_tmp_migrate | psql -p 8543 chorus_rails_
 cd $CHORUS_HOME
 log "Using Chorus 2.1 sql dump: $SQL_DUMP"
 log "Using Chorus 2.1 workfile directory: $WORKFILE_DIR"
-$RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
+RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
 log "Migration finished."

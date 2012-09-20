@@ -293,12 +293,8 @@ class ChorusInstaller
 
   def migrate_legacy_data
     log "Migrating data from previous version..." do
-      start_postgres
       log "Loading legacy data into postgres..." do
-        chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
-      end
-      log "Running legacy migrations..." do
-        chorus_exec("cd #{release_path} && RAILS_ENV=production WORKFILE_PATH=#{legacy_installation_path}/chorus-apps/runtime/data bin/rake legacy:migrate")
+        chorus_exec("cd #{release_path} && CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
       end
     end
   end
@@ -319,6 +315,9 @@ class ChorusInstaller
       link_shared_files
     end
 
+    log "Configuring secret key..."
+    configure_secret_key
+
     log "Extracting postgres..." do
       extract_postgres
     end
@@ -336,7 +335,6 @@ class ChorusInstaller
       setup_database
     end
 
-    configure_secret_key
     configure_file_storage_directories
 
     if do_legacy_upgrade

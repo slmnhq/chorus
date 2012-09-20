@@ -785,20 +785,18 @@ describe ChorusInstaller do
 
       @call_order = []
 
-      mock(installer).start_postgres { @call_order << :start_new_postgres }
       stub_chorus_exec(installer)
     end
 
     it "should execute the data migrator" do
       subject
-      @call_order.should == [:start_new_postgres, :import_legacy_schema, :legacy_migration]
+      @call_order.should == [:import_legacy_schema]
     end
   end
 
   def stub_chorus_exec(installer)
     stub(installer).chorus_exec.with_any_args do |cmd|
-      @call_order << :import_legacy_schema if cmd =~ /legacy_migrate_schema_setup\.sh/
-      @call_order << :legacy_migration if cmd =~ /rake legacy:migrate/
+      @call_order << :import_legacy_schema if cmd =~ /chorus_migrate/
       @call_order << :stop_old_app if cmd =~ /edcsvrctl stop; true/
       @call_order << :stop_old_app_or_fail if cmd =~ /edcsvrctl stop(?!; true)/
       @call_order << :start_old_app if cmd =~ /edcsvrctl start/
