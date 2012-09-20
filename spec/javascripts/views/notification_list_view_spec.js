@@ -25,10 +25,10 @@ describe("chorus.views.NotificationList", function() {
         });
 
         it("highlights the unread notifications", function() {
-            expect(this.view.$("li:eq(0)")).not.toHaveClass("unread");
+            expect(this.view.$("li:eq(0)")).toHaveClass("unread");
             expect(this.view.$("li:eq(1)")).toHaveClass("unread");
             expect(this.view.$("li:eq(2)")).toHaveClass("unread");
-            expect(this.view.$("li:eq(3)")).toHaveClass("unread");
+            expect(this.view.$("li:eq(3)")).not.toHaveClass("unread");
         });
 
         it("passes the 'isNotification' option to the activity views", function() {

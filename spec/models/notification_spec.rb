@@ -5,7 +5,7 @@ describe Notification do
   it { should validate_presence_of :event_id }
 
   describe "#destroy" do
-    let(:notification) { notifications(:bobs_notification1) }
+    let(:notification) { notifications(:notification1) }
 
     before do
       notification.destroy

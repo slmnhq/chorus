@@ -37,7 +37,7 @@ describe Events::Base do
   end
 
   describe '.notification_for_current_user' do
-    let(:event) { event_owner.notification_events.first }
+    let(:event) { event_owner.notifications.first.notification_event }
     let(:event_owner) { users(:owner) }
 
     it "retrieves the notification for the event" do

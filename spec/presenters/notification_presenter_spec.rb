@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe NotificationPresenter, :type => :view do
 
-  let(:notification) { notifications(:bobs_notification1) }
+  let(:notification) { notifications(:notification1) }
   let(:presenter) { NotificationPresenter.new(notification, view) }
 
   describe "#to_hash" do

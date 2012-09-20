@@ -55,7 +55,7 @@ describe EventPresenter, :type => :view do
 
       context "NoteOnWorkspace" do
         let(:workspace_with_sandbox) { workspaces(:public) }
-        let(:event) { current_user.notification_events.first }
+        let(:event) { current_user.notifications.first.notification_event }
 
         it "renders the event with a :read key based on the current user" do
           hash = subject.to_hash

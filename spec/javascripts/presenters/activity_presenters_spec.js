@@ -961,7 +961,7 @@ describe("chorus.presenters.Activity", function() {
                 importType: model.get("importType"),
                 importSourceLink: model.get("fileName"),
                 datasetType: t("dataset.types.table"),
-                destObjectOrName: "bobs_table"
+                destObjectOrName: "table"
             };
         });
         context("when called with a FILE_IMPORT_CREATED event", function () {

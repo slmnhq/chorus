@@ -54,7 +54,7 @@ describe("chorus.Mixins.Urls", function() {
         
         context("#showLink", function() {
             it("shows the link with the model's name", function () {
-                expect(this.object.showLink().string).toBe('<a href="#/workspaces/45">Bob Public</a>')
+                expect(this.object.showLink().string).toBe('<a href="#/workspaces/45">Public</a>')
             });
 
             it("shows the link with the given text", function () {

@@ -36,7 +36,7 @@ describe("chorus.models.Notification", function() {
 
         it("has the right author data", function() {
             expect(this.activity.get("actor").id).toBe(1000003);
-            expect(this.activity.get("actor").firstName).toBe("BobSearch");
+            expect(this.activity.get("actor").firstName).toBe("searchquery");
             expect(this.activity.get("actor").lastName).toBe("Brockovich");
         });
 
