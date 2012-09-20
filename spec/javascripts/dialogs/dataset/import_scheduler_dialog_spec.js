@@ -20,7 +20,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchFor(this.datasetImport);
                 this.dialog.$(".new_table input:radio").prop("checked", false);
                 this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
@@ -44,7 +43,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchFor(this.datasetImport);
                 this.dialog.$(".new_table input:radio").prop("checked", false);
                 this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.dialog.$(".dataset_picked").text("my_existing_table");
                 this.dialog.$(".dataset_picked").data("dataset", "my_existing_table");
                 this.attrs = this.dialog.getNewModelAttrs();
@@ -105,12 +103,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             this.dialog.$(".new_table input.name").val("abc").trigger("keyup");
         });
 
-        it("should have a checkbox for scheduling an import", function() {
-            expect(this.dialog.$(".schedule_import label")).toContainTranslation("import.schedule_import");
-            expect(this.dialog.$(".schedule_import input:checkbox")).toBeChecked();
-            expect(this.dialog.$(".schedule_import").not(".hidden")).not.toExist();
-        });
-
         it("should have a truncate checkbox for a new table", function() {
             expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
         });
@@ -128,7 +120,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         it("should show the schedule controls", function() {
-            expect(this.dialog.$(".schedule_import")).toExist();
             expect(this.dialog.$(".schedule_widget")).toExist();
         });
 
@@ -137,6 +128,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         context("when 'Import into New Table' is checked", function() {
+            beforeEach(function() {
+                this.dialog.$(".new_table input:radio").prop("checked", true).change();
+            });
+
             itShouldHaveAllTheFields(".new_table");
 
             it("doesn't show 'Select a table' menu/link", function() {
@@ -333,10 +328,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.render();
                 });
 
-                it("has a visible schedule_import checkbox", function() {
-                    expect(this.dialog.$(".schedule_import.hidden")).not.toExist();
-                });
-
                 it("has the right title", function() {
                     expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
                 });
@@ -354,10 +345,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                 it("should have a truncate checkbox for a new table", function() {
                     expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
-                });
-
-                it("has the 'schedule' checkbox checked by default", function() {
-                    expect(this.dialog.$("input[name='schedule']")).toBeChecked();
                 });
 
                 it("pre-populates the schedule fields with the import's settings", function() {
@@ -390,18 +377,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.$("input[name='sampleCount']").val()).toBe("500");
                 });
 
-                it("sets isActive to false, not null, on submission", function() {
-                    this.dialog.$("input[name='schedule']").prop("checked", false);
-                    this.dialog.$("button.submit").trigger("click");
-                    // must explicitly be false https://www.pivotaltracker.com/story/show/25783061
-                    expect(this.server.lastUpdate().params()["dataset_import[is_active]"]).toBe("false");
-                });
-
                 describe("submitting the form", function() {
                     beforeEach(function() {
                         this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
                         this.dialog.$("input[name='sampleCount']").val("201");
-                        this.dialog.$("button.submit").trigger("click");
+                        this.dialog.$("button.submit").click();
                     });
 
                     it("has the right loading text in the submit button", function() {
@@ -468,10 +448,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.$(".has_error")).not.toExist();
                 });
 
-                it("has the 'schedule' checkbox unchecked by default", function() {
-                    expect(this.dialog.$("input[name='schedule']")).not.toBeChecked();
-                });
-
                 it("pre-populates the schedule fields with the import's settings", function() {
                     expect(this.dialog.activeScheduleView.$(".start input[name='year']").val()).toBe("2013");
                     expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
@@ -532,7 +508,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should hide the schedule controls", function() {
-                expect(this.dialog.$(".schedule_import")).not.toExist();
                 expect(this.dialog.$(".schedule_widget")).not.toExist();
             });
 

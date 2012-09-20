@@ -62,6 +62,7 @@
                         <li><a class="import_now dialog" data-dialog="ImportScheduler" data-action="import_now" href="#">{{t "actions.import_now"}}</a></li>
                         {{#if hasSchedule}}
                             <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" data-action="edit_schedule" href="#">{{t "actions.edit_schedule"}}</a></li>
+                            <li><a class="delete_schedule alert" data-alert="ImportScheduleDelete" href="#">{{t "actions.delete_schedule"}}</a></li>
                         {{else}}
                             <li><a class="create_schedule dialog" data-dialog="ImportScheduler" data-action="create_schedule" href="#">{{t "actions.create_schedule"}}</a></li>
                         {{/if}}
@@ -69,6 +70,7 @@
                         <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
                         {{#if hasSchedule}}
                             <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
+                            <li><span class="delete_schedule disabled" >{{t "actions.delete_schedule"}}</span></li>
                         {{else}}
                             <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
                         {{/if}}

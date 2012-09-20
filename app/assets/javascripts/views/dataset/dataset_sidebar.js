@@ -110,7 +110,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download");
+        var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download, a.delete");
         $actionLinks.data("dataset", this.resource);
         $actionLinks.data("workspace", this.resource && this.resource.workspace());
         this.showOrHideMultipleSelectionSection();
