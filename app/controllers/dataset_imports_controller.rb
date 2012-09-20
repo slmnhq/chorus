@@ -35,10 +35,14 @@ class DatasetImportsController < ApplicationController
   end
 
   def destroy
-    schedule_id = params[:dataset_import][:id]
+    authorize! :can_edit_sub_objects, Workspace.find(params[:workspace_id])
+    import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
+    begin
+      import_schedule.destroy
+    rescue Exception =>e
+      raise ApiValidationError.new(:base, :delete_unsuccessful)
 
-    import_schedule = ImportSchedule.find(schedule_id)
-    import_schedule.destroy
+    end
 
     render :json => {}
   end

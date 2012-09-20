@@ -211,26 +211,6 @@ describe DatasetImportsController do
       log_in user
     end
 
-    describe "unscheduling an import" do
-
-      it "unschedule the import schedule and returns success" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:is_active => 'false')
-        response.code.should == "200"
-        import_schedule.reload.deleted_at.should_not be_nil
-        import_schedule.is_active.should be_false
-        ImportSchedule.find_by_workspace_id_and_source_dataset_id(import_schedule.workspace_id, src_table.id).should be_nil
-      end
-
-      it "presents a null object" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:is_active => 'false')
-        response.body
-      end
-    end
-
     describe "updating other values of Import schedule" do
       let(:frequency) {"DAILY"}
       let(:to_table) {import_schedule.workspace.sandbox.datasets.first}
@@ -276,19 +256,23 @@ describe DatasetImportsController do
     let(:user) { users(:owner) }
     let(:import_schedule) { import_schedules(:default) }
     let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
-    let(:import_params) { import_schedule.attributes }
     before do
       log_in user
     end
     it "deletes the import schedule and returns success" do
       delete :destroy, :dataset_id => src_table.id,
-             :workspace_id => import_schedule.workspace_id,
-             :dataset_import => import_params
+             :workspace_id => import_schedule.workspace_id
 
       response.code.should == "200"
       import_schedule.reload.deleted_at.should_not be_nil
       import_schedule.is_active.should be_false
       ImportSchedule.find_by_workspace_id_and_source_dataset_id(import_schedule.workspace_id, src_table.id).should be_nil
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, Workspace.find(import_schedule.workspace_id)
+      delete :destroy, :dataset_id => src_table.id,
+             :workspace_id => import_schedule.workspace_id
     end
   end
 
