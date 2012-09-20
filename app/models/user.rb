@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
                     :default_url => '/images/default-user-icon.png', :styles => {:icon => "50x50>"}
 
   validates_presence_of :username, :first_name, :last_name, :email
-  validate :uniqueness_of_non_deleted_username
+  validates_uniqueness_of :username, :case_sensitive => false, :allow_blank => true, :scope => :deleted_at
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
   validates_format_of :username, :with => /^\S+$/
   validates_presence_of :password, :unless => lambda { password_digest? || LdapClient.enabled? || legacy_password_digest? }
@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
     string :type_name
   end
 
-  before_save :update_password_digest, :unless => lambda { password.to_s.empty? }
+  before_save :update_password_digest, :unless => lambda { password.blank? }
 
   def accessible_events(current_user)
     events.where("workspace_id IS NULL
@@ -61,16 +61,6 @@ class User < ActiveRecord::Base
                     OR workspace_id IN
                       (SELECT workspace_id FROM memberships
                         WHERE user_id = #{current_user.id})").includes(:actor, :target1, :target2)
-  end
-
-  def uniqueness_of_non_deleted_username
-    if self.username
-      other_user = User.where("lower(users.username) = ?", self.username.downcase)
-      other_user = other_user.where("id != ?", self.id) if self.id
-      if other_user.present?
-        errors.add(:username, :taken)
-      end
-    end
   end
 
   def self.order(field)
@@ -90,9 +80,7 @@ class User < ActiveRecord::Base
     admin.size
   end
 
-  def self.admin
-    where(:admin => true)
-  end
+  scope :admin, where(:admin => true)
 
   def admin=(value)
     write_attribute(:admin, value) unless admin? && self.class.admin_count == 1 # don't unset last admin

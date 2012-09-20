@@ -9,7 +9,6 @@ describe NotificationPresenter, :type => :view do
     let(:hash) { presenter.to_hash }
 
     it "includes the right keys" do
-      puts "#{hash}"
       hash.should have_key(:id)
       hash.should have_key(:event)
       hash.should have_key(:recipient)

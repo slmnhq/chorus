@@ -48,7 +48,7 @@ describe User do
 
       it "deletes the legacy_password_digest" do
         user = User.authenticate(@user.username, 'secret')
-        user.legacy_password_digest.to_s.should be_empty
+        user.legacy_password_digest.should be_blank
       end
     end
   end
@@ -216,7 +216,8 @@ describe User do
 
     describe "duplicate user names" do
       it "should be disallowed" do
-        subject.should validate_uniqueness_of(:username).case_insensitive
+        user2 = FactoryGirl.build(:user, :username => @user.username.upcase)
+        user2.should_not be_valid
       end
 
       it "should be allowed when user name belongs to a deleted user" do
