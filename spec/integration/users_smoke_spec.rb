@@ -77,7 +77,9 @@ describe "Users" do
       click_link "Delete User"
       click_button "Delete User"
       wait_for_ajax
-      page.should_not have_content("#{other_user.first_name} #{other_user.last_name}")
+      within ".user_list" do
+        page.should_not have_content("#{other_user.first_name} #{other_user.last_name}")
+      end
     end
   end
 end
