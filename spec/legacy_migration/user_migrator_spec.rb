@@ -22,12 +22,14 @@ describe UserMigrator do
             user.username.should == legacy_user["user_name"]
             user.first_name.should == legacy_user["first_name"]
             user.last_name.should == legacy_user["last_name"]
-            legacy_user["password"].should == "{SHA}#{user.password_digest}"
+            legacy_user["password"].should == "{SHA}#{user.legacy_password_digest}"
             user.email.should == legacy_user["email_address"]
             user.title.should == legacy_user["title"]
             user.dept.should == legacy_user["ou"]
             user.notes.should == legacy_user["notes"]
             user.admin.should == (legacy_user["admin"] == 't' ? true : false)
+            user.password_salt.should be_empty
+            user.password_digest.should be_nil
             if legacy_user["is_deleted"] == "f"
               user.deleted_at.should be_nil
             else
@@ -38,39 +40,31 @@ describe UserMigrator do
           end
         end
 
-        # TODO: migrate symmetric passwords instead, since we now use sha256 instead of sha1
-        xit "sets the correct password" do
-          User.authenticate("edcadmin", "secret").should be_true
-        end
-
         it "creates all valid user objects" do
           User.unscoped.all.reject { |user| user.valid? }.should be_empty
         end
       end
     end
 
-    # TODO: migrate symmetric passwords instead, since we now use sha256 instead of sha1
-    # context "authenticating as a legacy user" do
-      # it "allows authentication without a password salt" do
-        # u = User.find_by_username('edcadmin')
-        # u.password_salt.should be_empty
-        # u.authenticate('secret').should be_present
-      # end
-    # end
-
-    context "when there is already a non-legacy user in the database" do
-      before do
-        Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
-        User.create!({:username => "non-legacy-user", :email => "user@example.com", :password => "secret", :first_name => "Legacy", :last_name => "User"}, :without_protection => true)
-        Sunspot.session = Sunspot.session.original_session
-      end
-
-      # Marked as pending because we can't guarantee the users table is empty before this test - BL
-      xit "still creates new users for legacy users" do
-        expect {
-          UserMigrator.migrate
-        }.to change(User, :count)
-      end
-    end
+    #context "when there is already a non-legacy user in the database" do
+    #  let(:non_legacy_user) {User.create!({:username => "non-legacy-user", :email => "user@example.com", :password => "secret", :first_name => "Legacy", :last_name => "User"}, :without_protection => true)}
+    #
+    #  before do
+    #    non_legacy_user.save!
+    #    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+    #    Sunspot.session = Sunspot.session.original_session
+    #  end
+    #
+    #  it "still creates new users for legacy users" do
+    #    expect {
+    #      UserMigrator.migrate
+    #    }.to change(User, :count)
+    #  end
+    #
+    #  it "still contains the non-legacy user" do
+    #    UserMigrator.migrate
+    #    non_legacy_user.reload.username.should == "non-legacy-user"
+    #  end
+    #end
   end
 end

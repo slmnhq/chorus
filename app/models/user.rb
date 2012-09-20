@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
 
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
-  attr_reader :password
+  attr_accessor :password
 
   has_many :gpdb_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   validate :uniqueness_of_non_deleted_username
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
   validates_format_of :username, :with => /^\S+$/
-  validates_presence_of :password, :unless => lambda { password_digest? || LdapClient.enabled? }
+  validates_presence_of :password, :unless => lambda { password_digest? || LdapClient.enabled? || legacy_password_digest? }
   validates_length_of :password, :minimum => 6, :maximum => 256, :if => :password
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
@@ -50,6 +50,8 @@ class User < ActiveRecord::Base
     string :grouping_id
     string :type_name
   end
+
+  before_save :update_password_digest, :unless => lambda { password.to_s.empty? }
 
   def accessible_events(current_user)
     events.where("workspace_id IS NULL
@@ -93,31 +95,12 @@ class User < ActiveRecord::Base
   end
 
   def admin=(value)
-    if admin? && self.class.admin_count == 1
-      value = true
-    end
-
-    write_attribute(:admin, value)
+    write_attribute(:admin, value) unless admin? && self.class.admin_count == 1 # don't unset last admin
   end
 
-  # TODO: if user doesn't have sha256 digest but encrypted password + key,
-  #       it's his first login and the password should be converted to sha256
   def authenticate(unencrypted_password)
-    if Digest::SHA256.hexdigest(unencrypted_password + password_salt) == password_digest
-      self
-    else
-      false
-    end
-  end
-
-  def password=(unencrypted_password)
-    self.password_salt = SecureRandom.hex(20)
-    @password = unencrypted_password
-    unless unencrypted_password.blank? || unencrypted_password.length < 6
-      self.password_digest = Digest::SHA256.hexdigest(unencrypted_password + password_salt)
-    else
-      self.password_digest = nil
-    end
+    migrate_password_digest(unencrypted_password) if legacy_password_digest?
+    authenticate_password_digest(unencrypted_password) && self
   end
 
   def destroy
@@ -134,5 +117,31 @@ class User < ActiveRecord::Base
   def accessible_account_ids
     shared_account_ids = InstanceAccount.joins(:gpdb_instance).where("gpdb_instances.shared = true").collect(&:id)
     (shared_account_ids + instance_account_ids).uniq
+  end
+
+  private
+
+  def update_password_digest
+    self.password_salt = SecureRandom.hex(20)
+    self.password_digest = digest_password(password)
+  end
+
+  def digest_password(unencrypted_password)
+    Digest::SHA256.hexdigest(unencrypted_password + password_salt)
+  end
+
+  def authenticate_password_digest(unencrypted_password)
+    digest_password(unencrypted_password) == password_digest.to_s
+  end
+
+  def authenticate_legacy_password_digest(unencrypted_password)
+    Digest::SHA1.hexdigest(unencrypted_password) == legacy_password_digest.to_s
+  end
+
+  def migrate_password_digest(unencrypted_password)
+    return unless authenticate_legacy_password_digest(unencrypted_password)
+    self.password = unencrypted_password
+    self.legacy_password_digest = nil
+    save!
   end
 end

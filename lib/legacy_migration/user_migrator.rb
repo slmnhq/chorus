@@ -24,7 +24,7 @@ class UserMigrator < AbstractMigrator
                                 created_at,
                                 updated_at,
                                 deleted_at,
-                                password_digest)
+                                legacy_password_digest)
                               SELECT
                                 edc_user.id,
                                 user_name,

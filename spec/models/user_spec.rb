@@ -27,6 +27,30 @@ describe User do
       User.authenticate(@user.username.downcase, 'secret').should be_true
       User.authenticate(@user.username.upcase, 'secret').should be_true
     end
+
+    context "when there's a legacy_password_digest" do
+      before do
+        @user = FactoryGirl.create :user
+        @user.password_digest = "XXXXXXXXXXXINVALIDXXXXXXX"
+        @user.password_salt = ""
+        @user.legacy_password_digest = Digest::SHA1.hexdigest("secret")
+        @user.save!
+      end
+
+      it "authenticates" do
+        User.authenticate(@user.username, 'secret').should be_true
+      end
+
+      it "rehashes the password as sha256" do
+        user = User.authenticate(@user.username, 'secret')
+        user.password_digest.should == Digest::SHA256.hexdigest('secret' + user.password_salt)
+      end
+
+      it "deletes the legacy_password_digest" do
+        user = User.authenticate(@user.username, 'secret')
+        user.legacy_password_digest.to_s.should be_empty
+      end
+    end
   end
 
   describe ".order" do
@@ -141,6 +165,13 @@ describe User do
 
         it "is not required for any user" do
           user = FactoryGirl.build(:user, :password => nil, :password_digest => nil)
+          user.should be_valid
+        end
+      end
+
+      context "when legacy password exists" do
+        it "is not required for any user" do
+          user = FactoryGirl.build(:user, :password => nil, :legacy_password_digest => 'password-digest!')
           user.should be_valid
         end
       end
