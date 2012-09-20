@@ -50,21 +50,23 @@ fi
 
 $bin/start-postgres.sh
 
+PGPASSWORD=$bin/database.pgpass
+
 # importing legacy sql
 # The database must exist
 log "Ensuring that application database exists..."
 RAILS_ENV=$RAILS_ENV rake db:create
 
-dropdb -p 8543 chorus_tmp_migrate
-psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
+PGPASSWORD=$PGPASSWORD dropdb   -p 8543 -U postgres_chorus chorus_tmp_migrate
+PGPASSWORD=$PGPASSWORD psql     -p 8543 -U postgres_chorus chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
 
 # Create a temporary database so we can namespace legacy tables into their own schema
-createdb -p 8543 chorus_tmp_migrate
-psql -p 8543 chorus_tmp_migrate < $SQL_DUMP > /dev/null
-psql -p 8543 chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
+PGPASSWORD=$PGPASSWORD createdb -p 8543 -U postgres_chorus chorus_tmp_migrate
+PGPASSWORD=$PGPASSWORD psql     -p 8543 -U postgres_chorus chorus_tmp_migrate < $SQL_DUMP > /dev/null
+PGPASSWORD=$PGPASSWORD psql     -p 8543 -U postgres_chorus chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
 
 # Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
-pg_dump --ignore-version -p 8543 chorus_tmp_migrate | psql -p 8543 chorus_rails_$RAILS_ENV > /dev/null
+PGPASSWORD=$PGPASSWORD pg_dump --ignore-version -p 8543 -U postgres_chorus chorus_tmp_migrate | psql -p 8543 -U postgres_chorus chorus_rails_$RAILS_ENV > /dev/null
 
 # running the migration
 
