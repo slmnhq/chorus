@@ -54,7 +54,7 @@ module PackageMaker
   PATHS_TO_PACKAGE = %w{
     bin/
     app/
-    config/
+    config/*
     db/
     doc/
     lib/
@@ -89,8 +89,16 @@ module PackageMaker
     FileUtils.mkdir_p(installation_path)
 
     PATHS_TO_PACKAGE.each do |path|
-      FileUtils.mkdir_p(File.join(installation_path, File.dirname(path)))
-      FileUtils.ln_s File.join(rails_root, path), File.join(installation_path, path)
+      source_path = File.join(rails_root, path)
+      destination_directory = File.dirname(File.join(installation_path, path))
+
+      FileUtils.mkdir_p(destination_directory)
+
+      if path.match /\*/
+        FileUtils.ln_s Dir.glob(source_path), destination_directory
+      else
+        FileUtils.ln_s source_path, File.join(installation_path, path)
+      end
     end
 
     PATHS_TO_EXCLUDE.each do |path|
