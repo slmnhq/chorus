@@ -199,6 +199,7 @@ class ChorusInstaller
   def link_shared_files
     FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
+    FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
 
     if File.expand_path("#{data_path}") != File.expand_path("#{destination_path}/shared")
       FileUtils.ln_sf("#{data_path}/db", "#{destination_path}/shared/db")
@@ -291,7 +292,7 @@ class ChorusInstaller
   end
 
   def migrate_legacy_data
-    log "Migrating data from previous versi on..." do
+    log "Migrating data from previous version..." do
       start_postgres
       log "Loading legacy data into postgres..." do
         chorus_exec("cd #{release_path} && packaging/legacy_migrate_schema_setup.sh legacy_database.sql")
@@ -369,18 +370,16 @@ class ChorusInstaller
   end
 
   def configure_secret_key
-    chorus_config_file = "#{destination_path}/shared/chorus.yml"
-    unless YAML.load_file(chorus_config_file) && YAML.load_file(chorus_config_file)['secret_key']
+    key_file = "#{destination_path}/shared/secret.key"
+    unless File.exists?(key_file)
       passphrase = prompt_for_passphrase
       if passphrase.nil? || passphrase.strip.empty?
         passphrase = Random.new.bytes(32)
       end
       # only a subset of openssl is available built-in to jruby, so this is the best we could do without including the full jruby-openssl gem
       secret_key = Base64.strict_encode64(OpenSSL::Digest.new("SHA-256", passphrase).digest)
-      File.open(chorus_config_file, 'a') do |f|
-        f.puts "\n"
-        f.puts "# do not change the secret key or you will not be able to retrieve your old passwords"
-        f.puts "secret_key: #{secret_key}"
+      File.open(key_file, 'w') do |f|
+        f.puts secret_key
       end
     end
   end

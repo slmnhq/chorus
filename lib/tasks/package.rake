@@ -51,28 +51,32 @@ end
 
 
 module PackageMaker
-  PATHS_TO_PACKAGE = [
-      "bin/",
-      "app/",
-      "config/",
-      "db/",
-      "doc/",
-      "lib/",
-      "packaging/",
-      "public/",
-      "script/",
-      "solr/conf/",
-      "vendor/",
-      "WEB-INF/",
-      "Gemfile",
-      "Gemfile.lock",
-      "README.md",
-      "Rakefile",
-      "config.ru",
-      "version.rb",
-      "version_build",
-      ".bundle/",
-  ]
+  PATHS_TO_PACKAGE = %w{
+    bin/
+    app/
+    config/
+    db/
+    doc/
+    lib/
+    packaging/
+    public/
+    script/
+    solr/conf/
+    vendor/
+    WEB-INF/
+    Gemfile
+    Gemfile.lock
+    README.md
+    Rakefile
+    config.ru
+    version.rb
+    version_build
+    .bundle/
+  }
+
+  PATHS_TO_EXCLUDE = %w{
+    config/secret.key
+  }
 
   extend self
 
@@ -87,6 +91,10 @@ module PackageMaker
     PATHS_TO_PACKAGE.each do |path|
       FileUtils.mkdir_p(File.join(installation_path, File.dirname(path)))
       FileUtils.ln_s File.join(rails_root, path), File.join(installation_path, path)
+    end
+
+    PATHS_TO_EXCLUDE.each do |path|
+      FileUtils.rm(File.join(installation_path, path))
     end
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root

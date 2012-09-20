@@ -11,7 +11,7 @@ class ChorusEncryptor
     private
 
     def secret_key
-      Base64.strict_decode64(Chorus::Application.config.chorus['secret_key'] || ("0" * 32))
+      Base64.strict_decode64(Chorus::Application.config.chorus['secret_key'])
     end
 
     def decrypt_cipher(password)

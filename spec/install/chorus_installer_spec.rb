@@ -440,26 +440,26 @@ describe ChorusInstaller do
       installer.copy_config_files
     end
 
-    context "when key is not already present in chorus.yml" do
+    context "when key is not already present in shared" do
       let(:passphrase) { 'secret_key' }
       before do
         mock(installer).prompt_for_passphrase { passphrase }
       end
-      it "generates the key from a passphrase and stores it in chorus.yml" do
+      it "generates the key from a passphrase and stores it in shared/secret.key" do
         installer.configure_secret_key
-        YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should_not be_nil
+        File.read('/opt/chorus/shared/secret.key').strip.should_not be_nil
       end
     end
 
-    context "when key is already present in chorus.yml" do
+    context "when key is already present" do
       let(:secret_key) { "its secret" }
       before do
-        File.open('/opt/chorus/shared/chorus.yml', 'a') { |f| f.puts "secret_key: #{secret_key}" }
+        File.open('/opt/chorus/shared/secret.key', 'w') { |f| f.puts secret_key }
       end
 
       it "does not change the existing key" do
         installer.configure_secret_key
-        YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key'].should == secret_key
+        File.read('/opt/chorus/shared/secret.key').strip.should == secret_key
       end
     end
 
@@ -471,10 +471,10 @@ describe ChorusInstaller do
 
       it "generates a different random key on each run" do
         installer.configure_secret_key
-        key1 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
-        File.open('/opt/chorus/shared/chorus.yml', 'w') {}
+        key1 = File.read('/opt/chorus/shared/secret.key').strip
+        File.delete('/opt/chorus/shared/secret.key')
         installer.configure_secret_key
-        key2 = YAML.load_file('/opt/chorus/shared/chorus.yml')['secret_key']
+        key2 = File.read('/opt/chorus/shared/secret.key').strip
         key1.should_not == key2
       end
     end
@@ -549,6 +549,10 @@ describe ChorusInstaller do
 
     it "links the database.yml file" do
       File.readlink('/opt/chorus/releases/2.2.0.0/config/database.yml').should == '/opt/chorus/shared/database.yml'
+    end
+
+    it "links the secret.key file" do
+      File.readlink('/opt/chorus/releases/2.2.0.0/config/secret.key').should == '/opt/chorus/shared/secret.key'
     end
 
     it "links tmp" do

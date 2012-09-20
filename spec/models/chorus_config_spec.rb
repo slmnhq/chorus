@@ -15,10 +15,17 @@ describe ChorusConfig do
           'a_default' => 'maybe'
       }
     end
+    stub(File).read(Rails.root.join('config/secret.key').to_s) do
+      "secret_key_goes_here"
+    end
   end
 
   it "reads the chorus.yml file" do
     config['simple'].should == 'no'
+  end
+
+  it "reads the secret.key file" do
+    config['secret_key'].should == "secret_key_goes_here"
   end
 
   it "reads composite keys" do
