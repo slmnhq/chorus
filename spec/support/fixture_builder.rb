@@ -194,6 +194,9 @@ FixtureBuilder.configure do |fbuilder|
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)
 
+    csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file_owner.save!(:validate => false)
+    fbuilder.name :default, csv_file_owner
     #Notes
     note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => owner, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
     fbuilder.name :note_on_greenplum, note_on_greenplum

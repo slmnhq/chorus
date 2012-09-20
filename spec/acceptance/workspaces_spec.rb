@@ -1,23 +1,28 @@
 require 'spec_helper'
 
 resource "Workspaces" do
-  let(:workspace) { workspaces(:api) }
+  let(:workspace) { workspaces(:public) }
   let(:workspace_id) { workspace.to_param }
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => user) }
-  let(:greenplum_instance) { FactoryGirl.create(:greenplum_instance, :owner => user) }
-  let!(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => greenplum_instance) }
-  let!(:sandbox) { FactoryGirl.create(:gpdb_schema, :database => database) }
-  let!(:instance_account) { FactoryGirl.create(:instance_account, :owner => user, :gpdb_instance => sandbox.gpdb_instance) }
-  let(:dataset) { FactoryGirl.create(:gpdb_table) }
-  let!(:associated_dataset) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
+  let(:greenplum_instance) { database.gpdb_instance}
+  let(:instance_id) { greenplum_instance.id }
+  let(:database) { sandbox.database }
+  let(:database_id) { database.id }
+  let(:sandbox) { dataset.schema }
+  let(:sandbox_id) { sandbox.id }
+  let(:instance_account) { greenplum_instance.account_for_user!(user) }
+  let(:dataset) { datasets(:table) }
+  let(:dataset_id) { dataset.to_param }
+  let(:associated_dataset) { AssociatedDataset.find_by_dataset_id_and_workspace_id(dataset_id, workspace_id) }
 
   before do
     log_in user
     stub(HdfsExternalTable).execute_query.with_any_args { nil }
     stub(File).readlines.with_any_args { ["The river was there."] }
+    stub(Dataset).refresh.with_any_args { |account, schema, options| schema.datasets }
   end
 
   get "/workspaces" do
@@ -47,7 +52,6 @@ resource "Workspaces" do
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
-    let(:sandbox_id) { sandbox.id }
 
     example_request "Update workspace details" do
       status.should == 200
@@ -69,7 +73,6 @@ resource "Workspaces" do
     let(:public) { "1" }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
     let(:database_name) { "new_database_name" }
-    let(:instance_id) { greenplum_instance.id }
 
     example_request "Add a sandbox by creating a new schema in a new database" do
       status.should == 200
@@ -89,8 +92,6 @@ resource "Workspaces" do
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
-    let(:database_id) { database.id }
-    #let(:schema_name) { "new_schema_name" }
 
     example_request "Add a sandbox by creating a new schema in an existing database" do
       status.should == 200
@@ -121,7 +122,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets/:id" do
-    let(:id) { dataset.to_param }
+    let(:id) { dataset_id }
 
     example_request "Show details for a dataset" do
       status.should == 200
@@ -135,7 +136,6 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let(:workspace) { workspaces(:public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
@@ -149,14 +149,13 @@ resource "Workspaces" do
 
     scope_parameters :dataset_import, :all
 
-    let(:dataset_id) { datasets(:table).id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
     let(:is_active) { "false" }
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
-    let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
+    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
     before do
       any_instance_of(Dataset) do |dataset|
@@ -172,7 +171,6 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let(:workspace) { workspaces(:public) }
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
@@ -187,7 +185,6 @@ resource "Workspaces" do
 
     scope_parameters :dataset_import, :all
 
-    let(:dataset_id) { datasets(:table).id }
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
@@ -195,7 +192,7 @@ resource "Workspaces" do
     let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
     let(:id) { import_schedules(:default).id }
-    let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
+    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
     before do
       any_instance_of(Dataset) do |dataset|
@@ -236,7 +233,6 @@ resource "Workspaces" do
   end
 
   delete "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let!(:dataset_id) { dataset.to_param }
 
     parameter :workspace_id, "Id of the workspace that the dataset belongs to"
     parameter :dataset_id, "Id of the dataset"
@@ -325,10 +321,10 @@ resource "Workspaces" do
     required_parameters :workspace_id, :id, :type, :to_table, :file_contains_header
     scope_parameters :csvimport, [:type, :columns_map, :to_table, :file_contains_header]
 
-    let(:csv_file) { CsvFile.last }
+    let(:csv_file) { csv_files(:default) }
 
-    let(:id)           { csv_file.id}
-    let(:type)         { "existingTable"}
+    let(:id)           { csv_file.id }
+    let(:type)         { "existingTable" }
     let(:to_table)     { "a_fine_table" }
     let(:file_contains_header) { "true" }
     let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
@@ -339,6 +335,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/image" do
+    let(:workspace) {workspaces(:api)}
     parameter :style, "Size of image ( original, icon )"
 
     example_request "Show workspace image" do
