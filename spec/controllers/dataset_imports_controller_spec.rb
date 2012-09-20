@@ -274,7 +274,7 @@ describe DatasetImportsController do
 
   describe "#destroy" do
     let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:bob_schedule) }
+    let(:import_schedule) { import_schedules(:default) }
     let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
     let(:import_params) { import_schedule.attributes }
     before do

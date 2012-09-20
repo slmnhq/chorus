@@ -244,7 +244,7 @@ resource "Workspaces" do
     scope_parameters :dataset_import, :all
 
     required_parameters :dataset_id , :id , :workspace_id
-    let(:id) { import_schedules(:bob_schedule).id }
+    let(:id) { import_schedules(:default).id }
 
     example_request "Delete import schedule for a dataset" do
       status.should == 200
