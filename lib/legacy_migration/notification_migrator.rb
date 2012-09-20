@@ -2,8 +2,7 @@ class NotificationMigrator < AbstractMigrator
   class << self
     def prerequisites(options)
       UserMigrator.migrate
-      NoteMigrator.migrate(options)
-      ActivityMigrator.migrate(options)
+      CommentMigrator.migrate(options)
     end
 
     def classes_to_validate
@@ -13,6 +12,7 @@ class NotificationMigrator < AbstractMigrator
     def migrate(options)
       prerequisites(options)
 
+      #NOTE alerts -> notifications
       Legacy.connection.exec_query(%Q(
         INSERT INTO notifications(
           legacy_id,
@@ -20,33 +20,8 @@ class NotificationMigrator < AbstractMigrator
           event_id,
           created_at,
           updated_at,
-          read
-        )
-        SELECT
-          edc_alert.id,
-          users.id,
-          events.id,
-          edc_alert.created_stamp,
-          edc_alert.last_updated_stamp,
-          edc_alert.is_read
-        FROM
-          edc_alert
-          INNER JOIN users
-            ON users.legacy_id = edc_alert.recipient
-          INNER JOIN events
-            ON events.legacy_id = edc_alert.reference AND events.legacy_type = 'edc_comment'
-          WHERE type = 'NOTE'
-          AND edc_alert.id NOT IN (SELECT legacy_id FROM notifications);
-        ))
-
-      Legacy.connection.exec_query(%Q(
-        INSERT INTO notifications(
-          legacy_id,
-          recipient_id,
-          event_id,
-          created_at,
-          updated_at,
-          read
+          read,
+          deleted_at
         )
         SELECT
           ea.id,
@@ -54,7 +29,79 @@ class NotificationMigrator < AbstractMigrator
           events.id,
           ea.created_stamp,
           ea.last_updated_stamp,
-          ea.is_read
+          ea.is_read,
+          CASE ea.is_deleted
+            WHEN 't' THEN ea.last_updated_tx_stamp
+            ELSE null
+          END
+        FROM
+          edc_alert ea
+          INNER JOIN users
+            ON users.legacy_id = ea.recipient
+          INNER JOIN events
+            ON events.legacy_id = ea.reference AND events.legacy_type = 'edc_comment'
+          WHERE type = 'NOTE'
+          AND ea.id NOT IN (SELECT legacy_id FROM notifications);
+        ))
+
+      #NOTE_COMMENT alerts -> notifications
+      Legacy.connection.exec_query(%Q(
+        INSERT INTO notifications(
+          legacy_id,
+          recipient_id,
+          event_id,
+          comment_id,
+          created_at,
+          updated_at,
+          read,
+          deleted_at
+        )
+        SELECT
+          ea.id,
+          users.id,
+          events.id,
+          comments.id,
+          ea.created_stamp,
+          ea.last_updated_stamp,
+          ea.is_read,
+          CASE ea.is_deleted
+            WHEN 't' THEN ea.last_updated_tx_stamp
+            ELSE null
+          END
+        FROM
+          edc_alert ea
+          INNER JOIN users
+            ON users.legacy_id = ea.recipient
+          INNER JOIN comments
+            ON comments.legacy_id = ea.reference
+          INNER JOIN events
+            ON events.id = comments.event_id
+          WHERE type = 'NOTE_COMMENT'
+          AND ea.id NOT IN (SELECT legacy_id FROM notifications);
+        ))
+
+      #MEMBERS_ADDED alerts -> notifications
+      Legacy.connection.exec_query(%Q(
+        INSERT INTO notifications(
+          legacy_id,
+          recipient_id,
+          event_id,
+          created_at,
+          updated_at,
+          read,
+          deleted_at
+        )
+        SELECT
+          ea.id,
+          users.id,
+          events.id,
+          ea.created_stamp,
+          ea.last_updated_stamp,
+          ea.is_read,
+          CASE ea.is_deleted
+            WHEN 't' THEN ea.last_updated_tx_stamp
+            ELSE null
+          END
         FROM
         edc_alert ea
         INNER JOIN edc_activity_stream_object aso
