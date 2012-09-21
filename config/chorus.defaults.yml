@@ -1,4 +1,6 @@
-#Only defaults that should apply to all applications should go in here, optional configurations should only go into chorus.yml.example
+# Only defaults that should apply to all applications should go in here,
+# optional configurations should only go into chorus.yml.example
+
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 5
 delete_unimported_csv_files_interval_hours: 6
@@ -12,8 +14,24 @@ max_upload_size_megabytes: 100
 server_port: 8080
 provision_max_size_in_gb: 100
 timezone_offset: -8
+
+# Configure thread pool size of webserver and worker processes.
+#
+# The # of webserver threads determines the maximum number of simultaneous web
+# requests. The # of worker threads determines the maximum number of
+# asychronous jobs, such as table copying or importing, that can be run
+# simultaneously.
+#
+# Each web or worker thread may use its own connection to the local Postgresql
+# database, thus the sum of 'worker_threads' + 'webserver_threads' must be less
+# than the 'max_connections' configured in postgresql.conf.
+#
+# The 'max_connections' parameter may be based on your operating system's kernel
+# shared memory size. For example, on OS X this parameter will default to 20.
+
 worker_threads: 10
 webserver_threads: 50
+
 file_sizes_mb:
   workfiles: 10
   csv_imports: 10

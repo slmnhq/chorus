@@ -13,8 +13,24 @@ ssl: "off"
 ssl_certificate: ""
 ssl_certificate_key: ""
 timezone_offset: -8
+
+# Configure thread pool size of webserver and worker processes.
+#
+# The # of webserver threads determines the maximum number of simultaneous web
+# requests. The # of worker threads determines the maximum number of
+# asychronous jobs, such as table copying or importing, that can be run
+# simultaneously.
+#
+# Each web or worker thread may use its own connection to the local Postgresql
+# database, thus the sum of 'worker_threads' + 'webserver_threads' must be less
+# than the 'max_connections' configured in postgresql.conf.
+#
+# The 'max_connections' parameter may be based on your operating system's kernel
+# shared memory size. For example, on OS X this parameter will default to 20.
+
 worker_threads: 10
 webserver_threads: 20
+
 file_sizes_mb:
   workfiles: 10
   csv_imports: 10
