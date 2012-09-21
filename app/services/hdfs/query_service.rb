@@ -12,7 +12,7 @@ module Hdfs
 
   class QueryService
     def self.instance_version(instance)
-      new(instance.host, instance.port, instance.username).version
+      new(instance.host, instance.port, instance.username, instance.version).version
     end
 
     def initialize(host, port, username, version = nil)
@@ -23,7 +23,7 @@ module Hdfs
     end
 
     def version
-      version = JavaHdfs.new(@host, @port, @username).version
+      version = JavaHdfs.new(@host, @port, @username, @version).version
       unless version
         Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
         raise ApiValidationError.new(:connection, :generic, {:message => "Unable to determine HDFS server version or unable to reach server at #{@host}:#{@port}. Check connection parameters."})
