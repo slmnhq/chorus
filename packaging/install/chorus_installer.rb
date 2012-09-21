@@ -7,7 +7,15 @@ require 'openssl'
 require 'pathname'
 
 class ChorusInstaller
-  attr_accessor :destination_path, :data_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
+  attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :legacy_installation_path, :log_stack
+
+  INSTALL_MODES = [:upgrade_existing, :upgrade_legacy, :fresh]
+
+  INSTALL_MODES.each do |mode|
+    define_method :"#{mode}?" do
+      install_mode == mode
+    end
+  end
 
   DEFAULT_PATH = "/opt/chorus"
 
@@ -17,6 +25,7 @@ class ChorusInstaller
     @logger = options[:logger]
     @io = options[:io]
     @log_stack = []
+    @install_mode = :fresh
   end
 
   def prompt(message)
@@ -91,7 +100,7 @@ class ChorusInstaller
   def prompt_for_legacy_upgrade
     @io.require_confirmation :confirm_legacy_upgrade
 
-    self.do_legacy_upgrade = true
+    self.install_mode = :upgrade_legacy
     self.legacy_installation_path = destination_path
     prompt_legacy_upgrade_destination
   end
@@ -103,7 +112,7 @@ class ChorusInstaller
 
   def prompt_for_2_2_upgrade
     @io.require_confirmation :confirm_upgrade
-    self.do_upgrade = true
+    self.install_mode = :upgrade_existing
   end
 
   def get_postgres_build
@@ -214,7 +223,7 @@ class ChorusInstaller
   end
 
   def create_database_config
-    return if do_upgrade
+    return if upgrade_existing?
 
     database_config_path = "#{destination_path}/shared/database.yml"
     database_config = YAML.load_file(database_config_path)
@@ -230,7 +239,7 @@ class ChorusInstaller
   end
 
   def setup_database
-    if do_upgrade
+    if upgrade_existing?
       start_postgres
       log "Running database migrations..." do
         chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
@@ -242,7 +251,7 @@ class ChorusInstaller
         start_postgres
         chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
         db_commands = "db:create db:migrate"
-        db_commands += " db:seed" unless do_legacy_upgrade
+        db_commands += " db:seed" unless upgrade_legacy?
         log "Running rake #{db_commands}"
         chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake #{db_commands}"
         stop_postgres
@@ -260,14 +269,14 @@ class ChorusInstaller
   end
 
   def stop_old_install
-    return unless do_upgrade
+    return unless upgrade_existing?
     log "Stopping Chorus..." do
       chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
     end
   end
 
   def startup
-    return unless do_upgrade
+    return unless upgrade_existing?
 
     log "Starting up Chorus..." do
       server_control "start"
@@ -322,20 +331,22 @@ class ChorusInstaller
       extract_postgres
     end
 
-    if do_upgrade
+    if upgrade_existing?
       log "Shutting down previous Chorus install..." do
         stop_old_install
       end
-    elsif do_legacy_upgrade
+    elsif upgrade_legacy?
       dump_and_shutdown_legacy
     end
 
-    log "#{do_upgrade ? "Updating" : "Creating"} database..." do
+    log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       link_services
       setup_database
     end
 
-    if do_legacy_upgrade
+    configure_file_storage_directories
+
+    if upgrade_legacy?
       #log "Migrating settings from previous version..."
       #migrate_legacy_settings
       #log "Done"
@@ -354,15 +365,19 @@ class ChorusInstaller
     log "#{e.class}: #{e.message}"
     raise
   rescue => e
-    server_control "stop" if do_legacy_upgrade rescue # rescue in case server_control blows up
+    server_control "stop" if upgrade_legacy? rescue # rescue in case server_control blows up
     log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
   end
 
   def remove_and_restart_previous!
-    log "Restarting server..."
+    if upgrade_existing?
+      log "Restarting server..."
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/server_control.sh start"
+    else
+      stop_postgres
+    end
     FileUtils.rm_rf release_path
-    chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/server_control.sh start" if do_upgrade
   end
 
   def configure_secret_key
@@ -377,6 +392,24 @@ class ChorusInstaller
       File.open(key_file, 'w') do |f|
         f.puts secret_key
       end
+    end
+  end
+
+  def configure_file_storage_directories
+    return if upgrade_existing?
+    chorus_config_file = "#{@destination_path}/shared/chorus.yml"
+    config = YAML.load_file(chorus_config_file)
+
+    default_path = "#{@destination_path}/shared"
+    if File.expand_path(data_path) != File.expand_path(default_path)
+      config['csv_import_file_storage_path'] = "#{data_path}/system/"
+      config['workfile_storage_path'] = "#{data_path}/system/"
+      config['image_storage'] = "#{data_path}/system/"
+      config['attachment_storage'] = "#{data_path}/system/"
+    end
+
+    File.open(chorus_config_file, 'w') do |file|
+      YAML.dump(config, file)
     end
   end
 

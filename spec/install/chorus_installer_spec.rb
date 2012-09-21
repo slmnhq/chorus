@@ -79,7 +79,7 @@ describe ChorusInstaller do
         dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
         stub_input nil
         installer.get_destination_path
-        installer.do_upgrade.should be_false
+        installer.upgrade_existing?.should be_false
       end
     end
 
@@ -95,8 +95,8 @@ describe ChorusInstaller do
         installer.destination_path.should == '/somewhere/chorus'
       end
 
-      it "should set do_upgrade" do
-        installer.do_upgrade.should be_true
+      it "should set upgrade_existing?" do
+        installer.upgrade_existing?.should be_true
       end
     end
 
@@ -170,9 +170,9 @@ describe ChorusInstaller do
       mock(installer).prompt_legacy_upgrade_destination
     end
 
-    it "should set do_legacy_upgrade" do
+    it "should set upgrade_legacy?" do
       subject
-      installer.do_legacy_upgrade.should be_true
+      installer.upgrade_legacy?.should be_true
     end
 
     it "should set the legacy installation path" do
@@ -589,7 +589,7 @@ describe ChorusInstaller do
     end
 
     it "does not update database.yml if upgrading" do
-      installer.do_upgrade = true
+      installer.install_mode = :upgrade_existing
       installer.create_database_config
 
       YAML.load_file('/opt/chorus/shared/database.yml')['production']['password'].should == 'something'
@@ -620,7 +620,7 @@ describe ChorusInstaller do
 
     context "when upgrading" do
       before do
-        installer.do_upgrade = true
+        installer.install_mode = :upgrade_existing
       end
 
       it "migrates the existing database" do
@@ -644,7 +644,7 @@ describe ChorusInstaller do
     context "when upgrading" do
       before do
         stub(installer).version { '2.2.0.0' }
-        installer.do_upgrade = true
+        installer.install_mode = :upgrade_existing
         installer.destination_path = '/opt/chorus'
         mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh stop") { true }
       end
@@ -669,7 +669,7 @@ describe ChorusInstaller do
     context "when upgrading" do
       before do
         stub(installer).version { '2.2.0.0' }
-        installer.do_upgrade = true
+        installer.install_mode = :upgrade_existing
         installer.destination_path = '/opt/chorus'
         mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start") { true }
       end
@@ -802,20 +802,35 @@ describe ChorusInstaller do
       FileUtils.mkdir_p "/opt/chorus/releases/2.2.0.0"
     end
 
-    it "should remove the release folder" do
-      dont_allow(installer).chorus_exec
-      installer.remove_and_restart_previous!
-      File.exists?("/opt/chorus/releases/2.2.0.0").should == false
-    end
-
-    context "when upgrading" do
+    context "when upgrading an existing 2.2 installation" do
       before do
-        installer.do_upgrade = true
+        installer.install_mode = :upgrade_existing
         mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/packaging/server_control.sh start")
       end
 
-      it "should start up the old install" do
+      it "starts up the old install" do
         installer.remove_and_restart_previous!
+      end
+
+      it "removes the release folder" do
+        installer.remove_and_restart_previous!
+        File.exists?("/opt/chorus/releases/2.2.0.0").should == false
+      end
+    end
+
+    context "when doing a legacy_upgrade or a fresh install" do
+      before do
+        installer.install_mode = :upgrade_legacy
+        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres")
+      end
+
+      it "stops postgres" do
+        installer.remove_and_restart_previous!
+      end
+
+      it "removes the release folder" do
+        installer.remove_and_restart_previous!
+        File.exists?("/opt/chorus/releases/2.2.0.0").should == false
       end
     end
   end
