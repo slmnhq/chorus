@@ -9,13 +9,23 @@ describe NoteAttachmentsController do
   end
 
   context "#create" do
-    it "changes the file content" do
-      event = Events::NoteOnGreenplumInstance.first
-      file = test_file('workfile.sql')
-      post :create, :note_id => event.id, :fileToUpload => {:contents => file}
-      response.code.should == '200'
-      event.reload
-      decoded_response[:attachments][0][:name].should == 'workfile.sql'
+    let(:event) { Events::NoteOnGreenplumInstance.first }
+
+    context "with a binary file" do
+      it "changes the file content" do
+        file = test_file('workfile.sql')
+        post :create, :note_id => event.id, :fileToUpload => {:contents => file}
+        response.code.should == '200'
+        decoded_response[:attachments][0][:name].should == 'workfile.sql'
+      end
+    end
+
+    context "with a svg visualization" do
+      it "converts the svg to a png file" do
+        post :create, :note_id => event.id, :file_name => "new_visualization.png", :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+        response.should be_success
+        decoded_response[:attachments][0][:name].should == 'new_visualization.png'
+      end
     end
   end
 

@@ -3,7 +3,13 @@ class NoteAttachmentsController < ApplicationController
     event = Events::Base.find(params[:note_id])
     authorize! :create, NoteAttachment, event
 
-    event.attachments.create!(:contents => params[:fileToUpload][:contents])
+    if params[:fileToUpload]
+      attachment_content = params[:fileToUpload][:contents]
+    else
+      transcoder = SvgToPng.new(params[:svg_data])
+      attachment_content = transcoder.fake_uploaded_file(params[:file_name])
+    end
+    event.attachments.create!(:contents => attachment_content)
     event.reload
     present event
   end
