@@ -4,6 +4,7 @@ require 'yaml'
 require_relative 'installer_errors'
 require 'base64'
 require 'openssl'
+require 'pathname'
 
 class ChorusInstaller
   attr_accessor :destination_path, :data_path, :database_password, :database_user, :do_upgrade, :do_legacy_upgrade, :legacy_installation_path, :log_stack
@@ -87,12 +88,6 @@ class ChorusInstaller
     end
 
     log "Data path = #{@data_path}"
-  end
-
-  def prompt_for_data_path
-    default_path = "#{@destination_path}/shared"
-    relative_path = @io.prompt_or_default(:data_path, default_path) || default_path
-    File.expand_path(relative_path)
   end
 
   def prompt_for_passphrase
@@ -201,10 +196,22 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
 
+    #Symlink the data paths under shared to the actual data_path directory.  So the app actually
+    #goes through two symlinks
     if File.expand_path("#{data_path}") != File.expand_path("#{destination_path}/shared")
-      FileUtils.ln_sf("#{data_path}/db", "#{destination_path}/shared/db")
-      FileUtils.ln_sf("#{data_path}/system", "#{destination_path}/shared/system")
+      ['db', 'system', 'solr/data', 'log'].each do |path|
+        destination = Pathname.new("#{destination_path}/shared/#{path}")
+        source = Pathname.new("#{data_path}/#{path}")
+        if(destination.exist? && !destination.symlink?)
+          destination.rmdir
+        end
+        unless(source.exist?)
+          source.mkpath
+        end
+        FileUtils.ln_sf(source.to_s, destination.to_s)
+      end
     end
+
     FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
@@ -335,8 +342,6 @@ class ChorusInstaller
       setup_database
     end
 
-    configure_file_storage_directories
-
     if do_legacy_upgrade
       #log "Migrating settings from previous version..."
       #migrate_legacy_settings
@@ -379,24 +384,6 @@ class ChorusInstaller
       File.open(key_file, 'w') do |f|
         f.puts secret_key
       end
-    end
-  end
-
-  def configure_file_storage_directories
-    return if do_upgrade
-    chorus_config_file = "#{@destination_path}/shared/chorus.yml"
-    config = YAML.load_file(chorus_config_file)
-
-    default_path = "#{@destination_path}/shared"
-    if File.expand_path(data_path) != File.expand_path(default_path)
-      config['csv_import_file_storage_path'] = "#{data_path}/system/"
-      config['workfile_storage_path'] = "#{data_path}/system/"
-      config['image_storage'] = "#{data_path}/system/"
-      config['attachment_storage'] = "#{data_path}/system/"
-    end
-
-    File.open(chorus_config_file, 'w') do |file|
-      YAML.dump(config, file)
     end
   end
 

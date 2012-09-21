@@ -480,47 +480,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#configure_file_storage_directories" do
-    before do
-      installer.destination_path = destination_path
-      installer.data_path = data_path
-
-      FileUtils.mkdir_p './chorus_installation/config'
-      FileUtils.mkdir_p './chorus_installation/packaging'
-      FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
-      installer.copy_config_files
-      FileUtils.mkdir_p('/opt/chorus/shared')
-      File.open('/opt/chorus/shared/chorus.yml', 'a') do |f|
-        f.puts "csv_import_file_storage_path: old.value"
-      end
-    end
-    let(:data_path) {"/data/chorus"}
-    let(:destination_path) {"/opt/chorus"}
-
-    it "updates the chorus.yml file to reflect the data path" do
-      installer.copy_config_files
-
-      installer.configure_file_storage_directories
-      YAML.load_file('/opt/chorus/shared/chorus.yml')['csv_import_file_storage_path'].should == "#{data_path}/system/"
-      YAML.load_file('/opt/chorus/shared/chorus.yml')['workfile_storage_path'].should == "#{data_path}/system/"
-      YAML.load_file('/opt/chorus/shared/chorus.yml')['image_storage'].should == "#{data_path}/system/"
-      YAML.load_file('/opt/chorus/shared/chorus.yml')['attachment_storage'].should == "#{data_path}/system/"
-    end
-
-    context "when the data path is the default" do
-      let(:data_path) { "#{destination_path}//shared/" }
-
-      it "does nothing" do
-        installer.copy_config_files
-
-        installer.configure_file_storage_directories
-        YAML.load_file('/opt/chorus/shared/chorus.yml')['csv_import_file_storage_path'].should == "old.value"
-      end
-    end
-  end
-
   describe "#link_services" do
     before do
       installer.destination_path = "/opt/chorus"
@@ -539,36 +498,75 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/opt/chorus"
       stub_version
-
-      installer.link_shared_files
     end
 
-    it "links the chorus.yml file" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/config/chorus.yml').should == '/opt/chorus/shared/chorus.yml'
+    describe "with the default data_path" do
+      before do
+        installer.link_shared_files
+      end
+
+      it "links the chorus.yml file" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/config/chorus.yml').should == '/opt/chorus/shared/chorus.yml'
+      end
+
+      it "links the database.yml file" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/config/database.yml').should == '/opt/chorus/shared/database.yml'
+      end
+
+      it "links the secret.key file" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/config/secret.key').should == '/opt/chorus/shared/secret.key'
+      end
+
+      it "links tmp" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/tmp').should == '/opt/chorus/shared/tmp'
+      end
+
+      it "links solr" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
+      end
+
+      it "links log" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/log').should == '/opt/chorus/shared/log'
+      end
+
+      it "links system" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/system').should == '/opt/chorus/shared/system'
+      end
+
+      it "links db" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/postgres-db').should == '/opt/chorus/shared/db'
+      end
     end
 
-    it "links the database.yml file" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/config/database.yml').should == '/opt/chorus/shared/database.yml'
-    end
+    describe "with a custom data_path" do
+      before do
+        installer.data_path = "/data/chorus"
+        installer.link_shared_files
+      end
 
-    it "links the secret.key file" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/config/secret.key').should == '/opt/chorus/shared/secret.key'
-    end
+      it "creates data_path" do
+        FileTest.exist?('/data/chorus/system').should be_true
+      end
 
-    it "links tmp" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/tmp').should == '/opt/chorus/shared/tmp'
-    end
+      it "links system" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/system').should == '/opt/chorus/shared/system'
+        File.readlink('/opt/chorus/shared/system').should == '/data/chorus/system'
+      end
 
-    it "links solr" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
-    end
+      it "links db" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/postgres-db').should == '/opt/chorus/shared/db'
+        File.readlink('/opt/chorus/shared/db').should == '/data/chorus/db'
+      end
 
-    it "links log" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/log').should == '/opt/chorus/shared/log'
-    end
+      it "links solr" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
+        File.readlink('/opt/chorus/shared/solr/data').should == '/data/chorus/solr/data'
+      end
 
-    it "links system" do
-      File.readlink('/opt/chorus/releases/2.2.0.0/system').should == '/opt/chorus/shared/system'
+      it "links log" do
+        File.readlink('/opt/chorus/releases/2.2.0.0/log').should == '/opt/chorus/shared/log'
+        File.readlink('/opt/chorus/shared/log').should == '/data/chorus/log'
+      end
     end
   end
 
@@ -611,7 +609,7 @@ describe ChorusInstaller do
       stub_chorus_exec(installer)
     end
 
-    let(:destination_path) {"/opt/chorus"}
+    let(:destination_path) { "/opt/chorus" }
 
     context "when installing fresh" do
       it "creates the database structure" do
