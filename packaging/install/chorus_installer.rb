@@ -33,12 +33,6 @@ class ChorusInstaller
     end
   end
 
-  def validate_non_root
-    if Process.uid == 0
-      raise InstallerErrors::InstallAborted, "Please run the installer as a non-root user."
-    end
-  end
-
   def validate_localhost
     unless system("ping -c 1 localhost > /dev/null")
       raise InstallerErrors::InstallAborted, "Could not connect to 'localhost', please set in /etc/hosts"
@@ -307,7 +301,6 @@ class ChorusInstaller
   end
 
   def install
-    validate_non_root
     validate_localhost
     get_destination_path
     get_data_path

@@ -727,20 +727,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#validate_non_root" do
-    context "when the script is being run by root"
-    it "raises an exception" do
-      mock(Process).uid() { 0 }
-      expect { installer.validate_non_root }.to raise_error(InstallerErrors::InstallAborted, /Please run the installer as a non-root user./)
-    end
-
-    context "when the script is not run as root" do
-      it "does not raise an exception" do
-        expect { installer.validate_non_root }.to_not raise_error()
-      end
-    end
-  end
-
   describe "#validate_localhost" do
     context "when localhost is undefined"
     it "raises an exception" do
