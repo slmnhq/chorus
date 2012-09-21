@@ -57,7 +57,7 @@ describe NotificationMigrator do
       end
       count.should > 0
       note_count = Notification.unscoped.where(:comment_id => nil).select do |notification|
-        notification.notification_event.legacy_type == 'edc_comment'
+        notification.event.legacy_type == 'edc_comment'
       end.count
       count.should == note_count
     end
@@ -96,7 +96,7 @@ describe NotificationMigrator do
       end
       count.should > 0
       note_count = Notification.unscoped.all.select do |notification|
-        notification.notification_event.action == 'MembersAdded'
+        notification.event.action == 'MembersAdded'
       end.count
       count.should == note_count
     end

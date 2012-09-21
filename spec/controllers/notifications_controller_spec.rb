@@ -3,8 +3,8 @@ require "spec_helper"
 describe NotificationsController do
   let(:notification1) { current_user.notifications.first }
   let(:notification2) { current_user.notifications[1] }
-  let(:event1) { notification1.notification_event }
-  let(:event2) { notification2.notification_event }
+  let(:event1) { notification1.event }
+  let(:event2) { notification2.event }
   let(:current_user) { users(:owner) }
 
   before do

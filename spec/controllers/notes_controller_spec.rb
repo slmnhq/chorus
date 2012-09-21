@@ -73,7 +73,7 @@ describe NotesController do
         post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => users_to_notify.map(&:id) }
         response.code.should == "201"                
         users_to_notify.each do |user|
-          user.notifications.last.notification_event.body.should == "Notify people note"
+          user.notifications.last.event.body.should == "Notify people note"
         end
       end
     end

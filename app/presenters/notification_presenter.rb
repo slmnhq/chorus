@@ -1,6 +1,6 @@
 class NotificationPresenter < Presenter
   def to_hash
-    presenter_event = EventPresenter.new(model.notification_event, @view_context)
+    presenter_event = EventPresenter.new(model.event, @view_context)
     {
         :id => model.id,
         :recipient => present(model.recipient, @options),
