@@ -110,7 +110,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("does not show a file size error", function() {
-                    chorus.modal.validateFileSize();
+                    this.dialog.validateFileSize();
                     expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                 });
             });
@@ -122,7 +122,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("shows an error", function() {
-                    chorus.modal.validateFileSize();
+                    this.dialog.validateFileSize();
                     expect(this.dialog.$('.errors')).toContainText("file exceeds");
                     expect(this.dialog.$('button.submit')).not.toBeEnabled();
                 });
@@ -130,7 +130,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("removes the error when a valid file is then selected", function() {
                     this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];
                     this.fakeFileUpload.add(this.fileList);
-                    chorus.modal.validateFileSize();
+                    this.dialog.validateFileSize();
                     expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                     expect(this.dialog.$('button.submit')).toBeEnabled();
                 });
