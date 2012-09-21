@@ -11,9 +11,11 @@ test "$RAILS_ENV" = "" && RAILS_ENV=production
 case $RAILS_ENV in
     production )
         RUBY=bin/ruby
+        RAKE=bin/rake
         ;;
     * )
         RUBY=ruby
+        RAKE=rake
         ;;
 esac
 
