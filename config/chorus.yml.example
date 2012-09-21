@@ -13,7 +13,7 @@ ssl: "off"
 ssl_certificate: ""
 ssl_certificate_key: ""
 timezone_offset: -8
-worker_threads: 5
+worker_threads: 10
 webserver_threads: 20
 file_sizes_mb:
   workfiles: 10
