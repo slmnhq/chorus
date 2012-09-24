@@ -5,8 +5,8 @@ class JobScheduler
   include Clockwork
 
   def initialize
-    every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'InstanceStatus.check') do
-      QC.enqueue("InstanceStatus.check")
+    every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'InstanceStatusChecker.check') do
+      QC.enqueue("InstanceStatusChecker.check")
     end
 
     every(Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
