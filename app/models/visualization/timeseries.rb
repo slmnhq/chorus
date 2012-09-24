@@ -1,5 +1,5 @@
 module Visualization
-  class Timeseries
+  class Timeseries < Base
     attr_accessor :rows, :time, :value, :time_interval, :aggregation, :filters, :type
     attr_writer :dataset, :schema
 
@@ -15,7 +15,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       @rows = result.rows.map { |row| {:value => row[0].to_f.round(3), :time => row[1]} }
     end
 
@@ -24,7 +24,6 @@ module Visualization
     def build_row_sql
       date_trunc = "date_trunc('#{@time_interval}' ,\"#{@time}\")"
 
-      relation = Arel::Table.new(%Q{"#{@schema.name}"."#{@dataset.name}"})
       query = relation.
         group(Arel.sql(date_trunc)).
         project(Arel.sql("#{@aggregation}(\"#{@value}\"), to_char(#{date_trunc}, '#{pattern}') ")).

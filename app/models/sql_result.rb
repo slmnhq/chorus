@@ -19,4 +19,14 @@ class SqlResult
     @rows = []
     @warnings = []
   end
+
+  def hashes
+    rows.map do |row|
+      hash = {}
+      columns.each_with_index do |column, i|
+        hash[column.name] = row[i]
+      end
+      hash
+    end
+  end
 end

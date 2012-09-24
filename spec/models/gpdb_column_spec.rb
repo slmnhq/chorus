@@ -8,7 +8,7 @@ describe GpdbColumn do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
 
-    describe 'for a real dataset' do
+    describe 'for a real table' do
       let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
       it "gets the column information for table users" do
@@ -30,24 +30,29 @@ describe GpdbColumn do
         column1_stats.number_distinct.should == 2
         column1_stats.common_values.should =~ %w(0 1)
       end
+
+      it 'has the correct column type for time values' do
+        time_column = subject.last
+        time_column.simplified_type.should == :datetime
+        time_column.should be_number_or_time
+      end
     end
 
     describe "for a chorus view" do
       let(:schema) { database.schemas.find_by_name('test_schema') }
-      let(:dataset) {
-        view = ChorusView.new
-        view.name = "myChorusView"
-        view.schema = schema
-        view.query = "SELECT * FROM base_table1;"
-        view.save!
-        view
-      }
+      let(:dataset) { datasets(:executable_chorus_view) }
 
       it "gets the column information" do
         subject.count.should == 5
         row = subject.first
         row.name.should eq('id')
-        row.data_type.should eq('int4')
+        row.data_type.should eq('integer')
+      end
+
+      it 'has the correct column type for time values' do
+        time_column = subject.last
+        time_column.simplified_type.should == :datetime
+        time_column.should be_number_or_time
       end
     end
   end

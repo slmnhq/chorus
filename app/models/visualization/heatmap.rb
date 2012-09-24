@@ -1,5 +1,5 @@
 module Visualization
-  class Heatmap
+  class Heatmap < Base
     attr_accessor :x_bins, :y_bins, :x_axis, :y_axis, :rows, :type, :filters
     attr_writer :dataset, :schema
 
@@ -12,14 +12,6 @@ module Visualization
       @type = attributes[:type]
       @dataset = dataset
       @schema = dataset.try :schema
-    end
-
-    def relation_raw
-      %Q{"#{@schema.name}"."#{@dataset.name}"}
-    end
-
-    def relation
-      Arel::Table.new(relation_raw)
     end
 
     def column_information
@@ -47,7 +39,7 @@ module Visualization
       CAST(#{@min_y} AS numeric),
       CAST(#{@max_y} AS numeric),
       #{y_bins}) AS y
-      FROM ( SELECT * FROM #{relation_raw}"
+      FROM ( SELECT * FROM #{@dataset.scoped_name}"
 
       query += " WHERE " + @filters.join(" AND ") if @filters.present?
 
@@ -60,7 +52,7 @@ module Visualization
     end
 
     def fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_min_max_sql).rows[0]
+      result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql).rows[0]
 
       @min_x = result[0].to_f
       @max_x = result[1].to_f
@@ -70,7 +62,7 @@ module Visualization
 
     def fetch!(account, check_id)
       fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       row_data = result.rows.map { |row| {:x => row[0].to_i, :y => row[1].to_i, :value => row[2].to_i} }
       @rows = fill_missing(row_data)
     end

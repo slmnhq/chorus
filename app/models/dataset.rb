@@ -160,6 +160,14 @@ class Dataset < ActiveRecord::Base
     GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
   end
 
+  def query_setup_sql
+    ""
+  end
+
+  def scoped_name
+    %Q{"#{schema_name}"."#{name}"}
+  end
+
   def dataset_consistent?(another_dataset)
     another_column_data = another_dataset.column_data
     my_column_data = column_data

@@ -18,25 +18,52 @@ describe Visualization::Frequency, :database_integration => true do
       visualization.fetch!(account, 12345)
     end
 
-    context "with no filter" do
-      let(:filters) { nil }
+    context "dataset is a table" do
+      context "with no filter" do
+        let(:filters) { nil }
 
-      it "returns the frequency data" do
-        visualization.rows.should == [
-          { :count => 4, :bucket => 'papaya' },
-          { :count => 3, :bucket => "orange" }
-        ]
+        it "returns the frequency data" do
+          visualization.rows.should == [
+              {:count => 4, :bucket => 'papaya'},
+              {:count => 3, :bucket => "orange"}
+          ]
+        end
+      end
+
+      context "with filters" do
+        let(:filters) { ['"base_table1"."column1" > 0', '"base_table1"."column2" < 5'] }
+
+        it "returns the frequency data based on the filtered dataset" do
+          visualization.rows.should == [
+              {:count => 2, :bucket => "orange"},
+              {:count => 1, :bucket => 'apple'}
+          ]
+        end
       end
     end
 
-    context "with filters" do
-      let(:filters) { ['"base_table1"."column1" > 0', '"base_table1"."column2" < 5'] }
+    context "dataset is a chorus view" do
+      let(:dataset) { datasets(:executable_chorus_view) }
+      context "with no filter" do
+        let(:filters) { nil }
 
-      it "returns the frequency data based on the filtered dataset" do
-        visualization.rows.should == [
-          { :count => 2, :bucket => "orange" },
-          { :count => 1, :bucket => 'apple' }
-        ]
+        it "returns the frequency data" do
+          visualization.rows.should == [
+              {:count => 4, :bucket => 'papaya'},
+              {:count => 3, :bucket => "orange"}
+          ]
+        end
+      end
+
+      context "with filters" do
+        let(:filters) { ['"CHORUS_VIEW"."column1" > 0', '"CHORUS_VIEW"."column2" < 5'] }
+
+        it "returns the frequency data based on the filtered dataset" do
+          visualization.rows.should == [
+              {:count => 2, :bucket => "orange"},
+              {:count => 1, :bucket => 'apple'}
+          ]
+        end
       end
     end
   end

@@ -257,6 +257,13 @@ FixtureBuilder.configure do |fbuilder|
     chorus_gpdb42_instance.refresh_databases
     GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name))
 
+    test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
+    test_schema = test_database.schemas.find_by_name('test_schema')
+    executable_chorus_view = ChorusView.new({:name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;"}, :without_protection => true)
+    executable_chorus_view.bound_workspaces << public_workspace
+    executable_chorus_view.save!(:validate => false)
+    fbuilder.name(:executable_chorus_view, executable_chorus_view)
+
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
     #Notification

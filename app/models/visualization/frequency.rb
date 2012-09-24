@@ -1,5 +1,5 @@
 module Visualization
-  class Frequency
+  class Frequency < Base
     attr_accessor :rows, :bins, :category, :filters, :type
     attr_writer :dataset, :schema
 
@@ -13,14 +13,13 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       @rows = result.rows.map { |row| { :bucket => row[0], :count => row[1].to_i } }
     end
 
     private
 
     def build_row_sql
-      relation = Arel::Table.new(%Q{"#{@schema.name}"."#{@dataset.name}"})
       query = relation.
         group(relation[@category]).
         project(relation[@category].as('bucket'), Arel.sql('count(1)').as('count')).

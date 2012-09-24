@@ -1,7 +1,7 @@
 require 'boxplot_summary'
 
 module Visualization
-  class Boxplot
+  class Boxplot < Base
     attr_accessor :rows, :bins, :category, :values, :filters, :type
     attr_writer :dataset, :schema
 
@@ -16,7 +16,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       row_data = result.rows.map { |row| {:bucket => row[0], :ntile => row[1].to_i, :min => row[2].to_f, :max => row[3].to_f, :count => row[4].to_i} }
       @rows = BoxplotSummary.summarize(row_data, @bins)
     end
@@ -28,7 +28,7 @@ module Visualization
 
       innerQuery = <<-SQL
         select innerQuery."#{@category}", innerQuery.ntile, min(innerQuery."#{@values}"), max(innerQuery."#{@values}"), count(*) cnt from
-          (select "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile FROM "#{@schema.name}"."#{@dataset.name}" #{filters} WINDOW t AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")) as innerQuery
+          (select "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile FROM #{@dataset.scoped_name} #{filters} WINDOW t AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")) as innerQuery
           GROUP BY innerQuery."#{@category}", innerQuery.ntile ORDER BY innerQuery."#{@category}", innerQuery.ntile
       SQL
 

@@ -36,6 +36,15 @@ class ChorusView < Dataset
     bound_workspaces.first
   end
 
+  def query_setup_sql
+    #set search_path to "#{schema.name}";
+    %Q{create temp view "#{name}" as #{query};}
+  end
+
+  def scoped_name
+    %Q{"#{name}"}
+  end
+
   def all_rows_sql(limit = nil)
     sql = "SELECT * FROM (#{query.gsub(';', '');}) AS cv_query"
     sql += " LIMIT #{limit}" if limit

@@ -60,25 +60,53 @@ describe Visualization::Histogram do
         visualization.fetch!(account, 12345)
       end
 
-      context "with no filter" do
-        let(:filters) { nil }
+      context 'dataset is a chorus view' do
+        let(:dataset) { datasets(:executable_chorus_view) }
 
-        it "returns the frequency data" do
-          visualization.rows.should == [
-              {:bin => [0, 0.5], :frequency => 3},
-              {:bin => [0.5, 1.0], :frequency => 6}
-          ]
+        context 'with no filter' do
+          let(:filters) { nil }
+
+          it 'fetches the data' do
+            visualization.rows.should == [
+                {:bin => [0, 0.5], :frequency => 3},
+                {:bin => [0.5, 1.0], :frequency => 6}
+            ]
+          end
+        end
+
+        context 'with a filter' do
+          let(:filters) { ['"CHORUS_VIEW"."category" = \'papaya\''] }
+
+          it 'fetches the data' do
+            visualization.rows.should == [
+                {:bin => [0, 0.5], :frequency => 1},
+                {:bin => [0.5, 1.0], :frequency => 3}
+            ]
+          end
         end
       end
 
-      context "with filters" do
-        let(:filters) { ['"base_table1"."category" = \'papaya\''] }
+      context 'dataset is a table' do
+        context "with no filter" do
+          let(:filters) { nil }
 
-        it "returns the frequency data based on the filtered dataset" do
-          visualization.rows.should == [
-              {:bin => [0, 0.5], :frequency => 1},
-              {:bin => [0.5, 1.0], :frequency => 3}
-          ]
+          it "returns the frequency data" do
+            visualization.rows.should == [
+                {:bin => [0, 0.5], :frequency => 3},
+                {:bin => [0.5, 1.0], :frequency => 6}
+            ]
+          end
+        end
+
+        context "with filters" do
+          let(:filters) { ['"base_table1"."category" = \'papaya\''] }
+
+          it "returns the frequency data based on the filtered dataset" do
+            visualization.rows.should == [
+                {:bin => [0, 0.5], :frequency => 1},
+                {:bin => [0.5, 1.0], :frequency => 3}
+            ]
+          end
         end
       end
     end

@@ -1,5 +1,5 @@
 module Visualization
-  class Histogram
+  class Histogram < Base
     attr_accessor :rows, :bins, :category, :filters, :type
     attr_writer :dataset, :schema
 
@@ -13,10 +13,9 @@ module Visualization
     end
 
     def build_row_sql
-      db_name = %Q{"#{@schema.name}"."#{@dataset.name}"}
-      category = %Q{#{db_name}."#{@category}"}
+      category = %Q{#{@dataset.scoped_name}."#{@category}"}
+
       width_bucket = "width_bucket(CAST(#{category} as numeric), CAST(#{@min} as numeric), CAST(#{@max} as numeric), #{@bins})"
-      relation = Arel::Table.new(db_name)
 
       query = relation.
           group(width_bucket).
@@ -29,7 +28,6 @@ module Visualization
     end
 
     def build_min_max_sql
-      relation = Arel::Table.new(%Q{"#{@schema.name}"."#{@dataset.name}"})
       query = relation.
           project(relation[@category].minimum.as('min'), relation[@category].maximum.as('max'))
 
@@ -37,12 +35,13 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      min_max_result = SqlExecutor.execute_sql(@schema, account, check_id, build_min_max_sql)
+
+      min_max_result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql)
+
       @min = min_max_result.rows[0][0].to_f
       @max = min_max_result.rows[0][1].to_f
 
-      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
-
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       row_data = result.rows.map { |row| {:bin => row[0].to_i, :frequency => row[1].to_i} }
 
       @rows = massage(row_data)
