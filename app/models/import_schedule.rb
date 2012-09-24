@@ -28,7 +28,7 @@ class ImportSchedule < ActiveRecord::Base
     if value
       self.deleted_at = nil
     else
-      self.deleted_at = Time.now
+      destroy
     end
   end
 

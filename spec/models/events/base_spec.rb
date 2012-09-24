@@ -140,6 +140,15 @@ describe Events::Base do
         let(:attr) { :destination_table }
         it { should be_a(String) }
       end
+
+      context "when the attribute has been deleted" do
+        before do
+          event.source_dataset.destroy
+          event.reload
+        end
+        let(:attr) { :source_dataset_id }
+        xit { should be_a(Dataset) }
+      end
     end
   end
 

@@ -31,16 +31,10 @@ module Events
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
-    {:actor => "User", :workspace => "Workspace", :target1 => nil, :target2 => nil}.each do |method, class_name|
+    [:actor, :workspace, :target1, :target2].each do |method|
       define_method("#{method}_with_deleted") do
-        original = send(:"#{method}_without_deleted")
-        return original if original
-        type = class_name || send(:"#{method}_type")
-        if type
-          type.constantize.unscoped do
-            send(:"#{method}_without_deleted", true)
-          end
-        end
+        original_method = :"#{method}_without_deleted"
+        send(original_method) || try_unscoped(method) { send(original_method, true) }
       end
       alias_method_chain method, :deleted
     end
@@ -160,6 +154,22 @@ module Events
 
         define_method(wrapper_name) { wrapper_type.find_by_id(send(wrapped_id)) }
         define_method("#{wrapper_name}=") { |value| send("#{wrapped_id}=", value.present? ? value.id : nil) }
+      end
+    end
+
+    private
+
+    def try_unscoped(method, &block)
+      type = target_class(method).try(:unscoped,&block)
+    end
+
+    def target_class(method)
+      case method
+        when :actor then User
+        when :workspace then Workspace
+        else
+          type = try(:"#{method}_type")
+          type.constantize if type
       end
     end
   end
