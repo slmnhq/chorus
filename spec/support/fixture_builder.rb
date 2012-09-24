@@ -226,6 +226,9 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :comment_on_note_on_no_collaborators_private,
                   Comment.create!({:text => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
 
+    #fbuilder.name :comment_on_note_on_public_workfile,
+    #              Comment.create!({:text => "Comment on public workfile", :event_id => note_on_public_workfile.id, :author_id => no_collaborators.id})
+
     #Events
     Timecop.travel(-1.day)
     Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => no_collaborators)

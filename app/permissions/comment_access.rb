@@ -10,6 +10,7 @@ class CommentAccess < AdminFullAccess
     Events::Base.for_dashboard_of(current_user).find(event.id)
     true
   rescue ActiveRecord::RecordNotFound => e
+    return true if event.workspace.public?
     false
   end
 

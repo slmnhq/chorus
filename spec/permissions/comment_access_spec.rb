@@ -7,6 +7,8 @@ describe CommentAccess do
   let(:comment_author) { users(:no_collaborators) }
   let(:event) { events(:note_on_no_collaborators_private)}
   let(:comment) { comments(:comment_on_note_on_no_collaborators_private) }
+  #let(:comment_on_note_on_public_workfile) { comments(:comment_on_note_on_public_workfile) }
+  let(:event_note_on_public_workfile) { events(:note_on_public_workfile) }
   let(:comment_access) {
     controller = CommentsController.new
     stub(controller).current_user { user }
@@ -61,6 +63,14 @@ describe CommentAccess do
 
       it "allows" do
         comment_access.can?(:create_comment_on, Comment, event).should be_true
+      end
+    end
+
+    context "on Public workspace" do
+      let(:user) { users(:no_collaborators) }
+
+      it "allows" do
+        comment_access.can?(:create_comment_on, Comment, event_note_on_public_workfile).should be_true
       end
     end
   end
