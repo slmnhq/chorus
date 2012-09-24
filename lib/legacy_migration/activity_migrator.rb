@@ -30,7 +30,8 @@ class ActivityMigrator < AbstractMigrator
           Events::ProvisioningSuccess,
           Events::WorkfileUpgradedVersion,
           Events::ChorusViewCreated,
-          Events::ChorusViewChanged
+          Events::ChorusViewChanged,
+          Events::WorkspaceChangeName
       ]
     end
 
@@ -426,6 +427,53 @@ class ActivityMigrator < AbstractMigrator
     WHERE streams.type = 'DATASET_CHANGED_QUERY'
     AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewChanged');
     ))
+    end
+
+    def migrate_workspace_name_changed
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      legacy_type,
+      action,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::WorkspaceChangeName',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object aso
+        ON streams.id = aso.activity_stream_id
+        AND aso.object_type = 'object'
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE streams.type = 'WORKSPACE_CHANGE_NAME'
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceChangeName');
+    ))
+
+
+      backfill_workspace_change_name_additional_data
+    end
+
+    def backfill_workspace_change_name_additional_data
+
+      Events::WorkspaceChangeName.where('additional_data IS NULL').each do |event|
+        row = Legacy.connection.exec_query("SELECT aso.object_name as workspace_old_name FROM edc_activity_stream_object aso
+                                      WHERE aso.activity_stream_id = '#{event.legacy_id}'
+                                      AND aso.entity_type = 'workspace' AND aso.object_type = 'object';").first
+        event.additional_data = {:workspace_old_name => row['workspace_old_name']}
+        event.save!
+      end
     end
 
     def migrate_file_import_created
@@ -1069,6 +1117,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_chorus_view_created_from_workfile
       migrate_chorus_view_created_from_dataset
       migrate_chorus_view_changed
+      migrate_workspace_name_changed
 
       Events::Base.find_each { |event| event.create_activities }
 

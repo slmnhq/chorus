@@ -426,6 +426,23 @@ describe ActivityMigrator do
         count.should > 0
         Events::WorkfileUpgradedVersion.count.should == count
       end
+
+      it "copies WORKSPACE CHANGE NAME from legacy activity" do
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as workspace_old_name FROM legacy_migrate.edc_activity_stream ed
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id AND aso.object_type = 'object'
+          where  type = 'WORKSPACE_CHANGE_NAME';").each do |row|
+          count += 1
+
+          event = Events::WorkspaceChangeName.find_by_legacy_id(row["id"])
+
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+          event.additional_data['workspace_old_name'].should == row['workspace_old_name']
+        end
+        count.should > 0
+        Events::WorkspaceChangeName.count.should == count
+      end
     end
 
     it "should create activities" do

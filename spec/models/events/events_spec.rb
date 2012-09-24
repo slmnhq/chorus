@@ -536,4 +536,22 @@ describe "Event types" do
     it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity
   end
+
+  describe "WorkspaceChangeName" do
+    subject do
+      Events::WorkspaceChangeName.add(
+          :actor => actor,
+          :workspace => workspace,
+          :workspace_old_name => "oldname"
+      )
+    end
+
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == {:workspace => workspace} }
+    its(:additional_data) { should == {'workspace_old_name' => 'oldname'} }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_does_not_create_a_global_activity
+  end
 end
