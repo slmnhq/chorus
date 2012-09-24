@@ -65,6 +65,8 @@ function start () {
 		echo "$GREENPLUM_IP local_greenplum"
 	else
 		"$FUSION_BIN_PATH/vmrun" -T fusion start gpdb421ee/Greenplum\ 4.2.1.vmx nogui
+		echo "starting Greenplum database"
+        "$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "source /home/gpadmin/.profile; /usr/local/greenplum-db/bin/gpstart -a"
 	fi
 }
 
