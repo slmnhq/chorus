@@ -10,6 +10,7 @@ attachment_storage: ":rails_root/system/"
 max_upload_size_megabytes: 100
 server_port: 8080
 ssl: "off"
+ssl_server_port: 8443
 ssl_certificate: ""
 ssl_certificate_key: ""
 timezone_offset: -8

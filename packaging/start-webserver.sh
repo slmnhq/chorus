@@ -37,8 +37,8 @@ case $RAILS_ENV in
         if ( test -f $MIZUNO_PID_FILE ) && ( kill -0 `cat $MIZUNO_PID_FILE` > /dev/null 2>&1 ); then
             log "Mizuno already running as process `cat $MIZUNO_PID_FILE`."
         else
-            log "starting mizuno on port 8081..."
-            if bundle exec mizuno -p 8081 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
+            log "starting mizuno on port 3000..."
+            if bundle exec mizuno -p 3000 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
                 wait_for_start $MIZUNO_PID_FILE
             fi
         fi

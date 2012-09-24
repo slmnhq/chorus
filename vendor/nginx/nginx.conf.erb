@@ -33,15 +33,17 @@ http {
     #gzip  on;
 
     server {
-        listen       <%= chorus_config['server_port'] %>;
+        listen      <%= chorus_config['server_port'] %>;
 
-
-    <% if chorus_config['ssl'] == 'on' %>
-    ssl on;
-	ssl_certificate <%= chorus_config['ssl_certificate'] %>;
-	ssl_certificate_key <%= chorus_config['ssl_certificate_key'] %>;
-	keepalive_timeout 70;
-    <% end %>
+<% if chorus_config['ssl'] == 'on' %>
+        rewrite ^ https://localhost:8443$request_uri? redirect;
+    }
+    server {
+        listen      <%=  chorus_config['ssl_server_port'] %> ssl;
+        ssl_certificate <%= chorus_config['ssl_certificate'] %>;
+        ssl_certificate_key <%= chorus_config['ssl_certificate_key'] %>;
+        keepalive_timeout 70;
+<% end %>
 
         server_name  localhost;
 
@@ -69,7 +71,7 @@ http {
         }
 
         location @app {
-            proxy_pass http://127.0.0.1:8081;
+            proxy_pass http://127.0.0.1:3000;
             proxy_redirect off;
 
             proxy_set_header Host $host;
