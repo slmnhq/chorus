@@ -19,3 +19,10 @@ instances:
     account:
       db_username: "test_superuser"
       db_password: "secret"
+
+  - host: "local_greenplum"
+    port: 5432
+    maintenance_db: "postgres"
+    account:
+      db_username: "test_superuser"
+      db_password: "secret"

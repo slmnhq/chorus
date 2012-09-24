@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # run this from the rails root.
+# Actual link: http://bitcast-a.v1.sjc1.bitgravity.com/greenplum/Greenplum_CE_Database/database_server/4.2.1.0/gpdb421ee.tar.gz
 
 command=$1
 
@@ -44,20 +45,24 @@ function start () {
 		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/service iptables stop"
 		"$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "/sbin/chkconfig iptables off"
 
-		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         chorus         $GREENPLUM_IP/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
+        echo "Writing /etc/hosts and pg_hba.conf..."
+        VMHOST_HOSTNAME=`hostname`
+        VMHOST_IP=`ifconfig vmnet1 | grep 'inet ' | awk '{ print $2}'`
+        "$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo '$VMHOST_IP $VMHOST_HOSTNAME' >> /etc/hosts"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         test_superuser         $GREENPLUM_IP/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
 
 
 
 		echo "starting Greenplum database"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "source /home/gpadmin/.profile; /usr/local/greenplum-db/bin/gpstart -a"
 		echo "Creating chorus user"
-		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "createuser -s chorus"
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "createuser -s test_superuser"
 		echo "Creating chorus password"
-		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "psql postgres -c \"alter user chorus with password 'password';\""
+		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "psql postgres -c \"alter user test_superuser with password 'secret';\""
 
 
 		echo "Add the following to /etc/hosts with sudo:"
-		echo "$GREENPLUM_IP local-greenplum"
+		echo "$GREENPLUM_IP local_greenplum"
 	else
 		"$FUSION_BIN_PATH/vmrun" -T fusion start gpdb421ee/Greenplum\ 4.2.1.vmx nogui
 	fi
@@ -89,6 +94,10 @@ function revert() {
 
 function status() {
 	"$FUSION_BIN_PATH/vmrun" list
+    "$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromGuestToHost gpdb421ee/Greenplum\ 4.2.1.vmx /home/gpadmin/GREENPLUM_IP ./GREENPLUM_IP
+    GREENPLUM_IP=`cat ./GREENPLUM_IP`
+    echo "Add the following to /etc/hosts with sudo:"
+    echo "$GREENPLUM_IP local_greenplum"
 }
 
 function remove() {

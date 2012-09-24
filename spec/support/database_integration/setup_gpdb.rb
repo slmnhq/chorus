@@ -3,11 +3,13 @@ require 'digest/md5'
 
 module GpdbIntegration
   config_file = "test_gpdb_connection_config.yml"
-  host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
 
+  REAL_GPDB_HOST = ENV['GPDB_HOST'] || 'local_greenplum'
   CONFIG          = YAML.load_file(File.expand_path("../#{config_file}", __FILE__))
-  INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == host_name }
+  INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == REAL_GPDB_HOST }
   ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
+  REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
+  REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
 
   def self.execute_sql(sql_file)
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
@@ -102,8 +104,7 @@ module GpdbIntegration
   end
 
   def self.real_gpdb_instance
-    host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
-    GpdbInstance.find_by_name(host_name.gsub("-", "_"))
+    GpdbInstance.find_by_name(REAL_GPDB_HOST.gsub("-", "_"))
   end
 
   def self.real_database

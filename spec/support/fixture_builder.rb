@@ -63,7 +63,7 @@ FixtureBuilder.configure do |fbuilder|
 
     chorus_gpdb40_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
     chorus_gpdb41_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
-    chorus_gpdb42_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb42").merge({:name => "chorus_gpdb42", :owner => admin}), :without_protection => true)
+    chorus_gpdb42_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge({:name => GpdbIntegration::REAL_GPDB_HOST.gsub('-', '_'), :owner => admin}), :without_protection => true)
 
     # Instance Accounts
     shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => shared_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
@@ -74,7 +74,7 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name(:chorus_gpdb40_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :gpdb_instance => chorus_gpdb40_instance}), :without_protection => true))
     fbuilder.name(:chorus_gpdb41_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :gpdb_instance => chorus_gpdb41_instance}), :without_protection => true))
-    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb42").merge({:owner => admin, :gpdb_instance => chorus_gpdb42_instance}), :without_protection => true)
+    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge({:owner => admin, :gpdb_instance => chorus_gpdb42_instance}), :without_protection => true)
     fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
 
     InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb40_instance}, :without_protection => true)
@@ -252,7 +252,7 @@ FixtureBuilder.configure do |fbuilder|
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases
-    GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name("ChorusAnalytics"))
+    GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name))
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 

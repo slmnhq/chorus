@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export RAILS_ENV=test
+GPDB_HOST=chorus-gpdb42
 
 . script/ci/setup.sh
 
@@ -24,7 +25,7 @@ sleep 30
 set +e
 
 echo "Running unit tests"
-script/test 2>&1
+GPDB_HOST=$GPDB_HOST script/test 2>&1
 RUBY_TESTS_RESULT=$?
 
 echo "Running javascript tests"
