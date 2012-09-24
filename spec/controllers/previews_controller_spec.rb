@@ -43,7 +43,7 @@ describe PreviewsController do
 
     context "when there's an error'" do
       before do
-        mock(SqlExecutor).preview_dataset(gpdb_table, account, '0.43214321') { raise CancelableQuery::QueryError }
+        mock(SqlExecutor).preview_dataset(gpdb_table, account, '0.43214321') { raise MultipleResultsetQuery::QueryError }
       end
       it "returns an error if the query fails" do
         post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}

@@ -26,28 +26,10 @@ class GpdbColumn
     self.columns_for_table(account, dataset)
   end
 
-  def self.columns_for_chorusview(account, view)
-    view.with_gpdb_connection(account) do |connection|
-      query = view.query
-      jdbc_conn = connection.instance_variable_get(:"@connection").connection
-      s = jdbc_conn.prepareStatement(query)
-      flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
-      s.executeWithFlags(flag)
-      metaData = s.getResultSet.getMetaData
-      numColumns = metaData.getColumnCount
-      (1..numColumns).map do |index|
-        GpdbColumn.new({
-          :name => metaData.getColumnName(index),
-          :data_type => metaData.getColumnTypeName(index)
-        })
-      end
-    end
-  end
-
   def self.columns_for_table(account, table)
     columns_with_stats = table.with_gpdb_connection(account) do |conn|
       sql = table.query_setup_sql + COLUMN_METADATA_QUERY % [conn.quote(table.schema.name), conn.quote(table.name), conn.quote(conn.quote_column_name(table.name))]
-      CancelableQuery.new(conn, nil).execute(sql).hashes
+      MultipleResultsetQuery.new(conn).execute(sql).hashes
     end
 
     columns_with_stats.map.with_index do |raw_row_data, i|

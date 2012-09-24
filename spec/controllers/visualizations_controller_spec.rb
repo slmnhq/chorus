@@ -111,7 +111,7 @@ describe VisualizationsController do
     context "when there's an error'" do
       before do
         any_instance_of(Visualization::Histogram) do |visualization|
-          stub(visualization).fetch!(instance_account, "43_#{user.id}") { raise CancelableQuery::QueryError }
+          stub(visualization).fetch!(instance_account, "43_#{user.id}") { raise MultipleResultsetQuery::QueryError }
         end
       end
 

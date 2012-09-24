@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::JDBCError', :with => :render_pg_error
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_pg_error
   rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
-  rescue_from 'CancelableQuery::QueryError', :with => :render_query_error
+  rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
 
   helper_method :current_user
