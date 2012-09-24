@@ -58,7 +58,7 @@ group :test, :development, :integration, :packaging do
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
   gem 'jasmine'
-  gem 'rspec_api_documentation'
+  gem 'rspec_api_documentation', :github => "pivotal-leopold/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder'

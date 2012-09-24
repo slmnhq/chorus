@@ -40,6 +40,18 @@ GIT
       scrolls (~> 0.0.8)
 
 GIT
+  remote: git://github.com/pivotal-leopold/rspec_api_documentation.git
+  revision: de1eaeec63bee61c29793328c09c4f98f1813edb
+  specs:
+    rspec_api_documentation (0.8.0)
+      activesupport (>= 3.0.0)
+      i18n (>= 0.1.0)
+      json (>= 1.4.6)
+      mustache (>= 0.99.4)
+      rspec (>= 2.6.0)
+      webmock (>= 1.7.0)
+
+GIT
   remote: git://github.com/pivotal/sunspot_matchers.git
   revision: a4684f540c27182c0a5c9f1b1fec16979c69bafa
   branch: sunspot_2_pre
@@ -233,13 +245,6 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.11.0)
-    rspec_api_documentation (0.8.0)
-      activesupport (>= 3.0.0)
-      i18n (>= 0.1.0)
-      json (>= 1.4.6)
-      mustache (>= 0.99.4)
-      rspec (>= 2.6.0)
-      webmock (>= 1.7.0)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
@@ -288,7 +293,7 @@ GEM
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
     vcr (2.1.1)
-    webmock (1.8.9)
+    webmock (1.8.10)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
     will_paginate (3.0.3)
@@ -338,7 +343,7 @@ DEPENDENCIES
   rake
   rr
   rspec-rails
-  rspec_api_documentation
+  rspec_api_documentation!
   ruby-debug
   sass-rails
   shoulda-matchers
