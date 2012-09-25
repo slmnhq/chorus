@@ -5,6 +5,7 @@ namespace :db do
       begin
         old_env, ENV['RAILS_ENV'] = ENV['RAILS_ENV'], 'integration'
         Rake::Task[:"db:structure:load"].invoke
+        Rake::Task[:"db:structure:load"].reenable
       ensure
         ENV['RAILS_ENV'] = old_env
       end
