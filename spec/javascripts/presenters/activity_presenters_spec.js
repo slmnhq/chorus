@@ -838,6 +838,30 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("workspace name change", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.workspaceChangeName({
+                workspace: { id: 55, name: "paleo_eaters" },
+                workspaceOldName: "old_name"
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkspaceChangeName.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    workspaceOldName: model.get("workspaceOldName")
+                }
+            );
+        });
+    });
+
     context("members added event", function() {
         var activity_data, activity_without_workspace_data;
         beforeEach(function() {

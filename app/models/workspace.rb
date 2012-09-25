@@ -27,7 +27,7 @@ class Workspace < ActiveRecord::Base
   validate :archiver_is_set_when_archiving
   validates_attachment_size :image, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
-  before_update :clear_assigned_datasets_on_sandbox_assignment
+  before_update :clear_assigned_datasets_on_sandbox_assignment, :create_name_change_event
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
@@ -189,6 +189,9 @@ class Workspace < ActiveRecord::Base
     self.has_added_sandbox = true if sandbox_id_changed? && sandbox
     true
   end
+  def create_name_change_event
+    create_workspace_name_change_event if name_changed?
+  end
 
   def clear_assigned_datasets_on_sandbox_assignment
     return true unless sandbox_id_changed? && sandbox
@@ -196,5 +199,9 @@ class Workspace < ActiveRecord::Base
       bound_datasets.destroy(dataset) if sandbox.datasets.include? dataset
     end
     true
+  end
+
+  def create_workspace_name_change_event
+    Events::WorkspaceChangeName.by(ActiveRecord::Base.current_user).add(:workspace => self, :workspace_old_name => self.name_was)
   end
 end

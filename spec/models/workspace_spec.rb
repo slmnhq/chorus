@@ -371,5 +371,30 @@ describe Workspace do
         end
       end
     end
+
+    describe "after_update" do
+      let(:owner) { users(:no_collaborators) }
+
+      before do
+        stub(ActiveRecord::Base).current_user { owner }
+      end
+
+      it "creates an event if the workspace name was changed" do
+        old_name = workspace.name
+        expect {
+          workspace.name = "new_workspace_name"
+          workspace.save
+        }.to change{ Events::WorkspaceChangeName.count }.by(1)
+        workspace.reload.name.should == 'new_workspace_name'
+        Events::WorkspaceChangeName.first.additional_data.should == {'workspace_old_name' => old_name}
+      end
+
+      it "does not create an event if the workspace name was not changed" do
+        expect {
+          workspace.name = workspace.name
+          workspace.save
+        }.not_to change{ Events::WorkspaceChangeName.count }
+      end
+    end
   end
 end

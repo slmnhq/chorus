@@ -235,6 +235,11 @@
 
             ChorusViewChanged: {
                 links: ["actor", "workspace", "dataset"]
+            },
+
+            WorkspaceChangeName: {
+                links: ["actor", "workspace"],
+                computed: ["workspaceOldName"]
             }
         },
 
@@ -395,6 +400,10 @@
 
         greenplumInstanceName: function(self) {
             return self.model.greenplumInstance().get("name")
+        },
+
+        workspaceOldName: function(self) {
+            return self.model.get("workspaceOldName")
         }
     };
 })();
