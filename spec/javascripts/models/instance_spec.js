@@ -34,7 +34,7 @@ describe("chorus.models.Instance", function() {
             var owner = this.instance.owner();
             expect(owner.get("id")).toBe(this.instance.get("owner").id);
             expect(owner.get("username")).toBe(this.instance.get("owner").username);
-            expect(owner.displayName()).toBe("John Doe");
+            expect(owner.displayName()).toBe(this.instance.get("owner").firstName + " " + this.instance.get("owner").lastName);
         })
     });
 

@@ -2,17 +2,17 @@ FactoryGirl.define do
   factory :user, :aliases => [:owner, :modifier, :actor] do
     sequence(:username) { |n| "user#{n}" }
     password "password"
-    first_name "John"
-    last_name "Doe"
+    first_name {Faker::Name.first_name}
+    last_name {Faker::Name.last_name}
     title "Grand Poo Bah"
     dept "Corporation Corp., Inc."
     notes "One of our top performers"
-    sequence(:email) { |n| "person#{n}@example.com" }
+    email {Faker::Internet.email(first_name)}
   end
 
   factory :admin, :parent => :user do
-    first_name "Admin"
-    last_name "User"
+    sequence(:first_name) { |n| "Admin_#{n}" }
+    sequence(:last_name) { |n| "User_#{n}" }
     admin true
   end
 

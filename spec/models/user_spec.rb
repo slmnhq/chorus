@@ -53,18 +53,18 @@ describe User do
 
   describe ".order" do
     it "sorts by first name, by default" do
-      User.order(nil).to_a.should == User.all(:order => "first_name").to_a
+      User.order(nil).to_a.should == User.all(:order => "LOWER(first_name)").to_a
     end
 
     context "with a recognized sort order" do
       it "respects the sort order" do
-        User.order("last_name").to_a.should == User.all(:order => "last_name").to_a
+        User.order("last_name").to_a.should == User.all(:order => "LOWER(last_name)").to_a
       end
     end
 
     context "with an unrecognized sort order" do
       it "sorts by first name" do
-        User.order("last_name; DROP TABLE users;").to_a.should == User.order("first_name").to_a
+        User.order("last_name; DROP TABLE users;").to_a.should == User.order("LOWER(first_name)").to_a
       end
     end
   end

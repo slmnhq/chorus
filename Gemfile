@@ -64,6 +64,7 @@ group :test, :development, :integration, :packaging do
   gem 'fixture_builder'
   gem 'spork-rails'
   gem 'ci_reporter'
+  gem 'faker'
 end
 
 group :development do

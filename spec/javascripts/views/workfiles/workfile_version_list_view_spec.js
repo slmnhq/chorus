@@ -2,7 +2,7 @@ describe("chorus.views.WorkfileVersionList", function() {
     beforeEach(function() {
         var version2attributes = rspecFixtures.workfileVersion({
             versionInfo: {
-                modifier: {firstName: 'Bob'},
+                modifier: {firstName: 'Bob', lastName: 'Doe'},
                 versionNum: 2,
                 updatedAt: '2012-11-29T10:00:00Z'
             }
@@ -10,7 +10,7 @@ describe("chorus.views.WorkfileVersionList", function() {
 
         var version1attributes = rspecFixtures.workfileVersion({
             versionInfo: {
-                modifier: {firstName: 'Rob'},
+                modifier: {firstName: 'Rob', lastName: 'Doe'},
                 versionNum: 1,
                 updatedAt: '2011-11-29T10:00:00Z'
             }
