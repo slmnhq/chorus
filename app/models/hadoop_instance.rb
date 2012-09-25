@@ -20,6 +20,10 @@ class HadoopInstance < ActiveRecord::Base
     "gphdfs://#{host}:#{port}/"
   end
 
+  def self.full_refresh(id)
+    find(id).refresh
+  end
+
   def refresh(path = "/")
     entries = HdfsEntry.list(path, self)
     entries.each { |entry| refresh(entry.path) if entry.is_directory? }

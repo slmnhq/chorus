@@ -97,7 +97,7 @@ describe GpdbInstancesController do
       let(:valid_attributes) { Hash.new }
 
       before do
-        gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => "new")
+        gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => "new", :id => 42)
         mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { gpdb_instance }
       end
 
@@ -109,6 +109,11 @@ describe GpdbInstancesController do
       it "renders the newly created gpdb instance" do
         post :create, :instance => valid_attributes
         decoded_response.name.should == "new"
+      end
+
+      it "schedules a job to refresh the instance" do
+        mock(QC.default_queue).enqueue("GpdbInstance.refresh", numeric)
+        post :create, :instance => valid_attributes
       end
     end
 

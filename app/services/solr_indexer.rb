@@ -14,11 +14,7 @@ module SolrIndexer
   def self.refresh_external_data
     Rails.logger.info("Starting Solr Refresh")
     GpdbInstance.find_each do |gpdb_instance|
-      gpdb_instance.refresh_databases(:mark_stale => true)
-
-      gpdb_instance.databases.each do |database|
-        GpdbSchema.refresh(gpdb_instance.owner_account, database, :mark_stale => true, :refresh_all => true)
-      end
+      gpdb_instance.refresh_all(:mark_stale => true)
     end
     HadoopInstance.find_each do |hadoop_instance|
       hadoop_instance.refresh

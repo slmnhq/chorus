@@ -5,13 +5,7 @@ describe SolrIndexer do
     it "refreshes all gpdb instances, all their databases, and all hadoop instances" do
       gpdb_instance_count = 0
       any_instance_of(GpdbInstance) do |instance|
-        stub(instance).refresh_databases { gpdb_instance_count += 1 }
-      end
-
-      GpdbInstance.all.each do |instance|
-        instance.databases.each do |database|
-          mock(GpdbSchema).refresh(instance.owner_account, database, :mark_stale => true, :refresh_all => true)
-        end
+        stub(instance).refresh_all(:mark_stale => true) { gpdb_instance_count += 1 }
       end
 
       hadoop_instance_count = 0

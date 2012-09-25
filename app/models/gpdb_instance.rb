@@ -104,6 +104,18 @@ class GpdbInstance < ActiveRecord::Base
     self
   end
 
+  def self.refresh(id, options={})
+    find(id).refresh_all options
+  end
+
+  def refresh_all(options={})
+    refresh_databases options
+
+    databases.each do |database|
+      GpdbSchema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
+    end
+  end
+
   def entity_type_name
     'greenplum_instance'
   end

@@ -371,5 +371,26 @@ describe GpdbInstance do
       subject.databases.map(&:name).should_not include "template0"
     end
   end
+
+  describe ".refresh" do
+    let(:instance) { gpdb_instances(:owners) }
+
+    before do
+      @refreshed_databases = false
+      any_instance_of(GpdbInstance) do |gpdb_instance|
+        stub(gpdb_instance).refresh_databases { @refreshed_databases = true }
+      end
+
+      instance.databases.count.should > 0
+      instance.databases.each do |database|
+        mock(GpdbSchema).refresh(instance.owner_account, database, :refresh_all => true)
+      end
+    end
+
+    it "should refresh all databases for the instance" do
+      described_class.refresh(instance.id)
+      @refreshed_databases.should == true
+    end
+  end
 end
 

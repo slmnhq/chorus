@@ -27,6 +27,11 @@ describe HadoopInstancesController do
         post :create, :hadoop_instance => valid_attributes
         decoded_response.name.should == hadoop_instance.name
       end
+
+      it "schedules a job to refresh the instance" do
+        mock(QC.default_queue).enqueue("HadoopInstance.full_refresh", numeric)
+        post :create, :hadoop_instance => valid_attributes
+      end
     end
   end
 

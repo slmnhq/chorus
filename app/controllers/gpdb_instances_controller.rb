@@ -20,6 +20,8 @@ class GpdbInstancesController < GpdbController
                                                        :aurora => use_aurora)
     if use_aurora
       QC.enqueue("AuroraProvider.provide!", created_gpdb_instance.id, params[:instance])
+    else
+      QC.enqueue("GpdbInstance.refresh", created_gpdb_instance.id)
     end
 
     present created_gpdb_instance, :status => :created
