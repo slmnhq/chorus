@@ -246,7 +246,7 @@ CREATE DATABASE "gpdb_test_database_no_public_schema" OWNER gpadmin;
 
 \connect "gpdb_test_database_no_public_schema"
 
-  DROP SCHEMA public;
+  DROP SCHEMA public CASCADE;
 
   CREATE SCHEMA non_public_schema;
     SET search_path TO 'non_public_schema';
