@@ -1,10 +1,11 @@
 require "spec_helper"
 
 describe NotesController do
+  let(:user) { users(:owner) }
+
   describe "#create" do
     before do
-      @user = FactoryGirl.create(:user)
-      log_in @user
+      log_in user
     end
 
     it "creates a note on the model specified by the 'entity_type' and 'entity_id'" do
@@ -12,7 +13,7 @@ describe NotesController do
         "entity_type" => "greenplum_instance",
         "entity_id" => "3",
         "body" => "I'm a note",
-      }, @user)
+      }, user)
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "I'm a note" }
       response.code.should == "201"
     end
@@ -23,7 +24,7 @@ describe NotesController do
               "entity_type" => "greenplum_instance",
               "entity_id" => "3",
               "body" => "<b>not evil</b> ",
-          }, @user)
+          }, user)
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "<b>not evil</b> <script>alert('Evil!')</script>" }
       response.code.should == "201"
     end
@@ -80,7 +81,8 @@ describe NotesController do
   end
 
   describe "#update" do
-    let(:note) { FactoryGirl.create(:note_on_greenplum_instance_event) }
+    let(:note) { events(:note_on_greenplum) }
+
     context "as the note owner" do
       before do
         log_in note.actor
@@ -90,7 +92,15 @@ describe NotesController do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "200"
 
-        Events::Note.first.body.should == "Some crazy content"
+        note.reload.body.should == "Some crazy content"
+      end
+
+      it "sanitize the Note body before update" do
+        log_in note.actor
+        post :update, :id => note.id, :note => {:body => "Hi there<script>alert('haha I am evil')</script>"}
+        response.code.should == "200"
+
+        note.reload.body.should == "Hi there"
       end
     end
 
@@ -104,22 +114,13 @@ describe NotesController do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "403"
 
-        Events::Note.first.body.should_not == "Some crazy content"
+        note.reload.body.should_not == "Some crazy content"
       end
     end
-
-    it "sanitize the Note body before update" do
-      log_in note.actor
-      post :update, :id => note.id, :note => {:body => "Hi there<script>alert('haha I am evil')</script>"}
-      response.code.should == "200"
-
-      Events::Note.first.body.should == "Hi there"
-    end
-
   end
 
   describe "#destroy" do
-    let(:note) { Events::NoteOnGreenplumInstance.first }
+    let(:note) { events(:note_on_greenplum) }
 
     before do
       log_in note.actor
@@ -127,6 +128,7 @@ describe NotesController do
 
     it "destroys the note with the given id" do
       delete :destroy, :id => note.id
+      note.reload.should be_deleted
       Events::NoteOnGreenplumInstance.find_by_id(note.id).should be_nil
     end
 

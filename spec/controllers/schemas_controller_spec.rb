@@ -3,15 +3,15 @@ require 'spec_helper'
 describe SchemasController do
   ignore_authorization!
 
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:owner) }
 
   before do
     log_in user
   end
 
   context "#index" do
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner_id => user.id) }
-    let(:instanceAccount) { FactoryGirl.create(:instance_account, :gpdb_instance_id => gpdb_instance.id, :owner_id => user.id) }
+    let(:gpdb_instance) { gpdb_instances(:shared) }
+    let(:instance_account) { gpdb_instance.owner_account }
     let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => "test2") }
     let(:schema1) { FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database) }
     let(:schema2) { FactoryGirl.build(:gpdb_schema, :name => 'schema2', :database => database) }
@@ -24,7 +24,7 @@ describe SchemasController do
       FactoryGirl.create(:gpdb_table, :name => "table2", :schema => schema2)
       schema2.reload
 
-      stub(GpdbSchema).refresh(instanceAccount, database) { [schema1, schema2] }
+      stub(GpdbSchema).refresh(instance_account, database) { [schema1, schema2] }
     end
 
     it "uses authorization" do
@@ -55,7 +55,7 @@ describe SchemasController do
   end
 
   context "#show" do
-    let(:schema) { FactoryGirl.create(:gpdb_schema) }
+    let(:schema) { gpdb_schemas(:public) }
     before do
       any_instance_of(GpdbSchema) { |schema| stub(schema).verify_in_source }
     end

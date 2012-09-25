@@ -3,18 +3,19 @@ require 'spec_helper'
 describe GpdbInstancesController do
   ignore_authorization!
 
+  let(:user) { users(:owner) }
+
   before do
-    @user = users(:owner)
-    log_in @user
+    log_in user
   end
 
   describe "#index" do
     before do
       FactoryGirl.create(:gpdb_instance)
-      FactoryGirl.create(:gpdb_instance, :owner => @user)
+      FactoryGirl.create(:gpdb_instance, :owner => user)
       FactoryGirl.create(:gpdb_instance, :shared => true)
-      FactoryGirl.create(:instance_account, :owner => @user) # Creates a gpdb_instance too
-      FactoryGirl.create(:gpdb_instance, :owner => @user, :state => 'offline')
+      FactoryGirl.create(:instance_account, :owner => user) # Creates a gpdb_instance too
+      FactoryGirl.create(:gpdb_instance, :owner => user, :state => 'offline')
     end
 
     it "returns all gpdb instances" do
@@ -26,12 +27,12 @@ describe GpdbInstancesController do
     it "returns gpdb instances to which the user has access, if requested" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.size.should == GpdbInstanceAccess.gpdb_instances_for(@user).count - 1
+      decoded_response.size.should == GpdbInstanceAccess.gpdb_instances_for(user).count - 1
     end
   end
 
   describe "#show" do
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
+    let(:gpdb_instance) { gpdb_instances(:shared) }
 
     context "with a valid instance id" do
       it "does not require authorization" do
@@ -64,10 +65,10 @@ describe GpdbInstancesController do
 
   describe "#update" do
     let(:changed_attributes) { {"name" => "changed"} }
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
+    let(:gpdb_instance) { gpdb_instances(:shared) }
 
     before do
-      stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, @user) { gpdb_instance }
+      stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, user) { gpdb_instance }
     end
 
     it "uses authorization" do
@@ -83,7 +84,7 @@ describe GpdbInstancesController do
     it "should handle invalid updates" do
       tmp_gpdb_instance = FactoryGirl.create(:gpdb_instance)
       tmp_gpdb_instance.name = nil
-      stub(Gpdb::InstanceRegistrar).update!(tmp_gpdb_instance, changed_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
+      stub(Gpdb::InstanceRegistrar).update!(tmp_gpdb_instance, changed_attributes, user) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
       put :update, :id => tmp_gpdb_instance.id, :instance => changed_attributes
       response.code.should == "422"
     end
@@ -97,7 +98,7 @@ describe GpdbInstancesController do
 
       before do
         gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => "new")
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, @user, anything) { gpdb_instance }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { gpdb_instance }
       end
 
       it "reports that the gpdb instance was created" do
@@ -138,7 +139,7 @@ describe GpdbInstancesController do
         gpdb_instance = GpdbInstance.last
         gpdb_instance.name.should == 'instance_name'
         gpdb_instance.description.should == 'A description'
-        gpdb_instance.owner.should == @user
+        gpdb_instance.owner.should == user
       end
 
       it "enqueues a request to provision a database for an instance" do
@@ -157,7 +158,7 @@ describe GpdbInstancesController do
 
       before do
         gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => nil)
-        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, @user, anything) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
+        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, user, anything) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
       end
 
       it "responds with validation errors" do

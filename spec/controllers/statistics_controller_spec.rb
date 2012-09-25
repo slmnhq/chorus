@@ -1,25 +1,22 @@
 require 'spec_helper'
 
 describe StatisticsController do
-  let(:user) { FactoryGirl.create :user}
+  let(:user) { users(:owner) }
 
   before do
     log_in user
   end
 
   context "#show" do
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner_id => user.id) }
-    let(:instanceAccount) { FactoryGirl.create(:instance_account, :gpdb_instance_id => gpdb_instance.id, :owner_id => user.id) }
-
-    let(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => "database1") }
-    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1', :database => database) }
+    let(:schema) { gpdb_schemas(:public) }
+    let(:instance_account) { schema.database.gpdb_instance.owner_account }
     let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
 
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table1").to_sql }
     let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
 
     it "should retrieve the db object for a schema" do
-      stub_gpdb(instanceAccount,
+      stub_gpdb(instance_account,
         datasets_sql => [
                   { 'type' => "r", "name" => "table1", "master_table" => 't' }
                 ],

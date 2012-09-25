@@ -147,7 +147,7 @@ describe ChorusViewsController, :database_integration => true do
     end
 
     context "as a user who is not a workspace member" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { users(:not_a_member) }
 
       it "does not allow updating the chorus view" do
         put :update, :id => chorus_view.to_param,

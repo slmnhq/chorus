@@ -2,14 +2,14 @@ require 'spec_helper'
 
 resource "Greenplum Database" do
   let(:owner) { users(:owner) }
-  let!(:owned_instance) { FactoryGirl.create :gpdb_instance, :owner => owner }
-  let!(:database) { FactoryGirl.create :gpdb_database, :gpdb_instance => owned_instance }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => owned_instance, :owner => owner)}
+  let(:owned_instance) { gpdb_instances(:owners) }
+  let(:database) { gpdb_databases(:default) }
+  let(:owner_account) { owned_instance.owner_account }
   let(:id) { database.to_param }
   let(:database_id) { database.to_param }
 
-  let(:db_schema_1) { FactoryGirl.create(:gpdb_schema, :database => database) }
-  let(:db_schema_2) { FactoryGirl.create(:gpdb_schema, :database => database) }
+  let(:db_schema_1) { gpdb_schemas(:default) }
+  let(:db_schema_2) { gpdb_schemas(:public) }
 
   before do
     log_in owner

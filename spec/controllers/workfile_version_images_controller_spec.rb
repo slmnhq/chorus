@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe WorkfileVersionImagesController do
   ignore_authorization!
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:workfile) { FactoryGirl.create(:workfile)}
+  let(:user) { users(:owner) }
+  let(:workfile) { workfiles(:public) }
   let!(:version) { FactoryGirl.create(:workfile_version, :workfile => workfile) }
 
   before do

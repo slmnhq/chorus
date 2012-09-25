@@ -3,7 +3,7 @@ require 'spec_helper'
 describe InstanceDatabasesController do
   ignore_authorization!
 
-  let!(:user) { FactoryGirl.create :user }
+  let(:user) { users(:owner) }
 
   before do
     log_in user
@@ -16,8 +16,8 @@ describe InstanceDatabasesController do
     end
 
     context "when instance accessible" do
-      let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }
-      let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => gpdb_instance.owner }
+      let(:gpdb_instance) { gpdb_instances(:shared) }
+      let(:owner_account) { gpdb_instance.owner_account }
       let!(:database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
       let!(:database2) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
       let!(:database3) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance) }
@@ -30,6 +30,7 @@ describe InstanceDatabasesController do
 
       context "when the instance is currently being provisioned" do
         let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true, :state => "provisioning" }
+        let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => gpdb_instance.owner }
 
         it "returns 422 and a warning message" do
           get :index, :gpdb_instance_id => gpdb_instance.id
@@ -66,7 +67,7 @@ describe InstanceDatabasesController do
   end
 
   describe "#show" do
-    let(:database) { FactoryGirl.create(:gpdb_database) }
+    let(:database) { gpdb_databases(:default) }
 
     it "uses authorization" do
       mock(subject).authorize!(:show_contents, database.gpdb_instance)
@@ -94,6 +95,8 @@ describe InstanceDatabasesController do
     end
 
     context "when the current user does not have credentials for the instance" do
+      let(:database) { FactoryGirl.create(:gpdb_database) }
+
       subject { described_class.new }
 
       generate_fixture "forbiddenInstance.json" do

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe WorkfileVersionsController do
   ignore_authorization!
-  let(:user) { FactoryGirl.create(:user) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-  let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+  let(:workfile) { workfiles(:public) }
+  let(:workspace) { workfile.workspace }
+  let(:user) { workspace.owner }
   let(:workfile_version) { FactoryGirl.build(:workfile_version, :workfile => workfile) }
 
   before do
@@ -90,6 +90,9 @@ describe WorkfileVersionsController do
   end
 
   context "#index" do
+    let(:workspace) { workspaces(:public) }
+    let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+
     before :each do
       workfile_version.save
       workfile.build_new_version(user, test_file('some.txt'), "commit message - 2").save

@@ -146,9 +146,10 @@ describe GpdbSchema do
   end
 
   describe "#functions" do
-    let(:account) { FactoryGirl.create(:instance_account) }
     let(:database) { FactoryGirl.create(:gpdb_database, :name => "Analytics") }
-    let(:schema) { FactoryGirl.create(:gpdb_schema, :database => database) }
+    let(:schema) { gpdb_schemas(:public) }
+    let(:database) { schema.database }
+    let(:account) { database.gpdb_instance.owner_account }
 
     before do
       stub_gpdb(account,

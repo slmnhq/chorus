@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe WorkfilesController do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:admin) { FactoryGirl.create(:admin) }
-  let(:member) { FactoryGirl.create(:user) }
-  let(:non_member) { FactoryGirl.create(:user) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-  let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
-  let(:private_workfile) { FactoryGirl.create(:workfile, :workspace => private_workspace) }
-  let(:public_workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
+  let(:user) { users(:owner)}
+  let(:admin) { users(:admin) }
+  let(:member) { users(:the_collaborator) }
+  let(:non_member) { users(:no_collaborators) }
+  let(:workfile) { workfiles(:public) }
+  let(:workspace) { workfile.workspace }
   let(:file) { test_file("workfile.sql", "text/sql") }
 
   describe "#index" do
+    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
+
     before(:each) do
       log_in user
 
@@ -101,6 +101,10 @@ describe WorkfilesController do
   end
 
   describe "#show" do
+    let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
+    let(:private_workfile) { FactoryGirl.create(:workfile, :workspace => private_workspace) }
+    let(:public_workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
+
     context "for a private workspace" do
       before do
         FactoryGirl.create(:workfile_version, :workfile => private_workfile, :contents => file)
@@ -222,17 +226,16 @@ describe WorkfilesController do
 
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, workspace
-      delete :destroy, :id => public_workfile.id
+      delete :destroy, :id => workfile.id
     end
 
     describe "deleting" do
       before do
-        delete :destroy, :id => public_workfile.id
+        delete :destroy, :id => workfile.id
       end
 
       it "should soft delete the workfile" do
-        workfile = Workfile.find_with_destroyed(public_workfile.id)
-        workfile.deleted_at.should_not be_nil
+        workfile.reload.should be_deleted
       end
 
       it "should respond with success" do

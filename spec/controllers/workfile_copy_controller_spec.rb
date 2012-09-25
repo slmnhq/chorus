@@ -7,9 +7,7 @@ describe WorkfileCopyController do
   let(:workfile_version) { workfile.versions.first }
   let(:target_workspace) { workspaces(:public_with_no_collaborators) }
 
-
   describe "#create" do
-
     before do
       log_in user
       workfile_version.contents = test_file('workfile.sql')
@@ -33,14 +31,15 @@ describe WorkfileCopyController do
     end
 
     it "should not copy if user is not a member of source workspace" do
-      another_user = FactoryGirl.create(:user)
+      another_user = users(:no_collaborators)
       membership = FactoryGirl.create(:membership, :workspace => target_workspace, :user => another_user)
       log_in another_user
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
       response.status.should == 403
     end
+
     it "should not copy if user is not a member of target workspace" do
-      another_user = FactoryGirl.create(:user)
+      another_user = users(:owner)
       membership = FactoryGirl.create(:membership, :workspace => workspace, :user => another_user)
       log_in another_user
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id

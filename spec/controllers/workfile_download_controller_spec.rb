@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe WorkfileDownloadController do
 
-  let(:user) { FactoryGirl.create(:user) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
+  let(:workspace) { workspaces(:public) }
+  let(:user) { workspace.owner }
   let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
   let(:workfile_version) { FactoryGirl.build(:workfile_version, :workfile => workfile) }
 

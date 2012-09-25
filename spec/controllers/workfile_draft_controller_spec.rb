@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkfileDraftController do
   let(:valid_attributes) { { :content => "Valid content goes here", :workfile_id => 3939 } }
   before(:each) do
-    @user = FactoryGirl.create :user
+    @user = users(:owner)
     log_in @user
   end
 

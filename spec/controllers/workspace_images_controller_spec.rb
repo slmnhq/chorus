@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe WorkspaceImagesController do
   before do
-    @user = FactoryGirl.create(:user)
+    @user = users(:owner)
     log_in @user
     any_instance_of(Workspace) do |workspace|
       stub(workspace).save_attached_files { true }
@@ -12,7 +12,7 @@ describe WorkspaceImagesController do
   describe "#update" do
     context "for Workspace" do
       before do
-        @workspace = FactoryGirl.create(:workspace)
+        @workspace = workspaces(:public)
       end
 
       let(:files) { [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small1.gif", Rails.root), "image/gif")] }

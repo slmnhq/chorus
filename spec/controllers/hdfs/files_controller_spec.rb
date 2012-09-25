@@ -1,13 +1,13 @@
 require "spec_helper"
 
 describe Hdfs::FilesController do
-  let(:hadoop_instance) { FactoryGirl.create :hadoop_instance }
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:entry) do
     HdfsEntry.create!({:is_directory => true, :path => '/data', :modified_at => Time.now.to_s, :hadoop_instance => hadoop_instance}, :without_protection => true)
   end
 
   before do
-    log_in FactoryGirl.create :user
+    log_in users(:owner)
   end
 
   describe "index" do

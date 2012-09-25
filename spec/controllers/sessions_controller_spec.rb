@@ -4,7 +4,7 @@ require 'timecop'
 describe SessionsController do
   describe "#create" do
     describe "with the correct credentials" do
-      let(:user) { User.new(:username => "admin") }
+      let(:user) { users(:admin) }
 
       before do
         stub(CredentialsValidator).user('admin', 'secret') { user }
@@ -96,7 +96,7 @@ describe SessionsController do
     end
 
     it "clears the session" do
-      log_in FactoryGirl.create :user
+      log_in users(:owner)
       delete :destroy
       response.code.should == "204"
       session[:user_id].should_not be_present
