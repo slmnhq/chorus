@@ -36,6 +36,6 @@ http_interactions:
         1000002''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workfile
         1000003''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 25 Sep 2012 00:57:29 GMT
+  recorded_at: Tue, 25 Sep 2012 18:58:24 GMT
 recorded_with: VCR 2.1.1
 ...

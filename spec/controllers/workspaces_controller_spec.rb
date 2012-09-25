@@ -287,6 +287,7 @@ describe WorkspacesController do
         stub(GpdbSchema).refresh(anything, anything) { }
         log_in database.gpdb_instance.owner
       end
+
       it "calls create_schema" do
         any_instance_of(GpdbDatabase) do |db|
           stub(db).create_schema("create_new_schema", database.gpdb_instance.owner) do |name|

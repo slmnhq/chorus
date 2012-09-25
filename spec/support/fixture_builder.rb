@@ -55,8 +55,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
     Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
 
-    shared_instance = GpdbInstance.create!({ :name => "Shared", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
-    owners_instance = GpdbInstance.create!({ :name => "Owners", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => owner, :shared => false}, :without_protection => true)
+    shared_instance = FactoryGirl.create(:gpdb_instance, :name => "Shared", :owner => admin, :shared => true)
+    owners_instance = FactoryGirl.create(:gpdb_instance, :name => "Owners", :owner => owner, :shared => false)
+
     fbuilder.name :owner_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => owners_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
@@ -64,48 +65,47 @@ FixtureBuilder.configure do |fbuilder|
 
     HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
-    chorus_gpdb40_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge({:name => "chorus_gpdb40", :owner => admin}), :without_protection => true)
-    chorus_gpdb41_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge({:name => "chorus_gpdb41", :owner => admin}), :without_protection => true)
-    chorus_gpdb42_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge({:name => GpdbIntegration::REAL_GPDB_HOST.gsub('-', '_'), :owner => admin}), :without_protection => true)
+    chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+    chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::REAL_GPDB_HOST.gsub('-', '_'), :owner => admin))
 
     # Instance Accounts
-    @shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => shared_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
-    fbuilder.name(:unauthorized, InstanceAccount.create!({:owner => the_collaborator, :gpdb_instance => owners_instance, :db_username => "thisisafakeaccount", :db_password => "whichdoesntexist"}, :without_protection => true))
-    owner_instance_account = InstanceAccount.create!({:owner => owner, :gpdb_instance => owners_instance, :db_username => 'owner', :db_password => 'i <3 me'}, :without_protection => true)
-    fbuilder.name(:aurora, InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true))
+    @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)
+    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :gpdb_instance => owners_instance)
+    owner_instance_account = FactoryGirl.create(:instance_account, :owner => owner, :gpdb_instance => owners_instance)
+    @aurora = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => aurora_instance)
 
-    fbuilder.name(:chorus_gpdb40_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge({:owner => admin, :gpdb_instance => chorus_gpdb40_instance}), :without_protection => true))
-    fbuilder.name(:chorus_gpdb41_test_superuser, InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge({:owner => admin, :gpdb_instance => chorus_gpdb41_instance}), :without_protection => true))
-    chorus_gpdb42_instance_account = InstanceAccount.create!(GpdbIntegration.account_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge({:owner => admin, :gpdb_instance => chorus_gpdb42_instance}), :without_protection => true)
-    fbuilder.name(:chorus_gpdb42_test_superuser, chorus_gpdb42_instance_account)
+    @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
+    @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))
+    @chorus_gpdb42_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:owner => admin, :gpdb_instance => chorus_gpdb42_instance))
 
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb40_instance}, :without_protection => true)
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb41_instance}, :without_protection => true)
-    InstanceAccount.create!({:db_username => 'user_with_restricted_access', :db_password => 'secret', :owner => user_with_restricted_access, :gpdb_instance => chorus_gpdb42_instance}, :without_protection => true)
+    [chorus_gpdb40_instance, chorus_gpdb41_instance, chorus_gpdb42_instance].each do |instance|
+      FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :gpdb_instance => instance)
+    end
 
     # Datasets
-    default_database = GpdbDatabase.create!({ :gpdb_instance => owners_instance, :name => 'default' }, :without_protection => true)
-    default_schema = GpdbSchema.create!({ :name => 'default', :database => default_database }, :without_protection => true)
-    GpdbSchema.create!({ :name => "public", :database => default_database }, :without_protection => true)
-    default_table = GpdbTable.create!({ :name => "table", :schema => default_schema }, :without_protection => true)
-    fbuilder.name :table, default_table
-    fbuilder.name :view, GpdbView.create!({ :name => "view", :schema => default_schema }, :without_protection => true)
+    default_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'default')
+    default_schema = FactoryGirl.create(:gpdb_schema, :name => 'default', :database => default_database)
+    FactoryGirl.create(:gpdb_schema, :name => "public", :database => default_database)
+    default_table = FactoryGirl.create(:gpdb_table, :name => "table", :schema => default_schema)
+    FactoryGirl.create(:gpdb_view, :name => "view", :schema => default_schema)
 
-    searchquery_database = GpdbDatabase.create!({ :gpdb_instance => owners_instance, :name => 'searchquery_database' }, :without_protection => true)
-    searchquery_schema = GpdbSchema.create!({ :name => "searchquery_schema", :database => searchquery_database }, :without_protection => true)
-    searchquery_table = GpdbTable.create!({ :name => "searchquery_table", :schema => searchquery_schema }, :without_protection => true)
-    searchquery_chorus_view = ChorusView.new({:name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table"}, :without_protection => true)
+    other_schema = FactoryGirl.create(:gpdb_schema, :name => "other_schema", :database => default_database)
+    other_table = FactoryGirl.create(:gpdb_table, :name => "other_table", :schema => other_schema)
+    FactoryGirl.create(:gpdb_view, :name => "other_view", :schema => other_schema)
+
+    # Search setup
+    searchquery_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'searchquery_database')
+    searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
+    searchquery_table = FactoryGirl.create(:gpdb_table, :name => "searchquery_table", :schema => searchquery_schema)
+    searchquery_chorus_view = FactoryGirl.build(:chorus_view, :name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table")
     searchquery_chorus_view.save!(:validate => false)
 
-    shared_search_database = GpdbDatabase.create!({ :gpdb_instance => shared_instance, :name => 'shared_database' }, :without_protection => true)
-    shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
-    GpdbTable.create!({ :name => "searchquery_shared_table", :schema => shared_search_schema }, :without_protection => true)
+    shared_search_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => shared_instance, :name => 'shared_database')
+    shared_search_schema = FactoryGirl.create(:gpdb_schema, :name => 'shared_schema', :database => shared_search_database)
+    FactoryGirl.create(:gpdb_table, :name => "searchquery_shared_table", :schema => shared_search_schema)
 
-    other_schema = GpdbSchema.create!({ :name => "other_schema", :database => default_database}, :without_protection => true)
-    other_table = GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
-    GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)
-
-    # Database Instance Accounts
+    # Search Database Instance Accounts
     searchquery_database.instance_accounts << owner_instance_account
     shared_search_database.instance_accounts << @shared_instance_account
 
@@ -116,10 +116,10 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators}, :without_protection => true)
     workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema}, :without_protection => true)
     workspaces << private_workspace = owner.owned_workspaces.create!(:name => "Private", :summary => "searchquery", :public => false)
-
     fbuilder.name :public, public_workspace
     fbuilder.name :private, private_workspace
-    workspaces << api_workspace = admin.owned_workspaces.create!({:name => "Api", :summary => "APIs Are Cool"}, :without_protection => true)
+
+    workspaces << api_workspace = admin.owned_workspaces.create!({:name => "Api"}, :without_protection => true)
     api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
     api_workspace.save!
     workspaces.each do |workspace|
@@ -141,27 +141,26 @@ FixtureBuilder.configure do |fbuilder|
     chorus_view.save!(:validate => false)
 
     #HDFS Entry
-    hdfs_entry = hadoop_instance.hdfs_entries.create!({:path => '/foo/bar/baz.sql', :is_directory => false, :modified_at => "2010-10-22 22:00:00"}, :without_protection => true)
-    fbuilder.name :hdfs_file, hdfs_entry
+    @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
-      no_collaborators_private = Workfile.create!({:file_name => "no collaborators Private", :description => "searchquery", :owner => no_collaborators, :workspace => no_collaborators_private_workspace}, :without_protection => true)
-      no_collaborators_public = Workfile.create!({:file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace}, :without_protection => true)
-      private_workfile = Workfile.create!({:file_name => "Private", :description => "searchquery", :owner => owner, :workspace => private_workspace, :execution_schema => default_schema}, :without_protection => true)
-      public_workfile = Workfile.create!({:file_name => "Public", :description => "searchquery", :owner => owner, :workspace => public_workspace}, :without_protection => true)
+      no_collaborators_private = FactoryGirl.create(:workfile, :file_name => "no collaborators Private", :description => "searchquery", :owner => no_collaborators, :workspace => no_collaborators_private_workspace)
+      no_collaborators_public = FactoryGirl.create(:workfile, :file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace)
+      private_workfile = FactoryGirl.create(:workfile, :file_name => "Private", :description => "searchquery", :owner => owner, :workspace => private_workspace, :execution_schema => default_schema)
+      public_workfile = FactoryGirl.create(:workfile, :file_name => "Public", :description => "searchquery", :owner => owner, :workspace => public_workspace)
 
-      archived_workfile = Workfile.create!({:file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace}, :without_protection => true)
+      archived_workfile = FactoryGirl.create(:workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace)
 
-      sql_workfile = Workfile.create!({:file_name => "sql.sql", :owner => owner, :workspace => public_workspace}, :without_protection => true)
+      sql_workfile = FactoryGirl.create(:workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace)
       fbuilder.name :sql, sql_workfile
 
-      no_collaborators_workfile_version = WorkfileVersion.create!({:workfile => no_collaborators_private, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => private_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => public_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file}, :without_protection => true)
+      no_collaborators_workfile_version = FactoryGirl.create(:workfile_version, :workfile => no_collaborators_private, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => private_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => public_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
 
       fbuilder.name :no_collaborators_creates_private_workfile, Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace)
       fbuilder.name :public_workfile_created, Events::WorkfileCreated.by(owner).add(:workfile => public_workfile, :workspace => public_workspace)
@@ -176,18 +175,18 @@ FixtureBuilder.configure do |fbuilder|
       Events::ChorusViewChanged.by(owner).add(:dataset => chorus_view, :workspace => public_workspace)
     end
 
-    text_workfile = Workfile.create!({:file_name => "text.txt", :owner => owner, :workspace => public_workspace}, :without_protection => true)
-    image_workfile = Workfile.create!({:file_name => "image.png", :owner => owner, :workspace => public_workspace}, :without_protection => true)
-    binary_workfile = Workfile.create!({:file_name => "binary.tar.gz", :owner => owner, :workspace => public_workspace}, :without_protection => true)
+    text_workfile = FactoryGirl.create(:workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace)
+    image_workfile = FactoryGirl.create(:workfile, :file_name => "image.png", :owner => owner, :workspace => public_workspace)
+    binary_workfile = FactoryGirl.create(:workfile, :file_name => "binary.tar.gz", :owner => owner, :workspace => public_workspace)
 
     File.open Rails.root + 'spec/fixtures/some.txt' do |file|
-      WorkfileVersion.create!({:workfile => text_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
+      FactoryGirl.create(:workfile_version, :workfile => text_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
     File.open Rails.root + 'spec/fixtures/small1.gif' do |file|
-      WorkfileVersion.create!({:workfile => image_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
+      FactoryGirl.create(:workfile_version, :workfile => image_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
     File.open Rails.root + 'spec/fixtures/binary.tar.gz' do |file|
-      WorkfileVersion.create!({:workfile => binary_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file}, :without_protection => true)
+      FactoryGirl.create(:workfile_version, :workfile => binary_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
 
     fbuilder.name :default, ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04', :frequency => 'weekly', :workspace_id => public_workspace.id, :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't', :new_table => 't', :user_id => owner.id} , :without_protection => true)
@@ -207,7 +206,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => shared_instance, :actor => owner, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
     Events::NoteOnGreenplumInstance.create!({:greenplum_instance => shared_instance, :actor => owner, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
     Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => hdfs_entry, :body => 'hhhhhhaaaadooooopppp')
+    Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
     Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')
@@ -241,7 +240,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceChangeName.by(admin).add(:workspace => public_workspace, :workspace_old_name => 'old_name')
-    Events::WorkspaceAddHdfsAsExtTable.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_file => hdfs_entry)
+    Events::WorkspaceAddHdfsAsExtTable.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_file => @hdfs_file)
     Events::FileImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'table')
     Events::FileImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => default_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FileImportFailed.by(owner).add(:workspace => public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
@@ -258,14 +257,13 @@ FixtureBuilder.configure do |fbuilder|
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases
-    GpdbSchema.refresh(chorus_gpdb42_instance_account, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name))
+    GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name))
 
     test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
     test_schema = test_database.schemas.find_by_name('test_schema')
-    executable_chorus_view = ChorusView.new({:name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;"}, :without_protection => true)
-    executable_chorus_view.bound_workspaces << public_workspace
-    executable_chorus_view.save!(:validate => false)
-    fbuilder.name(:executable_chorus_view, executable_chorus_view)
+    @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
+    @executable_chorus_view.bound_workspaces << public_workspace
+    @executable_chorus_view.save!(:validate => false)
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 

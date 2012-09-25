@@ -68,8 +68,8 @@ describe AuroraProvider do
           mock(service).create_database({
                                           :template => Aurora::DB_SIZE[:small],
                                           :database_name => 'database',
-                                          :db_username => 'edcadmin',
-                                          :db_password => 'secret',
+                                          :db_username => gpdb_instance.owner_account.db_username,
+                                          :db_password => gpdb_instance.owner_account.db_password,
                                           :size => 1,
                                           :schema_name => schema_name
                                         }) { database }
