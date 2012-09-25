@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe AssociatedDataset do
-  let(:workspace) { FactoryGirl.create(:workspace) }
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
+  let(:workspace) { workspaces(:public) }
 
   describe "validations" do
+    it {should validate_presence_of(:dataset_id)}
+    it {should validate_presence_of(:workspace_id)}
+
     it "should have uniq workspace_id + dataset_id" do
       association = described_class.new
       association.workspace = workspace

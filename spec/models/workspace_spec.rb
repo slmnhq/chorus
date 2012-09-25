@@ -174,7 +174,7 @@ describe Workspace do
     end
 
     context "when the workspace does not have a sandbox" do
-      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+      let!(:workspace) { FactoryGirl.build(:workspace, :sandbox => nil) }
       before do
         workspace.bound_datasets << source_table
       end

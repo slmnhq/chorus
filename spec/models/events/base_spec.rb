@@ -3,14 +3,14 @@ require "spec_helper"
 describe Events::Base do
   describe ".add(params)" do
     it "creates an event with the given parameters" do
-      gpdb_instance1 = FactoryGirl.create(:gpdb_instance)
-      gpdb_instance2 = FactoryGirl.create(:gpdb_instance)
-      user1 = FactoryGirl.create(:user)
+      gpdb_instance1 = gpdb_instances(:shared)
+      gpdb_instance2 = gpdb_instances(:owners)
+      user1 = users(:owner)
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
-      dataset = FactoryGirl.create(:gpdb_table)
+      dataset = datasets(:table)
       hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
-      workspace = FactoryGirl.create(:workspace)
+      workspace = workspaces(:public)
 
       Events::GreenplumInstanceCreated.by(user1).add(:greenplum_instance => gpdb_instance1)
       Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => gpdb_instance2, :new_owner => user3)

@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe GpdbTable do
-  let(:account) { FactoryGirl.create(:instance_account) }
-  let(:table) { FactoryGirl.create(:gpdb_table, :name => "clv_data") }
+  let(:table) { datasets(:table) }
+  let(:account) { table.schema.database.gpdb_instance.owner_account }
 
   describe "#analyze" do
     it "generates the correct sql" do

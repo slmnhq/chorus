@@ -59,7 +59,7 @@ describe GpdbInstance do
   end
 
   it "should not allow changing inaccessible attributes" do
-    gpdb_instance = FactoryGirl.create :gpdb_instance
+    gpdb_instance = FactoryGirl.build :gpdb_instance
     changed_id = 122222
     gpdb_instance.attributes = {:id => changed_id, :owner_id => changed_id}
     gpdb_instance.id.should_not == changed_id
@@ -127,7 +127,7 @@ describe GpdbInstance do
 
   describe "#owner_account" do
     it "returns the gpdb instance owner's account" do
-      owner = FactoryGirl.create(:user)
+      owner = users(:owner)
       gpdb_instance = FactoryGirl.create(:gpdb_instance, :owner => owner)
       owner_account = FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner)
 
@@ -136,47 +136,48 @@ describe GpdbInstance do
   end
 
   describe "access control" do
+    let(:user) { users(:owner) }
+
     before(:each) do
-      @user = FactoryGirl.create :user
-      @gpdb_instance_owned = FactoryGirl.create :gpdb_instance, :owner => @user
+      @gpdb_instance_owned = FactoryGirl.create :gpdb_instance, :owner => user
       @gpdb_instance_shared = FactoryGirl.create :gpdb_instance, :shared => true
-      @gpdb_instance_with_membership = FactoryGirl.create(:instance_account, :owner => @user).gpdb_instance
+      @gpdb_instance_with_membership = FactoryGirl.create(:instance_account, :owner => user).gpdb_instance
       @gpdb_instance_forbidden = FactoryGirl.create :gpdb_instance
     end
 
     describe '.accessible_to' do
       it "returns owned gpdb instances" do
-        GpdbInstance.accessible_to(@user).should include @gpdb_instance_owned
+        GpdbInstance.accessible_to(user).should include @gpdb_instance_owned
       end
 
       it "returns shared gpdb instances" do
-        GpdbInstance.accessible_to(@user).should include @gpdb_instance_shared
+        GpdbInstance.accessible_to(user).should include @gpdb_instance_shared
       end
 
       it "returns gpdb instances to which user has membership" do
-        GpdbInstance.accessible_to(@user).should include @gpdb_instance_with_membership
+        GpdbInstance.accessible_to(user).should include @gpdb_instance_with_membership
       end
 
       it "does not return instances the user has no access to" do
-        GpdbInstance.accessible_to(@user).should_not include(@gpdb_instance_forbidden)
+        GpdbInstance.accessible_to(user).should_not include(@gpdb_instance_forbidden)
       end
     end
 
     describe '#accessible_to' do
       it 'returns true if the instance is shared' do
-        @gpdb_instance_shared.accessible_to(@user).should be_true
+        @gpdb_instance_shared.accessible_to(user).should be_true
       end
 
       it 'returns true if the instance is owned by the user' do
-        @gpdb_instance_owned.accessible_to(@user).should be_true
+        @gpdb_instance_owned.accessible_to(user).should be_true
       end
 
       it 'returns true if the user has an instance account' do
-        @gpdb_instance_with_membership.accessible_to(@user).should be_true
+        @gpdb_instance_with_membership.accessible_to(user).should be_true
       end
 
       it 'returns false otherwise' do
-        @gpdb_instance_forbidden.accessible_to(@user).should be_false
+        @gpdb_instance_forbidden.accessible_to(user).should be_false
       end
 
     end
@@ -204,7 +205,7 @@ describe GpdbInstance do
 
     context "for non-owners" do
       it "excludes all gpdb instances" do
-        GpdbInstance.owned_by(FactoryGirl.create(:user)).should be_empty
+        GpdbInstance.owned_by(FactoryGirl.build_stubbed(:user)).should be_empty
       end
     end
 
@@ -224,7 +225,7 @@ describe GpdbInstance do
   end
 
   describe "#account_for_user!" do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { users(:owner) }
 
     context "shared gpdb instance" do
       let!(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }

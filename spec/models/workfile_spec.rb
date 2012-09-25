@@ -206,9 +206,9 @@ describe Workfile do
 
   describe "#build_new_version" do
 
-    let(:user) { FactoryGirl.create(:user) }
-    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-    let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+    let(:user) { users(:owner) }
+    let(:workspace) { FactoryGirl.build(:workspace, :owner => user) }
+    let(:workfile) { FactoryGirl.build(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
 
     context "when there is a previous version" do
       let(:workfile_version) { FactoryGirl.build(:workfile_version, :workfile => workfile) }
@@ -237,8 +237,8 @@ describe Workfile do
   end
 
   describe "#has_draft" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
+    let(:workspace) { workspaces(:public) }
+    let(:user) { workspace.owner }
     let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "some.txt", :workspace => workspace) }
     let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "workfile.sql", :workspace => workspace) }
     let!(:draft) { FactoryGirl.create(:workfile_draft, :workfile_id => workfile1.id, :owner_id => user.id) }

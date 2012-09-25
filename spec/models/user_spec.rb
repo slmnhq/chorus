@@ -28,7 +28,7 @@ describe User do
 
     context "when there's a legacy_password_digest" do
       before do
-        @user = FactoryGirl.create :user
+        @user = FactoryGirl.build :user
         @user.password_digest = "XXXXXXXXXXXINVALIDXXXXXXX"
         @user.password_salt = ""
         @user.legacy_password_digest = Digest::SHA1.hexdigest("secret")
@@ -138,7 +138,7 @@ describe User do
 
       context "when a deleted user with that username exists" do
         before(:each) do
-          FactoryGirl.create(:user, :username => "foo", :deleted_at => Time.now)
+          FactoryGirl.build(:user, :username => "foo", :deleted_at => Time.now)
         end
 
         it "validates" do
@@ -190,7 +190,7 @@ describe User do
         it { ensure_length_of(:password).is_at_least(6) }
 
         it "the password is updated" do
-          @user = FactoryGirl.create :user, :username => 'jimmy'
+          @user = FactoryGirl.build :user, :username => 'jimmy'
           @user.save!
 
           @user.password = "654321"
@@ -220,7 +220,7 @@ describe User do
 
       it "should be allowed when user name belongs to a deleted user" do
         @user.destroy
-        user2 = FactoryGirl.create(:user, :username => @user.username)
+        user2 = FactoryGirl.build(:user, :username => @user.username)
         user2.should be_valid
       end
     end
@@ -228,7 +228,7 @@ describe User do
 
   describe "image" do
     it "is /image/default-user-icon.png by default" do
-      user = FactoryGirl.create :user, :image => nil
+      user = FactoryGirl.build :user, :image => nil
       user.image.url.should == "/images/default-user-icon.png"
     end
   end
@@ -305,7 +305,7 @@ describe User do
     end
 
     it "should not allow deleting a user who owns a gpdb instance" do
-      user.gpdb_instances << FactoryGirl.create(:gpdb_instance, :owner => user)
+      user.gpdb_instances << FactoryGirl.build(:gpdb_instance, :owner => user)
       begin
         user.destroy
         fail
@@ -315,7 +315,7 @@ describe User do
     end
 
     it "does not allow deleting a user who owns a workspace" do
-      user.owned_workspaces << FactoryGirl.create(:workspace, :owner => user)
+      user.owned_workspaces << FactoryGirl.build(:workspace, :owner => user)
       begin
         user.destroy
         fail

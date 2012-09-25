@@ -61,7 +61,7 @@ describe WorkfileVersion do
 
     # Workaround for paperclip's lack of proper I18n in error messages
     context "when content has error message with exception message" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { users(:owner) }
 
       it "cleans the message" do
         workfile_version = described_class.new({

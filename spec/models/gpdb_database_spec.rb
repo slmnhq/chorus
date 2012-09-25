@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe GpdbDatabase do
   context "#refresh" do
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
-    let(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
+    let(:gpdb_instance) { FactoryGirl.build_stubbed(:gpdb_instance) }
+    let(:account) { FactoryGirl.build_stubbed(:instance_account, :gpdb_instance => gpdb_instance) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
 
     before(:each) do

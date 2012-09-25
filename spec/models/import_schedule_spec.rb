@@ -41,25 +41,25 @@ describe ImportSchedule do
 
   describe "#is_active" do
     it "returns true for new schedules" do
-      new_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: nil)
+      new_import_schedule = FactoryGirl.build(:import_schedule, deleted_at: nil)
       new_import_schedule.is_active.should be_true
     end
 
     it "returns false for deleted schedules" do
-      deleted_import_schedule = FactoryGirl.create(:import_schedule, deleted_at: Time.now)
+      deleted_import_schedule = FactoryGirl.build(:import_schedule, deleted_at: Time.now)
       deleted_import_schedule.is_active.should be_false
     end
   end
 
   describe "#is_active=" do
     it "sets the deleted_at attribute" do
-      import_schedule = FactoryGirl.create(:import_schedule)
+      import_schedule = FactoryGirl.build(:import_schedule)
       import_schedule.is_active = false
       import_schedule.deleted_at.should_not be_nil
     end
 
     it "clears the deleted at attribute" do
-      import_schedule = FactoryGirl.create(:import_schedule, deleted_at: Time.now)
+      import_schedule = FactoryGirl.build(:import_schedule, deleted_at: Time.now)
       import_schedule.is_active = true
       import_schedule.deleted_at.should be_nil
     end

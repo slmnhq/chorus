@@ -5,14 +5,14 @@ require_relative "helpers"
 describe "Event types" do
   extend EventHelpers
 
-  let(:actor) { FactoryGirl.create(:user) }
-  let(:greenplum_instance) { FactoryGirl.create(:gpdb_instance) }
+  let(:actor) { users(:owner) }
+  let(:greenplum_instance) { gpdb_instances(:greenplum) }
   let(:aurora_instance) { gpdb_instances(:aurora) }
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
-  let(:user) { FactoryGirl.create(:user) }
-  let(:workfile) { FactoryGirl.create(:workfile) }
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:user) { users(:the_collaborator) }
+  let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
-  let(:dataset) { FactoryGirl.create(:gpdb_table) }
+  let(:dataset) { datasets(:table) }
   let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
   let(:chorus_view) { datasets(:chorus_view) }
@@ -409,7 +409,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportCreated" do
-    let(:source_dataset) { datasets(:table) }
+    let(:source_dataset) { datasets(:other_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportCreated.add(
@@ -430,7 +430,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportSuccess" do
-    let(:source_dataset) { datasets(:table) }
+    let(:source_dataset) { datasets(:other_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportSuccess.add(
@@ -473,7 +473,7 @@ describe "Event types" do
   end
 
   describe "DatasetImportFailed" do
-    let(:source_dataset) {datasets(:table)}
+    let(:source_dataset) {datasets(:other_table)}
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DatasetImportFailed.add(

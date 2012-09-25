@@ -181,8 +181,9 @@ describe "Notes" do
     end
 
     describe "with a target" do
-      let(:workspace) { FactoryGirl.build(:workspace) }
-      let(:workfile) { FactoryGirl.build(:workfile) }
+      let(:workfile) { workfiles(:public) }
+      let(:workspace) { workfile.workspace }
+
       let(:subclass1) do
         Class.new(Events::Note) { has_targets :workspace, :workfile }
       end
@@ -206,10 +207,10 @@ describe "Notes" do
   end
 
   describe "#create_from_params(entity_type, entity_id, body, creator)" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { users(:owner) }
 
     it "creates a note on a greenplum instance" do
-      greenplum_instance = FactoryGirl.create(:greenplum_instance)
+      greenplum_instance = gpdb_instances(:greenplum)
       Events::Note.create_from_params({
         :entity_type => "greenplum_instance",
         :entity_id => greenplum_instance.id,
@@ -224,7 +225,7 @@ describe "Notes" do
     end
 
     it "creates a note on a hadoop instance" do
-      hadoop_instance = FactoryGirl.create(:hadoop_instance)
+      hadoop_instance = hadoop_instances(:hadoop)
       Events::Note.create_from_params({
         :entity_type => "hadoop_instance",
         :entity_id => hadoop_instance.id,
