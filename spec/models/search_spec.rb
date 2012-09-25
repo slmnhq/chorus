@@ -36,6 +36,7 @@ describe Search do
         Sunspot.session.should be_a_search_for(GpdbInstance)
         Sunspot.session.should be_a_search_for(HadoopInstance)
         Sunspot.session.should be_a_search_for(Workspace)
+        Sunspot.session.should be_a_search_for(Workfile)
         Sunspot.session.should be_a_search_for(Dataset)
         Sunspot.session.should be_a_search_for(HdfsEntry)
         Sunspot.session.should have_search_params(:fulltext, 'bob')
@@ -118,6 +119,39 @@ describe Search do
         Sunspot.session.should_not have_search_params(:facet, :type_name)
       end
     end
+
+    describe "with a workspace_id" do
+      let(:search) { Search.new(user, :query => 'bob', :per_type => 3, :workspace_id => 7) }
+
+      before do
+        any_instance_of(Sunspot::Search::AbstractSearch) do |search|
+          stub(search).group_response { {} }
+        end
+        search.models
+      end
+
+      it "performs a secondary search to pull back workfiles and datasets within the workspace" do
+        Sunspot.session.searches.length.should == 2
+        Sunspot.session.searches.last.should be_a_search_for(Dataset)
+        Sunspot.session.searches.last.should be_a_search_for(Workfile)
+        Sunspot.session.searches.last.should be_a_search_for(Workspace)
+        Sunspot.session.searches.last.should_not be_a_search_for(User)
+        Sunspot.session.searches.last.should have_search_params(:with, :workspace_id, 7)
+      end
+
+      it "limits the results to a max of per_page" do
+        Sunspot.session.searches.last.should have_search_params(:paginate, :page => 1, :per_page => 3)
+      end
+
+      it "searches for the same query" do
+        Sunspot.session.searches.last.should have_search_params(:fulltext, 'bob')
+      end
+
+      it "does not perform the workspace search more than once" do
+        search.num_found
+        Sunspot.session.searches.length.should == 2
+      end
+    end
   end
 
   context "with solr enabled" do
@@ -157,6 +191,15 @@ describe Search do
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 0
         end
+      end
+
+      it "includes the number of workspace specific results found" do
+        workspace = workspaces(:search_public)
+        VCR.use_cassette('search_solr_query_all_types_with_workspace_as_owner') do
+          search = Search.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
+          search.num_found[:this_workspace].should == 3
+        end
+
       end
     end
 

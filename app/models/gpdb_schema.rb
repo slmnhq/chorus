@@ -30,7 +30,7 @@ class GpdbSchema < ActiveRecord::Base
       ORDER BY t1.proname
   SQL
 
-  has_many :workspaces, :inverse_of => :sandbox
+  has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id
   delegate :with_gpdb_connection, :to => :database

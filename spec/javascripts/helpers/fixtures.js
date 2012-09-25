@@ -1357,7 +1357,7 @@ beforeEach(function() {
                 content: "SELECT * FROM test AS a",
                 databaseName: "dca_demo",
                 datasetType: "CHORUS_VIEW",
-                entityType: "chorusView",
+                entityType: "dataset",
                 id: "10010",
                 instance: {
                     id: '10000',

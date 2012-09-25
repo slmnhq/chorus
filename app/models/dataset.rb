@@ -45,7 +45,8 @@ class Dataset < ActiveRecord::Base
   end
 
   has_shared_search_fields [
-                               {:type => :integer, :method => :instance_account_ids, :options => {:multiple => true}}
+                               {:type => :integer, :name => :instance_account_ids, :options => {:multiple => true}},
+                               {:type => :integer, :name => :workspace_id, :options => {:multiple => true, :using => :searchable_workspace_ids }}
                            ]
 
   def instance_account_ids
@@ -54,6 +55,10 @@ class Dataset < ActiveRecord::Base
 
   def accessible_to(user)
     schema.database.gpdb_instance.accessible_to(user)
+  end
+
+  def searchable_workspace_ids
+    (bound_workspace_ids + schema.workspace_ids).uniq
   end
 
   def self.add_search_permissions(current_user, search)
@@ -313,6 +318,10 @@ class Dataset < ActiveRecord::Base
           Arel.sql(TABLE_TYPE).as('table_type')
       )
     end
+  end
+
+  def entity_type_name
+    'dataset'
   end
 
   private

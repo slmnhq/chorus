@@ -48,7 +48,8 @@ describe WorkspacesController do
 
     it "scopes by memberships" do
       get :index, :user_id => other_user.id
-      decoded_response.size.should == other_user.workspaces.count - 1
+      inaccessible_workspaces = other_user.workspaces - Workspace.accessible_to(owner)
+      decoded_response.size.should == other_user.workspaces.count - inaccessible_workspaces.length
       decoded_response.map(&:name).should_not include(workspaces(:private).name)
     end
 

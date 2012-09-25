@@ -17,6 +17,7 @@ class Presenter
   end
 
   def present(model, options={})
+    options = options.dup
     self.class.present(model, @view_context, options)
   end
 

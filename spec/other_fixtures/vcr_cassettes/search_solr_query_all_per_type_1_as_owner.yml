@@ -33,13 +33,13 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''User
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3201627.8,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin''],''username_texts''=>[''admin''],''email_texts''=>[''person1@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>3201627.8}]}},{''groupValue''=>''User
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3201627.8,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Admin''],''username_texts''=>[''evil_admin''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>3201627.8}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3241218.5,''docs''=>[{''id''=>''User
+        1000000'',''first_name_texts''=>[''Admin''],''username_texts''=>[''admin''],''email_texts''=>[''person1@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>3241218.5}]}},{''groupValue''=>''User
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3241218.5,''docs''=>[{''id''=>''User
+        1000001'',''first_name_texts''=>[''Admin''],''username_texts''=>[''evil_admin''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>3241218.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000000''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']},''User
         1000001''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 25 Sep 2012 18:58:17 GMT
+  recorded_at: Tue, 25 Sep 2012 22:44:24 GMT
 recorded_with: VCR 2.1.1
 ...

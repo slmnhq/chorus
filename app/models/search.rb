@@ -1,6 +1,6 @@
 class Search
   include ActiveModel::Validations
-  attr_accessor :query, :page, :per_page
+  attr_accessor :query, :page, :per_page, :workspace_id
   attr_reader :models_to_search, :per_type, :current_user
 
   validate :valid_entity_type
@@ -10,6 +10,7 @@ class Search
     @models_to_search = [User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry]
     self.query = params[:query]
     self.per_type = params[:per_type]
+    self.workspace_id = params[:workspace_id]
     if per_type
       self.per_page = 100
     else
@@ -23,6 +24,14 @@ class Search
     return @search if @search
     pa errors.class
     raise ApiValidationError.new(errors) unless valid?
+
+    build_search
+
+    @search.execute
+    @search
+  end
+
+  def build_search
     @search = Sunspot.new_search(*(models_to_search + [Events::Note])) do
       group :grouping_id do
         limit 3
@@ -31,7 +40,7 @@ class Search
       fulltext query, :highlight => true
       paginate :page => page, :per_page => per_page
 
-      if models_to_search.length > 1
+      if count_using_facets?
         facet :type_name
       end
 
@@ -40,9 +49,6 @@ class Search
     models_to_search.each do |model_to_search|
       model_to_search.add_search_permissions(current_user, @search) if model_to_search.respond_to? :add_search_permissions
     end
-
-    @search.execute
-    @search
   end
 
   def models
@@ -51,43 +57,48 @@ class Search
 
     search.associate_grouped_notes_with_primary_records
 
-    search.each_hit_with_result do |hit, result|
-      result.highlighted_attributes = hit.highlights_hash
+    search.results.each do |result|
       model_key = class_name_to_key(result.type_name)
       @models[model_key] << result unless per_type && @models[model_key].length >= per_type
     end
 
     populate_missing_records
 
+    populate_workspace_specific_results
+
     @models
   end
 
   def users
-    models[:users] || []
+    models[:users]
   end
 
   def gpdb_instances
-    models[:gpdb_instances] || []
+    models[:gpdb_instances]
   end
 
   def hadoop_instances
-    models[:hadoop_instances] || []
+    models[:hadoop_instances]
   end
 
   def workspaces
-    models[:workspaces] || []
+    models[:workspaces]
   end
 
   def workfiles
-    models[:workfiles] || []
+    models[:workfiles]
   end
 
   def datasets
-    models[:datasets] ||  []
+    models[:datasets]
   end
 
   def hdfs_entries
-    models[:hdfs_entries] || []
+    models[:hdfs_entries]
+  end
+
+  def this_workspace
+    models[:this_workspace]
   end
 
   def num_found
@@ -101,6 +112,8 @@ class Search
     else
       @num_found[class_name_to_key(models_to_search.first.name)] = search.group(:grouping_id).total
     end
+
+    populate_workspace_specific_results
 
     @num_found
   end
@@ -119,7 +132,15 @@ class Search
     end
   end
 
+  def workspace
+    Workspace.find(workspace_id)
+  end
+
   private
+
+  def count_using_facets?
+    models_to_search.length > 1
+  end
 
   def class_name_to_key(name)
     name.to_s.underscore.pluralize.to_sym
@@ -135,6 +156,14 @@ class Search
         models[model_key] = model_search.models[model_key]
       end
     end
+  end
+
+  def populate_workspace_specific_results
+    return unless workspace_id.present?
+    return if models.has_key? :this_workspace
+    workspace_search = WorkspaceSearch.new(current_user, :workspace_id => workspace_id, :per_page => per_type, :query => query)
+    models[:this_workspace] = workspace_search.results
+    num_found[:this_workspace] = workspace_search.num_found
   end
 
   def valid_entity_type

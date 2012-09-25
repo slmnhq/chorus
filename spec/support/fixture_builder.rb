@@ -116,8 +116,13 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators}, :without_protection => true)
     workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema}, :without_protection => true)
     workspaces << private_workspace = owner.owned_workspaces.create!(:name => "Private", :summary => "searchquery", :public => false)
+    workspaces << search_public_workspace = owner.owned_workspaces.create!({:name => "Search Public", :summary => "searchquery", :sandbox => searchquery_schema}, :without_protection => true)
+    workspaces << search_private_workspace = owner.owned_workspaces.create!({:name => "Search Private", :summary => "searchquery", :sandbox => searchquery_schema, :public => false}, :without_protection => true)
+
     fbuilder.name :public, public_workspace
     fbuilder.name :private, private_workspace
+    fbuilder.name :search_public, search_public_workspace
+    fbuilder.name :search_private, search_private_workspace
 
     workspaces << api_workspace = admin.owned_workspaces.create!({:name => "Api"}, :without_protection => true)
     api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
@@ -128,6 +133,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # Workspace / Dataset associations
     public_workspace.bound_datasets << default_table
+    search_public_workspace.bound_datasets << searchquery_chorus_view
 
     fbuilder.name :owner_creates_public_workspace, Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
     fbuilder.name :owner_creates_private_workspace, Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
@@ -149,6 +155,8 @@ FixtureBuilder.configure do |fbuilder|
       no_collaborators_public = FactoryGirl.create(:workfile, :file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace)
       private_workfile = FactoryGirl.create(:workfile, :file_name => "Private", :description => "searchquery", :owner => owner, :workspace => private_workspace, :execution_schema => default_schema)
       public_workfile = FactoryGirl.create(:workfile, :file_name => "Public", :description => "searchquery", :owner => owner, :workspace => public_workspace)
+      private_search_workfile = FactoryGirl.create(:workfile, :file_name => "Search Private", :description => "searchquery", :owner => owner, :workspace => search_private_workspace, :execution_schema => searchquery_schema)
+      public_search_workfile = FactoryGirl.create(:workfile, :file_name => "Search Public", :description => "searchquery", :owner => owner, :workspace => search_public_workspace)
 
       archived_workfile = FactoryGirl.create(:workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace)
 
@@ -159,6 +167,8 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => private_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => public_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => private_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => public_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
 

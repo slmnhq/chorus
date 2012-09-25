@@ -104,6 +104,10 @@ class GpdbInstance < ActiveRecord::Base
     self
   end
 
+  def entity_type_name
+    'greenplum_instance'
+  end
+
   private
 
   def create_database_in_instance(name, current_user)

@@ -26,7 +26,6 @@
     var constructorMap = {
         workfile: chorus.models.Workfile,
         dataset: chorus.models.DynamicDataset,
-        chorusView: chorus.models.DynamicDataset,
         workspace: chorus.models.Workspace,
         attachment: chorus.models.Attachment
     };

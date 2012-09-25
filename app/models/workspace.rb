@@ -14,7 +14,7 @@ class Workspace < ActiveRecord::Base
   has_many :workfiles
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
-  belongs_to :sandbox, :class_name => 'GpdbSchema', :foreign_key => "sandbox_id"
+  belongs_to :sandbox, :class_name => 'GpdbSchema'
 
   has_many :csv_files
 
@@ -42,8 +42,8 @@ class Workspace < ActiveRecord::Base
   end
 
   has_shared_search_fields [
-    { :type => :integer, :method => :member_ids, :options => { :multiple => true } },
-    { :type => :boolean, :method => :public }
+    { :type => :integer, :name => :member_ids, :options => { :multiple => true } },
+    { :type => :boolean, :name => :public }
   ]
 
   def self.add_search_permissions(current_user, search)

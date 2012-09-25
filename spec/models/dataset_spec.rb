@@ -165,7 +165,7 @@ describe Dataset do
 
       it "returns the list of datasets" do
         datasets = Dataset.refresh(account, schema)
-        datasets.map(&:name).should match_array(['table','new_table','new_view'])
+        datasets.map(&:name).should match_array(['table', 'new_table', 'new_view'])
       end
 
       context "when trying to create a duplicate record" do
@@ -195,7 +195,7 @@ describe Dataset do
 
           datasets = Dataset.refresh(account, schema)
           datasets.size.should == 2
-          datasets.map(&:name).should match_array(['new_table','new_view'])
+          datasets.map(&:name).should match_array(['new_table', 'new_view'])
         end
       end
 
@@ -230,7 +230,7 @@ describe Dataset do
 
       it "increments the dataset counter on the schema" do
         expect do
-          Dataset.refresh(account,schema)
+          Dataset.refresh(account, schema)
         end.to change { dataset.schema.reload.datasets_count }.by(1)
       end
     end
@@ -250,7 +250,7 @@ describe Dataset do
       it "decrements the dataset counter on the schema" do
         not_stale_before = schema.datasets.not_stale.count
         cached_before = dataset.schema.datasets_count
-        Dataset.refresh(account,schema, :mark_stale => true)
+        Dataset.refresh(account, schema, :mark_stale => true)
         not_stale_after = schema.datasets.not_stale.count
         cached_after = dataset.schema.reload.datasets_count
 
@@ -383,6 +383,19 @@ describe Dataset do
       dataset.stale_at = nil
       dataset.save!
     end
+
+    describe "workspace_ids" do
+      let(:workspace) { workspaces(:search_public) }
+      let(:chorus_view) { datasets(:searchquery_chorus_view) }
+
+      it "includes the id of all associated workspaces" do
+        chorus_view.searchable_workspace_ids.should include(workspace.id)
+      end
+
+      it "includes the id of all workspaces that include the dataset through a sandbox" do
+        dataset.searchable_workspace_ids.should include(workspace.id)
+      end
+    end
   end
 
   describe "#all_rows_sql" do
@@ -479,10 +492,10 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "with sort options" do
-      let(:options) {  {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]}}
+      let(:options) { {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]} }
       it "returns a query whose result with proper filtering" do
         names = rows.map { |row| row["name"] }
-        names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1" ]
+        names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1"]
       end
     end
 
@@ -540,7 +553,7 @@ describe Dataset::Query, :database_integration => true do
       end
 
       context "when destination table does exist" do
-        let(:dst_table_name) {sandbox.datasets.first.name}
+        let(:dst_table_name) { sandbox.datasets.first.name }
 
         before do
           attributes.merge!(
@@ -579,18 +592,18 @@ describe Dataset::Query, :database_integration => true do
             "is_active" => true,
             "start_datetime" => start,
             "end_date" => Date.parse("2012-11-24"),
-            "frequency"=> "weekly",
+            "frequency" => "weekly",
             "sample_count" => 1,
             "truncate" => false,
-            "import_type"=> "schedule"
+            "import_type" => "schedule"
         )
       }
 
       context "when destination table does not exist" do
         before do
           options.merge!(
-            "to_table" => "the_new_table",
-            "new_table" => true)
+              "to_table" => "the_new_table",
+              "new_table" => true)
         end
 
         it "creates an import schedule" do
@@ -634,7 +647,7 @@ describe Dataset::Query, :database_integration => true do
       end
 
       context "when destination table does exist" do
-        let(:dst_table_name) {sandbox.datasets.first.name}
+        let(:dst_table_name) { sandbox.datasets.first.name }
 
         before do
           options.merge!(

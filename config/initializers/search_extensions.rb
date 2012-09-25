@@ -18,8 +18,9 @@ module SearchExtensions
     def define_shared_search_fields(field_definitions, receiver_name=nil)
       searchable do |s|
         field_definitions.each do |field_def|
-          delegate field_def[:method], :to => receiver_name if receiver_name
-          s.public_send(field_def[:type], field_def[:method], field_def[:options].try(:dup))
+          method_name = (field_def[:options] && field_def[:options][:using]) || field_def[:name]
+          delegate method_name, :to => receiver_name if receiver_name
+          s.public_send(field_def[:type], field_def[:name], field_def[:options].try(:dup))
         end
       end
     end
@@ -31,6 +32,10 @@ module SearchExtensions
 
   def type_name
     self.class.type_name
+  end
+
+  def entity_type_name
+    self.class.name.underscore
   end
 end
 
@@ -58,10 +63,10 @@ module SunspotSearchExtensions
 
   def associate_grouped_notes_with_primary_records
     docs = solr_response['docs'] = []
-    group = group(:grouping_id)
-    return unless group && group.groups
+    group_response = group(:grouping_id)
+    return unless group_response && group_response.groups
     notes_for_object = Hash.new() { |hsh, key| hsh[key] = [] }
-    group.groups.each do |group|
+    group_response.groups.each do |group|
       docs << {'id' => group.value}
       group.hits.each do |group_hit|
         if group_hit.class_name =~ /^Event/
@@ -72,6 +77,14 @@ module SunspotSearchExtensions
 
     hits.each do |hit|
       hit.notes = notes_for_object[hit.id]
+    end
+
+    move_highlighted_attributes_to_results
+  end
+
+  def move_highlighted_attributes_to_results
+    each_hit_with_result do |hit, result|
+      result.highlighted_attributes = hit.highlights_hash
     end
   end
 end

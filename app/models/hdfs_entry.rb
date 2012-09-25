@@ -114,6 +114,10 @@ class HdfsEntry < ActiveRecord::Base
     hadoop_instance.url.chomp('/') + path
   end
 
+  def entity_type_name
+    'hdfs_file'
+  end
+
   private
 
   def self.normalize_path(path)

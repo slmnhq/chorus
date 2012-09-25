@@ -25,7 +25,7 @@ class Workfile < ActiveRecord::Base
   searchable do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    integer :workspace_id
+    integer :workspace_id, :multiple => true
     integer :member_ids, :multiple => true
     boolean :public
     string :grouping_id
