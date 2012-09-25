@@ -73,7 +73,6 @@ describe GpTableCopier, :database_integration => true do
           event.dataset.schema.should == sandbox
           event.workspace.should == workspace
           event.source_dataset.should == source_dataset
-          event.source_dataset_id.should == source_dataset.id
         end
 
         it "creates a notification on a successful import" do
@@ -192,7 +191,6 @@ describe GpTableCopier, :database_integration => true do
           event.dataset.schema.should == sandbox
           event.workspace.should == workspace
           event.source_dataset.should == source_dataset
-          event.source_dataset_id.should == source_dataset.id
         end
 
         it "creates a DatasetImportFailed on a failed import" do

@@ -110,48 +110,6 @@ describe Events::Base do
     Activity.where(:event_id => event.id).size.should == 0
   end
 
-  describe "translating additional data" do
-    let(:event_class) { Events::DatasetImportCreated }
-    let(:event) { event_class.first }
-
-    describe "#additional_data_key" do
-      subject { event.additional_data_key(attr) }
-
-      context "when the attribute can be translated" do
-        let(:attr) { :source_dataset_id }
-        it { should == :source_dataset }
-      end
-
-      context "when the attribute can not be translated" do
-        let(:attr) { :destination_table }
-        it { should == :destination_table }
-      end
-    end
-
-    describe "#additional_data_value" do
-      subject { event.additional_data_value(attr) }
-
-      context "when the attribute can be translated" do
-        let(:attr) { :source_dataset_id }
-        it { should be_a(Dataset) }
-      end
-
-      context "when the attribute can not be translated" do
-        let(:attr) { :destination_table }
-        it { should be_a(String) }
-      end
-
-      context "when the attribute has been deleted" do
-        before do
-          event.source_dataset.destroy
-          event.reload
-        end
-        let(:attr) { :source_dataset_id }
-        xit { should be_a(Dataset) }
-      end
-    end
-  end
-
   describe "with deleted" do
     describe "workspace" do
       it "still has access to the workspace" do
@@ -168,6 +126,19 @@ describe Events::Base do
         event = Events::Base.create!(:actor => actor)
         actor.destroy
         event.reload.actor.should == actor
+      end
+    end
+
+    describe "targets" do
+      it "still has access to the targets" do
+        event = Events::Base.where("target1_id IS NOT NULL AND target2_id IS NOT NULL").first
+        target1 = event.target1
+        target2 = event.target2
+        target1.destroy
+        target2.destroy
+        event.reload
+        event.target1.should == target1
+        event.target2.should == target2
       end
     end
   end

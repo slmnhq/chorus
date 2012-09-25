@@ -180,6 +180,8 @@ class ActivityMigrator < AbstractMigrator
       legacy_id,
       legacy_type,
       action,
+      target1_id,
+      target1_type,
       target2_id,
       target2_type,
       created_at,
@@ -190,18 +192,25 @@ class ActivityMigrator < AbstractMigrator
       streams.id,
       'edc_activity_stream',
       'Events::DatasetImportSuccess',
-      datasets.id,
+      source_dataset.id,
+      'Dataset',
+      target_dataset.id,
       'Dataset',
       streams.created_tx_stamp,
       streams.last_updated_tx_stamp,
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
-      INNER JOIN edc_activity_stream_object target_dataset
-        ON streams.id = target_dataset.activity_stream_id
-        AND target_dataset.entity_type = 'table'
-      INNER JOIN datasets
-        ON normalize_key(target_dataset.object_id) = datasets.legacy_id
+      INNER JOIN edc_activity_stream_object target_dataset_aso
+        ON streams.id = target_dataset_aso.activity_stream_id
+        AND target_dataset_aso.entity_type = 'table'
+      INNER JOIN datasets as target_dataset
+        ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
+      INNER JOIN edc_activity_stream_object source_dataset_aso
+        ON streams.id = source_dataset_aso.activity_stream_id
+        AND source_dataset_aso.entity_type = 'databaseObject'
+      INNER JOIN datasets as source_dataset
+        ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
       INNER JOIN edc_activity_stream_object actor
@@ -211,18 +220,6 @@ class ActivityMigrator < AbstractMigrator
     WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of dataset'
     AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetImportSuccess');
     ))
-
-      backfill_dataset_import_success_additional_data
-    end
-
-    def backfill_dataset_import_success_additional_data
-      Events::DatasetImportSuccess.where('additional_data IS NULL').each do |event|
-        row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
-                                      WHERE aso.activity_stream_id = '#{event.legacy_id}'
-                                      AND aso.entity_type = 'table';").first
-        event.additional_data = {:source_dataset_id => Dataset.unscoped.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id}
-        event.save!
-      end
     end
 
     def migrate_dataset_import_failed
@@ -755,6 +752,8 @@ class ActivityMigrator < AbstractMigrator
     legacy_id,
     legacy_type,
     action,
+    target1_id,
+    target1_type,
     target2_id,
     target2_type,
     created_at,
@@ -765,18 +764,25 @@ class ActivityMigrator < AbstractMigrator
     streams.id,
     'edc_activity_stream',
     'Events::DatasetImportCreated',
-    datasets.id,
+    source_dataset.id,
+    'Dataset',
+    target_dataset.id,
     'Dataset',
     streams.created_tx_stamp,
     streams.last_updated_tx_stamp,
     workspaces.id,
     users.id
   FROM edc_activity_stream streams
-    INNER JOIN edc_activity_stream_object target_dataset
-      ON streams.id = target_dataset.activity_stream_id
-      AND target_dataset.entity_type = 'table'
-    INNER JOIN datasets
-      ON normalize_key(target_dataset.object_id) = datasets.legacy_id
+    INNER JOIN edc_activity_stream_object target_dataset_aso
+      ON streams.id = target_dataset_aso.activity_stream_id
+      AND target_dataset_aso.entity_type = 'table'
+    INNER JOIN datasets target_dataset
+      ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
+    INNER JOIN edc_activity_stream_object source_dataset_aso
+      ON streams.id = source_dataset_aso.activity_stream_id
+      AND source_dataset_aso.entity_type = 'databaseObject'
+    INNER JOIN datasets as source_dataset
+      ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
     INNER JOIN workspaces
       ON workspaces.legacy_id = streams.workspace_id
     INNER JOIN edc_activity_stream_object actor
@@ -795,7 +801,7 @@ class ActivityMigrator < AbstractMigrator
         row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
                                     WHERE aso.activity_stream_id = '#{event.legacy_id}'
                                     AND aso.entity_type = 'table';").first
-        event.additional_data = {:source_dataset_id => Dataset.unscoped.find_by_legacy_id(DatabaseObjectMigrator.normalize_key(row['object_id'])).id, :destination_table => row['object_name']}
+        event.additional_data = {:destination_table => row['object_name']}
         event.save!
       end
     end

@@ -422,8 +422,8 @@ describe "Event types" do
     end
 
     its(:dataset) { should == dataset }
-    its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == { 'source_dataset_id' => source_dataset.id, 'destination_table' => dataset.name } }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :source_dataset => source_dataset} }
+    its(:additional_data) { should == { 'destination_table' => dataset.name } }
 
     it_creates_activities_for { [actor, workspace, dataset, source_dataset] }
     it_does_not_create_a_global_activity
@@ -442,8 +442,7 @@ describe "Event types" do
     end
 
     its(:dataset) { should == dataset }
-    its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == { 'source_dataset_id' => source_dataset.id} }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :source_dataset => source_dataset} }
 
     it "has a workspace in the source_dataset" do
       subject.source_dataset.bound_workspaces.should include(workspace)

@@ -141,22 +141,6 @@ module Events
       end
     end
 
-    def self.translate_additional_data_ids(args={})
-      self.object_translations ||= {}
-      args.each do |key_value|
-        wrapper_name = key_value.first
-        wrapper_type = key_value.last
-        wrapped_id = "#{wrapper_name}_id"
-
-        object_translations[wrapped_id.to_s] = wrapper_name
-
-        attr_accessible wrapper_name
-
-        define_method(wrapper_name) { wrapper_type.find_by_id(send(wrapped_id)) }
-        define_method("#{wrapper_name}=") { |value| send("#{wrapped_id}=", value.present? ? value.id : nil) }
-      end
-    end
-
     private
 
     def try_unscoped(method, &block)

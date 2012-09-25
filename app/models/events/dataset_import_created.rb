@@ -2,9 +2,8 @@ require 'events/base'
 
 module Events
   class DatasetImportCreated < Base
-    has_targets :workspace, :dataset
+    has_targets :source_dataset, :dataset, :workspace
     has_activities :actor, :workspace, :dataset, :source_dataset
-    has_additional_data :source_dataset_id, :destination_table
-    translate_additional_data_ids :source_dataset => Dataset
+    has_additional_data :destination_table
   end
 end
