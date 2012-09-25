@@ -20,9 +20,9 @@ alias l='ls'
 alias ll='ls -la'
 
 alias st='script/test'
-alias sta='script/test && script/test spec/legacy_migration'
+alias sta='script/test && script/test spec/legacy_migration && rake api_docs'
 alias rage='bundle exec rake db:migrate db:test:prepare'
-alias run_all_tests='st && rake phantom && rspec spec/integration && rake api_docs'
+alias run_all_tests='sta && rake phantom && rspec spec/integration'
 
 export CHORUS_HOME=~/workspace/chorusrails
 alias server_control='CHORUS_HOME=~/workspace/chorusrails RAILS_ENV=development ~/workspace/chorusrails/packaging/server_control.sh'
