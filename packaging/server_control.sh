@@ -30,13 +30,32 @@ function should_handle () {
 }
 
 function start () {
+  EXIT_STATUS=0
   pushd $CHORUS_HOME > /dev/null
-  if should_handle postgres;  then $bin/start-postgres.sh;    fi
-  if should_handle workers;   then $bin/start-workers.sh;     fi
-  if should_handle scheduler; then $bin/start-scheduler.sh;   fi
-  if should_handle solr;      then $bin/start-solr.sh;        fi
-  if should_handle webserver; then $bin/start-webserver.sh;   fi
+  if should_handle postgres;  then
+    $bin/start-postgres.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle workers;   then
+    $bin/start-workers.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle scheduler; then
+    $bin/start-scheduler.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle solr;      then
+    $bin/start-solr.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle webserver; then
+    $bin/start-webserver.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
   popd > /dev/null
+  if (($EXIT_STATUS > 0)); then
+    exit $EXIT_STATUS;
+  fi
 }
 
 function stop () {

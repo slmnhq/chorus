@@ -377,6 +377,7 @@ class ChorusInstaller
     else
       stop_postgres
     end
+    log "For Postgres errors check #{destination_path}/shared/db/server.log"
     FileUtils.rm_rf release_path
   end
 
