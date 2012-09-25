@@ -22,7 +22,7 @@ describe UsersController do
     describe "sorting" do
       it "sorts by first name" do
         get :index
-        decoded_response.first.first_name.should < decoded_response.second.first_name
+        decoded_response.first.first_name.should <= decoded_response.second.first_name
       end
 
       context "with a recognized sort order" do

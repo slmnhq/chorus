@@ -2,13 +2,6 @@ describe("chorus.models.Notification", function() {
     beforeEach(function() {
         this.collection = rspecFixtures.notificationSet();
         this.notification = this.collection.at(0);
-//        this.notification = fixtures.notifications.BE_MEMBER({
-//            author: {
-//                id: "10000",
-//                firstName: "Colonel",
-//                lastName: "Sanders"
-//            }
-//        });
     });
 
     describe("initialization", function() {
@@ -35,9 +28,9 @@ describe("chorus.models.Notification", function() {
         });
 
         it("has the right author data", function() {
-            expect(this.activity.get("actor").id).toBe(1000003);
-            expect(this.activity.get("actor").firstName).toBe("searchquery");
-            expect(this.activity.get("actor").lastName).toBe("Brockovich");
+            expect(this.activity.get("actor").id).toBe(this.notification.get("actor").id);
+            expect(this.activity.get("actor").firstName).toBe(this.notification.get("actor").firstName);
+            expect(this.activity.get("actor").lastName).toBe(this.notification.get("actor").lastName);
         });
 
         it("has the right id", function() {
@@ -56,15 +49,18 @@ describe("chorus.models.Notification", function() {
                 });
                 this.activity = this.notification.activity();
             });
+
             it("has the right body", function() {
                 expect(this.notification.get("comment").text).toBeDefined();
                 expect(this.activity.get("body")).toBe(this.notification.get("comment").text);
             });
+
             it("has the right author data", function() {
-                expect(this.activity.get("actor").firstName).toBe("Carly");
-                expect(this.activity.get("actor").lastName).toBe("Carlson");
+                expect(this.activity.get("actor").firstName).toBe(this.notification.get("actor").firstName);
+                expect(this.activity.get("actor").lastName).toBe(this.notification.get("actor").lastName);
             });
         });
+
         context("when there is not a comment", function() {
             it("has the right body", function() {
                 expect(this.activity.get("body")).toBe(this.notification.get("event").body);

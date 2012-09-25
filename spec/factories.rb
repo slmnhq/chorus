@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user, :aliases => [:owner, :modifier, :actor] do
     sequence(:username) { |n| "user#{n}" }
-    password "secret"
+    password "password"
     first_name "John"
     last_name "Doe"
     title "Grand Poo Bah"

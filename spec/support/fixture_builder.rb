@@ -11,6 +11,9 @@ FixtureBuilder.configure do |fbuilder|
   fbuilder.name_model_with(Workfile) do |record|
     record['file_name'].gsub(/\s+/, '_').downcase
   end
+  fbuilder.name_model_with(User) do |record|
+    record['username'].downcase
+  end
 
   # now declare objects
   fbuilder.factory do
@@ -21,33 +24,33 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     #Users
-    admin = User.create!({:first_name => 'Admin', :last_name => 'AlphaSearch', :username => 'admin', :email => 'admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
-    evil_admin = User.create!({:first_name => 'Evil', :last_name => 'AlphaSearch', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
+    admin = FactoryGirl.create(:admin, {:last_name => 'AlphaSearch', :username => 'admin'})
+    evil_admin = FactoryGirl.create(:admin, {:last_name => 'AlphaSearch', :username => 'evil_admin'})
     Events::UserAdded.by(admin).add(:new_user => evil_admin)
 
-    no_collaborators = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'no_collaborators', :email => 'alice@example.com', :password => FixtureBuilder.password)
+    no_collaborators = FactoryGirl.create(:user, :username => 'no_collaborators')
     Events::UserAdded.by(admin).add(:new_user => no_collaborators)
 
-    owner = User.create!(:first_name => 'searchquery', :last_name => 'Brockovich', :username => 'owner', :email => 'bob@example.com', :password => FixtureBuilder.password)
+    owner = FactoryGirl.create(:user, :first_name => 'searchquery', :username => 'owner')
     owner.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
     owner.save!
 
     fbuilder.name :admin_creates_owner, Events::UserAdded.by(admin).add(:new_user => owner)
 
-    the_collaborator = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'the_collaborator', :email => 'carly@example.com', :password => FixtureBuilder.password)
+    the_collaborator = FactoryGirl.create(:user, :username => 'the_collaborator')
     Events::UserAdded.by(admin).add(:new_user => the_collaborator)
 
-    not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
+    not_a_member = FactoryGirl.create(:user, :username => 'not_a_member')
     Events::UserAdded.by(admin).add(:new_user => not_a_member)
 
-    user_with_restricted_access = User.create!(:first_name => 'Restricted', :last_name => 'User', :username => 'restricted_user', :email => 'restricted@example.com', :password => FixtureBuilder.password)
+    user_with_restricted_access = FactoryGirl.create(:user, :username => 'restricted_user')
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    greenplum_instance = GpdbInstance.create!({ :name => "Greenplum", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
+    greenplum_instance = FactoryGirl.create(:gpdb_instance, :name => "Greenplum", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
-    aurora_instance = GpdbInstance.create!({ :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create" }, :without_protection => true)
+    aurora_instance = FactoryGirl.create(:gpdb_instance, :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create")
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
     Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
     Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
@@ -66,8 +69,7 @@ FixtureBuilder.configure do |fbuilder|
     chorus_gpdb42_instance = GpdbInstance.create!(GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge({:name => GpdbIntegration::REAL_GPDB_HOST.gsub('-', '_'), :owner => admin}), :without_protection => true)
 
     # Instance Accounts
-    shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => shared_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
-    fbuilder.name(:shared_instance_account, shared_instance_account)
+    @shared_instance_account = InstanceAccount.create!({:owner => admin, :gpdb_instance => shared_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
     fbuilder.name(:unauthorized, InstanceAccount.create!({:owner => the_collaborator, :gpdb_instance => owners_instance, :db_username => "thisisafakeaccount", :db_password => "whichdoesntexist"}, :without_protection => true))
     owner_instance_account = InstanceAccount.create!({:owner => owner, :gpdb_instance => owners_instance, :db_username => 'owner', :db_password => 'i <3 me'}, :without_protection => true)
     fbuilder.name(:aurora, InstanceAccount.create!({:owner => admin, :gpdb_instance => aurora_instance, :db_username => 'edcadmin', :db_password => 'secret'}, :without_protection => true))
@@ -87,7 +89,7 @@ FixtureBuilder.configure do |fbuilder|
     GpdbSchema.create!({ :name => "public", :database => default_database }, :without_protection => true)
     default_table = GpdbTable.create!({ :name => "table", :schema => default_schema }, :without_protection => true)
     fbuilder.name :table, default_table
-    GpdbView.create!({ :name => "view", :schema => default_schema }, :without_protection => true)
+    fbuilder.name :view, GpdbView.create!({ :name => "view", :schema => default_schema }, :without_protection => true)
 
     searchquery_database = GpdbDatabase.create!({ :gpdb_instance => owners_instance, :name => 'searchquery_database' }, :without_protection => true)
     searchquery_schema = GpdbSchema.create!({ :name => "searchquery_schema", :database => searchquery_database }, :without_protection => true)
@@ -105,7 +107,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # Database Instance Accounts
     searchquery_database.instance_accounts << owner_instance_account
-    shared_search_database.instance_accounts << shared_instance_account
+    shared_search_database.instance_accounts << @shared_instance_account
 
     #Workspaces
     workspaces = []

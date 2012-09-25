@@ -6,26 +6,24 @@ describe User do
   end
 
   describe ".authenticate" do
-    before do
-      @user = FactoryGirl.create :user #, :username => 'aDmin'
-    end
+    let(:user) { FactoryGirl.create(:user) }
 
     it "returns true if the password is correct" do
-      User.authenticate(@user.username, 'secret').should be_true
+      User.authenticate(user.username, 'password').should be_true
     end
 
     it "returns false if the password is incorrect" do
-      User.authenticate(@user.username, 'bogus').should be_false
+      User.authenticate(user.username, 'bogus').should be_false
     end
 
     it "returns false if the user is deleted" do
-      @user.destroy
-      User.authenticate(@user.username, 'secret').should be_false
+      user.destroy
+      User.authenticate(user.username, 'password').should be_false
     end
 
     it "is case insensitive" do
-      User.authenticate(@user.username.downcase, 'secret').should be_true
-      User.authenticate(@user.username.upcase, 'secret').should be_true
+      User.authenticate(user.username.downcase, 'password').should be_true
+      User.authenticate(user.username.upcase, 'password').should be_true
     end
 
     context "when there's a legacy_password_digest" do
