@@ -4,7 +4,7 @@ describe "Sandbox" do
 
   let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:instance) { GpdbIntegration.real_gpdb_instance }
-  let(:database) { instance.databases.find_by_name("ChorusAnalytics") }
+  let(:database) { GpdbIntegration.real_database }
   let(:schema) { database.schemas.first }
 
   before do
