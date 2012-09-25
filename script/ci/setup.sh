@@ -5,7 +5,7 @@ rbenv shell `cat .rbenv-version`
 export JASMINE_PORT=8888
 
 gem list bundler | grep bundler || gem install bundler
-bundle install --binstubs=b/
+bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 
 mkdir -p tmp/pids
 
