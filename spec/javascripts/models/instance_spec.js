@@ -1,6 +1,6 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.greenplumInstance({id: 1, version: "1234"});
+        this.instance = rspecFixtures.greenplumInstance({id: 1, version: "1234", owner:{firstName: "John", lastName: "Doe"}});
     });
 
     describe("#stateIconUrl and #stateText", function() {

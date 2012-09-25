@@ -32,7 +32,7 @@ describe GpdbInstancesController do
   end
 
   describe "#show" do
-    let(:gpdb_instance) { gpdb_instances(:shared) }
+    let(:gpdb_instance) { gpdb_instances(:owners) }
 
     context "with a valid instance id" do
       it "does not require authorization" do

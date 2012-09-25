@@ -4,7 +4,7 @@ resource "Greenplum Tables / Views" do
   let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => dataset.gpdb_instance, :owner => owner) }
+  let(:owner_account) { dataset.gpdb_instance.owner_account }
   let(:dataset_id) { dataset.id }
   let!(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }
   let!(:activity) { Activity.create!(:entity => dataset, :event => event) }

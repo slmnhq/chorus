@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UsersController do
   describe "#index" do
     before do
-      log_in users(:owner)
+      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
       FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy", :last_name => "bravo")
     end
 
@@ -86,7 +86,7 @@ describe UsersController do
     end
 
     context "admin" do
-      let(:admin) { users(:admin)}
+      let(:admin) {FactoryGirl.create(:admin, :username => 'some_user')}
 
       before do
         log_in admin
@@ -253,7 +253,7 @@ describe UsersController do
 
     context "admin" do
       before do
-        log_in users(:admin)
+        log_in FactoryGirl.create(:admin)
       end
 
       context "user with no instances or workspaces" do
@@ -310,7 +310,7 @@ describe UsersController do
 
     context "non-admin" do
       before(:each) do
-        log_in users(:owner)
+        log_in FactoryGirl.create(:user)
         delete :destroy, :id => user.id
       end
 
@@ -325,7 +325,7 @@ describe UsersController do
     end
 
     context "admin trying to delete himself" do
-      let(:admin) { users(:admin) }
+      let(:admin) { FactoryGirl.create :admin }
 
       before do
         log_in admin
@@ -348,7 +348,7 @@ describe UsersController do
 
     context "as an admin" do
       before(:each) do
-        log_in users(:admin)
+        log_in FactoryGirl.create(:admin)
       end
 
       it "returns the set of matching users" do
@@ -364,7 +364,7 @@ describe UsersController do
 
     context "as a non-admin" do
       before(:each) do
-        log_in users(:owner)
+        log_in FactoryGirl.create(:user)
       end
 
       it "returns unauthorized" do
