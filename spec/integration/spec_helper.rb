@@ -33,6 +33,7 @@ end
 
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
+require Rails.root.join('spec', 'factories.rb')
 require "#{Rails.root}/spec/support/fixture_builder.rb"
 require "#{Rails.root}/spec/support/database_integration/setup_gpdb.rb"
 
