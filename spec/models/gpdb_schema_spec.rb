@@ -27,16 +27,8 @@ describe GpdbSchema do
       database.schemas.where(:name => "new_schema").should exist
     end
 
-    it "refreshes datasets for new schemas" do
-      mock(Dataset).refresh.with_any_args do |*args|
-        args[0].should == account
-        args[1].name.should == 'new_schema'
-      end
-      GpdbSchema.refresh(account, database)
-    end
-
     it "passes the options Dataset.refresh" do
-      options = {:dostuff => true}
+      options = {:dostuff => true, :refresh_all => true}
       mock(Dataset).refresh(account, anything, options)
       GpdbSchema.refresh(account, database, options)
     end

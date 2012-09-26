@@ -55,7 +55,7 @@ class GpdbSchema < ActiveRecord::Base
         else
           schema.update_attributes!({:stale_at => nil}, :without_protection => true)
         end
-        Dataset.refresh(account, schema, options) if schema_new || options[:refresh_all]
+        Dataset.refresh(account, schema, options) if options[:refresh_all]
 
       rescue ActiveRecord::StatementInvalid => e
       end
