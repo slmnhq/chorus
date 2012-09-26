@@ -124,19 +124,24 @@ describe Workspace do
     let(:chorus_view) {
       ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
     }
+    let(:chorus_view_from_source) {
+      ChorusView.new({:name => "chorus_view_from_source", :schema => other_schema, :query => "select 1"}, :without_protection => true)
+    }
     let(:user) {users(:the_collaborator)}
 
     context "when the workspace has a sandbox" do
       before do
         chorus_view.save!(:validate => false)
+        chorus_view_from_source.save!(:validate => false)
         workspace.bound_datasets << chorus_view
+        workspace.bound_datasets << chorus_view_from_source
         workspace.bound_datasets << source_table
       end
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       context "when the user does not have an instance account" do
         it "lets them see associated datasets and chorus views only" do
-          workspace.datasets(user).should =~ [source_table, chorus_view]
+          workspace.datasets(user).should =~ [source_table, chorus_view, chorus_view_from_source]
         end
       end
 
@@ -149,13 +154,13 @@ describe Workspace do
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-            workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view]
+            workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
           end
 
           it "filters by type" do
             workspace.datasets(user, "SANDBOX_TABLE").should =~ [sandbox_table]
             workspace.datasets(user, "SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
-            workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view]
+            workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view, chorus_view_from_source]
             workspace.datasets(user, "SOURCE_TABLE").should =~ [source_table]
           end
         end

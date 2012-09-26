@@ -85,12 +85,13 @@ class Workspace < ActiveRecord::Base
         when "SANDBOX_TABLE" then
           datasets = datasets.tables
         when "SANDBOX_DATASET" then
-          datasets = datasets.views_tables
+          datasets = datasets.where(:schema_id => sandbox.id)
         when "CHORUS_VIEW" then
-          datasets = Dataset.chorus_views.where(:schema_id => sandbox.id)
+          associated_dataset_ids = associated_datasets.pluck(:dataset_id)
+          datasets = Dataset.where(:type => "ChorusView").where(:id => associated_dataset_ids)
         when "SOURCE_TABLE" then
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-          datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids)
+          datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids).where("type != 'ChorusView'")
         else
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
           datasets = Dataset.where(:id => (associated_dataset_ids + viewable_table_ids))
