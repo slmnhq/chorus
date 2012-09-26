@@ -21,6 +21,7 @@ describe WorkfilePresenter, :type => :view do
       hash.should have_key(:file_type)
       hash.should have_key(:latest_version_id)
       hash.should have_key(:has_draft)
+      hash.should have_key(:is_deleted)
       hash.should_not have_key(:execution_schema)
     end
 
