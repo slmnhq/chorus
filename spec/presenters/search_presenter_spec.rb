@@ -4,7 +4,7 @@ describe SearchPresenter, :type => :view do
 
   let(:user) { users(:owner) }
 
-  before(:each) do
+  before do
     reindex_solr_fixtures
     stub(ActiveRecord::Base).current_user { user }
   end
