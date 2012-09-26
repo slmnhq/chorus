@@ -8,7 +8,7 @@ resource "Search" do
     log_in user
   end
 
-  get "/search/global" do
+  get "/search" do
     parameter :query, "Search term"
     parameter :per_type, "Number of each entity to return"
     example "Global Search" do
@@ -19,7 +19,7 @@ resource "Search" do
     end
   end
 
-  get "/search/global" do
+  get "/search" do
     parameter :query, "Search term"
     parameter :entity_type, "The type of entity to search for (GpdbInstance, User, Workspace, Workfile)"
     parameter :page, "Page number"
@@ -32,7 +32,7 @@ resource "Search" do
     end
   end
 
-  post "/search/global/reindex" do
+  post "/search/reindex" do
     parameter :types, "The types of entities to reindex (#{Sunspot.searchable.map(&:name).join(', ')}) or 'all' to reindex all"
 
     required_parameters :types

@@ -52,7 +52,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/global/?query=jackson5&entity_type=workfile&workspace_id=5");
+                    expectPaginatedUrl("/search/?query=jackson5&entity_type=workfile&workspace_id=5");
                     expectShowUrl("#/workspaces/5/search/all/workfile/jackson5");
                 });
 
@@ -61,7 +61,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "all" });
                     });
 
-                    expectUrl("/search/global/?query=jackson5&workspace_id=5");
+                    expectUrl("/search/?query=jackson5&workspace_id=5");
                     expectShowUrl("#/workspaces/5/search/jackson5");
                 });
             });
@@ -106,7 +106,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/global/?query=jackson5&entity_type=workfile");
+                    expectPaginatedUrl("/search/?query=jackson5&entity_type=workfile");
                     expectShowUrl("#/search/all/workfile/jackson5");
                 });
 
@@ -115,7 +115,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "all" });
                     });
 
-                    expectUrl("/search/global/?query=jackson5");
+                    expectUrl("/search/?query=jackson5");
                     expectShowUrl("#/search/jackson5");
                 });
             });
@@ -127,7 +127,7 @@ describe("chorus.models.SearchResult", function() {
             });
 
             it("has the right url", function() {
-                expect(this.model.url()).toContain("/search/global/?query=%25%25%25");
+                expect(this.model.url()).toContain("/search/?query=%25%25%25");
             });
             expectShowUrl("#/search/%25%25%25");
         });

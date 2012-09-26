@@ -28,7 +28,7 @@
             } else if (this.isScopedToUserWorkspaces()) {
                 return "search/workspaces/";
             } else {
-                return "search/global/";
+                return "search/";
             }
         },
 

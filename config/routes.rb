@@ -101,11 +101,9 @@ Chorus::Application.routes.draw do
 
   resource :provisioning, :only => [:show], :controller => 'provisioning'
 
-  scope :path => "/search" do
-    resource :global, :only => [:show], :controller => 'search' do
-      collection do
-        post :reindex
-      end
+  resource :search, :only => [:show], :controller => 'search' do
+    member do
+      post :reindex
     end
   end
 
