@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -33,10 +33,10 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Dataset
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.5326478,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000037'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.5326478}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.5113115,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000037'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.5113115}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
         1000037''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 25 Sep 2012 22:44:18 GMT
+  recorded_at: Wed, 26 Sep 2012 20:48:36 GMT
 recorded_with: VCR 2.1.1
 ...

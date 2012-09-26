@@ -34,6 +34,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(GpdbInstance)
       Sunspot.session.should be_a_search_for(HadoopInstance)
       Sunspot.session.should be_a_search_for(Workspace)
+      Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)
       Sunspot.session.should be_a_search_for(HdfsEntry)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
@@ -114,6 +115,18 @@ describe Search do
       end
     end
   
+    describe "search with a specific model" do
+      it "only searches for that model" do
+        search = Search.new(user, :query => 'bob', :entity_type => 'user')
+        search.search
+        session = Sunspot.session
+        session.should be_a_search_for(User)
+        session.should_not be_a_search_for(GpdbInstance)
+        session.should have_search_params(:fulltext, 'bob')
+        session.should_not have_search_params(:facet, :type_name)
+      end
+    end
+
     describe "with a workspace_id" do
       let(:search) { Search.new(user, :query => 'bob', :per_type => 3, :workspace_id => 7) }
   
@@ -126,11 +139,12 @@ describe Search do
   
       it "performs a secondary search to pull back workfiles and datasets within the workspace" do
         Sunspot.session.searches.length.should == 2
-        Sunspot.session.searches.last.should be_a_search_for(Dataset)
-        Sunspot.session.searches.last.should be_a_search_for(Workfile)
-        Sunspot.session.searches.last.should be_a_search_for(Workspace)
-        Sunspot.session.searches.last.should_not be_a_search_for(User)
-        Sunspot.session.searches.last.should have_search_params(:with, :workspace_id, 7)
+        last_search = Sunspot.session.searches.last
+        last_search.should be_a_search_for(Dataset)
+        last_search.should be_a_search_for(Workfile)
+        last_search.should be_a_search_for(Workspace)
+        last_search.should_not be_a_search_for(User)
+        last_search.should have_search_params(:with, :workspace_id, 7)
       end
   
       it "limits the results to a max of per_page" do
