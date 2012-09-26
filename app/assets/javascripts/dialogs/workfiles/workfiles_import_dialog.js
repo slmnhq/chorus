@@ -105,7 +105,6 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }, self);
         }
 
-        // TODO: abstract away all of this JSON parsing into some model
         function uploadFinished(e, json) {
             self.model = new chorus.models.Workfile();
             self.model.set(self.model.parse(JSON.parse(json.result)));

@@ -282,8 +282,6 @@ class ActivityMigrator < AbstractMigrator
         additional_data = Legacy.connection.exec_query("SELECT aso1.object_name as destination_table FROM edc_activity_stream_object aso1
                                         WHERE aso1.activity_stream_id = '#{event.legacy_id}'
                                         AND aso1.entity_type = 'table';").first
-        # TODO Remove this line once we have chorus views
-        next unless additional_data
         event.additional_data[:destination_table] = additional_data['destination_table']
         event.save!
       end

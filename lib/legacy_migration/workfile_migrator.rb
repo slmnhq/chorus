@@ -123,7 +123,6 @@ class WorkfileMigrator < AbstractMigrator
             WHERE edc_work_file.id = public.workfiles.legacy_id)")
 
       silence_activerecord do
-        #TODO Optimize this to one query
         WorkfileVersion.where("contents_file_name IS NULL").each do |workfile_version|
           row = Legacy.connection.exec_query("
             SELECT

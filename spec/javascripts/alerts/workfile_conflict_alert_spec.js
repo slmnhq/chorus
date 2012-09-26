@@ -5,7 +5,6 @@ describe("chorus.alerts.WorkfileConflict", function() {
 
         this.workfile = rspecFixtures.workfile.sql({ versionInfo: { content : "version content" } });
         this.message = "This work file has been modified by Christine Klunk";
-        // TODO: REWRITE: Maybe server should provide {INVALID: {editor: "Christine Klunk"}} instead
         this.workfile.serverErrors = {fields: {version: {GENERIC: {message: this.message}}}};
         this.alert = new chorus.alerts.WorkfileConflict({ model : this.workfile });
         this.alert.render();

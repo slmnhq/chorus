@@ -437,7 +437,6 @@ chorus.views.MainContentView = chorus.views.Base.extend({
     },
 
     subviews: {
-        //todo get rid of the unnecessary div, css changes galore!
         ".content_header > div": "contentHeader",
         ".content_details > div": "contentDetails",
         ".content > div": "content",

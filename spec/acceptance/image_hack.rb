@@ -6,7 +6,7 @@ module RspecApiDocumentation
       end
       index.examples.each do |example|
 
-        # TODO: fix this horrible monkey patch
+        # For an uploaded image, render '...content redacted' instead of the image binary
         data = example.example.metadata
         begin
           if data[:requests][0][:request_body].include?("Content-Type: image")

@@ -251,7 +251,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
             });
 
             xcontext("when you are replacing a deleted version", function() {
-                //TODO replace with error 2.2 app gives
+                //TODO replace with error 2.2 app gives (https://www.pivotaltracker.com/story/show/35346593)
                 it("shows the version conflict alert", function() {
                     this.server.lastUpdate().fail([{
                         "message" : "Bad version, bro",

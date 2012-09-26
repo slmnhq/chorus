@@ -105,10 +105,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
             this.workspace.save();
         }
 
-        // TODO: possibly put back in for more sandbox stories, i.e. provisioning new sandbox or creating sandbox for new schema?
-//        if (this.model.save(this.activeForm.fieldValues()) !== false && this.activeForm == this.standaloneMode) {
-//            chorus.toast("instances.new_dialog.provisioning")
-//        }
     },
 
     saved: function() {
