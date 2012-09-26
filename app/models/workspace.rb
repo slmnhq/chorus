@@ -43,7 +43,8 @@ class Workspace < ActiveRecord::Base
 
   has_shared_search_fields [
     { :type => :integer, :name => :member_ids, :options => { :multiple => true } },
-    { :type => :boolean, :name => :public }
+    { :type => :boolean, :name => :public },
+    { :type => :integer, :name => :workspace_id, :options => { :multiple => true, :using => :id} }
   ]
 
   def self.add_search_permissions(current_user, search)

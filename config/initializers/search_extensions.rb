@@ -18,8 +18,13 @@ module SearchExtensions
     def define_shared_search_fields(field_definitions, receiver_name=nil)
       searchable do |s|
         field_definitions.each do |field_def|
+          field_def = field_def.dup
           method_name = (field_def[:options] && field_def[:options][:using]) || field_def[:name]
-          delegate method_name, :to => receiver_name if receiver_name
+          if receiver_name
+            delegate method_name, :to => receiver_name, :prefix => :search
+            field_def[:options] = field_def[:options].try(:dup) || {}
+            field_def[:options][:using] = "search_#{method_name}"
+          end
           s.public_send(field_def[:type], field_def[:name], field_def[:options].try(:dup))
         end
       end

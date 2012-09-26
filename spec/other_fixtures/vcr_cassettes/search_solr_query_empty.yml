@@ -21,7 +21,7 @@ http_interactions:
       Server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
@@ -35,5 +35,30 @@ http_interactions:
         -instance_account_ids_im:(1000000))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{}}'
     http_version:
   recorded_at: Tue, 25 Sep 2012 22:42:58 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>44}}'
+    http_version:
+  recorded_at: Wed, 26 Sep 2012 00:33:53 GMT
 recorded_with: VCR 2.1.1
 ...

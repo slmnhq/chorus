@@ -133,7 +133,7 @@ class Search
   end
 
   def workspace
-    Workspace.find(workspace_id)
+    @_workspace ||= Workspace.find(workspace_id)
   end
 
   private
