@@ -62,6 +62,7 @@ Chorus::Application.routes.draw do
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
       resource :import, :only => [:show, :create, :update, :destroy], :controller => "dataset_imports"
     end
+    resource :search, :only => [:show], :controller => 'workspace_search'
 
     resources :external_tables, :only => [:create]
     resources :csv, :only => [:create], :controller => 'workspace_csv' do

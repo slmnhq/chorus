@@ -21,8 +21,9 @@ class WorkspaceSearch < Search
   end
 
   def results
+    return @results if @results
     search.associate_grouped_notes_with_primary_records
-    search.results
+    @results = search.results
   end
 
   private

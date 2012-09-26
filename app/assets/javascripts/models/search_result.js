@@ -24,7 +24,7 @@
 
         urlTemplate: function() {
             if (this.isScopedToSingleWorkspace()) {
-                return "search/workspace/";
+                return "workspaces/{{workspaceId}}/search/";
             } else if (this.isScopedToUserWorkspaces()) {
                 return "search/workspaces/";
             } else {

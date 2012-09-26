@@ -9,7 +9,7 @@ describe("chorus.models.SearchResult", function() {
                 this.model.set({ workspaceId: "5", searchIn: "this_workspace" });
             });
 
-            expectPaginatedUrl("/search/workspace/?workspace_id=5&query=jackson5");
+            expectPaginatedUrl("/workspaces/5/search/?workspace_id=5&query=jackson5");
             expectShowUrl("#/workspaces/5/search/this_workspace/all/jackson5");
         });
 
