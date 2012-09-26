@@ -267,7 +267,7 @@ FixtureBuilder.configure do |fbuilder|
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases
-    GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name))
+    GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name), :refresh_all => true)
 
     test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
     test_schema = test_database.schemas.find_by_name('test_schema')
