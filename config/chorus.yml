@@ -13,7 +13,6 @@ ssl: "off"
 ssl_server_port: 8443
 ssl_certificate: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.crt"
 ssl_certificate_key: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.key"
-provision_max_size_in_gb: 100
 timezone_offset: -8
 worker_threads: 1
 file_sizes_mb:
