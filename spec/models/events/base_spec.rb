@@ -51,7 +51,7 @@ describe Events::Base do
     end
   end
 
-  describe ".for_dashboard_of(user)" do
+  describe ".visible_to(user)" do
     let(:user) { users(:no_collaborators) }
     let(:the_events) do
       [
@@ -74,7 +74,7 @@ describe Events::Base do
     let!(:global_activity) { Activity.global.create!(:event => the_events[3]) }
     let!(:duplicate_global_activity) { Activity.global.create!(:event => the_events[0]) }
 
-    subject { Events::Base.for_dashboard_of(user) }
+    subject { Events::Base.visible_to(user) }
 
     it "includes global events" do
       subject.should include(global_activity.event)
@@ -100,6 +100,7 @@ describe Events::Base do
     it "can be filtered further (like any activerecord relation)" do
       event = global_activity.event
       subject.find(event.to_param).should == event
+      subject.find_by_id(other_workspace1_activity.event).should be_nil
     end
   end
 

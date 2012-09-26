@@ -4,6 +4,7 @@ require 'model_map'
 module Events
   class Note < Base
     validates_presence_of :actor_id
+    belongs_to :promoted_by, :class_name => 'User'
 
     searchable do |s|
       s.text :body, :stored => true do
@@ -66,6 +67,8 @@ module Events
             Events::NoteOnHdfsFile
           when Dataset
             workspace_id ? Events::NoteOnWorkspaceDataset : Events::NoteOnDataset
+          else
+            raise StandardError, "Unknown model type #{model.class.name}"
         end
       end
     end

@@ -221,12 +221,12 @@ FixtureBuilder.configure do |fbuilder|
     csv_file_owner.save!(:validate => false)
     fbuilder.name :default, csv_file_owner
     #Notes
-    note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => owner, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
+    note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     fbuilder.name :note_on_greenplum, note_on_greenplum
-    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => greenplum_instance, :actor => owner, :body => 'i love searchquery', :created_at => '2010-01-01 02:01'}, :without_protection => true)
-    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => shared_instance, :actor => owner, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
-    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => shared_instance, :actor => owner, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
-    Events::NoteOnGreenplumInstance.create!({:greenplum_instance => shared_instance, :actor => owner, :body => 'really really?', :created_at => '2010-01-01 02:04'}, :without_protection => true)
+    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i love searchquery', :created_at => '2010-01-01 02:01')
+    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
+    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
+    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
     Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
     Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
     Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')

@@ -2,7 +2,7 @@
 require "spec_helper"
 require_relative "helpers"
 
-describe "Notes" do
+describe Events::Note do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
@@ -14,6 +14,10 @@ describe "Notes" do
   let(:hdfs_entry) do
     hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
                                          :modified_at => "2010-10-24 22:00:00")
+  end
+
+  describe "associations" do
+    it { should belong_to(:promoted_by).class_name('User') }
   end
 
   it "requires an actor" do
