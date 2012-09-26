@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/rspec_api_documentation.git
-  revision: daf812aaf76f797f8d1db8b238e5e0a49c8b0779
+  revision: 14175a05a62b3ffd15f56e0c7afa3f48b5fbd741
   specs:
     rspec_api_documentation (0.8.0)
       activesupport (>= 3.0.0)
