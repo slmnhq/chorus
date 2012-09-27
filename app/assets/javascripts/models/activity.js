@@ -109,8 +109,7 @@
 
         promoteToInsight: function(options) {
             var insight = new chorus.models.CommentInsight({
-                id: this.get("id"),
-                action: "promote"
+                noteId: this.get("id")
             });
             insight.bind("saved", function() {
                 this.collection.fetch();
@@ -191,8 +190,12 @@
             return this.get("action") === "NOTE";
         },
 
+        isNoteAndNotInsight: function() {
+            return isNote() && !isInSight();
+        },
+
         isInsight: function() {
-            return this.get("type") === "INSIGHT_CREATED";
+            return this.get("isInsight");
         },
 
         isSubComment: function() {
@@ -221,7 +224,16 @@
 
         isSuccessfulImport: function() {
             return this.get("action") === "FileImportSuccess" ||  this.get("action") === "DatasetImportSuccess" ;
+        },
+
+        promoterLink: function() {
+            return this.get("promotedBy") ? chorus.helpers.userProfileLink(new chorus.models.User(this.get("promotedBy"))) : null;
+        },
+
+        promotionTimestamp:function() {
+            return "";
         }
+
     });
 
     function makeAssociationMethod(name, setupFunction) {

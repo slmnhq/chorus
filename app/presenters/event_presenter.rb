@@ -6,7 +6,8 @@ class EventPresenter < Presenter
       merge(note_action_type_hash).
       merge(note_attachment_hash).
       merge(notification_hash).
-      merge(comments_hash)
+      merge(comments_hash).
+      merge(insight_hash)
   end
 
   def simple_hash
@@ -21,6 +22,13 @@ class EventPresenter < Presenter
   def comments_hash
     {
       :comments => present(model.comments)
+    }
+  end
+
+  def insight_hash
+    {
+        :is_insight =>  model.insight?,
+        :promoted_by => model.insight? ? present(model.promoted_by) : nil
     }
   end
 

@@ -9,7 +9,7 @@ describe("chorus.models.CommentInsight", function() {
         });
 
         it("has the right url", function() {
-            expect(this.model.url()).toBe("/commentinsight/41/promote");
+            expect(this.model.url()).toBe("/insights");
         });
     });
 

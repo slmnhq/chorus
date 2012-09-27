@@ -1,6 +1,7 @@
 chorus.models.CommentInsight = chorus.models.Base.extend({
+    parameterWrapper : 'insight',
     urlTemplate: function() {
-        return "commentinsight/{{id}}/{{action}}";
+        return "insights";
     }
 }, {
     count: function(options) {

@@ -18,15 +18,6 @@ describe InsightsController do
       note.promoted_by.should == user
     end
 
-    context "Note on Workspace" do
-      let(:note) { Events::NoteOnWorkspace.first }
-
-      it "should not be promotable" do
-        subject
-        response.code.should == "422"
-      end
-    end
-
     context "Permissions to promote" do
       let(:note) { events(:note_on_no_collaborators_private_workfile) }
       let(:user) { users(:not_a_member) }

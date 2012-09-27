@@ -30,6 +30,10 @@
             }
         },
 
+        isInsight: function() {
+            return this.model.isInsight();
+        },
+
         isUserGenerated: function() {
             return this.model.isUserGenerated();
         },
@@ -82,6 +86,13 @@
 
         id: function() {
             return this.model.id;
+        },
+
+        promotionDetails: function() {
+            return chorus.helpers.safeT("insight.promoted_by", {
+                promoterLink: this.model.promoterLink(),
+                relativeTimestamp: this.model.promotionTimestamp()
+            });
         }
     });
 

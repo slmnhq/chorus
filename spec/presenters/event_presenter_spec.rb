@@ -197,5 +197,21 @@ describe EventPresenter, :type => :view do
         end
       end
     end
+
+    context "events that are insight" do
+      let(:event) { events(:note_on_greenplum) }
+      let(:user) { users(:owner) }
+
+      before do
+        event.insight = true
+        event.promoted_by = user
+      end
+
+      it "has hash for insights" do
+        hash = subject.to_hash
+        hash[:is_insight].should be_true
+        hash[:promoted_by].should == Presenter.present(user, view)
+      end
+    end
   end
 end

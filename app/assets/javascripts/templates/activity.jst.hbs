@@ -54,7 +54,7 @@
         {{#unless isReadOnly}}
             <div class="links">
                 <a class="comment dialog" data-dialog="Comment" data-event-id="{{id}}" href="#">{{t "activity.comment"}}</a>
-                {{#if isNote}}
+                {{#if isNoteAndNotInsight}}
                     <span class="separator">|</span> <a class="promote" href="#">{{t "activity.promote"}}</a>
                 {{/if}}
                 {{#if isInsight}}
@@ -65,7 +65,7 @@
                             <span class="separator">|</span> <a href="#" class="publish">{{t "insight.publish.link"}}</a>
                         {{/if}}
                     {{/if}}
-                    <span class="separator">|</span> <span class="promoted_by">{{safeT "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}</span>
+                    <span class="separator">|</span> <span class="promoted_by">{{promotionDetails}}</span>
                 {{/if}}
             </div>
         {{/unless}}

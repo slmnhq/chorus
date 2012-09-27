@@ -159,6 +159,27 @@ describe("chorus.presenters.Activity", function() {
                 expect(presenter.isReadOnly()).toEqual(true);
             });
         });
+
+        describe("promotionDetails", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                    isInsight:true,
+                    promotedBy:{
+                        id:15,
+                        username:"chorusadmin",
+                        firstName:"Chorus",
+                        lastName:"admin"
+                    }
+                });
+                presenter_options = {
+                };
+                presenter = new chorus.presenters.Activity(model, presenter_options);
+            });
+            it('when isInsight is true', function() {
+                this.promotionDetails = presenter.promotionDetails().string;
+                expect(this.promotionDetails).toEqual('Promoted by <a href="#/users/15" class="user">Chorus admin</a> ');
+            });
+        });
     });
 
     context("greenplum instance created", function() {
