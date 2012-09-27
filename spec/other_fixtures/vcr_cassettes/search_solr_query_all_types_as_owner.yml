@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -34,7 +34,7 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>13,''ngroups''=>12,''groups''=>[{''groupValue''=>''User
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3893587.2,''docs''=>[{''id''=>''User
-        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@macgyver.org''],''last_name_texts''=>[''Mitchell''],''score''=>3893587.2}]}},{''groupValue''=>''Dataset
+        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@faybotsford.org''],''last_name_texts''=>[''Maggio''],''score''=>3893587.2}]}},{''groupValue''=>''Dataset
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1634414.0,''docs''=>[{''id''=>''GpdbTable
         1000006'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''searchquery'',''non-search''],''score''=>1634414.0}]}},{''groupValue''=>''HdfsEntry
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3802.3313,''docs''=>[{''id''=>''HdfsEntry
@@ -76,6 +76,6 @@ http_interactions:
         love @@@hl@@@searchquery@@@endhl@@@'']},''HadoopInstance 1000000''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
         for the hadoop instance'']}}}'
     http_version:
-  recorded_at: Thu, 27 Sep 2012 17:44:06 GMT
+  recorded_at: Thu, 27 Sep 2012 18:17:29 GMT
 recorded_with: VCR 2.1.1
 ...

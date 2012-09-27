@@ -74,7 +74,7 @@ describe GpdbInstancesController do
     end
 
     it "should handle invalid updates" do
-      tmp_gpdb_instance = FactoryGirl.create(:gpdb_instance)
+      tmp_gpdb_instance = gpdb_instances(:default)
       tmp_gpdb_instance.name = nil
       stub(Gpdb::InstanceRegistrar).update!(tmp_gpdb_instance, changed_attributes, user) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
       put :update, :id => tmp_gpdb_instance.id, :instance => changed_attributes
