@@ -56,6 +56,19 @@ resource "Search" do
     end
   end
 
+  get "/search/type_ahead" do
+    parameter :query, "Search term"
+
+    required_parameters :query
+
+    example "Type Ahead Search" do
+      VCR.use_cassette('type_ahead_query_acceptance') do
+        do_request(:query => 'searchquery')
+        status.should == 200
+      end
+    end
+  end
+
   post "/search/reindex" do
     parameter :types, "The types of entities to reindex (#{Sunspot.searchable.map(&:name).join(', ')}) or 'all' to reindex all"
 
