@@ -197,6 +197,18 @@ describe ApplicationController do
         decoded_pagination.total.should == page_count
         decoded_pagination.records.should == user_count
       end
+
+      context "with a per_page of zero" do
+        let(:object_to_present) do
+          User.paginate(:per_page => 0, :page => 1)
+        end
+
+        it "omits the total pages in the response" do
+          get :index
+
+          decoded_pagination.total.should be_nil
+        end
+      end
     end
   end
 

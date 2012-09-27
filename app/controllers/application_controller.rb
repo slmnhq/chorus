@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
         :page => model_or_collection.current_page,
         :per_page => model_or_collection.per_page,
         :records => model_or_collection.total_entries,
-        :total => model_or_collection.total_pages
+        :total => model_or_collection.per_page > 0 ? model_or_collection.total_pages : nil
       }
     end
 
