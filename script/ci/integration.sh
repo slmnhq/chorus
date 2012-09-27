@@ -2,7 +2,6 @@
 
 export RAILS_ENV=integration
 export GPDB_HOST=chorus-gpdb42
-export LOG_LEVEL=3
 
 . script/ci/setup.sh
 
