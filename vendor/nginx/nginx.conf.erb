@@ -36,7 +36,8 @@ http {
         listen      <%= chorus_config['server_port'] %>;
 
 <% if chorus_config['ssl'] == 'on' %>
-        rewrite ^ https://localhost:8443$request_uri? redirect;
+        rewrite ^ https://$host:8443$request_uri? redirect;
+        #rewrite ^(.*) https://$host$1 permanent;
     }
     server {
         listen      <%=  chorus_config['ssl_server_port'] %> ssl;
