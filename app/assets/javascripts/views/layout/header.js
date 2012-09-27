@@ -22,6 +22,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this.session = chorus.session;
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
+        this.notifications.per_page = 5;
         this.requiredResources.add([this.unreadNotifications, this.notifications]);
 
         this.typeAheadView = new chorus.views.TypeAheadSearch();
@@ -161,7 +162,7 @@ chorus.views.Header = chorus.views.Base.extend({
         } else {
             this.unreadNotifications.each(function(model) {
                 model.set({ unread: false }, { silent: true })
-            })
+            });
             this.notificationList.collection.trigger("reset")
         }
 

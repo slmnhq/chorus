@@ -4,6 +4,10 @@ module Events
   class Base < ActiveRecord::Base
     include SoftDelete
 
+    def self.eager_load_associations
+      [:attachments, :workfiles, :datasets, :actor, :target1, :target2, {:workspace => [:associated_datasets, :owner, {:sandbox => {:database => :gpdb_instance}}]}]
+    end
+
     self.table_name = :events
     self.inheritance_column = :action
     serialize :additional_data, JsonHashSerializer
