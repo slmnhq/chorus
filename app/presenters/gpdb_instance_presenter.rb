@@ -1,6 +1,6 @@
 class GpdbInstancePresenter < Presenter
   delegate :name, :host, :port, :id, :owner, :state, :shared, :provision_type,
-           :maintenance_db, :description, :instance_provider, :version, to: :model
+           :maintenance_db, :description, :instance_provider, :version, :used_by_workspaces, to: :model
 
   def to_hash
     {
@@ -15,7 +15,8 @@ class GpdbInstancePresenter < Presenter
       :maintenance_db => maintenance_db,
       :description => description,
       :instance_provider => instance_provider,
-      :version => version
+      :version => version,
+      :used_by_workspaces => (used_by_workspaces if model.is_a?(GpdbInstance))
     }
   end
 end

@@ -27,6 +27,7 @@ describe GpdbInstancePresenter, :type => :view do
       @hash.should have_key(:description)
       @hash.should have_key(:instance_provider)
       @hash.should have_key(:version)
+      @hash.should have_key(:used_by_workspaces)
     end
 
     it "should use ownerPresenter Hash method for owner" do

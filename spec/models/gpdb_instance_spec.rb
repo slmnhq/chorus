@@ -224,6 +224,23 @@ describe GpdbInstance do
     end
   end
 
+  describe "#used_by_workspaces" do
+    let!(:gpdb_instance) { FactoryGirl.create :gpdb_instance }
+    let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => 'db') }
+    let!(:gpdb_schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => gpdb_database) }
+    let!(:workspace1) { FactoryGirl.create(:workspace, :name => "ws_1", :sandbox => gpdb_schema) }
+    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "ws_2", :sandbox => gpdb_schema) }
+    let!(:workspace3) { FactoryGirl.create(:workspace, :name => "ws_3") }
+
+    it "returns the workspaces that use this instance's schema as sandbox" do
+      workspaces = gpdb_instance.used_by_workspaces
+      workspaces.count.should == 2
+      workspaces.should include(workspace1)
+      workspaces.should include(workspace2)
+      workspaces.should_not include(workspace3)
+    end
+  end
+
   describe "#account_for_user!" do
     let(:user) { users(:owner) }
 

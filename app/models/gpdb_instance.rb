@@ -32,6 +32,10 @@ class GpdbInstance < ActiveRecord::Base
     end
   end
 
+  def used_by_workspaces
+    Workspace.where("sandbox_id IN (SELECT id FROM gpdb_schemas s WHERE s.database_id IN (SELECT id FROM gpdb_databases d WHERE d.gpdb_instance_id IN (SELECT id FROM gpdb_instances i WHERE i.id = #{id})))")
+  end
+
   def self.accessible_to(user)
     where('gpdb_instances.shared OR gpdb_instances.owner_id = :owned OR gpdb_instances.id IN (:with_membership)',
           :owned => user.id,
