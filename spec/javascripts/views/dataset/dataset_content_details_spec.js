@@ -515,8 +515,17 @@ describe("chorus.views.DatasetContentDetails", function() {
                         this.server.completeFetchFor(dataset.statistics());
                         this.view.render();
                     });
+
                     it("should not display the derive chorus view button", function() {
                         expect(this.view.$("button.derive")).not.toExist();
+                    });
+
+                    context("when tableau is configured", function() {
+                        it("does not display the publish to tableau button", function() {
+                            chorus.models.Config.instance().set({ tableauConfigured: true });
+                            this.view.render();
+                            expect(this.view.$("button.publish")).not.toExist();
+                        });
                     });
                 });
 
@@ -531,6 +540,24 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
                     it("should display the derive chorus view button", function() {
                         expect(this.view.$("button.derive")).toExist();
+                    });
+
+                    context("when tableau is configured", function() {
+
+                        it("displays the publish to tableau button", function() {
+                            chorus.models.Config.instance().set({ tableauConfigured: true });
+                            debugger
+                            this.view.render();
+                            expect(this.view.$("button.publish")).toExist();
+                        });
+                    });
+
+                    context("when tableau isnt configured", function() {
+                        it("doesnt display the publish to tableau button", function() {
+                            chorus.models.Config.instance().set({ tableauConfigured: false });
+                            this.view.render();
+                            expect(this.view.$("button.publish")).not.toExist();
+                        });
                     });
                 });
             });
@@ -568,6 +595,15 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("does not display the derive chorus view button", function() {
                         expect(this.view.$("button.derive")).not.toExist();
                     });
+
+                    context("when tableau is configured", function() {
+                        it("displays the publish to tableau button", function() {
+                            chorus.models.Config.instance().set({ tableauConfigured: true });
+                            this.view.render();
+                            expect(this.view.$("button.publish")).toExist();
+                        });
+                    });
+
                     context("and the edit button is clicked", function() {
                         beforeEach(function() {
                             this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
