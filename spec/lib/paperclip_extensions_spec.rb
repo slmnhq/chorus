@@ -1,6 +1,34 @@
 require 'spec_helper'
 
 describe Paperclip do
+  class UploadedFile < OpenStruct; end
+
+  context "UploadedFileAdapter#content_type" do
+    it "get the content type for text file" do
+      sql_file = test_file("workfile.sql", "text/sql")
+      @file = UploadedFile.new(
+          :original_filename => "workfile.sql",
+          :content_type => "text/sql",
+          :head => "",
+          :path => sql_file
+      )
+      uploaded_file = Paperclip::UploadedFileAdapter.new(@file)
+      uploaded_file.content_type.should == "text/plain"
+    end
+  end
+
+  it "do not handle video file, so it should return nil" do
+    video_file = test_file("sample_wmv.wmv", "video/x-ms-wmv")
+    @file = UploadedFile.new(
+        :original_filename => "sample_wmv.wmv",
+        :content_type => "video/x-ms-wmv",
+        :head => "",
+        :path => video_file
+    )
+    uploaded_file = Paperclip::UploadedFileAdapter.new(@file)
+    uploaded_file.content_type.should be_nil
+  end
+
   context "Processor#convert" do
     it "should down size the image" do
       f = File.expand_path("spec/fixtures/User.png", Rails.root) # is 256x256

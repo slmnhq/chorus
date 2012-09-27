@@ -24,7 +24,8 @@ module Paperclip
     private
 
     def best_content_type_option(types)
-      types.reject {|type| type.content_type.match(/\/x-/) }.first.content_type
+      matched_types = types.reject {|type| type.content_type.match(/\/x-/) }
+      matched_types.first.content_type if matched_types.first.present?
     end
 
     def type_from_file_command
