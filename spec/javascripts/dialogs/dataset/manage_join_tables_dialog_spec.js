@@ -40,7 +40,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     it("fetches the schema's tables and views", function() {
         var datasetFetch = this.server.lastFetchFor(this.schema.datasets());
-        expect(datasetFetch.params().rows).toBe('7');
+        expect(datasetFetch.params().per_page).toBe('7');
         expect(datasetFetch.params().page).toBe('1');
     });
 
@@ -118,8 +118,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                    "/schemas/" + this.schema.id + "/datasets?type=meta&filter=a+query&page=1&rows=9",
-                    { paramsToIgnore: ["page", "rows", "type"] }
+                    "/schemas/" + this.schema.id + "/datasets?type=meta&filter=a+query&page=1&per_page=9",
+                    { paramsToIgnore: ["page", "per_page", "type"] }
                 );
             });
 
@@ -300,7 +300,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             it("shows pagination controls", function() {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
                 expect(this.dialog.$(".list_content_details .count")).toContainText("4");
-                expect(this.server.lastFetchFor(this.schema.datasets()).url).toContain("rows=7")
+                expect(this.server.lastFetchFor(this.schema.datasets()).url).toContain("per_page=7")
             })
         });
     });

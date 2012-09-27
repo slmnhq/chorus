@@ -53,7 +53,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             });
 
             it("should fetch the columns for the table", function() {
-                expect(this.server.lastFetchFor(this.table.columns(), {page: 1, rows: 1000})).toBeDefined();
+                expect(this.server.lastFetchFor(this.table.columns(), {page: 1, per_page: 1000})).toBeDefined();
             });
 
             context("when the fetch completes", function() {

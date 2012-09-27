@@ -80,15 +80,15 @@ _.extend(sinon.fakeServer, {
             var modelUri = new URI(model.url(options));
 
             if (!options.requireRows) {
-                uri.removeSearch("rows");
-                modelUri.removeSearch("rows");
+                uri.removeSearch("per_page");
+                modelUri.removeSearch("per_page");
             }
             return uri.equals(modelUri);
         }));
     },
 
     lastFetchAllFor: function(model, overrides) {
-        return this.lastFetchFor(model, _.extend({ rows: 1000, requireRows: true}, overrides));
+        return this.lastFetchFor(model, _.extend({ per_page: 1000, requireRows: true}, overrides));
     },
 
     makeFakeResponse: function(modelOrCollection, response) {
@@ -141,7 +141,7 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchAllFor: function(model, results, options, pagination) {
-        options = options || {page: 1, rows: 1000};
+        options = options || {page: 1, per_page: 1000};
         pagination = pagination || {page: 1, total: 1, records: results ? results.length : 1};
         this.completeFetchFor(model, results, options, pagination);
     },

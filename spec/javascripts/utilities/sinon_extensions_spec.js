@@ -65,7 +65,7 @@ describe("sinon extensions", function() {
     });
 
     describe("#lastFetchFor", function() {
-        context("when #fetchAll was called on a collection (setting a non-default 'rows' parameter)", function() {
+        context("when #fetchAll was called on a collection (setting a non-default 'per_page' parameter)", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.UserSet();
                 this.collection.fetchAll();

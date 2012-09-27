@@ -9,13 +9,13 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("#url", function() {
         it("is correct", function() {
-            expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/workspaces/10000/datasets?rows=10&page=1");
+            expect(this.collection.url({per_page: 10, page: 1})).toMatchUrl("/workspaces/10000/datasets?per_page=10&page=1");
         });
 
         context("with filter type", function() {
             it("appends the filter type", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
-                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({type: "SOURCE_TABLE", rows: "10", page: "1"});
+                expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({type: "SOURCE_TABLE", per_page: "10", page: "1"});
             });
         });
 
@@ -25,9 +25,9 @@ describe("chorus.collections.DatasetSet", function() {
             });
 
             it("appends the name pattern", function() {
-                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
+                expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     namePattern: "Foo",
-                    rows: "10",
+                    per_page: "10",
                     page: "1"
                 });
             });
@@ -39,12 +39,12 @@ describe("chorus.collections.DatasetSet", function() {
                 this.collection.attributes.objectType = "TABLE";
                 this.collection.attributes.namePattern = "Foo";
                 this.collection.attributes.databaseName = "dbName";
-                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
+                expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     type: "SOURCE_TABLE",
                     objectType: "TABLE",
                     namePattern: "Foo",
                     databaseName: "dbName",
-                    rows: "10",
+                    per_page: "10",
                     page: "1"
                 });
             });
@@ -53,7 +53,7 @@ describe("chorus.collections.DatasetSet", function() {
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
 
-                expect(this.collection.url({rows: 10, page: 1, method: "create"})).toContainQueryParams({
+                expect(this.collection.url({per_page: 10, page: 1, method: "create"})).toContainQueryParams({
                     datasetIds: "5678,1234"
                 });
             });
@@ -62,7 +62,7 @@ describe("chorus.collections.DatasetSet", function() {
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
 
-                expect(this.collection.url({rows: 10, page: 1})).not.toContain("dataset_ids");
+                expect(this.collection.url({per_page: 10, page: 1})).not.toContain("dataset_ids");
             });
         });
     });

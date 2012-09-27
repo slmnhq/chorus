@@ -15,8 +15,8 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("#url", function() {
         it("is correct", function() {
-            var url = this.collection.url({ rows: 10, page: 1});
-            expect(url).toContainQueryParams({ rows: 10, page: 1, type: "meta" });
+            var url = this.collection.url({ per_page: 10, page: 1});
+            expect(url).toContainQueryParams({ per_page: 10, page: 1, type: "meta" });
             expect(url).toHaveUrlPath("/schemas/987/datasets");
         });
 
@@ -26,9 +26,9 @@ describe("chorus.collections.DatasetSet", function() {
             });
 
             it("should include the filter in the url", function() {
-                var url = this.collection.url({rows: 10, page: 1});
+                var url = this.collection.url({per_page: 10, page: 1});
                 expect(url).toHaveUrlPath("/schemas/987/datasets");
-                expect(url).toContainQueryParams({ rows: 10, page: 1, filter: "foo" });
+                expect(url).toContainQueryParams({ per_page: 10, page: 1, filter: "foo" });
             });
         });
     });
@@ -38,7 +38,7 @@ describe("chorus.collections.DatasetSet", function() {
             this.collection.search("search term");
             expect(this.server.lastFetch().url).toMatchUrl(
                 "/schemas/987/datasets?filter=search+term",
-                {paramsToIgnore: ["type", "page", "rows"]}
+                {paramsToIgnore: ["type", "page", "per_page"]}
             );
         });
 

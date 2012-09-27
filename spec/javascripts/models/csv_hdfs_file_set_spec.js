@@ -8,7 +8,7 @@ describe("chorus.collections.CsvHdfsFileSet", function () {
     });
 
     it("use the correct url", function() {
-        expect(this.collection.url()).toMatchUrl("/hadoop_instances/1/files/123", {paramsToIgnore: ["page", "rows"]})
+        expect(this.collection.url()).toMatchUrl("/hadoop_instances/1/files/123", {paramsToIgnore: ["page", "per_page"]})
     });
 
     describe("#filesOnly", function () {

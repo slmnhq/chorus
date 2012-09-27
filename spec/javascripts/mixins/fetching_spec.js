@@ -166,10 +166,10 @@ describe("chorus.Mixins.Fetching", function() {
 
         context("fetching with options", function() {
             beforeEach(function() {
-                this.resource.fetchIfNotLoaded({rows: 10});
+                this.resource.fetchIfNotLoaded({per_page: 10});
             });
             it("should pass options to fetch", function() {
-                expect(this.resource.fetch.mostRecentCall.args[0].rows).toBe(10);
+                expect(this.resource.fetch.mostRecentCall.args[0].per_page).toBe(10);
             });
         });
     });

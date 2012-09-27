@@ -79,7 +79,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toMatchUrl('/datasets/5/columns', {paramsToIgnore: ['page', 'rows']});
+            expect(this.columns.url()).toMatchUrl('/datasets/5/columns', {paramsToIgnore: ['page', 'per_page']});
         })
     })
 

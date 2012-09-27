@@ -48,7 +48,7 @@ describe("chorus.views.Header", function() {
         });
     });
 
-    xdescribe("the notifications", function() {
+    describe("the notifications", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.view.notifications, [
                 fixtures.notification({ id: '1' }),
@@ -519,7 +519,7 @@ describe("chorus.views.Header", function() {
         });
 
         it("should fetch the users", function() {
-            expect(this.server.lastFetch().url).toBe(this.view.users.url({ page: 1, rows: 1000}));
+            expect(this.server.lastFetch().url).toBe(this.view.users.url({ page: 1, per_page: 1000}));
         })
 
         context("after fetches completes", function() {

@@ -89,7 +89,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                    });
 
                    it("fetches the list of hdfs files", function() {
-                        expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/", {paramsToIgnore: ["page", "rows"]})
+                        expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/", {paramsToIgnore: ["page", "per_page"]})
                    });
 
                    context("when the hdfs entries fetch completes", function() {

@@ -48,7 +48,7 @@ describe("chorus.pages.DashboardPage", function() {
         context("when the users fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(
-                    new chorus.collections.UserSet([], {page:1, rows:1}),
+                    new chorus.collections.UserSet([], {page:1, per_page:1}),
                     [rspecFixtures.user()],
                     null,
                     {page:1, total: 1234, records: 1234}
@@ -80,7 +80,7 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("gets the number of users", function() {
-            expect(this.server.lastFetchFor(new chorus.collections.UserSet([], {page:1, rows:1}))).toBeTruthy();
+            expect(this.server.lastFetchFor(new chorus.collections.UserSet([], {page:1, per_page:1}))).toBeTruthy();
         });
 
         it("passes the collection through to the workspaceSet view", function() {

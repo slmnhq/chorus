@@ -78,7 +78,7 @@ describe("chorus.views.DatasetList", function() {
 
                 it("fetches all of the datasets", function() {
                     var fetch = this.server.lastFetchFor(this.collection);
-                    expect(fetch.url).toContainQueryParams({ rows: 1000 });
+                    expect(fetch.url).toContainQueryParams({ per_page: 1000 });
                 });
 
                 describe("when the fetch completes", function() {

@@ -269,7 +269,7 @@ chorus.collections = {
 
         url: function(options) {
             options = _.extend({
-                rows: this.rows || 50,
+                per_page: this.per_page || 50,
                 page: 1
             }, options);
 
@@ -283,7 +283,7 @@ chorus.collections = {
 
             uri.addSearch({
                 page: options.page,
-                rows: options.rows
+                per_page: options.per_page
             });
 
             if (options.order) {
@@ -311,9 +311,9 @@ chorus.collections = {
         },
 
         fetchPage: function(page, options) {
-            if (options && options.rows) {
-                this.rows = options.rows;
-                delete options.rows;
+            if (options && options.per_page) {
+                this.per_page = options.per_page;
+                delete options.per_page;
             }
             var url = this.url({ page: page });
             options = _.extend({}, options, { url: url });
@@ -325,7 +325,7 @@ chorus.collections = {
             var fetchPage = function(page) {
                 var self = this;
                 this.fetch({
-                    url: this.url({ page: page, rows: 1000 }),
+                    url: this.url({ page: page, per_page: 1000 }),
                     silent: true,
                     add: page != 1,
                     success: function(collection, data, xhr) {

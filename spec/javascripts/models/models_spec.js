@@ -968,7 +968,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("fetches the corresponding page of the collection", function() {
-                    expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50");
+                    expect(this.collection.url()).toBe("/bar/bar?page=1&per_page=50");
                 });
             });
 
@@ -986,37 +986,37 @@ describe("chorus.models.Abstract", function() {
                 it("passes any options to the urlTemplate function", function() {
                     spyOn(this.collection, 'urlTemplate').andReturn("foo");
                     this.collection.url({ method: 'create' });
-                    expect(this.collection.urlTemplate).toHaveBeenCalledWith({rows: 50, page: 1, method: 'create'});
+                    expect(this.collection.urlTemplate).toHaveBeenCalledWith({per_page: 50, page: 1, method: 'create'});
                 });
             });
 
             context("when the collection has NO pagination or page property", function() {
                 it("fetches the first page of the collection", function() {
-                    expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50");
+                    expect(this.collection.url()).toBe("/bar/bar?page=1&per_page=50");
                 });
             });
 
             it("does not unescape %2b to +, or otherwise bypass escaping", function() {
                 this.collection.attributes.foo = "+";
-                expect(this.collection.url()).toBe("/bar/%2B?page=1&rows=50");
+                expect(this.collection.url()).toBe("/bar/%2B?page=1&per_page=50");
             });
 
             it("takes an optional page size", function() {
-                expect(this.collection.url({ rows: 1000 })).toBe("/bar/bar?page=1&rows=1000");
+                expect(this.collection.url({ per_page: 1000 })).toBe("/bar/bar?page=1&per_page=1000");
             });
 
             it("takes an optional page number", function() {
-                expect(this.collection.url({ page: 4 })).toBe("/bar/bar?page=4&rows=50");
+                expect(this.collection.url({ page: 4 })).toBe("/bar/bar?page=4&per_page=50");
             });
 
             it("mixes in order from collection ascending", function() {
                 this.collection.sortAsc("fooBar");
-                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&order=foo_bar")
+                expect(this.collection.url()).toBe("/bar/bar?page=1&per_page=50&order=foo_bar")
             });
 
             it("plays nicely with existing parameters in the url template", function() {
                 this.collection.urlTemplate = "bar/{{foo}}?why=not";
-                expect(this.collection.url()).toBe("/bar/bar?why=not&page=1&rows=50");
+                expect(this.collection.url()).toBe("/bar/bar?why=not&page=1&per_page=50");
             });
 
             context("when the collection has additional url params", function() {
@@ -1030,7 +1030,7 @@ describe("chorus.models.Abstract", function() {
                     it("passes any options to the urlParams function", function() {
                         spyOn(this.collection, 'urlParams').andCallThrough();
                         this.collection.url({ method: 'create' });
-                        expect(this.collection.urlParams).toHaveBeenCalledWith({ method: 'create', rows: 50, page: 1 });
+                        expect(this.collection.urlParams).toHaveBeenCalledWith({ method: 'create', per_page: 50, page: 1 });
                     });
                 });
 
@@ -1040,7 +1040,7 @@ describe("chorus.models.Abstract", function() {
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
-                        expect(this.collection.url()).toMatchUrl("/bar/bar?dance_dance=the+thizzle&page=1&rows=50");
+                        expect(this.collection.url()).toMatchUrl("/bar/bar?dance_dance=the+thizzle&page=1&per_page=50");
                     });
 
                     context("when the base url template includes a query string", function() {
@@ -1049,7 +1049,7 @@ describe("chorus.models.Abstract", function() {
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.collection.url()).toMatchUrl("/bar/bar?size=medium&dance_dance=the+thizzle&page=1&rows=50");
+                            expect(this.collection.url()).toMatchUrl("/bar/bar?size=medium&dance_dance=the+thizzle&page=1&per_page=50");
                         });
                     });
                 });
@@ -1118,7 +1118,7 @@ describe("chorus.models.Abstract", function() {
             });
 
             it("requests page one from the server", function() {
-                expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=1000");
+                expect(this.server.requests[0].url).toBe("/bar/bar?page=1&per_page=1000");
             });
 
             describe("and the server responds successfully", function() {
@@ -1161,7 +1161,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("requests subsequent pages", function() {
-                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&rows=1000");
+                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&per_page=1000");
                 });
 
                 it("triggers the reset event once", function() {
@@ -1205,7 +1205,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("requests subsequent pages", function() {
-                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&rows=1000");
+                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&per_page=1000");
                 });
 
                 it("triggers the reset event when the error occurs", function() {
@@ -1217,7 +1217,7 @@ describe("chorus.models.Abstract", function() {
         describe("#fetchPage", function() {
             it("requests page one from the server", function() {
                 this.collection.fetchPage(2);
-                expect(this.server.requests[0].url).toBe("/bar/bar?page=2&rows=50");
+                expect(this.server.requests[0].url).toBe("/bar/bar?page=2&per_page=50");
             });
 
             it("passes options through to fetch", function() {
@@ -1230,29 +1230,29 @@ describe("chorus.models.Abstract", function() {
             it("does not affect subsequent calls to fetch", function() {
                 this.collection.fetchPage(2);
                 this.collection.fetch();
-                expect(this.server.requests[1].url).toBe("/bar/bar?page=1&rows=50");
+                expect(this.server.requests[1].url).toBe("/bar/bar?page=1&per_page=50");
             });
 
-            context("when the 'rows' option is passed", function() {
+            context("when the 'per_page' option is passed", function() {
                 it("fetches the given number of rows", function() {
-                    this.collection.fetchPage(2, { rows: 13 });
-                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=2&rows=13");
+                    this.collection.fetchPage(2, { per_page: 13 });
+                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=2&per_page=13");
                 });
 
-                it("does not pass the 'rows' option through to Backbone.Collection#fetch", function() {
+                it("does not pass the 'per_page' option through to Backbone.Collection#fetch", function() {
                     spyOn(this.collection, "fetch");
-                    this.collection.fetchPage(2, { rows: 13 });
+                    this.collection.fetchPage(2, { per_page: 13 });
                     var options = this.collection.fetch.mostRecentCall.args[0];
-                    expect(options.rows).toBeUndefined();
+                    expect(options.per_page).toBeUndefined();
                 });
 
                 it("stores the number of rows, and fetches number next time", function() {
-                    this.collection.fetchPage(2, { rows: 13 });
+                    this.collection.fetchPage(2, { per_page: 13 });
                     this.collection.fetchPage(3);
-                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=3&rows=13");
+                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=3&per_page=13");
 
                     this.collection.fetch();
-                    expect(this.server.lastFetch().url).toContainQueryParams({ rows: 13 });
+                    expect(this.server.lastFetch().url).toContainQueryParams({ per_page: 13 });
                 });
             });
         });

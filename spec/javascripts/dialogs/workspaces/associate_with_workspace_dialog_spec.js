@@ -85,7 +85,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 expect(uri.query(true)).toEqual({
                     'dataset_ids': this.model.id,
                     page: '1',
-                    rows: '50'
+                    per_page: '50'
                 });
             });
 

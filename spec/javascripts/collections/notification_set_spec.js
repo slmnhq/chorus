@@ -20,7 +20,7 @@ describe("chorus.collections.NotificationSet", function() {
             });
 
             it("is correct", function() {
-                expect(this.collection.url()).toMatchUrl("/notifications?type=unread", { paramsToIgnore: ["page", "rows" ]})
+                expect(this.collection.url()).toMatchUrl("/notifications?type=unread", { paramsToIgnore: ["page", "per_page" ]})
             });
         });
     });
