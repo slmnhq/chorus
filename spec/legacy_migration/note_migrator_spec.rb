@@ -163,6 +163,19 @@ describe NoteMigrator do
       Events::NoteOnDataset.find_with_destroyed(:all).count.should == count
     end
 
+    it "should migrate insight flag and related information for all Notes" do
+      Legacy.connection.select_all("
+        SELECT ec.*
+        FROM edc_comment ec
+        WHERE entity_type NOT IN ('comment', 'activitystream')
+      ").each do |legacy_comment|
+        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note.insight.should == (legacy_comment["is_insight"] == "t" ? true : false)
+        note.promotion_time.should == legacy_comment["promotion_time"]
+        note.promoted_by_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["promotion_actioner"]}).id if legacy_comment["promotion_actioner"]
+      end
+    end
+
     it "is idempotent" do
       count = Events::Note.unscoped.count
       NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)

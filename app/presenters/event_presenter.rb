@@ -28,7 +28,8 @@ class EventPresenter < Presenter
   def insight_hash
     {
         :is_insight =>  model.insight?,
-        :promoted_by => model.insight? ? present(model.promoted_by) : nil
+        :promoted_by => model.insight? ? present(model.promoted_by) : nil,
+        :promotion_time => model.insight? ? model.promotion_time : nil
     }
   end
 

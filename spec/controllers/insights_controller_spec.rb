@@ -16,6 +16,7 @@ describe InsightsController do
       response.code.should == "201"
       note.reload.should be_insight
       note.promoted_by.should == user
+      note.promotion_time.should_not be_nil
     end
 
     context "Permissions to promote" do

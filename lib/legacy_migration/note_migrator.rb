@@ -28,6 +28,7 @@ class NoteMigrator < AbstractMigrator
       migrate_notes_on_workfiles
       migrate_notes_on_workspace_datasets
       migrate_notes_on_datasets
+      migrate_insights_on_notes
     end
   
     private
@@ -324,6 +325,19 @@ class NoteMigrator < AbstractMigrator
                                           WHERE id = '#{note.legacy_id}'").first
           note.additional_data = {:body => row['body']}
           note.save!(:validate => false)
+        end
+      end
+    end
+
+    def migrate_insights_on_notes
+      silence_activerecord do
+        Events::Note.unscoped.all.each do |note|
+          row = Legacy.connection.exec_query("SELECT is_insight, promotion_time, promotion_actioner FROM edc_comment
+                                          WHERE id = '#{note.legacy_id}'").first
+          note.insight = (row['is_insight'] == 't' ? true : false)
+          note.promotion_time = row['promotion_time']
+          note.promoted_by_id = User.find_with_destroyed(:first, :conditions => {:username => row["promotion_actioner"]}).id if row["promotion_actioner"]
+          note.save!
         end
       end
     end

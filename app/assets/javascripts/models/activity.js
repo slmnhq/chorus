@@ -231,7 +231,7 @@
         },
 
         promotionTimestamp:function() {
-            return "";
+            return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : nil
         }
 
     });

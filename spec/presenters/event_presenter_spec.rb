@@ -205,12 +205,14 @@ describe EventPresenter, :type => :view do
       before do
         event.insight = true
         event.promoted_by = user
+        event.promotion_time = Time.now()
       end
 
       it "has hash for insights" do
         hash = subject.to_hash
         hash[:is_insight].should be_true
         hash[:promoted_by].should == Presenter.present(user, view)
+        hash[:promotion_time].should == event.promotion_time
       end
     end
   end

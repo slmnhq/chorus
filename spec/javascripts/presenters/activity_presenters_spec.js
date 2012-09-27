@@ -169,7 +169,8 @@ describe("chorus.presenters.Activity", function() {
                         username:"chorusadmin",
                         firstName:"Chorus",
                         lastName:"admin"
-                    }
+                    },
+                    promotionTime: "2012-09-27T16:45:51Z"
                 });
                 presenter_options = {
                 };
@@ -177,7 +178,7 @@ describe("chorus.presenters.Activity", function() {
             });
             it('when isInsight is true', function() {
                 this.promotionDetails = presenter.promotionDetails().string;
-                expect(this.promotionDetails).toEqual('Promoted by <a href="#/users/15" class="user">Chorus admin</a> ');
+                expect(this.promotionDetails).toEqual('Promoted by <a href="#/users/15" class="user">Chorus admin</a> '+ model.promotionTimestamp() );
             });
         });
     });

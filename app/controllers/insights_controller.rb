@@ -4,6 +4,7 @@ class InsightsController < ApplicationController
     head(401) and return unless note
     note.insight = true
     note.promoted_by = current_user
+    note.promotion_time = Time.now()
     note.save!
     head 201
   end
