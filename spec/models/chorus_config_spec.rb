@@ -41,6 +41,30 @@ describe ChorusConfig do
     config['undefined.key'].should == nil
   end
 
+  describe "#tableau_configured?" do
+    let(:tableau_config) do
+      {
+          'url' => 'localhost',
+          'port' => '1234',
+          'username' => 'user',
+          'password' => 'password'
+      }
+    end
+
+    it 'returns true if the tableau url/port and username/password are configured' do
+      config.config = { 'tableau' =>  tableau_config }
+      config.tableau_configured?.should be_true
+    end
+
+    it 'returns false if any of the keys are missing' do
+      tableau_config.each do |key, _value|
+        invalid_config = tableau_config.reject { |attr, _value| attr == key }
+        config.config = { 'tableau' => invalid_config }
+        config.should_not be_tableau_configured
+      end
+    end
+  end
+
   describe "#gpfdist_configured?" do
     it "returns true if all the gpfdist keys are set" do
       config.config = {

@@ -17,6 +17,13 @@ describe ConfigurationsController do
       decoded_response.external_auth_enabled.should == true
     end
 
+    it "includes the tableau_configured? value" do
+      stub(Chorus::Application.config.chorus).tableau_configured? { 'value' }
+      get :show
+      response.code.should == "200"
+      decoded_response.tableau_configured.should == 'value'
+    end
+
     it "gpfdist_configured is true when config.gpfdist_configured? is true" do
       stub(Chorus::Application.config.chorus).gpfdist_configured? { true }
       get :show
