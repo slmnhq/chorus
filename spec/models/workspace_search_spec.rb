@@ -16,25 +16,41 @@ describe WorkspaceSearch do
           stub(search).group_response { {} }
         end
       end
-      let(:search) { WorkspaceSearch.new(owner, :query => 'bob', :workspace_id => 7) }
 
-      it "searches only for Workspace, Workfiles and Datasets (and Notes)" do
-        search.results
-        Sunspot.session.should be_a_search_for(Workspace)
-        Sunspot.session.should be_a_search_for(Workfile)
-        Sunspot.session.should be_a_search_for(Dataset)
-        Sunspot.session.should be_a_search_for(Events::Note)
-        Sunspot.session.should_not be_a_search_for(User)
+      context "when unscoped" do
+        let(:search) { WorkspaceSearch.new(owner, :query => 'bob', :workspace_id => 7) }
+
+        it "searches only for Workspace, Workfiles and Datasets (and Notes)" do
+          search.results
+          Sunspot.session.should be_a_search_for(Workspace)
+          Sunspot.session.should be_a_search_for(Workfile)
+          Sunspot.session.should be_a_search_for(Dataset)
+          Sunspot.session.should be_a_search_for(Events::Note)
+          Sunspot.session.should_not be_a_search_for(User)
+        end
+
+        it "scopes the search to the workspace" do
+          search.results
+          Sunspot.session.should have_search_params(:with, :workspace_id, 7)
+        end
+
+        it "should not facet by type_name" do
+          search.results
+          Sunspot.session.should_not have_search_params(:facet, :type_name)
+        end
       end
 
-      it "scopes the search to the workspace" do
-        search.results
-        Sunspot.session.should have_search_params(:with, :workspace_id, 7)
-      end
+      context "when scoped to an entity_type" do
+        let(:search) { WorkspaceSearch.new(owner, :query => 'bob', :workspace_id => 7, :entity_type => 'workfile') }
 
-      it "should not facet by type_name" do
-        search.results
-        Sunspot.session.should_not have_search_params(:facet, :type_name)
+        it "scopes the search to the type" do
+          search.results
+          Sunspot.session.should be_a_search_for(Workfile)
+          Sunspot.session.should be_a_search_for(Events::Note)
+          Sunspot.session.should_not be_a_search_for(Workspace)
+          Sunspot.session.should_not be_a_search_for(Dataset)
+          Sunspot.session.should_not be_a_search_for(User)
+        end
       end
     end
   end
@@ -68,7 +84,7 @@ describe WorkspaceSearch do
       it "has highlighted results" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search_result_workfile = search.results.find {|m| m == workfile}
+          search_result_workfile = search.results.find { |m| m == workfile }
           search_result_workfile.highlighted_attributes[:description][0].should == '<em>searchquery</em>'
         end
       end

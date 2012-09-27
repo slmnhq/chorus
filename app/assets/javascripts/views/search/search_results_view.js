@@ -43,7 +43,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());
         }
-        if (!this.model.hasSpecificEntityType() && this.model.workspaceItems().length) {
+        if (this.model.workspaceItems().length) {
             this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
                 collection: this.model.workspaceItems(),
                 search: this.model

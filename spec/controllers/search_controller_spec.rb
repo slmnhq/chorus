@@ -34,6 +34,14 @@ describe SearchController do
         get :show, :query => 'hippopotomous'
       end
     end
+
+    generate_fixture "searchResultWithEntityTypeUser.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_user_as_owner" do
+        get :show, :query => 'searchquery', :entity_type => 'user'
+      end
+    end
   end
 
   describe "#type_ahead" do

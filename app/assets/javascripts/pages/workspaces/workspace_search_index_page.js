@@ -22,7 +22,7 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
     typeOptions: function() {
         var options = this._super("typeOptions", arguments);
         if (this.search.isScoped()) {
-            var toDisable = ["instance", "user", "workspace", "hdfs"];
+            var toDisable = ["gpdb_instance", "hadoop_instance", "user", "workspace", "hdfs"];
             _.each(options, function(option) {
                 if (_.include(toDisable, option.data)) {
                     option.disabled = true;
@@ -39,4 +39,4 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
         this.requiredResources.add(this.search.workspace());
         this.search.workspace().fetch();
     }
-})
+});

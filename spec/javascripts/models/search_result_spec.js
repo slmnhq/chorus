@@ -195,17 +195,9 @@ describe("chorus.models.SearchResult", function() {
     });
 
     describe("#getResults", function() {
-        beforeEach(function() {
-            this.model = fixtures.searchResult({
-                thisWorkspace: {
-                    numFound: 3,
-                    results: [ fixtures.searchResultWorkfileJson() ]
-                }
-            });
-        });
-
         context("when the search result is scoped to a single workspace", function() {
             it("returns the collection of items in that workspace", function() {
+                this.model = rspecFixtures.searchResultInWorkspace();
                 this.model.set({ workspaceId: "101", searchIn: "this_workspace" });
                 expect(this.model.getResults()).toBeDefined();
                 expect(this.model.getResults()).toBe(this.model.workspaceItems());
@@ -214,23 +206,26 @@ describe("chorus.models.SearchResult", function() {
 
         context("when the search results is filtered to a single entity type", function() {
             it("returns the results collection for that entity type", function() {
-                this.model.set({ entityType: "workfile" });
+                this.model = rspecFixtures.searchResultWithEntityTypeUser();
+                this.model.set({ entityType: "user" });
                 expect(this.model.getResults()).toBeDefined();
-                expect(this.model.getResults()).toBe(this.model.workfiles());
+                expect(this.model.getResults()).toBe(this.model.users());
             });
         });
 
         context("when the search result is filtered by workspace AND by entity type", function() {
             it("returns the collection for its entity type", function() {
+                this.model = rspecFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
                 this.model.set({ entityType: "workfile", searchIn: "this_workspace", workspaceId: "101" });
                 this.model.unset("thisWorkspace");
                 expect(this.model.getResults()).toBeDefined();
-                expect(this.model.getResults()).toBe(this.model.workfiles());
+                expect(this.model.getResults()).toBe(this.model.workspaceItems());
             });
         });
 
         context("when the search result has no entity type and is not scoped to a single workspace", function() {
             it("returns undefined", function() {
+                this.model = rspecFixtures.searchResult();
                 expect(this.model.getResults()).toBeUndefined();
             });
         });

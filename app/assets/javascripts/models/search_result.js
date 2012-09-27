@@ -134,15 +134,19 @@
         attachments: makeCollectionMethod("attachments"),
 
         getResults: function() {
+            if (this.isScopedToSingleWorkspace()) {
+                return this.workspaceItems();
+            }
+
             switch(this.entityType()) {
                 case "user":
-                    return this.users()
+                    return this.users();
                     break;
                 case "workspace":
-                    return this.workspaces()
+                    return this.workspaces();
                     break;
                 case "workfile":
-                    return this.workfiles()
+                    return this.workfiles();
                     break;
                 case "dataset":
                     return this.datasets();
@@ -157,10 +161,6 @@
                     return this.hdfs();
                 case "attachment":
                     return this.attachments();
-            }
-
-            if (this.isScopedToSingleWorkspace()) {
-                return this.workspaceItems();
             }
         },
 

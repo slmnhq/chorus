@@ -1,22 +1,17 @@
 describe("chorus.views.SearchResults", function() {
     var makeSearchResults = function() {
-        return fixtures.searchResult({
+        var results = rspecFixtures.searchResult();
+        results.set({
             entityType: "all",
-            workspaceId: '10001',
-            thisWorkspace: {
-                results: [
-                    fixtures.searchResultWorkfileJson(),
-                    fixtures.searchResultDatasetJson(),
-                    fixtures.searchResultChorusViewJson()
-                ],
-                numFound: 3
-            }
+            workspaceId: '10001'
         });
-    }
+        return results;
+    };
 
     context("when there are no search results", function() {
         beforeEach(function() {
-            this.model = fixtures.emptySearchResult({ query: "foo" });
+            this.model = rspecFixtures.emptySearchResult();
+            this.model.set({ query: "foo" });
             this.view = new chorus.views.SearchResults({model: this.model});
             this.view.render();
         });
@@ -55,7 +50,7 @@ describe("chorus.views.SearchResults", function() {
 
     context("when there are search results", function() {
         beforeEach(function() {
-            this.model = makeSearchResults()
+            this.model = makeSearchResults();
             this.view = new chorus.views.SearchResults({model: this.model});
             this.view.render();
         });
@@ -63,10 +58,10 @@ describe("chorus.views.SearchResults", function() {
         context("when searching for all types of items", function() {
             it("includes a section for every type of item", function() {
                 var sections = this.view.$(".search_result_list");
-                expect(sections.filter(".this_workspace.selectable")).toExist();
                 expect(sections.filter(".user_list.selectable")).toExist();
                 expect(sections.filter(".workfile_list.selectable")).toExist();
-                expect(sections.filter(".attachment_list.selectable")).toExist();
+                // TODO: Enable when attachments are added to search
+//                expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
                 expect(sections.filter(".hdfs_list.selectable")).toExist();
                 expect(sections.filter(".instance_list.selectable")).toExist();
@@ -75,7 +70,7 @@ describe("chorus.views.SearchResults", function() {
 
         context("when searching for only workfiles", function() {
             beforeEach(function() {
-                this.model = makeSearchResults()
+                this.model = makeSearchResults();
                 this.model.set({ entityType: "workfile" });
                 this.model.unset("workspaces");
                 this.model.unset("attachment");
@@ -92,23 +87,29 @@ describe("chorus.views.SearchResults", function() {
 
         context("when searching for only workfiles in a particular workspace", function() {
             beforeEach(function() {
-                this.model = fixtures.searchResult({
+                this.model = rspecFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
+                this.model.set({
                     entityType: "workfile",
                     workspaceId: "101",
-                    searchIn: "this_workspace",
-
-                    attachment: null,
-                    workspaces: null,
-                    instances: null,
-                    datasets: null,
-                    hdfs: null,
-                    users: null
+                    searchIn: "this_workspace"
                 });
                 this.view = new chorus.views.SearchResults({ model: this.model });
                 this.view.render();
             });
 
-            itShowsOnlyTheWorkfileSection();
+            it("includes a section for the workspace specific results", function() {
+                expect(this.view.$(".search_result_list.this_workspace.selectable")).toExist();
+            });
+
+            it("does not show the other sections", function() {
+                expect(this.view.$(".search_result_list.workfile_list")).not.toExist();
+                expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
+                expect(this.view.$(".search_result_list.instance_list")).not.toExist();
+                expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
+                expect(this.view.$(".search_result_list.user_list")).not.toExist();
+                expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
+                expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
+            });
         });
 
         function itShowsOnlyTheWorkfileSection() {
@@ -133,18 +134,28 @@ describe("chorus.views.SearchResults", function() {
             });
 
             context("when the li is in the 'this workspace' section", function() {
+                beforeEach(function() {
+                    this.model = rspecFixtures.searchResultInWorkspace();
+                    this.model.set({
+                        workspaceId: "101",
+                        searchIn: "this_workspace"
+                    });
+                    this.view = new chorus.views.SearchResults({ model: this.model });
+                    this.view.render();
+                });
+
                 context("and it is for a workfile", function() {
                     it("triggers the 'workfile:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().at(0);
-                        this.view.$(".this_workspace li").eq(0).click();
+                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") == 'workfile'});
+                        this.view.$(".this_workspace li[data-template=search_workfile]").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", modelToClick);
                     });
                 });
 
                 context("and it is for a dataset", function() {
                     it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().at(1);
-                        this.view.$(".this_workspace li").eq(1).click();
+                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") == 'dataset'});
+                        this.view.$(".this_workspace li[data-template=search_dataset]").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                     });
                 });
@@ -158,7 +169,8 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
 
-            context("when the li is for an attachment", function() {
+            //TODO: Enable when attachments are added to search
+            xcontext("when the li is for an attachment", function() {
                 it("triggers the 'attachment:selected' event on itself, with the clicked attachment", function() {
                     var attachmentToClick = this.model.attachments().at(1);
                     this.view.$(".attachment_list li").eq(1).click();

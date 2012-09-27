@@ -160,6 +160,15 @@ window.rspecFixtureDefinitions = {
     emptySearchResult : {
         model: "SearchResult"
     },
+    searchResultInWorkspace : {
+        model: "SearchResult"
+    },
+    searchResultInWorkspaceWithEntityTypeWorkfile : {
+        model: "SearchResult"
+    },
+    searchResultWithEntityTypeUser : {
+        model: "SearchResult"
+    },
 
     frequencyTask: {},
     frequencyTaskWithErrors: {
