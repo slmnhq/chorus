@@ -10,24 +10,16 @@ describe GpdbInstancesController do
   end
 
   describe "#index" do
-    before do
-      FactoryGirl.create(:gpdb_instance)
-      FactoryGirl.create(:gpdb_instance, :owner => user)
-      FactoryGirl.create(:gpdb_instance, :shared => true)
-      FactoryGirl.create(:instance_account, :owner => user) # Creates a gpdb_instance too
-      FactoryGirl.create(:gpdb_instance, :owner => user, :state => 'offline')
-    end
-
     it "returns all gpdb instances" do
       get :index
       response.code.should == "200"
       decoded_response.size.should == GpdbInstance.count
     end
 
-    it "returns gpdb instances to which the user has access, if requested" do
+    it "returns online gpdb instances that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.size.should == GpdbInstanceAccess.gpdb_instances_for(user).count - 1
+      decoded_response.map(&:id).should_not include(gpdb_instances(:offline).id)
     end
   end
 

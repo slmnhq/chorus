@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe UsersController do
-  describe "#index" do
-    before do
-      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
-      FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy", :last_name => "bravo")
-    end
+  let(:user) { users(:owner) }
 
+  before do
+    log_in user
+  end
+
+  describe "#index" do
     it_behaves_like "an action that requires authentication", :get, :index
 
     it "succeeds" do
@@ -34,10 +35,6 @@ describe UsersController do
     end
 
     describe "pagination" do
-      before do
-        FactoryGirl.create(:user, :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com")
-      end
-
       it "paginates the collection" do
         get :index, :page => 1, :per_page => 2
         decoded_response.length.should == 2
@@ -66,31 +63,28 @@ describe UsersController do
   end
 
   describe "#create" do
-    before do
-      @values = {:username => "another_user", :password => "secret", :first_name => "joe",
-                 :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
-                 :dept => "bureau of bureaucracy", :notes => "poor personal hygiene", :admin => true}
-    end
+    let(:params) {
+      {:username => "another_user", :password => "secret", :first_name => "joe",
+       :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
+       :dept => "bureau of bureaucracy", :notes => "poor personal hygiene", :admin => true}
+    }
 
     it_behaves_like "an action that requires authentication", :post, :create
 
     context "not admin" do
-      before do
-        log_in FactoryGirl.build :user
-      end
+      let(:user) { users(:restricted_user) }
 
       it "should refuse" do
-        post :create, {:user => @values}
-        response.code.should == "401"
+        post :create, {:user => params}
+        response.should be_forbidden
       end
     end
 
     context "admin" do
-      let(:admin) {FactoryGirl.create(:admin, :username => 'some_user')}
+      let(:user) { users(:admin) }
 
       before do
-        log_in admin
-        post :create, {:user => @values}
+        post :create, {:user => params}
       end
 
       it "should succeed" do
@@ -98,15 +92,15 @@ describe UsersController do
       end
 
       it "should create a user" do
-        User.find_by_username(@values[:username]).should be_present
+        User.find_by_username(params[:username]).should be_present
       end
 
       it "should make a user an admin" do
-        User.find_by_username(@values[:username]).admin.should be_true
+        User.find_by_username(params[:username]).admin.should be_true
       end
 
       it "should return the user's fields except password" do
-        @values.each do |key, value|
+        params.each do |key, value|
           key = key.to_s
           decoded_response[key].should == value unless key == "password"
         end
@@ -119,8 +113,8 @@ describe UsersController do
 
       it "makes a UserAdded event" do
         event = Events::UserAdded.first
-        event.new_user.should == User.find_by_username(@values[:username])
-        event.actor.should == admin
+        event.new_user.should == User.find_by_username(params[:username])
+        event.actor.should == user
       end
 
       generate_fixture "userWithErrors.json" do
@@ -154,13 +148,12 @@ describe UsersController do
         end
 
         it "allows an admin to remove their own privileges, if there are other admins" do
-          other_admin = FactoryGirl.create(:admin)
           put :update, :id => admin.to_param, :user => {:admin => "false"}
           response.code.should == "200"
           decoded_response.admin.should == false
         end
 
-        it "does not allow an admin to remove their own priveleges if there are no other admins" do
+        it "does not allow an admin to remove their own privileges if there are no other admins" do
           users(:evil_admin).delete
           put :update, :id => admin.to_param, :user => {:admin => "false"}
           response.code.should == "200"
@@ -216,23 +209,23 @@ describe UsersController do
   end
 
   describe "#show" do
+    let(:user) { users(:owner) }
+    let(:other_user) { users(:the_collaborator) }
     before do
-      @user = FactoryGirl.create(:user)
-      @other_user = FactoryGirl.create(:user)
-      log_in @user
+      log_in user
     end
 
     it_behaves_like "an action that requires authentication", :get, :show
 
     context "with a valid user id" do
       it "succeeds" do
-        get :show, :id => @other_user.to_param
+        get :show, :id => other_user.to_param
         response.should be_success
       end
 
       it "presents the user" do
-        mock.proxy(controller).present(@other_user)
-        get :show, :id => @other_user.to_param
+        mock.proxy(controller).present(other_user)
+        get :show, :id => other_user.to_param
       end
     end
 
@@ -244,19 +237,19 @@ describe UsersController do
     end
 
     generate_fixture "user.json" do
-      get :show, :id => @other_user.to_param
+      get :show, :id => other_user.to_param
     end
   end
 
   describe "#destroy" do
-    let(:user) { FactoryGirl.create :user }
-
     context "admin" do
       before do
-        log_in FactoryGirl.create(:admin)
+        log_in users(:admin)
       end
 
       context "user with no instances or workspaces" do
+        let(:user) { users(:the_collaborator) }
+
         before do
           delete :destroy, :id => user.id
         end
@@ -276,8 +269,10 @@ describe UsersController do
       end
 
       context "user owns an instance" do
+        let(:user) { users(:the_collaborator) }
+
         before do
-          user.gpdb_instances << FactoryGirl.create(:gpdb_instance, :owner => user)
+          user.gpdb_instances << gpdb_instances(:default)
           delete :destroy, :id => user.id
         end
 
@@ -292,8 +287,10 @@ describe UsersController do
       end
 
       context "user owns a workspace" do
+        let(:user) { users(:the_collaborator) }
+
         before do
-          user.workspaces << FactoryGirl.create(:workspace, :owner => user)
+          user.owned_workspaces << workspaces(:public)
           delete :destroy, :id => user.id
         end
 
@@ -309,8 +306,10 @@ describe UsersController do
     end
 
     context "non-admin" do
+      let(:user) { users(:the_collaborator) }
+
       before(:each) do
-        log_in FactoryGirl.create(:user)
+        log_in users(:owner)
         delete :destroy, :id => user.id
       end
 
@@ -325,7 +324,7 @@ describe UsersController do
     end
 
     context "admin trying to delete himself" do
-      let(:admin) { FactoryGirl.create :admin }
+      let(:admin) { users(:admin) }
 
       before do
         log_in admin
@@ -348,7 +347,7 @@ describe UsersController do
 
     context "as an admin" do
       before(:each) do
-        log_in FactoryGirl.create(:admin)
+        log_in users(:admin)
       end
 
       it "returns the set of matching users" do
@@ -364,7 +363,7 @@ describe UsersController do
 
     context "as a non-admin" do
       before(:each) do
-        log_in FactoryGirl.create(:user)
+        log_in users(:owner)
       end
 
       it "returns unauthorized" do

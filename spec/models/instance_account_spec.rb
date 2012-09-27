@@ -21,7 +21,7 @@ describe InstanceAccount do
 
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
-    let(:instance) { gpdb_instances(:greenplum) }
+    let(:instance) { gpdb_instances(:default) }
     let(:secret_key) { '\0' * 32 }
     let(:password) { "apass" }
     let!(:instance_account) do

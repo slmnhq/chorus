@@ -73,7 +73,7 @@ describe ApplicationController do
     end
 
     describe "when an access denied error is raised" do
-      let(:object_to_present) { gpdb_instances(:greenplum) }
+      let(:object_to_present) { gpdb_instances(:default) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }
 
       before do

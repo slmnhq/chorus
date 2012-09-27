@@ -6,7 +6,7 @@ describe "Notes" do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
-  let(:greenplum_instance) { gpdb_instances(:greenplum) }
+  let(:greenplum_instance) { gpdb_instances(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:workfile) { workfiles(:public)}
@@ -210,7 +210,7 @@ describe "Notes" do
     let(:user) { users(:owner) }
 
     it "creates a note on a greenplum instance" do
-      greenplum_instance = gpdb_instances(:greenplum)
+      greenplum_instance = gpdb_instances(:default)
       Events::Note.create_from_params({
         :entity_type => "greenplum_instance",
         :entity_id => greenplum_instance.id,

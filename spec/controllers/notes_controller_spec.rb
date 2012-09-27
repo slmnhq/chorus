@@ -30,7 +30,7 @@ describe NotesController do
     end
 
     it "uses authorization" do
-      id = gpdb_instances(:greenplum).to_param
+      id = gpdb_instances(:default).to_param
       mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
     end
@@ -105,7 +105,7 @@ describe NotesController do
     end
 
     context "not as the note owner" do
-      let(:other_user) { FactoryGirl.create(:user) }
+      let(:other_user) { users(:the_collaborator) }
       before do
         log_in other_user
       end

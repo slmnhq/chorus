@@ -19,7 +19,7 @@ describe ModelMap do
     end
 
     it "works for greenplum instances" do
-      model = gpdb_instances(:greenplum)
+      model = gpdb_instances(:default)
       ModelMap.model_from_params("greenplum_instance", model.id).should == model
     end
 

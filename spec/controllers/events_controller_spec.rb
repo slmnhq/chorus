@@ -15,7 +15,7 @@ describe EventsController do
     end
 
     context "when getting the activities for a gpdb instance" do
-      let(:object) { gpdb_instances(:greenplum) }
+      let(:object) { gpdb_instances(:default) }
 
       it "presents the gpdb instance's activities" do
         mock_present { |models| models.should include(event) }
@@ -77,9 +77,6 @@ describe EventsController do
 
     context "when getting the activities for an hdfs file" do
       let(:object) { HdfsEntry.first }
-
-      let(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
-      let(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
 
       it "presents the workspace's activities" do
         mock_present { |models| models.should include(event) }

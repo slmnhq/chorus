@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe UserImagesController do
-  let(:user) { FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty") }
+  let(:user) { users(:no_picture) }
 
   before do
     log_in user
@@ -41,7 +41,7 @@ describe UserImagesController do
   end
 
   describe "#show" do
-    let(:user) { FactoryGirl.create(:user, :image => test_file('small1.gif')) }
+    let(:user) { users(:with_picture) }
 
     it "uses send_file" do
       mock(controller).send_file(user.image.path('original'), :type => user.image_content_type) {

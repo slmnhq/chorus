@@ -166,7 +166,7 @@ describe Search do
     let(:admin) { users(:admin) }
     let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
-    let(:gpdb_instance) { gpdb_instances(:greenplum) }
+    let(:gpdb_instance) { gpdb_instances(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }

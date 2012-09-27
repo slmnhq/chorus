@@ -64,7 +64,7 @@ describe SessionsController do
 
   describe "#show" do
     context "When logged in" do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { users(:owner) }
 
       before do
         log_in user

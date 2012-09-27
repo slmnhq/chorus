@@ -6,7 +6,7 @@ describe "Event types" do
   extend EventHelpers
 
   let(:actor) { users(:owner) }
-  let(:greenplum_instance) { gpdb_instances(:greenplum) }
+  let(:greenplum_instance) { gpdb_instances(:default) }
   let(:aurora_instance) { gpdb_instances(:aurora) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:user) { users(:the_collaborator) }

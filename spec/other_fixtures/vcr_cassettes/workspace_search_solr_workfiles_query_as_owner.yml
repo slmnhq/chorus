@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Workfile+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Workfile%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&fq=workspace_id_im%3A1000003&q=searchquery&fl=%2A+score&qf=file_name_texts+description_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Workfile+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Workfile%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=workspace_id_im%3A1000005&q=searchquery&fl=%2A+score&qf=file_name_texts+description_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       Content-Type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,15 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''file_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''file_name_texts
         description_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workfile
         OR Events\\:\\:Note)'',''type_name_s:(Workfile)'',''-(type_name_s:Workfile
-        AND -member_ids_im:1000003 AND -public_b:true)'',''workspace_id_im:1000003'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Workfile
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1897.3491,''docs''=>[{''id''=>''Workfile
-        1000003'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''score''=>1897.3491}]}}]}},''highlighting''=>{''Workfile
-        1000003''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
+        AND -member_ids_im:1000006 AND -public_b:true)'',''workspace_id_im:1000005'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Workfile
+        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1939.3625,''docs''=>[{''id''=>''Workfile
+        1000005'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery''],''score''=>1939.3625}]}}]}},''highlighting''=>{''Workfile
+        1000005''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Wed, 26 Sep 2012 23:17:07 GMT
+  recorded_at: Thu, 27 Sep 2012 17:44:34 GMT
 recorded_with: VCR 2.1.1
 ...

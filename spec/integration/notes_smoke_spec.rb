@@ -7,7 +7,7 @@ describe "Notes" do
   
   describe "creating a note on a GPDB instance" do
     it "contains the note" do
-      instance = gpdb_instances(:greenplum)
+      instance = gpdb_instances(:default)
       visit("#/instances")
       wait_for_ajax
       within ".greenplum_instance ul" do
