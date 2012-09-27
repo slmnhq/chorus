@@ -13,7 +13,7 @@ module Events
     serialize :additional_data, JsonHashSerializer
 
     class_attribute :entities_that_get_activities, :target_names, :object_translations
-    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
+    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data, :insight, :promotion_time, :promoted_by
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
     has_many :notifications

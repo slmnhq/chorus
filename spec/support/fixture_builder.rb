@@ -230,6 +230,8 @@ FixtureBuilder.configure do |fbuilder|
     #Notes
     note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     fbuilder.name :note_on_greenplum, note_on_greenplum
+    insight_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i am an insight with greenpluminsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
+    fbuilder.name :insight_on_greenplum, insight_on_greenplum
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i love searchquery', :created_at => '2010-01-01 02:01')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')

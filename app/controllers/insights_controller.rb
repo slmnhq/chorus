@@ -8,4 +8,8 @@ class InsightsController < ApplicationController
     note.save!
     head 201
   end
+
+  def index
+    present Events::Note.visible_to(current_user).where(insight: true)
+  end
 end
