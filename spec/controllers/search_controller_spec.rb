@@ -36,6 +36,37 @@ describe SearchController do
     end
   end
 
+  describe "#type_ahead" do
+    it_behaves_like "an action that requires authentication", :get, :type_ahead
+
+    context "with a user" do
+      let(:user) { users(:owner) }
+
+      before do
+        log_in user
+      end
+
+      it "uses the search object" do
+        fake_search = Object.new
+        mock(Search).new(user, anything) do |_, params|
+          params[:query].should == "marty"
+          params[:search_type].should == :type_ahead
+          fake_search
+        end
+        mock_present { |model| model.should == fake_search }
+        get :type_ahead, :query => 'marty'
+      end
+
+      generate_fixture "typeAheadSearchResult.json" do
+        reindex_solr_fixtures
+
+        VCR.use_cassette "type_ahead_search_fixture" do
+          get :type_ahead, :query => 'searchquery'
+        end
+      end
+    end
+  end
+
   describe "#reindex" do
     it_behaves_like "an action that requires authentication", :post, :reindex
 

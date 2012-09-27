@@ -102,6 +102,7 @@ Chorus::Application.routes.draw do
   resource :provisioning, :only => [:show], :controller => 'provisioning'
 
   resource :search, :only => [:show], :controller => 'search' do
+    get :type_ahead
     member do
       post :reindex
     end

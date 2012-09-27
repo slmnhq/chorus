@@ -1,53 +1,72 @@
 class SearchPresenter < Presenter
 
-  delegate :users, :gpdb_instances, :hadoop_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :this_workspace, to: :model
+  delegate :users, :gpdb_instances, :hadoop_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :this_workspace, :search_type, :results, to: :model
 
   def to_hash
+    case search_type
+      when :type_ahead then type_ahead_results
+      else per_type_results
+    end
+  end
+
+  private
+
+  def type_ahead_results
+    model.models # TODO: figure out a better way to force execution of the search
     {
-      :users => {
-        :results => present_models_with_highlights(users),
-        :numFound => num_found[:users]
-      },
+        type_ahead: {
+            results:
+                present_models_with_highlights(results)
+        }
+    }
+  end
 
-      :instances => {
-        :results => present_models_with_highlights(gpdb_instances),
-        :numFound => num_found[:gpdb_instances]
-      },
+  def per_type_results
+    {
+        :users => {
+            :results => present_models_with_highlights(users),
+            :numFound => num_found[:users]
+        },
 
-      :hadoop_instances => {
-        :results => present_models_with_highlights(hadoop_instances),
-        :numFound => num_found[:hadoop_instances]
-      },
+        :instances => {
+            :results => present_models_with_highlights(gpdb_instances),
+            :numFound => num_found[:gpdb_instances]
+        },
 
-      :workspaces => {
-        :results => present_models_with_highlights(workspaces),
-        :numFound => num_found[:workspaces]
-      },
+        :hadoop_instances => {
+            :results => present_models_with_highlights(hadoop_instances),
+            :numFound => num_found[:hadoop_instances]
+        },
 
-      :workfiles => {
-        :results => present_models_with_highlights(workfiles),
-        :numFound => num_found[:workfiles]
-      },
+        :workspaces => {
+            :results => present_models_with_highlights(workspaces),
+            :numFound => num_found[:workspaces]
+        },
 
-      :datasets => {
-        :results => present_datasets_with_nested_highlights(datasets),
-        :numFound => num_found[:datasets]
-      },
+        :workfiles => {
+            :results => present_models_with_highlights(workfiles),
+            :numFound => num_found[:workfiles]
+        },
 
-      :hdfs => {
-        :results => present_models_with_highlights(hdfs_entries),
-        :numFound => num_found[:hdfs_entries]
-      }
+        :datasets => {
+            :results => present_datasets_with_nested_highlights(datasets),
+            :numFound => num_found[:datasets]
+        },
+
+        :hdfs => {
+            :results => present_models_with_highlights(hdfs_entries),
+            :numFound => num_found[:hdfs_entries]
+        }
     }.merge(workspace_specific_results)
   end
 
   def workspace_specific_results
     if model.workspace_id
       {
-        :this_workspace => {
-          :results => present_workspace_models_with_highlights(this_workspace),
-          :numFound => num_found[:this_workspace]
-        }
+          :this_workspace => {
+              :results => present_workspace_models_with_highlights(this_workspace),
+              :numFound => num_found[:this_workspace]
+          }
       }
     else
       {}
@@ -83,8 +102,6 @@ class SearchPresenter < Presenter
     end
     results
   end
-
-  private
 
   def extend_result_with_nested_highlights(result)
     schema_name = result[:highlighted_attributes].delete(:schema_name)

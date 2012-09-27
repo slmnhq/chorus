@@ -1,13 +1,12 @@
 chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
     constructorName: "TypeAheadSearchResult",
-    urlTemplate: "search/typeAhead/",
+    urlTemplate: "search/type_ahead/",
 
     results: function() {
         var typeAhead = this.get('typeAhead');
 
         if (!typeAhead) { return []; }
-
-        return _.compact(_.map(typeAhead.docs, function(result) {
+        return _.compact(_.map(typeAhead.results, function(result) {
             switch (result.entityType) {
                 case "user":
                     return new chorus.models.User(result);
@@ -18,17 +17,20 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 case "workfile":
                     return new chorus.models.Workfile(result);
                     break;
-                case "hdfs":
+                case "hdfs_file":
                     return new chorus.models.HdfsEntry(result);
                     break;
                 case "dataset":
                     return new chorus.models.Dataset(result);
                     break;
-                case "chorusView":
+                case "chorus_view":
                     return new chorus.models.ChorusView(result);
                     break;
-                case "instance":
+                case "greenplum_instance":
                     return new chorus.models.GreenplumInstance(result);
+                    break;
+                case "hadoop_instance":
+                    return new chorus.models.HadoopInstance(result);
                     break;
                 default:
                     break;

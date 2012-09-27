@@ -1501,7 +1501,7 @@ beforeEach(function() {
         typeAheadSearchResultJson: function(overrides) {
             return _.extend({
                 "typeAhead": {
-                    "docs": [
+                    "results": [
                         {
                             "lastUpdatedStamp": "2012-03-16 12:33:15",
                             "type": "attachment",

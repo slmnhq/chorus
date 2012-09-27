@@ -1,21 +1,22 @@
 describe("chorus.models.TypeAheadSearchResult", function() {
     beforeEach(function() {
-        this.result = fixtures.typeAheadSearchResult();
+        this.result = rspecFixtures.typeAheadSearchResult();
     });
 
     describe("fixtures", function() {
         it('gives us what we expect', function() {
-            var entityTypes = _.pluck(this.result.get('typeAhead').docs, 'entityType');
-            expect(entityTypes).toEqual([
-                'attachment',
-                'hdfs',
+            var entityTypes = _.pluck(this.result.results(), 'entityType');
+            var expectedEntityTypes = [
+//                'attachment',
+                'hdfs_file',
                 'workspace',
-                'instance',
+                'greenplum_instance',
+                'hadoop_instance',
                 'user',
                 'workfile',
-                'dataset',
-                'chorusView'
-            ]);
+                'dataset'
+            ].sort();
+            expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes)
         });
     });
 
@@ -35,14 +36,19 @@ describe("chorus.models.TypeAheadSearchResult", function() {
         });
 
         it("returns objects of the appropriate type, excluding artifacts", function() {
-            expect(this.searchResults.length).toBe(7);
-            expect(this.searchResults[0]).toBeA(chorus.models.HdfsEntry);
-            expect(this.searchResults[1]).toBeA(chorus.models.Workspace);
-            expect(this.searchResults[2]).toBeA(chorus.models.GreenplumInstance);
-            expect(this.searchResults[3]).toBeA(chorus.models.User);
-            expect(this.searchResults[4]).toBeA(chorus.models.Workfile);
-            expect(this.searchResults[5]).toBeA(chorus.models.Dataset);
-            expect(this.searchResults[6]).toBeA(chorus.models.ChorusView);
+            var expectToContainClass = function(list, entityClass) {
+                expect(!!_.find(list, function(element) {
+                    return element instanceof entityClass
+                })).toBeTruthy();
+            };
+            expectToContainClass(this.searchResults, chorus.models.HdfsEntry);
+            expectToContainClass(this.searchResults, chorus.models.Workspace);
+            expectToContainClass(this.searchResults, chorus.models.GreenplumInstance);
+            expectToContainClass(this.searchResults, chorus.models.HadoopInstance);
+            expectToContainClass(this.searchResults, chorus.models.User);
+            expectToContainClass(this.searchResults, chorus.models.Workfile);
+            expectToContainClass(this.searchResults, chorus.models.Dataset);
+//            expectToContainClass(this.searchResults, chorus.models.ChorusView);
         });
 
         it("expects all result objects to have a name and downloadUrl/showUrl method", function() {

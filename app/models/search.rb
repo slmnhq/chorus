@@ -1,7 +1,9 @@
 class Search
   include ActiveModel::Validations
-  attr_accessor :query, :page, :per_page, :workspace_id
+  attr_accessor :query, :page, :per_page, :workspace_id, :search_type
   attr_reader :models_to_search, :per_type, :current_user
+
+  delegate :results, to: :search
 
   validate :valid_entity_type
 
@@ -11,6 +13,7 @@ class Search
     self.query = params[:query]
     self.per_type = params[:per_type]
     self.workspace_id = params[:workspace_id]
+    self.search_type = params[:search_type]
     if per_type
       self.per_page = 100
     else
