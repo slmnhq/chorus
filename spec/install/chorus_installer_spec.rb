@@ -479,10 +479,10 @@ describe ChorusInstaller do
       FileUtils.mkdir_p(installer.destination_path)
     end
 
-    it "creates a symlink to server_control.sh" do
+    it "creates a symlink to chorus_control.sh" do
       installer.link_services
 
-      File.readlink('/usr/local/greenplum-chorus/server_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh'
+      File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
     end
   end
 
@@ -638,7 +638,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/server_control.sh stop") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/chorus_control.sh stop") { true }
       end
 
       it "should stop the previous version" do
@@ -663,7 +663,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh start") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh start") { true }
       end
 
       it "should stop the previous version" do
@@ -780,8 +780,8 @@ describe ChorusInstaller do
       cmd =~ /rake/ and cmd.scan /db:(\S+)/ do |targets|
         @call_order << :"rake_db_#{targets[0]}"
       end
-      @call_order << :start_postgres if cmd =~ /server_control\.sh start postgres/
-      @call_order << :stop_postgres if cmd =~ /server_control\.sh stop postgres/
+      @call_order << :start_postgres if cmd =~ /chorus_control\.sh start postgres/
+      @call_order << :stop_postgres if cmd =~ /chorus_control\.sh stop postgres/
       @call_order << :create_user if cmd =~ /CREATE ROLE/
       @call_order << :create_database if cmd =~ /initdb/
     end
@@ -797,7 +797,7 @@ describe ChorusInstaller do
     context "when upgrading an existing 2.2 installation" do
       before do
         installer.install_mode = :upgrade_existing
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/packaging/server_control.sh start")
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/packaging/chorus_control.sh start")
       end
 
       it "starts up the old install" do
@@ -813,7 +813,7 @@ describe ChorusInstaller do
     context "when doing a legacy_upgrade or a fresh install" do
       before do
         installer.install_mode = :upgrade_legacy
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres")
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
       end
 
       it "stops postgres" do

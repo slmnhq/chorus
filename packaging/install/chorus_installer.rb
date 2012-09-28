@@ -181,7 +181,7 @@ class ChorusInstaller
   end
 
   def link_services
-    FileUtils.ln_sf("#{release_path}/packaging/server_control.sh", "#{destination_path}/server_control.sh")
+    FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
   end
 
   def link_shared_files
@@ -261,7 +261,7 @@ class ChorusInstaller
   def stop_old_install
     return unless upgrade_existing?
     log "Stopping Chorus..." do
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/server_control.sh stop"
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh stop"
     end
   end
 
@@ -269,7 +269,7 @@ class ChorusInstaller
     return unless upgrade_existing?
 
     log "Starting up Chorus..." do
-      server_control "start"
+      chorus_control "start"
     end
   end
 
@@ -355,7 +355,7 @@ class ChorusInstaller
     log "#{e.class}: #{e.message}"
     raise
   rescue => e
-    server_control "stop" if upgrade_legacy? rescue # rescue in case server_control blows up
+    chorus_control "stop" if upgrade_legacy? rescue # rescue in case chorus_control blows up
     log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
   end
@@ -363,7 +363,7 @@ class ChorusInstaller
   def remove_and_restart_previous!
     if upgrade_existing?
       log "Restarting server..."
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/server_control.sh start"
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/chorus_control.sh start"
     else
       stop_postgres
     end
@@ -425,15 +425,15 @@ class ChorusInstaller
 
   def stop_postgres
     log "Stopping postgres..."
-    server_control "stop postgres"
+    chorus_control "stop postgres"
   end
 
   def start_postgres
     log "Starting postgres..."
-    server_control "start postgres"
+    chorus_control "start postgres"
   end
 
-  def server_control(args)
-    chorus_exec "CHORUS_HOME=#{release_path} #{release_path}/packaging/server_control.sh #{args}"
+  def chorus_control(args)
+    chorus_exec "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh #{args}"
   end
 end

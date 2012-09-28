@@ -144,7 +144,7 @@ module PackageMaker
     # remove previous chorusrails install
     if legacy_path.present?
       chorus_home = "#{install_path}/current"
-      run "ssh #{host} 'test -e #{install_path} && CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/server_control.sh stop'"
+      run "ssh #{host} 'test -e #{install_path} && CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/chorus_control.sh stop'"
       run "ssh #{host} 'rm -rf #{install_path}'"
     end
 
@@ -153,7 +153,7 @@ module PackageMaker
     run "ssh #{host} 'rm -rf #{installer_dir} && mkdir -p #{installer_dir}'"
     run "scp #{package_file} install_answers.txt '#{host}:#{installer_dir}'"
     if config['clean_install']
-      run "ssh #{host} 'CHORUS_HOME=#{install_path}/current #{install_path}/server_control.sh stop'"
+      run "ssh #{host} 'CHORUS_HOME=#{install_path}/current #{install_path}/chorus_control.sh stop'"
       run "ssh #{host} 'rm -rf #{install_path}/*'"
     end
     run "ssh #{host} 'cat /dev/null > #{install_path}/install.log'" unless legacy_path.present?
@@ -164,7 +164,7 @@ module PackageMaker
     if install_success
       builds_to_keep = 5
       run "ssh #{host} 'cd #{install_path}/releases && test `ls | wc -l` -gt 5 && find . -maxdepth 1 -not -newer \"`ls -t | head -6 | tail -1`\" -not -name \".\" -exec rm -rf {} \\;'"
-      run "ssh #{host} 'CHORUS_HOME=#{install_path}/current #{install_path}/server_control.sh start'"
+      run "ssh #{host} 'CHORUS_HOME=#{install_path}/current #{install_path}/chorus_control.sh start'"
     end
 
     raise StandardError.new("Installation failed!") unless install_success

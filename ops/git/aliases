@@ -25,4 +25,5 @@ alias rage='bundle exec rake db:migrate db:test:prepare'
 alias run_all_tests='sta && rake phantom && rspec spec/integration'
 
 export CHORUS_HOME=~/workspace/chorusrails
-alias server_control='CHORUS_HOME=~/workspace/chorusrails RAILS_ENV=development ~/workspace/chorusrails/packaging/server_control.sh'
+alias chorus_control='CHORUS_HOME=~/workspace/chorusrails RAILS_ENV=development ~/workspace/chorusrails/packaging/chorus_control.sh'
+alias server_control='CHORUS_HOME=~/workspace/chorusrails RAILS_ENV=development ~/workspace/chorusrails/packaging/chorus_control.sh'

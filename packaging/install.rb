@@ -19,7 +19,7 @@ if __FILE__ == $0
     installer.startup
 
     puts "Installation completed."
-    puts "run ./server_control.sh start from #{installer.destination_path} to start everything up!" unless installer.upgrade_existing?
+    puts "run ./chorus_control.sh start from #{installer.destination_path} to start everything up!" unless installer.upgrade_existing?
   rescue InstallerErrors::InstallationFailed => e
     installer.remove_and_restart_previous!
     exit 1

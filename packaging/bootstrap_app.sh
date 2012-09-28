@@ -7,7 +7,7 @@ echo "Initializing the database..."
 cd $CHORUS_HOME && ./postgres/bin/initdb --locale=en_US.UTF-8 $CHORUS_HOME/shared/db
 
 echo "Starting db..."
-cd $CHORUS_HOME && RAILS_ENV=production ./server_control.sh start postgres
+cd $CHORUS_HOME && RAILS_ENV=production ./chorus_control.sh start postgres
 sleep 1
 
 echo "Creating user accounts..."
