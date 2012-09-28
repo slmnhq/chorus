@@ -35,10 +35,17 @@ describe InsightsController do
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
-    let(:subject) { get :index }
+    let(:subject) { get :index, :insight => {:entity_type => 'dashboard'}}
+    let(:workspace) { workspaces(:public) }
+    let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
+        :workspace => workspace,
+        :body => 'Come see my awesome workspace!',
+        :insight => true,
+        :promotion_time => Time.now(),
+        :promoted_by => user) }
 
     it "presents the insight" do
-      mock_present do |models,view,options|
+      mock_present do |models|
         models.should include(insight)
       end
       subject
@@ -46,7 +53,7 @@ describe InsightsController do
     end
 
     it "should not include any non-insights" do
-      mock_present do |models, view, options|
+      mock_present do |models|
         models.should_not include(non_insight)
       end
       subject
@@ -64,10 +71,32 @@ describe InsightsController do
       end
 
       it "should not include " do
-        mock_present do |models, view, options|
+        mock_present do |models|
           models.should_not include(private_insight)
         end
         subject
+      end
+    end
+
+    context "when getting insights for the dashboard" do
+      it "returns all insights " do
+        mock_present { |models|
+          models.should include(workspace_insight)
+          models.should include(insight)
+        }
+        get :index, :insight => { :entity_type => "dashboard" }
+        response.code.should == "200"
+      end
+    end
+
+    context "when getting insight for a workspace" do
+      it "returns insights for the particular workspace only" do
+        mock_present { |models|
+          models.should include(workspace_insight)
+          models.should_not include(insight)
+        }
+        get :index, :insight => { :entity_type => "workspace", :entity_id => workspace.id }
+        response.code.should == "200"
       end
     end
   end

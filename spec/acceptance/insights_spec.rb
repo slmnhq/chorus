@@ -21,8 +21,14 @@ resource "Insights" do
   end
 
   get "/insights" do
+
+    parameter :entity_id, "Entity Id for filtering insights"
+    parameter :entity_type, "Entity_type (dashboard or workspace)"
+
+    required_parameters :entity_type
     scope_parameters :insight, :all
 
+    let(:entity_type) {"dashboard"}
     example_request "get the list of insights" do
       status.should == 200
     end
