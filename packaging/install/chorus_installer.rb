@@ -191,7 +191,7 @@ class ChorusInstaller
 
     #Symlink the data paths under shared to the actual data_path directory.  So the app actually
     #goes through two symlinks
-    if (!upgrade_existing?) && File.expand_path("#{data_path}") != File.expand_path("#{destination_path}/shared")
+    if data_path && File.expand_path("#{data_path}") != File.expand_path("#{destination_path}/shared")
       ['db', 'system', 'solr/data', 'log'].each do |path|
         destination = Pathname.new("#{destination_path}/shared/#{path}")
         source = Pathname.new("#{data_path}/#{path}")

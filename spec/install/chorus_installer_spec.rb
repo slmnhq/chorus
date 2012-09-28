@@ -537,9 +537,7 @@ describe ChorusInstaller do
       File.readlink('/usr/local/greenplum-chorus/shared/log').should == '/data/chorus/log'
     end
 
-    context "when data_path is set to the shared directory" do
-      let(:data_path) { destination_path + "/shared" }
-
+    shared_examples "not link the data paths" do
       it "doesn't link system" do
         File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/system').should == '/usr/local/greenplum-chorus/shared/system'
         File.symlink?('/usr/local/greenplum-chorus/shared/system').should be_false
@@ -559,6 +557,16 @@ describe ChorusInstaller do
         File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/log').should == '/usr/local/greenplum-chorus/shared/log'
         File.symlink?('/usr/local/greenplum-chorus/shared/log').should be_false
       end
+    end
+
+    context "when data_path is not set" do
+      let(:data_path) { nil }
+      it_should_behave_like "not link the data paths"
+    end
+
+    context "when data_path is set to the shared directory" do
+      let(:data_path) { destination_path + "/shared" }
+      it_should_behave_like "not link the data paths"
     end
   end
 
