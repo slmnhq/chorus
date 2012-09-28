@@ -23,7 +23,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "mouseleave .chart_icon": "showSelectedTitle",
         "click button.visualize": "startVisualizationWizard",
         "click button.derive": "startCreateChorusViewWizard",
-        "click button.edit": "startEditChorusViewWizard"
+        "click button.edit": "startEditChorusViewWizard",
+        "click button.publish": "displayPublishDialog"
     },
 
     setup: function() {
@@ -240,5 +241,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     updateColumnCount: function() {
         this.$('.count').text(t("dataset.column_count", {count: this.collection.length}))
+    },
+
+    displayPublishDialog: function() {
+      this.dialog = new chorus.dialogs.PublishToTableau({model: this.dataset.deriveTableauWorkbook()});
+      this.dialog.launchModal();
     }
 });

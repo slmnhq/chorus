@@ -235,6 +235,21 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
             });
 
+            describe("clicking the publish button", function() {
+                beforeEach(function() {
+                    this.modalSpy = stubModals()
+                    chorus.models.Config.instance().set({ tableauConfigured: true });
+                    this.view.render();
+                    this.view.$("button.publish").click();
+                });
+
+                it("opens the publish to tableau modal", function() {
+                    var modal = this.modalSpy.lastModal();
+                    expect(modal).toBeA(chorus.dialogs.PublishToTableau);
+                    expect(modal.model).toBeA(chorus.models.TableauWorkbook);
+                })
+            });
+
             context("and the visualize button is clicked", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'showVisualizationConfig');
@@ -546,7 +561,6 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         it("displays the publish to tableau button", function() {
                             chorus.models.Config.instance().set({ tableauConfigured: true });
-                            debugger
                             this.view.render();
                             expect(this.view.$("button.publish")).toExist();
                         });

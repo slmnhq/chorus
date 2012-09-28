@@ -314,6 +314,12 @@ chorus.models.Dataset = chorus.models.Base.include(
         });
     },
 
+    deriveTableauWorkbook: function() {
+        return new chorus.models.TableauWorkbook({
+           dataset: this
+        });
+    },
+
     importFrequency: $.noop
 }, {
     metaTypeMap: {
