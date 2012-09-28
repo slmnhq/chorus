@@ -17,7 +17,8 @@ class ChorusInstaller
     end
   end
 
-  DEFAULT_PATH = "/opt/chorus"
+  DEFAULT_PATH = "/usr/local/greenplum-chorus"
+  DEFAULT_DATA_PATH = "/data/greenplum-chorus"
 
   def initialize(options={})
     @installer_home = options[:installer_home]
@@ -60,14 +61,6 @@ class ChorusInstaller
     @silent
   end
 
-  def prompt_or_default(default)
-    if silent?
-      default
-    else
-      yield || default
-    end
-  end
-
   def get_destination_path
     default_path = ENV['CHORUS_HOME'] || DEFAULT_PATH
     default_path = default_path.sub(/\/current$/, '')
@@ -82,15 +75,12 @@ class ChorusInstaller
   end
 
   def get_data_path
-    default_path = "#{@destination_path}/shared"
-    if @version_detector.can_upgrade_2_2?(version)
-      self.data_path = File.expand_path(default_path)
-    else
-      relative_path = @io.prompt_or_default(:data_path, default_path) || default_path
+    if !@version_detector.can_upgrade_2_2?(version)
+      relative_path = @io.prompt_or_default(:data_path, DEFAULT_DATA_PATH)
       self.data_path = File.expand_path(relative_path)
+      log "Data path = #{@data_path}"
     end
 
-    log "Data path = #{@data_path}"
   end
 
   def prompt_for_passphrase

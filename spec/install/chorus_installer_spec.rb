@@ -42,7 +42,7 @@ describe ChorusInstaller do
 
     let(:upgrade_2_2) { false }
     let(:upgrade_legacy) { false }
-    let(:default_path) { '/opt/chorus' }
+    let(:default_path) { '/usr/local/greenplum-chorus' }
     let(:destination_path) { '/somewhere/chorus' }
 
     it "should set relevant settings" do
@@ -120,7 +120,7 @@ describe ChorusInstaller do
       installer.destination_path = destination_path
       stub(version_detector).can_upgrade_2_2?(anything) { do_2_2_upgrade }
     end
-    let(:default_path) { "#{destination_path}/shared" }
+    let(:default_path) { "/data/greenplum-chorus" }
     let(:data_path) { '/large_disk/data/' }
     let(:destination_path) { '/destination' }
     let(:do_2_2_upgrade) { false }
@@ -133,14 +133,6 @@ describe ChorusInstaller do
       it "should set the data path when the user enters one" do
         installer.get_data_path
         installer.data_path.should == '/large_disk/data'
-      end
-
-      describe "when the user does not enter a path" do
-        let(:data_path) { nil }
-        it "should default correctly" do
-          installer.get_data_path
-          installer.data_path.should == default_path
-        end
       end
 
       describe "when the user types a relative path" do
@@ -157,7 +149,7 @@ describe ChorusInstaller do
 
       it "should not prompt data directory" do
         installer.get_data_path
-        installer.data_path.should == default_path
+        installer.data_path.should == nil
       end
     end
   end
@@ -176,9 +168,9 @@ describe ChorusInstaller do
     end
 
     it "should set the legacy installation path" do
-      installer.destination_path = '/opt/chorus/thingy'
+      installer.destination_path = '/usr/local/greenplum-chorus/thingy'
       subject
-      installer.legacy_installation_path.should == '/opt/chorus/thingy'
+      installer.legacy_installation_path.should == '/usr/local/greenplum-chorus/thingy'
     end
   end
 
@@ -321,53 +313,53 @@ describe ChorusInstaller do
 
   describe "#copy_chorus_to_destination" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
 
       FileUtils.mkpath './chorus_installation/'
       FileUtils.touch './chorus_installation/source_file_of_some_kind'
       stub_version
-      mock(FileUtils).cp_r('./chorus_installation/.', '/opt/chorus/releases/2.2.0.0', :preserve => true)
+      mock(FileUtils).cp_r('./chorus_installation/.', '/usr/local/greenplum-chorus/releases/2.2.0.0', :preserve => true)
     end
 
     it "creates the correct release path" do
       installer.copy_chorus_to_destination
-      File.directory?('/opt/chorus/releases/2.2.0.0').should be_true
+      File.directory?('/usr/local/greenplum-chorus/releases/2.2.0.0').should be_true
     end
   end
 
   describe "#create_shared_structure" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
     end
 
     it "creates the temporary folders" do
       installer.create_shared_structure
 
-      File.directory?('/opt/chorus/shared/tmp/pids').should be_true
+      File.directory?('/usr/local/greenplum-chorus/shared/tmp/pids').should be_true
     end
 
     it "creates the solr index data path" do
       installer.create_shared_structure
 
-      File.directory?('/opt/chorus/shared/solr/data').should be_true
+      File.directory?('/usr/local/greenplum-chorus/shared/solr/data').should be_true
     end
 
     it "create the logs path" do
       installer.create_shared_structure
 
-      File.directory?('/opt/chorus/shared/log').should be_true
+      File.directory?('/usr/local/greenplum-chorus/shared/log').should be_true
     end
 
     it "creates the system file uploads path" do
       installer.create_shared_structure
 
-      File.directory?('/opt/chorus/shared/system').should be_true
+      File.directory?('/usr/local/greenplum-chorus/shared/system').should be_true
     end
   end
 
   describe "#copy_config_files" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
 
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
@@ -377,60 +369,60 @@ describe ChorusInstaller do
     end
 
     it "should create chorus.yml.example in shared path" do
-      File.exists?('/opt/chorus/shared/chorus.yml.example').should be_false
+      File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml.example').should be_false
       installer.copy_config_files
 
-      File.exists?('/opt/chorus/shared/chorus.yml.example').should be_true
+      File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml.example').should be_true
     end
 
     context "chorus.yml" do
       context "when chorus.yml doesn't exist in shared path" do
         it "creates chorus.yml file in shared path" do
-          File.exists?('/opt/chorus/shared/chorus.yml').should be_false
+          File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml').should be_false
           installer.copy_config_files
 
-          File.exists?('/opt/chorus/shared/chorus.yml').should be_true
+          File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml').should be_true
         end
       end
 
       context "when chorus.yml file already exists in the shared path" do
         before do
-          FileUtils.mkdir_p('/opt/chorus/shared')
-          File.open('/opt/chorus/shared/chorus.yml', 'w') { |f| f.puts "some yaml stuff" }
+          FileUtils.mkdir_p('/usr/local/greenplum-chorus/shared')
+          File.open('/usr/local/greenplum-chorus/shared/chorus.yml', 'w') { |f| f.puts "some yaml stuff" }
         end
 
         it "should not overwrite existing chorus.yml" do
           installer.copy_config_files
-          File.read('/opt/chorus/shared/chorus.yml').strip.should == "some yaml stuff"
+          File.read('/usr/local/greenplum-chorus/shared/chorus.yml').strip.should == "some yaml stuff"
         end
       end
     end
 
     context "when database.yml doesn't exist in shared path" do
       it "creates database.yml file in shared path" do
-        File.exists?('/opt/chorus/shared/database.yml').should be_false
+        File.exists?('/usr/local/greenplum-chorus/shared/database.yml').should be_false
         installer.copy_config_files
 
-        File.exists?('/opt/chorus/shared/database.yml').should be_true
+        File.exists?('/usr/local/greenplum-chorus/shared/database.yml').should be_true
       end
     end
 
     context "when database.yml exists in the shared path" do
       before do
-        FileUtils.mkdir_p('/opt/chorus/shared')
-        File.open('/opt/chorus/shared/database.yml', 'w') { |f| f.puts "some yaml stuff" }
+        FileUtils.mkdir_p('/usr/local/greenplum-chorus/shared')
+        File.open('/usr/local/greenplum-chorus/shared/database.yml', 'w') { |f| f.puts "some yaml stuff" }
       end
 
       it "should not overwrite existing database.yml" do
         installer.copy_config_files
-        File.read('/opt/chorus/shared/database.yml').strip.should == "some yaml stuff"
+        File.read('/usr/local/greenplum-chorus/shared/database.yml').strip.should == "some yaml stuff"
       end
     end
   end
 
   describe "#configure_secret_key" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
 
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
@@ -447,19 +439,19 @@ describe ChorusInstaller do
       end
       it "generates the key from a passphrase and stores it in shared/secret.key" do
         installer.configure_secret_key
-        File.read('/opt/chorus/shared/secret.key').strip.should_not be_nil
+        File.read('/usr/local/greenplum-chorus/shared/secret.key').strip.should_not be_nil
       end
     end
 
     context "when key is already present" do
       let(:secret_key) { "its secret" }
       before do
-        File.open('/opt/chorus/shared/secret.key', 'w') { |f| f.puts secret_key }
+        File.open('/usr/local/greenplum-chorus/shared/secret.key', 'w') { |f| f.puts secret_key }
       end
 
       it "does not change the existing key" do
         installer.configure_secret_key
-        File.read('/opt/chorus/shared/secret.key').strip.should == secret_key
+        File.read('/usr/local/greenplum-chorus/shared/secret.key').strip.should == secret_key
       end
     end
 
@@ -471,10 +463,10 @@ describe ChorusInstaller do
 
       it "generates a different random key on each run" do
         installer.configure_secret_key
-        key1 = File.read('/opt/chorus/shared/secret.key').strip
-        File.delete('/opt/chorus/shared/secret.key')
+        key1 = File.read('/usr/local/greenplum-chorus/shared/secret.key').strip
+        File.delete('/usr/local/greenplum-chorus/shared/secret.key')
         installer.configure_secret_key
-        key2 = File.read('/opt/chorus/shared/secret.key').strip
+        key2 = File.read('/usr/local/greenplum-chorus/shared/secret.key').strip
         key1.should_not == key2
       end
     end
@@ -482,7 +474,7 @@ describe ChorusInstaller do
 
   describe "#link_services" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
       stub_version
       FileUtils.mkdir_p(installer.destination_path)
     end
@@ -490,91 +482,91 @@ describe ChorusInstaller do
     it "creates a symlink to server_control.sh" do
       installer.link_services
 
-      File.readlink('/opt/chorus/server_control.sh').should == '/opt/chorus/releases/2.2.0.0/packaging/server_control.sh'
+      File.readlink('/usr/local/greenplum-chorus/server_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh'
     end
   end
 
   describe "#link_shared_files" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = destination_path
+      installer.data_path = data_path
       stub_version
+      installer.link_shared_files
     end
 
-    describe "with the default data_path" do
-      before do
-        installer.link_shared_files
-      end
+    let(:data_path) { "/data/chorus" }
+    let(:destination_path) { "/usr/local/greenplum-chorus" }
 
-      it "links the chorus.yml file" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/config/chorus.yml').should == '/opt/chorus/shared/chorus.yml'
-      end
-
-      it "links the database.yml file" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/config/database.yml').should == '/opt/chorus/shared/database.yml'
-      end
-
-      it "links the secret.key file" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/config/secret.key').should == '/opt/chorus/shared/secret.key'
-      end
-
-      it "links tmp" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/tmp').should == '/opt/chorus/shared/tmp'
-      end
-
-      it "links solr" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
-      end
-
-      it "links log" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/log').should == '/opt/chorus/shared/log'
-      end
-
-      it "links system" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/system').should == '/opt/chorus/shared/system'
-      end
-
-      it "links db" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/postgres-db').should == '/opt/chorus/shared/db'
-      end
+    it "links the chorus.yml file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/chorus.yml').should == '/usr/local/greenplum-chorus/shared/chorus.yml'
     end
 
-    describe "with a custom data_path" do
-      before do
-        installer.data_path = "/data/chorus"
-        installer.link_shared_files
+    it "links the database.yml file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/database.yml').should == '/usr/local/greenplum-chorus/shared/database.yml'
+    end
+
+    it "links the secret.key file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/secret.key').should == '/usr/local/greenplum-chorus/shared/secret.key'
+    end
+
+    it "links tmp" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/tmp').should == '/usr/local/greenplum-chorus/shared/tmp'
+    end
+
+    it "creates data_path" do
+      FileTest.exist?('/data/chorus/system').should be_true
+    end
+
+    it "links system" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/system').should == '/usr/local/greenplum-chorus/shared/system'
+      File.readlink('/usr/local/greenplum-chorus/shared/system').should == '/data/chorus/system'
+    end
+
+    it "links db" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/postgres-db').should == '/usr/local/greenplum-chorus/shared/db'
+      File.readlink('/usr/local/greenplum-chorus/shared/db').should == '/data/chorus/db'
+    end
+
+    it "links solr" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/solr/data').should == '/usr/local/greenplum-chorus/shared/solr/data'
+      File.readlink('/usr/local/greenplum-chorus/shared/solr/data').should == '/data/chorus/solr/data'
+    end
+
+    it "links log" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/log').should == '/usr/local/greenplum-chorus/shared/log'
+      File.readlink('/usr/local/greenplum-chorus/shared/log').should == '/data/chorus/log'
+    end
+
+    context "when data_path is set to the shared directory" do
+      let(:data_path) { destination_path + "/shared" }
+
+      it "doesn't link system" do
+        File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/system').should == '/usr/local/greenplum-chorus/shared/system'
+        File.symlink?('/usr/local/greenplum-chorus/shared/system').should be_false
       end
 
-      it "creates data_path" do
-        FileTest.exist?('/data/chorus/system').should be_true
+      it "doesn't link db" do
+        File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/postgres-db').should == '/usr/local/greenplum-chorus/shared/db'
+        File.symlink?('/usr/local/greenplum-chorus/shared/db').should be_false
       end
 
-      it "links system" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/system').should == '/opt/chorus/shared/system'
-        File.readlink('/opt/chorus/shared/system').should == '/data/chorus/system'
+      it "doesn't link solr" do
+        File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/solr/data').should == '/usr/local/greenplum-chorus/shared/solr/data'
+        File.symlink?('/usr/local/greenplum-chorus/shared/solr/data').should be_false
       end
 
-      it "links db" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/postgres-db').should == '/opt/chorus/shared/db'
-        File.readlink('/opt/chorus/shared/db').should == '/data/chorus/db'
-      end
-
-      it "links solr" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/solr/data').should == '/opt/chorus/shared/solr/data'
-        File.readlink('/opt/chorus/shared/solr/data').should == '/data/chorus/solr/data'
-      end
-
-      it "links log" do
-        File.readlink('/opt/chorus/releases/2.2.0.0/log').should == '/opt/chorus/shared/log'
-        File.readlink('/opt/chorus/shared/log').should == '/data/chorus/log'
+      it "doesn't link log" do
+        File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/log').should == '/usr/local/greenplum-chorus/shared/log'
+        File.symlink?('/usr/local/greenplum-chorus/shared/log').should be_false
       end
     end
   end
 
   describe "#create_database_config" do
     before do
-      installer.destination_path = "/opt/chorus"
-      FileUtils.mkdir_p '/opt/chorus/shared/'
-      File.open('/opt/chorus/shared/database.yml', 'w') do |f|
+      installer.destination_path = "/usr/local/greenplum-chorus"
+      FileUtils.mkdir_p '/usr/local/greenplum-chorus/shared/'
+      File.open('/usr/local/greenplum-chorus/shared/database.yml', 'w') do |f|
         f.puts({'production' => {'password' => 'something', 'username' => 'the_user'}}.to_yaml)
       end
     end
@@ -585,14 +577,14 @@ describe ChorusInstaller do
       installer.database_password.length >= 10
       installer.database_user.should == 'the_user'
 
-      YAML.load_file('/opt/chorus/shared/database.yml')['production']['password'].should == installer.database_password
+      YAML.load_file('/usr/local/greenplum-chorus/shared/database.yml')['production']['password'].should == installer.database_password
     end
 
     it "does not update database.yml if upgrading" do
       installer.install_mode = :upgrade_existing
       installer.create_database_config
 
-      YAML.load_file('/opt/chorus/shared/database.yml')['production']['password'].should == 'something'
+      YAML.load_file('/usr/local/greenplum-chorus/shared/database.yml')['production']['password'].should == 'something'
     end
   end
 
@@ -609,7 +601,7 @@ describe ChorusInstaller do
       stub_chorus_exec(installer)
     end
 
-    let(:destination_path) { "/opt/chorus" }
+    let(:destination_path) { "/usr/local/greenplum-chorus" }
 
     context "when installing fresh" do
       it "creates the database structure" do
@@ -645,8 +637,8 @@ describe ChorusInstaller do
       before do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
-        installer.destination_path = '/opt/chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/server_control.sh stop") { true }
+        installer.destination_path = '/usr/local/greenplum-chorus'
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/server_control.sh stop") { true }
       end
 
       it "should stop the previous version" do
@@ -670,8 +662,8 @@ describe ChorusInstaller do
       before do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
-        installer.destination_path = '/opt/chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh start") { true }
+        installer.destination_path = '/usr/local/greenplum-chorus'
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh start") { true }
       end
 
       it "should stop the previous version" do
@@ -682,47 +674,47 @@ describe ChorusInstaller do
 
   describe "#link_current_to_release" do
     before do
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
       stub(installer).version { '2.2.0.0' }
-      FileUtils.mkdir_p '/opt/chorus/releases/1.2.2.2'
+      FileUtils.mkdir_p '/usr/local/greenplum-chorus/releases/1.2.2.2'
     end
 
     it "creates a symlink to the new release from current" do
       installer.link_current_to_release
 
-      File.readlink('/opt/chorus/current').should == '/opt/chorus/releases/2.2.0.0'
+      File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
     end
 
     it "should overwrite an existing link" do
-      FileUtils.ln_s("/opt/chorus/releases/1.2.2.2", "/opt/chorus/current")
-      mock(File).delete("/opt/chorus/current") # FakeFS workaround
+      FileUtils.ln_s("/usr/local/greenplum-chorus/releases/1.2.2.2", "/usr/local/greenplum-chorus/current")
+      mock(File).delete("/usr/local/greenplum-chorus/current") # FakeFS workaround
       installer.link_current_to_release
 
-      File.readlink('/opt/chorus/current').should == '/opt/chorus/releases/2.2.0.0'
+      File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
     end
   end
 
   describe "#extract_postgres" do
     before do
       stub_version
-      installer.destination_path = "/opt/chorus"
+      installer.destination_path = "/usr/local/greenplum-chorus"
     end
 
     it "calls tar to unpack postgres" do
       installer.instance_variable_set(:@postgres_package, 'postgres-blahblah.tar.gz')
-      mock(installer).chorus_exec("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/") { true }
+      mock(installer).chorus_exec("tar xzf /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /usr/local/greenplum-chorus/releases/2.2.0.0/") { true }
       installer.extract_postgres
     end
   end
 
   describe "command execution" do
     before do
-      installer.destination_path = '/opt/chorus'
+      installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { "2.2.0.0" }
     end
 
     it "raises an exception if exit code is different than zero" do
-      mock(logger).capture_output("PATH=/opt/chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command") { false }
+      mock(logger).capture_output("PATH=/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command") { false }
       expect { installer.send(:chorus_exec, "silly command") }.to raise_error(InstallerErrors::CommandFailed)
     end
   end
@@ -746,7 +738,7 @@ describe ChorusInstaller do
 
     before do
       installer.legacy_installation_path = '/opt/old_chorus'
-      installer.destination_path = '/opt/chorus'
+      installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
       stub_chorus_exec(installer)
 
@@ -764,7 +756,7 @@ describe ChorusInstaller do
 
     before do
       installer.legacy_installation_path = '/opt/old_chorus'
-      installer.destination_path = '/opt/chorus'
+      installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
 
       @call_order = []
@@ -798,14 +790,14 @@ describe ChorusInstaller do
   describe "#remove_and_restart_previous!" do
     before do
       stub(installer).version { "2.2.0.0" }
-      installer.destination_path = "/opt/chorus"
-      FileUtils.mkdir_p "/opt/chorus/releases/2.2.0.0"
+      installer.destination_path = "/usr/local/greenplum-chorus"
+      FileUtils.mkdir_p "/usr/local/greenplum-chorus/releases/2.2.0.0"
     end
 
     context "when upgrading an existing 2.2 installation" do
       before do
         installer.install_mode = :upgrade_existing
-        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/current /opt/chorus/packaging/server_control.sh start")
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/packaging/server_control.sh start")
       end
 
       it "starts up the old install" do
@@ -814,14 +806,14 @@ describe ChorusInstaller do
 
       it "removes the release folder" do
         installer.remove_and_restart_previous!
-        File.exists?("/opt/chorus/releases/2.2.0.0").should == false
+        File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end
     end
 
     context "when doing a legacy_upgrade or a fresh install" do
       before do
         installer.install_mode = :upgrade_legacy
-        mock(installer).chorus_exec("CHORUS_HOME=/opt/chorus/releases/2.2.0.0 /opt/chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres")
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/server_control.sh stop postgres")
       end
 
       it "stops postgres" do
@@ -830,7 +822,7 @@ describe ChorusInstaller do
 
       it "removes the release folder" do
         installer.remove_and_restart_previous!
-        File.exists?("/opt/chorus/releases/2.2.0.0").should == false
+        File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end
     end
   end
