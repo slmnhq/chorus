@@ -18,8 +18,6 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.workspace = this.model.workspace();
-        this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
-        this.workspace.fetchIfNotLoaded();
 
         this.schemaPicker = new chorus.views.SchemaPicker();
         this.schemaPicker.bind("change", this.onSchemaPickerChange, this);
@@ -34,16 +32,13 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
         }
     },
 
-    workspaceLoaded:function () {
+    postRender:function () {
+        this.$(".loading").startLoading();
         if (this.workspace.sandbox()) {
             this.$(".name").text(this.workspace.sandbox().schema().canonicalName());
             this.$("input#sandbox_schema").prop("disabled", false);
             this.$("label[for='sandbox_schema']").removeClass('disabled');
         }
-    },
-
-    postRender:function () {
-        this.$(".loading").startLoading();
     },
 
     onSchemaPickerChange:function () {

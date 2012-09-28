@@ -949,6 +949,23 @@ describe("chorus.models.Abstract", function() {
                 });
             });
         });
+
+        describe("#set", function() {
+           context("when the attributes has completeJson set to true", function() {
+               it("sets the model as loaded", function() {
+                   this.model = new chorus.models.Base();
+                   this.model.set({completeJson: true});
+                   expect(this.model.loaded).toBeTruthy();
+               });
+           });
+           context("when the attributes do not have completeJson set to true", function() {
+               it("does not set the model as loaded", function() {
+                   this.model = new chorus.models.Base();
+                   this.model.set({});
+                   expect(this.model.loaded).not.toBeTruthy();
+               });
+           });
+        });
     });
 
     describe("Collection", function() {

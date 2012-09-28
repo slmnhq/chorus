@@ -238,6 +238,14 @@ chorus.models = {
                 }
             }, this);
             return changes;
+        },
+
+        set: function(attrs) {
+            var result = this._super("set", arguments);
+            if(attrs && attrs.completeJson) {
+                this.loaded = true;
+            }
+            return result
         }
     })
 };
