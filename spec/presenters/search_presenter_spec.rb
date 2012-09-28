@@ -143,24 +143,5 @@ describe SearchPresenter, :type => :view do
         dataset_hash.should have_key(:workspace)
       end
     end
-
-    context "when the search is a type ahead search" do
-      let(:search) do
-        Search.new(user,
-                   :query => 'searchquery',
-                   :search_type => :type_ahead).tap do |search|
-          VCR.use_cassette('type_ahead_search') do
-            search.models # force lazy evaluation of search results
-          end
-        end
-      end
-      let(:presenter) { SearchPresenter.new(search, view) }
-
-      it "returns an array of models including one of each type" do
-        results = presenter.to_hash[:type_ahead][:results]
-        types = results.map { |result| result[:entity_type] }
-        types.should include("user", "workfile", "dataset", "hdfs_file", "greenplum_instance", "hadoop_instance")
-      end
-    end
   end
 end

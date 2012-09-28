@@ -3,25 +3,6 @@ class SearchPresenter < SearchPresenterBase
   delegate :users, :gpdb_instances, :hadoop_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :this_workspace, :search_type, :results, to: :model
 
   def to_hash
-    case search_type
-      when :type_ahead then type_ahead_results
-      else per_type_results
-    end
-  end
-
-  private
-
-  def type_ahead_results
-    model.models # TODO: figure out a better way to force execution of the search
-    {
-        type_ahead: {
-            results:
-                present_models_with_highlights(results)
-        }
-    }
-  end
-
-  def per_type_results
     {
         :users => {
             :results => present_models_with_highlights(users),
@@ -59,6 +40,8 @@ class SearchPresenter < SearchPresenterBase
         }
     }.merge(workspace_specific_results)
   end
+
+  private
 
   def workspace_specific_results
     if model.workspace_id

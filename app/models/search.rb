@@ -3,8 +3,6 @@ class Search
   attr_accessor :query, :page, :per_page, :workspace_id, :search_type
   attr_reader :models_to_search, :per_type, :current_user
 
-  delegate :results, to: :search
-
   validate :valid_entity_type
 
   def initialize(current_user, params = {})
@@ -25,7 +23,6 @@ class Search
 
   def search
     return @search if @search
-    pa errors.class
     raise ApiValidationError.new(errors) unless valid?
 
     build_search

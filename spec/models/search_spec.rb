@@ -176,6 +176,7 @@ describe Search do
     let(:private_workfile) { workfiles(:private) }
     let(:public_workfile) { workfiles(:public) }
     let(:dataset) { datasets(:searchquery_table) }
+    let(:typeahead_dataset) { datasets(:typeahead) }
     let(:shared_dataset) { datasets(:searchquery_shared_table) }
     let(:chorus_view) { datasets(:searchquery_chorus_view) }
 
@@ -194,12 +195,20 @@ describe Search do
       end
     end
 
+    describe "with an empty search string" do
+      it "returns an empty array" do
+        create_and_record_search(owner, :query => "") do |search|
+          search.models.should be {}
+        end
+      end
+    end
+
     describe "#num_found" do
       it "returns a hash with the number found of each type" do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 1
-          search.num_found[:datasets].should == 3
+          search.num_found[:datasets].should == 4
         end
       end
 
@@ -213,7 +222,7 @@ describe Search do
       it "includes the number of workspace specific results found" do
         workspace = workspaces(:search_public)
         create_and_record_search(owner, :query => 'searchquery', :workspace_id => workspace.id) do |search|
-          search.num_found[:this_workspace].should == 4
+          search.num_found[:this_workspace].should == 5
         end
       end
     end
@@ -288,7 +297,7 @@ describe Search do
 
       it "returns the Dataset objects found" do
         create_and_record_search do |search|
-          search.datasets.should =~ [dataset, shared_dataset, chorus_view]
+          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset]
         end
       end
 
@@ -407,13 +416,5 @@ describe Search do
         end
       end
     end
-  end
-
-  def record_with_vcr(tape_name = nil, &block)
-    VCR.use_cassette(tape_name || snakify(example.full_description), &block)
-  end
-
-  def snakify(string)
-    string.downcase.gsub(/[^\w\d]+/, '_')
   end
 end

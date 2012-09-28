@@ -6,7 +6,7 @@ class SearchController < ApplicationController
   end
 
   def type_ahead
-    present Search.new(current_user, params.merge(:search_type => :type_ahead))
+    present TypeAheadSearch.new(current_user, params)
   end
 
   def reindex

@@ -60,6 +60,7 @@ describe WorkspaceSearch do
     let(:workfile) { workfiles(:search_public) }
     let(:matching_table) { datasets(:searchquery_table) }
     let(:matching_view) { datasets(:searchquery_chorus_view) }
+    let(:typeahead_dataset) { datasets(:typeahead) }
     before do
       reindex_solr_fixtures
     end
@@ -68,7 +69,7 @@ describe WorkspaceSearch do
       it "returns the total number of results found" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.num_found.should == 4
+          search.num_found.should == 5
         end
       end
     end
@@ -77,7 +78,7 @@ describe WorkspaceSearch do
       it "returns the founds results" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.results.should =~ [workfile, matching_table, matching_view, workspace]
+          search.results.should =~ [workfile, matching_table, matching_view, workspace, typeahead_dataset]
         end
       end
 

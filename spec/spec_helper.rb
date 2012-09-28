@@ -34,6 +34,10 @@ VCR.configure do |c|
   c.default_cassette_options = { :record => :new_episodes }
 end
 
+def record_with_vcr(tape_name = nil, &block)
+  default_tape_name = example.full_description.downcase.gsub(/[^\w\d]+/, '_')
+  VCR.use_cassette(tape_name || default_tape_name, &block)
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

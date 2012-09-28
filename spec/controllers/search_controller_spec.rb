@@ -56,9 +56,8 @@ describe SearchController do
 
       it "uses the search object" do
         fake_search = Object.new
-        mock(Search).new(user, anything) do |_, params|
+        mock(TypeAheadSearch).new(user, anything) do |_, params|
           params[:query].should == "marty"
-          params[:search_type].should == :type_ahead
           fake_search
         end
         mock_present { |model| model.should == fake_search }
