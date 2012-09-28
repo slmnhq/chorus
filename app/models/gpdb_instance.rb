@@ -33,7 +33,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def used_by_workspaces
-    Workspace.where("sandbox_id IN (SELECT id FROM gpdb_schemas s WHERE s.database_id IN (SELECT id FROM gpdb_databases d WHERE d.gpdb_instance_id IN (SELECT id FROM gpdb_instances i WHERE i.id = #{id})))")
+    Workspace.where("sandbox_id IN (SELECT id FROM gpdb_schemas s WHERE s.database_id IN (SELECT id FROM gpdb_databases d WHERE d.gpdb_instance_id IN (SELECT id FROM gpdb_instances i WHERE i.id = #{id})))") if id.present?
   end
 
   def self.accessible_to(user)

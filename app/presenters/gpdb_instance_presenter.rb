@@ -15,8 +15,26 @@ class GpdbInstancePresenter < Presenter
       :maintenance_db => maintenance_db,
       :description => description,
       :instance_provider => instance_provider,
-      :version => version,
-      :used_by_workspaces => (used_by_workspaces if model.is_a?(GpdbInstance))
+      :version => version
+    }.merge(workspace_hash)
+  end
+
+  def workspace_hash
+    workspaces = used_by_workspaces
+    return { :used_by_workspaces => nil } if workspaces.nil?
+
+    arr = workspaces.map do |workspace|
+      gpdb_schema = GpdbSchema.find(workspace.sandbox_id)
+      hash = Hash.new()
+      hash[:size] = 0 # TODO: need real value
+      hash[:schemaName] = gpdb_schema.name if gpdb_schema.present?
+      hash[:databaseName] = gpdb_schema.database.name if gpdb_schema.present?
+      hash[:ownerFullName] = "#{owner.first_name} #{owner.last_name}"
+      hash
+    end
+
+    {
+        :used_by_workspaces => (arr if model.is_a?(GpdbInstance))
     }
   end
 end
