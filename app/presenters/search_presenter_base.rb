@@ -22,6 +22,10 @@ class SearchPresenterBase < Presenter
     end
   end
 
+  def complete_json?
+    true
+  end
+
   private
 
   def extend_result_with_nested_highlights(result)

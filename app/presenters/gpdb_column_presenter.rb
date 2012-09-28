@@ -21,4 +21,8 @@ class GpdbColumnPresenter < Presenter
     return { } unless model.statistics.present?
     present(model.statistics)
   end
+
+  def complete_json?
+    true
+  end
 end

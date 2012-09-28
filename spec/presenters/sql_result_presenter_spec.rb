@@ -20,8 +20,8 @@ describe SqlResultPresenter, :type => :view do
   describe "#to_hash" do
     it "presents the columns" do
       hash[:columns].should == [
-          GpdbColumnPresenter.new(GpdbColumn.new({:name => "size", :data_type => "real"}), view).to_hash,
-          GpdbColumnPresenter.new(GpdbColumn.new({:name => "is_cool", :data_type => "boolean"}), view).to_hash
+          GpdbColumnPresenter.new(GpdbColumn.new({:name => "size", :data_type => "real"}), view).presentation_hash,
+          GpdbColumnPresenter.new(GpdbColumn.new({:name => "is_cool", :data_type => "boolean"}), view).presentation_hash
       ]
     end
 
@@ -34,7 +34,7 @@ describe SqlResultPresenter, :type => :view do
     end
 
     it "presents the execution schema" do
-      hash[:execution_schema].should == GpdbSchemaPresenter.new(schema, view).to_hash
+      hash[:execution_schema].should == GpdbSchemaPresenter.new(schema, view).presentation_hash
     end
 
     it "presents the warnings" do

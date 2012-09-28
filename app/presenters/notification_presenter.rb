@@ -10,4 +10,8 @@ class NotificationPresenter < Presenter
         :timestamp => model.created_at
     }
   end
+
+  def complete_json?
+    true
+  end
 end

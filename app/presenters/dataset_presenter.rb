@@ -11,6 +11,10 @@ class DatasetPresenter < Presenter
     }.merge(workspace_hash).merge(associated_workspaces_hash).merge(frequency)
   end
 
+  def complete_json?
+    !rendering_activities?
+  end
+
   private
 
   def schema_hash

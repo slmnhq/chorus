@@ -40,6 +40,26 @@ describe Presenter, :type => :view do
       it "presents a hash of the model" do
         json[:username].should == object_to_present.username
       end
+
+      context "when complete_json? is true" do
+        before do
+          any_instance_of(UserPresenter, :complete_json? => true)
+        end
+
+        it "includes complete json" do
+          json[:complete_json].should be_true
+        end
+      end
+
+      context "when complete_json? is false" do
+        before do
+          any_instance_of(UserPresenter, :complete_json? => false)
+        end
+
+        it "does not include complete json" do
+          json.should_not have_key(:complete_json)
+        end
+      end
     end
 
     context "with a paperclip attachment" do
@@ -112,6 +132,12 @@ describe Presenter, :type => :view do
       it "presents an empty array" do
         json.should == []
       end
+    end
+  end
+
+  describe "complete_json?" do
+    it "is false by default" do
+      @presenter.complete_json?.should be_false
     end
   end
 end

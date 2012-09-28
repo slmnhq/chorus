@@ -27,4 +27,8 @@ class WorkspacePresenter < Presenter
       }
     end
   end
+
+  def complete_json?
+    !rendering_activities?
+  end
 end

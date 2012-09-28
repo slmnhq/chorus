@@ -9,7 +9,7 @@ class Presenter
 
   def self.present_model(model, view_context, options)
     presenter_class = get_presenter_class(model)
-    presenter_class.new(model, view_context, options).to_hash
+    presenter_class.new(model, view_context, options).presentation_hash
   end
 
   def self.present_collection(collection, view_context, options)
@@ -34,6 +34,19 @@ class Presenter
   delegate :h, :sanitize, :to => :@view_context
 
   attr_reader :model, :options
+
+  def complete_json?
+    false
+  end
+
+  def complete_json
+    complete_json? ? {:complete_json => true} : {}
+  end
+
+  def presentation_hash
+    hash = to_hash
+    hash.merge(complete_json) if hash
+  end
 
   private
 

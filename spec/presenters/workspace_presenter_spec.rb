@@ -36,7 +36,7 @@ describe WorkspacePresenter, :type => :view do
     end
 
     it "uses the image presenter to serialize the image urls" do
-      @hash[:image].to_hash.should == (ImagePresenter.new(@workspace.image, view).to_hash)
+      @hash[:image].to_hash.should == (ImagePresenter.new(@workspace.image, view).presentation_hash)
     end
 
     it "should respond with the current user's permissions (as an owner of the workspace)'" do
@@ -45,17 +45,17 @@ describe WorkspacePresenter, :type => :view do
 
     it "should use ownerPresenter Hash method for owner" do
       owner = @hash[:owner]
-      owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
+      owner.to_hash.should == (UserPresenter.new(@user, view).presentation_hash)
     end
 
     it "should use ownerPresenter Hash method for owner" do
       archiver = @hash[:archiver]
-      archiver.to_hash.should == (UserPresenter.new(@archiver, view).to_hash)
+      archiver.to_hash.should == (UserPresenter.new(@archiver, view).presentation_hash)
     end
 
     it "should use gpdbSchemaPresenter Hash method for sandbox_info" do
       sandbox = @hash[:sandbox_info]
-      sandbox.to_hash.should == (GpdbSchemaPresenter.new(@schema, view).to_hash)
+      sandbox.to_hash.should == (GpdbSchemaPresenter.new(@schema, view).presentation_hash)
     end
 
     it_behaves_like "sanitized presenter", :workspace, :summary
@@ -67,6 +67,21 @@ describe WorkspacePresenter, :type => :view do
         @hash[:id].should == @workspace.id
         @hash[:name].should == @workspace.name
         @hash.keys.size.should == 2
+      end
+    end
+  end
+
+  describe "complete_json?" do
+    context "when rendering activities" do
+      let(:options) { {:activity_stream => true} }
+      it "is not true" do
+        @presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when not rendering activities" do
+      it "is true" do
+        @presenter.complete_json?.should be_true
       end
     end
   end

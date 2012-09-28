@@ -12,4 +12,8 @@ class GpdbSchemaFunctionPresenter < Presenter
         :description => description
     }
   end
+
+  def complete_json?
+    true
+  end
 end

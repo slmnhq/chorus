@@ -9,4 +9,8 @@ class SqlResultPresenter < Presenter
         :warnings => warnings
     }
   end
+
+  def complete_json?
+    true
+  end
 end

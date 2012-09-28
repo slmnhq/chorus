@@ -9,4 +9,8 @@ class CommentPresenter < Presenter
         :timestamp => created_at
     }
   end
+
+  def complete_json?
+    true
+  end
 end

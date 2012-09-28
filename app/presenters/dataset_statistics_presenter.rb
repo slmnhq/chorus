@@ -14,4 +14,8 @@ class DatasetStatisticsPresenter < Presenter
         :definition => definition
     }
   end
+
+  def complete_json?
+    true
+  end
 end

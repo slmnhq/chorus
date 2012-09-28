@@ -27,8 +27,8 @@ describe WorkfileVersionPresenter, :type => :view do
     end
 
     it "uses the user presenter to serialize the owner and modifier" do
-      hash[:owner].to_hash.should == UserPresenter.new(owner, view).to_hash
-      hash[:modifier].to_hash.should == UserPresenter.new(owner, view).to_hash
+      hash[:owner].to_hash.should == UserPresenter.new(owner, view).presentation_hash
+      hash[:modifier].to_hash.should == UserPresenter.new(owner, view).presentation_hash
     end
 
     it "sanitizes values" do
@@ -128,6 +128,28 @@ describe WorkfileVersionPresenter, :type => :view do
         hash[:modifier][:id].should == owner.id
         hash[:owner].keys.size.should == 1
         hash[:modifier].keys.size.should == 1
+      end
+    end
+  end
+
+  describe "complete_json?" do
+    context "when rendering activities" do
+      let(:options) { {:activity_stream => true, :contents => true} }
+      it "is not true" do
+        presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when not including the contents" do
+      it "is not true" do
+        presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when not rendering activities and including the contents" do
+      let(:options) { {:contents => true} }
+      it "is true" do
+        presenter.complete_json?.should be_true
       end
     end
   end

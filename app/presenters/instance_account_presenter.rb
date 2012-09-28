@@ -10,4 +10,8 @@ class InstanceAccountPresenter < Presenter
       :owner => present(owner)
     }
   end
+
+  def complete_json?
+    true
+  end
 end

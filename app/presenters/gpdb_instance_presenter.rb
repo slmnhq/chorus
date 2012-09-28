@@ -37,4 +37,8 @@ class GpdbInstancePresenter < Presenter
         :used_by_workspaces => (arr if model.is_a?(GpdbInstance))
     }
   end
+
+  def complete_json?
+    true
+  end
 end

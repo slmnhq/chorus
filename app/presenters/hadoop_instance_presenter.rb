@@ -15,4 +15,8 @@ class HadoopInstancePresenter < Presenter
         :group_list => group_list
     }
   end
+
+  def complete_json?
+    true
+  end
 end

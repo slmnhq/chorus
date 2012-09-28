@@ -21,7 +21,7 @@ describe UserPresenter, :type => :view do
     end
 
     it "uses the image presenter to serialize the image urls" do
-      @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).to_hash)
+      @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).presentation_hash)
     end
 
     it "does not include unwanted keys" do
@@ -40,8 +40,23 @@ describe UserPresenter, :type => :view do
         @hash[:username].should == @user.username
         @hash[:first_name].should == @user.first_name
         @hash[:last_name].should == @user.last_name
-        @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).to_hash)
+        @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).presentation_hash)
         @hash.keys.size.should == 5
+      end
+    end
+  end
+
+  describe "complete_json?" do
+    context "when rendering activities" do
+      let(:options) { {:activity_stream => true} }
+      it "is not true" do
+        @presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when not rendering activities" do
+      it "is true" do
+        @presenter.complete_json?.should be_true
       end
     end
   end

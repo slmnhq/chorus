@@ -7,5 +7,9 @@ class ImagePresenter < Presenter
         :icon => url(:icon)
     }
   end
+
+  def complete_json?
+    true
+  end
 end
 

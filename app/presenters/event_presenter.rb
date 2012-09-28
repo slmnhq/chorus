@@ -17,6 +17,10 @@ class EventPresenter < Presenter
         merge(note_attachment_hash)
   end
 
+  def complete_json?
+    true
+  end
+
   private
 
   def comments_hash

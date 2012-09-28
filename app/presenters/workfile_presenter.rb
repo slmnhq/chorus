@@ -12,7 +12,11 @@ class WorkfilePresenter < Presenter
       :has_draft => has_draft(current_user),
       :is_deleted => model.deleted?
     }
-    workfile[:execution_schema] = present(execution_schema) if @options[:include_execution_schema]
+    workfile[:execution_schema] = present(execution_schema) if options[:include_execution_schema]
     workfile
+  end
+
+  def complete_json?
+    options[:include_execution_schema]
   end
 end

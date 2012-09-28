@@ -11,4 +11,8 @@ class NoteAttachmentPresenter < Presenter
         :type => File.extname(contents.original_filename).sub(/^\./, '')
     }
   end
+
+  def complete_json?
+    true
+  end
 end

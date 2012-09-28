@@ -73,7 +73,7 @@ describe GpdbColumnPresenter, :type => :view do
         gpdb_column.statistics = statistics
       end
 
-      its(:statistics) { should == GpdbColumnStatisticsPresenter.new(statistics, view).to_hash }
+      its(:statistics) { should == GpdbColumnStatisticsPresenter.new(statistics, view).presentation_hash }
     end
   end
 end

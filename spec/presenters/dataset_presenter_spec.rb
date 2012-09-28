@@ -67,6 +67,22 @@ describe DatasetPresenter, :type => :view do
         hash[:frequency].should == import_schedule.frequency
       end
     end
+  end
 
+  describe "complete_json?" do
+    let(:dataset) { datasets(:table) }
+    context "when rendering activities" do
+      let(:activity_stream) { true }
+      it "is not true" do
+        presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when not rendering activities" do
+      let(:activity_stream) { nil }
+      it "is true" do
+        presenter.complete_json?.should be_true
+      end
+    end
   end
 end

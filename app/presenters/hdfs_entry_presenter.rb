@@ -24,4 +24,8 @@ class HdfsEntryPresenter < Presenter
 
     hash
   end
+
+  def complete_json?
+    options[:deep]
+  end
 end

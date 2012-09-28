@@ -9,4 +9,8 @@ class WorkfileDraftPresenter < Presenter
       :workfile_id => workfile_id
     }
   end
+
+  def complete_json?
+    true
+  end
 end

@@ -9,4 +9,8 @@ class CsvFilePresenter < Presenter
     model.errors.add(:contents, :FILE_INVALID)
     raise ActiveRecord::RecordInvalid.new(model)
   end
+
+  def complete_json?
+    true
+  end
 end

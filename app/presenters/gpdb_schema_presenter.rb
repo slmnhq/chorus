@@ -8,4 +8,8 @@ class GpdbSchemaPresenter < Presenter
         :dataset_count => datasets.size
     }
   end
+
+  def complete_json?
+    true
+  end
 end

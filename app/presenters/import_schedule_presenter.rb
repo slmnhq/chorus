@@ -21,5 +21,9 @@ class ImportSchedulePresenter < Presenter
              :is_active => is_active
          }.merge(:execution_info => {})
   end
+
+  def complete_json?
+    true
+  end
 end
 

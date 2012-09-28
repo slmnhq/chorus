@@ -20,7 +20,7 @@ class WorkfileVersionPresenter < Presenter
   end
 
   def content_value
-    @options[:contents] ? get_content : nil
+    options[:contents] ? get_content : nil
   end
 
   def owner_hash
@@ -33,5 +33,9 @@ class WorkfileVersionPresenter < Presenter
 
   def icon_url
     contents.url(:icon) if model.image?
+  end
+
+  def complete_json?
+    !rendering_activities? && options[:contents]
   end
 end

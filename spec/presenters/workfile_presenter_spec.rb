@@ -4,7 +4,8 @@ describe WorkfilePresenter, :type => :view do
   let(:user) { users(:owner) }
   let(:workfile) { workfiles(:private) }
   let(:workspace) { workfile.workspace }
-  let(:presenter) { WorkfilePresenter.new(workfile, view) }
+  let(:options) { {} }
+  let(:presenter) { WorkfilePresenter.new(workfile, view, options) }
 
   before(:each) do
     stub(ActiveRecord::Base).current_user { user }
@@ -26,11 +27,11 @@ describe WorkfilePresenter, :type => :view do
     end
 
     it "uses the workspace presenter to serialize the workspace" do
-      hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view).to_hash)
+      hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view).presentation_hash)
     end
 
     it "uses the user presenter to serialize the owner" do
-      hash[:owner].to_hash.should == (UserPresenter.new(user, view).to_hash)
+      hash[:owner].to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
     it "uses the workfile file name" do
@@ -55,7 +56,7 @@ describe WorkfilePresenter, :type => :view do
       let(:presenter) { WorkfilePresenter.new(workfile, view, :include_execution_schema => true) }
 
       it "includes the execution_schema" do
-        hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view).to_hash
+        hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view).presentation_hash
       end
     end
 
@@ -66,6 +67,21 @@ describe WorkfilePresenter, :type => :view do
       json = WorkfilePresenter.new(workfile, view).to_hash
 
       json[:file_name].should_not include '"'
+    end
+  end
+
+  describe "complete_json?" do
+    context "when not including execution schema" do
+      it "is not true" do
+        presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when including execution schema" do
+      let(:options) { {:include_execution_schema => true} }
+      it "is true" do
+        presenter.complete_json?.should be_true
+      end
     end
   end
 end

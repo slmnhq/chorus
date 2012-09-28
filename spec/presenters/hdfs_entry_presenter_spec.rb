@@ -90,5 +90,21 @@ describe HdfsEntryPresenter, :type => :view do
       end
     end
   end
+
+  describe "complete_json?" do
+    let(:entry) { hdfs_entries(:hdfs_file) }
+    context "when deep is not specified" do
+      it "is not true" do
+        presenter.complete_json?.should_not be_true
+      end
+    end
+
+    context "when deep is specified" do
+      let(:options) { {:deep => true} }
+      it "is true" do
+        presenter.complete_json?.should be_true
+      end
+    end
+  end
 end
 
