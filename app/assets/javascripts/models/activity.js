@@ -190,8 +190,8 @@
             return this.get("action") === "NOTE";
         },
 
-        isNoteAndNotInsight: function() {
-            return isNote() && !isInSight();
+        canBePromotedToInsight: function() {
+            return this.isNote() && !this.isInsight();
         },
 
         isInsight: function() {
@@ -227,13 +227,17 @@
         },
 
         promoterLink: function() {
-            return this.get("promotedBy") ? chorus.helpers.userProfileLink(new chorus.models.User(this.get("promotedBy"))) : null;
+            var promoter = this.promoter();
+            return promoter ? chorus.helpers.userProfileLink(promoter) : "MISSING PROMOTER";
+        },
+
+        promoter: function () {
+            return this.get("promotedBy") ? new chorus.models.User(this.get("promotedBy")) : null;
         },
 
         promotionTimestamp:function() {
             return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : nil
         }
-
     });
 
     function makeAssociationMethod(name, setupFunction) {

@@ -134,6 +134,7 @@ window.rspecFixtureDefinitions = {
             sandboxAdded: {},
             noteOnGreenplumInstanceCreated: {},
             noteOnHadoopInstanceCreated: {},
+            insightOnGreenplumInstance: {},
             hdfsExternalTableCreated: {},
             fileImportCreated: {},
             fileImportFailed: {},

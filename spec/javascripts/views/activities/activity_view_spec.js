@@ -159,6 +159,29 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
                 expect(this.view.$("a.edit_link")).not.toExist();
             });
+
+            it("displays a link to promote a note as an insight", function() {
+                spyOn(this.presenter, "canBePromotedToInsight").andReturn(true);
+                this.view.render();
+                expect(this.view.$("a.promote")).toExist();
+
+                this.presenter.canBePromotedToInsight.andReturn(false);
+                this.view.render();
+                expect(this.view.$("a.promote")).not.toExist();
+            });
+
+            it("does not display a note's promotion details if it is not an insight", function() {
+                this.view.render();
+                expect(this.view.$("span.promoted_by")).not.toExist();
+            });
+
+            it("displays the note's promotion details if it is an insight", function() {
+                this.model = this.presenter.model = rspecFixtures.activity.insightOnGreenplumInstance();
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+
+                expect(this.view.$("span.promoted_by")).toExist();
+            });
         });
 
         xcontext("isNotification", function() {

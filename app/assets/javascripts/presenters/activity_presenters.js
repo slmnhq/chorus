@@ -30,6 +30,10 @@
             }
         },
 
+        canBePromotedToInsight: function() {
+            return this.model.canBePromotedToInsight();
+        },
+
         isInsight: function() {
             return this.model.isInsight();
         },

@@ -45,6 +45,13 @@ module Events
       result
     end
 
+    def promote_to_insight(actor)
+      self.insight = true
+      self.promoted_by = actor
+      touch(:promotion_time)
+      save!
+    end
+
     class << self
       private
 

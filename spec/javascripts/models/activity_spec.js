@@ -34,6 +34,24 @@ describe("chorus.models.Activity", function() {
             });
         });
 
+        describe("#promoter", function() {
+            it("returns a user with the right data", function() {
+                activity = rspecFixtures.activity.insightOnGreenplumInstance({
+                    promotedBy: { id: 5 },
+                    greenplumInstance: { id: 6 }
+                });
+
+                var promoter = activity.promoter();
+                expect(promoter).toBeA(chorus.models.User);
+                expect(promoter.id).toBe(5);
+            });
+            it("returns null if the note is not an insight", function() {
+                activity = rspecFixtures.activity.greenplumInstanceChangedOwner();
+                var promoter = activity.promoter();
+                expect(promoter).toBeNull();
+            });
+        });
+
         describe("#member", function() {
             it("returns a user with the right data", function() {
                 activity = rspecFixtures.activity.membersAdded({
@@ -392,6 +410,23 @@ describe("chorus.models.Activity", function() {
         it("returns false for non-notes", function() {
             this.model.set({ type: "WorkspaceMakePublic" });
             expect(this.model.isNote()).toBeFalsy();
+        });
+    });
+
+    describe("#canBePromotedToInsight", function() {
+        it("returns true if it is a note but not an insight", function() {
+            this.model.set({ action: "NOTE", isInsight: false });
+            expect(this.model.canBePromotedToInsight()).toBeTruthy();
+        });
+
+        it("returns false for insights", function() {
+            this.model.set({ action: "NOTE", isInsight: true });
+            expect(this.model.canBePromotedToInsight()).toBeFalsy();
+        });
+
+        it("returns false for non-notes", function() {
+            this.model.set({ type: "WorkspaceMakePublic" });
+            expect(this.model.canBePromotedToInsight()).toBeFalsy();
         });
     });
 

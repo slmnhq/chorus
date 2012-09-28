@@ -210,6 +210,37 @@ describe Events::Note do
     end
   end
 
+  describe "#promote_to_insight" do
+    let(:actor) { users(:owner) }
+    let(:event) {
+      Events::NoteOnGreenplumInstance.add(
+          :actor => actor,
+          :greenplum_instance => greenplum_instance,
+          :body => "This is the body"
+      )
+    }
+
+    subject { event.promote_to_insight(actor) }
+    it { should be_true }
+
+    it "saves the note" do
+      expect {
+        event.promote_to_insight(actor)
+      }.to change(event, :updated_at)
+    end
+
+    describe "it saves a note after promoting it to an insight" do
+      subject do
+        event.promote_to_insight(actor)
+        event.reload
+      end
+
+      it { should be_insight }
+      its(:promoted_by) { should == actor }
+      its(:promotion_time) { should be_within(1.minute).of(Time.now) }
+    end
+  end
+
   describe "#create_from_params(entity_type, entity_id, body, creator)" do
     let(:user) { users(:owner) }
 
