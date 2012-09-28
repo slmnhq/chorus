@@ -186,6 +186,13 @@ chorus.models = {
             return this.get(this.nameAttribute || "name");
         },
 
+        shortName: function(length) {
+            length = length || 20;
+
+            var name = this.name() || "";
+            return (name.length < length) ? name : name.slice(0, length) + "...";
+        },
+
         highlightedName: function() {
             var highlightedModel = chorus.helpers.withSearchResults(this);
             return new Handlebars.SafeString(highlightedModel.name());

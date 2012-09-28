@@ -316,8 +316,13 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     deriveTableauWorkbook: function() {
         return new chorus.models.TableauWorkbook({
-           dataset: this
+           dataset: this,
+           name: this.get('objectName')
         });
+    },
+
+    humanType: function() {
+      return t(['dataset.types',this.get("type"),this.get("objectType")].join("."));
     },
 
     importFrequency: $.noop
