@@ -89,8 +89,7 @@ describe GpdbInstancesController do
       let(:valid_attributes) { Hash.new }
 
       before do
-        gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => "new", :id => 42)
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { gpdb_instance }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { gpdb_instances(:default) }
       end
 
       it "reports that the gpdb instance was created" do
@@ -100,7 +99,7 @@ describe GpdbInstancesController do
 
       it "renders the newly created gpdb instance" do
         post :create, :instance => valid_attributes
-        decoded_response.name.should == "new"
+        decoded_response.name.should == "Default"
       end
 
       it "schedules a job to refresh the instance" do
@@ -154,8 +153,9 @@ describe GpdbInstancesController do
       let(:invalid_attributes) { Hash.new }
 
       before do
-        gpdb_instance = FactoryGirl.build(:gpdb_instance, :name => nil)
-        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, user, anything) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
+        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, user, anything) {
+          raise(ActiveRecord::RecordInvalid.new(gpdb_instances(:default)))
+        }
       end
 
       it "responds with validation errors" do

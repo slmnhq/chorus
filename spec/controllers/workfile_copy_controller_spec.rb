@@ -21,7 +21,7 @@ describe WorkfileCopyController do
     end
 
     it "should copy latest version to a new active workspace" do
-      workfile_version1 = FactoryGirl.create(:workfile_version, :workfile => workfile)
+      workfile_version1 = workfile_versions(:public)
       workfile_version1.version_num =2
       workfile_version1.contents = test_file('some.txt')
       workfile_version1.save!
@@ -32,7 +32,6 @@ describe WorkfileCopyController do
 
     it "should not copy if user is not a member of source workspace" do
       another_user = users(:no_collaborators)
-      membership = FactoryGirl.create(:membership, :workspace => target_workspace, :user => another_user)
       log_in another_user
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
       response.status.should == 403
@@ -40,7 +39,6 @@ describe WorkfileCopyController do
 
     it "should not copy if user is not a member of target workspace" do
       another_user = users(:owner)
-      membership = FactoryGirl.create(:membership, :workspace => workspace, :user => another_user)
       log_in another_user
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
       response.status.should == 403

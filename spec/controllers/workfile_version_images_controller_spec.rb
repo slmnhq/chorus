@@ -4,7 +4,7 @@ describe WorkfileVersionImagesController do
   ignore_authorization!
   let(:user) { users(:owner) }
   let(:workfile) { workfiles(:public) }
-  let!(:version) { FactoryGirl.create(:workfile_version, :workfile => workfile) }
+  let(:version) { workfile_versions(:public) }
 
   before do
     log_in user

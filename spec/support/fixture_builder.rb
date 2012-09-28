@@ -136,9 +136,9 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :search_public, search_public_workspace
     fbuilder.name :search_private, search_private_workspace
 
-    workspaces << api_workspace = admin.owned_workspaces.create!({:name => "Api"}, :without_protection => true)
-    api_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
-    api_workspace.save!
+    workspaces << image_workspace = admin.owned_workspaces.create!({:name => "image"}, :without_protection => true)
+    image_workspace.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'Workspace.jpg'), "image/jpg")
+    image_workspace.save!
     workspaces.each do |workspace|
       workspace.members << the_collaborator
     end
@@ -178,7 +178,7 @@ FixtureBuilder.configure do |fbuilder|
       no_collaborators_workfile_version = FactoryGirl.create(:workfile_version, :workfile => no_collaborators_private, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => private_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
-      FactoryGirl.create(:workfile_version, :workfile => public_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      fbuilder.name(:public, FactoryGirl.create(:workfile_version, :workfile => public_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file))
       FactoryGirl.create(:workfile_version, :workfile => private_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => public_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
@@ -200,6 +200,7 @@ FixtureBuilder.configure do |fbuilder|
     text_workfile = FactoryGirl.create(:workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace)
     image_workfile = FactoryGirl.create(:workfile, :file_name => "image.png", :owner => owner, :workspace => public_workspace)
     binary_workfile = FactoryGirl.create(:workfile, :file_name => "binary.tar.gz", :owner => owner, :workspace => public_workspace)
+    code_workfile = FactoryGirl.create(:workfile, :file_name => "code.cpp", :owner => owner, :workspace => public_workspace)
 
     File.open Rails.root + 'spec/fixtures/some.txt' do |file|
       FactoryGirl.create(:workfile_version, :workfile => text_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
@@ -210,6 +211,12 @@ FixtureBuilder.configure do |fbuilder|
     File.open Rails.root + 'spec/fixtures/binary.tar.gz' do |file|
       FactoryGirl.create(:workfile_version, :workfile => binary_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
+
+    File.open Rails.root + 'spec/fixtures/test.cpp' do |file|
+      FactoryGirl.create(:workfile_version, :workfile => code_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+    end
+
+    fbuilder.name :default, FactoryGirl.create(:workfile_draft, :owner => owner)
 
     fbuilder.name :default, ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04', :frequency => 'weekly', :workspace_id => public_workspace.id, :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't', :new_table => 't', :user_id => owner.id} , :without_protection => true)
 

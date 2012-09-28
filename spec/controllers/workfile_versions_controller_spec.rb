@@ -5,14 +5,13 @@ describe WorkfileVersionsController do
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
   let(:user) { workspace.owner }
-  let(:workfile_version) { FactoryGirl.build(:workfile_version, :workfile => workfile) }
+  let(:workfile_version) { workfile_versions(:public) }
 
   before do
     log_in user
   end
 
   context "#update" do
-
     before do
       workfile_version.contents = test_file('workfile.sql')
       workfile_version.save
@@ -25,7 +24,7 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      draft = FactoryGirl.create(:workfile_draft, :workfile_id => workfile.id, :owner_id => user.id)
+      workfile_drafts(:default).tap { |draft| draft.workfile_id = workfile.id; draft.save! }
       WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 1
 
       post :update, :workfile_id => workfile.id, :id => workfile_version.id, :workfile => {:content => 'New content'}
@@ -50,7 +49,7 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      draft = FactoryGirl.create(:workfile_draft, :workfile_id => workfile.id, :owner_id => user.id)
+      workfile_drafts(:default).tap { |draft| draft.workfile_id = workfile.id; draft.save! }
       WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 1
 
       post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
@@ -91,7 +90,7 @@ describe WorkfileVersionsController do
 
   context "#index" do
     let(:workspace) { workspaces(:public) }
-    let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+    let(:workfile) { workfiles(:public) }
 
     before :each do
       workfile_version.save

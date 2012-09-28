@@ -287,7 +287,7 @@ describe DatasetImportsController do
     let(:source_table_name) { "\"#{schema_name}\".\"#{source_table}\"" }
     let(:destination_table_name) { "dst_candy" }
     let(:destination_table_fullname) { "\"test_schema\".\"dst_candy\"" }
-    let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
+    let(:workspace) { workspaces(:public).tap { |ws| ws.owner = user; ws.members << user; ws.sandbox = schema; ws.save! } }
     let(:sandbox) { workspace.sandbox }
 
     let(:gpdb_params) do

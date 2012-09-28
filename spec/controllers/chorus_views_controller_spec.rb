@@ -115,9 +115,11 @@ describe ChorusViewsController, :database_integration => true do
 
   describe "#update" do
     let(:chorus_view) do
-      FactoryGirl.create(:chorus_view,
-        :schema => schema,
-        :query => 'select 1;').tap { |c| c.bound_workspaces << workspace }
+      datasets(:chorus_view).tap { |c|
+        c.schema = schema
+        c.query = "select 1;"
+        c.save!
+      }
     end
 
     let(:options) do
@@ -162,9 +164,7 @@ describe ChorusViewsController, :database_integration => true do
 
   describe "#destroy" do
     let(:chorus_view) do
-      FactoryGirl.create(:chorus_view,
-                         :schema => schema,
-                         :query => 'select 1;').tap { |c| c.bound_workspaces << workspace }
+      datasets(:chorus_view).tap { |c| c.schema = schema }
     end
 
     it "lets a workspace member soft delete a chorus view" do

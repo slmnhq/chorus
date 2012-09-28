@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''100'',''defType''=>''edismax'',''fl''=>''*
@@ -33,13 +33,13 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''User
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3269802.5,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin_1''],''username_texts''=>[''admin''],''email_texts''=>[''admin_1@christiansencrooks.org''],''last_name_texts''=>[''AlphaSearch''],''score''=>3269802.5}]}},{''groupValue''=>''User
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3269802.5,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Admin_2''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_2@franecki.org''],''last_name_texts''=>[''AlphaSearch''],''score''=>3269802.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3315501.5,''docs''=>[{''id''=>''User
+        1000000'',''first_name_texts''=>[''Admin_1''],''username_texts''=>[''admin''],''email_texts''=>[''admin_1@torp.info''],''last_name_texts''=>[''AlphaSearch''],''score''=>3315501.5}]}},{''groupValue''=>''User
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3315501.5,''docs''=>[{''id''=>''User
+        1000001'',''first_name_texts''=>[''Admin_2''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_2@boyle.biz''],''last_name_texts''=>[''AlphaSearch''],''score''=>3315501.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000000''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']},''User
         1000001''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Thu, 27 Sep 2012 18:18:35 GMT
+  recorded_at: Thu, 27 Sep 2012 21:26:17 GMT
 recorded_with: VCR 2.1.1
 ...

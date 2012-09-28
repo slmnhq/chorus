@@ -4,10 +4,11 @@ describe WorkspaceDatasetsController do
   ignore_authorization!
 
   let(:user) { users(:the_collaborator) }
-  let(:workspace) { FactoryGirl.create(:workspace) }
-  let(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
-  let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
-  let(:datasets) { fake_relation [gpdb_table, gpdb_view] }
+  let(:workspace) { workspaces(:public) }
+  let(:gpdb_view) { datasets(:view) }
+  let(:gpdb_table) { datasets(:table) }
+  let(:other_table) { datasets(:other_table) }
+  let(:the_datasets) { fake_relation [gpdb_table, gpdb_view] }
 
   before do
     log_in user
@@ -16,7 +17,7 @@ describe WorkspaceDatasetsController do
       workspaces_for(user).mock!.
       find(workspace.to_param) { workspace }
 
-    stub(workspace).datasets { datasets }
+    stub(workspace).datasets { the_datasets }
     any_instance_of(GpdbTable) do |table|
       stub(table).accessible_to(user) { true }
     end
@@ -27,14 +28,14 @@ describe WorkspaceDatasetsController do
 
   describe "#index" do
     it "presents the workspace's datasets, ordered by name and paginated" do
-      mock_present { |collection| collection.should =~ datasets }
+      mock_present { |collection| collection.should =~ the_datasets }
       get :index, :workspace_id => workspace.to_param
       response.should be_success
     end
 
     it "orders and paginates the datasets" do
-      mock(datasets).order("lower(name)") { datasets }
-      mock(datasets).paginate("page" => "2", "per_page" => "25") { datasets }
+      mock(the_datasets).order("lower(name)") { the_datasets }
+      mock(the_datasets).paginate("page" => "2", "per_page" => "25") { the_datasets }
       get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
     end
 
@@ -51,31 +52,33 @@ describe WorkspaceDatasetsController do
     end
 
     it "should filter db objects by type" do
-      mock(workspace).datasets(user, "SANDBOX_TABLE") { datasets }
+      mock(workspace).datasets(user, "SANDBOX_TABLE") { the_datasets }
       get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
     end
   end
 
   describe "#create" do
+    let(:other_view) { datasets(:other_view) }
+
     it "should associate one table to the workspace" do
-      post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => other_table.to_param
       response.code.should == "201"
       response.decoded_body.should_not be_nil
-      workspace.bound_datasets.should include(gpdb_table)
+      workspace.bound_datasets.should include(other_table)
     end
 
     it "should associate multiple tables/views to the workspace for one table" do
-      table_ids = gpdb_table.to_param + "," + gpdb_view.to_param
+      table_ids = other_table.to_param + "," + other_view.to_param
 
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
       response.code.should == "201"
 
-      workspace.bound_datasets.should include(gpdb_table)
-      workspace.bound_datasets.should include(gpdb_view)
+      workspace.bound_datasets.should include(other_table)
+      workspace.bound_datasets.should include(other_view)
     end
 
     it "should create event and activity" do
-      table_ids = [gpdb_table.to_param, gpdb_view.to_param]
+      table_ids = [other_table.to_param, other_view.to_param]
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
 
       events = Events::SourceTableCreated.by(user)
@@ -83,14 +86,8 @@ describe WorkspaceDatasetsController do
     end
 
     context "when associating multiple datasets with a workspace" do
-      let(:gpdb_table2) { FactoryGirl.create(:gpdb_table) }
-
-      before do
-        workspace.bound_datasets << gpdb_table2
-      end
-
       it "shows an error if some datasets are already associated" do
-        table_ids = [gpdb_table.to_param, gpdb_table2.to_param]
+        table_ids = [gpdb_table.to_param, other_table.to_param]
         post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
         response.code.should == "422"
       end
@@ -99,7 +96,6 @@ describe WorkspaceDatasetsController do
 
   describe "#show" do
     it "does not present datasets not associated with the workspace" do
-      other_table = FactoryGirl.create(:gpdb_table)
       get :show, :id => other_table.to_param, :workspace_id => workspace.to_param
       response.should be_not_found
     end
@@ -133,8 +129,6 @@ describe WorkspaceDatasetsController do
   end
 
   describe "#destroy" do
-    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset=> gpdb_table, :workspace => workspace)}
-
     it "deletes the association" do
       delete :destroy, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
 

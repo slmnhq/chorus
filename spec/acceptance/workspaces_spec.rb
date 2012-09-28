@@ -335,7 +335,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/image" do
-    let(:workspace) {workspaces(:api)}
+    let(:workspace) { workspaces(:image) }
     parameter :style, "Size of image ( original, icon )"
 
     example_request "Show workspace image" do

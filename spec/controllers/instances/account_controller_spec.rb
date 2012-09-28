@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 describe GpdbInstances::AccountController do
-  describe "#show" do
-    let(:joe) { FactoryGirl.create(:user) }
-    let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
-    let!(:account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => joe }
+  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:user) { users(:default) }
+  let(:owner) { users(:owner) }
+  let(:account) { gpdb_instance.account_for_user(owner) }
 
+  describe "#show" do
     before do
-      log_in joe
+      log_in owner
     end
 
     it "returns the current_user's InstanceAccount for the specified Instance" do
@@ -23,12 +24,9 @@ describe GpdbInstances::AccountController do
   end
 
   describe "#create" do
-    let(:joe) { FactoryGirl.create :user }
-    let(:gpdb_instance) { FactoryGirl.create :gpdb_instance }
-
     before do
       stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
-      log_in joe
+      log_in user
     end
 
     it "succeeds" do
@@ -36,7 +34,7 @@ describe GpdbInstances::AccountController do
       response.code.should == "201"
 
       decoded_response.db_username.should == "lenny"
-      decoded_response.owner.id.should == joe.id
+      decoded_response.owner.id.should == user.id
 
       rehydrated_account = InstanceAccount.find(decoded_response.id)
       rehydrated_account.db_password.should == "secret"
@@ -66,12 +64,9 @@ describe GpdbInstances::AccountController do
   end
 
   describe "#update" do
-    let(:joe) { FactoryGirl.create :user }
-    let(:gpdb_instance) { FactoryGirl.create :gpdb_instance }
-
     before do
       stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
-      log_in joe
+      log_in user
     end
 
     it "succeeds" do
@@ -79,7 +74,7 @@ describe GpdbInstances::AccountController do
       response.code.should == "200"
 
       decoded_response.db_username.should == "changed"
-      decoded_response.owner.id.should == joe.id
+      decoded_response.owner.id.should == user.id
 
       rehydrated_account = InstanceAccount.find(decoded_response.id)
       rehydrated_account.db_password.should == "changed"
@@ -109,13 +104,7 @@ describe GpdbInstances::AccountController do
   end
 
   describe "#destroy" do
-    let(:owner) { FactoryGirl.create :user }
-    let!(:instance_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner) }
-    let(:joe) { FactoryGirl.create(:user) }
-
     context "of an unshared account" do
-      let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :owner => owner }
-
       before do
         log_in owner
       end
@@ -133,16 +122,17 @@ describe GpdbInstances::AccountController do
     end
 
     context "of a shared account" do
-      let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :owner => owner, :shared => true }
+      let(:gpdb_instance) { gpdb_instances(:shared) }
+      let(:admin) { users(:admin) }
 
       it "does not delete the owner's account" do
-        log_in owner
+        log_in admin
         lambda { delete :destroy, :gpdb_instance_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end
 
       it "does not delete the shared account" do
-        log_in joe
+        log_in user
         lambda { delete :destroy, :gpdb_instance_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end

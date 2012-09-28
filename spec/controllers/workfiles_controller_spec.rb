@@ -1,31 +1,19 @@
 require 'spec_helper'
 
 describe WorkfilesController do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:admin) { FactoryGirl.create(:admin) }
-  let(:member) { FactoryGirl.create(:user) }
-  let(:non_member) { FactoryGirl.create(:user) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-  let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
-  let(:private_workfile) { FactoryGirl.create(:workfile, :workspace => private_workspace) }
-  let(:public_workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
+  let(:user) { users(:owner) }
+  let(:admin) { users(:admin) }
+  let(:member) { users(:the_collaborator) }
+  let(:non_member) { users(:no_collaborators) }
+  let(:workspace) { workspaces(:public) }
+  let(:private_workspace) { workspaces(:private) }
+  let(:private_workfile) { workfiles(:private) }
+  let(:public_workfile) { workfiles(:public) }
   let(:file) { test_file("workfile.sql", "text/sql") }
 
   describe "#index" do
     before(:each) do
       log_in user
-
-      @wf4 = FactoryGirl.create(:workfile, :file_name => "workfile4.sql", :workspace => workspace)
-      FactoryGirl.create(:workfile_version, :workfile => @wf4, :contents => file)
-
-      @wf3 = FactoryGirl.create(:workfile, :file_name => "workfile3.sql", :workspace => workspace)
-      FactoryGirl.create(:workfile_version, :workfile => @wf3, :contents => file)
-
-      @wf2 = FactoryGirl.create(:workfile, :file_name => "workfile2.sql", :workspace => workspace)
-      FactoryGirl.create(:workfile_version, :workfile => @wf2, :contents => file)
-
-      @wf1 = FactoryGirl.create(:workfile, :file_name => "workfile1.sql", :workspace => workspace)
-      FactoryGirl.create(:workfile_version, :workfile => @wf1, :contents => file)
     end
 
     it "responds with a success" do
@@ -35,30 +23,27 @@ describe WorkfilesController do
 
     it "sorts by file name by default" do
       get :index, :workspace_id => workspace.id
-      decoded_response.first.id.should == @wf1.id
+      names = decoded_response.map { |file| file.name }
+      names.should == names.sort
     end
 
     it "sorts by last updated " do
       get :index, :workspace_id => workspace.id, :order => "date"
-      decoded_response.first.id.should == @wf4.id
+      timestamps = decoded_response.map { |file| file.updated_at }
+      timestamps.should == timestamps.sort
     end
 
     it "sorts by Workfile name " do
       get :index, :workspace_id => workspace.id, :order => "file_name"
-      decoded_response.first.id.should == @wf1.id
+      names = decoded_response.map { |file| file.name }
+      names.should == names.sort
     end
 
     context "with file types" do
-      before do
-        code_file = test_file("code.cpp", "text/plain")
-        wf = FactoryGirl.create(:workfile, :file_name => "code.cpp", :workspace => workspace)
-        FactoryGirl.create(:workfile_version, :workfile => wf, :contents => code_file)
-      end
-
       it "filters by file type: sql" do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "sql"
         response.code.should == "200"
-        decoded_response.length.should == 4
+        decoded_response.length.should == 2
       end
 
       it "filters by file type: code" do
@@ -69,9 +54,11 @@ describe WorkfilesController do
     end
 
     describe "pagination" do
+      let(:sorted_workfiles) { workspace.workfiles.sort_by!{|wf| wf.file_name.downcase } }
+
       it "defaults the per_page to fifty" do
         get :index, :workspace_id => workspace.id
-        decoded_response.length.should == 4
+        decoded_response.length.should == sorted_workfiles.length
         request.params[:per_page].should == 50
       end
 
@@ -83,15 +70,14 @@ describe WorkfilesController do
       it "defaults to page one" do
         get :index, :workspace_id => workspace.id, :per_page => 2
         decoded_response.length.should == 2
-        decoded_response.first.id.should == @wf1.id
-        decoded_response.second.id.should == @wf2.id
+        decoded_response.first.id.should == sorted_workfiles.first.id
       end
 
       it "accepts a page parameter" do
         get :index, :workspace_id => workspace.id, :page => 2, :per_page => 2
         decoded_response.length.should == 2
-        decoded_response.first.id.should == @wf3.id
-        decoded_response.last.id.should == @wf4.id
+        decoded_response.first.id.should == sorted_workfiles[2].id
+        decoded_response.last.id.should == sorted_workfiles[3].id
       end
     end
 
@@ -102,10 +88,6 @@ describe WorkfilesController do
 
   describe "#show" do
     context "for a private workspace" do
-      before do
-        FactoryGirl.create(:workfile_version, :workfile => private_workfile, :contents => file)
-      end
-
       context "as a workspace member" do
         before(:each) do
           private_workspace.members << member
@@ -138,8 +120,6 @@ describe WorkfilesController do
 
     context "for a public workspace" do
       before do
-        FactoryGirl.create(:workfile_version, :workfile => public_workfile, :contents => file)
-
         log_in non_member
       end
 
@@ -156,10 +136,9 @@ describe WorkfilesController do
 
       def self.generate_workfile_fixture(json_filename, uploaded_filename, mime_type)
         generate_fixture "workfile/#{json_filename}" do
-          file = test_file(uploaded_filename, mime_type)
-          workfile = FactoryGirl.create(:workfile, :workspace => workspace, :file_name => uploaded_filename)
-          FactoryGirl.create(:workfile_version, :workfile => workfile, :contents => file)
-          get :show, :id => workfile
+          workfile_versions(:public).contents = test_file(uploaded_filename, mime_type)
+          public_workfile.file_name = uploaded_filename
+          get :show, :id => public_workfile
         end
       end
 

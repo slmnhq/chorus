@@ -6,7 +6,7 @@ describe User do
   end
 
   describe ".authenticate" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { users(:default) }
 
     it "returns true if the password is correct" do
       User.authenticate(user.username, 'password').should be_true
@@ -286,7 +286,7 @@ describe User do
   end
 
   describe "#destroy" do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { users(:default) }
 
     before do
       user.destroy
@@ -315,15 +315,14 @@ describe User do
     end
 
     it "does not allow deleting a user who owns a workspace" do
-      user.owned_workspaces << FactoryGirl.build(:workspace, :owner => user)
+      workspace_owner = users(:no_collaborators)
       begin
-        user.destroy
+        workspace_owner.destroy
         fail
       rescue ActiveRecord::RecordInvalid => e
         e.record.errors.messages[:workspace_count].should == [[:equal_to, {:count => 0}]]
       end
     end
-
   end
 
   describe "search fields" do

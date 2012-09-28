@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user, :aliases => [:owner, :modifier, :actor] do
-    sequence(:username) { |n| "user#{n}" }
+    sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     password "password"
     first_name {Faker::Name.first_name}
     last_name {Faker::Name.last_name}
@@ -11,14 +11,14 @@ FactoryGirl.define do
   end
 
   factory :admin, :parent => :user do
-    sequence(:first_name) { |n| "Admin_#{n}" }
-    sequence(:last_name) { |n| "User_#{n}" }
+    sequence(:first_name) { |n| "Admin_#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:last_name) { |n| "User_#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     admin true
   end
 
   factory :gpdb_instance, :aliases => [:greenplum_instance] do
-    sequence(:name) { |n| "instance#{n}" }
-    sequence(:host) { |n| "host#{n}.emc.com" }
+    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     maintenance_db "postgres"
     owner
@@ -26,41 +26,41 @@ FactoryGirl.define do
   end
 
   factory :hadoop_instance do
-    sequence(:name) { |n| "instance#{n}" }
-    sequence(:host) { |n| "host#{n}.emc.com" }
+    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     owner
   end
 
   factory :instance_account do
-    sequence(:db_username) { |n| "username#{n}" }
+    sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"
     owner
     gpdb_instance
   end
 
   factory :gpdb_database do
-    sequence(:name) { |n| "database#{n}" }
+    sequence(:name) { |n| "database#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     gpdb_instance
   end
 
   factory :gpdb_schema do
-    sequence(:name) { |n| "schema#{n}" }
+    sequence(:name) { |n| "schema#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :database, :factory => :gpdb_database
   end
 
   factory :gpdb_table do
-    sequence(:name) { |n| "table#{n}" }
+    sequence(:name) { |n| "table#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema
   end
 
   factory :gpdb_view do
-    sequence(:name) { |n| "view#{n}" }
+    sequence(:name) { |n| "view#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema
   end
 
   factory :chorus_view do
-    sequence(:name) { |n| "chorus_view#{n}" }
+    sequence(:name) { |n| "chorus_view#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema
   end
 
@@ -87,7 +87,7 @@ FactoryGirl.define do
   end
 
   factory :workspace do
-    sequence(:name) { |n| "workspace#{n}" }
+    sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner
     after(:create) do |workspace|
       FactoryGirl.create(:membership, :workspace => workspace, :user => workspace.owner)

@@ -92,7 +92,7 @@ describe InstanceDatabasesController do
     end
 
     context "when the current user does not have credentials for the instance" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { users(:default) }
       subject { described_class.new }
 
       generate_fixture "forbiddenInstance.json" do

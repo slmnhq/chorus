@@ -4,8 +4,8 @@ describe WorkfileDownloadController do
 
   let(:workspace) { workspaces(:public) }
   let(:user) { workspace.owner }
-  let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
-  let(:workfile_version) { FactoryGirl.build(:workfile_version, :workfile => workfile) }
+  let(:workfile) { workfiles(:public) }
+  let(:workfile_version) { workfile_versions(:public) }
 
   before do
     log_in user
@@ -44,8 +44,13 @@ describe WorkfileDownloadController do
 
     context "in the case of draft" do
       before do
-        draft = FactoryGirl.create(:workfile_draft, :content => "Valid content goes here", :workfile_id => workfile.id, :owner_id => user.id)
+        workfile_drafts(:default).tap do |draft|
+          draft.content = "Valid content goes here"
+          draft.workfile_id = workfile.id
+          draft.save!
+        end
       end
+
       it "returns the content of draft for the particular user" do
         get :show, :workfile_id => workfile.id
 
@@ -54,8 +59,6 @@ describe WorkfileDownloadController do
         response.headers['Content-Disposition'].should include('filename="some.txt"')
         response.headers['Content-Type'].should == 'text/plain'
       end
-
     end
-
   end
 end

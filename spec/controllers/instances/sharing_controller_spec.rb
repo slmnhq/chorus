@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe GpdbInstances::SharingController do
-  let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => gpdb_instance.owner) }
+  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:owner_account) { gpdb_instance.owner_account }
+  let(:owner) { users(:owner) }
+  let(:user) { users(:default) }
 
   describe "#create" do
     before do
-      log_in gpdb_instance.owner
+      log_in owner
     end
 
     it "sets the shared attribute on an unshared gpdb instance" do
@@ -22,7 +24,7 @@ describe GpdbInstances::SharingController do
     end
 
     it "deletes accounts other than those belonging to the gpdb instance owner" do
-      other_account = FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance)
+      other_account = gpdb_instance.account_for_user(users(:the_collaborator))
 
       post :create, :gpdb_instance_id => gpdb_instance.to_param
 
@@ -31,13 +33,13 @@ describe GpdbInstances::SharingController do
     end
 
     it "rejects non-owners" do
-      log_in FactoryGirl.create(:user)
+      log_in user
       post :create, :gpdb_instance_id => gpdb_instance.to_param
       response.code.should == "404"
     end
 
     it "rejects non-owners of shared accounts" do
-      log_in FactoryGirl.create(:user)
+      log_in user
       gpdb_instance.update_attributes(:shared => true)
 
       post :create, :gpdb_instance_id => gpdb_instance.to_param
@@ -47,7 +49,7 @@ describe GpdbInstances::SharingController do
 
   describe "#destroy" do
     before do
-      log_in gpdb_instance.owner
+      log_in owner
     end
 
     it "removes the shared attribute from a shared gpdb instance" do
@@ -63,13 +65,13 @@ describe GpdbInstances::SharingController do
     end
 
     it "rejects non-owners" do
-      log_in FactoryGirl.create(:user)
+      log_in user
       delete :destroy, :gpdb_instance_id => gpdb_instance.to_param
       response.code.should == "404"
     end
 
     it "rejects non-owners of shared accounts" do
-      log_in FactoryGirl.create(:user)
+      log_in user
       gpdb_instance.update_attributes(:shared => true)
 
       delete :destroy, :gpdb_instance_id => gpdb_instance.to_param
