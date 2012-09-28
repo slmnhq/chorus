@@ -476,6 +476,8 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
       stub_version
+      FileUtils.mkdir_p('/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/')
+      FileUtils.touch('/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_path.sh')
       FileUtils.mkdir_p(installer.destination_path)
     end
 
@@ -483,6 +485,11 @@ describe ChorusInstaller do
       installer.link_services
 
       File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
+    end
+
+    it "should copy chorus_path.sh" do
+      installer.link_services
+      File.exists?('/usr/local/greenplum-chorus/chorus_path.sh').should be_true
     end
   end
 

@@ -182,6 +182,7 @@ class ChorusInstaller
 
   def link_services
     FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
+    FileUtils.cp("#{release_path}/packaging/chorus_path.sh", destination_path + "/chorus_path.sh")
   end
 
   def link_shared_files
