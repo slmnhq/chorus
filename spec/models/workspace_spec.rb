@@ -130,6 +130,8 @@ describe Workspace do
     let(:user) {users(:the_collaborator)}
 
     context "when the workspace has a sandbox" do
+      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
+
       before do
         chorus_view.save!(:validate => false)
         chorus_view_from_source.save!(:validate => false)
@@ -137,7 +139,6 @@ describe Workspace do
         workspace.bound_datasets << chorus_view_from_source
         workspace.bound_datasets << source_table
       end
-      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       context "when the user does not have an instance account" do
         it "lets them see associated datasets and chorus views only" do

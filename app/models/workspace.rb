@@ -93,8 +93,7 @@ class Workspace < ActiveRecord::Base
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
           datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids).where("type != 'ChorusView'")
         else
-          associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-          datasets = Dataset.where(:id => (associated_dataset_ids + viewable_table_ids))
+          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids))
       end
       return datasets
     else

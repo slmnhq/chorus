@@ -75,17 +75,17 @@ describe("chorus.models.Dataset", function() {
         it("doesn't override type when type already exists", function() {
             var model = new chorus.models.Dataset({ type: "foo"})
             expect(model.get("type")).toBe("foo")
-        })
+        });
 
         it("sets type to datasetType if datasetType exists", function() {
             var model = new chorus.models.Dataset({ datasetType: "foo"})
             expect(model.get("type")).toBe("foo")
-        })
+        });
 
         it("sets type to SOURCE_TABLE if neither type nor datasetType exists", function() {
             var model = new chorus.models.Dataset({})
             expect(model.get("type")).toBe("SOURCE_TABLE")
-        })
+        });
     });
 
     describe("#statistics", function() {
@@ -200,7 +200,7 @@ describe("chorus.models.Dataset", function() {
             dataset = newFixtures.workspaceDataset.sandboxView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = rspecFixtures.workspaceDataset.datasetTable();
+            dataset = rspecFixtures.workspaceDataset.sourceTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
             dataset = rspecFixtures.workspaceDataset.chorusView();
@@ -664,11 +664,11 @@ describe("chorus.models.Dataset", function() {
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
-            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.workspaceDataset.sourceTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a source view", function() {
-            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.workspaceDataset.sourceView().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a chorus view", function() {

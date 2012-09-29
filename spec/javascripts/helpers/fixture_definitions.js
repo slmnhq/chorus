@@ -57,7 +57,9 @@ window.rspecFixtureDefinitions = {
         children: {
             chorusView: {},
             datasetTable: {},
-            datasetView: {}
+            datasetView: {},
+            sourceTable: {},
+            sourceView: {}
         }
     },
 

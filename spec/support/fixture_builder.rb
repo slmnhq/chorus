@@ -106,6 +106,9 @@ FixtureBuilder.configure do |fbuilder|
     other_table = FactoryGirl.create(:gpdb_table, :name => "other_table", :schema => other_schema)
     FactoryGirl.create(:gpdb_view, :name => "other_view", :schema => other_schema)
 
+    source_table = FactoryGirl.create(:gpdb_table, :name => "source_table", :schema => other_schema)
+    source_view = FactoryGirl.create(:gpdb_view, :name => "source_view", :schema => other_schema)
+
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
@@ -144,7 +147,8 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     # Workspace / Dataset associations
-    public_workspace.bound_datasets << default_table
+    public_workspace.bound_datasets << source_table
+    public_workspace.bound_datasets << source_view
     search_public_workspace.bound_datasets << searchquery_chorus_view
 
     fbuilder.name :owner_creates_public_workspace, Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)

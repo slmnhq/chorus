@@ -8,6 +8,8 @@ describe WorkspaceDatasetsController do
   let(:gpdb_view) { datasets(:view) }
   let(:gpdb_table) { datasets(:table) }
   let(:other_table) { datasets(:other_table) }
+  let(:source_table) { datasets(:source_table) }
+  let(:source_view) { datasets(:source_view) }
   let(:the_datasets) { fake_relation [gpdb_table, gpdb_view] }
 
   before do
@@ -125,12 +127,28 @@ describe WorkspaceDatasetsController do
           get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
         end
       end
+
+      context "when the dataset is a source table" do
+        let(:the_datasets) { fake_relation [source_table] }
+
+        generate_fixture "workspaceDataset/sourceTable.json" do
+          get :show, :id => source_table.to_param, :workspace_id => workspace.to_param
+        end
+      end
+
+      context "when the dataset is a source view" do
+        let(:the_datasets) { fake_relation [source_view] }
+
+        generate_fixture "workspaceDataset/sourceView.json" do
+          get :show, :id => source_view.to_param, :workspace_id => workspace.to_param
+        end
+      end
     end
   end
 
   describe "#destroy" do
     it "deletes the association" do
-      delete :destroy, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+      delete :destroy, :id => source_table.to_param, :workspace_id => workspace.to_param
 
       response.should be_success
       AssociatedDataset.find_by_dataset_id_and_workspace_id(gpdb_table.to_param, workspace.to_param).should be_nil
@@ -138,7 +156,7 @@ describe WorkspaceDatasetsController do
 
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, workspace
-      delete :destroy, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+      delete :destroy, :id => source_table.to_param, :workspace_id => workspace.to_param
     end
   end
 end
