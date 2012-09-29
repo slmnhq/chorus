@@ -137,7 +137,7 @@ describe GpdbSchema do
     end
   end
 
-  describe "#functions" do
+  describe "#stored_functions" do
     let(:schema) { gpdb_schemas(:public) }
     let(:database) { schema.database }
     let(:account) { database.gpdb_instance.owner_account }
@@ -166,6 +166,23 @@ describe GpdbSchema do
       first_function.arg_types.should == ["int4", "int4"]
       first_function.definition.should == "SELECT 'HI!'"
       first_function.description.should == "awesome!"
+    end
+  end
+
+  describe "#disk_space_used" do
+    let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema3') }
+    let(:account) { GpdbIntegration.real_gpdb_instance.owner_account }
+
+    it "returns the disk space used by all relations in the schema" do
+      schema.disk_space_used(account).should > 0
+    end
+
+    context "when we can't calculate the size" do
+      let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema') }
+
+      it "should return nil" do
+        schema.disk_space_used(account).should be_nil
+      end
     end
   end
 

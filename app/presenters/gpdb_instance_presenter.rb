@@ -20,21 +20,15 @@ class GpdbInstancePresenter < Presenter
   end
 
   def workspace_hash
+    return {} unless @options[:size_only]
+    return { :used_by_workspaces => nil } if model.account_for_user(current_user).nil?
+
     workspaces = used_by_workspaces
-    return { :used_by_workspaces => nil } if workspaces.nil?
 
-    arr = workspaces.map do |workspace|
-      gpdb_schema = GpdbSchema.find(workspace.sandbox_id)
-      hash = Hash.new()
-      hash[:size] = 0 # TODO: need real value
-      hash[:schemaName] = gpdb_schema.name if gpdb_schema.present?
-      hash[:databaseName] = gpdb_schema.database.name if gpdb_schema.present?
-      hash[:ownerFullName] = "#{owner.first_name} #{owner.last_name}"
-      hash
-    end
-
+    total_size_in_bytes = workspaces.inject(0) { |sum, workspace| sum + workspace.sandbox.disk_space_used(model.account_for_user!(current_user)) }
     {
-        :used_by_workspaces => (arr if model.is_a?(GpdbInstance))
+        :used_by_workspaces => present(workspaces, @options),
+        :sandboxes_size => @view_context.number_to_human_size(total_size_in_bytes)
     }
   end
 

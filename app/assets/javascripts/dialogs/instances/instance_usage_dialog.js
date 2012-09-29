@@ -8,13 +8,5 @@ chorus.dialogs.InstanceUsage = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.usage = this.resource = this.options.instance.usage();
-        this.usage.fetchIfNotLoaded();
-        this.requiredResources.push(this.usage);
-        this.config = chorus.models.Config.instance();
-        this.requiredResources.push(this.config);
-    },
-
-    additionalContext:function () {
-        this.usage.calculatePercentages();
     }
 });

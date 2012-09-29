@@ -53,18 +53,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.bindings.removeAll();
         this.bindings.add(this.resource, "change", this.render, this);
 
-        var instanceUsage = this.instance.usage();
         var account = this.instance.accountForCurrentUser();
-
-        var update = _.debounce(_.bind(function() {
-            this.updateWorkspaceUsage();
-        }, this), 100);
-
-        if(instanceUsage) {
-            this.bindings.add(instanceUsage, "loaded", update, this);
-            this.bindings.add(instanceUsage, "fetchFailed", update, this);
-        }
-
         if(account) {
             this.instance.accounts().fetch();
             account.fetchIfNotLoaded();
@@ -82,7 +71,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         if (this.instance) {
             this.$("a.dialog").data("instance", this.instance);
             if(this.instance.usage()) {
-                this.instance.usage().fetch();
+                this.updateWorkspaceUsage();
             }
         }
     },

@@ -15,6 +15,7 @@ ssl_certificate: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.crt"
 ssl_certificate_key: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.key"
 timezone_offset: -8
 worker_threads: 1
+sandbox_recommended_size_in_gb: 5
 file_sizes_mb:
   workfiles: 10
   csv_imports: 10

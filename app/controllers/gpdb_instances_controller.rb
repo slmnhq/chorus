@@ -6,12 +6,12 @@ class GpdbInstancesController < GpdbController
                        GpdbInstance.scoped
                      end
 
-    present gpdb_instances
+    present gpdb_instances, :presenter_options => { :size_only => true }
   end
 
   def show
     gpdb_instance = GpdbInstance.find(params[:id])
-    present gpdb_instance
+    present gpdb_instance, :presenter_options => { :size_only => true }
   end
 
   def create
@@ -31,6 +31,6 @@ class GpdbInstancesController < GpdbController
     gpdb_instance = GpdbInstance.find(params[:id])
     authorize! :edit, gpdb_instance
     updated_gpdb_instance = Gpdb::InstanceRegistrar.update!(gpdb_instance, params[:instance], current_user)
-    present updated_gpdb_instance
+    present updated_gpdb_instance, :presenter_options => { :size_only => true }
   end
 end

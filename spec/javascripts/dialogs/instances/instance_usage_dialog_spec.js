@@ -9,14 +9,6 @@ describe("chorus.dialogs.InstanceUsage", function() {
         this.dialog = new chorus.dialogs.InstanceUsage({ instance: this.instance });
     });
 
-    it("requires the config object", function() {
-        expect(this.dialog.requiredResources).toContain(chorus.models.Config.instance());
-    });
-
-    it("fetches the usage", function() {
-        expect(this.dialog.usage).toHaveBeenFetched();
-    });
-
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
@@ -31,8 +23,6 @@ describe("chorus.dialogs.InstanceUsage", function() {
             beforeEach(function(){
                 var sourceUsage = fixtures.instanceUsage();
                 sourceUsage.set({instanceId : this.dialog.usage.get("instanceId")});
-                this.server.completeFetchFor(sourceUsage);
-                this.server.completeFetchFor(chorus.models.Config.instance(), fixtures.configJson());
                 this.workspaces = this.dialog.usage.get("workspaces");
             });
 
@@ -42,7 +32,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
 
             it("renders a li for each workspace", function() {
                 expect(this.dialog.$("li").length).toBe(this.workspaces.length)
-            })
+            });
 
             it("renders the workspace_small.png image for each workspace", function() {
                 expect(this.dialog.$("li img[src='/images/workspaces/workspace_small.png']").length).toBe(this.workspaces.length);
@@ -50,17 +40,15 @@ describe("chorus.dialogs.InstanceUsage", function() {
 
             it("displays a link to each workspace", function() {
                 expect(this.dialog.$("li a.workspace_link").length).toBe(this.workspaces.length)
-            })
+            });
 
             it("sets the width of the 'used' bar to be the percentage of the workspace size vs the recommended size", function() {
                 var zipped = _.zip(this.dialog.$("li"), this.workspaces);
-                var recommendedSize = this.dialog.config.get("sandboxRecommendSizeInBytes");
                 _.each(zipped, function(z) {
                     var el = $(z[0]);
                     var workspace = z[1];
-                    var expectedPercentage = parseInt(workspace.sizeInBytes, 10) /recommendedSize;
                     var actualPercentage = el.find(".used").width() / el.find(".usage_bar").width();
-                    expect(actualPercentage).toBeCloseTo(expectedPercentage, 1);
+                    expect(actualPercentage).toBeCloseTo(workspace.percentageUsed, 1);
                 });
             });
 
