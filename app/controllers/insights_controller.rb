@@ -3,7 +3,7 @@ class InsightsController < ApplicationController
     note = Events::Note.visible_to(current_user).where(id: params[:insight][:note_id]).first
     head(401) and return unless note
     note.promote_to_insight(current_user)
-    head 201
+    present note, :status => :created
   end
 
   def index

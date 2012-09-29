@@ -6,15 +6,26 @@ describe InsightsController do
     log_in user
   end
 
-  describe "POST #create" do
+  describe "#create (POST)" do
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.first }
 
     subject { post :create, :insight => {:note_id => note.id} }
 
-    it "marks the NOTE as an insight" do
+    it "returns status 201" do
       subject
       response.code.should == "201"
+    end
+
+    it "returns the note" do
+      mock_present do |insight|
+        insight.should == note
+      end
+      subject
+    end
+
+    it "marks the NOTE as an insight" do
+      subject
       note.reload.should be_insight
       note.promoted_by.should == user
       note.promotion_time.should_not be_nil
@@ -31,7 +42,7 @@ describe InsightsController do
     end
   end
 
-  describe "GET #index" do
+  describe "#index (GET)" do
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
