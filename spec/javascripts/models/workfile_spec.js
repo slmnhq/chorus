@@ -39,30 +39,22 @@ describe("chorus.models.Workfile", function() {
         });
 
         context("when the workfile's workspace has a sandbox", function() {
-            beforeEach(function() {
-                this.model.workspace().set({
-                    sandboxInfo: {
-                        id: 6, name: "schema",
-                        database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
-                    }
-                });
-            });
-
             context("when the workfile has never been executed", function() {
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.database().instance().id).toBe(5);
-                    expect(schema.database().instance().name()).toBe('instance');
-                    expect(schema.database().id).toBe(4);
-                    expect(schema.database().name()).toBe('db');
-                    expect(schema.get("id")).toBe(6);
-                    expect(schema.get("name")).toBe('schema');
+                    var sandboxSchema = this.model.workspace().sandbox();
+                    expect(schema.database().instance().id).toBe(sandboxSchema.database().instance().id);
+                    expect(schema.database().instance().name()).toBe(sandboxSchema.database().instance().name());
+                    expect(schema.database().id).toBe(sandboxSchema.database().id);
+                    expect(schema.database().name()).toBe(sandboxSchema.database().name());
+                    expect(schema.get("id")).toBe(sandboxSchema.get("id"));
+                    expect(schema.get("name")).toBe(sandboxSchema.get("name"));
                 });
             });
 
             context("when the workfile was last executed in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
-                    this.schemaJson = rspecFixtures.schemaJson()['response']
+                    this.schemaJson = rspecFixtures.schemaJson()['response'];
                     this.model.set({ executionSchema: this.schemaJson});
                 });
 
@@ -75,6 +67,10 @@ describe("chorus.models.Workfile", function() {
         });
 
         context("when the workfile's workspace does not have a sandbox", function() {
+            beforeEach(function() {
+                delete this.model.attributes.workspace.sandboxInfo;
+            });
+
             it("returns undefined", function() {
                 expect(this.model.executionSchema()).toBeUndefined();
             });
@@ -83,16 +79,16 @@ describe("chorus.models.Workfile", function() {
 
     describe("#sandbox", function() {
         context("when the workfile's workspace has been fetched", function() {
-            beforeEach(function() {
-                spyOn(this.model, "workspace").andReturn(rspecFixtures.workspace());
-            });
-
             it("returns the sandbox from the workspace", function() {
-                expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
+                expect(this.model.sandbox()).toBe(this.model.workspace().sandbox());
             });
-        })
+        });
 
         context("when the workfile's workspace has not been fetched", function() {
+            beforeEach(function() {
+               delete this.model.attributes.workspace;
+            });
+
             it("returns undefined", function() {
                 expect(this.model.sandbox()).toBeFalsy();
             });

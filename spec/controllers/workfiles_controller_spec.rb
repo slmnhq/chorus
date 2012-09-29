@@ -134,18 +134,17 @@ describe WorkfilesController do
         log_in admin
       end
 
-      def self.generate_workfile_fixture(json_filename, uploaded_filename, mime_type)
+      def self.generate_workfile_fixture(fixture_name, json_filename)
         generate_fixture "workfile/#{json_filename}" do
-          workfile_versions(:public).contents = test_file(uploaded_filename, mime_type)
-          public_workfile.file_name = uploaded_filename
-          get :show, :id => public_workfile
+          fixture = workfiles(fixture_name)
+          get :show, :id => fixture.id
         end
       end
 
-      generate_workfile_fixture("sql.json", "workfile.sql", "text/plain")
-      generate_workfile_fixture("text.json", "some.txt", "text/plain")
-      generate_workfile_fixture("image.json", "small1.gif", "image/gif")
-      generate_workfile_fixture("binary.json", "binary.tar.gz", "application/octet-stream")
+      generate_workfile_fixture(:"sql.sql", "sql.json")
+      generate_workfile_fixture(:"text.txt", "text.json")
+      generate_workfile_fixture(:"image.png", "image.json")
+      generate_workfile_fixture(:"binary.tar.gz", "binary.json")
     end
   end
 
