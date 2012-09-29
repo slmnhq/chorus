@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Dataset Association" do
   let(:user) { users(:owner) }
-  let(:gpdb_table) { datasets(:table) }
+  let(:gpdb_table) { datasets(:source_table) }
   let(:workspace) { workspaces(:public)}
   let(:workspace_id) { workspace.id }
   let(:id) { gpdb_table.id }
