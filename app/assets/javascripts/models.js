@@ -241,7 +241,8 @@ chorus.models = {
         },
 
         set: function(attrs) {
-            var result = this._super("set", arguments);
+            //Can't use _super because we end up nesting set calls which _super doesn't handle
+            var result = Backbone.Model.prototype.set.apply(this, arguments);
             if(attrs && attrs.completeJson) {
                 this.loaded = true;
             }

@@ -74,7 +74,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         var $types = this.$(".data_types .chosen");
         var types = _.map($types, function($type, i) {
             return $types.eq(i).text();
-        })
+        });
         this.model.set({types: types}, {silent: true});
     },
 

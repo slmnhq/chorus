@@ -82,7 +82,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         it("has the right labels", function() {
             expect(this.dialog.title).toMatchTranslation("hdfs.create_external.title");
             expect(this.dialog.$("button.submit").text()).toMatchTranslation("hdfs.create_external.ok");
-        })
+        });
 
         context("changing the workspace", function() {
             beforeEach(function() {
@@ -92,7 +92,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             it("populates the select when refresh happens", function() {
                 this.dialog.render();
                 expect(this.dialog.$("select")).toHaveValue(this.workspace3.id);
-            })
+            });
         });
 
         context("clicking submit", function() {
