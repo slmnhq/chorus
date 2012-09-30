@@ -7,6 +7,7 @@ describe Dataset do
   let(:other_schema) { gpdb_schemas(:other_schema) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
   let(:dataset) { datasets(:table) }
+  let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
 
   describe "associations" do
@@ -18,7 +19,7 @@ describe Dataset do
     let(:workspace) { workspaces(:public) }
 
     it "can be bound to workspaces" do
-      dataset.bound_workspaces.should include workspace
+      source_table.bound_workspaces.should include workspace
     end
   end
 
@@ -783,3 +784,4 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 end
+
