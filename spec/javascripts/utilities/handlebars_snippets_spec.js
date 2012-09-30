@@ -899,13 +899,13 @@ describe("handlebars", function () {
                 });
 
                 it("returns Source Table", function() {
-                    this.sourceTable = rspecFixtures.workspaceDataset.datasetTable();
+                    this.sourceTable = rspecFixtures.workspaceDataset.sourceTable();
                     Handlebars.helpers.humanizedDatasetType(this.sourceTable.attributes);
                     expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.TABLE');
-                })
+                });
 
                 it("returns Source View", function() {
-                    this.sourceView = rspecFixtures.workspaceDataset.datasetView();
+                    this.sourceView = rspecFixtures.workspaceDataset.sourceView();
                     Handlebars.helpers.humanizedDatasetType(this.sourceView.attributes);
                     expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.VIEW');
                 })

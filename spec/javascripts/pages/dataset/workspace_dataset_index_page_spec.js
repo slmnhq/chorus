@@ -10,11 +10,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         });
         chorus.page = this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
         chorus.bindModalLaunchingClicks(this.page);
-    })
+    });
 
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("datasets")
-    })
+    });
 
     describe("#initialize", function() {
         it("fetches the workspace", function() {
@@ -36,14 +36,13 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.workspace);
                 spyOn(this.page.mainContent.contentDetails, "postRender").andCallThrough();
             });
 
             context("when the instance is provisioning", function() {
                 beforeEach(function() {
-                    this.instance = rspecFixtures.greenplumInstance({ state: "provisioning" });
-                    this.server.completeFetchFor(this.page.instance, this.instance);
+                    this.workspace.attributes.sandboxInfo.database.instance.state = 'provisioning';
+                    this.server.completeFetchFor(this.workspace);
                 });
 
                 it("sets the provisioningState to 'provisioning' on the content details view", function() {
@@ -54,8 +53,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             context("when the instance failed provisioning", function() {
                 beforeEach(function() {
-                    this.instance = rspecFixtures.greenplumInstance({ state: "fault" });
-                    this.server.completeFetchFor(this.page.instance, this.instance);
+                    this.workspace.attributes.sandboxInfo.database.instance.state = 'fault';
+                    this.server.completeFetchFor(this.workspace);
                 });
 
                 it("sets the provisioningState to 'fault' on the content details view", function() {
@@ -69,17 +68,17 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     describe("when a fetch fails", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl")
-        })
+        });
 
         it("navigates to the 404 page when the workspace fetch fails", function() {
             this.page.workspace.trigger('resourceNotFound', this.page.workspace);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-        })
+        });
 
         it("navigates to the 404 page when the collection fetch fails", function() {
             this.page.collection.trigger('resourceNotFound', this.page.collection);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-        })
+        });
     });
 
     context("it does not have a sandbox", function() {
@@ -257,7 +256,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
-                        this.server.completeFetchFor(this.page.instance, rspecFixtures.greenplumInstance());
+                        expect(this.page.instance.isShared()).toBeFalsy();
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
@@ -296,8 +295,9 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 context("when the account loads and is empty and the instance is shared", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
+                        this.page.instance.set({"shared": true});
+                        expect(this.page.instance.isShared()).toBeTruthy();
                         this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
-                        this.server.completeFetchFor(this.page.instance, rspecFixtures.greenplumInstance({"shared":true}));
                     });
 
                     it("does not pop up a WorkspaceInstanceAccount dialog", function() {
@@ -411,7 +411,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             it("removes the import button", function() {
                 expect(this.page.mainContent.contentDetails.$("button")).not.toExist();
             });
-        })
+        });
 
         context("and the workspace is archived", function() {
             beforeEach(function() {

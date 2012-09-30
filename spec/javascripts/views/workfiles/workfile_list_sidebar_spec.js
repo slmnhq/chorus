@@ -18,8 +18,8 @@ describe("chorus.views.WorkfileListSidebar", function() {
             it("does not render the activity stream", function() {
                 expect(this.view.$(".info")).not.toExist();
             });
-        })
-    })
+        });
+    });
 
     describe("workfile:selected event handling", function() {
         context("when a workfile is selected", function() {
@@ -27,7 +27,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 beforeEach(function() {
                     _.extend(this.workfile.get("versionInfo"), { updatedAt : "2011-11-22T10:46:03Z" })
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
-                })
+                });
 
                 it("displays the selected filename", function() {
                     expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
@@ -38,12 +38,12 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 });
 
                 it("displays the name of the person who updated the workfile", function() {
-                    expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayName());
+                    expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayShortName());
                 });
 
                 it("links to the profile page of the modifier", function() {
                     expect(this.view.$("a.updated_by").attr("href")).toBe(this.workfile.modifier().showUrl());
-                })
+                });
 
                 context("when the user is a workspace member", function() {
                     beforeEach(function() {

@@ -26,7 +26,7 @@ describe("chorus.views.DatasetSidebar", function() {
     context("when a dataset is selected", function() {
         beforeEach(function() {
             this.server.reset();
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset = rspecFixtures.workspaceDataset.sourceTable();
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
         });
 
@@ -693,7 +693,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when the dataset is a source view", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.workspaceDataset.datasetView();
+                    this.dataset = rspecFixtures.workspaceDataset.sourceView();
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
@@ -737,7 +737,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a source table", function() {
                 _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                     beforeEach(function() {
-                        this.dataset = rspecFixtures.workspaceDataset.datasetTable({ objectType : type});
+                        this.dataset = rspecFixtures.workspaceDataset.sourceTable({ objectType : type});
                         chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                     });
 

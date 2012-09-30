@@ -16,7 +16,7 @@ chorus.dialogs.Base = chorus.Modal.extend({
 
         this.events["click .modal_controls button.cancel"] = "closeModal";
 
-        header.html($("<h1/>").text(this.title))
+        header.html($("<h1/>").text(this.title));
         content.html(this.template(this.context()));
         content.attr("data-template", this.className);
 
@@ -28,7 +28,7 @@ chorus.dialogs.Base = chorus.Modal.extend({
             addClass(this.className).
             addClass("dialog").
             addClass(this.additionalClass || "");
-        this.delegateEvents()
+        this.delegateEvents();
         this.renderSubviews();
         this.renderHelps();
         this.postRender($(this.el));
@@ -45,4 +45,4 @@ chorus.dialogs.Base = chorus.Modal.extend({
     revealed: function () {
         $("#facebox").removeClass().addClass("dialog_facebox");
     }
-})
+});

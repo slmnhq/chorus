@@ -69,14 +69,9 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
             this.collection.attributes.type = choice;
             this.collection.fetch();
-        }, this)
+        }, this);
 
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
-    },
-
-    entriesFetched: function() {
-        this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
-        this.render();
     },
 
     entriesFetched: function() {
@@ -112,14 +107,15 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             targetButton.disabled = false;
             delete targetButton.helpText;
             this.mainContent.contentDetails.render();
-            this.instance = this.workspace.sandbox().instance()
+            this.instance = this.workspace.sandbox().instance();
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
-            this.checkAccountOnLoaded();
-            this.instanceOnLoaded();
+            this.account.onLoaded(this.checkAccount, this);
 
-            this.instance.fetch();
-            this.account.fetch();
+            this.mainContent.contentDetails.provisioningState = this.instance.get("state");
+            this.mainContent.contentDetails.render();
+
+            this.account.fetchIfNotLoaded();
         } else {
             var loggedInUser = chorus.session.user();
 
@@ -129,19 +125,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                 targetButton.helpText = t("dataset.import.need_sandbox_no_permissions");
                 this.mainContent.contentDetails.render();
             }
-
         }
-    },
-
-    checkAccountOnLoaded: function() {
-        this.account.onLoaded(function() {this.instance.onLoaded(this.checkAccount, this)}, this);
-    },
-
-    instanceOnLoaded: function() {
-        this.instance.onLoaded(function() {
-            this.mainContent.contentDetails.provisioningState = this.instance.get("state");
-            this.mainContent.contentDetails.render();
-        }, this);
     },
 
     checkAccount: function() {
