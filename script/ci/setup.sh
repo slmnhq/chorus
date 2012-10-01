@@ -1,6 +1,5 @@
 export JRUBY_OPTS="--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m"
 export PATH="$HOME/phantomjs/bin:/opt/postgres/9.1/bin:$HOME/.rbenv/bin:$PATH"
-export LOG_LEVEL=3
 
 eval "$(rbenv init - --no-rehash)"
 rbenv shell `cat .rbenv-version`

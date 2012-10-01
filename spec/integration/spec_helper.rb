@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] = 'integration'
+ENV["LOG_LEVEL"] = '3'
 require File.expand_path("../../../config/environment", __FILE__)
 
 require 'rspec/rails'

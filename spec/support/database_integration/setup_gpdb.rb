@@ -12,9 +12,11 @@ module GpdbIntegration
   REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
 
   def self.execute_sql(sql_file)
+    puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 
     sql = sql_read.gsub('gpdb_test_database', GpdbIntegration.database_name)
+    puts "  Replacing gpdb_test_database with #{GpdbIntegration.database_name}"
 
     connection_params = [
         "-U #{ACCOUNT_CONFIG['db_username']}",
@@ -36,10 +38,6 @@ module GpdbIntegration
   def self.setup_gpdb
     execute_sql("setup_gpdb.sql")
     record_sql_changes
-  end
-
-  def self.drop_gpdb
-    execute_sql("drop_gpdb.sql") if sql_changed?
   end
 
   def self.record_sql_changes
