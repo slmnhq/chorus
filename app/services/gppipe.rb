@@ -101,7 +101,7 @@ class Gppipe < GpTableCopier
           thr2 = Thread.new { read_pipe_f(semaphore, count) }
 
           semaphore.acquire
-          thread_hung = !semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
+          thread_hung = !semaphore.tryAcquire(Gppipe.grace_period_seconds * 1000, java.util.concurrent.TimeUnit::MILLISECONDS)
           raise Exception if thread_hung
 
           #collect any exceptions raised inside thread1 or thread2
