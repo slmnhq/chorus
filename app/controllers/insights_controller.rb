@@ -1,6 +1,6 @@
 class InsightsController < ApplicationController
   def create
-    note = check_note_visibility
+    note = get_note_if_visible
     return head(:forbidden) unless note
     note.promote_to_insight(current_user)
     present note, :status => :created
@@ -14,7 +14,9 @@ class InsightsController < ApplicationController
   end
 
   private
-  def check_note_visibility
-    Events::Note.visible_to(current_user).where(id: params[:insight][:note_id]).first
+  def get_note_if_visible
+    note_query = Events::Note.where(id: params[:insight][:note_id])
+    note_query = note_query.visible_to(current_user) unless current_user.admin?
+    note_query.first
   end
 end

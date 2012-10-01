@@ -31,6 +31,16 @@ describe InsightsController do
       note.promotion_time.should_not be_nil
     end
 
+    context "when the current user is an admin" do
+      let(:note) { events(:note_on_no_collaborators_private_workfile) }
+      let(:user) { users(:admin) }
+
+      it "returns status 201" do
+        subject
+        response.code.should == "201"
+      end
+    end
+
     context "when the current user does not have permission to see the note" do
       let(:note) { events(:note_on_no_collaborators_private_workfile) }
       let(:user) { users(:not_a_member) }
