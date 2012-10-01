@@ -8,6 +8,6 @@ chorus.models.TableauWorkbook = chorus.models.Base.extend({
     },
 
     url: function() {
-        return "/datasets/" + this.get('dataset').get('id') + "/tableau_workbook";
+        return "/datasets/" + this.get('dataset').get('id') + "/tableau_workbooks";
     }
 });

@@ -31,7 +31,7 @@ gpfdist:
   data_dir: "/tmp"
 
 tableau:
-  url: 'http://10.80.129.167'
+  url: '10.80.129.167'
   port: 80
   username: 'chorusadmin'
   password: 'secret'

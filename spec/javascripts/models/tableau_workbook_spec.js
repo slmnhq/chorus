@@ -4,7 +4,7 @@ describe("chorus.models.TableauWorkbook", function () {
     });
 
     it("has the correct url", function () {
-        expect(this.model.url()).toBe("/datasets/42/tableau_workbook");
+        expect(this.model.url()).toBe("/datasets/42/tableau_workbooks");
     });
 
     it("validates the name is present", function() {
