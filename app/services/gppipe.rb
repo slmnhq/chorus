@@ -56,14 +56,32 @@ class Gppipe < GpTableCopier
     src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
   end
 
-  def read_pipe
-    dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
+  def read_pipe(count)
+    done_read = 0
+    while done_read != count
+      result = dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
+      done_read += result
+    end
+  end
+
+  def write_pipe_f(semaphore)
+    write_pipe
+  ensure
+    semaphore.release
+  end
+
+  def read_pipe_f(semaphore, count)
+    read_pipe(count)
+  ensure
+    semaphore.release
   end
 
   def run
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
-      no_rows_to_import = (src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count'] == 0) || row_limit == 0
+      count = src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count']
+      no_rows_to_import = (count == 0) || row_limit == 0
+      count = row_limit if row_limit && row_limit < count
 
       if create_new_table?
         dst_conn.exec_query("CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
@@ -78,34 +96,26 @@ class Gppipe < GpTableCopier
           dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
                                LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
 
-          thr1 = Thread.new { write_pipe }
-          thr2 = Thread.new { read_pipe }
+          semaphore = java.util.concurrent.Semaphore.new(0)
+          thr1 = Thread.new { write_pipe_f(semaphore) }
+          thr2 = Thread.new { read_pipe_f(semaphore, count) }
 
-          while(thr1.alive? || thr2.alive?)
-            sleep(1)
-            if(thr1.alive? && !thr2.alive?)
-              sleep(Gppipe.grace_period_seconds)
-              if(thr1.alive?)
-                thr1.kill
-                raise RuntimeError, "Gpfdist writer thread was hung, even through reader completed."
-              end
-            elsif(!thr1.alive? && thr2.alive?)
-              sleep(Gppipe.grace_period_seconds)
-              if(thr2.alive?)
-                thr2.kill
-                raise RuntimeError, "Gpfdist reader thread was hung, even through writer completed."
-              end
-            end
-          end
+          semaphore.acquire
+          thread_hung = !semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
+          raise Exception if thread_hung
 
           #collect any exceptions raised inside thread1 or thread2
           thr1.join
           thr2.join
-
         rescue Exception => e
+          src_conn.instance_variable_get(:@connection).connection.cancelQuery if thr1 && thr1.alive?
+          dst_conn.instance_variable_get(:@connection).connection.cancelQuery if thr2 && thr2.alive?
+          thr1.try(:kill)
+          thr2.try(:kill)
           if create_new_table?
             dst_conn.exec_query("DROP TABLE IF EXISTS #{destination_table_fullname}")
           end
+
           raise ImportFailed, e.message
         ensure
           src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{source_schema.name}\".#{pipe_name}_w;")
