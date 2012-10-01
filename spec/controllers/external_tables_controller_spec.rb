@@ -49,7 +49,7 @@ describe ExternalTablesController do
       end
 
       it "creates hdfs external table for a workspace with sandbox amd responds with ok" do
-        mock(HdfsExternalTable).create(workspace, instance_account, anything, user)
+        mock(Hdfs::ExternalTableCreator).create(workspace, instance_account, anything, user)
 
         post :create, parameters
         response.code.should == "200"
@@ -67,7 +67,7 @@ describe ExternalTablesController do
       end
 
       before do
-        mock(HdfsExternalTable).create.with_any_args { raise HdfsExternalTable::CreationFailed }
+        mock(Hdfs::ExternalTableCreator).create.with_any_args { raise Hdfs::ExternalTableCreator::CreationFailed }
       end
 
       it "responds with unprocessable entity and add specific errors" do
@@ -90,7 +90,7 @@ describe ExternalTablesController do
       end
 
       before do
-        mock(HdfsExternalTable).create.with_any_args { raise HdfsExternalTable::AlreadyExists }
+        mock(Hdfs::ExternalTableCreator).create.with_any_args { raise Hdfs::ExternalTableCreator::AlreadyExists }
       end
 
       it "responds with unprocessable entity and add specific errors" do

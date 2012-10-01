@@ -20,7 +20,7 @@ resource "Workspaces" do
 
   before do
     log_in user
-    stub(HdfsExternalTable).execute_query.with_any_args { nil }
+    stub(any_instance_of(Hdfs::ExternalTableCreator)).create_external_table {}
     stub(File).readlines.with_any_args { ["The river was there."] }
     stub(Dataset).refresh.with_any_args { |account, schema, options| schema.datasets }
   end
