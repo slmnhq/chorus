@@ -58,8 +58,9 @@ GIT
   specs:
     sunspot_matchers (2.0.0.pre.120417)
 
-PATH
-  remote: ~/workspace/tabcmd_gem
+GIT
+  remote: git@github.com:GreenplumChorus/tableau.git
+  revision: 0be66575a6633de9c20b526c840ede8e80759901
   specs:
     tabcmd_gem (0.0.1)
       highline

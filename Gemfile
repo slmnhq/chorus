@@ -15,7 +15,7 @@ gem 'quiet_assets'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
 gem 'attr_encrypted'
-gem 'tabcmd_gem', :path => '~/workspace/tabcmd_gem'
+gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
