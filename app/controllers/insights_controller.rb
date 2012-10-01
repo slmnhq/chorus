@@ -1,7 +1,7 @@
 class InsightsController < ApplicationController
   def create
     note = get_note_if_visible
-    return head(:forbidden) unless note
+    raise SecurityTransgression unless note
     note.promote_to_insight(current_user)
     present note, :status => :created
   end
