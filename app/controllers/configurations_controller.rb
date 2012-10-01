@@ -8,6 +8,7 @@ class ConfigurationsController < ApplicationController
     render :json => { :response => {
       :external_auth_enabled => LdapClient.enabled?,
       :gpfdist_configured => Chorus::Application.config.chorus.gpfdist_configured?,
+      :tableau_configured => Chorus::Application.config.chorus.tableau_configured?,
       :file_sizes_mb_workfiles => Chorus::Application.config.chorus['file_sizes_mb.workfiles'],
       :file_sizes_mb_csv_imports => Chorus::Application.config.chorus['file_sizes_mb.csv_imports'],
       :file_sizes_mb_user_icon => Chorus::Application.config.chorus['file_sizes_mb.user_icon'],

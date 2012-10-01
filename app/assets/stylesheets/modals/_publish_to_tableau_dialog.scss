@@ -1,0 +1,10 @@
+.publish_to_tableau_dialog {
+  width: 450px;
+
+  .target_location {
+    width: 450px;
+    @include results-console-message;
+    @include ellipsis;
+    padding-bottom: 10px;
+  }
+}

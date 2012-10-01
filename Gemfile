@@ -15,6 +15,7 @@ gem 'quiet_assets'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
 gem 'attr_encrypted'
+gem 'tabcmd_gem', :path => '~/workspace/tabcmd_gem'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
@@ -64,6 +65,7 @@ group :test, :development, :integration, :packaging do
   gem 'fixture_builder'
   gem 'ci_reporter'
   gem 'faker'
+  gem 'fakeweb'
 end
 
 group :development do

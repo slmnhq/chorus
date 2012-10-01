@@ -31,6 +31,12 @@ gpfdist:
   read_port: 8001
   data_dir: "/tmp"
 
+tableau:
+  url: '10.80.129.167'
+  port: 80
+  username: 'chorusadmin'
+  password: 'secret'
+
 ldap:
   host: 10.32.88.212
   enable: false

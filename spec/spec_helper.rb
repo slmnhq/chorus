@@ -11,7 +11,6 @@ require 'rspec_api_documentation'
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
 require "vcr"
-require "webmock/rspec"
 require 'shoulda-matchers'
 
 module Shoulda # :nodoc:
@@ -30,7 +29,7 @@ end
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/other_fixtures/vcr_cassettes'
-  c.hook_into :webmock # or :fakeweb
+  c.hook_into :fakeweb
   c.default_cassette_options = { :record => :new_episodes }
 end
 

@@ -28,6 +28,11 @@ class ChorusConfig
         self['gpfdist.data_dir'] && self['gpfdist.ssl'] != nil && true)
   end
 
+  def tableau_configured?
+    (self['tableau.url'] && self['tableau.port'] && self['tableau.username'] &&
+     self['tableau.password'] && true)
+  end
+
   def self.config_file_path(root_dir=nil)
     root_dir = Rails.root unless root_dir
     File.join root_dir, 'config/chorus.yml'

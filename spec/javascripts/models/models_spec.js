@@ -753,6 +753,20 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
+        describe("#shortName", function() {
+            beforeEach(function() {
+               this.model.set({name: "SomeName"});
+            });
+
+            it("returns the name if the name is already short enough", function() {
+               expect(this.model.shortName(20)).toBe("SomeName");
+            });
+
+            it("ellipsizes long names", function() {
+               expect(this.model.shortName(3)).toBe("Som...")
+            });
+        });
+
         describe("highlightedName", function() {
             context("when the model has a nameAttribute set", function() {
                 beforeEach(function() {

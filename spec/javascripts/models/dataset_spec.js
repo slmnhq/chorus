@@ -801,6 +801,14 @@ describe("chorus.models.Dataset", function() {
         })
     });
 
+    describe("#deriveTableauWorkbook", function() {
+       it("Creates a TableauWorkbook from the dataset", function() {
+          var workbook = this.dataset.deriveTableauWorkbook();
+           expect(workbook).toBeA(chorus.models.TableauWorkbook);
+           expect(workbook.get('dataset')).toEqual(this.dataset);
+       });
+    });
+
     describe("#asDataset", function() {
         it("converts the object to a dataset", function() {
             var dataset = this.dataset.asWorkspaceDataset();
