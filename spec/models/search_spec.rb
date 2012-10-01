@@ -247,7 +247,7 @@ describe Search do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           gpdb_instance = search.gpdb_instances.first
-          gpdb_instance.highlighted_attributes.length.should == 1
+          gpdb_instance.highlighted_attributes.length.should == 2
           gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>searchquery</em> and greenplumsearch"
         end
       end
@@ -264,7 +264,7 @@ describe Search do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           hadoop_instance = search.hadoop_instances.first
-          hadoop_instance.highlighted_attributes.length.should == 1
+          hadoop_instance.highlighted_attributes.length.should == 2
           hadoop_instance.highlighted_attributes[:description][0].should == "<em>searchquery</em> for the hadoop instance"
         end
       end
