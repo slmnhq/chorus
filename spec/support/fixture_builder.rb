@@ -56,7 +56,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    greenplum_instance = FactoryGirl.create(:gpdb_instance, :name => "Default", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
+    greenplum_instance = FactoryGirl.create(:gpdb_instance, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
+    fbuilder.name :default, greenplum_instance
     Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     aurora_instance = FactoryGirl.create(:gpdb_instance, :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create")
@@ -72,7 +73,8 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :owner_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => owners_instance)
 
-    hadoop_instance = HadoopInstance.create!({ :name => "Hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    hadoop_instance = HadoopInstance.create!({ :name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    fbuilder.name :hadoop, hadoop_instance
     Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
 
     HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)

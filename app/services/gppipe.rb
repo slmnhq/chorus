@@ -53,13 +53,14 @@ class Gppipe < GpTableCopier
   end
 
   def write_pipe
-    src_conn.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
+    src_conn_2.exec_query("INSERT INTO \"#{source_schema.name}\".#{pipe_name}_w (SELECT * FROM #{source_table_fullname} #{limit_clause});")
   end
 
   def read_pipe(count)
     done_read = 0
     while done_read != count
-      result = dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
+      p "Inside the read loop: done read = #{done_read}, count = #{count}"
+      result = dst_conn_2.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
       done_read += result
     end
   end
@@ -77,6 +78,7 @@ class Gppipe < GpTableCopier
   end
 
   def run
+    p "CALLING RUN"
     Timeout::timeout(Gppipe.timeout_seconds) do
       pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
       count = src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count']
@@ -109,8 +111,8 @@ class Gppipe < GpTableCopier
           thr2.join
         rescue Exception => e
           p "Rescuing from an exception: #{e.class} #{e.message}"
-          src_conn.instance_variable_get(:@connection).connection.cancelQuery if thr1 && thr1.alive?
-          dst_conn.instance_variable_get(:@connection).connection.cancelQuery if thr2 && thr2.alive?
+          src_conn_2.instance_variable_get(:@connection).connection.cancelQuery
+          dst_conn_2.instance_variable_get(:@connection).connection.cancelQuery
           p "Killing both child threads."
           thr1.try(:kill)
           thr2.try(:kill)
@@ -122,6 +124,7 @@ class Gppipe < GpTableCopier
           raise ImportFailed, e.message
         ensure
           p "Inside ensure block: dropping external tables."
+
           src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{source_schema.name}\".#{pipe_name}_w;")
           dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{destination_schema.name}\".#{pipe_name}_r;")
           FileUtils.rm pipe_file if File.exists? pipe_file
@@ -154,8 +157,30 @@ class Gppipe < GpTableCopier
     )
   end
 
+  def src_conn_2
+    @raw_src_conn_2 ||= ActiveRecord::Base.postgresql_connection(
+        :host => source_schema.gpdb_instance.host,
+        :port => source_schema.gpdb_instance.port,
+        :database => source_schema.database.name,
+        :username => source_account.db_username,
+        :password => source_account.db_password,
+        :adapter => "jdbcpostgresql"
+    )
+  end
+
   def dst_conn
     @raw_dst_conn ||= ActiveRecord::Base.postgresql_connection(
+        :host => destination_schema.gpdb_instance.host,
+        :port => destination_schema.gpdb_instance.port,
+        :database => destination_schema.database.name,
+        :username => destination_account.db_username,
+        :password => destination_account.db_password,
+        :adapter => "jdbcpostgresql"
+    )
+  end
+
+  def dst_conn_2
+    @raw_dst_conn_2 ||= ActiveRecord::Base.postgresql_connection(
         :host => destination_schema.gpdb_instance.host,
         :port => destination_schema.gpdb_instance.port,
         :database => destination_schema.database.name,

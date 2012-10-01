@@ -68,7 +68,7 @@ describe SearchController do
         reindex_solr_fixtures
 
         VCR.use_cassette "type_ahead_search_fixture" do
-          get :type_ahead, :query => 'searchquery'
+          get :type_ahead, :query => 'search'
         end
       end
     end

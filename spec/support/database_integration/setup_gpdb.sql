@@ -240,6 +240,52 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
 
   \dtvs test_schema3.*
 
+  CREATE SCHEMA test_gpfdist_schema;
+      SET search_path TO 'test_gpfdist_schema';
+
+      CREATE TABLE candy
+      (id numeric(4,0),
+       name character varying(255),
+       id2 integer,
+       id3 integer,
+       date_test date,
+       fraction double precision,
+       numeric_with_scale numeric(4,2),
+       time_test time without time zone,
+       time_with_precision time(3) without time zone,
+       time_with_zone time(3) with time zone,
+       time_stamp_with_precision timestamp(3) with time zone,
+       PRIMARY KEY(id2, id3, id));
+
+    CREATE TABLE allcaps_candy
+      (id numeric(4, 0),
+      "STUFF" integer,
+      "KITKAT" integer,
+      "SNICKERS" text);
+
+    CREATE TABLE "2candy"
+      (id numeric(4,0),
+       name character varying(255),
+       id2 integer,
+       id3 integer,
+       date_test date,
+       fraction double precision,
+       numeric_with_scale numeric(4,2),
+       time_test time without time zone,
+       time_with_precision time(3) without time zone,
+       time_with_zone time(3) with time zone,
+       time_stamp_with_precision timestamp(3) with time zone,
+       PRIMARY KEY(id2, id3, id));
+
+    CREATE TABLE candy_empty();
+
+    CREATE TABLE candy_one_column("2id" integer) DISTRIBUTED RANDOMLY;
+
+    CREATE TABLE candy_composite("id" integer, "id2" integer, PRIMARY KEY("id", "id2"));
+
+  \dtvs test_gpfdist_schema.*
+
+
 
 DROP DATABASE IF EXISTS "gpdb_test_database_no_pub_sch";
 CREATE DATABASE "gpdb_test_database_no_pub_sch" OWNER gpadmin;
