@@ -60,7 +60,7 @@ module GpdbIntegration
   end
 
   def self.database_name
-    "gpdb_" + Socket.gethostname
+    "gpdb_#{Socket.gethostname}_#{Rails.env.slice(0..2)}"
   end
 
   def self.instance_config_for_gpdb(name)
