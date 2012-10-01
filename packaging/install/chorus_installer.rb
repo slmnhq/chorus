@@ -180,9 +180,15 @@ class ChorusInstaller
     end
   end
 
+  def generate_paths_file
+    File.open("#{destination_path}/chorus_path.sh", 'w') do |file|
+      file.puts "export CHORUS_HOME=#{destination_path}"
+      file.puts "export PATH=$PATH:$CHORUS_HOME"
+    end
+  end
+
   def link_services
     FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
-    FileUtils.cp("#{release_path}/packaging/chorus_path.sh", destination_path + "/chorus_path.sh")
   end
 
   def link_shared_files
@@ -332,6 +338,7 @@ class ChorusInstaller
 
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       link_services
+      generate_paths_file
       setup_database
     end
 

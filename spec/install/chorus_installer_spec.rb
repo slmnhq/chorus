@@ -472,6 +472,20 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#generate_paths_file" do
+    before do
+      installer.destination_path = "/usr/local/greenplum-chorus"
+      FileUtils.mkdir_p installer.destination_path
+    end
+
+    it "generates a file with the CHORUS_HOME and PATH set" do
+      installer.generate_paths_file
+      lines = File.read("/usr/local/greenplum-chorus/chorus_path.sh").lines.to_a
+      lines[0].chomp.should == "export CHORUS_HOME=#{installer.destination_path}"
+      lines[1].chomp.should == "export PATH=$PATH:$CHORUS_HOME"
+    end
+  end
+
   describe "#link_services" do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
@@ -485,11 +499,6 @@ describe ChorusInstaller do
       installer.link_services
 
       File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
-    end
-
-    it "should copy chorus_path.sh" do
-      installer.link_services
-      File.exists?('/usr/local/greenplum-chorus/chorus_path.sh').should be_true
     end
   end
 
