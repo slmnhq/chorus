@@ -2,8 +2,12 @@ require "spec_helper"
 
 describe TableauWorkbooksController do
   let(:user) { users(:owner) }
+  let(:save_status) { true }
   before do
     log_in user
+    any_instance_of(TableauWorkbook) do |wb|
+      mock(wb).save { save_status }
+    end
   end
 
   describe "#create" do
@@ -28,19 +32,18 @@ describe TableauWorkbooksController do
     end
 
     it "returns 201 created when the save succeeds" do
-      any_instance_of(TableauWorkbook) do |wb|
-        mock(wb).save { true }
-      end
+
       post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
       response.code.should == '201'
     end
 
-    it "responds with error if the save fails" do
-      any_instance_of(TableauWorkbook) do |wb|
-        mock(wb).save { false }
+    context "when the save fails" do
+      let(:save_status) { false }
+
+      it "responds with error" do
+        post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+        response.code.should == '422'
       end
-      post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
-      response.code.should == '422'
     end
   end
 end
