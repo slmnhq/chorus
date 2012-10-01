@@ -24,6 +24,8 @@ case $RAILS_ENV in
         ;;
 esac
 
+PATH=$PATH:$CHORUS_HOME/packaging/dummy
+
 ##### PID file locations #####
 
 mkdir -p $CHORUS_HOME/tmp/pids

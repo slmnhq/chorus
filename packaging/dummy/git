@@ -1,0 +1,3 @@
+# this is a stub. some Gemspecs shell out to git, so we avoid
+# printing errors when we are in production and git is not installed.
+exit 0
