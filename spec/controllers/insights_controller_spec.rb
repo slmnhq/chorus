@@ -31,13 +31,13 @@ describe InsightsController do
       note.promotion_time.should_not be_nil
     end
 
-    context "Permissions to promote" do
+    context "when the current user does not have permission to see the note" do
       let(:note) { events(:note_on_no_collaborators_private_workfile) }
       let(:user) { users(:not_a_member) }
 
-      it "should fail" do
+      it "returns permission denied status code" do
         subject
-        response.code.should == "401"
+        response.code.should == "403"
       end
     end
   end

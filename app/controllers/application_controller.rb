@@ -53,6 +53,7 @@ class ApplicationController < ActionController::Base
     present_errors({:record => :NOT_FOUND}, :status => :not_found)
   end
 
+  # TODO remove this?
   def render_forbidden(e = nil)
     present_forbidden(e.try(:subject))
   end
