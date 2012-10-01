@@ -29,7 +29,7 @@ GPDB_HOST=$GPDB_HOST script/test 2>&1
 RUBY_TESTS_RESULT=$?
 
 echo "Running javascript tests"
-b/rake phantom 2>&1
+CI_REPORTS=spec/javascripts/reports b/rake ci:setup:rspec phantom 2>&1
 JS_TESTS_RESULT=$?
 
 echo "Cleaning up jasmine process $jasmine_pid"
