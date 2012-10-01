@@ -241,10 +241,10 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
   \dtvs test_schema3.*
 
 
-DROP DATABASE IF EXISTS "gpdb_test_database_no_public_schema";
-CREATE DATABASE "gpdb_test_database_no_public_schema" OWNER gpadmin;
+DROP DATABASE IF EXISTS "gpdb_test_database_no_pub_sch";
+CREATE DATABASE "gpdb_test_database_no_pub_sch" OWNER gpadmin;
 
-\connect "gpdb_test_database_no_public_schema"
+\connect "gpdb_test_database_no_pub_sch"
 
   DROP SCHEMA public CASCADE;
 

@@ -448,7 +448,7 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "when 'public' schema does not exist" do
-      let(:database_name) { "#{GpdbIntegration.database_name}_no_public_schema" }
+      let(:database_name) { "#{GpdbIntegration.database_name}_no_pub_sch" }
       let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(database_name, GpdbIntegration.real_gpdb_instance) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }

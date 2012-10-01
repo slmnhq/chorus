@@ -84,7 +84,7 @@ module GpdbIntegration
     gpdb_schema = database.schemas.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
 
-    database_without_public_schema = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_public_schema")
+    database_without_public_schema = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_pub_sch")
     GpdbSchema.refresh(account, database_without_public_schema)
     gpdb_schema_without_public_schema = database_without_public_schema.schemas.find_by_name('non_public_schema')
     Dataset.refresh(account, gpdb_schema_without_public_schema)
