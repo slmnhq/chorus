@@ -1,13 +1,7 @@
 class SearchPresenterBase < Presenter
 
   def present_workspace_models_with_highlights(models)
-    results = present_models_with_highlights(models, :workspace => model.workspace)
-    results.each do |result|
-      if result[:entity_type] == 'dataset'
-        extend_result_with_nested_highlights(result)
-      end
-    end
-    results
+    present_models_with_highlights(models, :workspace => model.workspace)
   end
 
   def present_models_with_highlights(models, options = {})
@@ -18,6 +12,9 @@ class SearchPresenterBase < Presenter
       hsh[:highlighted_attributes] = model.highlighted_attributes
       hsh[:comments] = model.search_result_notes
       hsh[:entity_type] = model.entity_type_name
+      if hsh[:entity_type] == 'dataset'
+        extend_result_with_nested_highlights(hsh)
+      end
       hsh
     end
   end
@@ -31,10 +28,13 @@ class SearchPresenterBase < Presenter
   def extend_result_with_nested_highlights(result)
     schema_name = result[:highlighted_attributes].delete(:schema_name)
     result[:schema][:highlighted_attributes] = {:name => schema_name} if schema_name
+
     database_name = result[:highlighted_attributes].delete(:database_name)
     result[:schema][:database][:highlighted_attributes] = {:name => database_name} if database_name
+
     object_name = result[:highlighted_attributes].delete(:name)
     result[:highlighted_attributes][:object_name] = object_name if object_name
+
     column_name = result[:highlighted_attributes].delete(:column_name)
     result[:columns] = [{:highlighted_attributes => {:body => column_name}}] if column_name
   end

@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -43,6 +43,6 @@ http_interactions:
         1000020''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkspace
         1000039''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']}}}'
     http_version:
-  recorded_at: Mon, 01 Oct 2012 17:29:09 GMT
+  recorded_at: Mon, 01 Oct 2012 18:04:00 GMT
 recorded_with: VCR 2.1.1
 ...

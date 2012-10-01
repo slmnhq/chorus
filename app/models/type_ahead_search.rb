@@ -17,6 +17,7 @@ class TypeAheadSearch
     build_search
 
     @search.execute
+    @search.move_highlighted_attributes_to_results
     @search
   end
 

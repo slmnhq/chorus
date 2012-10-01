@@ -55,7 +55,6 @@ module SunspotSearchExtensions
 
   def execute
     results = super
-
     new_highlights = {}
     (@solr_result['highlighting'] || {}).each do |key, value|
       key = key.sub(/^Gpdb(Table|View)|^ChorusView/, 'Dataset')
@@ -80,7 +79,7 @@ module SunspotSearchExtensions
       end
     end
 
-    each_hit_with_result do |hit|
+    hits.each do |hit|
       hit.notes = notes_for_object[hit.id]
     end
 

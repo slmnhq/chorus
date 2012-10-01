@@ -30,7 +30,7 @@ class SearchPresenter < SearchPresenterBase
         },
 
         :datasets => {
-            :results => present_datasets_with_nested_highlights(datasets),
+            :results => present_models_with_highlights(datasets),
             :numFound => num_found[:datasets]
         },
 
@@ -54,13 +54,5 @@ class SearchPresenter < SearchPresenterBase
     else
       {}
     end
-  end
-
-  def present_datasets_with_nested_highlights(models)
-    results = present_models_with_highlights(models)
-    results.each do |result|
-      extend_result_with_nested_highlights(result)
-    end
-    results
   end
 end
