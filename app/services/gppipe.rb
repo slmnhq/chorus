@@ -108,16 +108,20 @@ class Gppipe < GpTableCopier
           thr1.join
           thr2.join
         rescue Exception => e
+          p "Rescuing from an exception: #{e.class} #{e.message}"
           src_conn.instance_variable_get(:@connection).connection.cancelQuery if thr1 && thr1.alive?
           dst_conn.instance_variable_get(:@connection).connection.cancelQuery if thr2 && thr2.alive?
+          p "Killing both child threads."
           thr1.try(:kill)
           thr2.try(:kill)
           if create_new_table?
             dst_conn.exec_query("DROP TABLE IF EXISTS #{destination_table_fullname}")
           end
 
+          p "Raising exception."
           raise ImportFailed, e.message
         ensure
+          p "Inside ensure block: dropping external tables."
           src_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{source_schema.name}\".#{pipe_name}_w;")
           dst_conn.exec_query("DROP EXTERNAL TABLE IF EXISTS \"#{destination_schema.name}\".#{pipe_name}_r;")
           FileUtils.rm pipe_file if File.exists? pipe_file
