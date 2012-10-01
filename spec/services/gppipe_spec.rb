@@ -18,7 +18,7 @@ describe Gppipe, :database_integration => true do
   let(:instance_account1) { GpdbIntegration.real_gpdb_account }
   let(:user) { instance_account1.owner }
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
-  let(:schema_name) { 'test_schema' }
+  let(:schema_name) { 'test_gpfdist_schema' }
   let(:schema) { database.schemas.find_by_name(schema_name) }
 
   let(:gpdb1) do
