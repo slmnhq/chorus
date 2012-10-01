@@ -114,7 +114,7 @@ describe Search do
         })
       end
     end
-  
+
     describe "search with a specific model" do
       it "only searches for that model" do
         search = Search.new(user, :query => 'bob', :entity_type => 'user')
@@ -129,14 +129,14 @@ describe Search do
 
     describe "with a workspace_id" do
       let(:search) { Search.new(user, :query => 'bob', :per_type => 3, :workspace_id => 7) }
-  
+
       before do
         any_instance_of(Sunspot::Search::AbstractSearch) do |search|
           stub(search).group_response { {} }
         end
         search.models
       end
-  
+
       it "performs a secondary search to pull back workfiles and datasets within the workspace" do
         Sunspot.session.searches.length.should == 2
         last_search = Sunspot.session.searches.last
@@ -146,15 +146,15 @@ describe Search do
         last_search.should_not be_a_search_for(User)
         last_search.should have_search_params(:with, :workspace_id, 7)
       end
-  
+
       it "limits the results to a max of per_page" do
         Sunspot.session.searches.last.should have_search_params(:paginate, :page => 1, :per_page => 3)
       end
-  
+
       it "searches for the same query" do
         Sunspot.session.searches.last.should have_search_params(:fulltext, 'bob')
       end
-  
+
       it "does not perform the workspace search more than once" do
         search.num_found
         Sunspot.session.searches.length.should == 2
@@ -318,8 +318,8 @@ describe Search do
         events(:note_on_workspace_dataset).body.should == "workspacedatasetnotesearch"
         create_and_record_search(owner, :query => 'workspacedatasetnotesearch') do |search|
           dataset = search.datasets.first
-        dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>workspacedatasetnotesearch</em>"
-          end
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>workspacedatasetnotesearch</em>"
+        end
       end
     end
 
@@ -357,6 +357,18 @@ describe Search do
         create_and_record_search(owner, :query => 'alphasearch', :per_type => 1) do |search|
           search.users.length.should == 1
           search.num_found[:users].should > 1
+        end
+      end
+    end
+
+    context "when a record exists in solr, but not in the database" do
+      before do
+        public_workspace.delete
+      end
+
+      it "does not blow up" do
+        create_and_record_search do |search|
+          search.models
         end
       end
     end

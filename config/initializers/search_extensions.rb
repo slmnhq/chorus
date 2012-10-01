@@ -116,7 +116,7 @@ module Sunspot
       end
 
       def result=(new_result)
-        if (notes)
+        if (notes && new_result)
           new_result.search_result_notes = notes
         end
         @result = new_result
