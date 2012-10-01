@@ -57,6 +57,13 @@ describe GpdbInstancePresenter, :type => :view do
           hash[:used_by_workspaces].should be_nil
         end
       end
+
+      context "when disk space for a schema can't be retrieved" do
+        it "skips those schemas" do
+          any_instance_of(GpdbSchema) {|schema| stub(schema).disk_space_used(anything) {nil} }
+          puts hash
+        end
+      end
     end
 
     it_behaves_like "sanitized presenter", :gpdb_instance, :name

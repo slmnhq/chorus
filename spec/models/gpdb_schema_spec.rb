@@ -177,10 +177,22 @@ describe GpdbSchema do
       schema.disk_space_used(account).should > 0
     end
 
+    it "caches the value" do
+      mock.proxy(account).gpdb_instance
+      schema.disk_space_used(account).should > 0
+      schema.disk_space_used(account).should > 0
+    end
+
     context "when we can't calculate the size" do
       let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema') }
 
       it "should return nil" do
+        schema.disk_space_used(account).should be_nil
+      end
+
+      it "should cache the value correctly" do
+        mock.proxy(account).gpdb_instance
+        schema.disk_space_used(account).should be_nil
         schema.disk_space_used(account).should be_nil
       end
     end

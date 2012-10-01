@@ -12,13 +12,20 @@ class WorkspacePresenter < Presenter
       sandbox_size = sandbox.disk_space_used(account)
       recommended_gb = Chorus::Application.config.chorus['sandbox_recommended_size_in_gb']
       recommended_bytes = recommended_gb * 1024 * 1024 * 1024
-      {
-          :size => @view_context.number_to_human_size(sandbox_size),
-          :percentage_used => (sandbox_size / recommended_bytes.to_f * 100).round,
+      result = {
+          :size => nil,
+          :percentage_used => nil,
           :owner_full_name => "#{owner.first_name} #{owner.last_name}",
           :schema_name => sandbox.name,
           :database_name => sandbox.database.name
       }
+      if sandbox_size
+        result.merge({
+          :size => @view_context.number_to_human_size(sandbox_size),
+          :percentage_used => (sandbox_size / recommended_bytes.to_f * 100).round
+        })
+      end
+      result
     else
       {
           :id => id,

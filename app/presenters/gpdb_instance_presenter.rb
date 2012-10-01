@@ -25,7 +25,7 @@ class GpdbInstancePresenter < Presenter
 
     workspaces = used_by_workspaces
 
-    total_size_in_bytes = workspaces.inject(0) { |sum, workspace| sum + workspace.sandbox.disk_space_used(model.account_for_user!(current_user)) }
+    total_size_in_bytes = workspaces.collect { |workspace| workspace.sandbox.disk_space_used(model.account_for_user!(current_user)) }.compact.sum
     {
         :used_by_workspaces => present(workspaces, @options),
         :sandboxes_size => @view_context.number_to_human_size(total_size_in_bytes)

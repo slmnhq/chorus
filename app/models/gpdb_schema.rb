@@ -115,8 +115,9 @@ class GpdbSchema < ActiveRecord::Base
 
       @disk_space_used = results.first['size']
     end
-    @disk_space_used
-  rescue ActiveRecord::StatementInvalid
+    @disk_space_used == :error ? nil : @disk_space_used
+  rescue Exception
+    @disk_space_used = :error
     nil
   end
 
