@@ -257,29 +257,38 @@ describe("chorus.utilities.CsvParser", function() {
         }
     });
 
-    describe("#normalizeForDatabase", function() {
-        it("converts to lower case", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase("FILENAME")).toBe("filename")
-        });
-
+    var itNormalizesNames = function(normalizer) {
         it("converts spaces to underscores", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase("file name")).toBe("file_name")
+            expect(normalizer("file name")).toBe("file_name")
         });
 
         it("converts periods to underscores", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase("file.name")).toBe("file_name")
+            expect(normalizer("file.name")).toBe("file_name")
         });
 
         it("discards invalid characters", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase("file^$name*&22_+33")).toBe("filename22_33")
+            expect(normalizer("file^$name*&22_+33")).toBe("filename22_33")
         });
 
         it("trims the white spaces", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase(" file^$name* &22_+33 ")).toBe("filename_22_33")
+            expect(normalizer(" file^$name* &22_+33 ")).toBe("filename_22_33")
         });
 
         it("truncates at 64 characters", function() {
-            expect(chorus.utilities.CsvParser.normalizeForDatabase("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
+            expect(normalizer("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
         });
+    }
+
+    describe("#normalizeForDatabase", function() {
+        itNormalizesNames(chorus.utilities.CsvParser.normalizeForDatabase);
+    })
+
+    describe("#normalizeColumnName", function() {
+
+        it("converts to lower case", function() {
+            expect(chorus.utilities.CsvParser.normalizeColumnName("FILENAME")).toBe("filename")
+        });
+
+        itNormalizesNames(chorus.utilities.CsvParser.normalizeColumnName);
     })
 });

@@ -18,22 +18,14 @@ module Hdfs
 
     def create
       validate_parameters!
-      GpdbTable.transaction do
-        dataset = create_dataset
-        create_event(dataset)
-        create_external_table
-        dataset
-      end
+      create_external_table
+      Dataset.refresh(account, sandbox)
+      dataset = sandbox.reload.datasets.find_by_name!(parameters[:table_name])
+      create_event(dataset)
+      dataset
     end
 
     private
-
-    def create_dataset
-      GpdbTable.create! do |dataset|
-        dataset.name = parameters[:table_name]
-        dataset.schema_id = workspace.sandbox_id
-      end
-    end
 
     def create_external_table
       sql = create_sql
@@ -63,7 +55,7 @@ module Hdfs
     end
 
     def map_columns(column_names, column_types)
-      (0...column_names.length).map {|i| "#{column_names[i]} #{column_types[i]}" }.join(", ")
+      (0...column_names.length).map { |i| "#{column_names[i]} #{column_types[i]}" }.join(", ")
     end
 
     def validate_parameters!

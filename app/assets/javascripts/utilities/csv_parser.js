@@ -33,7 +33,7 @@ chorus.utilities.CsvParser = function(contents, options) {
     };
 
     this.parseColumnNames = function() {
-        return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeForDatabase);
+        return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeColumnName);
     };
 
     this.overrideColumnNames = function() {
@@ -77,5 +77,10 @@ chorus.utilities.CsvParser = function(contents, options) {
 }
 
 chorus.utilities.CsvParser.normalizeForDatabase = function(str) {
-    return str.trim().toLowerCase().replace(/[\s.]/g, "_").replace(/[^a-z0-9_]/g, '').substring(0, 64);
+    return str.trim().replace(/[\s.]/g, "_").replace(/[^a-z0-9_]/g, '').substring(0, 64);
 }
+
+chorus.utilities.CsvParser.normalizeColumnName = function(str) {
+    return chorus.utilities.CsvParser.normalizeForDatabase(str.toLowerCase());
+}
+
