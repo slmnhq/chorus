@@ -49,6 +49,9 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         this.resource.loaded = true;
         this.instance.activities().fetch();
+        this.instance.accounts().fetchAll();
+
+        account.fetchIfNotLoaded();
         this.requiredResources.reset();
         this.bindings.removeAll();
         this.bindings.add(this.resource, "change", this.render, this);
