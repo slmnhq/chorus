@@ -30,7 +30,7 @@ end
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/other_fixtures/vcr_cassettes'
   c.hook_into :fakeweb
-  c.default_cassette_options = { :record => :all }
+  c.default_cassette_options = { :record => :new_episodes }
 end
 
 def record_with_vcr(tape_name = nil, &block)
