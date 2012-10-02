@@ -10,7 +10,7 @@ attachment_storage: ":rails_root/system/"
 max_upload_size_megabytes: 100
 server_port: 8080
 sandbox_recommended_size_in_gb: 5
-ssl: "off"
+ssl: false
 ssl_server_port: 8443
 ssl_certificate: ""
 ssl_certificate_key: ""

@@ -9,7 +9,7 @@ workfile_storage_path : ":rails_root/system/"
 image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
 server_port: 8080
-ssl: "off"
+ssl: false
 ssl_server_port: 8443
 ssl_certificate: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.crt"
 ssl_certificate_key: "/Users/pivotal/workspace/chorusrails/packaging/ssl/test.key"
