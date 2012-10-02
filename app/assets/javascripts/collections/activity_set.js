@@ -4,7 +4,11 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
 
     url: function() {
         if (this.attributes.insights) {
-            return "/commentinsight/";
+            var workspace = this.attributes.workspace
+            if (workspace) {
+                return "/insights?entity_type=workspace&entity_id=" + workspace.id;
+            }
+            return "/insights?entity_type=dashboard";
         } else {
             return this.attributes.url;
         }

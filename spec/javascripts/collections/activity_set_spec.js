@@ -1,10 +1,24 @@
 describe("chorus.collections.ActivitySet", function() {
     describe("#url", function() {
         context("when the collection has the 'insights' attribute set to true", function() {
-            it("returns the url for fetching all insights", function() {
-                this.collection = new chorus.collections.ActivitySet([]);
-                this.collection.attributes.insights = true;
-                expect(this.collection.url()).toHaveUrlPath("/commentinsight/");
+
+            context("and collection is for the dashboard", function() {
+                it("returns the url for fetching all insights", function() {
+                    this.collection = new chorus.collections.ActivitySet([]);
+                    this.collection.attributes.insights = true;
+                    expect(this.collection.url()).toHaveUrlPath("/insights");
+                    expect(this.collection.url()).toContainQueryParams({entity_type : "dashboard"})
+                });
+            });
+
+            context("and collection is for a workspace", function() {
+                it("returns the url for fetching insights belonging to a workspace", function() {
+                    this.collection = new chorus.collections.ActivitySet([]);
+                    this.collection.attributes.insights = true;
+                    this.collection.attributes.workspace = { id: 21 }
+                    expect(this.collection.url()).toHaveUrlPath("/insights");
+                    expect(this.collection.url()).toContainQueryParams({entity_type : "workspace", entity_id: 21})
+                });
             });
         });
     });

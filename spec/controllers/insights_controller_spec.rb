@@ -56,7 +56,7 @@ describe InsightsController do
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
-    let(:subject) { get :index, :insight => {:entity_type => 'dashboard'}}
+    let(:subject) { get :index, :entity_type => 'dashboard' }
     let(:workspace) { workspaces(:public) }
     let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
         :workspace => workspace,
@@ -65,7 +65,7 @@ describe InsightsController do
         :promotion_time => Time.now(),
         :promoted_by => user) }
 
-    it "presents the insight" do
+    it "presents the insights" do
       mock_present do |models|
         models.should include(insight)
       end
@@ -97,6 +97,17 @@ describe InsightsController do
         end
         subject
       end
+
+      context "when user is an admin" do
+        let(:user) { users(:admin) }
+        it "should show insights" do
+          mock_present do |models|
+            models.should include(private_insight)
+          end
+          subject
+        end
+      end
+
     end
 
     context "when getting insights for the dashboard" do
@@ -105,7 +116,16 @@ describe InsightsController do
           models.should include(workspace_insight)
           models.should include(insight)
         }
-        get :index, :insight => { :entity_type => "dashboard" }
+        get :index, :entity_type => "dashboard"
+        response.code.should == "200"
+      end
+
+      it "returns all insights as default" do
+        mock_present { |models|
+          models.should include(workspace_insight)
+          models.should include(insight)
+        }
+        get :index
         response.code.should == "200"
       end
     end
@@ -116,7 +136,7 @@ describe InsightsController do
           models.should include(workspace_insight)
           models.should_not include(insight)
         }
-        get :index, :insight => { :entity_type => "workspace", :entity_id => workspace.id }
+        get :index, :entity_type => "workspace", :entity_id => workspace.id
         response.code.should == "200"
       end
     end

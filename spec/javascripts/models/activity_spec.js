@@ -376,7 +376,7 @@ describe("chorus.models.Activity", function() {
             this.model.promoteToInsight({ success: this.success });
         });
 
-        it("posts to the comment insight url", function() {
+        it("posts to the comment insight url with the correct parameters", function() {
             expect(this.server.lastCreate().url).toBe("/insights");
         });
 

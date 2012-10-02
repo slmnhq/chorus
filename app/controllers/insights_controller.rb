@@ -7,10 +7,11 @@ class InsightsController < ApplicationController
   end
 
   def index
-    param_hash = params[:insight]
-    events = Events::Base.visible_to(current_user).where(insight: true)
-    events = events.where(workspace_id: param_hash[:entity_id]) if param_hash[:entity_type] == "workspace"
-    present events
+    params[:entity_type] ||= 'dashboard'
+    event_query = Events::Base.where(insight: true)
+    event_query = event_query.visible_to(current_user) unless current_user.admin?
+    event_query = event_query.where(workspace_id: params[:entity_id]) if params[:entity_type] == "workspace"
+    present event_query
   end
 
   private
