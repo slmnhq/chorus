@@ -35,6 +35,7 @@ class Dataset < ActiveRecord::Base
   delegate :gpdb_instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
+
   searchable :unless => :stale? do |s|
     s.text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST

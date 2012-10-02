@@ -5,48 +5,51 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbInstance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=type_name_s%3A%28User+OR+GpdbInstance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000003+OR+1000005+OR+1000006+OR+1000007%29%29&q=typeahead%2A&fl=%2A+score&qf=name_texts+first_name_texts+last_name_texts+file_name_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=30
+      string: fq=type%3A%28User+OR+GpdbInstance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=type_name_s%3A%28User+OR+GpdbInstance+OR+HadoopInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000003+OR+1000005+OR+1000006+OR+1000007%29%29&q=typeahead&fl=%2A+score&qf=name_texts+first_name_texts+last_name_texts+file_name_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=30
     headers:
-      Content-Type:
+      content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
+      connection:
+      - close
   response:
     status:
       code: 200
       message: OK
     headers:
-      Content-Type:
+      content-type:
       - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
+      connection:
+      - close
+      server:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''fl''=>''*
-        score'',''start''=>''0'',''q''=>''typeahead*'',''qf''=>''name_texts first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''fl''=>''*
+        score'',''start''=>''0'',''q''=>''typeahead'',''qf''=>''name_texts first_name_texts
         last_name_texts file_name_texts'',''hl.simple.pre''=>''@@@hl@@@'',''hl.simple.post''=>''@@@endhl@@@'',''wt''=>''ruby'',''fq''=>[''type:(User
         OR GpdbInstance OR HadoopInstance OR Workspace OR Workfile OR Dataset OR HdfsEntry)'',''type_name_s:(User
         OR GpdbInstance OR HadoopInstance OR Workspace OR Workfile OR Dataset OR HdfsEntry)'',''-(type_name_s:Dataset
         AND -instance_account_ids_im:(1000000 OR 1000003 OR 1000005 OR 1000006 OR
-        1000007))''],''hl''=>''on'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>9,''start''=>0,''maxScore''=>1.0,''docs''=>[{''id''=>''GpdbInstance
-        1000009'',''name_texts''=>[''typeahead''],''score''=>1.0},{''id''=>''HadoopInstance
-        1000002'',''name_texts''=>[''typeahead''],''score''=>1.0},{''id''=>''User
-        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@zemlak.net''],''last_name_texts''=>[''Lang''],''score''=>1.0},{''id''=>''Workfile
+        1000007))''],''hl''=>''on'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>9,''start''=>0,''maxScore''=>4158412.0,''docs''=>[{''id''=>''User
+        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@buckridge.info''],''last_name_texts''=>[''Lynch''],''score''=>4158412.0},{''id''=>''Workfile
         1000000'',''file_name_texts''=>[''typeahead''],''description_texts''=>[''A
-        nice description''],''score''=>1.0},{''id''=>''Workspace 1000001'',''name_texts''=>[''typeahead''],''score''=>1.0},{''id''=>''Workspace
-        1000002'',''name_texts''=>[''typeahead_private''],''score''=>1.0},{''id''=>''Workspace
-        1000003'',''name_texts''=>[''typeahead_public''],''score''=>1.0},{''id''=>''Workspace
-        1000004'',''name_texts''=>[''typeahead_private_no_members''],''score''=>1.0},{''id''=>''HdfsEntry
-        1000005'',''name_texts''=>[''typeahead''],''parent_name_texts''=>[''testdir''],''score''=>1.0}]},''highlighting''=>{''GpdbInstance
+        nice description''],''score''=>4158412.0},{''id''=>''GpdbInstance 1000009'',''name_texts''=>[''typeahead''],''score''=>2081850.5},{''id''=>''HadoopInstance
+        1000002'',''name_texts''=>[''typeahead''],''score''=>2081850.5},{''id''=>''Workspace
+        1000001'',''name_texts''=>[''typeahead''],''score''=>2081850.5},{''id''=>''HdfsEntry
+        1000005'',''name_texts''=>[''typeahead''],''parent_name_texts''=>[''testdir''],''score''=>2081850.5},{''id''=>''Workspace
+        1000002'',''name_texts''=>[''typeahead_private''],''score''=>1487036.1},{''id''=>''Workspace
+        1000003'',''name_texts''=>[''typeahead_public''],''score''=>1487036.1},{''id''=>''Workspace
+        1000004'',''name_texts''=>[''typeahead_private_no_members''],''score''=>1040925.25}]},''highlighting''=>{''User
+        1000010''=>{''first_name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workfile
+        1000000''=>{''file_name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''GpdbInstance
         1000009''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''HadoopInstance
-        1000002''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''User 1000010''=>{''first_name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workfile
-        1000000''=>{''file_name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workspace
-        1000001''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workspace
+        1000002''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workspace
+        1000001''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''HdfsEntry
+        1000005''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']},''Workspace
         1000002''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_private'']},''Workspace
         1000003''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_public'']},''Workspace
-        1000004''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_private_no_members'']},''HdfsEntry
-        1000005''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@'']}}}'
-    http_version:
-  recorded_at: Tue, 02 Oct 2012 00:13:42 GMT
+        1000004''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_private_no_members'']}}}'
+    http_version: '1.1'
+  recorded_at: Tue, 02 Oct 2012 18:21:54 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -8,8 +8,8 @@ class TypeAheadSearch
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    self.query = params[:query] + "*"
-    self.per_page = params[:per_page] || 5
+    self.query = params[:query]
+    self.per_page = params[:per_page] || 3
   end
 
   def search

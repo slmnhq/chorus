@@ -24,9 +24,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>194}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:00 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -51,9 +51,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>84}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:02 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -78,9 +78,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>58}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:02 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -105,9 +105,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:02 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -132,9 +132,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>24}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:02 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -159,9 +159,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -186,15 +186,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@legros.net</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@barrowmitham.biz</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Lavina</field><field boost="1000000" name="last_name_texts">Kessler</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">lavina@rohan.biz</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Scot</field><field boost="1000000" name="last_name_texts">Will</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">scot@zulauf.net</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">Marks</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@kihn.info</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Schimmel</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@treutelhickle.net</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">Bechtelar</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@crooks.net</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jayne</field><field boost="1000000" name="last_name_texts">Gleason</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">jayne@effertz.info</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Amanda</field><field boost="1000000" name="last_name_texts">Crooks</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">amanda@jerdekertzmann.name</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jerald</field><field boost="1000000" name="last_name_texts">Pacocha</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">jerald@carter.org</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Lynch</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@buckridge.info</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Reanna</field><field boost="1000000" name="last_name_texts">Rice</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">reanna@wuckertaltenwerth.biz</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Howard</field><field boost="1000000" name="last_name_texts">Bashirian</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">howard@schowalter.info</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Dan</field><field boost="1000000" name="last_name_texts">Anderson</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">dan@yundtbotsford.info</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Sven</field><field boost="1000000" name="last_name_texts">Davis</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">sven@stiedemann.name</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Astrid</field><field boost="1000000" name="last_name_texts">Rempel</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">astrid@stromanupton.org</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Ashtyn</field><field boost="1000000" name="last_name_texts">Wiza</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">ashtyn@hermann.info</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Janet</field><field boost="1000000" name="last_name_texts">Homenick</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">janet@keelingmacgyver.info</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Alvera</field><field boost="1000000" name="last_name_texts">Harber</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">alvera@lockman.org</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@reichelprosacco.biz</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@white.name</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Zetta</field><field boost="1000000" name="last_name_texts">Considine</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">zetta@dooley.net</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Kayla</field><field boost="1000000" name="last_name_texts">Heaney</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">kayla@davis.org</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">Donnelly</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@tremblaylesch.name</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Steuber</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@ratke.name</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">Bruen</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@durgan.info</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Ralph</field><field boost="1000000" name="last_name_texts">Wunsch</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">ralph@mantegrimes.info</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jannie</field><field boost="1000000" name="last_name_texts">Mayer</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">jannie@bashirian.org</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Hollis</field><field boost="1000000" name="last_name_texts">Tillman</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">hollis@marvin.com</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Dare</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@king.net</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Hilario</field><field boost="1000000" name="last_name_texts">Bartell</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">hilario@hammechmidt.info</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Hollis</field><field boost="1000000" name="last_name_texts">Jakubowski</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">hollis@deckowhills.info</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Tomasa</field><field boost="1000000" name="last_name_texts">Hermiston</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">tomasa@leannonjohnson.org</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Tyrell</field><field boost="1000000" name="last_name_texts">Parker</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">tyrell@stanton.com</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Emiliano</field><field boost="1000000" name="last_name_texts">Macejkovic</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">emiliano@kirlin.info</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Violette</field><field boost="1000000" name="last_name_texts">Howell</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">violette@schamberger.info</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Ian</field><field boost="1000000" name="last_name_texts">Little</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">ian@friesen.com</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Katarina</field><field boost="1000000" name="last_name_texts">Wiza</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">katarina@cronin.org</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -213,9 +213,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>26}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -240,9 +240,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>26}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:03 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -267,9 +267,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>20}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -294,9 +294,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>25}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -321,9 +321,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -348,9 +348,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>29}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -375,9 +375,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -402,9 +402,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>24}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:04 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -429,9 +429,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>17}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -456,9 +456,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>59}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -483,9 +483,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -510,9 +510,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>25}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -537,9 +537,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -564,9 +564,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>60}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -591,9 +591,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -618,9 +618,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>14}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -645,9 +645,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:05 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -672,9 +672,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>203}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:06 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:05 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -699,8 +699,8 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Tue, 02 Oct 2012 00:31:06 GMT
+  recorded_at: Tue, 02 Oct 2012 18:34:05 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -7,7 +7,7 @@ describe TypeAheadSearch do
     it "takes current user and search params" do
       search = described_class.new(owner, :query => 'fries')
       search.current_user.should == owner
-      search.query.should == 'fries*'
+      search.query.should == 'fries'
     end
   end
 
@@ -23,7 +23,7 @@ describe TypeAheadSearch do
       Sunspot.session.should be_a_search_for(Dataset)
       Sunspot.session.should be_a_search_for(HdfsEntry)
       Sunspot.session.should have_search_params(:fulltext, Proc.new {
-        fulltext 'bob*', :fields => [:name, :first_name, :last_name, :file_name]
+        fulltext 'bob', :fields => [:name, :first_name, :last_name, :file_name]
       })
     end
 
@@ -48,7 +48,7 @@ describe TypeAheadSearch do
     def create_and_record_search(*args)
       if args.empty?
         tape_name = "type_ahead_search_spec"
-        args = [owner, {:query => 'typeahea', :per_page => 10}]
+        args = [owner, {:query => 'typeahead', :per_page => 10}]
       end
       record_with_vcr(tape_name) do
         search = described_class.new(*args)

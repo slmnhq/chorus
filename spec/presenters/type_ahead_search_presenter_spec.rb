@@ -13,7 +13,7 @@ describe TypeAheadSearchPresenter, :type => :view do
 
     let(:search) do
       TypeAheadSearch.new(user,
-                          :query => 'typeahead').tap do |search|
+                          :query => 'typeahead', :per_page => 10).tap do |search|
         record_with_vcr do
           search.search
         end

@@ -72,8 +72,8 @@ describe("chorus.models.TypeAheadSearchResult", function() {
     });
 
     describe("url", function() {
-        it("should have 5 results per_page", function() {
-            expect(this.result.url()).toMatch("per_page=5(&|$)");
+        it("should have 3 results per_page", function() {
+            expect(this.result.url()).toMatch("per_page=3(&|$)");
         });
     });
 });
