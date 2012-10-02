@@ -1,6 +1,9 @@
 describe("chorus.pages.DatasetShowPage", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset();
+        this.dataset = rspecFixtures.dataset({
+            associatedWorkspaces: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
+            tableauWorkbooks: [fixtures.tableauWorkbookJson(), fixtures.tableauWorkbookJson(), fixtures.tableauWorkbookJson()]
+        });
         this.columnSet = this.dataset.columns();
         this.page = new chorus.pages.DatasetShowPage(
             this.dataset.id
@@ -98,7 +101,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl")
                     this.page.model.trigger('resourceNotFound', this.page.model);
-                })
+                });
 
                 it("navigates to the 404 page", function() {
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
@@ -106,19 +109,20 @@ describe("chorus.pages.DatasetShowPage", function() {
             });
 
             describe("workspace usage", function() {
-                xit("is in the custom header", function() {
+                it("is in the custom header", function() {
                     expect(this.page.$('.content_header .found_in')).toExist();
-                })
+                });
 
-                xit("qtip-ifies the other_menu", function() {
+                it("qtip-ifies the other_menu", function() {
                     this.page.$('.content_header .found_in .open_other_menu').click()
                     expect(this.qtipSpy).toHaveVisibleQtip();
                     expect(this.qtipSpy.find('li').length).toBe(2);
-                })
+                });
 
                 context("when the tabular data is not used in any workspace", function() {
                     beforeEach(function() {
                         this.dataset.unset("associatedWorkspaces");
+                        delete this.dataset._workspaceAssociated;
                     });
 
                     it("renders successfully, without the workspace usage section", function() {
@@ -134,7 +138,39 @@ describe("chorus.pages.DatasetShowPage", function() {
                         expect(this.page.$('.content_header .found_in')).not.toExist();
                     });
                 });
-            })
+            });
+
+            describe("tableau publishing details", function() {
+                it("is in the custom header", function() {
+                    expect(this.page.$('.content_header .published_to')).toExist();
+                });
+
+                it("qtip-ifies the other_menu", function() {
+                    this.page.$('.content_header .published_to .open_other_menu').click()
+                    expect(this.qtipSpy).toHaveVisibleQtip();
+                    expect(this.qtipSpy.find('li').length).toBe(2);
+                });
+
+                context("when the dataset has not been published to tableau", function() {
+                    beforeEach(function() {
+                        this.dataset.unset("tableauWorkbooks");
+                        delete this.dataset._tableauWorkbooks;
+                    });
+
+                    it("renders successfully, without the tableau workbook section", function() {
+                        this.page = new chorus.pages.DatasetShowPage(
+                            "123",
+                            "Foo%2F",
+                            "Bar%25",
+                            "TABLE",
+                            "slashes%2F"
+                        );
+                        this.server.completeFetchFor(this.dataset);
+                        this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                        expect(this.page.$('.content_header .published_to')).not.toExist();
+                    });
+                });
+            });
 
             it("has a search field in the content details that filters the column list", function() {
                 var searchInput = this.page.mainContent.contentDetails.$("input.search"),

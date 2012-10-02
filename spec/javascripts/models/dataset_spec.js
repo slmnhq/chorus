@@ -633,6 +633,57 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#tableauWorkbooks", function() {
+        beforeEach(function() {
+            this.dataset = rspecFixtures.dataset({tableauWorkbooks: [
+                {id: "100000", name: "first" },
+                {id: "100001", name: "second" }
+            ]
+            });
+        });
+        context("when there are workbooks associated", function() {
+            it("returns a workspace set with the right data", function() {
+                var workbooks = this.dataset.tableauWorkbooks();
+                expect(workbooks).toBeA(chorus.collections.TableauWorkbookSet);
+                expect(workbooks.length).toBe(2);
+                expect(workbooks.at(0).get("id")).toBe("100000");
+                expect(workbooks.at(1).get("id")).toBe("100001");
+                expect(workbooks.at(0).get("name")).toBe("first");
+                expect(workbooks.at(1).get("name")).toBe("second");
+            });
+        });
+
+        context("when there are no workbooks associated", function () {
+            beforeEach(function () {
+                this.dataset.unset("tableauWorkbooks");
+                delete this.dataset._tableauWorkbooks
+            });
+            it("returns an empty workspace set", function() {
+                var workbooks = this.dataset.tableauWorkbooks();
+                expect(workbooks.length).toBe(0);
+            });
+        });
+        describe("when the tableauWorkbooks attribute is changed", function() {
+            beforeEach(function() {
+                this.dataset.unset("tableauWorkbooks");
+                delete this.dataset._tableauWorkbooks;
+                this.oldWorkbooks = this.dataset.tableauWorkbooks();
+                expect(this.oldWorkbooks.length).toBe(0);
+
+                this.dataset.set({tableauWorkbooks: [
+                    {id: "43", name: "working_hard"},
+                    {id: "54", name: "hardly_working"}
+                ]
+                });
+            });
+
+            it("is invalidated", function() {
+                expect(this.dataset.tableauWorkbooks()).not.toEqual(this.oldWorkbooks);
+                expect(this.dataset.tableauWorkbooks().length).toBe(2);
+            });
+        });
+    });
+
     describe("#setDatasetNumber", function() {
         beforeEach(function() {
             this.dataset.setDatasetNumber(4)

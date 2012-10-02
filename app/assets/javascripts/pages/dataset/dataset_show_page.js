@@ -59,6 +59,10 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                 content: this.$('.found_in .other_menu'),
                 classes: "found_in_other_workspaces_menu"
             });
+            chorus.menu(this.$('.published_to .open_other_menu'), {
+                content: this.$('.published_to .other_menu'),
+                classes: "found_in_other_workspaces_menu"
+            });
         },
 
         drawColumns: function() {

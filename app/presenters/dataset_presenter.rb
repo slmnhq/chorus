@@ -55,6 +55,7 @@ class DatasetPresenter < Presenter
   end
 
   def tableau_workbooks_hash
+    return {:tableau_workbooks => []} if rendering_activities?
     tableau_workbooks = tableau_workbook_publications.map do |workbook|
       { :id => workbook.id,
         :name => workbook.name,

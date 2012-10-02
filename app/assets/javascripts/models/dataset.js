@@ -18,6 +18,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     initialize: function() {
         this.bind('invalidated', this.refetchAfterInvalidated, this);
         this.bind("change:associatedWorkspaces", this.invalidateWorkspacesAssociated, this);
+        this.bind("change:tableauWorkbooks", this.invalidateTableauWorkbooks, this);
 
         if (!this.has("type")) {
             this.set({type: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
@@ -110,6 +111,14 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     },
 
+    tableauWorkbooks: function() {
+        if (!this._tableauWorkbooks) {
+            var workbookList = this.get("tableauWorkbooks");
+            this._tableauWorkbooks = new chorus.collections.TableauWorkbookSet(workbookList);
+        }
+        return this._tableauWorkbooks;
+    },
+
     workspaceArchived: function() {
         return this.workspace() && !this.workspace().isActive();
     },
@@ -120,6 +129,10 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     invalidateWorkspacesAssociated: function() {
         delete this._workspaceAssociated
+    },
+
+    invalidateTableauWorkbooks: function() {
+        delete this._tableauWorkbooks
     },
 
     statistics: function() {

@@ -1691,6 +1691,14 @@ beforeEach(function() {
 
         typeAheadSearchResult: function(overrides) {
             return new chorus.models.TypeAheadSearchResult(fixtures.typeAheadSearchResultJson(overrides));
+        },
+
+        tableauWorkbookJson: function(overrides) {
+            return _.extend({
+                "name": "MyTableauWorkbook",
+                "id": fixtures.nextId().toString(),
+                "url": "http://base.url/workbooks/MyTableauWorkbook"
+            }, overrides);
         }
     });
 });

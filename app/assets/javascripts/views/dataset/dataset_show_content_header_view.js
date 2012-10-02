@@ -5,6 +5,7 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
         return {
             importFrequency: chorus.helpers.importFrequencyForModel(this.model),
             workspacesAssociated: this.model.workspacesAssociated(),
+            tableauWorkbooks: this.model.tableauWorkbooks(),
             dataset: this.model.asWorkspaceDataset(),
             showLocation: this.options && this.options.showLocation
         }
