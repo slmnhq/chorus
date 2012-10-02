@@ -167,6 +167,12 @@ FactoryGirl.define do
     workspace
   end
 
+  factory :tableau_workbook_publication do
+    sequence(:name) { |n| "workbook#{n}" }
+    association :dataset, :factory => :gpdb_table
+    workspace
+  end
+
   factory :hdfs_entry do
     hadoop_instance
     is_directory false

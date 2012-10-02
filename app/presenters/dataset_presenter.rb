@@ -1,5 +1,5 @@
 class DatasetPresenter < Presenter
-  delegate :id, :name, :schema, :source_dataset_for, :bound_workspaces, :import_schedules, :api_type, :to => :model
+  delegate :id, :name, :schema, :source_dataset_for, :bound_workspaces, :import_schedules, :api_type, :tableau_workbook_publications, :to => :model
 
   def to_hash
     {
@@ -8,7 +8,10 @@ class DatasetPresenter < Presenter
       :object_name => h(name),
       :schema => schema_hash,
       :hasCredentials => model.accessible_to(current_user)
-    }.merge(workspace_hash).merge(associated_workspaces_hash).merge(frequency)
+    }.merge(workspace_hash).
+      merge(associated_workspaces_hash).
+      merge(frequency).
+      merge(tableau_workbooks_hash)
   end
 
   def complete_json?
@@ -50,4 +53,16 @@ class DatasetPresenter < Presenter
 
     {:associated_workspaces => workspaces}
   end
+
+  def tableau_workbooks_hash
+    tableau_workbooks = tableau_workbook_publications.map do |workbook|
+      { :id => workbook.id,
+        :name => workbook.name,
+        :url => workbook.tableau_url
+      }
+    end
+
+    { :tableau_workbooks => tableau_workbooks }
+  end
+
 end

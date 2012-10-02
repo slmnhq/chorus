@@ -31,6 +31,17 @@ describe DatasetPresenter, :type => :view do
     end
   end
 
+  describe ".tableau_hash" do
+    let(:dataset) { datasets(:table) }
+    let(:workbook) { tableau_workbook_publications(:default) }
+
+    it "includes associated tableau publications" do
+      hash[:tableau_workbooks][0][:id].should == workbook.id
+      hash[:tableau_workbooks][0][:name].should == workbook.name
+      hash[:tableau_workbooks][0][:url].should == workbook.tableau_url
+    end
+  end
+
   describe "#to_hash" do
     context "when rendering an activity stream" do
       let(:workspace) { FactoryGirl.create :workspace }
