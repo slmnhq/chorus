@@ -46,7 +46,6 @@ Chorus::Application.routes.draw do
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
     resource :download, :only => :show, :controller => 'dataset_downloads'
-    resources :tableau_workbooks, :only => :create
     collection do
       post :preview_sql, :controller => 'previews'
     end
@@ -61,6 +60,7 @@ Chorus::Application.routes.draw do
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
       resource :import, :only => [:show, :create, :update, :destroy], :controller => "dataset_imports"
+      resources :tableau_workbooks, :only => :create
     end
     resource :search, :only => [:show], :controller => 'workspace_search'
 

@@ -3,6 +3,7 @@ require "spec_helper"
 describe TableauWorkbooksController do
   let(:user) { users(:owner) }
   let(:save_status) { true }
+
   before do
     log_in user
     any_instance_of(TableauWorkbook) do |wb|
@@ -12,6 +13,7 @@ describe TableauWorkbooksController do
 
   describe "#create" do
     let(:dataset) { datasets(:table) }
+    let(:workspace) { workspaces(:public)}
 
     context 'when the dataset is a table' do
       let(:dataset) { datasets(:table) }
@@ -32,9 +34,15 @@ describe TableauWorkbooksController do
     end
 
     it "returns 201 created when the save succeeds" do
-
       post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
       response.code.should == '201'
+    end
+
+    it "creates a tableau publication when the save succeeds" do
+      post :create, :workspace_id => workspace.to_param, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+      twp = dataset.tableau_workbook_publications.find_by_name("myTableauWorkbook")
+      twp.dataset_id.should == dataset.id
+      twp.workspace_id.should == workspace.id
     end
 
     context "when the save fails" do

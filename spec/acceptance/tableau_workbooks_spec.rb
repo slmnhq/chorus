@@ -2,6 +2,7 @@ require 'spec_helper'
 
 resource "Tableau Workbooks" do
   let(:dataset) { datasets(:executable_chorus_view) }
+  let(:workspace) { workspaces(:public) }
   let(:user) { dataset.gpdb_instance.owner }
 
   before do
@@ -11,16 +12,19 @@ resource "Tableau Workbooks" do
     end
   end
 
-  post "/datasets/:dataset_id/tableau_workbooks" do
+  post "/workspaces/:workspace_id/datasets/:dataset_id/tableau_workbooks" do
     parameter :name, "Name of the workbook to be created"
     parameter :dataset_id, "id of the dataset to link to the workbook"
+    parameter :workspace_id, "id of the workspace the dataset is in"
 
     required_parameters :name
     required_parameters :dataset_id
+    required_parameters :workspace_id
 
     scope_parameters :tableau_workbook, :all
 
     let(:dataset_id) { dataset.id }
+    let(:workspace_id) { workspace.id }
     let(:name) { 'MyTableauWorkbook'}
 
     example_request "Create a tableau workbook" do

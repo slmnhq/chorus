@@ -12,6 +12,7 @@ class Dataset < ActiveRecord::Base
 
   has_many :import_schedules, :foreign_key => 'source_dataset_id'
   has_many :imports, :foreign_key => 'source_dataset_id'
+  has_many :tableau_workbook_publications
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
