@@ -2,7 +2,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
     chorus.Mixins.InstanceCredentials.page).extend({
         constructorName: "DatasetShowPage",
         helpId: "dataset",
-        hideDeriveChorusView: true,
+        isInstanceBrowser: true,
         additionalClass: 'dataset_show',
         sidebarOptions: {},
         contentDetailsOptions: {},
@@ -80,7 +80,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                 persistent: true,
                 contentHeader: customHeaderView,
                 contentDetails: new chorus.views.DatasetContentDetails(_.extend(
-                    { dataset: this.dataset, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView},
+                    { dataset: this.dataset, collection: this.columnSet, isInstanceBrowser: this.isInstanceBrowser},
                     this.contentDetailsOptions))
             });
 

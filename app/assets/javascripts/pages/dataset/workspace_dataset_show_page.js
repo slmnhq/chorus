@@ -1,7 +1,7 @@
 chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
     constructorName: "WorkspaceDatasetShowPage",
     helpId: "dataset",
-    hideDeriveChorusView: false,
+    isInstanceBrowser: false,
 
     crumbs: function() {
         return [

@@ -173,6 +173,12 @@ describe("chorus.pages.DatasetShowPage", function() {
                 it("does not have a Derive Chorus View button", function() {
                     expect(this.page.$(".derive")).not.toExist();
                 });
+
+                it("does not have a publish to Tableau button", function() {
+                    chorus.models.Config.instance().set({ tableauConfigured: true });
+                    this.page.render();
+                    expect(this.page.$("button.publish")).not.toExist();
+                });
             });
         });
     });
