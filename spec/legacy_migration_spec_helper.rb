@@ -8,6 +8,8 @@ require 'database_cleaner'
 
 DatabaseCleaner.strategy = :truncation
 
+
+
 SPEC_WORKFILE_PATH = Rails.root + "system/legacy_workfiles"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -19,7 +21,17 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.clean
-    `cd #{Rails.root} && RAILS_ENV=test spec/legacy_migrate_schema_setup.sh db/legacy/legacy.sql`
+
+    def legacy_sql_md5
+      'a61b8dc56fb987df72209e625e5594ca'
+    end
+
+    unless File.exist?("db/legacy/legacy_#{legacy_sql_md5}.sql")
+      p "Downloading legacy dump from server"
+      FileUtils.mkdir_p('db/legacy')
+      `wget  -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci/~ci/legacy_#{legacy_sql_md5}.sql`
+    end
+    `cd #{Rails.root} && RAILS_ENV=test spec/legacy_migrate_schema_setup.sh db/legacy/legacy_#{legacy_sql_md5}.sql`
   end
 
   config.after(:suite) do
