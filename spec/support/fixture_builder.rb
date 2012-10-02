@@ -319,13 +319,14 @@ FixtureBuilder.configure do |fbuilder|
     @executable_chorus_view.bound_workspaces << public_workspace
     @executable_chorus_view.save!(:validate => false)
 
-    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
-
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner)
     fbuilder.name(:notification1, Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true) )
     fbuilder.name(:notification2, Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true) )
     fbuilder.name(:notification3, Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true) )
     fbuilder.name(:notification4, Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true) )
+
+    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+    #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.
   end
 end
