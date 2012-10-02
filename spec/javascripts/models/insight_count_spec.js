@@ -1,11 +1,11 @@
-describe("chorus.models.CommentInsight", function() {
+describe("chorus.models.InsightCount", function() {
     beforeEach(function() {
-        this.model = new chorus.models.CommentInsight();
+        this.model = new chorus.models.InsightCount();
     });
 
     context("with an id and action", function() {
         beforeEach(function() {
-            this.model = new chorus.models.CommentInsight({ id: '41', action: "promote" });
+            this.model = new chorus.models.InsightCount({ id: '41', action: "promote" });
         });
 
         it("has the right url", function() {
@@ -15,7 +15,7 @@ describe("chorus.models.CommentInsight", function() {
 
     describe(".count", function() {
         beforeEach(function() {
-            this.insightCount = chorus.models.CommentInsight.count({ urlParams: { foo: "bar" }});
+            this.insightCount = chorus.models.InsightCount.count({ urlParams: { foo: "bar" }});
         });
 
         it("returns a model with the right URL", function() {

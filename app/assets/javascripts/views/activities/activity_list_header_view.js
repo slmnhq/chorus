@@ -13,7 +13,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         if (this.modelIsWorkspace()) {
             options.urlParams = { workspaceId: this.model.get("id") };
         }
-        this.insightCount = chorus.models.CommentInsight.count(options);
+        this.insightCount = chorus.models.InsightCount.count(options);
         this.requiredResources.add(this.insightCount);
         this.insightCount.fetch();
         this.collection = this.options.collection || (this.model && this.model.activities());

@@ -18,26 +18,26 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
         var comments = model.comments().models;
         var numComments = model.get("numberOfComment");
         var numInsights = model.get("numberOfInsight");
-        var commentInsightCountString;
+        var insightCountString;
         if (numComments > 0) {
             if (numInsights > 0) {
-                commentInsightCountString = t("dashboard.workspaces.recent_comments_and_insights", {
+                insightCountString = t("dashboard.workspaces.recent_comments_and_insights", {
                     recent_comments: t("dashboard.workspaces.recent_comments", {count: numComments}),
                     recent_insights: t("dashboard.workspaces.recent_insights", {count: numInsights})
                 })
             } else {
-                commentInsightCountString = t("dashboard.workspaces.recent_comments", {count: numComments})
+                insightCountString = t("dashboard.workspaces.recent_comments", {count: numComments})
             }
         } else if (numInsights > 0) {
-            commentInsightCountString = t("dashboard.workspaces.recent_insights", {count: numInsights})
+            insightCountString = t("dashboard.workspaces.recent_insights", {count: numInsights})
         } else {
-            commentInsightCountString = t("dashboard.workspaces.no_recent_comments_or_insights")
+            insightCountString = t("dashboard.workspaces.no_recent_comments_or_insights")
         }
 
         return {
             imageUrl: model.defaultIconUrl(),
             showUrl: model.showUrl(),
-            commentInsightCountString: commentInsightCountString,
+            insightCountString: insightCountString,
             insightCount: numInsights,
             latestComment: comments[0] && {
                 timestamp: comments[0].get("timestamp"),

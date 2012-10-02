@@ -1,4 +1,4 @@
-chorus.models.CommentInsight = chorus.models.Base.extend({
+chorus.models.InsightCount = chorus.models.Base.extend({
     parameterWrapper : 'insight',
     urlTemplate: function() {
         return "insights";

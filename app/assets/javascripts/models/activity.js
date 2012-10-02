@@ -108,7 +108,7 @@
         },
 
         promoteToInsight: function(options) {
-            var insight = new chorus.models.CommentInsight({
+            var insight = new chorus.models.InsightCount({
                 noteId: this.get("id")
             });
             insight.bind("saved", function() {
@@ -122,7 +122,7 @@
         },
 
         publish: function() {
-            var insight = new chorus.models.CommentInsight({
+            var insight = new chorus.models.InsightCount({
                 id: this.get("id"),
                 action: "publish"
             });
@@ -135,7 +135,7 @@
         },
 
         unpublish: function() {
-            var insight = new chorus.models.CommentInsight({
+            var insight = new chorus.models.InsightCount({
                 id: this.get("id"),
                 action: "unpublish"
             });
