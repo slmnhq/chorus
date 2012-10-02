@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 resource "Greenplum DB account sharing" do
-  let(:owner) { users(:no_collaborators) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner)}
-  let!(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner => owner, :shared => shared) }
+  let(:owner) {gpdb_instance.owner }
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do
@@ -11,7 +9,7 @@ resource "Greenplum DB account sharing" do
   end
 
   post "/gpdb_instances/:gpdb_instance_id/sharing" do
-    let(:shared) { false }
+    let!(:gpdb_instance) { gpdb_instances(:owners) }
 
     example_request "Make instance shared" do
       status.should == 201
@@ -19,7 +17,7 @@ resource "Greenplum DB account sharing" do
   end
 
   delete "/gpdb_instances/:gpdb_instance_id/sharing" do
-    let(:shared) { true }
+    let!(:gpdb_instance) {gpdb_instances(:shared) }
 
     example_request "Require individual accounts" do
       status.should == 200

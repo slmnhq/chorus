@@ -2,8 +2,8 @@ require 'spec_helper'
 
 resource "Workfiles" do
   let(:owner) { users(:owner) }
-  let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
-  let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
+  let!(:workspace) { workspaces(:public) }
+  let!(:workfile) { workfiles("sql.sql") }
   let!(:file) { test_file("workfile.sql", "text/sql") }
   let!(:workfile_id) { workfile.to_param }
   let(:result) { }
@@ -24,7 +24,7 @@ resource "Workfiles" do
 
   get "/workfiles/:workfile_id/download" do
     before do
-      FactoryGirl.create(:workfile_version, :owner => owner, :workfile => workfile, :contents => file)
+      workfile_versions(:public).tap { |v| v.contents = file; v.save! }
     end
 
     parameter :workfile_id, "Workfile to download"
@@ -40,7 +40,7 @@ resource "Workfiles" do
 
   post "/workfiles/:workfile_id/copy" do
     before do
-      FactoryGirl.create(:workfile_version, :owner => owner, :workfile => workfile, :contents => file)
+      workfile_versions(:public).tap { |v| v.contents = file; v.save! }
     end
 
     parameter :workfile_id, "Workfile to copy"

@@ -263,7 +263,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
-    Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
+    fbuilder.name :note_on_hdfs_file ,Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
     Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
     Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')

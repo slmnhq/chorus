@@ -2,12 +2,11 @@ require 'spec_helper'
 
 resource "Greenplum DB members" do
   let(:owner) { users(:owner) }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner) }
   let(:non_member) { users(:no_collaborators) }
-  let!(:member_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance) }
-  let!(:member) { member_account.owner }
+  let!(:member_account) { gpdb_instance.account_for_user(member) }
+  let!(:member) { users(:the_collaborator) }
 
-  let!(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :owner => owner) }
+  let!(:gpdb_instance) { gpdb_instances(:owners) }
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do

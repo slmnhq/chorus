@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 resource "Workfile drafts" do
-  let(:owner) { users(:owner) }
-  let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
-  let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
+  let(:owner) { workspace.owner }
+  let!(:workspace) { workfile.workspace }
+  let!(:workfile) { workfiles("sql.sql") }
   let!(:file) { test_file("workfile.sql", "text/sql") }
-  let!(:workfile_version) { FactoryGirl.create(:workfile_version, :workfile => workfile, :contents => file, :owner => owner) }
+  let!(:workfile_version) { workfile_versions(:public)}
   let!(:workfile_id) { workfile.to_param }
 
   before do
@@ -14,7 +14,7 @@ resource "Workfile drafts" do
 
   get "/workfiles/:workfile_id/draft" do
     before do
-      FactoryGirl.create(:workfile_draft, :owner => owner, :workfile => workfile)
+      workfile_drafts(:default).tap { |d| d.workfile = workfile; d.save! }
     end
 
     parameter :workfile_id, "ID of the workfile for which the draft should be shown"
@@ -28,7 +28,7 @@ resource "Workfile drafts" do
 
   put "/workfiles/:workfile_id/draft" do
     before do
-      FactoryGirl.create(:workfile_draft, :owner => owner, :workfile => workfile)
+      workfile_drafts(:default).tap { |d| d.workfile = workfile; d.save! }
     end
     let(:content) { "This is the updated content." }
 
@@ -61,7 +61,7 @@ resource "Workfile drafts" do
 
   delete "/workfiles/:workfile_id/draft" do
     before do
-      FactoryGirl.create(:workfile_draft, :owner => owner, :workfile => workfile)
+      workfile_drafts(:default).tap { |d| d.workfile = workfile; d.save! }
     end
 
     parameter :workfile_id, "ID of the workfile for which the draft should be deleted"

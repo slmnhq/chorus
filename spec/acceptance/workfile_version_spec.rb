@@ -2,14 +2,18 @@ require 'spec_helper'
 
 resource "Workfile versions" do
   let(:owner) { users(:owner) }
-  let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
-  let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
+  let!(:workspace) { workspaces(:public) }
+  let!(:workfile) { workfiles(:public)}
   let!(:file) { test_file("workfile.sql", "text/sql") }
-  let!(:workfile_version) { FactoryGirl.create(:workfile_version, :workfile => workfile, :contents => file, :owner => owner) }
+  let!(:workfile_version) { workfile_versions(:public) }
   let!(:workfile_id) { workfile.to_param }
 
   before do
     log_in owner
+    workfile_version.tap { |v|
+      v.contents = file
+      v.save!
+    }
   end
 
   get "/workfiles/:workfile_id/versions" do

@@ -3,7 +3,7 @@ require './spec/acceptance/image_hack'
 
 resource "Workspaces" do
   let(:user) { users(:admin) }
-  let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
+  let!(:workspace) { workspaces(:public) }
 
   before do
     log_in user

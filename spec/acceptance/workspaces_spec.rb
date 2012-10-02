@@ -6,7 +6,7 @@ resource "Workspaces" do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => user) }
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:greenplum_instance) { database.gpdb_instance}
   let(:instance_id) { greenplum_instance.id }
   let(:database) { sandbox.database }
@@ -284,12 +284,12 @@ resource "Workspaces" do
     parameter :dataset_ids, "Comma-delimited list of dataset IDs to associate with the workspace"
 
     before do
-      workspace.sandbox = sandbox
+      workspace.sandbox = gpdb_schemas(:searchquery_schema)
       workspace.save
     end
 
-    let(:view) { FactoryGirl.create(:gpdb_view) }
-    let(:table) { FactoryGirl.create(:gpdb_table) }
+    let(:view) { datasets(:view) }
+    let(:table) { datasets(:table) }
     let(:dataset_ids) { view.to_param + "," + table.to_param }
 
     example_request "Associate the specified datasets with the workspace" do

@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 resource "Greenplum DB schemas" do
-  let(:owner) { users(:owner) }
-  let!(:owned_instance) { FactoryGirl.create :gpdb_instance, :owner => owner }
-  let!(:database) { FactoryGirl.create :gpdb_database, :gpdb_instance => owned_instance }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => owned_instance, :owner => owner)}
+  let(:owner) { owned_instance.owner }
+  let!(:owned_instance) { gpdb_instances(:owners) }
+  let!(:database) { gpdb_databases(:default) }
+  let!(:owner_account) { owned_instance.account_for_user(owner) }
 
-  let(:db_schema) { FactoryGirl.create(:gpdb_schema, :database => database) }
+  let(:db_schema) { gpdb_schemas(:default)}
   let(:id) { db_schema.to_param }
   let(:schema_id) { db_schema.to_param }
-  let(:table) { FactoryGirl.create(:gpdb_table, :name => "table1", :schema => db_schema) }
-  let(:view) { FactoryGirl.create(:gpdb_view, :name => "view1", :schema => db_schema) }
+  let(:table) { datasets(:table) }
+  let(:view) { datasets(:view) }
 
   let(:default_dataset_refresh_options) { { :sort => [{:relname => 'asc'}] } }
 

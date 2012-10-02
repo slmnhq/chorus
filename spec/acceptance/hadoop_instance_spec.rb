@@ -1,12 +1,10 @@
 require 'spec_helper'
 
 resource "Hadoop DB instances" do
-  let(:owner) { users(:owner) }
-  let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'will_be_stubbed', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
+  let(:owner) { instance.owner }
+  let!(:instance) { hadoop_instances(:hadoop) }
   let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.now.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
   let!(:file_entry) { HdfsEntry.create!({:path => '/test.txt', :modified_at => Time.now.to_s, :size => "1234kB", :hadoop_instance => instance}, :without_protection => true ) }
-  let!(:event) { FactoryGirl.create(:hadoop_instance_created_event, :hadoop_instance => instance) }
-  let!(:activity) { Activity.create!(:entity => instance, :event => event) }
   let(:hadoop_instance_id) { instance.to_param }
 
   before do
