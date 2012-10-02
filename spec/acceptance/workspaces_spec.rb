@@ -20,7 +20,6 @@ resource "Workspaces" do
 
   before do
     log_in user
-    stub(any_instance_of(Hdfs::ExternalTableCreator)).create_external_table {}
     stub(File).readlines.with_any_args { ["The river was there."] }
     stub(Dataset).refresh.with_any_args { |account, schema, options| schema.datasets }
   end
@@ -267,8 +266,12 @@ resource "Workspaces" do
     let(:table_name) { "highway_to_heaven" }
 
     before do
-      workspace.sandbox = sandbox
-      workspace.save!
+      workspace.update_attribute(:sandbox, sandbox)
+      any_instance_of(Hdfs::ExternalTableCreator) do |instance|
+        stub(instance).create_external_table {
+          sandbox.datasets << FactoryGirl.create(:gpdb_table, :schema => sandbox, :name => table_name)
+        }
+      end
     end
 
     example_request "Create external table from CSV file on hadoop" do
