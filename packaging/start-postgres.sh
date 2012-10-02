@@ -10,6 +10,13 @@ bin=`cd "$bin"; pwd`
 
 POSTGRES_PORT=8543
 
+if [ -f $POSTGRES_PID_FILE ]; then
+  if kill -0 `head -1 $POSTGRES_PID_FILE` > /dev/null 2>&1; then
+    log "Postgres already running as process `head -1 $POSTGRES_PID_FILE`."
+    exit 1
+  fi
+fi
+
 $CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DIR/server.log -D $POSTGRES_DIR -w -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>$POSTGRES_DIR/pg_ctl.log
 POSTGRES_START=$?
 
