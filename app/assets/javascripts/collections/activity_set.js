@@ -4,14 +4,19 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
 
     url: function() {
         if (this.attributes.insights) {
-            var workspace = this.attributes.workspace
-            if (workspace) {
-                return "/insights?entity_type=workspace&entity_id=" + workspace.id;
-            }
-            return "/insights?entity_type=dashboard";
+            return this.getInsightUrl();
         } else {
             return this.attributes.url;
         }
+    },
+
+    getInsightUrl: function() {
+        var workspace = this.attributes.workspace
+        var url_base = "/insights";
+        if (workspace) {
+            return (url_base + "?entity_type=workspace&entity_id=" + workspace.id);
+        }
+        return (url_base + "?entity_type=dashboard");
     }
 }, {
     forDashboard: function() {

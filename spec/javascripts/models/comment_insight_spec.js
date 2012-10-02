@@ -22,7 +22,7 @@ describe("chorus.models.CommentInsight", function() {
             expect(this.insightCount).toBeA(chorus.models.Base);
 
             this.insightCount.fetch();
-            expect(this.server.lastFetch().url).toHaveUrlPath("/commentinsight/count");
+            expect(this.server.lastFetch().url).toHaveUrlPath("/insights/count");
         });
 
         it("includes urlParams, if provided", function() {

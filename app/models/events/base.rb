@@ -43,7 +43,7 @@ module Events
       alias_method_chain method, :deleted
     end
 
-    default_scope { order("id DESC") }
+    default_scope { order("events.id DESC") }
 
     def self.by(actor)
       where(:actor_id => actor.id)

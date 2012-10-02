@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 describe InsightsController do
-
-  before do
-    log_in user
-  end
-
   describe "#create (POST)" do
+    before do
+      log_in user
+    end
+
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.first }
 
@@ -53,6 +52,10 @@ describe InsightsController do
   end
 
   describe "#index (GET)" do
+    before do
+      log_in user
+    end
+
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
@@ -138,6 +141,77 @@ describe InsightsController do
         }
         get :index, :entity_type => "workspace", :entity_id => workspace.id
         response.code.should == "200"
+      end
+    end
+  end
+
+  describe "#count (GET)" do
+    let(:user) { users(:owner) }
+    let(:admin) { users(:admin) }
+    let(:not_a_member) { users(:not_a_member) }
+    let(:workspace) { workspaces(:public) }
+    let(:private_workspace) { workspaces(:private) }
+    #let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
+    #    :workspace => workspace,
+    #    :body => 'Come see my awesome workspace!',
+    #    :insight => true,
+    #    :promotion_time => Time.now(),
+    #    :promoted_by => user) }
+
+    let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
+        :workspace => private_workspace,
+        :body => 'You cant see my private workspace!',
+        :insight => true,
+        :promotion_time => Time.now(),
+        :promoted_by => user) }
+
+    context "when getting insights for the dashboard" do
+      it "returns a count of all the insights visible to the current user" do
+        log_in user
+        get :count, :entity_type => "dashboard"
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 2
+      end
+      it "returns a count of all the insights visiible to another user" do
+        log_in not_a_member
+        get :count, :entity_type => "dashboard"
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 1
+      end
+      it "returns a count of all the insights visible to the admin" do
+        log_in admin
+        get :count, :entity_type => "dashboard"
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 2
+      end
+      context "with an empty entity_type" do
+        it "returns a count of all the insights visible to the current user" do
+          log_in user
+          get :count
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == 2
+        end
+      end
+    end
+
+    context "when getting insights for a workspace" do
+      it "returns a count of all the insights visible to the current user" do
+        log_in user
+        get :count, :entity_type => "workspace", :entity_id => private_workspace.id
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 1
+      end
+      it "returns a count of all the insights visible to the admin" do
+        log_in admin
+        get :count, :entity_type => "workspace", :entity_id => private_workspace.id
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 1
+      end
+      it "returns a count of zero for a user that can't see any insights on this workspace" do
+        log_in not_a_member
+        get :count, :entity_type => "workspace", :entity_id => private_workspace.id
+        response.code.should == "200"
+        decoded_response[:number_of_insight].should == 0
       end
     end
   end

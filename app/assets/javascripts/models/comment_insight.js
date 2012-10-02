@@ -7,7 +7,7 @@ chorus.models.CommentInsight = chorus.models.Base.extend({
     count: function(options) {
         options || (options = {});
         var count = new chorus.models.Base();
-        count.urlTemplate = "commentinsight/count";
+        count.urlTemplate = "insights/count";
         count.urlParams = options.urlParams;
         return count;
     }

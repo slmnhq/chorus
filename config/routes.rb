@@ -103,8 +103,12 @@ Chorus::Application.routes.draw do
 
   resource :provisioning, :only => [:show], :controller => 'provisioning'
 
-  resources :insights, :only => [:create, :index]
-  
+  resources :insights, :only => [:create, :index] do
+    collection do
+      get :count
+    end
+  end
+
   resource :search, :only => [:show], :controller => 'search' do
     get :type_ahead
     member do
