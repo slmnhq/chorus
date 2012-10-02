@@ -15,7 +15,7 @@ FixtureBuilder.configure do |fbuilder|
     record['username'].downcase
   end
 
-  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{GpdbIntegration::REAL_GPDB_HOST}.yml"
+  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{GpdbIntegration::REAL_GPDB_HOST}_#{Rails.env}.yml"
 
   # now declare objects
   fbuilder.factory do
