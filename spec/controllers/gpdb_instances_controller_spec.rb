@@ -90,9 +90,10 @@ describe GpdbInstancesController do
 
     context "with register provision type" do
       let(:valid_attributes) { Hash.new }
+      let(:instance) { gpdb_instances(:default) }
 
       before do
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { gpdb_instances(:default) }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { instance }
       end
 
       it "reports that the gpdb instance was created" do
@@ -102,7 +103,7 @@ describe GpdbInstancesController do
 
       it "renders the newly created gpdb instance" do
         post :create, :instance => valid_attributes
-        decoded_response.name.should == "Default"
+        decoded_response.name.should == instance.name
       end
 
       it "schedules a job to refresh the instance" do

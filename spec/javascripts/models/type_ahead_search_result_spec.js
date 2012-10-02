@@ -63,5 +63,17 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 }
             })
         });
-    })
+    });
+
+    describe("isPaginated", function() {
+        it("should be true", function() {
+            expect(this.result.isPaginated()).toBeTruthy();
+        });
+    });
+
+    describe("url", function() {
+        it("should have 5 results per_page", function() {
+            expect(this.result.url()).toMatch("per_page=5(&|$)");
+        });
+    });
 });

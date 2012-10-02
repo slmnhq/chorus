@@ -1,5 +1,5 @@
 class TypeAheadSearch
-  attr_accessor :query
+  attr_accessor :query, :per_page
   attr_reader :current_user
 
   MODELS_TO_SEARCH = [User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry]
@@ -9,6 +9,7 @@ class TypeAheadSearch
   def initialize(current_user, params = {})
     @current_user = current_user
     self.query = params[:query] + "*"
+    self.per_page = params[:per_page] || 5
   end
 
   def search
@@ -25,6 +26,7 @@ class TypeAheadSearch
     @search = Sunspot.new_search(MODELS_TO_SEARCH) do
       fulltext query, :highlight => true, :fields => [:name, :first_name, :last_name, :file_name]
       with :type_name, MODELS_TO_SEARCH.collect(&:name)
+      paginate :page => 1, :per_page => per_page
     end
 
     MODELS_TO_SEARCH.each do |model_to_search|

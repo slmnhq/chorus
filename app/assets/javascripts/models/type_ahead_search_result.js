@@ -1,6 +1,7 @@
 chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
     constructorName: "TypeAheadSearchResult",
     urlTemplate: "search/type_ahead/",
+    numResultsPerPage: 5,
 
     results: function() {
         var typeAhead = this.get('typeAhead');
@@ -36,5 +37,9 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                     break;
             }
         }));
+    },
+
+    isPaginated: function() {
+        return true;
     }
 });

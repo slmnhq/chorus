@@ -1,6 +1,4 @@
 ;(function() {
-    var NUM_RESULTS_PER_PAGE = 50;
-
     var collectionMap = {
         hdfs: "HdfsEntrySet",
         datasets: "DynamicDatasetSet",
@@ -15,6 +13,7 @@
 
     chorus.models.SearchResult = chorus.models.Base.extend({
         constructorName: "SearchResult",
+        numResultsPerPage: 50,
 
         initialize: function() {
             this.bind('invalidated', function() {
@@ -100,7 +99,7 @@
                 params.workspaceId = this.get("workspaceId");
             }
             if (this.isPaginated()) {
-                params.per_page = NUM_RESULTS_PER_PAGE;
+                params.per_page = this.numResultsPerPage;
                 params.page = this.currentPageNumber();
             } else {
                 params.per_type = 3;
@@ -165,7 +164,7 @@
         },
 
         numPages: function(totalFound) {
-            return Math.ceil(totalFound / NUM_RESULTS_PER_PAGE);
+            return Math.ceil(totalFound / this.numResultsPerPage);
         },
 
         total: function() {
