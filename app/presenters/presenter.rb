@@ -8,7 +8,7 @@ class Presenter
   end
 
   def self.present_model(model, view_context, options)
-    presenter_class = get_presenter_class(model)
+    presenter_class = get_presenter_class(model, options)
     presenter_class.new(model, view_context, options).presentation_hash
   end
 
@@ -50,7 +50,10 @@ class Presenter
 
   private
 
-  def self.get_presenter_class(model)
+  def self.get_presenter_class(model, options)
+    if options[:presenter_class]
+      return options.delete(:presenter_class).to_s.constantize
+    end
     case model
     when Paperclip::Attachment
       ImagePresenter

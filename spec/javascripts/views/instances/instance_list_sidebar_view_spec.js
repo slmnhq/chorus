@@ -26,6 +26,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
         it("fetches the activities, instance usage and accounts", function() {
             expect(this.instance.activities()).toHaveBeenFetched();
+            expect(this.instance.usage()).toHaveBeenFetched();
             expect(this.instance.accounts()).toHaveBeenFetched();
         });
 
@@ -227,6 +228,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             var instance = rspecFixtures.greenplumInstance({"shared":true});
                             instance.loaded = true;
                             this.view.setInstance(instance);
+                            this.server.completeFetchFor(instance.usage(), { workspaces: [] });
                             var instanceAccountSet = rspecFixtures.instanceAccountSet();
                             instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
                             this.server.completeFetchFor(instance.accounts(), instanceAccountSet.models);
@@ -414,50 +416,59 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when there are no workspaces", function() {
-                beforeEach(function() {
-                    this.instance.usage().set({workspaces: []});
-                    this.view.render();
-                });
-
-                it("should disable the link", function() {
-                    expect(this.view.$('.actions .workspace_usage')).toHaveClass('disabled');
-                    expect(this.view.$('.actions .workspace_usage').data('dialog')).toBeUndefined();
-                });
-
-                it("should show a count of zero", function() {
-                    expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 0});
-                });
+            it("has the default loading text on the workspace usage link", function() {
+                expect(this.view.$(".actions .workspace_usage")).toContainTranslation("instances.sidebar.usage_loading");
             });
 
-            context("when there are workspaces", function() {
+            context("when the workspace usage fetch completes", function() {
                 beforeEach(function() {
-                    this.instance.usage().set({workspaces: [
-                        fixtures.instanceWorkspaceUsageJson(),
-                        fixtures.instanceWorkspaceUsageJson()
-                    ]});
-                    this.view.render();
+                    this.server.completeFetchFor(this.instance.usage(), rspecFixtures.instanceDetails());
                 });
 
-                it("should be a dialog link", function() {
-                    expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
-                    expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
-                    expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.instance);
+                context("when there are no workspaces", function() {
+                    beforeEach(function() {
+                        this.instance.usage().set({workspaces: []});
+                        this.instance.usage().trigger("loaded");
+                    });
+
+                    it("should disable the link", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toHaveClass('disabled');
+                        expect(this.view.$('.actions .workspace_usage').data('dialog')).toBeUndefined();
+                    });
+
+                    it("should show a count of zero", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 0});
+                    });
                 });
 
-                it("should show the appropriate number of workspaces", function() {
-                    expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 2});
+                context("when there are workspaces", function() {
+                    beforeEach(function() {
+                        expect(this.instance.usage().get("workspaces").length).toBeGreaterThan(0);
+                    });
+
+                    it("should be a dialog link", function() {
+                        expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
+                        expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
+                        expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.instance);
+                    });
+
+                    it("should show the appropriate number of workspaces", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: this.instance.usage().get("workspaces").length});
+                    });
                 });
             });
         });
 
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
-                this.instance.usage().set({workspaces: null});
-                this.view.render();
+                this.server.completeFetchFor(this.instance.activities());
+                this.server.completeFetchFor(this.instance.accounts(), rspecFixtures.instanceAccountSet().models);
+                this.server.completeFetchFor(this.instance.accountForCurrentUser());
+                this.server.completeFetchFor(this.instance.usage(), rspecFixtures.instanceDetailsWithoutPermission());
             });
 
             it("renders without the workspace usage section", function() {
+                expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
                 expect(this.view.$('.actions .workspace_usage')).not.toExist();
             });
         });

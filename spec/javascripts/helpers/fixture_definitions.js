@@ -109,6 +109,13 @@ window.rspecFixtureDefinitions = {
     instanceAccount: {},
     instanceAccountSet: {},
 
+    instanceDetails: {
+        model: 'InstanceUsage'
+    },
+    instanceDetailsWithoutPermission: {
+        model: 'InstanceUsage'
+    },
+
     forbiddenInstance: {},
 
     activity: {

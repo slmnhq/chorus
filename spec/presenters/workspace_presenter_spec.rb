@@ -67,34 +67,6 @@ describe WorkspacePresenter, :type => :view do
         hash.keys.size.should == 2
       end
     end
-
-    context "when rendering for instance size" do
-      let(:options) { {:size_only => true} }
-      let(:size) { 10 }
-
-      before do
-        any_instance_of(GpdbSchema) do |schema|
-          stub(schema).disk_space_used(is_a(InstanceAccount)) { size }
-        end
-      end
-
-      it "should render the correct subset" do
-        hash.should have_key(:size)
-        hash.should have_key(:percentage_used)
-        hash.should have_key(:schema_name)
-        hash.should have_key(:database_name)
-        hash.should have_key(:owner_full_name)
-      end
-
-      context "when size cannot be calculated" do
-        let(:size) { nil }
-
-        it "returns nil for size and percentage" do
-          hash[:size].should == nil
-          hash[:percentage_used].should == nil
-        end
-      end
-    end
   end
 
   describe "complete_json?" do

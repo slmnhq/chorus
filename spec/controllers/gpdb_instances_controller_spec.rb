@@ -7,9 +7,6 @@ describe GpdbInstancesController do
 
   before do
     log_in user
-    any_instance_of(GpdbSchema) do |schema|
-      stub(schema).disk_space_used(anything) { 10 }
-    end
   end
 
   describe "#index" do
@@ -41,7 +38,7 @@ describe GpdbInstancesController do
       end
 
       it "presents the gpdb instance" do
-        mock.proxy(controller).present(gpdb_instance, :presenter_options => { :size_only => true })
+        mock.proxy(controller).present(gpdb_instance)
         get :show, :id => gpdb_instance.to_param
       end
 

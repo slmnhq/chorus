@@ -55,14 +55,22 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         var account = this.instance.accountForCurrentUser();
         if(account) {
-            this.instance.accounts().fetch();
+            this.instance.accounts().fetchIfNotLoaded();
             account.fetchIfNotLoaded();
             this.requiredResources.push(this.instance.accounts());
             this.requiredResources.push(account);
+            this.bindings.add(this.instance.accounts(), "change", this.render);
+            this.bindings.add(this.instance.accounts(), "remove", this.render);
             this.bindings.add(account, "change", this.render);
             this.bindings.add(account, "fetchFailed", this.render);
         }
 
+        var instanceUsage = this.instance.usage();
+        if(instanceUsage) {
+            instanceUsage.onLoaded(this.updateWorkspaceUsage, this);
+            this.bindings.add(instanceUsage, "fetchFailed", this.updateWorkspaceUsage, this);
+            instanceUsage.fetchIfNotLoaded();
+        }
         this.render();
     },
 
@@ -85,19 +93,20 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     updateWorkspaceUsage: function() {
-        this.$(".workspace_usage_container").empty();
-        if (this.model.hasWorkspaceUsageInfo()) {
-
-            var el;
-            var count = this.instance.usage().workspaceCount();
-            if (count > 0) {
-                el = $("<a class='dialog workspace_usage' href='#' data-dialog='InstanceUsage'></a>");
-                el.data("instance", this.instance);
-            } else {
-                el = $("<span class='disabled workspace_usage'></span>");
+        if (this.instance.usage().loaded) {
+            this.$(".workspace_usage_container").empty();
+            if(this.model.hasWorkspaceUsageInfo()) {
+                var el;
+                var count = this.instance.usage().workspaceCount();
+                if (count > 0) {
+                    el = $("<a class='dialog workspace_usage' href='#' data-dialog='InstanceUsage'></a>");
+                    el.data("instance", this.instance);
+                } else {
+                    el = $("<span class='disabled workspace_usage'></span>");
+                }
+                el.text(t("instances.sidebar.usage", {count: count}));
+                this.$(".workspace_usage_container").append(el);
             }
-            el.text(t("instances.sidebar.usage", {count: count}));
-            this.$(".workspace_usage_container").append(el);
         }
     }
 });

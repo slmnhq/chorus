@@ -228,9 +228,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                rspecFixtures.instanceAccount({ id: '1', owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                rspecFixtures.instanceAccount({ id: '2', owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                rspecFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
+                rspecFixtures.instanceAccount({ id: '1', instanceId: this.instance.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                rspecFixtures.instanceAccount({ id: '2', instanceId: this.instance.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                rspecFixtures.instanceAccount({ id: '3', instanceId: this.instance.id, owner: this.owner.attributes })
             ]);
             this.dialog = new chorus.dialogs.InstancePermissions({ instance: this.instance });
             this.dialog.launchModal();

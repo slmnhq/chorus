@@ -9,6 +9,10 @@ describe("chorus.dialogs.InstanceUsage", function() {
         this.dialog = new chorus.dialogs.InstanceUsage({ instance: this.instance });
     });
 
+    it("fetches the usage", function() {
+        expect(this.dialog.usage).toHaveBeenFetched();
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
@@ -21,8 +25,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
 
         context("when the usage and config have been fetched", function() {
             beforeEach(function(){
-                var sourceUsage = fixtures.instanceUsage();
-                sourceUsage.set({instanceId : this.dialog.usage.get("instanceId")});
+                this.server.completeFetchFor(this.instance.usage(), rspecFixtures.instanceDetails());
                 this.workspaces = this.dialog.usage.get("workspaces");
             });
 
@@ -48,7 +51,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
                     var el = $(z[0]);
                     var workspace = z[1];
                     var actualPercentage = el.find(".used").width() / el.find(".usage_bar").width();
-                    expect(actualPercentage).toBeCloseTo(workspace.percentageUsed, 1);
+                    expect(actualPercentage).toBeCloseTo(workspace.percentageUsed/100, 1);
                 });
             });
 

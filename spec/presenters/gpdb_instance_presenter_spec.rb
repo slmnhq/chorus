@@ -38,34 +38,6 @@ describe GpdbInstancePresenter, :type => :view do
       owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
-    context "when size_only is true" do
-      let(:options) { {:size_only => true} }
-
-      it "should have :used_by_workspaces" do
-        hash.should have_key(:used_by_workspaces)
-      end
-
-      it "should use workspacePresenter" do
-        used_by_workspaces = hash[:used_by_workspaces]
-        used_by_workspaces.count.should == gpdb_instance.used_by_workspaces.count
-      end
-
-      context "when the current_user doesn't have access to the instance" do
-        let(:user) { users(:not_a_member) }
-
-        it "should have nil used_by_workspaces" do
-          hash[:used_by_workspaces].should be_nil
-        end
-      end
-
-      context "when disk space for a schema can't be retrieved" do
-        it "skips those schemas" do
-          any_instance_of(GpdbSchema) {|schema| stub(schema).disk_space_used(anything) {nil} }
-          puts hash
-        end
-      end
-    end
-
     it_behaves_like "sanitized presenter", :gpdb_instance, :name
     it_behaves_like "sanitized presenter", :gpdb_instance, :host
   end

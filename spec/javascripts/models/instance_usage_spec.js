@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceUsage", function() {
     beforeEach(function() {
-        this.usage = fixtures.instanceUsage();
+        this.usage = rspecFixtures.instanceDetails();
         this.workspaces = this.usage.get('workspaces');
     });
 

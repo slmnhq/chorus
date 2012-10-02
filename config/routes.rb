@@ -23,6 +23,7 @@ Chorus::Application.routes.draw do
       resource :owner, :only => [:update], :controller => 'owner'
       resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
       resource :account, :only => [:show, :create, :update, :destroy], :controller => 'account'
+      resource :workspace_detail, :only => [:show]
       resources :members, :only => [:index, :create, :update, :destroy]
     end
   end

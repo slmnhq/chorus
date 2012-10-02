@@ -85,4 +85,12 @@ resource "Greenplum DB instances" do
       status.should == 200
     end
   end
+
+  get "/gpdb_instances/:gpdb_instance_id/workspace_detail" do
+    let(:gpdb_instance_id) { owned_instance.to_param }
+
+    example_request "Get details for workspaces having sandboxes within an instance" do
+      status.should == 200
+    end
+  end
 end

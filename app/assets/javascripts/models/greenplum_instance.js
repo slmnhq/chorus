@@ -94,8 +94,7 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
 
     usage: function() {
         if (!this.instanceUsage) {
-            var workspaces = this.get('usedByWorkspaces');
-            this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id'), workspaces: workspaces, sandboxesSize : this.get('sandboxesSize')})
+            this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id')});
         }
         return this.instanceUsage
     },

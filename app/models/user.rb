@@ -107,6 +107,10 @@ class User < ActiveRecord::Base
     (shared_account_ids + instance_account_ids).uniq
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def update_password_digest

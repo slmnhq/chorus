@@ -268,7 +268,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         localGroup.add(this.instance.sharing(), "destroy", displaySuccessToast);
         localGroup.add(this.instance.sharing(), "destroyFailed", displayFailureToast);
 
-        this.instance.sharing().set({id: -1}) // so that model isNew() is false, and destroy sends message to server
+        this.instance.sharing().set({id: -1}); // so that model isNew() is false, and destroy sends message to server
         this.instance.sharing().destroy();
 
         function displaySuccessToast() {
@@ -296,7 +296,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         localGroup.add(this.instance.sharing(), "saved", displaySuccessToast);
         localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
 
-        this.instance.sharing().unset("id") // so that model isNew() is true, and server sees a create
+        this.instance.sharing().unset("id"); // so that model isNew() is true, and server sees a create
         this.instance.sharing().save();
 
         function displaySuccessToast() {
@@ -328,9 +328,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     removeIndividualAccount: function(accountId) {
+        var account = this.collection.get(accountId);
         var selectedUser = this.collection.get(accountId).user();
-
-        var account = new chorus.models.InstanceAccount({id: accountId, instanceId: this.model.id });
 
         this.bindings.add(account, "destroyFailed", function() {
             this.showErrors(account);

@@ -138,22 +138,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        instanceWorkspaceUsageJson: function(overrides) {
-            var workspaceId = this.nextId().toString();
-            return _.extend({
-                workspaceId: workspaceId,
-                workspaceName: "workspace" + workspaceId,
-                image: { original: "/foo", icon: "/bar" },
-                workspaceOwnerFullName: "EDC Admin",
-                sandboxId: this.nextId().toString(),
-                databaseName: "Analytics",
-                schemaName: "analytics",
-                ownerFullName: "EDC Admin",
-                sizeInBytes: "1648427008",
-                size: "1.5GB"
-            }, overrides);
-        },
-
         nestedWorkfileJson: function() {
             var id = this.nextId().toString();
             return {
@@ -255,21 +239,6 @@ beforeEach(function() {
                 entityType: "file"
             }, overrides);
             return new chorus.models.Attachment(attributes);
-        },
-
-        instanceUsage: function() {
-            return new chorus.models.InstanceUsage({
-                "sandboxesSize": "2.9GB",
-                "sandboxesSizeInBytes": 3157917696,
-                "workspaces": [
-                    this.instanceWorkspaceUsageJson({
-                        sizeInBytes: "1648427008"
-                    }),
-                    this.instanceWorkspaceUsageJson({
-                        sizeInBytes: "1509490688"
-                    })
-                ]
-            });
         },
 
         datasetJson: function(overrides) {
