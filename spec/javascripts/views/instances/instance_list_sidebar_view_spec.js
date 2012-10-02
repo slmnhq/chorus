@@ -27,14 +27,14 @@ describe("chorus.views.InstanceListSidebar", function() {
         it("fetches the activities, instance usage and accounts", function() {
             expect(this.instance.activities()).toHaveBeenFetched();
             expect(this.instance.usage()).toHaveBeenFetched();
-            expect(this.instance.accounts()).toHaveBeenFetched();
+            expect(this.instance.accounts()).toHaveAllBeenFetched();
         });
 
         context("when the data has been loaded", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts());
+                this.server.completeFetchAllFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -429,7 +429,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts());
+                this.server.completeFetchAllFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.lastFetchFor(this.instance.usage()).fail("Account map needed");
             });
