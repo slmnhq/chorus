@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ImportSchedule do
-  let(:pending_import_schedule) { import_schedules(:pending_import_schedule) }  # TODO: orphaned?
   let(:future_import_schedule) { import_schedules(:future_import_schedule) }
   let(:import_schedule) { import_schedules(:default) }
 

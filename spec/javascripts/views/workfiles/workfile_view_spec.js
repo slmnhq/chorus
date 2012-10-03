@@ -18,7 +18,7 @@ describe("chorus.views.Workfile", function() {
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
     });
 
-    // TODO: make these work with new api and fixtures
+    // TODO: make these work with new api and fixtures [#37135825]
     xcontext("when the workfile has one comment", function() {
         it("includes the most recent comment body", function() {
             expect(this.view.$(".comment .body")).toContainText(this.model.lastComment().get("body"));

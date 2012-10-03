@@ -62,7 +62,7 @@ describe WorkfileMigrator do
           new_workfile.file_name.should == legacy_workfile["file_name"]
           should_be_equal_dates(new_workfile.created_at, legacy_workfile["created_tx_stamp"])
 
-          # TODO bug????
+          # TODO bug with paperclip interaction [#37137223]
           #should_be_equal_dates(new_workfile.updated_at, legacy_workfile["last_updated_tx_stamp"])
         end
       end

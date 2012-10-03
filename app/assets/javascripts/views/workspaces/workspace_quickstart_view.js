@@ -34,7 +34,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
             this.model.get("hasAddedWorkfile") == true &&
             this.model.get("hasChangedSettings") == true) {
 
-            chorus.router.navigate("/workspaces/" + this.model.id);
+            chorus.router.navigate(this.model.showUrl());
         }
 
         this._super("render", arguments);

@@ -70,7 +70,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
                 it("redirects to the regular workspace page", function() {
                     this.view.render();
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/999");
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.showUrl());
                 });
             });
         });
@@ -234,15 +234,14 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                 this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
 
-            // TODO: navigation is not working yet
-            xit("navigates to the normal workspace show page", function() {
+            it("navigates to the normal workspace show page", function() {
                 this.view.render();
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl())
             });
         });
-    })
+    });
 
-    describe("clicking the dismiss link", function() { // TODO
+    describe("clicking the dismiss link", function() {
         beforeEach(function() {
             chorus.router.navigate.reset();
             this.view.$("a.dismiss").click();
