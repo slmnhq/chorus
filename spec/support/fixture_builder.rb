@@ -183,9 +183,15 @@ FixtureBuilder.configure do |fbuilder|
 
     # Tableau publications
     publication = FactoryGirl.create :tableau_workbook_publication, :name => "default",
-                                     :workspace => public_workspace, :dataset => chorus_view
-    fbuilder.name :owner_publishes_to_tableau, Events::TableauWorkbookPublished.by(owner).add(:workbook_name => publication.name, :dataset => publication.dataset, :workspace => publication.workspace, :tableau_url => publication.tableau_url)
-
+                                     :workspace => public_workspace, :dataset => chorus_view, :project_name => "Default"
+    fbuilder.name :owner_publishes_to_tableau, Events::TableauWorkbookPublished.by(owner).add(
+        :workbook_name => publication.name,
+        :dataset => publication.dataset,
+        :workspace => publication.workspace,
+        :project_name => "Default",
+        :workbook_url => publication.workbook_url,
+        :project_url => publication.project_url
+    )
 
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)

@@ -35,12 +35,14 @@ describe TableauWorkbooksController do
 
     it "returns 201 created with data when the save succeeds" do
       any_instance_of(TableauWorkbookPublication) do |workbook|
-        stub(workbook).tableau_url { "foo.com"}
+        stub(workbook).workbook_url { "foo.com"}
+        stub(workbook).project_url { "foo.com/projects"}
       end
       post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
       response.code.should == '201'
       decoded_response.name.should == 'myTableauWorkbook'
       decoded_response.url.should == 'foo.com'
+      decoded_response.project_url.should == "foo.com/projects"
     end
 
     it "should create a TableauWorkbookPublished event" do

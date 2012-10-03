@@ -10,19 +10,24 @@ class TableauWorkbooksController < ApplicationController
       publication = TableauWorkbookPublication.create!(
           :name => params[:tableau_workbook][:name],
           :dataset_id => dataset.id,
-          :workspace_id => params[:workspace_id]
+          :workspace_id => params[:workspace_id],
+          :project_name => "Default"
       )
       Events::TableauWorkbookPublished.by(current_user).add(
           :workbook_name => publication.name,
           :dataset => publication.dataset,
           :workspace => publication.workspace,
-          :tableau_url => publication.tableau_url)
+          :workbook_url => publication.workbook_url,
+          :project_name => publication.project_name,
+          :project_url => publication.project_url
+      )
       render :json => {
           :response => {
               :name => publication.name,
               :dataset_id => publication.dataset_id,
               :id => publication.id,
-              :url => publication.tableau_url
+              :url => publication.workbook_url,
+              :project_url => publication.project_url
           }
       }, :status => :created
     else

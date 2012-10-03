@@ -259,7 +259,7 @@
 
             TableauWorkbookPublished: {
                 links: ["actor", "dataset"],
-                computed: ["datasetType", "tableauWorkbookLink"]
+                computed: ["datasetType", "tableauWorkbookLink", "tableauProjectLink"]
             }
         },
 
@@ -344,8 +344,14 @@
 
         tableauWorkbookLink: function(self) {
             var workbookName = self.model.get("workbookName");
-            var workbookUrl = self.model.get("tableauUrl");
+            var workbookUrl = self.model.get("workbookUrl");
            return "<a href='" + workbookUrl  + "' target='_blank'>" + workbookName + "</a>";
+        },
+
+        tableauProjectLink: function(self) {
+            var projectName = self.model.get("projectName");
+            var projectUrl = self.model.get("projectUrl");
+            return "<a href='" + projectUrl  + "' target='_blank'>" + projectName + "</a>";
         },
 
         count: function(self)    {

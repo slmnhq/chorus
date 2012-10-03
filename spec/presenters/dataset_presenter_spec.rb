@@ -38,7 +38,7 @@ describe DatasetPresenter, :type => :view do
     it "includes associated tableau publications" do
       hash[:tableau_workbooks][0][:id].should == workbook.id
       hash[:tableau_workbooks][0][:name].should == workbook.name
-      hash[:tableau_workbooks][0][:url].should == workbook.tableau_url
+      hash[:tableau_workbooks][0][:url].should == workbook.workbook_url
     end
   end
 

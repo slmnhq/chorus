@@ -59,7 +59,7 @@ class DatasetPresenter < Presenter
     tableau_workbooks = tableau_workbook_publications.map do |workbook|
       { :id => workbook.id,
         :name => workbook.name,
-        :url => workbook.tableau_url
+        :url => workbook.workbook_url
       }
     end
 
