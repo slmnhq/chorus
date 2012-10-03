@@ -298,21 +298,23 @@
             return new Handlebars.SafeString(result.outerHtml());
         },
 
-        publishedToTableau: function(tableauWorkbookSet) {
+        usedInTableau: function(tableauWorkbookSet, contextObject) {
+            contextObject = contextObject.clone();
             if (!tableauWorkbookSet || tableauWorkbookSet.length == 0) { return ""; }
 
             if (!(tableauWorkbookSet instanceof chorus.collections.TableauWorkbookSet)) {
                 tableauWorkbookSet = new chorus.collections.TableauWorkbookSet(tableauWorkbookSet);
+
             }
 
-            function linkToWorkbook(workbook) {
+            function linkToContextObject(workbook) {
                 return chorus.helpers.linkTo(workbook.get("url"), workbook.get('name'), {
                     title: workbook.get('name'),
                     target: "_blank"
                 }).toString()
             }
 
-            var workbookLink = linkToWorkbook(tableauWorkbookSet.at(0));
+            var workbookLink = linkToContextObject(tableauWorkbookSet.at(0));
 
             var result = $("<div></div>").addClass('published_to')
             var otherWorkbooksMenu = chorus.helpers.linkTo('#', t('tableau.other_workbooks', {count: tableauWorkbookSet.length - 1}), {'class': 'open_other_menu'}).toString()
@@ -328,7 +330,7 @@
             if (tableauWorkbookSet.length > 1) {
                 var list = $('<ul></ul>').addClass('other_menu');
                 _.each(_.rest(tableauWorkbookSet.models), function(workbook) {
-                    list.append($('<li></li>').html(linkToWorkbook(workbook)));
+                    list.append($('<li></li>').html(linkToContextObject(workbook)));
                 })
                 result.append(list);
             }
