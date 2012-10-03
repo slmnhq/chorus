@@ -54,10 +54,11 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                 ul.append(view.render().el);
             } catch (err) {
                 chorus.log("error", err, "processing activity", model);
-                //TODO remove this before shipping
-                var action, id;
-                try {action = model.get("action");  id = model.id;} catch(err) {}
-                chorus.toast("bad_activity", {type: action, id: id, toastOpts: {theme: "bad_activity"}});
+                if (chorus.isDevMode()) {
+                    var action, id;
+                    try {action = model.get("action");  id = model.id;} catch(err) {}
+                    chorus.toast("bad_activity", {type: action, id: id, toastOpts: {theme: "bad_activity"}});
+                }
             }
         }, this);
     },

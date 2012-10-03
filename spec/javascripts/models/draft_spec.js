@@ -8,4 +8,4 @@ describe("chorus.models.Draft", function() {
             expect(this.model.url()).toBe("/workfiles/5/draft");
         });
     });
-})N
+})

@@ -47,6 +47,27 @@ describe("chorus.views.NotificationList", function() {
         });
     });
 
+    describe("error handling bad notifications", function() {
+        beforeEach(function() {
+            this.collection.loaded = true;
+            spyOn(chorus.views.Activity.prototype, 'initialize').andCallThrough();
+        });
+
+        it("should show toast message for broken notifications in dev mode", function() {
+            spyOn(chorus, "toast");
+            chorus.isDevMode.andReturn(true);
+            this.view.render();
+            expect(chorus.toast).toHaveBeenCalled();
+        });
+
+        it ("should not show toast message for broken activities in non dev mode", function() {
+            spyOn(chorus, "toast");
+            chorus.isDevMode.andReturn(false);
+            this.view.render();
+            expect(chorus.toast).not.toHaveBeenCalled();
+        })
+    });
+
     describe("more link", function() {
         beforeEach(function() {
             this.collection.loaded = true;

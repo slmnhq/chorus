@@ -23,7 +23,7 @@ chorus.views.Sidebar = chorus.views.Base.extend({
 
         $("#sidebar_wrapper .jump_to_top").bind("click", _.bind(this.jumpToTop, this));
 
-        if (chorus.isDevMode) {
+        if (chorus.isDevMode()) {
             $("#sidebar_wrapper").attr("data-sidebar-template", this.className);
         }
     },

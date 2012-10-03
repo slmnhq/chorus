@@ -220,6 +220,20 @@ describe("chorus.views.ActivityList", function() {
         it("logs the exception", function() {
             this.view.render();
             expect(chorus.log).toHaveBeenCalled();
+        });
+
+        it("should show toast message for bad activity in dev mode", function() {
+            spyOn(chorus, "toast");
+            chorus.isDevMode.andReturn(true);
+            this.view.render();
+            expect(chorus.toast).toHaveBeenCalled();
+        });
+        
+        it ("should not show toast message for bad activity in non dev mode", function() {
+            spyOn(chorus, "toast");
+            chorus.isDevMode.andReturn(false);
+            this.view.render();
+            expect(chorus.toast).not.toHaveBeenCalled();
         })
     });
 
