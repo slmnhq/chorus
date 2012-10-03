@@ -26,13 +26,12 @@ describe GpdbInstancePresenter, :type => :view do
     end
 
     it "has a human text for size" do
-      hash[:sandboxes_size].should == view.number_to_human_size(10 * gpdb_instance.used_by_workspaces.count)
+      hash[:sandboxes_size].should == view.number_to_human_size(10 * gpdb_instance.used_by_workspaces(user).count)
     end
 
     context "for the workspaces" do
       let(:workspaces) { hash[:workspaces] }
       let(:workspace_hash) { workspaces.first }
-      let(:workspace_count) { gpdb_instance.used_by_workspaces.count }
 
       it "has the right keys" do
         workspace_hash.should have_key(:id)
@@ -54,7 +53,7 @@ describe GpdbInstancePresenter, :type => :view do
       end
 
       it "sanitizes the workspace names" do
-        workspace = gpdb_instance.used_by_workspaces.first
+        workspace = gpdb_instance.used_by_workspaces(user).first
         workspace.update_attributes!(:name => "<script>")
         workspaces.detect{|w| w[:id] == workspace.id}[:name].should == "&lt;script&gt;"
       end
