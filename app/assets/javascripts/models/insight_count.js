@@ -1,7 +1,8 @@
 chorus.models.InsightCount = chorus.models.Base.extend({
+    constructorName: 'InsightCount',
     parameterWrapper : 'insight',
     urlTemplate: function() {
-        return "insights";
+        return this.get('noteId') ? "insights/promote" : "insights";
     }
 }, {
     count: function(options) {

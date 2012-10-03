@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe InsightsController do
-  describe "#create (POST)" do
+  describe "#promote (POST to /promote)" do
     before do
       log_in user
     end
@@ -9,7 +9,7 @@ describe InsightsController do
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.first }
 
-    subject { post :create, :insight => {:note_id => note.id} }
+    subject { post :promote, :insight => {:note_id => note.id} }
 
     it "returns status 201" do
       subject

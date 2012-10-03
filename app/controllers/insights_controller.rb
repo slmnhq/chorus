@@ -1,5 +1,5 @@
 class InsightsController < ApplicationController
-  def create
+  def promote
     note = get_note_if_visible(params[:insight][:note_id])
     raise SecurityTransgression unless note
     note.promote_to_insight(current_user)

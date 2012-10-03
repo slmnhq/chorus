@@ -381,7 +381,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("posts to the comment insight url with the correct parameters", function() {
-            expect(this.server.lastCreate().url).toBe("/insights");
+            expect(this.server.lastCreate().url).toBe("/insights/promote");
         });
 
         it("calls the success function", function() {

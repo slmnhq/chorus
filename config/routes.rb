@@ -106,6 +106,7 @@ Chorus::Application.routes.draw do
   resources :insights, :only => [:create, :index] do
     collection do
       get :count
+      post :promote
     end
   end
 
