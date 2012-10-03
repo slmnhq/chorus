@@ -6,8 +6,8 @@ div.login {
 
     .card {
         @include borderbox;
-        background-color: $card-background;
-        border: 2px solid $card-border-color;
+        background-color: $element-background;
+        border: 2px solid $border-color;
         margin: auto;
         width: $login-width;
         overflow: auto;

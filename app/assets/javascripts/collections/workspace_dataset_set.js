@@ -1,5 +1,5 @@
 chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend({
-    // TODO: Split this class into WorkspaceDatasetSetSearch and WorkspaceDatasetSet (for saving and fetching only)
+
     model:chorus.models.WorkspaceDataset,
     constructorName: "WorkspaceDatasetSet",
 

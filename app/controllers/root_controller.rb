@@ -7,6 +7,6 @@ class RootController < ApplicationController
 
   def not_found
     #render :json => {:route => :not_found}, :status => :not_found
-    render :json => {:route => :not_found}, :status => :ok # TODO: REWRITE: status OK is weird, but it keeps the front-end working.
+    render :json => {:route => :not_found}, :status => :ok # TODO: Revert to a regular 404 after all api calls have been implemented.
   end
 end

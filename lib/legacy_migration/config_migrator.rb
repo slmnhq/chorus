@@ -7,7 +7,6 @@ class ConfigMigrator < AbstractMigrator
   end
 
   def migrate
-    # TODO - Figure out where this file is
     return if not @properties_path
     File.open(@output_path, 'w') { |f| f.write(config.to_yaml) }
   end

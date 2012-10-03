@@ -57,7 +57,7 @@ describe("chorus.views.SearchDataset", function() {
         })
     });
 
-    // TODO: Fix these when we have the new structure for column and table comments on a dataset.
+    // TODO: Fix these when we have the new structure for column and table comments on a dataset. [#37076621]
     xcontext("when there are column comments", function() {
         beforeEach(function() {
             this.model.set({'comments': [{highlightedAttributes: {body: ['comment 1', 'comment 2']}}]});
@@ -70,7 +70,7 @@ describe("chorus.views.SearchDataset", function() {
         });
     });
 
-    // TODO: Fix these when we have the new structure for column and table comments on a dataset.
+    // TODO: Fix these when we have the new structure for column and table comments on a dataset. [#37076621]
     xcontext("when there is a table comment", function() {
         beforeEach(function() {
             this.model.get('highlightedAttributes').description = ['comment 1'];

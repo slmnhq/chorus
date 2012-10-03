@@ -17,7 +17,7 @@ class InstanceStatusChecker
 
   def check
     begin
-      #TODO - rename online in HadoopInstance also to state
+      #TODO - rename online in HadoopInstance also to state [#37074871]
       if instance.is_a?(HadoopInstance)
         instance.online = false
         check_hdfs_instance
@@ -26,7 +26,6 @@ class InstanceStatusChecker
         check_gpdb_instance
       end
     rescue => e
-      # TODO: we should specify which exceptions we are actually expecting from JDBC and HDFS
       Rails.logger.error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     ensure
       instance.touch

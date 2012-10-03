@@ -390,15 +390,14 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    //TODO reactivate this test when publish insight story get done
-    xdescribe("#publish", function() {
+    describe("#publish", function() {
         it("posts to the comment insight url with the publish action", function() {
             this.model.publish();
             expect(this.server.lastCreate().url).toBe("/insights");
         });
     });
 
-    xdescribe("#unpublish", function() {
+    describe("#unpublish", function() {
         it("posts to the comment insight url with the unpublish action", function() {
             this.model.unpublish();
             expect(this.server.lastCreate().url).toBe("/insights");

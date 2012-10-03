@@ -46,12 +46,10 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def highlighted_attributes
-    @highlighted_attributes ||= {} #TODO remove this once highlighted_attributes are implemented?
     @highlighted_attributes.merge(:path => [highlighted_path])
   end
 
   def highlighted_path
-    return unless @highlighted_attributes #TODO remove this once highlighted_attributes are implemented?
     dir = @highlighted_attributes.has_key?(:parent_name) ? @highlighted_attributes[:parent_name].first : parent_name
 
     *rest, dir_name, file_name = path.split("/")

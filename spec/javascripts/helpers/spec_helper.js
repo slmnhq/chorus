@@ -340,9 +340,6 @@
         delete chorus.models.Config._instance;
         delete chorus.models.GreenplumInstance._aurora;
 
-        // TODO - why is this causing problems?
-        // this.server.restore();
-
         $.cookie("userId", null)
         if (this instanceof jasmine.Spec) {
             _.each(this, function(_value, key) {

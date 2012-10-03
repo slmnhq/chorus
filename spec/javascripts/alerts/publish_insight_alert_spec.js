@@ -1,8 +1,6 @@
 describe("chorus.alerts.PublishInsight", function() {
     beforeEach(function() {
         this.activity = rspecFixtures.activity.noteOnDatasetCreated();
-        //TODO: update code so that this unset is not necessary
-        this.activity.unset("body");
     });
 
     context("when publishing", function() {
@@ -14,7 +12,7 @@ describe("chorus.alerts.PublishInsight", function() {
         it("displays the confirmation message", function() {
             var title = this.alert.$("h1").text().trim();
             expect(title).toMatchTranslation("insight.publish.alert.title");
-            expect(this.alert.$("p").text().trim()).toMatchTranslation("insight.publish.alert.body");
+            expect(this.alert.$(".content p").text().trim()).toMatchTranslation("insight.publish.alert.body");
             expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("insight.publish.alert.button");
         });
 
@@ -41,7 +39,7 @@ describe("chorus.alerts.PublishInsight", function() {
         it("displays the confirmation message", function() {
             var title = this.alert.$("h1").text().trim();
             expect(title).toMatchTranslation("insight.unpublish.alert.title");
-            expect(this.alert.$("p").text().trim()).toMatchTranslation("insight.unpublish.alert.body");
+            expect(this.alert.$(".content p").text().trim()).toMatchTranslation("insight.unpublish.alert.body");
             expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("insight.unpublish.alert.button");
         });
 
