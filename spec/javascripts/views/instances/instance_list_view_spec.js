@@ -142,9 +142,9 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
-            it("should not display the name as a link", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).not.toExist();
-                expect(this.view.$(".greenplum_instance li:eq(0) span.name")).toContainText("Greenplum");
+            it("should display the name as a link", function() {
+                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).toExist();
+                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).toContainText("Greenplum");
             });
         });
 
