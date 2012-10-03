@@ -17,7 +17,7 @@ describe DatasetDownloadsController do
         response.code.should == "200"
       end
 
-      it "sets the response body to a dataset streamer enum for the dataset and user" do
+      it "streams the data into the template" do
         any_instance_of(DatasetStreamer) do |streamer|
           mock(streamer).enum { "i am the enum" }
         end
@@ -35,6 +35,12 @@ describe DatasetDownloadsController do
       it "should set the content-type header" do
         get :show, :dataset_id => table.to_param, :format => 'csv'
         response.headers["Content-Disposition"].should == "attachment; filename=#{table.name}.csv"
+      end
+
+      it "sets stream to true which sets the correct headers" do
+        get :show, :dataset_id => table.to_param, :format => 'csv'
+        response.headers["Cache-Control"].should == 'no-cache'
+        response.headers["Transfer-Encoding"].should == 'chunked'
       end
     end
 
