@@ -49,16 +49,14 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         this.resource.loaded = true;
         this.instance.activities().fetch();
-        this.instance.accounts().fetchAll();
 
-        account.fetchIfNotLoaded();
         this.requiredResources.reset();
         this.bindings.removeAll();
         this.bindings.add(this.resource, "change", this.render, this);
 
         var account = this.instance.accountForCurrentUser();
         if(account) {
-            this.instance.accounts().fetchIfNotLoaded();
+            this.instance.accounts().fetchAllIfNotLoaded();
             account.fetchIfNotLoaded();
             this.requiredResources.push(this.instance.accounts());
             this.requiredResources.push(account);

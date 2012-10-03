@@ -34,7 +34,9 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchAllFor(this.instance.accounts());
+                var instanceAccountSet = rspecFixtures.instanceAccountSet();
+                instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
+                this.server.completeFetchAllFor(this.instance.accounts(), instanceAccountSet.models);
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
