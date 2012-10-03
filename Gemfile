@@ -66,7 +66,6 @@ group :test, :development, :integration, :packaging do
   gem 'ci_reporter'
   gem 'faker'
   gem 'fakeweb'
-  gem 'thin'
 end
 
 group :development do
