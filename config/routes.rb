@@ -103,7 +103,7 @@ Chorus::Application.routes.draw do
 
   resource :provisioning, :only => [:show], :controller => 'provisioning'
 
-  resources :insights, :only => [:create, :index] do
+  resources :insights, :only => [:index] do
     collection do
       get :count
       post :promote

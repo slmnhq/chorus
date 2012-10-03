@@ -24,10 +24,23 @@ module Events
       entity_id = params[:entity_id]
       entity_type = params[:entity_type]
       workspace_id = params[:workspace_id]
+      insight = params[:is_insight]
 
       model = ModelMap.model_from_params(entity_type, entity_id)
       raise ActiveRecord::RecordNotFound unless model
-      event_params = {entity_type => model, "body" => body, 'dataset_ids' => params[:dataset_ids], 'workfile_ids' => params[:workfile_ids]}
+      event_params = {
+        entity_type => model,
+        "body" => body,
+        'dataset_ids' => params[:dataset_ids],
+        'workfile_ids' => params[:workfile_ids],
+        'insight' => insight
+      }
+
+      if insight
+        event_params["promoted_by"] = creator
+        event_params["promotion_time"] = Time.now
+      end
+
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
       event_class = event_class_for_model(model, workspace_id)
       event_class.by(creator).add(event_params)

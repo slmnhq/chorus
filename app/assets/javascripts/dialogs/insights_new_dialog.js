@@ -3,6 +3,10 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
     placeholder: t("insight.placeholder"),
     submitButton: t("insight.button.create"),
 
+    events: {
+        "click button.submit": "save",
+    },
+
     makeModel:function () {
         this.model = new chorus.models.Insight({
             entityType: this.options.entityType,
@@ -10,5 +14,18 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
             workspaceId: this.options.workspaceId
         });
         this._super("makeModel", arguments);
+    },
+
+    save: function(e) {
+        e && e.preventDefault();
+        this.model.set({
+            body: this.getTextBody()
+        });
+        console.log(this.model);
+        this.model.save();
+    },
+
+    getTextBody: function() {
+        return this.$("textarea").val();
     }
 });

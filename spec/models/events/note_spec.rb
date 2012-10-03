@@ -366,6 +366,35 @@ describe Events::Note do
       last_note.body.should == "Crazy workspace dataset content"
     end
 
+    it "doesn't always create insights" do
+      Events::Note.create_from_params({
+        :entity_type => "dataset",
+        :entity_id => dataset.id,
+        :body => "Crazy workspace dataset content",
+        :workspace_id => workspace.id
+      }, user)
+
+      last_note = Events::Note.first
+      last_note.insight.should_not == true
+      last_note.promoted_by.should == nil
+      last_note.promotion_time.should == nil
+    end
+
+    it "creates an insight" do
+      Events::Note.create_from_params({
+        :entity_type => "dataset",
+        :entity_id => dataset.id,
+        :body => "Crazy workspace dataset content",
+        :workspace_id => workspace.id,
+        :is_insight => true,
+      }, user)
+
+      last_note = Events::Note.first
+      last_note.insight.should == true
+      last_note.promoted_by.should == user
+      last_note.promotion_time.should_not == nil
+    end
+
     it "raises an exception if the entity type is unknown" do
       expect {
         Events::Note.create_from_params({

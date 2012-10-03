@@ -29,5 +29,18 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
         it("has the right button text", function() {
             expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("insight.button.create");
         });
+
+        describe("clicking the submit button", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, 'save');
+                this.dialog.$("textarea").val("a fine selection of text, especially considering the price point");
+                this.dialog.$("button.submit").click();
+            });
+
+            it("saves the insight model with the text", function() {
+                expect(this.dialog.model.save).toHaveBeenCalled();
+                expect(this.dialog.model.get("body")).toBe("a fine selection of text, especially considering the price point");
+            });
+        });
     });
 });
