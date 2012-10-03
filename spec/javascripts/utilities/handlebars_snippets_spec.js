@@ -789,19 +789,14 @@ describe("handlebars", function () {
             }
         });
 
-        describe("usedInTableau", function() {
-            var contextObjectClass = chorus.models.Base.extend({
-            });
-            beforeEach(function () {
-                this.contextObject = new contextObjectClass();
-            });
+        describe("publishedToTableau", function() {
             context("when the first arguments is an array", function () {
                 beforeEach(function () {
                     this.workbookList = [
                         fixtures.tableauWorkbookJson({name: "foo", url: "foo.com"}),
                         fixtures.tableauWorkbookJson({name: "bar", url: "bar.com"})
                     ];
-                    this.result = Handlebars.helpers.usedInTableau(this.workbookList, this.contextObject).toString();
+                    this.result = Handlebars.helpers.publishedToTableau(this.workbookList).toString();
                 });
 
                 it("includes the 'published to workbook' information", function () {
