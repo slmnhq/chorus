@@ -1223,6 +1223,33 @@ describe("chorus.presenters.Activity", function() {
         itHasTheActorIcon();
     });
 
+    context("tableau workbook published", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.tableauWorkbookPublished({
+                workspace: { id: 55, name: "paleo_eaters" },
+                workbookName: "fancy_workbook",
+                tableauUrl: "http://example.com/workbooks/fancy_workbook"
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.TableauWorkbookPublished.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    datasetType: t("dataset.types.query"),
+                    tableauWorkbookLink: "<a href='http://example.com/workbooks/fancy_workbook' target='_blank'">fancy_workbook</a>"
+                }
+            );
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

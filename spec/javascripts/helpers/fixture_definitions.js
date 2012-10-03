@@ -159,7 +159,8 @@ window.rspecFixtureDefinitions = {
             chorusViewCreatedFromDataset: {},
             chorusViewCreatedFromWorkfile: {},
             chorusViewChanged: {},
-            workspaceChangeName: {}
+            workspaceChangeName: {},
+            tableauWorkbookPublished: {}
         }
     },
 

@@ -43,6 +43,15 @@ describe TableauWorkbooksController do
       decoded_response.url.should == 'foo.com'
     end
 
+    it "should create a TableauWorkbookPublished event" do
+      post :create, :workspace_id => workspace.to_param, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+      the_event = Events::Base.first
+      the_event.action.should == "TableauWorkbookPublished"
+      the_event.dataset.should == dataset
+      the_event.workspace.should == workspace
+      the_event.workbook_name.should == "myTableauWorkbook"
+    end
+
     it "creates a tableau publication when the save succeeds" do
       post :create, :workspace_id => workspace.to_param, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
       twp = dataset.tableau_workbook_publications.find_by_name("myTableauWorkbook")

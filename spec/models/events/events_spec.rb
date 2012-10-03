@@ -555,4 +555,24 @@ describe "Event types" do
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
   end
+
+  describe "TableauWorkbookPublished" do
+    subject do
+      Events::TableauWorkbookPublished.add(
+          :actor => actor,
+          :workspace => workspace,
+          :dataset => dataset,
+          :workbook_name => "testing book",
+          :tableau_url => "test.com"
+      )
+    end
+
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == { :workspace => workspace, :dataset => dataset } }
+    its(:additional_data) { should == { 'workbook_name' => "testing book", 'tableau_url' => 'test.com' } }
+
+    it_creates_activities_for { [actor, workspace, dataset] }
+    it_does_not_create_a_global_activity
+  end
 end

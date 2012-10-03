@@ -287,7 +287,7 @@ describe("chorus.models.Dataset", function() {
             "VIEW": "view",
             "EXTERNAL_TABLE": "table",
             "MASTER_TABLE": "table",
-            "CHORUS_VIEW": "view"
+            "CHORUS_VIEW": "query"
         }
 
         _.each(expectedTypeMap, function(str, type) {

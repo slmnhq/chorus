@@ -255,6 +255,11 @@
             WorkspaceChangeName: {
                 links: ["actor", "workspace"],
                 computed: ["workspaceOldName"]
+            },
+
+            TableauWorkbookPublished: {
+                links: ["actor", "dataset"],
+                computed: ["datasetType", "tableauWorkbookLink"]
             }
         },
 
@@ -337,7 +342,13 @@
             return t("dataset.types." + type);
         },
 
-        count: function(self) {
+        tableauWorkbookLink: function(self) {
+            var workbookName = self.model.get("workbookName");
+            var workbookUrl = self.model.get("tableauUrl");
+           return "<a href='" + workbookUrl  + "' target='_blank'>" + workbookName + "</a>";
+        },
+
+        count: function(self)    {
           return self.model.get("numAdded");
         },
 

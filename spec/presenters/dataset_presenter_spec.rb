@@ -32,7 +32,7 @@ describe DatasetPresenter, :type => :view do
   end
 
   describe ".tableau_hash" do
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:chorus_view) }
     let(:workbook) { tableau_workbook_publications(:default) }
 
     it "includes associated tableau publications" do

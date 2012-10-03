@@ -160,7 +160,8 @@ describe EventsController do
         "chorusViewCreatedFromWorkfile" => Events::ChorusViewCreated.from_workfile,
         "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset,
         "chorusViewChanged" => Events::ChorusViewChanged,
-        "workspaceChangeName" => Events::WorkspaceChangeName
+        "workspaceChangeName" => Events::WorkspaceChangeName,
+        "tableauWorkbookPublished" => Events::TableauWorkbookPublished
     }
 
     FIXTURE_FILES.each do |filename, event_relation|

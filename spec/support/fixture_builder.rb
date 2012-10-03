@@ -176,14 +176,16 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace, :actor => owner)
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
 
-    # Tableau publications
-    FactoryGirl.create :tableau_workbook_publication, :name => "default",
-                       :workspace => public_workspace, :dataset => default_table
-
     # Chorus View
     chorus_view = ChorusView.new({:name => "chorus_view", :schema => default_schema, :query => "select * from a_table"}, :without_protection => true)
     chorus_view.bound_workspaces << public_workspace
     chorus_view.save!(:validate => false)
+
+    # Tableau publications
+    publication = FactoryGirl.create :tableau_workbook_publication, :name => "default",
+                                     :workspace => public_workspace, :dataset => chorus_view
+    fbuilder.name :owner_publishes_to_tableau, Events::TableauWorkbookPublished.by(owner).add(:workbook_name => publication.name, :dataset => publication.dataset, :workspace => publication.workspace, :tableau_url => publication.tableau_url)
+
 
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
