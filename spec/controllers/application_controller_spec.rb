@@ -285,6 +285,7 @@ describe ApplicationController do
 
     context "when the request is not for application/json" do
       it "renders an empty hash" do
+        request.env['CONTENT_TYPE'] = nil
         get :index
         response.body.should == ' '
       end

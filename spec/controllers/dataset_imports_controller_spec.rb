@@ -60,9 +60,10 @@ describe DatasetImportsController do
       context "into a new destination dataset" do
         before do
           attributes[:new_table] = "true"
+          attributes.merge! :dataset_id => src_table.to_param, :workspace_id => active_workspace.id
         end
 
-        let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
+        let(:active_workspace) { FactoryGirl.create :workspace, :name => "TestImportWorkspace", :sandbox => schema, :owner => user }
 
         it "enqueues a new Import.run job for active workspaces and returns success" do
           mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
@@ -77,35 +78,35 @@ describe DatasetImportsController do
             end
           end
 
-          post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes
           response.should be_success
         end
 
         it "makes a DATASET_IMPORT_CREATED event" do
-          expect { post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          expect {
+            post :create, attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
         end
 
         it "should return error for archived workspaces" do
           attributes[:workspace_id] = archived_workspace.id
-          post :create, :dataset_id => src_table.to_param, :workspace_id => archived_workspace.id, "dataset_import" => attributes
+          post :create, attributes
           response.code.should == "422"
         end
 
         it "should return successfully for active workspaces" do
-          post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes
           response.code.should == "201"
           response.body.should == "{}"
         end
 
         it "throws an error if table already exists" do
-          attributes[:to_table] = "master_table1"
-          post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes.merge(:to_table => "master_table1")
           response.code.should == "422"
         end
 
         it "throws an error if source table can't be found" do
-          post :create, :dataset_id => 'missing_source_table', :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes.merge(:dataset_id => 'missing_source_table')
           response.code.should == "404"
         end
       end
@@ -114,6 +115,7 @@ describe DatasetImportsController do
         before do
           attributes[:new_table] = "false"
           attributes[:to_table] = active_workspace.sandbox.datasets.first.name
+          attributes.merge! :dataset_id => src_table.to_param, :workspace_id => active_workspace.id
         end
 
         context "when destination dataset is consistent with source" do
@@ -125,7 +127,7 @@ describe DatasetImportsController do
 
           it "creates an import for the correct dataset and returns success" do
             expect {
-              post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+              post :create, attributes
             }.to change(Import, :count).by(1)
             response.should be_success
             last_import = Import.last
@@ -137,14 +139,15 @@ describe DatasetImportsController do
           end
 
           it "makes a DATASET_IMPORT_CREATED event" do
-            expect { post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+            expect {
+              post :create, attributes
             }.to change(Events::DatasetImportCreated, :count).by(1)
           end
         end
 
         it "throws an error if table does not exist" do
           attributes[:to_table] = "table_that_does_not_exist"
-          post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes
           response.code.should == "422"
         end
 
@@ -152,7 +155,7 @@ describe DatasetImportsController do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { false }
           end
-          post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+          post :create, attributes
           response.code.should == "422"
           decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
         end
@@ -171,7 +174,7 @@ describe DatasetImportsController do
 
       it "makes a new import schedule and returns success" do
         attributes[:sample_count] = ''
-        post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
 
         src_table.import_schedules.last.tap do |schedule|
           schedule.workspace.should == active_workspace
@@ -187,7 +190,7 @@ describe DatasetImportsController do
 
       it "limits the number of rows when set" do
         attributes[:sample_count] = '40'
-        post :create, :dataset_id => src_table.to_param, :workspace_id => active_workspace.id, :dataset_import => attributes
+        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
 
         src_table.import_schedules.last.tap do |schedule|
           schedule.workspace.should == active_workspace
@@ -203,9 +206,9 @@ describe DatasetImportsController do
 
   describe "#update", :database_integration => true do
     let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:default) }
-    let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
-    let(:import_params) { import_schedule.attributes.merge(:import_type => "schedule") }
+    let(:import_schedule) { import_schedules :default }
+    let(:src_table) {Dataset.find import_schedule[:source_dataset_id]}
+    let(:import_params) { import_schedule.attributes.symbolize_keys.merge :import_type => "schedule" }
 
     before do
       log_in user
@@ -215,17 +218,17 @@ describe DatasetImportsController do
       let(:frequency) {"DAILY"}
       let(:to_table) {import_schedule.workspace.sandbox.datasets.first}
 
+      before do
+         import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
+      end
+
       it "updates the start time for the import schedule" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:start_datetime => '2012-01-01 0:00')
+        put :update, import_params.merge(:start_datetime => '2012-01-01 0:00')
         import_schedule.reload.start_datetime.should == Time.parse('2012-01-01 0:00')
       end
 
       it "updates the import's frequency only and returns success" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:frequency => frequency)
+        put :update, import_params.merge(:frequency => frequency)
         response.code.should == "200"
         import_schedule.reload
 
@@ -235,17 +238,13 @@ describe DatasetImportsController do
       end
 
       it "returns an error when importing into a new table but name already exists" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:new_table => 'true', :to_table => to_table.name)
+        put :update, import_params.merge(:new_table => 'true', :to_table => to_table.name)
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
       end
 
       it "returns an error when importing into an existing table but name doesnt exist" do
-        put :update, :dataset_id => src_table.id,
-            :workspace_id => import_schedule.workspace_id,
-            :dataset_import => import_params.merge(:new_table => 'false', :to_table => "non_existent")
+        put :update, import_params.merge(:new_table => 'false', :to_table => "non_existent")
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
       end
@@ -325,6 +324,8 @@ describe DatasetImportsController do
           :dataset => nil,
           :truncate => false,
           :destination_table => destination_table_name,
+          :dataset_id => source_dataset.id,
+          :workspace_id => workspace.id
       }
     end
 
@@ -356,7 +357,7 @@ describe DatasetImportsController do
     it "copies data" do
       expect {
         expect {
-          post :create, :dataset_id => source_dataset.id, :workspace_id => workspace.id, :dataset_import => import_attributes
+          post :create, import_attributes
         }.to change(Events::DatasetImportCreated, :count).by(1)
       }.to change(Events::DatasetImportSuccess, :count).by(1)
       check_destination_table
@@ -374,7 +375,7 @@ describe DatasetImportsController do
       it "copies data when the start time has passed" do
         Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
           expect {
-            post :create, :dataset_id => source_dataset.id, :workspace_id => workspace.id, :dataset_import => import_attributes
+            post :create, import_attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
         end
         Timecop.freeze(DateTime.parse(start_time) + 1.day) do

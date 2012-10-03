@@ -22,16 +22,16 @@ describe CommentsController do
 
     it "uses authorization" do
       mock(subject).authorize! :create_comment_on, Comment, event
-      post :create, {:comment => @params}
+      post :create, @params
     end
 
     it "should post with appropriate response" do
-      post :create, {:comment => @params}
+      post :create, @params
       response.code.should == "201"
     end
 
     it "should create make the current user the author" do
-      post :create, {:comment => @params}
+      post :create, @params
       Comment.find_by_text(@params[:text]).author.should == commenter
     end
 
@@ -39,7 +39,7 @@ describe CommentsController do
       before do
         Comment.create!({:event => event, :author => first_commenter, :text => "Nice event"}, :without_protection => true)
         Comment.create!({:event => event, :author => second_commenter, :text => "Great event"}, :without_protection => true)
-        post :create, {:comment => @params}
+        post :create, @params
       end
 
       it "notifies the other commenters" do
@@ -61,7 +61,7 @@ describe CommentsController do
 
       before do
         Comment.create!({:event => event, :author => second_commenter, :text => "I am a second comment"}, :without_protection => true)
-        post :create, {:comment => @params}
+        post :create, @params
       end
 
       it "notifies the event author" do
@@ -89,7 +89,7 @@ describe CommentsController do
       it "only notifies the same user once" do
         expect {
           expect {
-            post :create, {:comment => @params}
+            post :create, @params
           }.to change {
             Notification.where(:recipient_id => event_author.id, :event_id => event.id).count
           }.by(1)

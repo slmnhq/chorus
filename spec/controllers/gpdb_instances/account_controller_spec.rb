@@ -30,7 +30,7 @@ describe GpdbInstances::AccountController do
     end
 
     it "succeeds" do
-      post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret"}
+      post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
       response.code.should == "201"
 
       decoded_response.db_username.should == "lenny"
@@ -46,7 +46,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret"}
+        post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
         response.code.should == '422'
       end
     end
@@ -57,7 +57,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret"}
+        post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
         response.should be_not_found
       end
     end
@@ -70,7 +70,7 @@ describe GpdbInstances::AccountController do
     end
 
     it "succeeds" do
-      put :update, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "changed", :db_password => "changed"}
+      put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
       response.code.should == "200"
 
       decoded_response.db_username.should == "changed"
@@ -86,7 +86,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
         response.should be_not_found
       end
     end
@@ -97,7 +97,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
         response.code.should == '422'
       end
     end

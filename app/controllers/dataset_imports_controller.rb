@@ -1,4 +1,5 @@
 class DatasetImportsController < ApplicationController
+
   def show
     import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
     present import_schedule
@@ -22,9 +23,8 @@ class DatasetImportsController < ApplicationController
 
     attributes = params[:dataset_import].dup
     attributes[:workspace_id] = params[:workspace_id]
-    schedule_id = attributes[:id]
 
-    import_schedule = ImportSchedule.find(schedule_id)
+    import_schedule = ImportSchedule.find attributes[:id]
     destination_table_change = (import_schedule[:to_table] != attributes[:to_table])
 
     normalize_import_attributes!(attributes)

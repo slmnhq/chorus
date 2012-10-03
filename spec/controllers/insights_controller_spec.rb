@@ -9,7 +9,7 @@ describe InsightsController do
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.first }
 
-    subject { post :promote, :insight => {:note_id => note.id} }
+    subject { post :promote, :note_id => note.id}
 
     it "returns status 201" do
       subject
@@ -151,12 +151,6 @@ describe InsightsController do
     let(:not_a_member) { users(:not_a_member) }
     let(:workspace) { workspaces(:public) }
     let(:private_workspace) { workspaces(:private) }
-    let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
-        :workspace => workspace,
-        :body => 'Come see my awesome workspace!',
-        :insight => true,
-        :promotion_time => Time.now(),
-        :promoted_by => user) }
 
     let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
         :workspace => private_workspace,

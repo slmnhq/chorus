@@ -27,7 +27,7 @@ describe ChorusViewsController, :database_integration => true do
       }
 
       it "creates a chorus view" do
-        post :create, :chorus_view => options
+        post :create, options
 
         chorus_view = Dataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
@@ -41,7 +41,7 @@ describe ChorusViewsController, :database_integration => true do
       end
 
       it "creates an event" do
-        post :create, :chorus_view => options
+        post :create, options
 
         the_event = Events::Base.first
         the_event.action.should == "ChorusViewCreated"
@@ -51,7 +51,7 @@ describe ChorusViewsController, :database_integration => true do
       end
 
       generate_fixture "workspaceDataset/chorusView.json" do
-        post :create, :chorus_view => options
+        post :create, options
       end
     end
 
@@ -68,7 +68,7 @@ describe ChorusViewsController, :database_integration => true do
       }
 
       it "creates a chorus view" do
-        post :create, :chorus_view => options
+        post :create, options
 
         chorus_view = Dataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
@@ -82,7 +82,7 @@ describe ChorusViewsController, :database_integration => true do
       end
 
       it "creates an event" do
-        post :create, :chorus_view => options
+        post :create, options
 
         the_event = Events::Base.first
         the_event.action.should == "ChorusViewCreated"
@@ -105,7 +105,7 @@ describe ChorusViewsController, :database_integration => true do
       }
 
       it "responds with unprocessible entity" do
-        post :create, :chorus_view => options
+        post :create, options
         response.code.should == "422"
         decoded = JSON.parse(response.body)
         decoded['errors']['fields']['query']['GENERIC'].should be_present
