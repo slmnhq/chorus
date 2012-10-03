@@ -182,6 +182,7 @@ describe WorkfilesController do
         post :create, @params
         event = Events::WorkfileCreated.by(user).first
         event.workfile.description.should == @params[:workfile][:description]
+        event.additional_data["commit_message"].should == @params[:workfile][:description]
         event.workspace.to_param.should == @params[:workspace_id]
       end
 

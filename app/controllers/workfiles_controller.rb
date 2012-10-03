@@ -60,7 +60,8 @@ class WorkfilesController < ApplicationController
 
       Events::WorkfileCreated.by(current_user).add(
         :workfile => workfile,
-        :workspace => workspace
+        :workspace => workspace,
+        :commit_message => params[:workfile][:description]
       )
 
       workspace.has_added_workfile = true

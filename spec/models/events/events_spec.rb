@@ -292,7 +292,8 @@ describe "Event types" do
       Events::WorkfileCreated.add(
           :actor => actor,
           :workfile => workfile,
-          :workspace => workspace
+          :workspace => workspace,
+          :commit_message => 'new Commit message'
       )
     end
 
@@ -300,6 +301,7 @@ describe "Event types" do
     its(:workspace) { should == workspace }
 
     its(:targets) { should == {:workfile => workfile, :workspace => workspace} }
+    its(:additional_data) { should == {"commit_message" => 'new Commit message'} }
 
     it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity

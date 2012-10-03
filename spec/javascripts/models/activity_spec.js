@@ -283,6 +283,10 @@ describe("chorus.models.Activity", function() {
             expect(rspecFixtures.activity.workfileUpgradedVersion().hasCommitMessage()).toBeTruthy();
         });
 
+        it("returns true for activity where action is WorkfileCreated with commit message", function() {
+            expect(rspecFixtures.activity.workfileCreated().hasCommitMessage()).toBeTruthy();
+        });
+
         it("returns false for other activities", function() {
             expect(rspecFixtures.activity.membersAdded().hasCommitMessage()).toBeFalsy();
         });
