@@ -14,13 +14,14 @@ resource "Notes" do
     parameter :body, "Text body of the note"
     parameter :entity_type, "Type of object the note is being posted on"
     parameter :entity_id, "Id of the object the note is being posted on"
+    parameter :is_insight, "Promote this note to an insight?"
 
     let(:body) { note.body }
     let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:entity_type) { "greenplum_instance" }
     let(:entity_id) { gpdb_instance.id }
 
-    example_request "Post a new note on a Greenplum instance" do
+    example_request "Post a new note/insight on a Greenplum instance" do
       status.should == 201
     end
   end
