@@ -30,7 +30,9 @@ describe WorkspacePresenter, :type => :view do
       hash.should have_key(:has_added_sandbox)
       hash.should have_key(:has_changed_settings)
       hash.should have_key(:sandbox_info)
-      hash.should have_key(:latest_comment_list)
+      hash.should_not have_key(:number_of_insights)
+      hash.should_not have_key(:number_of_comments)
+      hash.should_not have_key(:latest_comment_list)
     end
 
     it "uses the image presenter to serialize the image urls" do
@@ -65,6 +67,48 @@ describe WorkspacePresenter, :type => :view do
         hash[:id].should == @workspace.id
         hash[:name].should == @workspace.name
         hash.keys.size.should == 2
+      end
+    end
+
+    context "when rendering latest comments" do
+      let(:options) { {:show_latest_comments => true} }
+      before do
+        @workspace.save!
+      end
+
+      it "should render the latest comment hash" do
+        hash.should have_key(:number_of_insights)
+        hash.should have_key(:number_of_comments)
+        hash.should have_key(:latest_comment_list)
+      end
+
+      context "with recent comments and insights" do
+        let(:event) do
+          evt = nil
+          Timecop.freeze(8.days.ago) do
+            evt = Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body', :actor => @user)
+          end
+          evt
+        end
+
+        before do
+          Timecop.freeze(1.day.ago) do
+            @comment = Comment.create!(:text => 'comment body of event', :author_id => @user.id, :event_id => event.id)
+          end
+          insight = Events::NoteOnWorkspace.create(:workspace => @workspace, :body => 'insight body', :actor => @user, :insight => true)
+          Comment.create!(:text => 'comment body of insight', :author_id => @user.id, :event_id => insight.id)
+          Comment.create!(:text => 'comment body of insight 2', :author_id => @user.id, :event_id => insight.id)
+          Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -1', :actor => @user)
+          Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -2', :actor => @user)
+        end
+
+        it "should have the correct values for latest comments/insights" do
+          hash[:number_of_comments].should == 6
+          hash[:number_of_insights].should == 1
+          hash[:latest_comment_list].size.should == 5
+          hash[:latest_comment_list].should_not include(event)
+          hash[:latest_comment_list].should_not include(@comment)
+        end
       end
     end
   end

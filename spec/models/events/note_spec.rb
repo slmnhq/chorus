@@ -26,6 +26,17 @@ describe Events::Note do
     note.errors.messages[:actor_id].length.should == 1
   end
 
+  describe ".insights" do
+    let(:insight) { events(:insight_on_greenplum) }
+    let(:normal) { events(:note_on_dataset) }
+
+    it "should only include insights" do
+      insights = described_class.insights
+      insights.should include(insight)
+      insights.should_not include(normal)
+    end
+  end
+
   describe "NoteOnGreenplumInstance" do
     subject do
       Events::NoteOnGreenplumInstance.add(

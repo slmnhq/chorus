@@ -78,7 +78,7 @@ describe WorkspacesController do
     end
 
     generate_fixture "workspaceSet.json" do
-      get :index
+      get :index, :show_latest_comments => 'true'
     end
 
   end
@@ -141,7 +141,7 @@ describe WorkspacesController do
       end
 
       it "presents the workspace" do
-        mock.proxy(controller).present(workspace)
+        mock.proxy(controller).present(workspace, :presenter_options => {:show_latest_comments => false})
         get :show, :id => workspace.to_param
       end
     end
@@ -154,7 +154,7 @@ describe WorkspacesController do
     end
 
     generate_fixture "workspace.json" do
-      get :show, :id => workspace.to_param
+      get :show, :id => workspace.to_param, :show_latest_comments => 'true'
     end
   end
 

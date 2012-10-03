@@ -31,6 +31,8 @@ describe Events::Base do
     end
   end
 
+  it_should_behave_like "recent"
+
   it "is ordered with the most recent items first, by default" do
     events = Events::Base.limit(2).to_a
     events[0].created_at.should > events[1].created_at

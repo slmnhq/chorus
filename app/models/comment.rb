@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
   include SoftDelete
+  include Recent
 
   attr_accessible :author_id, :text, :event_id
   belongs_to :event, :class_name => 'Events::Base'

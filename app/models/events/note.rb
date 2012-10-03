@@ -46,6 +46,10 @@ module Events
       event_class.by(creator).add(event_params)
     end
 
+    def self.insights
+      where(:insight => true)
+    end
+
     def search_body
       result = ""
       doc = Nokogiri::HTML(body)

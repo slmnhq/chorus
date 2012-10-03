@@ -261,5 +261,15 @@ FactoryGirl.define do
     truncate false
     sample_count 1
   end
+
+  factory :comment do
+    event factory: :user_created_event
+    author factory: :user
+    text "this is a comment"
+  end
+
+  factory :insight, :parent => :note_on_workspace_event do
+    insight true
+  end
 end
 

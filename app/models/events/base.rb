@@ -3,6 +3,7 @@ require 'json_hash_serializer'
 module Events
   class Base < ActiveRecord::Base
     include SoftDelete
+    include Recent
 
     def self.eager_load_associations
       [:attachments, :workfiles, :datasets, :actor, :target1, :target2, {:workspace => [:associated_datasets, :owner, {:sandbox => {:database => :gpdb_instance}}]}]

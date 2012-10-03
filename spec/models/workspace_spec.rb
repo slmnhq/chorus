@@ -7,6 +7,9 @@ describe Workspace do
     it { should have_many(:activities) }
     it { should have_many(:events) }
     it { should belong_to(:sandbox) }
+    it { should have_many(:owned_notes).class_name('Events::Note') }
+    it { should have_many(:owned_events).class_name('Events::Base') }
+    it { should have_many(:comments).through(:owned_events) }
   end
 
   describe "create" do
