@@ -11,6 +11,8 @@ class GpdbInstance < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
+  has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
+  has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
@@ -32,8 +34,8 @@ class GpdbInstance < ActiveRecord::Base
     end
   end
 
-  def used_by_workspaces
-    Workspace.where("sandbox_id IN (SELECT id FROM gpdb_schemas s WHERE s.database_id IN (SELECT id FROM gpdb_databases d WHERE d.gpdb_instance_id IN (SELECT id FROM gpdb_instances i WHERE i.id = #{id})))") if id.present?
+  def used_by_workspaces(viewing_user)
+    workspaces.workspaces_for(viewing_user)
   end
 
   def self.accessible_to(user)

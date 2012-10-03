@@ -11,7 +11,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
     workspaces = []
     total_size_in_bytes = 0
 
-    used_by_workspaces.each do |workspace|
+    used_by_workspaces(current_user).each do |workspace|
       sandbox_size = workspace.sandbox.disk_space_used(account)
       total_size_in_bytes += sandbox_size || 0
 

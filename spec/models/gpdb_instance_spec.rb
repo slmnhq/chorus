@@ -229,15 +229,21 @@ describe GpdbInstance do
     let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => 'db') }
     let!(:gpdb_schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => gpdb_database) }
     let!(:workspace1) { FactoryGirl.create(:workspace, :name => "ws_1", :sandbox => gpdb_schema) }
-    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "ws_2", :sandbox => gpdb_schema) }
+    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "ws_2", :sandbox => gpdb_schema, :public => false) }
     let!(:workspace3) { FactoryGirl.create(:workspace, :name => "ws_3") }
 
     it "returns the workspaces that use this instance's schema as sandbox" do
-      workspaces = gpdb_instance.used_by_workspaces
+      workspaces = gpdb_instance.used_by_workspaces(users(:admin))
       workspaces.count.should == 2
       workspaces.should include(workspace1)
       workspaces.should include(workspace2)
       workspaces.should_not include(workspace3)
+    end
+
+    it "only returns workspaces visible to the user" do
+      workspaces = gpdb_instance.used_by_workspaces(users(:not_a_member))
+      workspaces.count.should == 1
+      workspaces.should include(workspace1)
     end
   end
 
