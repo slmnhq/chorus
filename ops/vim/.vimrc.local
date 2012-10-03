@@ -70,6 +70,6 @@ map <leader>h              :call WinMove('h')<cr>
 map <leader>k              :call WinMove('k')<cr>
 map <leader>l              :call WinMove('l')<cr>
 map <leader>j              :call WinMove('j')<cr>
-
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:CommandTMaxFiles = 100000
 
