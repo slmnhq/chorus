@@ -26,8 +26,6 @@ resource "Chorus Views" do
 
     required_parameters :source_object_id, :source_object_type, :object_name, :schema_id, :workspace_id, :query
 
-    scope_parameters :chorus_view, :all
-
     let(:source_object_id) { dataset_id }
     let(:source_object_type) { "dataset" }
     let(:workspace_id) { workspace.id }
@@ -49,8 +47,6 @@ resource "Chorus Views" do
 
     parameter :id, "Id of the chorus view to update"
     parameter :query, "Sql statement of the Chorus View, must start with SELECT or WITH"
-
-    scope_parameters :workspace_dataset, :all
 
     required_parameters :id, :query
 
@@ -92,8 +88,6 @@ resource "Chorus Views" do
     parameter :schema_id, "Id of the corresponding schema"
     parameter :query, "Sql of the chorus view"
     parameter :check_id, "Unique token"
-
-    scope_parameters :task, :all
 
     required_parameters :schema_id, :query, :check_id
 

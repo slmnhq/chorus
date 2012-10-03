@@ -81,7 +81,6 @@ resource "Workfiles" do
     parameter :file_name, "Filename"
 
     required_parameters :file_name
-    scope_parameters :workfile, :all
 
     let(:owner_id) { owner.to_param }
     let(:description) { "Get off my lawn, you darn kids!" }
@@ -108,7 +107,6 @@ resource "Workfiles" do
         r.add_column("results_of", "your_sql")
       end
     end
-
 
     example_request "Executes a workfile" do
       status.should == 200

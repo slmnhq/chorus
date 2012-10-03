@@ -1,5 +1,7 @@
 module GpdbInstances
   class MembersController < ApplicationController
+    wrap_parameters :account, :include => [:db_username, :db_password, :owner_id]
+
     def index
       accounts = GpdbInstance.find(params[:gpdb_instance_id]).accounts
       present paginate(accounts.includes(:owner).order(:id))

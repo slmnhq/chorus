@@ -1,4 +1,6 @@
 class PreviewsController < GpdbController
+  wrap_parameters :task, :exclude => [:id, :dataset_id]
+
   def create
     dataset = Dataset.find(params[:dataset_id])
     instance_account = authorized_gpdb_account(dataset)

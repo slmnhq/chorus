@@ -21,8 +21,6 @@ resource "Tableau Workbooks" do
     required_parameters :dataset_id
     required_parameters :workspace_id
 
-    scope_parameters :tableau_workbook, :all
-
     let(:dataset_id) { dataset.id }
     let(:workspace_id) { workspace.id }
     let(:name) { 'MyTableauWorkbook'}

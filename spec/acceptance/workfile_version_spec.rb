@@ -51,7 +51,6 @@ resource "Workfile versions" do
     parameter :content, "Content of the file"
 
     required_parameters :owner_id
-    scope_parameters :workfile, :all
 
     let(:owner_id) { owner.to_param }
     let(:commit_message) { "Hey there, Billy" }
@@ -70,7 +69,6 @@ resource "Workfile versions" do
     parameter :content, "Content of the file"
 
     required_parameters :owner_id
-    scope_parameters :workfile, :all
 
     let(:owner_id) { owner.to_param }
     let(:commit_message) { "Get off my lawn, you darn kids!" }

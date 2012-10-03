@@ -28,8 +28,6 @@ resource "Visualizations" do
     required_parameters :bins
     required_parameters :y_axis
 
-    scope_parameters :chart_task, :all
-
     let(:dataset_id) { dataset.id }
     let(:check_id) { "1234" }
     let(:type) { "frequency" }
@@ -64,8 +62,6 @@ resource "Visualizations" do
     required_parameters :y_bins
     required_parameters :x_axis
     required_parameters :y_axis
-
-    scope_parameters :chart_task, :all
 
     let(:dataset_id) { dataset.id }
     let(:check_id) { "1234" }
@@ -107,8 +103,6 @@ resource "Visualizations" do
     required_parameters :bins
     required_parameters :x_axis
 
-    scope_parameters :chart_task, :all
-
     let(:dataset_id) { dataset.id }
     let(:check_id) { "1234" }
     let(:type) { "histogram" }
@@ -143,9 +137,6 @@ resource "Visualizations" do
     required_parameters :y_axis
     required_parameters :aggregation
     required_parameters :time_interval
-
-    scope_parameters :chart_task, :all
-
     let(:dataset_id) { dataset.id }
     let(:check_id) { "1234" }
     let(:type) { "timeseries" }
@@ -181,8 +172,6 @@ resource "Visualizations" do
     required_parameters :x_axis
     required_parameters :y_axis
     required_parameters :bins
-
-    scope_parameters :chart_task, :all
 
     let(:dataset_id) { dataset.id }
     let(:check_id) { "1234" }

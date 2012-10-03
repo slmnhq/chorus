@@ -1,6 +1,6 @@
 class InsightsController < ApplicationController
   def create
-    note = get_note_if_visible
+    note = get_note_if_visible(params[:insight][:note_id])
     raise SecurityTransgression unless note
     note.promote_to_insight(current_user)
     present note, :status => :created
@@ -27,8 +27,8 @@ class InsightsController < ApplicationController
     insight_query
   end
 
-  def get_note_if_visible
-    note_query = Events::Note.where(id: params[:insight][:note_id])
+   def get_note_if_visible(note_id)
+    note_query = Events::Note.where(id: note_id)
     note_query = note_query.visible_to(current_user) unless current_user.admin?
     note_query.first
   end

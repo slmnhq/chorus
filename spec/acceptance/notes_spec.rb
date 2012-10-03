@@ -15,9 +15,6 @@ resource "Notes" do
     parameter :entity_type, "Type of object the note is being posted on"
     parameter :entity_id, "Id of the object the note is being posted on"
 
-    scope_parameters :note, :all
-
-
     let(:body) { note.body }
     let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:entity_type) { "greenplum_instance" }
@@ -33,8 +30,6 @@ resource "Notes" do
     parameter :entity_type, "Type of object the note is being posted on"
     parameter :entity_id, "Id of the object the note is being posted on"
 
-    scope_parameters :note, :all
-
     let(:body) { note.body }
     let(:entity_type) { "hdfs_file" }
     let(:entity_id) { "#{hdfs_file.hadoop_instance_id}|#{hdfs_file.path}" }
@@ -49,7 +44,6 @@ resource "Notes" do
     parameter :body, "New text body of the note"
 
     required_parameters :id
-    scope_parameters :note, :all
 
     let(:id) { note.id }
     let(:body) { "New text" }

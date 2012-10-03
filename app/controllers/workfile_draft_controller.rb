@@ -1,6 +1,6 @@
 class WorkfileDraftController < ApplicationController
   def create
-    draft = WorkfileDraft.new(params[:draft])
+    draft = WorkfileDraft.new(params[:workfile_draft])
     draft.workfile_id = params[:workfile_id]
     draft.owner_id = current_user.id
     draft.save!
@@ -14,7 +14,7 @@ class WorkfileDraftController < ApplicationController
 
   def update
     draft = WorkfileDraft.find_by_owner_id_and_workfile_id!(current_user.id, params[:workfile_id])
-    draft.update_attributes(params[:draft])
+    draft.update_attributes(params[:workfile_draft])
     present draft
   end
 

@@ -1,4 +1,6 @@
 class WorkfileVersionsController < ApplicationController
+  wrap_parameters WorkfileVersion, :name => :workfile
+
   def update
     workfile = Workfile.find(params[:workfile_id])
     authorize! :can_edit_sub_objects, workfile.workspace

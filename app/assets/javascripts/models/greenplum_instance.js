@@ -6,7 +6,7 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
 
     showUrlTemplate: "instances/{{id}}/databases",
 
-    parameterWrapper: "instance",
+    parameterWrapper: "gpdb_instance",
 
     dataBinding: 'data-greenplum-instance-id',
 

@@ -20,15 +20,16 @@ describe "gpdb instances", :network => true do
     end
 
     it "can be created" do
-      post "/gpdb_instances", :instance => valid_attributes
+      post "/gpdb_instances", :gpdb_instance => valid_attributes
 
       response.code.should == "201"
     end
 
     it "can be updated" do
-      post "/gpdb_instances", :instance => valid_attributes
+      post "/gpdb_instances", :gpdb_instance => valid_attributes
       gpdb_instance_id = decoded_response.id
-      put "/gpdb_instances/#{gpdb_instance_id}", :instance => valid_attributes.merge(:name => "new_name")
+      put "/gpdb_instances/#{gpdb_instance_id}",
+          :gpdb_instance => valid_attributes.merge(:name => "new_name")
 
       decoded_response.name.should == "new_name"
     end

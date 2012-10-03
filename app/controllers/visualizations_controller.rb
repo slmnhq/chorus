@@ -1,4 +1,6 @@
 class VisualizationsController < GpdbController
+  wrap_parameters :chart_task
+
   def create
     dataset = Dataset.find(params[:dataset_id])
     v = Visualization.build(dataset, params[:chart_task])

@@ -38,7 +38,6 @@ resource "Greenplum DB members" do
     let(:db_password) { "bird_grosservogel" }
 
     required_parameters :owner_id, :db_username, :db_password
-    scope_parameters :account, :all
 
     example_request "Add member" do
       status.should == 201
@@ -55,7 +54,6 @@ resource "Greenplum DB members" do
     let(:db_password) { "upagus" }
 
     required_parameters :db_username, :db_password
-    scope_parameters :account, :all
 
     example_request "Update member" do
       status.should == 200

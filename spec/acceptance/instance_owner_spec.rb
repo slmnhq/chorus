@@ -14,7 +14,6 @@ resource "Greenplum DB ownership" do
     parameter :id, "The new owner's user id"
 
     required_parameters :gpdb_instance_id, :id
-    scope_parameters :owner, :all
 
     let(:gpdb_instance_id) { owned_instance.to_param }
     let(:id) { new_owner.to_param }

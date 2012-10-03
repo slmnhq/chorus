@@ -36,7 +36,6 @@ resource "Greenplum DB account for current user" do
     let(:db_password) { "bird_long_password" }
 
     required_parameters :db_username, :db_password
-    scope_parameters :account, :all
 
     before do
       log_in non_owner
@@ -55,7 +54,6 @@ resource "Greenplum DB account for current user" do
     let(:db_password) { "upagus" }
 
     required_parameters :db_username, :db_password
-    scope_parameters :account, :all
 
     before do
       log_in member

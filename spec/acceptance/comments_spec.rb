@@ -14,7 +14,6 @@ resource "Comments" do
     parameter :event_id, "Event id"
 
     required_parameters :text, :event_id
-    scope_parameters :comment, :all
 
     let(:text) { "cookiemonster" }
     let(:event_id) { event.id }

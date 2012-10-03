@@ -36,7 +36,6 @@ resource "Hadoop DB instances" do
     let(:group_list) { "bird" }
 
     required_parameters :name, :host, :port, :username, :group_list
-    scope_parameters :hadoop_instance, :all
 
     example_request "Register a Hadoop database" do
       status.should == 201
@@ -60,7 +59,6 @@ resource "Hadoop DB instances" do
     let(:id) { instance.id }
 
     required_parameters :name, :host, :port, :username, :group_list
-    scope_parameters :hadoop_instance, :all
 
     example_request "Update the details on a hadoop instance" do
       status.should == 200

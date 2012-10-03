@@ -27,7 +27,6 @@ resource "Users" do
     parameter :admin, "Only settable if the authenticated user is an admin"
 
     required_parameters :username, :first_name, :last_name, :email
-    scope_parameters :user, :all
 
     let(:username) { "cookiemonster" }
     let(:first_name) { "Cookie" }
@@ -64,8 +63,7 @@ resource "Users" do
     parameter :admin, "Only settable if the authenticated user is an admin"
 
     required_parameters :username, :first_name, :last_name, :email
-    scope_parameters :user, :all
-
+    #
     let(:username) { "Monster1" }
     let(:first_name) { "Cookie1" }
     let(:last_name) { "Monster1" }

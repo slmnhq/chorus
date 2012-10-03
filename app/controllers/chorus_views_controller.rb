@@ -1,17 +1,19 @@
 class ChorusViewsController < ApplicationController
+  wrap_parameters :chorus_view, :exclude => [:id]
+
   def create
-    param = params[:chorus_view]
+    chorus_view_params = params[:chorus_view]
     chorus_view = ChorusView.new
-    chorus_view.name = param[:object_name]
-    chorus_view.schema = GpdbSchema.find(param[:schema_id])
-    chorus_view.query = param[:query]
+    chorus_view.name = chorus_view_params[:object_name]
+    chorus_view.schema = GpdbSchema.find(chorus_view_params[:schema_id])
+    chorus_view.query = chorus_view_params[:query]
 
-    workspace = Workspace.find(param[:workspace_id])
+    workspace = Workspace.find(chorus_view_params[:workspace_id])
 
-    if (param[:source_object_type] == 'workfile')
-      source_object = Workfile.find(param[:source_object_id])
+    if (chorus_view_params[:source_object_type] == 'workfile')
+      source_object = Workfile.find(chorus_view_params[:source_object_id])
     else
-      source_object = Dataset.find(param[:source_object_id])
+      source_object = Dataset.find(chorus_view_params[:source_object_id])
     end
 
     ChorusView.transaction do
@@ -30,7 +32,7 @@ class ChorusViewsController < ApplicationController
   def update
     chorus_view = ChorusView.find(params[:id])
     authorize! :can_edit_sub_objects, chorus_view.workspace
-    chorus_view.query = params[:workspace_dataset][:query]
+    chorus_view.query = params[:query] || params[:workspace_dataset][:query]
     chorus_view.save!
 
     Events::ChorusViewChanged.by(current_user).add(

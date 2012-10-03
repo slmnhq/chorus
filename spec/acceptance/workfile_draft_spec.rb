@@ -36,7 +36,6 @@ resource "Workfile drafts" do
     parameter :content, "Content"
 
     required_parameters :workfile_id, :content
-    scope_parameters :draft, :all
 
     example_request "Updates the workfile draft" do
       status.should == 200
@@ -51,7 +50,6 @@ resource "Workfile drafts" do
     parameter :content, "Content"
 
     required_parameters :workfile_id, :content
-    scope_parameters :draft, :all
 
     example_request "Creates the draft for a workfile" do
       status.should == 201

@@ -6,7 +6,6 @@ resource "Sessions" do
   post "/sessions" do
     parameter :username, "username"
     parameter :password, "password"
-    scope_parameters :session, [:username, :password]
 
     let(:username) { user.username }
     let(:password) { FixtureBuilder.password }

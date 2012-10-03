@@ -191,11 +191,11 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("updates the model", function() {
-                expect(this.server.lastUpdate().params()["instance[name]"]).toBe("test2");
-                expect(this.server.lastUpdate().params()["instance[port]"]).toBe("8556");
-                expect(this.server.lastUpdate().params()["instance[host]"]).toBe("testhost2");
-                expect(this.server.lastUpdate().params()["instance[size]"]).toBe("123");
-                expect(this.server.lastUpdate().params()["instance[maintenanceDb]"]).toBeUndefined();
+                expect(this.server.lastUpdate().params()["gpdb_instance[name]"]).toBe("test2");
+                expect(this.server.lastUpdate().params()["gpdb_instance[port]"]).toBe("8556");
+                expect(this.server.lastUpdate().params()["gpdb_instance[host]"]).toBe("testhost2");
+                expect(this.server.lastUpdate().params()["gpdb_instance[size]"]).toBe("123");
+                expect(this.server.lastUpdate().params()["gpdb_instance[maintenanceDb]"]).toBeUndefined();
             });
         });
 

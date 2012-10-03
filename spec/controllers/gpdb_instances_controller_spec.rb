@@ -65,11 +65,11 @@ describe GpdbInstancesController do
 
     it "uses authorization" do
       mock(subject).authorize!(:edit, gpdb_instance)
-      put :update, :id => gpdb_instance.id, :instance => changed_attributes
+      put :update, :id => gpdb_instance.id, :gpdb_instance => changed_attributes
     end
 
     it "should reply with successful update" do
-      put :update, :id => gpdb_instance.id, :instance => changed_attributes
+      put :update, :id => gpdb_instance.id, :gpdb_instance => changed_attributes
       response.code.should == "200"
     end
 
@@ -77,7 +77,7 @@ describe GpdbInstancesController do
       tmp_gpdb_instance = gpdb_instances(:default)
       tmp_gpdb_instance.name = nil
       stub(Gpdb::InstanceRegistrar).update!(tmp_gpdb_instance, changed_attributes, user) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
-      put :update, :id => tmp_gpdb_instance.id, :instance => changed_attributes
+      put :update, :id => tmp_gpdb_instance.id, :gpdb_instance => changed_attributes
       response.code.should == "422"
     end
   end
@@ -94,18 +94,18 @@ describe GpdbInstancesController do
       end
 
       it "reports that the gpdb instance was created" do
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
         response.code.should == "201"
       end
 
       it "renders the newly created gpdb instance" do
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
         decoded_response.name.should == instance.name
       end
 
       it "schedules a job to refresh the instance" do
         mock(QC.default_queue).enqueue("GpdbInstance.refresh", numeric)
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
       end
     end
 
@@ -121,17 +121,17 @@ describe GpdbInstancesController do
       end
 
       it "reports that the instance was created" do
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
         response.code.should == "201"
       end
 
       it "renders the newly created instance" do
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
         decoded_response.name.should == "instance_name"
       end
 
       it "creates a greenplum instance" do
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
 
         gpdb_instance = GpdbInstance.last
         gpdb_instance.name.should == 'instance_name'
@@ -146,7 +146,7 @@ describe GpdbInstancesController do
           gpdb_instance
         end
         mock(QC.default_queue).enqueue("AuroraProvider.provide!", 123, valid_attributes)
-        post :create, :instance => valid_attributes
+        post :create, :gpdb_instance => valid_attributes
       end
     end
 
@@ -160,7 +160,7 @@ describe GpdbInstancesController do
       end
 
       it "responds with validation errors" do
-        post :create, :instance => invalid_attributes
+        post :create, :gpdb_instance => invalid_attributes
         response.code.should == "422"
       end
     end

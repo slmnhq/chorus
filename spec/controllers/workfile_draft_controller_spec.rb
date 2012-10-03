@@ -18,12 +18,12 @@ describe WorkfileDraftController do
   describe "#create" do
     context "with valid attributes" do
       it "should save the data" do
-        post :create, :draft => valid_attributes, :workfile_id => 3939
+        post :create, :workfile_draft => valid_attributes, :workfile_id => 3939
         response.code.should == "201"
       end
 
       it "renders the newly created draft" do
-        post :create, :draft => valid_attributes, :workfile_id => 3939
+        post :create, :workfile_draft => valid_attributes, :workfile_id => 3939
         decoded_response.content.should == "Valid content goes here"
         decoded_response.workfile_id.should == 3939
         decoded_response.owner_id.should == user.id
@@ -54,7 +54,7 @@ describe WorkfileDraftController do
     end
     it "updates and renders the updated values" do
       updated_attributes = {:content => "I am a leaf upon the wind, watch how I soar."}
-      put :update, :draft => updated_attributes, :workfile_id => 3939
+      put :update, :workfile_draft => updated_attributes, :workfile_id => 3939
       decoded_response.content.should == "I am a leaf upon the wind, watch how I soar."
       decoded_response.workfile_id.should == 3939
       decoded_response.owner_id.should == user.id

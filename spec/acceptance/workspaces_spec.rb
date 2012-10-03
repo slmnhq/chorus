@@ -46,7 +46,6 @@ resource "Workspaces" do
     parameter :summary, "Notes about the workspace"
 
     required_parameters :name
-    scope_parameters :workspace, :all
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
@@ -66,7 +65,6 @@ resource "Workspaces" do
     parameter :schema_name, "Name of new schema"
 
     required_parameters :name
-    scope_parameters :workspace, :all
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
@@ -86,7 +84,6 @@ resource "Workspaces" do
     #parameter :schema_name, "Name of new schema"
 
     required_parameters :name
-    scope_parameters :workspace, :all
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
@@ -103,7 +100,6 @@ resource "Workspaces" do
     parameter :summary, "Notes about the workspace"
 
     required_parameters :name
-    scope_parameters :workspace, :all
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
@@ -146,7 +142,6 @@ resource "Workspaces" do
 
     required_parameters :dataset_id, :to_table, :new_table
 
-    scope_parameters :dataset_import, :all
 
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
@@ -182,7 +177,6 @@ resource "Workspaces" do
 
     required_parameters :dataset_id, :to_table, :new_table
 
-    scope_parameters :dataset_import, :all
 
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
@@ -236,7 +230,6 @@ resource "Workspaces" do
     parameter :workspace_id, "Id of the workspace that the dataset belongs to"
     parameter :dataset_id, "Id of the dataset"
     parameter :id, "id of the import schedule"
-    scope_parameters :dataset_import, :all
 
     required_parameters :dataset_id , :id , :workspace_id
     let(:id) { import_schedules(:default).id }
@@ -248,17 +241,16 @@ resource "Workspaces" do
 
   post "/workspaces/:workspace_id/external_tables" do
     parameter :hdfs_entry_id, "Id of the source HDFS entry"
-    parameter :has_header, "'true' if data contains a header column, 'false' otherwise", :scope => :hdfs_external_table
-    parameter :column_names, "Array of column names", :scope => :hdfs_external_table
-    parameter :types, "Array of column types", :scope => :hdfs_external_table
-    parameter :delimiter, "Delimiter (i.e. , or ;)", :scope => :hdfs_external_table
-    parameter :table_name, "Name of the table to be created", :scope => :hdfs_external_table
+    parameter :has_header, "'true' if data contains a header column, 'false' otherwise"
+    parameter :column_names, "Array of column names"
+    parameter :types, "Array of column types"
+    parameter :delimiter, "Delimiter (i.e. , or ;)"
+    parameter :table_name, "Name of the table to be created"
     parameter :workspace_id, "Id of the workspace to create the table in"
 
     required_parameters :hdfs_entry_id, :table_name, :workspace_id, :column_names, :delimiter, :types
-    scope_parameters :hdfs_external_table, [:hdfs_entry_id, :has_header, :column_names, :column_types, :delimiter, :table_name]
 
-    let(:hdfs_entry_id) { hadoop_instance.hdfs_entries.create!(path: "/files/data.csv").id }
+    let(:hdfs_entry_id) { hdfs_entries(:hdfs_file).id }
     let(:has_header) { true }
     let(:column_names) { ["field1", "field2"] }
     let(:types) { ["text", "text"] }

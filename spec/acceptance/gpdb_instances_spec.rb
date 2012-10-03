@@ -29,7 +29,6 @@ resource "Greenplum DB instances" do
     let(:shared) { "1" }
 
     required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password
-    scope_parameters :instance, :all
 
     example_request "Register a Greenplum database" do
       status.should == 201
@@ -59,8 +58,6 @@ resource "Greenplum DB instances" do
     parameter :host, "Host IP or address"
     parameter :port, "Port"
     parameter :maintenance_db, "Database to use for initial connection (usually 'postgres')"
-
-    scope_parameters :instance, :all
 
     let(:id) { owned_instance.to_param }
     let(:name) { "Sesame_Street" }
