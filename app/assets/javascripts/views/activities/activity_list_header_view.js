@@ -11,7 +11,10 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     setup: function() {
         var options = {}
         if (this.modelIsWorkspace()) {
-            options.urlParams = { workspaceId: this.model.get("id") };
+            options.urlParams = {
+                workspaceId: this.model.get("id"),
+                entityType: "workspace"
+            };
         }
         this.insightCount = chorus.models.InsightCount.count(options);
         this.requiredResources.add(this.insightCount);
