@@ -80,14 +80,6 @@ module Events
       end
     end
 
-    def additional_data_key(additional_data_key)
-      self.class.object_translations.fetch(additional_data_key.to_s, additional_data_key)
-    end
-
-    def additional_data_value(additional_data_key)
-      send(additional_data_key(additional_data_key))
-    end
-
     private
 
     def create_activity(entity_name)

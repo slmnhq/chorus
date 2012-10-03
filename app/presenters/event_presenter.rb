@@ -64,12 +64,8 @@ class EventPresenter < Presenter
 
   def additional_data_hash
     pairs = model.additional_data.map do |key, value|
-      if value.class == String
-        [key, sanitize(value)]
-      else
-        [model.additional_data_key(key), present(model.additional_data_value(key), @options)]
-      end
-
+      value = value.is_a?(String) ? sanitize(value) : value
+      [key, value]
     end
     Hash[pairs]
   end
