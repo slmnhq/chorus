@@ -33,9 +33,14 @@ describe TableauWorkbooksController do
       end
     end
 
-    it "returns 201 created when the save succeeds" do
+    it "returns 201 created with data when the save succeeds" do
+      any_instance_of(TableauWorkbookPublication) do |workbook|
+        stub(workbook).tableau_url { "foo.com"}
+      end
       post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
       response.code.should == '201'
+      decoded_response.name.should == 'myTableauWorkbook'
+      decoded_response.url.should == 'foo.com'
     end
 
     it "creates a tableau publication when the save succeeds" do

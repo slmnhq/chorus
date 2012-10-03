@@ -9,6 +9,7 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
+        this.dataset = this.options.dataset;
         this.bindings.add(this.model, "saved", this.saveSuccess);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
@@ -29,6 +30,8 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
                 name: this.model.shortName(20)
             });
         this.closeModal();
+        this.dataset.tableauWorkbooks().add(this.model);
+        this.dataset.trigger("change");
     },
 
     saveFailed: function() {

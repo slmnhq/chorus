@@ -2,8 +2,10 @@
     <div class="found_in">{{datasetLocation model}}</div>
 {{/if}}
 <div class="menus"></div>
+<div>
 {{usedInWorkspaces workspacesAssociated dataset}}
 {{usedInTableau tableauWorkbooks dataset}}
+</div>
 {{#if imageUrl}}
     <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}"/>
 {{/if}}

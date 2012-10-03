@@ -2,7 +2,7 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
     beforeEach(function () {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectName:"myDataset"});
         this.model = this.dataset.deriveTableauWorkbook();
-        this.dialog = new chorus.dialogs.PublishToTableau({model:this.model});
+        this.dialog = new chorus.dialogs.PublishToTableau({model:this.model, dataset: this.dataset});
         this.dialog.render();
     });
 
@@ -32,6 +32,7 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
            beforeEach(function() {
                spyOn(chorus.Modal.prototype, "closeModal");
                spyOn(chorus, "toast");
+               this.originalWorkbooksCount = this.dataset.tableauWorkbooks().length;
               this.server.lastCreateFor(this.model).succeed();
            });
 
@@ -47,6 +48,10 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
                         name: "foo"
                     }
                 );
+            });
+
+            it("updates the dataset", function() {
+                expect(this.dataset.tableauWorkbooks().length).toBeGreaterThan(this.originalWorkbooksCount);
             });
         });
 

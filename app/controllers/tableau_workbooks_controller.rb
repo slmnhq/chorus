@@ -7,12 +7,19 @@ class TableauWorkbooksController < ApplicationController
     workbook = create_new_workbook(dataset, params[:tableau_workbook][:name])
 
     if workbook.save
-      TableauWorkbookPublication.create!(
+      publication = TableauWorkbookPublication.create!(
           :name => params[:tableau_workbook][:name],
           :dataset_id => dataset.id,
           :workspace_id => params[:workspace_id]
       )
-      render :json => {}, :status => :created
+      render :json => {
+          :response => {
+              :name => publication.name,
+              :dataset_id => publication.dataset_id,
+              :id => publication.id,
+              :url => publication.tableau_url
+          }
+      }, :status => :created
     else
       puts workbook.errors.full_messages.join(". ")
       present_errors({:fields => {:tableau =>

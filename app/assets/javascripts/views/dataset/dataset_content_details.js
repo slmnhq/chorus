@@ -244,7 +244,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     displayPublishDialog: function() {
-      this.dialog = new chorus.dialogs.PublishToTableau({model: this.dataset.deriveTableauWorkbook()});
+      this.dialog = new chorus.dialogs.PublishToTableau({
+          model: this.dataset.deriveTableauWorkbook(),
+          dataset: this.dataset
+      });
       this.dialog.launchModal();
     }
 });

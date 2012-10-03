@@ -283,7 +283,7 @@
 
             var workspaceLink = linkToContextObject(workspaceSet.at(0));
 
-            var result = $("<div></div>").addClass('found_in')
+            var result = $("<div></div>").addClass('found_in workspace_association');
             var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceSet.length - 1}), {'class': 'open_other_menu'}).toString()
 
             result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspaceSet.length }));
@@ -319,7 +319,14 @@
             var result = $("<div></div>").addClass('published_to')
             var otherWorkbooksMenu = chorus.helpers.linkTo('#', t('tableau.other_workbooks', {count: tableauWorkbookSet.length - 1}), {'class': 'open_other_menu'}).toString()
 
-            result.append(t('tableau.body', {workbookLink: workbookLink, otherWorkbooksMenu: otherWorkbooksMenu, count: tableauWorkbookSet.length }));
+            result.append(t('tableau.body',
+                {
+                    tableauIcon: ($('<span/>').addClass('tableau_icon')).outerHtml(),
+                    workbookLink: workbookLink,
+                    otherWorkbooksMenu: otherWorkbooksMenu,
+                    count: tableauWorkbookSet.length
+                }
+            ));
             if (tableauWorkbookSet.length > 1) {
                 var list = $('<ul></ul>').addClass('other_menu');
                 _.each(_.rest(tableauWorkbookSet.models), function(workbook) {
