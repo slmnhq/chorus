@@ -3,9 +3,9 @@
 </div>
 
 <input id="create_database_view_name" value="{{name}}" type="text" name="name" tabindex="1" maxlength="64"/>
-
+<input id="create_work_file" type="checkbox" checked="checked" name="create_work_file" tabindex="2" /><label for="create_work_file">{{t "actions.create_tableau_workfile"}}</label>
 
 <div class="modal_controls">
-    <button type="button" class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
-    <button type="button" class="submit" tabindex=2>{{t "actions.publish_to_tableau"}}</button>
+    <button type="button" class="cancel" tabindex=4>{{t "actions.cancel"}}</button>
+    <button type="button" class="submit" tabindex=3>{{t "actions.publish_to_tableau"}}</button>
 </div>

@@ -21,7 +21,15 @@ class TableauWorkbooksController < ApplicationController
           :project_name => publication.project_name,
           :project_url => publication.project_url
       )
-      # TODO: shouldn't there be a tableau workbook presenter?
+      if params[:create_work_file] == "true"
+        workfile = publication.workspace.workfiles.build(file_name: "#{params[:tableau_workbook][:name]}.twb")
+        workfile.owner = current_user
+        version = workfile.versions.build
+        version.contents = nil
+        version.owner = current_user
+        version.modifier = current_user
+        workfile.save!
+      end
       render :json => {
           :response => {
               :name => publication.name,

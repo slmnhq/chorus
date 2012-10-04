@@ -14,7 +14,8 @@ describe TableauWorkbooksController do
   describe "#create" do
     let(:dataset) { datasets(:table) }
     let(:workspace) { workspaces(:public)}
-    let(:params) { { :dataset_id => dataset.id, :workspace_id => workspace.id, :name => "myTableauWorkbook" } }
+    let(:params) { extra_options.merge({ :dataset_id => dataset.id, :workspace_id => workspace.id, :name => "myTableauWorkbook" }) }
+    let(:extra_options) { {} }
 
     context 'when the dataset is a table' do
       let(:dataset) { datasets(:table) }
@@ -36,10 +37,10 @@ describe TableauWorkbooksController do
 
     it "returns 201 created with data when the save succeeds" do
       any_instance_of(TableauWorkbookPublication) do |workbook|
-        stub(workbook).workbook_url { "foo.com"}
-        stub(workbook).project_url { "foo.com/projects"}
+        stub(workbook).workbook_url { "foo.com" }
+        stub(workbook).project_url { "foo.com/projects" }
       end
-      post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+      post :create, params
       response.code.should == '201'
       decoded_response.name.should == 'myTableauWorkbook'
       decoded_response.url.should == 'foo.com'
@@ -60,6 +61,26 @@ describe TableauWorkbooksController do
       twp = dataset.tableau_workbook_publications.find_by_name("myTableauWorkbook")
       twp.dataset_id.should == dataset.id
       twp.workspace_id.should == workspace.id
+    end
+
+    context "when not creating a tableau workfile" do
+      let(:extra_options) { {:create_work_file => "false"} }
+
+      it "should not create a tableau workfile" do
+        expect {
+          post :create, params
+        }.not_to change { Workfile.count }
+      end
+    end
+
+    context "when also creating tableau workfile" do
+      let(:extra_options) { {:create_work_file => "true"} }
+
+      it "should save a workfile" do
+        expect {
+          post :create, params
+        }.to change { Workfile.count }.by(1)
+      end
     end
 
     context "when the save fails" do
