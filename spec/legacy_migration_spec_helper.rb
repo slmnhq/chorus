@@ -23,7 +23,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
 
     def legacy_sql_md5
-      'a61b8dc56fb987df72209e625e5594ca'
+      '2486542b3bf5ea32de833c119c19a498'
     end
 
     unless File.exist?("db/legacy/legacy_#{legacy_sql_md5}.sql")

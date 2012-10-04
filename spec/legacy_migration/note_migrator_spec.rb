@@ -127,7 +127,7 @@ describe NoteMigrator do
       Legacy.connection.select_all("
         SELECT ec.*
         FROM edc_comment ec, edc_user eu
-        WHERE entity_type = 'databaseObject' and ec.author_name = eu.user_name AND ec.workspace_id IS NOT NULL
+        WHERE entity_type IN ('databaseObject', 'chorusView') and ec.author_name = eu.user_name AND ec.workspace_id IS NOT NULL
       ").each do |legacy_comment|
         count += 1
         note = Events::NoteOnWorkspaceDataset.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})

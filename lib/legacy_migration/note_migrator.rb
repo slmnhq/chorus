@@ -4,6 +4,7 @@ class NoteMigrator < AbstractMigrator
       HdfsEntryMigrator.migrate
       WorkfileMigrator.migrate(options)
       DatabaseObjectMigrator.migrate
+      ChorusViewMigrator.migrate
     end
 
     def classes_to_validate
@@ -271,7 +272,7 @@ class NoteMigrator < AbstractMigrator
         INNER JOIN workspaces
           ON workspaces.legacy_id = edc_comment.workspace_id
       WHERE
-        edc_comment.entity_type = 'databaseObject'
+        edc_comment.entity_type IN ( 'databaseObject', 'chorusView')
         AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnWorkspaceDataset');
       ))
   

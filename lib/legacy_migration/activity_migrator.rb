@@ -319,6 +319,7 @@ class ActivityMigrator < AbstractMigrator
         AND chorus_view.entity_type = 'chorusView'
       INNER JOIN datasets
         ON normalize_key(chorus_view.object_id) = datasets.legacy_id
+        AND streams.workspace_id = datasets.edc_workspace_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
       INNER JOIN edc_activity_stream_object actor
