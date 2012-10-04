@@ -38,7 +38,7 @@ class WorkspacePresenter < Presenter
     recent_comments = model.comments.recent
     recent_insights = recent_notes.select { |note| note.insight? }
     all = recent_notes + recent_comments
-    latest_5 = all.sort_by(&:created_at)[0..4]
+    latest_5 = all.sort_by(&:created_at)[-5..-1]
 
     {
         :number_of_insights => recent_insights.size,

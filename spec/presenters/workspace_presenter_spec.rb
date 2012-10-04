@@ -106,8 +106,8 @@ describe WorkspacePresenter, :type => :view do
           hash[:number_of_comments].should == 5
           hash[:number_of_insights].should == 1
           hash[:latest_comment_list].size.should == 5
-          hash[:latest_comment_list].should_not include(event)
-          hash[:latest_comment_list].should_not include(@comment)
+          hash[:latest_comment_list].should_not include(@presenter.present(event))
+          hash[:latest_comment_list].should_not include(@presenter.present(@comment))
         end
       end
     end
