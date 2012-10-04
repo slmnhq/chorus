@@ -84,4 +84,6 @@ nginx.conf
 /gpdb421ee
 GREENPLUM_IP
 
+# Ignore regression specs, as they live in another repo and should only be symlinked into spec/
+/spec/regression
 
