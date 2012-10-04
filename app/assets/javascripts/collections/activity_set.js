@@ -14,7 +14,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         var workspace = this.attributes.workspace
         var url_base = "/insights";
         if (workspace) {
-            return (url_base + "?entity_type=workspace&entity_id=" + workspace.id);
+            return (url_base + "?entity_type=workspace&workspace_id=" + workspace.id);
         }
         return (url_base + "?entity_type=dashboard");
     }

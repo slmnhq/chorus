@@ -10,5 +10,5 @@ chorus.models.Insight = chorus.models.Comment.extend({
 
     declareValidations:function (newAttrs) {
         this.require('body', newAttrs);
-    },
+    }
 });

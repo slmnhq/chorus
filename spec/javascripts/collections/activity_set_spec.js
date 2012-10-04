@@ -17,7 +17,7 @@ describe("chorus.collections.ActivitySet", function() {
                     this.collection.attributes.insights = true;
                     this.collection.attributes.workspace = { id: 21 }
                     expect(this.collection.url()).toHaveUrlPath("/insights");
-                    expect(this.collection.url()).toContainQueryParams({entity_type : "workspace", entity_id: 21})
+                    expect(this.collection.url()).toContainQueryParams({entity_type : "workspace", workspace_id: 21})
                 });
             });
         });
