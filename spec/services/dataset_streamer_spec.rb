@@ -67,6 +67,7 @@ describe DatasetStreamer, :database_integration => true do
       it "returns the error message" do
         enumerator = streamer.enum
         enumerator.next.should == "The requested dataset contains no rows"
+        finish_enumerator(enumerator)
       end
     end
 
