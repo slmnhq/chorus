@@ -17,4 +17,10 @@ class AbstractMigrator
     Sunspot.session = Sunspot.session.original_session
     ActiveRecord::Base.record_timestamps = true
   end
+
+  def self.silence_solr
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
+    yield
+    Sunspot.session = Sunspot.session.original_session
+  end
 end

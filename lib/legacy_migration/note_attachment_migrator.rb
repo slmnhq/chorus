@@ -11,14 +11,17 @@ class NoteAttachmentMigrator < AbstractMigrator
 
     def migrate(options)
       prerequisites(options)
-      migrate_workfiles_attachment_on_notes
-      migrate_dataset_attachment_on_notes
-      migrate_desktop_attachment_on_notes
+      silence_solr do
+        migrate_workfiles_attachment_on_notes
+        migrate_dataset_attachment_on_notes
+        migrate_desktop_attachment_on_notes
+      end
     end
 
     private
 
     def migrate_workfiles_attachment_on_notes
+
       Legacy.connection.exec_query(%Q(
       INSERT INTO notes_workfiles(
         legacy_id,
@@ -73,7 +76,6 @@ class NoteAttachmentMigrator < AbstractMigrator
 
 
     def migrate_desktop_attachment_on_notes
-
       get_file do |note_legacy_id, file_name, file, attachment_legacy_id|
         event = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => note_legacy_id})
         unless event
