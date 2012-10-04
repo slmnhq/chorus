@@ -52,18 +52,25 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with workfile in a workspace", function() {
         beforeEach(function() {
-            this.result = fixtures.attachmentOnWorkfileInWorkspaceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
 
         it("shows the workfile set", function() {
+            var workfile = this.result.workfile();
+            var workspace = workfile.workspace();
+
+            var workspaceUrl = "#/workspaces/"+workspace.id;
+            var workfileUrl = workspaceUrl+ "/workfiles/"+workfile.id;
+
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.workfile_in_workspace",
                 {
-                    workfileLink: '<a href="#/workspaces/10000/workfiles/10030">buildout.txt</a>',
-                    workspaceLink: '<a href="#/workspaces/10000">ws</a>'
+                    workfileLink: '<a href="'+workfileUrl+'">'+workfile.name()+'</a>',
+                    workspaceLink: '<a href="'+workspaceUrl+'">'+workspace.name()+'</a>'
                 }
             );
         });

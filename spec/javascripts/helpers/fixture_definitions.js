@@ -189,6 +189,10 @@ window.rspecFixtureDefinitions = {
         model: "SearchResult"
     },
 
+    searchResultWithAttachmentOnWorkfileNote : {
+        model: "SearchResult"
+    },
+
     frequencyTask: {},
     frequencyTaskWithErrors: {
         model: 'FrequencyTask'

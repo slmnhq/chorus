@@ -58,6 +58,14 @@ describe SearchController do
         get :show, :query => 'searchquery_workspace'
       end
     end
+
+    generate_fixture "searchResultWithAttachmentOnWorkfileNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_workfile" do
+        get :show, :query => 'searchquery_workfile'
+      end
+    end
   end
 
   describe "#type_ahead" do

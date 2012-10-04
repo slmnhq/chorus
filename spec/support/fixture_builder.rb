@@ -278,6 +278,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
     note_on_workspace = Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
     fbuilder.name :note_on_workspace, note_on_workspace
+    note_on_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => text_workfile, :body => "My awesome workfile")
+    fbuilder.name :note_on_workfile, note_on_workfile
+
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
@@ -326,6 +329,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
     fbuilder.name(:note_attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance'))))
     fbuilder.name(:note_attachment_workspace, note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace'))))
+    fbuilder.name(:note_attachment_workfile, note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile'))))
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases

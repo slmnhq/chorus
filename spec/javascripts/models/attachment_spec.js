@@ -72,8 +72,12 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("shows the URL for a workfile in a workspace", function() {
-            var model = fixtures.attachmentOnWorkfileInWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/workspaces/10000/workfiles/10030");
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            var model = search.attachments().at(0);
+            var workfile = model.workfile();
+            var workspace = workfile.workspace();
+            expect(model.showUrl()).toBe("#/workspaces/"+workspace.id+
+                "/workfiles/"+workfile.id);
         });
 
         it("shows the URL for an instance", function() {
@@ -117,13 +121,15 @@ describe("chorus.models.Attachment", function() {
 
     describe("workfile", function() {
         beforeEach(function() {
-            this.model = fixtures.attachmentOnWorkfileInWorkspaceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            this.model = search.attachments().at(0);
         });
 
         it("returns the workfile", function() {
-            this.workfile = this.model.workfile();
-            expect(this.workfile.get('name')).toBe(this.model.get('workfile').name);
-            expect(this.workfile.get('id')).toBe(this.model.get('workfile').id);
+            var workfile = this.model.workfile();
+
+            expect(workfile.get('name')).toBe(this.model.get('workfile').name);
+            expect(workfile.get('id')).toBe(this.model.get('workfile').id);
         });
 
         it("returns falsy when there is no workfile", function() {

@@ -42,7 +42,11 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     workspace: function() {
         if(!this._workspace) {
-            this._workspace = this.get('workspace')&& !_.isEmpty(this.get('workspace')) && new chorus.models.Workspace(this.get('workspace'));
+            if (this.workfile()) {
+                this._workspace = this.workfile().workspace();
+            } else {
+                this._workspace = this.get('workspace')&& !_.isEmpty(this.get('workspace')) && new chorus.models.Workspace(this.get('workspace'));
+            }
         }
         return this._workspace;
     },

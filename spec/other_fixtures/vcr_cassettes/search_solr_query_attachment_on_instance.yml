@@ -24,7 +24,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>60,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>17,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts contents_file_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -35,10 +35,10 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''NoteAttachment
-        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>5541035.0,''docs''=>[{''id''=>''NoteAttachment
-        1000002'',''contents_file_name_texts''=>[''searchquery_instance''],''score''=>5541035.0}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''NoteAttachment'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''NoteAttachment
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>5263910.5,''docs''=>[{''id''=>''NoteAttachment
+        1000002'',''contents_file_name_texts''=>[''searchquery_instance''],''score''=>5263910.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''NoteAttachment'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''NoteAttachment
         1000002''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@instance@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 04 Oct 2012 20:44:00 GMT
+  recorded_at: Thu, 04 Oct 2012 22:03:15 GMT
 recorded_with: VCR 2.1.1
 ...
