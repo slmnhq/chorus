@@ -42,7 +42,7 @@ class WorkspacePresenter < Presenter
 
     {
         :number_of_insights => recent_insights.size,
-        :number_of_comments => recent_notes.size + recent_comments.size,
+        :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
         :latest_comment_list => present(latest_5)
     }
   end

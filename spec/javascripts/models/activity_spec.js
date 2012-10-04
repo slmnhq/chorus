@@ -274,7 +274,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns true for sub-comments", function() {
-            expect(fixtures.activities.SUB_COMMENT().isUserGenerated()).toBeTruthy();
+            expect(rspecFixtures.comment().isUserGenerated()).toBeTruthy();
         });
     });
 
@@ -447,7 +447,7 @@ describe("chorus.models.Activity", function() {
 
     describe("#isSubComment", function() {
         it("returns true for sub-comments", function() {
-            this.model.set({ type: "SUB_COMMENT" });
+            this.model.set({ action: "SUB_COMMENT" });
             expect(this.model.isSubComment()).toBeTruthy();
         });
 
@@ -488,9 +488,23 @@ describe("chorus.models.Activity", function() {
             });
         });
 
+        context("when actor information is present", function () {
+            beforeEach(function() {
+                this.model = rspecFixtures.activity.noteOnWorkspaceCreated()
+            });
+            it("creates a user", function() {
+                expect(this.model.author()).toBeA(chorus.models.User);
+            });
+
+            it("returns the same instance when called multiple times", function() {
+                expect(this.model.author()).toBe(this.model.author());
+            });
+        });
+
         context("when author information is not present", function() {
             beforeEach(function() {
                 this.model.unset("author");
+                this.model.unset("actor");
             });
 
             it("returns undefined", function() {

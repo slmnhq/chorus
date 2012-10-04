@@ -41,7 +41,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
             context("when there are no insights", function() {
                 beforeEach(function() {
-                    this.workspace1.set({numberOfComment: 4, numberOfInsight: 0});
+                    this.workspace1.set({numberOfComments: 4, numberOfInsights: 0});
                     this.view.render();
                 });
 
@@ -57,7 +57,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
             context("when there are no comments", function() {
                 beforeEach(function() {
-                    this.workspace1.set({numberOfComment: 0, numberOfInsight: 4});
+                    this.workspace1.set({numberOfComments: 0, numberOfInsights: 4});
                     this.view.render();
                 });
 
@@ -73,7 +73,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
             context("when both insights and comments are available", function() {
                 beforeEach(function() {
-                    this.workspace1.set({numberOfComment: 3, numberOfInsight: 4});
+                    this.workspace1.set({numberOfComments: 3, numberOfInsights: 4});
                     this.view.render();
                 });
 
@@ -92,14 +92,14 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
             context("when there are no insights or comments", function() {
                 it("displays no insights or comments when 0", function() {
-                    this.workspace1.set({numberOfComment: 0, numInsights: 0});
+                    this.workspace1.set({numberOfComments: 0, numberOfInsights: 0});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")
                 })
 
                 it("displays no insights or comments when null", function() {
-                    this.workspace1.set({numberOfComment: null, numInsights: null});
+                    this.workspace1.set({numberOfComments: null, numberOfInsights: null});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")

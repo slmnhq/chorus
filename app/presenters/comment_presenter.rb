@@ -6,6 +6,7 @@ class CommentPresenter < Presenter
         :id => id,
         :author => present(author),
         :text => text,
+        :action => 'SUB_COMMENT',
         :timestamp => created_at
     }
   end

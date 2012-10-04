@@ -16,7 +16,7 @@
             } else if (this.model.isSuccessfulImport()) {
                 return "/images/import_icon.png";
             } else {
-                return this.model.actor().fetchImageUrl({ size: "icon" });
+                return this.model.author().fetchImageUrl({ size: "icon" });
             }
         },
 
@@ -26,7 +26,7 @@
             } else if (this.model.isSuccessfulImport()) {
                 return this.model.dataset().showUrl();
             } else {
-                return this.model.actor().showUrl();
+                return this.model.author().showUrl();
             }
         },
 
@@ -260,7 +260,12 @@
             TableauWorkbookPublished: {
                 links: ["actor", "dataset"],
                 computed: ["datasetType", "tableauWorkbookLink", "tableauProjectLink"]
+            },
+
+            SUB_COMMENT: {
+                links: ["author"]
             }
+
         },
 
         headerParams: function(self) {

@@ -16,8 +16,8 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
 
     collectionModelContext: function(model) {
         var comments = model.comments().models;
-        var numComments = model.get("numberOfComment");
-        var numInsights = model.get("numberOfInsight");
+        var numComments = model.get("numberOfComments");
+        var numInsights = model.get("numberOfInsights");
         var insightCountString;
         if (numComments > 0) {
             if (numInsights > 0) {

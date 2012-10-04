@@ -19,8 +19,12 @@
         urlTemplate: "activities/{{id}}",
 
         author: function() {
-            if (!this._author && this.has("author")) {
-                this._author = new chorus.models.User(this.get("author"))
+            if (!this._author) {
+                if (this.has("author")) {
+                    this._author = new chorus.models.User(this.get("author"));
+                } else if (this.has("actor")) {
+                    this._author = new chorus.models.User(this.get("actor"));
+                }
             }
 
             return this._author;
@@ -199,7 +203,7 @@
         },
 
         isSubComment: function() {
-            return this.get("type") === "SUB_COMMENT";
+            return this.get("action") === "SUB_COMMENT";
         },
 
         hasCommitMessage: function() {
