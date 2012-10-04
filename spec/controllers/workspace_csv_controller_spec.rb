@@ -7,15 +7,6 @@ describe WorkspaceCsvController do
   let(:non_auth_user) { users(:no_collaborators) }
   let(:file) { test_file("test.csv", "text/csv") }
   let(:workspace) { workspaces(:public) }
-  let(:csv_file_params) do
-    {
-        :workspace_id => workspace.to_param,
-        :csv => {
-            :contents => file,
-            :truncate => truncate
-        }
-    }
-  end
   let(:truncate) { false }
 
   before do
@@ -23,6 +14,16 @@ describe WorkspaceCsvController do
   end
 
   describe "#create" do
+    let(:csv_file_params) do
+      {
+          :workspace_id => workspace.to_param,
+          :csv => {
+              :contents => file,
+              :truncate => truncate
+          }
+      }
+    end
+
     it "saves the user and workspace onto the csv file" do
       post :create, csv_file_params
       csv_file = CsvFile.last
@@ -60,6 +61,7 @@ describe WorkspaceCsvController do
 
   describe "#import" do
     before do
+      FactorGirl.create :csv_file,
       post :create, csv_file_params
       @csv_file = CsvFile.last
     end

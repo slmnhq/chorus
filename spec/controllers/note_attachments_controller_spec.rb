@@ -14,7 +14,7 @@ describe NoteAttachmentsController do
     context "with a binary file" do
       it "changes the file content" do
         file = test_file('workfile.sql')
-        post :create, :note_id => event.id, :fileToUpload => {:contents => file}
+        post :create, :note_id => event.id, :contents => file
         response.code.should == '200'
         decoded_response[:attachments][0][:name].should == 'workfile.sql'
       end

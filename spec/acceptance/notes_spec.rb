@@ -71,12 +71,25 @@ resource "Notes" do
     parameter :contents, "File contents"
 
     required_parameters :note_id, :contents
-    scope_parameters :fileToUpload, :contents
 
     let(:note_id) { note.id }
     let(:contents) { test_file("small1.gif") }
 
     example_request "Attaches the contents of a file to a note" do
+      status.should == 200
+    end
+  end
+
+  post "/notes/:note_id/attachments" do
+    parameter :note_id, "Note id"
+    parameter :svg_data, "SVG File contents"
+
+    required_parameters :note_id, :svg_data
+
+    let(:note_id) { note.id }
+    let(:svg_data) { test_file("SVG-logo.svg").read }
+
+    example_request "Attaches a visualization to a note" do
       status.should == 200
     end
   end
