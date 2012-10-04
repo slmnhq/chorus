@@ -1,7 +1,9 @@
 {{#if workfile}}
     <div class="info">
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
-        <div class="updated">Updated by <a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{displayTimestamp workfile.versionInfo.updatedAt}}</span></div>
+        {{#unless hideUpdatedTime}}
+            <div class="updated">{{t "workfiles.updated_by"}}<a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{displayTimestamp workfile.versionInfo.updatedAt}}</span></div>
+        {{/unless}}
     </div>
     <div class="actions">
         <ul>
@@ -10,8 +12,12 @@
                     <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-workspace-id={{workfile.workspace.id}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
                 {{/if}}
             {{/unless}}
-            <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
-            <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
+            {{#unless hideCopyLink}}
+                <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
+            {{/unless}}
+            {{#unless hideDownloadLink}}
+                <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
+            {{/unless}}
             {{#ifAll activeWorkspace canUpdate}}
                 <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
             {{/ifAll}}

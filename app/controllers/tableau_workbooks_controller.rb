@@ -22,13 +22,9 @@ class TableauWorkbooksController < ApplicationController
           :project_url => publication.project_url
       )
       if params[:tableau_workbook][:create_work_file] == "true"
-        workfile = publication.workspace.workfiles.build(file_name: "#{params[:tableau_workbook][:name]}.twb")
+        workfile = LinkedTableauWorkfile.new(file_name: "#{params[:tableau_workbook][:name]}.twb")
         workfile.owner = current_user
-        version = workfile.versions.build
-        version.contents = nil
-        version.owner = current_user
-        version.modifier = current_user
-        workfile.save!
+        publication.workspace.workfiles << workfile
       end
       render :json => {
           :response => {

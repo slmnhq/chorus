@@ -79,7 +79,7 @@ describe TableauWorkbooksController do
       it "should save a workfile" do
         expect {
           post :create, params
-        }.to change { Workfile.count }.by(1)
+        }.to change { LinkedTableauWorkfile.count }.by(1)
       end
     end
 

@@ -8,7 +8,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
-        })
+        });
 
         context("when no workfile is selected", function() {
             it("does not render the info section", function() {
@@ -75,16 +75,16 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 it("displays a link to copy the workfile to another workspace", function() {
                     var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
                     expect(copyLink).toExist();
-                    expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-                    expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+                    expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
+                    expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
                     expect(copyLink).toHaveAttr("data-active-only", 'true')
-                })
+                });
 
                 it("displays a link to download the workfile", function() {
                     var downloadLink = this.view.$(".actions a.download");
                     expect(downloadLink).toExist();
                     expect(downloadLink.attr("href")).toBe(this.workfile.downloadUrl());
-                })
+                });
 
                 context("when it is in a regular workfile list", function() {
                     it("displays a link 'add a note'", function() {
@@ -93,11 +93,28 @@ describe("chorus.views.WorkfileListSidebar", function() {
                         expect(addLink).toHaveAttr("data-entity-type", "workfile");
                         expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
                     });
-                })
+                });
+
+                context("when it is a tableau workbook", function () {
+                    beforeEach(function () {
+                        this.workfile.set({fileType: 'tableau_workbook'});
+                        this.view.render();
+                    });
+
+                    it("hide the copy and download links", function () {
+                        expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
+                        expect(this.view.$('.actions a.download')).not.toExist();
+                    });
+
+                    it("hide the updated information", function () {
+                        expect(this.view.$('.info .updated')).not.toExist();
+                    });
+
+                });
 
                 context("when it is in a search result workfile list", function() {
                     beforeEach(function() {
-                        this.view.options.hideAddNoteLink = true
+                        this.view.options.hideAddNoteLink = true;
                         this.view.render()
                     });
 
@@ -105,15 +122,15 @@ describe("chorus.views.WorkfileListSidebar", function() {
                         var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
                         expect(addLink).not.toExist();
                     });
-                })
+                });
 
                 it("displays the activity list", function() {
                     expect(this.view.$(".activity_list")).toExist();
-                })
+                });
 
                 it("sets the collection to the activities of the selected workfile", function() {
                     expect(this.view.collection).toBe(this.workfile.activities());
-                })
+                });
 
                 describe("when the activity set is changed", function() {
                     beforeEach(function() {
