@@ -14,13 +14,14 @@ describe TableauWorkbooksController do
   describe "#create" do
     let(:dataset) { datasets(:table) }
     let(:workspace) { workspaces(:public)}
+    let(:params) { { :dataset_id => dataset.id, :workspace_id => workspace.id, :name => "myTableauWorkbook" } }
 
     context 'when the dataset is a table' do
       let(:dataset) { datasets(:table) }
 
       it 'instantiates the workbook with the table name' do
         mock.proxy(TableauWorkbook).new(hash_including(:db_relname => dataset.name))
-        post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+        post :create, params
       end
     end
 
@@ -29,7 +30,7 @@ describe TableauWorkbooksController do
 
       it 'instantiates the workbook with the sql query' do
         mock.proxy(TableauWorkbook).new(hash_including(:query => dataset.query))
-        post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+        post :create, params
       end
     end
 
@@ -46,7 +47,7 @@ describe TableauWorkbooksController do
     end
 
     it "should create a TableauWorkbookPublished event" do
-      post :create, :workspace_id => workspace.to_param, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+      post :create, params
       the_event = Events::Base.first
       the_event.action.should == "TableauWorkbookPublished"
       the_event.dataset.should == dataset
@@ -55,7 +56,7 @@ describe TableauWorkbooksController do
     end
 
     it "creates a tableau publication when the save succeeds" do
-      post :create, :workspace_id => workspace.to_param, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+      post :create, params
       twp = dataset.tableau_workbook_publications.find_by_name("myTableauWorkbook")
       twp.dataset_id.should == dataset.id
       twp.workspace_id.should == workspace.id
@@ -65,7 +66,7 @@ describe TableauWorkbooksController do
       let(:save_status) { false }
 
       it "responds with error" do
-        post :create, :dataset_id => dataset.id, :tableau_workbook => {:name => "myTableauWorkbook"}
+        post :create, params
         response.code.should == '422'
       end
     end

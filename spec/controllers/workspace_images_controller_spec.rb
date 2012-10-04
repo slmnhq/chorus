@@ -9,12 +9,12 @@ describe WorkspaceImagesController do
     end
   end
 
-  describe "#update" do
+  describe "#create" do
     context "for Workspace" do
       let(:workspace) { workspaces(:public) }
       let(:files) { [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small1.gif", Rails.root), "image/gif")] }
 
-      it "updates the workspace's image" do
+      it "adds the workspace's image" do
         default_image_path = "/images/original/missing.png"
         workspace.image.url.should == ""
         post :create, :workspace_id => workspace.id, :files => files

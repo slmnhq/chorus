@@ -11,11 +11,11 @@ describe WorkfilesController do
   let(:public_workfile) { workfiles(:public) }
   let(:file) { test_file("workfile.sql", "text/sql") }
 
-  describe "#index" do
-    before(:each) do
-      log_in user
-    end
+  before do
+    log_in user
+  end
 
+  describe "#index" do
     it "responds with a success" do
       get :index, :workspace_id => workspace.id
       response.code.should == "200"
@@ -89,7 +89,7 @@ describe WorkfilesController do
   describe "#show" do
     context "for a private workspace" do
       context "as a workspace member" do
-        before(:each) do
+        before do
           private_workspace.members << member
           log_in member
         end
@@ -149,45 +149,35 @@ describe WorkfilesController do
   end
 
   describe "#create" do
-    before(:each) do
-      @params = {
-        :workspace_id => workspace.to_param,
-        :workfile => {
-          :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+    let(:params) { {
+      :workspace_id => workspace.to_param,
+      :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
           :versions_attributes => [{:contents => file}]
-        }
-      }
-    end
+    } }
 
     it_behaves_like "an action that requires authentication", :post, :create
 
     context "as a member of the workspace" do
-      let(:current_user) { user }
-
-      before(:each) do
-        log_in user
-      end
-
       it "creates a workfile" do
-        post :create, @params
+        post :create, params
         Workfile.last.file_name.should == "workfile.sql"
       end
 
       it "sets has_added_workfile on the workspace to true" do
-        post :create, @params
+        post :create, params
         workspace.reload.has_added_workfile.should be_true
       end
 
       it "makes a WorkfileCreated event" do
-        post :create, @params
+        post :create, params
         event = Events::WorkfileCreated.by(user).first
-        event.workfile.description.should == @params[:workfile][:description]
-        event.additional_data["commit_message"].should == @params[:workfile][:description]
-        event.workspace.to_param.should == @params[:workspace_id]
+        event.workfile.description.should == params[:description]
+        event.additional_data["commit_message"].should == params[:description]
+        event.workspace.to_param.should == params[:workspace_id]
       end
 
       it "creates a workfile from an svg document" do
-        post :create, :workspace_id => workspace.to_param, :workfile => { :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>' }
+        post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
         Workfile.last.file_name.should == 'some_vis.png'
       end
     end

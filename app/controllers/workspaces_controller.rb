@@ -1,4 +1,5 @@
 class WorkspacesController < ApplicationController
+  wrap_parameters :exclude => []
   def index
     if params[:user_id]
       user = User.find(params[:user_id])

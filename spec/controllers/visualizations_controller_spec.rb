@@ -17,7 +17,7 @@ describe VisualizationsController do
         mock(fake_visualization).fetch!(instance_account, "43_#{user.id}")
         mock_present { |model| model.should == fake_visualization }
 
-        post :create, :chart_task => {:type => "frequency", :check_id => "43"}, :dataset_id => dataset.id
+        post :create, :type => "frequency", :check_id => "43", :dataset_id => dataset.id
         response.status.should == 200
       end
 
@@ -30,12 +30,11 @@ describe VisualizationsController do
         generate_fixture "frequencyTask.json" do
           dataset = Dataset.find_by_name!("base_table1")
 
-          post :create, :dataset_id => dataset.id, :chart_task => {
+          post :create, :dataset_id => dataset.id,
               :type => "frequency",
               :check_id => "43",
               :bins => 4,
               :y_axis => "category"
-          }
 
           response.should be_success
         end
@@ -43,12 +42,11 @@ describe VisualizationsController do
         generate_fixture "frequencyTaskWithErrors.json" do
           dataset = Dataset.find_by_name!("base_table1")
 
-          post :create, :dataset_id => dataset.id, :chart_task => {
+          post :create, :dataset_id => dataset.id,
               :type => "frequency",
               :check_id => "43",
               :bins => 4,
               :y_axis => "hippopotamus"
-          }
 
           response.code.should == "422"
         end
@@ -56,49 +54,45 @@ describe VisualizationsController do
         generate_fixture "heatmapTask.json" do
           dataset = Dataset.find_by_name!("heatmap_table")
 
-          post :create, :dataset_id => dataset.id, :chart_task => {
+          post :create, :dataset_id => dataset.id,
               :type => "heatmap",
               :check_id => "43",
               :x_bins => 3,
               :y_bins => 3,
               :x_axis => "column1",
               :y_axis => "column2"
-          }
 
           response.should be_success
         end
 
         generate_fixture "boxplotTask.json" do
           dataset = Dataset.find_by_name!("base_table1")
-           post :create, :dataset_id => dataset.id, :chart_task => {
+           post :create, :dataset_id => dataset.id,
                :type => "boxplot",
                :check_id => "43",
                :bins => 20,
                :x_axis => "category",
                :y_axis => "column2"
-           }
         end
 
         generate_fixture "timeseriesTask.json" do
           dataset = Dataset.find_by_name!("base_table1")
-          post :create, :dataset_id => dataset.id, :chart_task => {
+          post :create, :dataset_id => dataset.id,
               :type => "timeseries",
               :check_id => "43",
               :time_interval => "month",
               :aggregation => "sum",
               :x_axis => "time_value",
               :y_axis => "column1"
-          }
         end
 
         generate_fixture "histogramTask.json" do
           dataset = Dataset.find_by_name!("base_table1")
-          post :create, :dataset_id => dataset.id, :chart_task => {
+          post :create, :dataset_id => dataset.id,
               :type => "histogram",
               :check_id => "43",
               :bins => 2,
               :x_axis => "column1"
-          }
         end
       end
     end
@@ -111,7 +105,7 @@ describe VisualizationsController do
       end
 
       it "returns an error if the query fails" do
-        post :create, :chart_task => {:type => "histogram", :check_id => '43'}, :dataset_id => dataset.id
+        post :create, :type => "histogram", :check_id => '43', :dataset_id => dataset.id
         response.code.should == "422"
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end

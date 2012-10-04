@@ -1,5 +1,5 @@
 class WorkfileVersionsController < ApplicationController
-  wrap_parameters WorkfileVersion, :name => :workfile
+  wrap_parameters :workfile, :exclude => []
 
   def update
     workfile = Workfile.find(params[:workfile_id])

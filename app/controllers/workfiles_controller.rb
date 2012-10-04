@@ -1,6 +1,8 @@
 require 'will_paginate/array'
 
 class WorkfilesController < ApplicationController
+  wrap_parameters :exclude => []
+
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace

@@ -58,6 +58,7 @@ describe GpdbInstancesController do
   describe "#update" do
     let(:changed_attributes) { {"name" => "changed"} }
     let(:gpdb_instance) { gpdb_instances(:shared) }
+    let(:params) { changed_attributes.merge( :id => gpdb_instance.id) }
 
     before do
       stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, user) { gpdb_instance }
@@ -65,19 +66,19 @@ describe GpdbInstancesController do
 
     it "uses authorization" do
       mock(subject).authorize!(:edit, gpdb_instance)
-      put :update, :id => gpdb_instance.id, :gpdb_instance => changed_attributes
+      put :update, params
     end
 
-    it "should reply with successful update" do
-      put :update, :id => gpdb_instance.id, :gpdb_instance => changed_attributes
+    it "returns 200" do
+      put :update, params
       response.code.should == "200"
     end
 
-    it "should handle invalid updates" do
-      tmp_gpdb_instance = gpdb_instances(:default)
-      tmp_gpdb_instance.name = nil
-      stub(Gpdb::InstanceRegistrar).update!(tmp_gpdb_instance, changed_attributes, user) { raise(ActiveRecord::RecordInvalid.new(gpdb_instance)) }
-      put :update, :id => tmp_gpdb_instance.id, :gpdb_instance => changed_attributes
+    it "returns 422 when the update parameters are invalid" do
+      stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, user) do
+        raise(ActiveRecord::RecordInvalid.new(gpdb_instance))
+      end
+      put :update, params
       response.code.should == "422"
     end
   end
@@ -94,12 +95,12 @@ describe GpdbInstancesController do
       end
 
       it "reports that the gpdb instance was created" do
-        post :create, :gpdb_instance => valid_attributes
+        post :create, valid_attributes
         response.code.should == "201"
       end
 
       it "renders the newly created gpdb instance" do
-        post :create, :gpdb_instance => valid_attributes
+        post :create, valid_attributes
         decoded_response.name.should == instance.name
       end
 
@@ -110,33 +111,29 @@ describe GpdbInstancesController do
     end
 
     context "with create provision type" do
-      let(:valid_attributes) do
-        HashWithIndifferentAccess.new({
-                                          :provision_type => 'create',
-                                          :name => 'instance_name',
-                                          :description => 'A description',
-                                          :db_username => 'gpadmin',
-                                          :db_password => 'secret'
-                                      })
+      let(:params) do
+        {
+            :provision_type => 'create',
+            :name => 'instance_name',
+            :description => 'A description',
+            :db_username => 'gpadmin',
+            :db_password => 'secret'
+        }
       end
 
-      it "reports that the instance was created" do
-        post :create, :gpdb_instance => valid_attributes
+      it "returns 201" do
+        post :create, params
         response.code.should == "201"
       end
 
-      it "renders the newly created instance" do
-        post :create, :gpdb_instance => valid_attributes
-        decoded_response.name.should == "instance_name"
-      end
-
-      it "creates a greenplum instance" do
-        post :create, :gpdb_instance => valid_attributes
-
-        gpdb_instance = GpdbInstance.last
-        gpdb_instance.name.should == 'instance_name'
-        gpdb_instance.description.should == 'A description'
-        gpdb_instance.owner.should == user
+      it "presents a newly created greenplum instance" do
+        mock_present do |gpdb_instance|
+          gpdb_instance.name.should == 'instance_name'
+          gpdb_instance.description.should == 'A description'
+          gpdb_instance.owner.should == user
+          gpdb_instance.should be_persisted
+        end
+        post :create, params
       end
 
       it "enqueues a request to provision a database for an instance" do
@@ -145,22 +142,20 @@ describe GpdbInstancesController do
           gpdb_instance.id = 123
           gpdb_instance
         end
-        mock(QC.default_queue).enqueue("AuroraProvider.provide!", 123, valid_attributes)
-        post :create, :gpdb_instance => valid_attributes
+        mock(QC.default_queue).enqueue("AuroraProvider.provide!", 123, params.stringify_keys)
+        post :create, params
       end
     end
 
     context "with invalid attributes" do
-      let(:invalid_attributes) { Hash.new }
-
       before do
-        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, user, anything) {
+        stub(Gpdb::InstanceRegistrar).create!({}, user, anything) {
           raise(ActiveRecord::RecordInvalid.new(gpdb_instances(:default)))
         }
       end
 
       it "responds with validation errors" do
-        post :create, :gpdb_instance => invalid_attributes
+        post :create
         response.code.should == "422"
       end
     end

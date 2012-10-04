@@ -19,7 +19,6 @@ describe ExternalTablesController do
     context "without sandbox" do
       let(:parameters) do
         {
-            :hdfs_external_table => {},
             :workspace_id => workspace_without_sandbox.id
         }
       end
@@ -36,14 +35,13 @@ describe ExternalTablesController do
     context "with sandbox" do
       let(:parameters) do
         {
-            :hdfs_external_table => {
-                :hadoop_instance_id => hadoop_instance.id,
-                :pathname => "foo_fighter/twisted_sisters/",
-                :has_header => true,
-                :column_names => ["field1", "field2"],
-                :types => ["text", "text"],
-                :delimiter => ',',
-                :table_name => "highway_to_heaven"},
+            :hadoop_instance_id => hadoop_instance.id,
+            :pathname => "foo_fighter/twisted_sisters/",
+            :has_header => true,
+            :column_names => ["field1", "field2"],
+            :types => ["text", "text"],
+            :delimiter => ',',
+            :table_name => "highway_to_heaven",
             :workspace_id => workspace.id
         }
       end
@@ -59,9 +57,7 @@ describe ExternalTablesController do
     context "failure to connect to the sandbox" do
       let(:parameters) do
         {
-            :hdfs_external_table => {
-                :hadoop_instance_id => hadoop_instance.id,
-            },
+            :hadoop_instance_id => hadoop_instance.id,
             :workspace_id => workspace.id
         }
       end
@@ -82,9 +78,7 @@ describe ExternalTablesController do
     context "failure to create table in the sandbox" do
       let(:parameters) do
         {
-            :hdfs_external_table => {
-                :hadoop_instance_id => hadoop_instance.id,
-            },
+            :hadoop_instance_id => hadoop_instance.id,
             :workspace_id => workspace.id
         }
       end

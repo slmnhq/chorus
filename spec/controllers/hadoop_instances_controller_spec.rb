@@ -12,59 +12,50 @@ describe HadoopInstancesController do
 
   describe "#create" do
     context "with valid attributes" do
-      let(:valid_attributes) { Hash.new }
-
       before do
-        stub(Hdfs::InstanceRegistrar).create!(valid_attributes, @user) { hadoop_instance }
+        stub(Hdfs::InstanceRegistrar).create!( {}, @user) { hadoop_instance }
       end
 
       it "reports that the instance was created" do
-        post :create, :hadoop_instance => valid_attributes
+        post :create
         response.code.should == "201"
       end
 
       it "renders the newly created instance" do
-        post :create, :hadoop_instance => valid_attributes
+        post :create
         decoded_response.name.should == hadoop_instance.name
       end
 
       it "schedules a job to refresh the instance" do
         mock(QC.default_queue).enqueue("HadoopInstance.full_refresh", numeric)
-        post :create, :hadoop_instance => valid_attributes
+        post :create
       end
     end
   end
 
   describe "#update" do
-    context "with valid attributes" do
-      let(:attributes) { {'name' => 'new_name'} }
+    let(:attributes) { {'name' => 'some_random_value'} }
+    let(:params) { attributes.merge :id => hadoop_instance }
+    let(:fake_instance) { Object.new }
 
-      before do
-        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user)
-      end
-
-      it "uses authorization" do
-        mock(subject).authorize!(:edit, hadoop_instance)
-        put :update, :id => hadoop_instance.id, :hadoop_instance => attributes
-      end
-
-      it "responds with validation error" do
-        put :update, :id => hadoop_instance.id, :hadoop_instance => attributes
-        response.code.should == "200"
-      end
+    it "presents a hadoop instance returned by update" do
+      mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user) { fake_instance }
+      it_uses_authorization(:edit, hadoop_instance)
+      mock_present { |instance| instance.should == fake_instance }
+      put :update, params
     end
 
-    context "with invalid attributes" do
-      let(:invalid_attributes) { {'name' => ''} }
+    context "when it fails due to validation" do
+      let(:attributes) { {'name' => 'some_wrong_value'} }
 
       before do
-        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, invalid_attributes, @user) do
+        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user) do
           raise(ActiveRecord::RecordInvalid.new(hadoop_instance))
         end
       end
 
       it "responds with validation error" do
-        put :update, :id => hadoop_instance.id, :hadoop_instance => invalid_attributes
+        put :update, params
         response.code.should == "422"
       end
     end

@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_filter :require_not_current_user, :only => [:destroy]
   before_filter :require_admin_or_referenced_user, :only => :update
 
-  wrap_parameters User
+  wrap_parameters :exclude => []
 
   def index
     present paginate(User.order(params[:order]))

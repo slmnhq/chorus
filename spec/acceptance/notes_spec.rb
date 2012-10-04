@@ -71,7 +71,7 @@ resource "Notes" do
     parameter :contents, "File contents"
 
     required_parameters :note_id, :contents
-    scope_parameters :fileToUpload, :all
+    scope_parameters :fileToUpload, :contents
 
     let(:note_id) { note.id }
     let(:contents) { test_file("small1.gif") }

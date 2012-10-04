@@ -11,35 +11,37 @@ describe WorkfileVersionsController do
     log_in user
   end
 
-  context "#update" do
+  describe "#update" do
+    let(:params) { {:workfile_id => workfile.id, :id => workfile_version.id, :content => 'New content'} }
     before do
       workfile_version.contents = test_file('workfile.sql')
       workfile_version.save
     end
 
     it "changes the file content" do
-      post :update, :workfile_id => workfile.id, :id => workfile_version.id, :workfile => {:content => 'New content'}
+      post :update, params
 
       File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:default).tap { |draft| draft.workfile_id = workfile.id; draft.save! }
-      WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 1
+      workfile_drafts(:default).update_attribute(:workfile_id, workfile.id)
+      draft_count(workfile, user).should == 1
 
-      post :update, :workfile_id => workfile.id, :id => workfile_version.id, :workfile => {:content => 'New content'}
-      WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 0
+      post :update, params
+      draft_count(workfile, user).should == 0
     end
   end
 
-  context "#create" do
+  describe "#create" do
+    let(:params) { {:workfile_id => workfile.id, :content => 'New content', :commit_message => 'A new version'} }
     before do
       workfile_version.contents = test_file('workfile.sql')
       workfile_version.save
     end
 
     it "changes the file content" do
-      post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
+      post :create, params
       workfile.reload
 
       File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
@@ -49,15 +51,15 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:default).tap { |draft| draft.workfile_id = workfile.id; draft.save! }
-      WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 1
+      workfile_drafts(:default).update_attribute(:workfile_id, workfile.id)
+      draft_count(workfile, user).should == 1
 
-      post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
-      WorkfileDraft.find_all_by_owner_id_and_workfile_id(user.id, workfile.id).length.should == 0
+      post :create, params
+      draft_count(workfile, user).should == 0
     end
 
     it "creates the activity stream for upgrade" do
-      post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version -1'}
+      post :create, params.merge(:commit_message => 'A new version -1')
       event = Events::WorkfileUpgradedVersion.by(user).first
       event.workfile.should == workfile
       event.workspace.to_param.should == workfile.workspace.id.to_s
@@ -88,7 +90,7 @@ describe WorkfileVersionsController do
     end
   end
 
-  context "#index" do
+  describe "#index" do
     let(:workspace) { workspaces(:public) }
     let(:workfile) { workfiles(:public) }
 
@@ -105,5 +107,9 @@ describe WorkfileVersionsController do
       decoded_response[0].version_num = 3
       decoded_response[1].version_num = 2
     end
+  end
+
+  def draft_count(workfile, user)
+    workfile.drafts.where(:owner_id => user.id).count
   end
 end

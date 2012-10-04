@@ -85,42 +85,40 @@ describe WorkspacesController do
 
   describe "#create" do
     context "with valid parameters" do
-      let(:parameters) { {:workspace => {:name => "foobar"}} }
-
+      let(:params) { {:name => "foobar"} }
       it "creates a workspace" do
-        lambda {
-          post :create, parameters
-        }.should change(Workspace, :count).by(1)
+        expect {
+          post :create, params
+        }.to change(Workspace, :count).by(1)
       end
 
       it "creates an event for public workspace" do
-        parameters = {:workspace => {:name => "foobar", :public => true}}
-        lambda {
-          post :create, parameters
-        }.should change(Events::PublicWorkspaceCreated, :count).by(1)
-      end
-
-      it "creates an event for private workspace" do
-        parameters = {:workspace => {:name => "foobar", :public => false}}
-        lambda {
-          post :create, parameters
-        }.should change(Events::PrivateWorkspaceCreated, :count).by(1)
-      end
-
-      it "presents the workspace" do
-        post :create, parameters
-        parameters[:workspace].keys.each do |key|
-          decoded_response[key].should == parameters[:workspace][key]
+        expect_to_add_event(Events::PublicWorkspaceCreated, owner) do
+          post :create, params.merge(:public => true)
         end
       end
 
+      it "creates an event for private workspace" do
+        expect_to_add_event(Events::PrivateWorkspaceCreated, owner) do
+          post :create, params.merge(:public => false)
+        end
+      end
+
+      it "presents the workspace" do
+        mock_present do |workspace|
+          workspace.should be_a(Workspace)
+          workspace.name.should == "foobar"
+        end
+        post :create, params
+      end
+
       it "adds the owner as a member of the workspace" do
-        post :create, parameters
+        post :create, params
         Workspace.last.memberships.first.user.should == owner
       end
 
       it "sets the authenticated user as the owner of the new workspace" do
-        post :create, parameters
+        post :create, params
         Workspace.last.owner.should == owner
       end
     end
@@ -158,122 +156,113 @@ describe WorkspacesController do
     end
   end
 
+  #Add contexts for the different params and workspaces
   describe "#update" do
-    let(:workspace) { workspaces(:public_with_no_collaborators) }
+    let(:public_workspace) { workspaces(:public_with_no_collaborators) }
+    let(:private_workspace) { workspaces(:private_with_no_collaborators) }
+    let(:workspace) {private_workspace}
+
+    let(:params) { {
+        :id => workspace.id,
+        :owner => {id: "3"},
+        :public => workspace.public?.to_s,
+        :archived => workspace.archived?.to_s
+    } }
 
     context "when the current user has update authorization" do
       it "uses authentication" do
         mock(subject).authorize!(:update, workspace)
-        put :update, :id => workspace.id, :workspace => {
-            :owner => {id: "3"},
-            :public => "false"
-        }
+        put :update, params
       end
 
-      it "allows updating the workspace's privacy and owner" do
+      it "can change the owner" do
         member = users(:the_collaborator)
-        put :update, :id => workspace.id, :workspace => {
-            :owner_id => member.id.to_s,
-            :public => "false"
-        }
+        put :update, params.merge(:owner_id => member.id.to_s)
 
         workspace.reload
-        workspace.should_not be_public
         workspace.owner.should == member
         response.should be_success
       end
 
-      it "makes the right event when making the workspace public" do
-        workspace = workspaces(:private_with_no_collaborators)
-        parameters = {:id => workspace.id, :workspace => {:public => true, :archived => workspace.archived?.to_s}}
-        lambda {
-          lambda {
-            lambda {
-              put :update, parameters
-            }.should change(Events::WorkspaceMakePublic, :count).by(1)
-          }.should_not change(Events::WorkspaceArchived, :count)
-        }.should_not change(Events::WorkspaceUnarchived, :count)
-      end
+      context "changing a public workspace" do
+        let(:workspace) {public_workspace}
 
-      it "makes the right event when making the workspace private" do
-        parameters = {:id => workspace.id, :workspace => {:public => false, :archived => workspace.archived?.to_s}}
-        lambda {
-          lambda {
-            lambda {
-              put :update, parameters
-            }.should change(Events::WorkspaceMakePrivate, :count).by(1)
-          }.should_not change(Events::WorkspaceArchived, :count)
-        }.should_not change(Events::WorkspaceUnarchived, :count)
-      end
-
-      it "allows archiving the workspace" do
-        lambda {
-          put :update, :id => workspace.id, :workspace => {
-              :archived => "true"
-          }
-        }.should change(Events::WorkspaceArchived.by(owner), :count).by(1)
-
-        workspace.reload
-        workspace.archived_at.should_not be_nil
-        workspace.archiver.should == owner
-      end
-
-      context "with an archived workspace" do
-        it "makes the right event when making the workspace public" do
-          workspace = workspaces(:archived)
-          workspace.public = false
-          workspace.save!
-
-          parameters = {:id => workspace.id, :workspace => {:public => "true", :archived => workspace.archived?.to_s}}
-          lambda {
-            lambda {
-              lambda {
-                put :update, parameters
-              }.should change(Events::WorkspaceMakePublic, :count).by(1)
-            }.should_not change(Events::WorkspaceArchived, :count)
-          }.should_not change(Events::WorkspaceUnarchived, :count)
+        it "allows updating the workspace's privacy" do
+          put :update, params.merge(:public => false)
+          workspace.reload
+          workspace.should_not be_public
+          response.should be_success
         end
 
-        it "makes the right event when making the workspace private" do
-          workspace = workspaces(:archived)
-          parameters = {:id => workspace.id, :workspace => {:public => "false", :archived => workspace.archived?.to_s}}
-          lambda {
-            lambda {
-              lambda {
-                put :update, parameters
-              }.should change(Events::WorkspaceMakePrivate, :count).by(1)
-            }.should_not change(Events::WorkspaceArchived, :count)
-          }.should_not change(Events::WorkspaceUnarchived, :count)
+        it "generates an event" do
+          expect_to_add_event(Events::WorkspaceMakePrivate, owner) do
+            put :update, params.merge(:public => false)
+          end
         end
       end
 
-      it "allows unarchiving the workspace" do
-        workspace = workspaces(:archived)
+      context "changing a private workspace" do
+        let(:workspace) {private_workspace}
 
-        lambda {
-          put :update, :id => workspace.id, :workspace => {
-              :archived => "false"
-          }
-        }.should change(Events::WorkspaceUnarchived.by(owner), :count).by(1)
+        it "allows updating the workspace's privacy" do
+          put :update, params.merge(:public => "true")
 
-        workspace.reload
-        workspace.archived_at.should be_nil
-        workspace.archiver.should be_nil
+          workspace.reload
+          workspace.should be_public
+          response.should be_success
+        end
+
+        it "generates an event" do
+          expect_to_add_event(Events::WorkspaceMakePublic, owner) do
+            put :update, params.merge(:public => "true")
+          end
+        end
+      end
+
+      describe "unarchiving workspace" do
+        let(:workspace) {workspaces(:archived)}
+
+        it "unarchives the workspace" do
+          put :update, params.merge(:archived => "false")
+          workspace.reload
+          workspace.archived_at.should be_nil
+          workspace.archiver.should be_nil
+          response.should be_success
+        end
+
+        it "generates an event" do
+          expect_to_add_event(Events::WorkspaceUnarchived, owner) do
+            put :update, params.merge(:archived => "false")
+          end
+        end
+      end
+
+      describe "archiving the workspace" do
+        let(:workspace) { workspaces(:public) }
+
+        it "archives the workspace" do
+          put :update, params.merge(:archived => "true")
+          workspace.reload
+          workspace.archived_at.should be_within(1.minute).of(Time.now)
+          workspace.archiver.should == owner
+        end
+
+        it "generates an event" do
+          expect_to_add_event(Events::WorkspaceArchived, owner) do
+            put :update, params.merge(:archived => "true")
+          end
+        end
       end
 
       it "allows changing the sandbox" do
         sandbox = gpdb_schemas(:other_schema)
 
-        lambda {
-          lambda {
-            put :update, :id => workspace.id, :workspace => {
-                :sandbox_id => sandbox.to_param
-            }
-
-            response.should be_success
-          }.should change(Events::WorkspaceAddSandbox.by(owner), :count).by(1)
-        }.should_not change(Events::WorkspaceUnarchived, :count)
-
+        expect_to_add_event(Events::WorkspaceAddSandbox, owner) do
+           put :update, params.merge(:sandbox_id => sandbox.to_param)
+        end
+        
+        response.should be_success
+        
         workspace.reload
         workspace.sandbox_id.should == sandbox.id
         workspace.has_added_sandbox.should == true
@@ -326,6 +315,14 @@ describe WorkspacesController do
 
     context "when new sandbox is a new schema in a new database" do
       let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:params) { {
+          :id => workspace.id,
+          :owner => {id: owner.id.to_s},
+          :public => "false",
+          :schema_name => "public",
+          :database_name => "new_database",
+          :instance_id => gpdb_instance.id
+      } }
 
       before do
         stub(GpdbSchema).refresh(anything, anything) { }
@@ -343,11 +340,11 @@ describe WorkspacesController do
         any_instance_of(GpdbDatabase) do |database_double|
           mock(database_double).create_schema("create_new_schema", gpdb_instance.owner) do |name|
             database = gpdb_instance.reload.databases.find_by_name("new_database")
-            database.schemas.create!({:name => name}, :without_protection => true)
+            FactoryGirl.create :gpdb_schema, :name => name, :database => database
           end
         end
 
-        send_request
+        put :update, params.merge(:schema_name => "create_new_schema")
 
         workspace.reload.sandbox.tap do |sandbox|
           sandbox.name.should == "create_new_schema"
@@ -355,34 +352,24 @@ describe WorkspacesController do
         end
       end
 
-      it "does not call create_schema if the schema name is public" do
+      it "does not call create_schema if the schema is public" do
         any_instance_of(GpdbInstance) do |instance_double|
           stub(instance_double).create_database("new_database", gpdb_instance.owner) do |name|
-            database = gpdb_instance.databases.create!({:name => name}, :without_protection => true)
-            database.schemas.create!({:name => "public"}, :without_protection => true)
+            database = FactoryGirl.create :gpdb_database, :name => name, :gpdb_instance => gpdb_instance
+            schema = FactoryGirl.create :gpdb_schema, :name => "public", :database => database
             database
           end
         end
-        create_schema_called = false
         any_instance_of(GpdbDatabase) do |database_double|
-          stub(database_double).create_schema("public", gpdb_instance.owner) do |name|
-            create_schema_called = true
-          end
+          mock(database_double).create_schema.with_any_args.times(0)
         end
 
-        put :update, :id => workspace.id, :workspace => {
-            :owner => {id: owner.id.to_s},
-            :public => "false",
-            :schema_name => "public",
-            :database_name => "new_database",
-            :instance_id => gpdb_instance.id
-        }
-
+        put :update, params
+        response.should be_success
         workspace.reload.sandbox.tap do |sandbox|
           sandbox.name.should == "public"
           sandbox.database.name.should == "new_database"
         end
-        create_schema_called.should be_false
       end
 
       it "returns an error if creation fails" do
@@ -392,20 +379,18 @@ describe WorkspacesController do
           }
         end
 
-        send_request
+        put :update, params.merge(:schema_name => "create_new_schema")
         response.code.should == "422"
         decoded_errors.fields.database.GENERIC.message.should == "Database creation failed"
       end
-
-      def send_request
-        put :update, :id => workspace.id, :workspace => {
-            :owner => {id: owner.id.to_s},
-            :public => "false",
-            :schema_name => "create_new_schema",
-            :database_name => "new_database",
-            :instance_id => gpdb_instance.id
-        }
-      end
     end
+  end
+
+  def expect_to_add_event(event_class, owner)
+    expect {
+      expect {
+        yield
+      }.to change(Events::Base, :count).by(1) # generates a single event
+    }.to change(event_class.by(owner), :count).by(1)
   end
 end

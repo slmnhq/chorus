@@ -71,20 +71,20 @@ describe UsersController do
 
     it_behaves_like "an action that requires authentication", :post, :create
 
-    context "not admin" do
+    context "when creator is not admin" do
       let(:user) { users(:restricted_user) }
 
       it "should refuse" do
-        post :create, {:user => params}
+        post :create, params
         response.should be_forbidden
       end
     end
 
-    context "admin" do
+    context "when creator is admin" do
       let(:user) { users(:admin) }
 
       before do
-        post :create, {:user => params}
+        post :create, params
       end
 
       it "should succeed" do
@@ -107,7 +107,7 @@ describe UsersController do
       end
 
       it "should refuse invalid data" do
-        post :create, {:user => {}}
+        post :create
         response.code.should == "422"
       end
 
@@ -118,7 +118,7 @@ describe UsersController do
       end
 
       generate_fixture "userWithErrors.json" do
-        post :create, :user => {}
+        post :create
       end
     end
   end
@@ -137,38 +137,38 @@ describe UsersController do
 
       context "with a valid user id" do
         it "responds with the updated user" do
-          put :update, :id => other_user.to_param, :user => {:admin => "true"}
+          put :update, :id => other_user.to_param, :admin => "true"
           response.code.should == "200"
           decoded_response.admin.should == true
         end
 
         it "allows making someone an admin" do
-          put :update, :id => other_user.to_param, :user => {:admin => "true"}
+          put :update, :id => other_user.to_param, :admin => "true"
           other_user.reload.should be_admin
         end
 
         it "allows an admin to remove their own privileges, if there are other admins" do
-          put :update, :id => admin.to_param, :user => {:admin => "false"}
+          put :update, :id => admin.to_param, :admin => "false"
           response.code.should == "200"
           decoded_response.admin.should == false
         end
 
         it "does not allow an admin to remove their own privileges if there are no other admins" do
           users(:evil_admin).delete
-          put :update, :id => admin.to_param, :user => {:admin => "false"}
+          put :update, :id => admin.to_param, :admin => "false"
           response.code.should == "200"
           decoded_response.admin.should == true
         end
 
         it "updates other attributes" do
-          put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
+          put :update, :id => other_user.to_param, :first_name => "updated"
           decoded_response.first_name.should == "updated"
         end
       end
 
       context "with an invalid user id" do
         it "returns not found" do
-          put :update, :id => 'bogus', :user => {:first_name => "updated"}
+          put :update, :id => 'bogus', :first_name => "updated"
           response.should be_not_found
         end
       end
@@ -181,26 +181,26 @@ describe UsersController do
 
       it "allows the user to edit their own profile" do
         expect {
-          put :update, :id => non_admin.to_param, :user => {:first_name => "updated"}
+          put :update, :id => non_admin.to_param, :first_name => "updated"
         }.to_not change { non_admin.reload.last_name }
 
         decoded_response.first_name.should == "updated"
       end
 
       it "does not allow non-admins to make themselves an admin" do
-        put :update, :id => non_admin.to_param, :user => {:admin => "true"}
+        put :update, :id => non_admin.to_param, :admin => "true"
         non_admin.reload.should_not be_admin
       end
 
       it "does not allow non-admins to update other users" do
         expect {
-          put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
+          put :update, :id => other_user.to_param, :first_name => "updated"
         }.to_not change { other_user.reload.first_name }
         response.code.should == "404"
       end
 
       it "lets users change their own password" do
-        put :update, :id => non_admin.to_param, :user => {:password => '987654'}
+        put :update, :id => non_admin.to_param, :password => '987654'
         response.code.should == "200"
         user = User.find(non_admin.to_param)
         user.password_digest.should == Digest::SHA256.hexdigest("987654" + user.password_salt)

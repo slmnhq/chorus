@@ -3,12 +3,14 @@ require 'timecop'
 
 describe SessionsController do
   describe "#create" do
+    let(:user) { users(:admin) }
+    let(:params) { {:username => user.username, :password => 'secret'} }
+
     describe "with the correct credentials" do
-      let(:user) { users(:admin) }
 
       before do
         stub(CredentialsValidator).user('admin', 'secret') { user }
-        post :create, :session => {:username => 'admin', :password => 'secret'}
+        post :create, params
       end
 
       it "succeeds" do
@@ -21,24 +23,21 @@ describe SessionsController do
       end
 
       it "sets session expiration" do
-        stub(Chorus::Application.config.chorus).[]('session_timeout_minutes') { 240 }
-        Timecop.freeze(2012, 4, 17, 10, 30) do
-          post :create, :session => {:username => 'admin', :password => 'secret'}
-          response.should be_success
-          session[:expires_at].should == 4.hours.from_now
-        end
+        stub(Chorus::Application.config.chorus).[]('session_timeout_minutes') { 123 }
+        post :create, params
+        response.should be_success
+        session[:expires_at].should be_within(1.minute).of(123.minutes.from_now)
       end
     end
 
-    context "correct credentials for a deleted user" do
-      let(:user) { users(:evil_admin) }
-
+    context "with correct credentials for a deleted user" do
+      let(:user) {users :evil_admin}
       before do
         user.destroy
-        post :create, :session => {:username => 'admin', :password => 'secret'}
+        post :create, params
       end
 
-      it "fails" do
+      it "fails with response code 401" do
         response.code.should == "401"
       end
     end
@@ -48,11 +47,11 @@ describe SessionsController do
         thing = Object.new
         stub(thing).errors.stub!.messages { {:field => [["error", {}]]} }
         invalid_exception = CredentialsValidator::Invalid.new(thing)
-        stub(CredentialsValidator).user('admin', 'public') { raise(invalid_exception) }
-        post :create, :session => {:username => 'admin', :password => 'public'}
+        stub(CredentialsValidator).user(user.username, 'secret') { raise(invalid_exception) }
+        post :create, params
       end
 
-      it "fails" do
+      it "fails with response code 401" do
         response.code.should == "401"
       end
 

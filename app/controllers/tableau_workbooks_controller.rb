@@ -21,6 +21,7 @@ class TableauWorkbooksController < ApplicationController
           :project_name => publication.project_name,
           :project_url => publication.project_url
       )
+      # TODO: shouldn't there be a tableau workbook presenter?
       render :json => {
           :response => {
               :name => publication.name,

@@ -8,96 +8,90 @@ describe NotesController do
       log_in user
     end
 
+    let(:entity_type) { "greenplum_instance"}
+    let(:entity_id) { "entity-id"}
+    let(:attributes) { { :entity_type => entity_type, :entity_id => entity_id, :body => "I'm a note" } }
+
     it "creates a note on the model specified by the 'entity_type' and 'entity_id'" do
-      mock(Events::Note).create_from_params({
-        "entity_type" => "greenplum_instance",
-        "entity_id" => "3",
-        "body" => "I'm a note",
-      }, user)
-      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "I'm a note" }
+      mock(Events::Note).create_from_params(attributes.stringify_keys, user)
+      post :create, attributes
       response.code.should == "201"
     end
 
     it "sanitizes the body of note" do
-      mock(Events::Note).create_from_params(
-          {
-              "entity_type" => "greenplum_instance",
-              "entity_id" => "3",
-              "body" => "<b>not evil</b> ",
-          }, user)
-      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "<b>not evil</b> <script>alert('Evil!')</script>" }
+      mock(Events::Note).create_from_params(attributes.merge(:body => "<b>not evil</b>").stringify_keys, user)
+      post :create, attributes.merge!(:body => "<b>not evil</b><script>alert('Evil!')</script>")
       response.code.should == "201"
     end
 
     it "uses authorization" do
-      id = gpdb_instances(:default).to_param
-      mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
-      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
+      mock(controller).authorize!(:create, Events::Note, entity_type, entity_id)
+      post :create, attributes
     end
 
-    context "with datasets" do
+    context "when adding a note to a workspace" do
+      let(:workspace) { workspaces(:public) }
+      let(:entity_type) { "workspace" }
+      let(:entity_id) { workspace.id }
+
       it "associates the datasets to the Note" do
-        workspace = workspaces(:public)
-        associated_datasets = workspace.bound_datasets[0..1]
-        associated_dataset_ids = associated_datasets.map(&:id)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :dataset_ids => associated_dataset_ids }
+        associated_datasets_ids = workspace.bound_datasets[0..1]
+        post :create, attributes.merge(:dataset_ids => associated_datasets.to_param)
         response.code.should == "201"
         Events::NoteOnWorkspace.first.datasets.should == associated_datasets
       end
-    end
 
-
-    context "with workfiles" do
       it "associates the workfiles to the Note" do
-        workspace = workspaces(:public)
         associated_workfiles = workspace.workfiles[0..1]
         associated_workfile_ids = associated_workfiles.map(&:id)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a real note" , :workfile_ids => associated_workfile_ids }
+        post :create, attributes.merge(:workfile_ids => associated_workfile_ids)
         response.code.should == "201"
         Events::NoteOnWorkspace.first.workfiles.should =~ associated_workfiles
       end
-    end
 
-    context "with an exception" do
-      it "responds with an error code" do
-        workspace = workspaces(:archived)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a faulty note" }
-        response.code.should == "422"
+      context "when the workspace is archived" do
+        let(:workspace) { workspaces(:archived) }
+
+        it "responds with an error code" do
+          post :create, attributes
+          response.code.should == "422"
+        end
       end
-    end
 
-    context "with 'notify users'" do
-      let(:users_to_notify) { [users(:owner), users(:no_collaborators)] }
+      context "when given users to notify" do
+        let(:users_to_notify) { [users(:owner), users(:no_collaborators)] }
 
-      it "notifies the recipients" do
-        workspace = workspaces(:public)
-        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "Notify people note", :recipients => users_to_notify.map(&:id) }
-        response.code.should == "201"                
-        users_to_notify.each do |user|
-          user.notifications.last.event.body.should == "Notify people note"
+        it "generates notifications for the users" do
+          post :create, attributes.merge(:recipients => users_to_notify.map(&:id), :body => "Notify people note")
+          response.code.should == "201"
+          users_to_notify.each do |user|
+            user.notifications.last.event.body.should == "Notify people note"
+          end
         end
       end
     end
   end
 
   describe "#update" do
+    before do
+      log_in user
+    end
+
     let(:note) { events(:note_on_greenplum) }
+    let(:attributes) { { :id => note.id, :body => "Some crazy content" } }
 
     context "as the note owner" do
-      before do
-        log_in note.actor
-      end
+      let(:user) { note.actor }
 
       it "update the note on a gpdb instance" do
-        post :update, :id => note.id, :note => {:body => "Some crazy content"}
+        post :update, attributes
         response.code.should == "200"
 
         note.reload.body.should == "Some crazy content"
       end
 
       it "sanitize the Note body before update" do
-        log_in note.actor
-        post :update, :id => note.id, :note => {:body => "Hi there<script>alert('haha I am evil')</script>"}
+        post :update, attributes.merge(:body => "Hi there<script>alert('haha I am evil')</script>")
         response.code.should == "200"
 
         note.reload.body.should == "Hi there"
@@ -105,13 +99,10 @@ describe NotesController do
     end
 
     context "not as the note owner" do
-      let(:other_user) { users(:the_collaborator) }
-      before do
-        log_in other_user
-      end
+      let(:user) { users(:the_collaborator) }
 
       it "update the note on a gpdb instance" do
-        post :update, :id => note.id, :note => {:body => "Some crazy content"}
+        post :update, attributes
         response.code.should == "403"
 
         note.reload.body.should_not == "Some crazy content"
