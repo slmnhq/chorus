@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/rspec_api_documentation.git
-  revision: e050526202c23105ca1ee631efe3488a6642617c
+  revision: 95f2435467571178f1ef42d8063b358479feba76
   specs:
     rspec_api_documentation (0.8.0)
       activesupport (>= 3.0.0)
@@ -307,7 +307,7 @@ GEM
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
     vcr (2.1.1)
-    webmock (1.8.10)
+    webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
     will_paginate (3.0.3)
