@@ -10,6 +10,10 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         expect(this.dialog.$("input[name='name']").val()).toBe("myDataset");
     });
 
+    it("checks the create workfile checkbox", function () {
+        expect(this.dialog.$("input[name='create_work_file']")).toBeChecked();
+    });
+
     describe("when publish is clicked", function () {
         beforeEach(function () {
             this.dialog.$("input[name='name']").val("foo");
@@ -18,6 +22,10 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
 
         it("sets the name on the workbook", function () {
             expect(this.model.name()).toBe("foo");
+        });
+
+        it("sets the create_work_file on the workbook", function () {
+            expect(this.model.get('createWorkFile')).toBe(true);
         });
 
         it("saves the workbook", function() {

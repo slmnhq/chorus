@@ -1,7 +1,7 @@
 chorus.models.TableauWorkbook = chorus.models.Base.extend({
     constructorName: "TableauWorkbook",
     entityType: "tableau_workbook",
-    paramsToSave: ['name'],
+    paramsToSave: ['name', 'createWorkFile'],
 
     declareValidations:function (newAttrs) {
         this.require('name', newAttrs);

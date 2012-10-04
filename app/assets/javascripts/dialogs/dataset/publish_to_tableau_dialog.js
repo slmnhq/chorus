@@ -16,7 +16,7 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
     },
 
     publishToTableau: function() {
-        this.model.set({name: this.$("input[name='name']").val()});
+        this.model.set({name: this.$("input[name='name']").val(), createWorkFile: this.$("input[name='create_work_file']").is(':checked')});
         this.$("button.submit").startLoading('actions.publishing');
         this.$("button.cancel").prop("disabled", true);
         this.model.save();
