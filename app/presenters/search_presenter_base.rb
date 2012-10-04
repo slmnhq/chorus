@@ -4,6 +4,15 @@ class SearchPresenterBase < Presenter
     present_models_with_highlights(models, :workspace => model.workspace)
   end
 
+  def present_attachments_with_highlights(models)
+    models.each do |model|
+      model.highlighted_attributes = {
+          :name => model.highlighted_attributes[:contents_file_name]
+      }
+    end
+    present_models_with_highlights(models)
+  end
+
   def present_models_with_highlights(models, options = {})
     models.collect do |model|
       m = (model.is_a? Workfile) ? model.latest_workfile_version : model

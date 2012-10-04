@@ -116,7 +116,7 @@ describe SearchPresenter, :type => :view do
         attachments_hash = @hash[:attachment]
         attachments_hash.should have_key(:numFound)
         attachments_hash.should have_key(:results)
-        attachments_hash[:results][0][:highlighted_attributes].should have_key(:contents_file_name)
+        attachments_hash[:results][0][:highlighted_attributes].should have_key(:name)
         attachments_hash[:results][0][:entity_type].should == 'note_attachment'
       end
 
