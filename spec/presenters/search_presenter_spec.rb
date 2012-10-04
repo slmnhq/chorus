@@ -111,6 +111,15 @@ describe SearchPresenter, :type => :view do
         first_result[:entity_type].should == 'hdfs_file'
       end
 
+      it "includes note attachments" do
+        @hash.should have_key(:note_attachments)
+        attachments_hash = @hash[:note_attachments]
+        attachments_hash.should have_key(:numFound)
+        attachments_hash.should have_key(:results)
+        attachments_hash[:results][0][:highlighted_attributes].should have_key(:contents_file_name)
+        attachments_hash[:results][0][:entity_type].should == 'note_attachment'
+      end
+
       it "does not include the this_workspace key" do
         @hash.should_not have_key(:this_workspace)
       end

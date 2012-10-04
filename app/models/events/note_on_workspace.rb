@@ -1,5 +1,3 @@
-require 'events/note'
-
 module Events
   class NoteOnWorkspace < Note
     has_targets :workspace

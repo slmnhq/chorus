@@ -1,5 +1,3 @@
-require 'events/note'
-
 module Events
   class NoteOnHdfsFile < Note
     has_targets :hdfs_file

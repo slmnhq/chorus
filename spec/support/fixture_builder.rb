@@ -320,6 +320,7 @@ FixtureBuilder.configure do |fbuilder|
     #NotesAttachment
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
     fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
+    fbuilder.name(:note_attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery'))))
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases

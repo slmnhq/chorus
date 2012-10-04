@@ -98,3 +98,12 @@ module Events
     end
   end
 end
+
+# Preload all note classes, otherwise, note_attachment.note will not work in dev mode.
+Events::NoteOnGreenplumInstance
+Events::NoteOnHadoopInstance
+Events::NoteOnWorkspace
+Events::NoteOnWorkfile
+Events::NoteOnHdfsFile
+Events::NoteOnWorkspaceDataset
+Events::NoteOnDataset

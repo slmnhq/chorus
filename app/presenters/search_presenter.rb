@@ -1,6 +1,6 @@
 class SearchPresenter < SearchPresenterBase
 
-  delegate :users, :gpdb_instances, :hadoop_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :this_workspace, :search_type, :results, to: :model
+  delegate :users, :gpdb_instances, :hadoop_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :note_attachments, :this_workspace, :search_type, :results, to: :model
 
   def to_hash
     {
@@ -37,6 +37,11 @@ class SearchPresenter < SearchPresenterBase
         :hdfs => {
             :results => present_models_with_highlights(hdfs_entries),
             :numFound => num_found[:hdfs_entries]
+        },
+
+        :note_attachments => {
+            :results => present_models_with_highlights(note_attachments),
+            :numFound => num_found[:note_attachments]
         }
     }.merge(workspace_specific_results)
   end

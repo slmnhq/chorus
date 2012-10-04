@@ -12,6 +12,13 @@ class NoteAttachment < ActiveRecord::Base
 
   validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['note_attachment'].megabytes, :message => :file_size_exceeded
 
+  attr_accessor :highlighted_attributes, :search_result_notes
+  searchable do
+    text :contents_file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+  end
+
   def contents_are_image?
     MIME::Types.type_for(contents_file_name).first.to_s.starts_with?('image/')
   end

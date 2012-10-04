@@ -14,6 +14,7 @@ describe NoteAttachmentPresenter, :type => :view do
       hash.should have_key(:timestamp)
       hash.should have_key(:entity_type)
       hash.should have_key(:type)
+      hash.should have_key(note_attachment.note.type_name.downcase)
     end
 
     context "when the attachment is an image" do

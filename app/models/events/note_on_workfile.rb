@@ -1,5 +1,3 @@
-require 'events/note'
-
 module Events
   class NoteOnWorkfile < Note
     has_targets :workfile

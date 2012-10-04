@@ -1,5 +1,3 @@
-require 'events/note'
-
 module Events
   class NoteOnGreenplumInstance < Note
     has_targets :greenplum_instance
