@@ -55,8 +55,10 @@ describe("chorus.models.Attachment", function() {
 
     describe("#showUrlTemplate", function() {
         it("shows the URL for a workspace", function() {
-            var model = fixtures.attachmentOnWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/workspaces/10000");
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            var model = search.attachments().at(0);
+            var workspace = model.workspace();
+            expect(model.showUrl()).toBe("#/workspaces/" + workspace.id);
         });
 
         it("shows the URL for a dataset set in a workspace", function() {
@@ -75,8 +77,10 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("shows the URL for an instance", function() {
-             var model = fixtures.attachmentOnInstanceSearchResult();
-             expect(model.showUrl()).toBe("#/instances/10000/databases");
+            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            var model = search.attachments().at(0);
+            var instance = model.instance();
+             expect(model.showUrl()).toBe("#/instances/"+instance.id+"/databases");
          });
 
         it("shows the URL for an hdfsFile", function() {
@@ -155,17 +159,18 @@ describe("chorus.models.Attachment", function() {
 
     describe("instance", function() {
         beforeEach(function() {
-            this.model = fixtures.attachmentOnInstanceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            this.model = search.attachments().at(0);
         });
 
         it("returns the instance", function() {
             this.instance = this.model.instance();
-            expect(this.instance.get('name')).toBe(this.model.get('instance').name);
-            expect(this.instance.get('id')).toBe(this.model.get('instance').id);
+            expect(this.instance.get('name')).toBe(this.model.get('gpdbInstance').name);
+            expect(this.instance.get('id')).toBe(this.model.get('gpdbInstance').id);
         });
 
         it("returns falsy when there is no instance", function() {
-            this.model.unset('instance');
+            this.model.unset('gpdbInstance');
             expect(this.model.instance()).toBeFalsy();
         });
 

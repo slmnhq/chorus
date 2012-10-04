@@ -63,7 +63,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     instance: function() {
         if (!this._instance) {
-            this._instance = this.get('instance') && new chorus.models.GreenplumInstance(this.get('instance'));
+            this._instance = this.get('gpdbInstance') && new chorus.models.GreenplumInstance(this.get('gpdbInstance'));
         }
         return this._instance;
     },

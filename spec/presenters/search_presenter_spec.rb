@@ -112,8 +112,8 @@ describe SearchPresenter, :type => :view do
       end
 
       it "includes note attachments" do
-        @hash.should have_key(:note_attachments)
-        attachments_hash = @hash[:note_attachments]
+        @hash.should have_key(:attachment)
+        attachments_hash = @hash[:attachment]
         attachments_hash.should have_key(:numFound)
         attachments_hash.should have_key(:results)
         attachments_hash[:results][0][:highlighted_attributes].should have_key(:contents_file_name)

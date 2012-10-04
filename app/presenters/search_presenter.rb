@@ -39,7 +39,7 @@ class SearchPresenter < SearchPresenterBase
             :numFound => num_found[:hdfs_entries]
         },
 
-        :note_attachments => {
+        :attachment => {
             :results => present_models_with_highlights(note_attachments),
             :numFound => num_found[:note_attachments]
         }

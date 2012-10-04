@@ -42,6 +42,22 @@ describe SearchController do
         get :show, :query => 'searchquery', :entity_type => 'user'
       end
     end
+
+    generate_fixture "searchResultWithAttachmentOnInstanceNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_instance" do
+        get :show, :query => 'searchquery_instance'
+      end
+    end
+
+    generate_fixture "searchResultWithAttachmentOnWorkspaceNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_workspace" do
+        get :show, :query => 'searchquery_workspace'
+      end
+    end
   end
 
   describe "#type_ahead" do

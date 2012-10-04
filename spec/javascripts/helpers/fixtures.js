@@ -650,7 +650,6 @@ beforeEach(function() {
             return model;
         },
 
-
         attachmentOnDatasetNotInWorkspaceSearchResult: function(overrides) {
             var attributes = _.extend({
                 entityType: "attachment",
@@ -689,77 +688,6 @@ beforeEach(function() {
                     objectType: "TABLE"
                 },
                 comments: []
-            });
-            return new chorus.models.Attachment(attributes);
-        },
-
-        attachmentOnInstanceSearchResult: function(overrides) {
-            var attributes = _.extend({
-                "entityType": "attachment",
-                "type": "attachment",
-                "id": "10014",
-                "isDeleted": false,
-                "lastUpdatedStamp": "2012-03-20 16:43:21",
-                "fileId": "10014",
-                "fileType": "IMAGE",
-                "isBinary": true,
-                "name": "chuck.jpg",
-                "highlightedAttributes": {
-                    "name": ["<em>chuck<\/em>.jpg"]
-                },
-                "owner": {
-                    "id": "InitialUser",
-                    "lastName": "Admin",
-                    "firstName": "EDC"
-                },
-                "workspace": {},
-                "instance": {
-                    "port": 5432,
-                    "id": "10000",
-                    "host": "gillette.sf.pivotallabs.com",
-                    "provision_type": "register",
-                    "name": "gillette",
-                    "owner": {
-                        "id": "InitialUser",
-                        "lastName": "Admin",
-                        "firstName": "EDC"
-                    },
-                    "state": "online",
-                    "instanceProvider": "Greenplum Database",
-                    "isDeleted": false,
-                    "entityType": "instance",
-                    "database": "postgres"
-                },
-                "comments": []
-            });
-            return new chorus.models.Attachment(attributes);
-        },
-
-        attachmentOnWorkspaceSearchResult: function(overrides) {
-            var attributes = _.extend({
-
-                "entityType": "attachment",
-                "type": "attachment",
-                "id": "10013",
-                "isDeleted": false,
-                "lastUpdatedStamp": "2012-03-20 16:31:17",
-                "fileId": "10013",
-                "fileType": "IMAGE",
-                "isBinary": true,
-                "name": "chuck.jpg",
-                "highlightedAttributes": {
-                    "name": ["<em>chuck<\/em>.jpg"]
-                },
-                "owner": {
-                    "id": "InitialUser",
-                    "lastName": "Admin",
-                    "firstName": "EDC"
-                },
-                "workspace": {
-                    "id": "10000",
-                    "name": "ws"
-                },
-                "comments": []
             });
             return new chorus.models.Attachment(attributes);
         },

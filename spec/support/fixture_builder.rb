@@ -276,7 +276,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
     fbuilder.name :note_on_hdfs_file ,Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
     Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
-    Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
+    note_on_workspace = Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
+    fbuilder.name :note_on_workspace, note_on_workspace
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
@@ -323,7 +324,8 @@ FixtureBuilder.configure do |fbuilder|
     #NotesAttachment
     fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
     fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
-    fbuilder.name(:note_attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery'))))
+    fbuilder.name(:note_attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance'))))
+    fbuilder.name(:note_attachment_workspace, note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace'))))
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases

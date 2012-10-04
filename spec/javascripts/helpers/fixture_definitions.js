@@ -181,6 +181,14 @@ window.rspecFixtureDefinitions = {
         model: "SearchResult"
     },
 
+    searchResultWithAttachmentOnInstanceNote : {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnWorkspaceNote : {
+        model: "SearchResult"
+    },
+
     frequencyTask: {},
     frequencyTaskWithErrors: {
         model: 'FrequencyTask'

@@ -89,17 +89,20 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with workspace", function() {
         beforeEach(function() {
-            this.result = fixtures.attachmentOnWorkspaceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
 
         it("shows the file", function() {
+            var workspace = this.result.workspace();
+
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.workspace",
                 {
-                    workspaceLink: '<a href="#/workspaces/10000">ws</a>'
+                    workspaceLink: '<a href="#/workspaces/'+workspace.id+'">'+workspace.name()+'</a>'
                 }
             );
         });
@@ -107,17 +110,19 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with instance", function() {
         beforeEach(function() {
-            this.result = fixtures.attachmentOnInstanceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
 
         it("shows the file", function() {
+            var instance = this.result.instance();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.instance",
                 {
-                    instanceLink: '<a href="#/instances/10000/databases">gillette</a>'
+                    instanceLink: '<a href="#/instances/'+instance.id+'/databases">'+instance.name()+'</a>'
                 }
             );
         });

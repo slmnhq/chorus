@@ -9,7 +9,7 @@ class NoteAttachmentPresenter < Presenter
         :icon_url => contents_are_image? ? model.contents.url(:icon) : nil ,
         :entity_type => "file",
         :type => File.extname(contents.original_filename).sub(/^\./, ''),
-        note.type_name.downcase => present(note.primary_target)
+        note.type_name.underscore => present(note.primary_target)
     }
   end
 
