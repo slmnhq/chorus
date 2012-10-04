@@ -14,6 +14,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         beforeEach(function() {
             this.view.resultLimit = 100;
             this.server.completeFetchFor(this.result);
+            this.results = this.result.results()
         });
 
         it("should have one entry for each item in the result", function() {
@@ -24,69 +25,92 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
-//
-//        it("should display the correct name and type for hdfs", function() {
-//            var hdfs = this.result.results()[1];
-//            var result = this.view.$("li.result:eq(0)");
-//            expect(result.find(".name").html()).toBe(hdfs.highlightedAttributes.name[0]);
-//            expect(result.find(".name").attr("href")).toBe('#/hadoop_instances/10020/browseFile/' + hdfs.id);
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs");
-//        });
-//
-//        it("should display nothing for hdfs binary file", function(){
-//            _.each(this.result.get("typeAhead").docs, function(hdfs) { hdfs.isBinary = true; });
-//            this.view.model = this.result;
-//            this.view.render();
-//            expect(this.view.$("span.type")).not.toContainText("Hadoop");
-//        });
-//
-//        it("should display the correct name and type for workspace", function() {
-//            var workspace = this.result.results()[2];
-//            var result = this.view.$("li.result:eq(1)");
-//            expect(result.find(".name").html()).toBe(workspace.highlightedAttributes.name[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.Workspace(workspace)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workspace");
-//        });
-//
-//        it("should display the correct name and type for instance", function() {
-//            var instance = this.result.results()[3];
-//            var result = this.view.$("li.result:eq(2)");
-//            expect(result.find(".name").html()).toBe(instance.highlightedAttributes.name[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.GreenplumInstance(instance)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.instance");
-//        });
-//
-//        it("should display the correct name and type for user", function() {
-//            var user = this.result.results()[4];
-//            var result = this.view.$("li.result:eq(3)");
-//            expect(result.find(".name").html()).toBe(user.highlightedAttributes.firstName[0] + ' ' + user.highlightedAttributes.lastName[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.User(user)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
-//        });
-//
-//        it("should display the correct name and type for workfile", function() {
-//            var workfile = this.result.results()[5];
-//            var result = this.view.$("li.result:eq(4)");
-//            expect(result.find(".name").html()).toBe(workfile.highlightedAttributes.fileName[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.Workfile(workfile)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
-//        });
-//
-//        it("should display the correct name and type for dataset", function() {
-//            var dataset = this.result.results()[6];
-//            var result = this.view.$("li.result:eq(5)");
-//            expect(result.find(".name").html()).toBe(dataset.highlightedAttributes.objectName[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.Dataset(dataset)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
-//        });
-//
-//        it("should display the correct name and type for chorusView", function() {
-//            var chorusView = this.result.results()[7];
-//            var result = this.view.$("li.result:eq(6)");
-//            expect(result.find(".name").html()).toBe(chorusView.highlightedAttributes.objectName[0]);
-//            expect(result.find(".name").attr("href")).toBe((new chorus.models.ChorusView(chorusView)).showUrl());
-//            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
-//        });
+
+        it("should display the correct name and type for hdfs", function() {
+            var hdfs = resultForEntityType(this.results, 'hdfs_file');
+            var resultIndex = this.results.indexOf(hdfs);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(hdfs.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(hdfs.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_file");
+        });
+
+        it("should display nothing for hdfs binary file", function(){
+            _.each(this.result.get("typeAhead").results, function(entry) { if(entry.entityType == "hdfs_file") {entry.isBinary = true; } });
+            this.view.model = this.result;
+            this.view.render();
+            expect(this.view.$("span.type")).not.toContainTranslation("type_ahead.entity.hdfs_file");
+        });
+
+        it("should display the correct name and type for workspace", function() {
+            var workspace = resultForEntityType(this.results, 'workspace');
+            var resultIndex = this.results.indexOf(workspace);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(workspace.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(workspace.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workspace");
+        });
+
+        it("should display the correct name and type for greenplum_instance", function() {
+            var instance = resultForEntityType(this.results, 'greenplum_instance');
+            var resultIndex = this.results.indexOf(instance);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(instance.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(instance.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.greenplum_instance");
+        });
+
+        it("should display the correct name and type for hadoop_instance", function() {
+            var instance = resultForEntityType(this.results, 'hadoop_instance');
+            var resultIndex = this.results.indexOf(instance);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(instance.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(instance.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hadoop_instance");
+        });
+
+        it("should display the correct name and type for user", function() {
+            var user = resultForEntityType(this.results, 'user');
+            var resultIndex = this.results.indexOf(user);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe((user.get("highlightedAttributes").firstName[0] + ' ' + user.get("lastName")));
+            expect(result.find(".name").attr("href")).toBe(user.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
+        });
+
+        it("should display the correct name and type for workfile", function() {
+            var workfile = resultForEntityType(this.results, 'workfile');
+            var resultIndex = this.results.indexOf(workfile);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(workfile.get("highlightedAttributes").fileName[0]);
+            expect(result.find(".name").attr("href")).toBe(workfile.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
+        });
+
+        it("should display the correct name and type for dataset", function() {
+            var dataset = resultForEntityType(this.results, 'dataset');
+            var resultIndex = this.results.indexOf(dataset);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(dataset.get("highlightedAttributes").objectName[0]);
+            expect(result.find(".name").attr("href")).toBe(dataset.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
+        });
+
+        it("should display the correct name and type for chorusView", function() {
+            var chorusView = _.find(this.results, function(result) {
+                return result.get("entityType") == 'dataset' && result.get("type") == 'CHORUS_VIEW';
+            });
+            var resultIndex = this.results.indexOf(chorusView);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(chorusView.get("highlightedAttributes").objectName[0]);
+            expect(result.find(".name").attr("href")).toBe(chorusView.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
+        });
+        function resultForEntityType(results, type) {
+            return _.find(results, function(result) {
+                return result.get("entityType") == type;
+            });
+        }
 
         describe("keyboard navigation", function() {
             var view;

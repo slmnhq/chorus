@@ -14,17 +14,24 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         var ctx = {query: this.model.get("query")};
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
 
-            var isBinaryHdfs = result.get('entityType') == 'hdfs' && ( result.get('isBinary') !== false )
+            var isBinaryHdfs = result.get('entityType') == 'hdfs_file' && ( result.get('isBinary') !== false )
 
             return {
                 name: result.highlightedName(),
-                type: t("type_ahead.entity." + result.get('entityType')),
+                type: t("type_ahead.entity." + this.entityTypeForResult(result)),
                 url: result.showUrl(),
                 linkable : !isBinaryHdfs
             };
-        });
+        }, this);
 
         return ctx;
+    },
+
+    entityTypeForResult: function(result) {
+        if(result.get('entityType') == 'dataset' && result.get('type') == 'CHORUS_VIEW') {
+            return 'chorusView';
+        }
+        return result.get('entityType');
     },
 
     handleKeyEvent: function(event) {

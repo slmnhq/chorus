@@ -127,6 +127,7 @@ FixtureBuilder.configure do |fbuilder|
     # type ahead search fixtures
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
+    typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead", :schema => searchquery_schema)
     typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead'#, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
@@ -136,8 +137,10 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create model, :name => 'typeahead'
     end
     FactoryGirl.create :workspace, :name => "typeahead_private", :public => false, :owner => owner
-    FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner
+    typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
     FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
+
+    typeahead_public_workspace.bound_datasets << typeahead_chorus_view
 
     # Search Database Instance Accounts
     searchquery_database.instance_accounts << owner_instance_account
