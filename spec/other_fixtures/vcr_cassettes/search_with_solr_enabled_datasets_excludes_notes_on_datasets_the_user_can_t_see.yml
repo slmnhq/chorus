@@ -24,7 +24,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts column_name_texts query_texts
         parent_name_texts contents_file_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -35,19 +35,19 @@ http_interactions:
         AND -member_ids_im:1000007 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000007 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000001))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>4,''groups''=>[{''groupValue''=>''Workfile
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.3776176,''docs''=>[{''id''=>''Events::NoteOnWorkfile
-        1000021'',''body_texts''=>[''notesearch forever''],''score''=>1.3776176}]}},{''groupValue''=>''Workfile
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.3776176,''docs''=>[{''id''=>''Events::NoteOnWorkfile
-        1000022'',''body_texts''=>[''notesearch never''],''score''=>1.3776176}]}},{''groupValue''=>''Workspace
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.3776176,''docs''=>[{''id''=>''Events::NoteOnWorkspace
-        1000041'',''body_texts''=>[''notesearch forever''],''score''=>1.3776176}]}},{''groupValue''=>''Workspace
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.3776176,''docs''=>[{''id''=>''Events::NoteOnWorkspace
-        1000042'',''body_texts''=>[''notesearch never''],''score''=>1.3776176}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2,''Workspace'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkfile
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4005376,''docs''=>[{''id''=>''Events::NoteOnWorkfile
+        1000021'',''body_texts''=>[''notesearch forever''],''score''=>1.4005376}]}},{''groupValue''=>''Workfile
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4005376,''docs''=>[{''id''=>''Events::NoteOnWorkfile
+        1000022'',''body_texts''=>[''notesearch never''],''score''=>1.4005376}]}},{''groupValue''=>''Workspace
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4005376,''docs''=>[{''id''=>''Events::NoteOnWorkspace
+        1000042'',''body_texts''=>[''notesearch forever''],''score''=>1.4005376}]}},{''groupValue''=>''Workspace
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4005376,''docs''=>[{''id''=>''Events::NoteOnWorkspace
+        1000043'',''body_texts''=>[''notesearch never''],''score''=>1.4005376}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2,''Workspace'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkfile
         1000021''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkfile
         1000022''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']},''Events::NoteOnWorkspace
-        1000041''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkspace
-        1000042''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']}}}'
+        1000042''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkspace
+        1000043''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 00:23:18 GMT
+  recorded_at: Fri, 05 Oct 2012 20:49:08 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -66,6 +66,37 @@ describe SearchController do
         get :show, :query => 'searchquery_workfile'
       end
     end
+
+    generate_fixture "searchResultWithAttachmentOnDatasetNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_dataset" do
+        get :show, :query => 'searchquery_dataset'
+      end
+    end
+
+    generate_fixture "searchResultWithAttachmentOnHadoopNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_hadoop" do
+        get :show, :query => 'searchquery_hadoop'
+      end
+    end
+
+    generate_fixture "searchResultWithAttachmentOnHdfsNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_hdfs" do
+        get :show, :query => 'searchquery_hdfs_file'
+      end
+    end
+    generate_fixture "searchResultWithAttachmentOnWorkspaceDatasetNote.json" do
+      reindex_solr_fixtures
+
+      VCR.use_cassette "search_solr_query_attachment_on_workspace_dataset" do
+        get :show, :query => 'searchquery_workspace_dataset'
+      end
+    end
   end
 
   describe "#type_ahead" do

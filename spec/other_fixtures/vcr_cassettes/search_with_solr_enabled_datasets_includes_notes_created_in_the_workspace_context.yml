@@ -35,10 +35,10 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Dataset
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.9195602,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000040'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.9195602}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.171868,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000040'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.171868}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
         1000040''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 00:23:20 GMT
+  recorded_at: Fri, 05 Oct 2012 20:49:09 GMT
 recorded_with: VCR 2.1.1
 ...

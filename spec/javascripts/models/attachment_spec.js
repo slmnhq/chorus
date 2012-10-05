@@ -1,6 +1,8 @@
 describe("chorus.models.Attachment", function() {
     beforeEach(function() {
-        this.model = fixtures.attachment({ id: "97", name: "helmut" });
+        var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+        this.model = search.attachments().at(0);
+        this.model.set({ id: "97", name: "helmut" });
     });
 
     describe("#downloadUrl", function() {
@@ -9,24 +11,24 @@ describe("chorus.models.Attachment", function() {
             expect(this.model.downloadUrl()).toBe("/attachments/123/download/");
         });
     });
-    describe("#iconUrl", function () {
-        it("uses type for the iconUrl", function () {
-            this.model.set({type:'csv'});
+    describe("#iconUrl", function() {
+        it("uses type for the iconUrl", function() {
+            this.model.set({type: 'csv'});
             expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('csv'));
         });
 
-        it("uses fileType for the iconUrl", function () {
-            this.model.set({fileType:'jpg'});
+        it("uses fileType for the iconUrl", function() {
+            this.model.set({fileType: 'jpg'});
             expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('jpg'));
         });
 
-        it("uses the IconUrl value if the attachment is image", function () {
-            this.model.set({iconUrl:'note/2/attachments?style=icon'});
+        it("uses the IconUrl value if the attachment is image", function() {
+            this.model.set({iconUrl: 'note/2/attachments?style=icon'});
             expect(this.model.iconUrl()).toBe('note/2/attachments?style=icon');
         });
     })
 
-    it("returns its name", function () {
+    it("returns its name", function() {
         expect(this.model.name()).toBe("helmut");
     });
 
@@ -43,13 +45,15 @@ describe("chorus.models.Attachment", function() {
 
     describe("#isImage", function() {
         beforeEach(function() {
-            this.image = fixtures.attachment({ type: "IMAGE" });
-            this.noImage = fixtures.attachment({ type: "OTHER" });
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            this.model = search.attachments().at(0);
         });
 
         it("returns the correct value", function() {
-            expect(this.image.isImage()).toBeTruthy();
-            expect(this.noImage.isImage()).toBeFalsy();
+            this.model.set({type: "IMAGE"});
+            expect(this.model.isImage()).toBeTruthy();
+            this.model.set({type: "OTHER"});
+            expect(this.model.isImage()).toBeFalsy();
         });
     });
 
@@ -61,14 +65,10 @@ describe("chorus.models.Attachment", function() {
             expect(model.showUrl()).toBe("#/workspaces/" + workspace.id);
         });
 
-        it("shows the URL for a dataset set in a workspace", function() {
-            var model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/workspaces/33333/datasets/" + 100);
-        });
-
         it("shows the URL for a dataset with no workspace", function() {
-            var model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/datasets/100");
+            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            var model = search.attachments().at(0);
+            expect(model.showUrl()).toBe("#/datasets/" + model.dataset().id);
         });
 
         it("shows the URL for a workfile in a workspace", function() {
@@ -76,26 +76,30 @@ describe("chorus.models.Attachment", function() {
             var model = search.attachments().at(0);
             var workfile = model.workfile();
             var workspace = workfile.workspace();
-            expect(model.showUrl()).toBe("#/workspaces/"+workspace.id+
-                "/workfiles/"+workfile.id);
+            expect(model.showUrl()).toBe("#/workspaces/" + workspace.id +
+                "/workfiles/" + workfile.id);
         });
 
         it("shows the URL for an instance", function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             var model = search.attachments().at(0);
             var instance = model.instance();
-             expect(model.showUrl()).toBe("#/instances/"+instance.id+"/databases");
-         });
+            expect(model.showUrl()).toBe("#/instances/" + instance.id + "/databases");
+        });
 
         it("shows the URL for an hdfsFile", function() {
-            var model = fixtures.attachmentOnFileInHdfsSearchResult();
-            expect(model.showUrl()).toBe("#/hadoop_instances/10020/browseFile/333");
+            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            var model = search.attachments().at(0);
+            var hdfs = model.hdfsFile();
+            var hadoop = model.hadoopInstance()
+            expect(model.showUrl()).toBe("#/hadoop_instances/" + hadoop.id + "/browseFile/" + hdfs.id);
         });
     });
 
     describe("workspace", function() {
         beforeEach(function() {
-            this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            this.model = search.attachments().at(0);
         });
 
         it("returns the workspace", function() {
@@ -144,17 +148,18 @@ describe("chorus.models.Attachment", function() {
 
     describe("hdfs", function() {
         beforeEach(function() {
-            this.model = fixtures.attachmentOnFileInHdfsSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            this.model = search.attachments().at(0);
         });
 
         it("returns the hdfsFile", function() {
             this.hdfsFile = this.model.hdfsFile();
-            expect(this.hdfsFile.get('name')).toBe(this.model.get('hdfs').name);
-            expect(this.hdfsFile.get('id')).toBe(this.model.get('hdfs').id);
+            expect(this.hdfsFile.get('name')).toBe(this.model.get('hdfsEntry').name);
+            expect(this.hdfsFile.get('id')).toBe(this.model.get('hdfsEntry').id);
         });
 
         it("returns falsy when there is no hdfsFile", function() {
-            this.model.unset('hdfs');
+            this.model.unset('hdfsEntry');
             expect(this.model.hdfsFile()).toBeFalsy();
         });
 
@@ -186,49 +191,25 @@ describe("chorus.models.Attachment", function() {
     });
 
     describe("dataset", function() {
-        context("when there is a workspace", function() {
-            beforeEach(function() {
-                this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
-            });
-
-            it("returns a dataset", function() {
-                this.dataset = this.model.dataset();
-                expect(this.dataset).toBeA(chorus.models.WorkspaceDataset);
-                expect(this.dataset.get("workspace")).toBe(this.model.get('workspace'));
-                expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
-                expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
-            });
-
-            it("returns falsy when there is no dataset", function() {
-                this.model.unset('dataset');
-                expect(this.model.dataset()).toBeFalsy();
-            });
-
-            it("memoizes", function() {
-                expect(this.model.dataset()).toBe(this.model.dataset());
-            })
+        beforeEach(function() {
+            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            this.model = search.attachments().at(0);
         });
 
-        context("when there is no workspace", function() {
-            beforeEach(function() {
-                this.model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
-            });
+        it("returns a Database Object", function() {
+            this.dataset = this.model.dataset();
+            expect(this.dataset).toBeA(chorus.models.Dataset);
+            expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
+            expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
+        });
 
-            it("returns a Database Object", function() {
-                this.dataset = this.model.dataset();
-                expect(this.dataset).toBeA(chorus.models.Dataset);
-                expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
-                expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
-            });
+        it("returns falsy when there is no dataset", function() {
+            this.model.unset('dataset');
+            expect(this.model.dataset()).toBeFalsy();
+        });
 
-            it("returns falsy when there is no dataset", function() {
-                this.model.unset('dataset');
-                expect(this.model.dataset()).toBeFalsy();
-            });
-
-            it("memoizes", function() {
-                expect(this.model.dataset()).toBe(this.model.dataset());
-            })
+        it("memoizes", function() {
+            expect(this.model.dataset()).toBe(this.model.dataset());
         });
     });
 });

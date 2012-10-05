@@ -60,7 +60,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     hdfsFile: function() {
         if(!this._hdfsFile) {
-            this._hdfsFile = this.get('hdfs') && new chorus.models.HdfsEntry(this.get('hdfs'));
+            this._hdfsFile = this.get('hdfsEntry') && new chorus.models.HdfsEntry(this.get('hdfsEntry'));
         }
         return this._hdfsFile;
     },
@@ -74,9 +74,13 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     hadoopInstance: function() {
         if (!this._hadoopInstance) {
-            this._hadoopInstance = this.get('hadoopInstance') && new chorus.models.HadoopInstance(this.get('hadoopInstance'));
+            if (this.hdfsFile()) {
+                this._hadoopInstance = this.hdfsFile().getHadoopInstance();
+            } else {
+                this._hadoopInstance = this.get('hadoopInstance') && new chorus.models.HadoopInstance(this.get('hadoopInstance'));
+            }
         }
-        return this._instance;
+        return this._hadoopInstance;
     },
 
     dataset: function() {

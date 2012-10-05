@@ -24,15 +24,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>130}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>64}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:17 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Attachment 1000000</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000000</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">workfile.sql</field></doc><doc><field name="id">Attachment 1000001</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000001</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">User.png</field></doc><doc><field name="id">Attachment 1000002</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000002</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_instance</field></doc><doc><field name="id">Attachment 1000003</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000003</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_workspace</field></doc><doc><field name="id">Attachment 1000004</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000004</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_workfile</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Attachment 1000000</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000000</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">workfile.sql</field></doc><doc><field name="id">Attachment 1000001</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000001</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">User.png</field></doc><doc><field name="id">Attachment 1000002</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000002</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_instance</field></doc><doc><field name="id">Attachment 1000003</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000003</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_workspace</field></doc><doc><field name="id">Attachment 1000004</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000004</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_workfile</field></doc><doc><field name="id">Attachment 1000005</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000005</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_dataset</field></doc><doc><field name="id">Attachment 1000006</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000006</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_hadoop</field></doc><doc><field name="id">Attachment 1000007</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000007</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_hdfs_file</field></doc><doc><field name="id">Attachment 1000008</field><field name="type">Attachment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Attachment</field><field name="grouping_id_s">Attachment 1000008</field><field name="type_name_s">Attachment</field><field boost="1000000" name="contents_file_name_texts">searchquery_workspace_dataset</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -51,9 +51,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>25}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:17 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -78,15 +78,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>286}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>36}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:18 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:03 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">GpdbTable 1000000</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000001</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000001</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000002</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000002</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">other_table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000003</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000003</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">other_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000004</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000004</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">source_table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000005</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000005</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">source_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000006</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_table</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000007</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000007</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_chorus_view</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="query_texts">select searchquery from a_table</field></doc><doc><field name="id">GpdbTable 1000008</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000008</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000000</field><field boost="1000000" name="name_texts">searchquery_shared_table</field><field boost="1000" name="database_name_texts">shared_database</field><field boost="1000" name="schema_name_texts">shared_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000009</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000009</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000010</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000010</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field></doc><doc><field name="id">ChorusView 1000011</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000011</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">chorus_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="query_texts">select * from a_table</field></doc><doc><field name="id">GpdbTable 1000012</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000012</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">base_table1</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000013</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000013</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">view1</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000014</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000014</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">different_names_table</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000015</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000015</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">different_types_table</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000016</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000016</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">7_`~!@#$%^&amp;*()+=[]{}|\;:',&lt;.&gt;/?</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000017</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000017</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">external_web_table1</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000018</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000018</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000019</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000019</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">allcaps_candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000020</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000020</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">2candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000021</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000021</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_empty</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000022</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000022</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_one_column</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000023</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000023</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_composite</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000024</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000024</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">master_table1</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000025</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000025</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">pg_all_types</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000026</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000026</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">non_public_base_table1</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes_no_pub_sch</field><field boost="1000" name="schema_name_texts">non_public_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000027</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000027</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">migrationhistory</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">madlib</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000028</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000028</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">training_info</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">madlib</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000029</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000029</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">spatial_ref_sys</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">public</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000030</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000030</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">geometry_columns</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">public</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000031</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000031</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000032</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000032</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">allcaps_candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000033</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000033</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">2candy</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000034</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000034</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_empty</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000035</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000035</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_one_column</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000036</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000036</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_composite</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000037</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000037</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">other_base_table</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema2</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000038</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000038</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">heatmap_table</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000039</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000039</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">stream_table_with_quotes</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000040</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000040</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">stream_empty_table</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000041</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000041</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">CHORUS_VIEW</field><field boost="1000" name="database_name_texts">gpdb_garcia_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="query_texts">select * from test_schema.base_table1;</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">GpdbTable 1000000</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000001</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000001</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000002</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000002</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">other_table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000003</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000003</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">other_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000004</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000004</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">source_table</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000005</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000005</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">source_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">other_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000006</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_table</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000007</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000007</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_chorus_view</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="query_texts">select searchquery from a_table</field></doc><doc><field name="id">GpdbTable 1000008</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000008</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000000</field><field boost="1000000" name="name_texts">searchquery_shared_table</field><field boost="1000" name="database_name_texts">shared_database</field><field boost="1000" name="schema_name_texts">shared_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000009</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000009</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000010</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000010</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="schema_name_texts">searchquery_schema</field></doc><doc><field name="id">ChorusView 1000011</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000011</field><field name="type_name_s">Dataset</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">chorus_view</field><field boost="1000" name="database_name_texts">default</field><field boost="1000" name="schema_name_texts">default</field><field boost="1000" name="query_texts">select * from a_table</field></doc><doc><field name="id">GpdbTable 1000012</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000012</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">base_table1</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbView 1000013</field><field name="type">GpdbView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbView</field><field name="grouping_id_s">Dataset 1000013</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">view1</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000014</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000014</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">different_names_table</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000015</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000015</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">different_types_table</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000016</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000016</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">7_`~!@#$%^&amp;*()+=[]{}|\;:',&lt;.&gt;/?</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000017</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000017</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">external_web_table1</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000018</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000018</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000019</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000019</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">allcaps_candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000020</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000020</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">2candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000021</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000021</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_empty</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000022</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000022</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_one_column</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000023</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000023</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_composite</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000024</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000024</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">master_table1</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000025</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000025</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">pg_all_types</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000026</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000026</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">non_public_base_table1</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes_no_pub_sch</field><field boost="1000" name="schema_name_texts">non_public_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000027</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000027</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">migrationhistory</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">madlib</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000028</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000028</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">training_info</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">madlib</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000029</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000029</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">spatial_ref_sys</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">public</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000030</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000030</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">geometry_columns</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">public</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000031</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000031</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000032</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000032</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">allcaps_candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000033</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000033</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">2candy</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000034</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000034</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_empty</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000035</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000035</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_one_column</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000036</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000036</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">candy_composite</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_gpfdist_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000037</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000037</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">other_base_table</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema2</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000038</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000038</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">heatmap_table</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000039</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000039</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">stream_table_with_quotes</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">GpdbTable 1000040</field><field name="type">GpdbTable</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">Dataset 1000040</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field boost="1000000" name="name_texts">stream_empty_table</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema3</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">non-search</field></doc><doc><field name="id">ChorusView 1000041</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="grouping_id_s">Dataset 1000041</field><field name="type_name_s">Dataset</field><field name="instance_account_ids_im">1000007</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">CHORUS_VIEW</field><field boost="1000" name="database_name_texts">gpdb_graystone_tes</field><field boost="1000" name="schema_name_texts">test_schema</field><field boost="1000" name="query_texts">select * from test_schema.base_table1;</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -105,9 +105,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>39}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -134,7 +134,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -159,9 +159,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>22}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -186,9 +186,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>41}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>34}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -213,9 +213,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -240,285 +240,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>68}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@zboncakjaskolski.info</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@moenyundt.net</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Libbie</field><field boost="1000000" name="last_name_texts">Wilderman</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">libbie@koepp.org</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Fae</field><field boost="1000000" name="last_name_texts">Swaniawski</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">fae@altenwerth.name</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">Haley</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@gislason.net</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Durgan</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@kirlinlarson.org</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">Bayer</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@simonis.info</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Rashawn</field><field boost="1000000" name="last_name_texts">Yost</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">rashawn@pfannerstill.com</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Mariano</field><field boost="1000000" name="last_name_texts">Kovacek</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">mariano@boehm.com</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jay</field><field boost="1000000" name="last_name_texts">Ledner</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">jay@legros.org</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Bogan</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@langworth.name</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Lurline</field><field boost="1000000" name="last_name_texts">Balistreri</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">lurline@conroy.com</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Cierra</field><field boost="1000000" name="last_name_texts">Conroy</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">cierra@oconnellkuhn.info</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Rogers</field><field boost="1000000" name="last_name_texts">Hamill</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">rogers@mayert.net</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jazmyne</field><field boost="1000000" name="last_name_texts">Olson</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">jazmyne@wolfhuel.net</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Nellie</field><field boost="1000000" name="last_name_texts">Bruen</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">nellie@mann.name</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Crawford</field><field boost="1000000" name="last_name_texts">Ratke</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">crawford@brakus.org</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Estell</field><field boost="1000000" name="last_name_texts">Hayes</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">estell@okeefe.net</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Daniella</field><field boost="1000000" name="last_name_texts">Schroeder</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">daniella@zulauf.net</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workfile 1000000</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000000</field><field name="member_ids_im">1000012</field><field name="member_ids_im">1000012</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">typeahead</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">LinkedTableauWorkfile 1000001</field><field name="type">LinkedTableauWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">LinkedTableauWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">LinkedTableauWorkfile 1000001</field><field name="type_name_s">LinkedTableauWorkfile</field><field boost="1000000" name="file_name_texts">tableau</field></doc><doc><field name="id">Workfile 1000002</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000006</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">no collaborators Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000003</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000005</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000003</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">no collaborators Public</field><field boost="1000" name="description_texts">No Collaborators Search</field></doc><doc><field name="id">Workfile 1000004</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000009</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000004</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000005</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000006</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000011</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000006</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Search Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000007</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000010</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000007</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Search Public</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000008</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000007</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000008</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">archived</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000009</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000009</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">sql.sql</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000010</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">text.txt</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000011</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000011</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">image.png</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000012</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000012</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">binary.tar.gz</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000013</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000013</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">code.cpp</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000014</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000013</field><field name="member_ids_im">1000018</field><field name="member_ids_im">1000018</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000014</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">workfile.doc</field><field boost="1000" name="description_texts">A nice description</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>22}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workspace 1000000</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000000</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000012</field><field name="member_ids_im">1000012</field><field name="public_b">true</field><field name="workspace_id_im">1000000</field><field boost="1000000" name="name_texts">workspace44445</field></doc><doc><field name="id">Workspace 1000001</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000014</field><field name="member_ids_im">1000014</field><field name="public_b">true</field><field name="workspace_id_im">1000001</field><field boost="1000000" name="name_texts">typeahead</field></doc><doc><field name="id">Workspace 1000002</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000002</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="workspace_id_im">1000002</field><field boost="1000000" name="name_texts">typeahead_private</field></doc><doc><field name="id">Workspace 1000003</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000003</field><field boost="1000000" name="name_texts">typeahead_public</field></doc><doc><field name="id">Workspace 1000004</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000004</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000004</field><field boost="1000000" name="name_texts">typeahead_private_no_members</field></doc><doc><field name="id">Workspace 1000005</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000005</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">true</field><field name="workspace_id_im">1000005</field><field boost="1000000" name="name_texts">Public with no collaborators</field><field boost="1000" name="summary_texts">searchquery can see I guess</field></doc><doc><field name="id">Workspace 1000006</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field boost="1000000" name="name_texts">Private with no collaborators</field><field boost="1000" name="summary_texts">Not for searchquery, ha ha</field></doc><doc><field name="id">Workspace 1000007</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000007</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">true</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">Archived</field></doc><doc><field name="id">Workspace 1000008</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">Public</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000009</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000009</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="workspace_id_im">1000009</field><field boost="1000000" name="name_texts">Private</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000010</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000010</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000010</field><field boost="1000000" name="name_texts">Search Public</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000011</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000011</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">Search Private</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000012</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000012</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000000</field><field name="public_b">true</field><field name="workspace_id_im">1000012</field><field boost="1000000" name="name_texts">image</field></doc><doc><field name="id">Workspace 1000013</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000013</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000018</field><field name="member_ids_im">1000018</field><field name="public_b">true</field><field name="workspace_id_im">1000013</field><field boost="1000000" name="name_texts">workspace44446</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">HdfsEntry 1000002</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000002</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">result.txt</field><field boost="1000" name="parent_name_texts">searchquery</field></doc><doc><field name="id">HdfsEntry 1000005</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000005</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="parent_name_texts">testdir</field></doc><doc><field name="id">HdfsEntry 1000009</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000009</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">baz.sql</field><field boost="1000" name="parent_name_texts">bar</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>14}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:19 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000022</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000026</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i am a comment with greenplumsearch in me</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000027</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i am an insight with greenpluminsight in me</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000028</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i love searchquery</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000029</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">is this a greenplumsearch instance?</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000030</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">no, not greenplumsearch</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000031</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">really really?</field></doc><doc><field name="id">Events::NoteOnHadoopInstance 1000032</field><field name="type">Events::NoteOnHadoopInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnHadoopInstance</field><field name="grouping_id_s">HadoopInstance 1000000</field><field name="type_name_s">HadoopInstance</field><field name="body_texts">hadoop-idy-doop</field></doc><doc><field name="id">Events::NoteOnHdfsFile 1000033</field><field name="type">Events::NoteOnHdfsFile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnHdfsFile</field><field name="grouping_id_s">HdfsEntry 1000009</field><field name="type_name_s">HdfsEntry</field><field name="body_texts">hhhhhhaaaadooooopppp</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000034</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000035</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field name="body_texts">My awesome workfile</field></doc><doc><field name="id">Events::NoteOnDataset 1000036</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000037</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnDataset 1000039</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">notesearch ftw</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000040</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000041</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000042</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnDataset 1000036</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on dataset</field></doc><doc><field name="id">Events::NoteOnDataset 1000039</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">notesearch ftw</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@kulas.biz</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@uptonsanford.info</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Cicero</field><field boost="1000000" name="last_name_texts">Wuckert</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">cicero@conroybatz.net</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Dillon</field><field boost="1000000" name="last_name_texts">Carroll</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">dillon@lubowitz.biz</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">Hessel</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@crist.name</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Von</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@gerlach.info</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">VonRueden</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@hickle.info</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Joanne</field><field boost="1000000" name="last_name_texts">Nolan</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">joanne@fadelmertz.org</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Gerald</field><field boost="1000000" name="last_name_texts">Kessler</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">gerald@mayer.org</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Odessa</field><field boost="1000000" name="last_name_texts">Beahan</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">odessa@hane.info</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Wilderman</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@murphy.net</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Kameron</field><field boost="1000000" name="last_name_texts">Stoltenberg</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">kameron@collier.info</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Odessa</field><field boost="1000000" name="last_name_texts">Wiza</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">odessa@lowe.name</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Audra</field><field boost="1000000" name="last_name_texts">Farrell</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">audra@langosh.biz</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Amir</field><field boost="1000000" name="last_name_texts">Huel</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">amir@runolfonwindler.org</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Nolan</field><field boost="1000000" name="last_name_texts">Feil</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">nolan@thompson.net</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Frankie</field><field boost="1000000" name="last_name_texts">Ziemann</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">frankie@oconnell.org</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Terry</field><field boost="1000000" name="last_name_texts">Pacocha</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">terry@shields.net</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Jon</field><field boost="1000000" name="last_name_texts">Lehner</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">jon@altenwerth.org</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -539,7 +269,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -564,15 +294,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>49}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000022</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000035</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field name="body_texts">My awesome workfile</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workfile 1000000</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000000</field><field name="member_ids_im">1000012</field><field name="member_ids_im">1000012</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">typeahead</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">LinkedTableauWorkfile 1000001</field><field name="type">LinkedTableauWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">LinkedTableauWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">LinkedTableauWorkfile 1000001</field><field name="type_name_s">LinkedTableauWorkfile</field><field boost="1000000" name="file_name_texts">tableau</field></doc><doc><field name="id">Workfile 1000002</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000006</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">no collaborators Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000003</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000005</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000003</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">no collaborators Public</field><field boost="1000" name="description_texts">No Collaborators Search</field></doc><doc><field name="id">Workfile 1000004</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000009</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000004</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000005</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000006</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000011</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000006</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Search Private</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000007</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000010</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000007</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Search Public</field><field boost="1000" name="description_texts">searchquery</field></doc><doc><field name="id">Workfile 1000008</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000007</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000008</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">archived</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000009</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000009</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">sql.sql</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000010</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">text.txt</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000011</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000011</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">image.png</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000012</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000012</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">binary.tar.gz</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000013</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000013</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">code.cpp</field><field boost="1000" name="description_texts">A nice description</field></doc><doc><field name="id">Workfile 1000014</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_im">1000013</field><field name="member_ids_im">1000018</field><field name="member_ids_im">1000018</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000014</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">workfile.doc</field><field boost="1000" name="description_texts">A nice description</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -591,9 +321,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>47}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -620,13 +350,175 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspace 1000034</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000041</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000042</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000007</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workspace 1000000</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000000</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000012</field><field name="member_ids_im">1000012</field><field name="public_b">true</field><field name="workspace_id_im">1000000</field><field boost="1000000" name="name_texts">workspace44445</field></doc><doc><field name="id">Workspace 1000001</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000014</field><field name="member_ids_im">1000014</field><field name="public_b">true</field><field name="workspace_id_im">1000001</field><field boost="1000000" name="name_texts">typeahead</field></doc><doc><field name="id">Workspace 1000002</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000002</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000006</field><field name="public_b">false</field><field name="workspace_id_im">1000002</field><field boost="1000000" name="name_texts">typeahead_private</field></doc><doc><field name="id">Workspace 1000003</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000006</field><field name="public_b">true</field><field name="workspace_id_im">1000003</field><field boost="1000000" name="name_texts">typeahead_public</field></doc><doc><field name="id">Workspace 1000004</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000004</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000003</field><field name="public_b">false</field><field name="workspace_id_im">1000004</field><field boost="1000000" name="name_texts">typeahead_private_no_members</field></doc><doc><field name="id">Workspace 1000005</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000005</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000005</field><field boost="1000000" name="name_texts">Public with no collaborators</field><field boost="1000" name="summary_texts">searchquery can see I guess</field></doc><doc><field name="id">Workspace 1000006</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field boost="1000000" name="name_texts">Private with no collaborators</field><field boost="1000" name="summary_texts">Not for searchquery, ha ha</field></doc><doc><field name="id">Workspace 1000007</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000007</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000007</field><field boost="1000000" name="name_texts">Archived</field></doc><doc><field name="id">Workspace 1000008</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field boost="1000000" name="name_texts">Public</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000009</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000009</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000009</field><field boost="1000000" name="name_texts">Private</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000010</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000010</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000010</field><field boost="1000000" name="name_texts">Search Public</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000011</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000011</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field boost="1000000" name="name_texts">Search Private</field><field boost="1000" name="summary_texts">searchquery</field></doc><doc><field name="id">Workspace 1000012</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000012</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000000</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000012</field><field boost="1000000" name="name_texts">image</field></doc><doc><field name="id">Workspace 1000013</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1000013</field><field name="type_name_s">Workspace</field><field name="member_ids_im">1000018</field><field name="member_ids_im">1000018</field><field name="public_b">true</field><field name="workspace_id_im">1000013</field><field boost="1000000" name="name_texts">workspace44446</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:04 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">HdfsEntry 1000002</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000002</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">result.txt</field><field boost="1000" name="parent_name_texts">searchquery</field></doc><doc><field name="id">HdfsEntry 1000005</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000005</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">typeahead</field><field boost="1000" name="parent_name_texts">testdir</field></doc><doc><field name="id">HdfsEntry 1000009</field><field name="type">HdfsEntry</field><field name="type">ActiveRecord::Base</field><field name="class_name">HdfsEntry</field><field name="grouping_id_s">HdfsEntry 1000009</field><field name="type_name_s">HdfsEntry</field><field boost="1000000" name="name_texts">baz.sql</field><field boost="1000" name="parent_name_texts">bar</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000022</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000026</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i am a comment with greenplumsearch in me</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000027</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i am an insight with greenpluminsight in me</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000028</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000000</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">i love searchquery</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000029</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">is this a greenplumsearch instance?</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000030</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">no, not greenplumsearch</field></doc><doc><field name="id">Events::NoteOnGreenplumInstance 1000031</field><field name="type">Events::NoteOnGreenplumInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnGreenplumInstance</field><field name="grouping_id_s">GpdbInstance 1000002</field><field name="type_name_s">GpdbInstance</field><field name="body_texts">really really?</field></doc><doc><field name="id">Events::NoteOnHadoopInstance 1000032</field><field name="type">Events::NoteOnHadoopInstance</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnHadoopInstance</field><field name="grouping_id_s">HadoopInstance 1000000</field><field name="type_name_s">HadoopInstance</field><field name="body_texts">hadoop-idy-doop</field></doc><doc><field name="id">Events::NoteOnHdfsFile 1000033</field><field name="type">Events::NoteOnHdfsFile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnHdfsFile</field><field name="grouping_id_s">HdfsEntry 1000009</field><field name="type_name_s">HdfsEntry</field><field name="body_texts">hhhhhhaaaadooooopppp</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000034</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000035</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field name="body_texts">My awesome workfile</field></doc><doc><field name="id">Events::NoteOnDataset 1000036</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000037</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnDataset 1000039</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">notesearch ftw</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000040</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000041</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field name="grouping_id_s">Dataset 1000004</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000042</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000043</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>14}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnDataset 1000036</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on dataset</field></doc><doc><field name="id">Events::NoteOnDataset 1000039</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">notesearch ftw</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -647,7 +539,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -672,69 +564,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>26}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspaceDataset 1000037</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000040</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-      connection:
-      - close
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
-    http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkfile 1000021</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000005</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000022</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field name="body_texts">notesearch never</field></doc><doc><field name="id">Events::NoteOnWorkfile 1000035</field><field name="type">Events::NoteOnWorkfile</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkfile</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workfile 1000010</field><field name="type_name_s">Workfile</field><field name="body_texts">My awesome workfile</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -755,6 +593,168 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 20:39:20 GMT
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspace 1000034</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">Come see my awesome workspace!</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000042</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Workspace 1000008</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch forever</field></doc><doc><field name="id">Events::NoteOnWorkspace 1000043</field><field name="type">Events::NoteOnWorkspace</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="body_texts">notesearch never</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnWorkspaceDataset 1000037</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="grouping_id_s">Dataset 1000000</field><field name="type_name_s">Dataset</field><field name="body_texts">Note on workspace dataset</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000040</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="instance_account_ids_im">1000002</field><field name="workspace_id_im">1000003</field><field name="workspace_id_im">1000010</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">Dataset 1000006</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc><doc><field name="id">Events::NoteOnWorkspaceDataset 1000041</field><field name="type">Events::NoteOnWorkspaceDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnWorkspaceDataset</field><field name="workspace_id_im">1000008</field><field name="workspace_id_im">1000007</field><field name="grouping_id_s">Dataset 1000004</field><field name="type_name_s">Dataset</field><field name="body_texts">workspacedatasetnotesearch</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version: '1.1'
+  recorded_at: Fri, 05 Oct 2012 21:51:05 GMT
 recorded_with: VCR 2.1.1
 ...

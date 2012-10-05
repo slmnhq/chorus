@@ -281,8 +281,10 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
     Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
-    fbuilder.name :note_on_hdfs_file ,Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
+    note_on_hadoop_instance = Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
+    fbuilder.name :note_on_hadoop_instance, note_on_hadoop_instance
+    note_on_hdfs_file = Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
+    fbuilder.name :note_on_hdfs_file, note_on_hdfs_file
     note_on_workspace = Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
     fbuilder.name :note_on_workspace, note_on_workspace
     note_on_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => text_workfile, :body => "My awesome workfile")
@@ -291,8 +293,11 @@ FixtureBuilder.configure do |fbuilder|
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
-    fbuilder.name :note_on_dataset, Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'notesearch ftw')
-    fbuilder.name :note_on_workspace_dataset, Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
+    note_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_dataset, note_on_dataset
+    Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
+    note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
+    fbuilder.name :note_on_workspace_dataset, note_on_workspace_dataset
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
@@ -337,6 +342,10 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance'))))
     fbuilder.name(:attachment_workspace, note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace'))))
     fbuilder.name(:attachment_workfile, note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile'))))
+    fbuilder.name(:attachment_dataset, note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset'))))
+    fbuilder.name(:attachment_hadoop, note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop'))))
+    fbuilder.name(:attachment_hdfs, note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file'))))
+    fbuilder.name(:attachment_workspace_dataset, note_on_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset'))))
 
     GpdbIntegration.refresh_chorus
     chorus_gpdb42_instance.refresh_databases

@@ -1,6 +1,7 @@
 describe("chorus.views.SearchAttachment", function() {
     beforeEach(function() {
-        this.result = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
+        var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+        this.result = search.attachments().at(0);
         this.view = new chorus.views.SearchAttachment({model: this.result});
         this.view.render()
     });
@@ -18,23 +19,10 @@ describe("chorus.views.SearchAttachment", function() {
         expect(this.view.$('a.name').attr('href')).toBe(this.result.downloadUrl());
     });
 
-    context("with a workspace and tabular data", function() {
-        it("shows workspace and tabular data set", function() {
-            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"');
-            expect(
-                this.view.$(".description .found_in").html()).toContainTranslation(
-                "attachment.found_in.dataset_in_workspace",
-                {
-                    workspaceLink: '<a href="#/workspaces/33333">ws</a>',
-                    datasetLink: '<a href="#/workspaces/33333/datasets/' + this.result.dataset().id + '">2010_report_on_white_house</a>'
-                }
-            );
-        });
-    });
-
-    context("with tabular data but no workspace", function() {
+    context("with tabular data", function() {
         beforeEach(function() {
-            this.result = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
@@ -44,7 +32,7 @@ describe("chorus.views.SearchAttachment", function() {
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.dataset_not_in_workspace",
                 {
-                    datasetLink: '<a href="#/datasets/' + this.result.dataset().id  + '">2010_report_on_white_house</a>'
+                    datasetLink: '<a href="#/datasets/' + this.result.dataset().id  + '">searchquery_table</a>'
                 }
             );
         });
@@ -78,17 +66,20 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with file in a hdfs", function() {
         beforeEach(function() {
-            this.result = fixtures.attachmentOnFileInHdfsSearchResult();
+            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
 
         it("shows the file", function() {
+            var hdfs = this.result.hdfsFile();
+            var hadoop_instance = this.result.hadoopInstance();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.file_in_hdfs",
                 {
-                    hdfsFileLink: '<a href="#/hadoop_instances/10020/browseFile/333">cleardb.sql</a>'
+                    hdfsFileLink: '<a href="#/hadoop_instances/' + hadoop_instance.id +  '/browseFile/' + hdfs.id  +'">'+hdfs.name()+'</a>'
                 }
             );
         });
@@ -141,6 +132,6 @@ describe("chorus.views.SearchAttachment", function() {
     });
 
     it("shows matching name", function() {
-        expect(this.view.$(".name").html()).toContain("<em>Titanic<\/em><em>2</em>.jpg");
+        expect(this.view.$(".name").html()).toContain("<em>searchquery<\/em>");
     });
 });

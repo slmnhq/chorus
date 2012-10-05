@@ -194,6 +194,22 @@ window.rspecFixtureDefinitions = {
         model: "SearchResult"
     },
 
+    searchResultWithAttachmentOnDatasetNote : {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnHdfsNote : {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnHadoopNote : {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnWorkspaceDatasetNote : {
+        model: "SearchResult"
+    },
+
     frequencyTask: {},
     frequencyTaskWithErrors: {
         model: 'FrequencyTask'

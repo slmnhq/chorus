@@ -24,13 +24,13 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
         OR GpdbInstance OR HadoopInstance OR Workspace OR Workfile OR Dataset OR HdfsEntry
         OR Attachment OR Events\\:\\:Note)'',''type_name_s:(User OR GpdbInstance OR
         HadoopInstance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(type_name_s:Workspace
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(type_name_s:Dataset AND
-        -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>84,''ngroups''=>70,''groups''=>[{''groupValue''=>''Attachment
+        -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>88,''ngroups''=>74,''groups''=>[{''groupValue''=>''Attachment
         1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
         1000000'',''contents_file_name_texts''=>[''workfile.sql'']}]}},{''groupValue''=>''Attachment
         1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
@@ -40,7 +40,15 @@ http_interactions:
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
         1000003'',''contents_file_name_texts''=>[''searchquery_workspace'']}]}},{''groupValue''=>''Attachment
         1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
-        1000004'',''contents_file_name_texts''=>[''searchquery_workfile'']}]}},{''groupValue''=>''Dataset
+        1000004'',''contents_file_name_texts''=>[''searchquery_workfile'']}]}},{''groupValue''=>''Attachment
+        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
+        1000005'',''contents_file_name_texts''=>[''searchquery_dataset'']}]}},{''groupValue''=>''Attachment
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
+        1000006'',''contents_file_name_texts''=>[''searchquery_hadoop'']}]}},{''groupValue''=>''Attachment
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
+        1000007'',''contents_file_name_texts''=>[''searchquery_hdfs_file'']}]}},{''groupValue''=>''Attachment
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Attachment
+        1000008'',''contents_file_name_texts''=>[''searchquery_workspace_dataset'']}]}},{''groupValue''=>''Dataset
         1000006'',''doclist''=>{''numFound''=>3,''start''=>0,''docs''=>[{''id''=>''GpdbTable
         1000006'',''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''non-search'']},{''id''=>''Events::NoteOnDataset
         1000039'',''body_texts''=>[''notesearch ftw'']},{''id''=>''Events::NoteOnWorkspaceDataset
@@ -85,43 +93,43 @@ http_interactions:
         1000001'',''name_texts''=>[''instance44445'']}]}},{''groupValue''=>''HadoopInstance
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
         1000002'',''name_texts''=>[''typeahead'']}]}},{''groupValue''=>''User 1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@hettingerprosacco.org''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
+        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@schamberger.org''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
         1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@hermiston.org''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
+        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@hettingerwyman.info''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000002'',''first_name_texts''=>[''Melyssa''],''username_texts''=>[''default''],''email_texts''=>[''melyssa@hills.biz''],''last_name_texts''=>[''Tillman'']}]}},{''groupValue''=>''User
+        1000002'',''first_name_texts''=>[''Loyal''],''username_texts''=>[''default''],''email_texts''=>[''loyal@fritsch.name''],''last_name_texts''=>[''Donnelly'']}]}},{''groupValue''=>''User
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000003'',''first_name_texts''=>[''Darrel''],''username_texts''=>[''no_collaborators''],''email_texts''=>[''darrel@kuhnspinka.name''],''last_name_texts''=>[''Schmidt'']}]}},{''groupValue''=>''User
+        1000003'',''first_name_texts''=>[''Darlene''],''username_texts''=>[''no_collaborators''],''email_texts''=>[''darlene@okeefe.com''],''last_name_texts''=>[''Runolfsdottir'']}]}},{''groupValue''=>''User
         1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000004'',''first_name_texts''=>[''no_picture''],''username_texts''=>[''no_picture''],''email_texts''=>[''no_picture@moriette.info''],''last_name_texts''=>[''Okuneva'']}]}},{''groupValue''=>''User
+        1000004'',''first_name_texts''=>[''no_picture''],''username_texts''=>[''no_picture''],''email_texts''=>[''no_picture@okeefechristiansen.name''],''last_name_texts''=>[''Glover'']}]}},{''groupValue''=>''User
         1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000005'',''first_name_texts''=>[''with_picture''],''username_texts''=>[''with_picture''],''email_texts''=>[''with_picture@mantewilkinson.org''],''last_name_texts''=>[''Wilderman'']}]}},{''groupValue''=>''User
+        1000005'',''first_name_texts''=>[''with_picture''],''username_texts''=>[''with_picture''],''email_texts''=>[''with_picture@waterscrist.biz''],''last_name_texts''=>[''Satterfield'']}]}},{''groupValue''=>''User
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@gottlieb.org''],''last_name_texts''=>[''Weber'']}]}},{''groupValue''=>''User
+        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@smithfahey.net''],''last_name_texts''=>[''Dooley'']}]}},{''groupValue''=>''User
         1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000007'',''first_name_texts''=>[''Sierra''],''username_texts''=>[''the_collaborator''],''email_texts''=>[''sierra@toymosciski.com''],''last_name_texts''=>[''Ondricka'']}]}},{''groupValue''=>''User
+        1000007'',''first_name_texts''=>[''Yoshiko''],''username_texts''=>[''the_collaborator''],''email_texts''=>[''yoshiko@kuhic.com''],''last_name_texts''=>[''Koch'']}]}},{''groupValue''=>''User
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000008'',''first_name_texts''=>[''Madonna''],''username_texts''=>[''not_a_member''],''email_texts''=>[''madonna@waelchi.net''],''last_name_texts''=>[''Kuhlman'']}]}},{''groupValue''=>''User
+        1000008'',''first_name_texts''=>[''Ora''],''username_texts''=>[''not_a_member''],''email_texts''=>[''ora@turnerledner.net''],''last_name_texts''=>[''Stamm'']}]}},{''groupValue''=>''User
         1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000009'',''first_name_texts''=>[''Emilio''],''username_texts''=>[''restricted_user''],''email_texts''=>[''emilio@jones.com''],''last_name_texts''=>[''Deckow'']}]}},{''groupValue''=>''User
+        1000009'',''first_name_texts''=>[''Gayle''],''username_texts''=>[''restricted_user''],''email_texts''=>[''gayle@kuhlman.info''],''last_name_texts''=>[''Toy'']}]}},{''groupValue''=>''User
         1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@emard.biz''],''last_name_texts''=>[''Kuhn'']}]}},{''groupValue''=>''User
+        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@greenfelder.net''],''last_name_texts''=>[''Schaefer'']}]}},{''groupValue''=>''User
         1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000011'',''first_name_texts''=>[''Santa''],''username_texts''=>[''user44445''],''email_texts''=>[''santa@kovacek.com''],''last_name_texts''=>[''Witting'']}]}},{''groupValue''=>''User
+        1000011'',''first_name_texts''=>[''Laurianne''],''username_texts''=>[''user44445''],''email_texts''=>[''laurianne@stark.name''],''last_name_texts''=>[''Mohr'']}]}},{''groupValue''=>''User
         1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000012'',''first_name_texts''=>[''Jakob''],''username_texts''=>[''user44446''],''email_texts''=>[''jakob@bernhard.com''],''last_name_texts''=>[''Wisozk'']}]}},{''groupValue''=>''User
+        1000012'',''first_name_texts''=>[''Alexanne''],''username_texts''=>[''user44446''],''email_texts''=>[''alexanne@renner.biz''],''last_name_texts''=>[''Kunde'']}]}},{''groupValue''=>''User
         1000013'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000013'',''first_name_texts''=>[''Stephon''],''username_texts''=>[''user44447''],''email_texts''=>[''stephon@murazik.net''],''last_name_texts''=>[''Stamm'']}]}},{''groupValue''=>''User
+        1000013'',''first_name_texts''=>[''Lea''],''username_texts''=>[''user44447''],''email_texts''=>[''lea@mckenziekulas.name''],''last_name_texts''=>[''Gusikowski'']}]}},{''groupValue''=>''User
         1000014'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000014'',''first_name_texts''=>[''Amira''],''username_texts''=>[''user44448''],''email_texts''=>[''amira@fahey.info''],''last_name_texts''=>[''Sawayn'']}]}},{''groupValue''=>''User
+        1000014'',''first_name_texts''=>[''Lydia''],''username_texts''=>[''user44448''],''email_texts''=>[''lydia@trompraynor.info''],''last_name_texts''=>[''Mohr'']}]}},{''groupValue''=>''User
         1000015'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000015'',''first_name_texts''=>[''Zula''],''username_texts''=>[''user44449''],''email_texts''=>[''zula@reingerweinat.org''],''last_name_texts''=>[''Lockman'']}]}},{''groupValue''=>''User
+        1000015'',''first_name_texts''=>[''Donnie''],''username_texts''=>[''user44449''],''email_texts''=>[''donnie@roob.org''],''last_name_texts''=>[''Zemlak'']}]}},{''groupValue''=>''User
         1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000016'',''first_name_texts''=>[''Felicia''],''username_texts''=>[''user44450''],''email_texts''=>[''felicia@crist.name''],''last_name_texts''=>[''Nitzsche'']}]}},{''groupValue''=>''User
+        1000016'',''first_name_texts''=>[''Julie''],''username_texts''=>[''user44450''],''email_texts''=>[''julie@harber.org''],''last_name_texts''=>[''Connelly'']}]}},{''groupValue''=>''User
         1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000017'',''first_name_texts''=>[''Eli''],''username_texts''=>[''user44451''],''email_texts''=>[''eli@torphy.name''],''last_name_texts''=>[''Raynor'']}]}},{''groupValue''=>''User
+        1000017'',''first_name_texts''=>[''Angelica''],''username_texts''=>[''user44451''],''email_texts''=>[''angelica@larkin.com''],''last_name_texts''=>[''Hessel'']}]}},{''groupValue''=>''User
         1000018'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000018'',''first_name_texts''=>[''Ruby''],''username_texts''=>[''user44452''],''email_texts''=>[''ruby@yundt.name''],''last_name_texts''=>[''Olson'']}]}},{''groupValue''=>''Workfile
+        1000018'',''first_name_texts''=>[''Ulices''],''username_texts''=>[''user44452''],''email_texts''=>[''ulices@aufderhar.info''],''last_name_texts''=>[''Hoppe'']}]}},{''groupValue''=>''Workfile
         1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
         1000000'',''file_name_texts''=>[''typeahead''],''description_texts''=>[''A
         nice description'']}]}},{''groupValue''=>''Workfile 1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
@@ -130,17 +138,8 @@ http_interactions:
         1000003'',''file_name_texts''=>[''Private''],''description_texts''=>[''searchquery'']}]}},{''groupValue''=>''Workfile
         1000004'',''doclist''=>{''numFound''=>2,''start''=>0,''docs''=>[{''id''=>''Workfile
         1000004'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery'']},{''id''=>''Events::NoteOnWorkfile
-        1000021'',''body_texts''=>[''notesearch forever'']}]}},{''groupValue''=>''Workfile
-        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
-        1000005'',''file_name_texts''=>[''Search Private''],''description_texts''=>[''searchquery'']}]}},{''groupValue''=>''Workfile
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
-        1000006'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery'']}]}},{''groupValue''=>''Workfile
-        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
-        1000007'',''file_name_texts''=>[''archived''],''description_texts''=>[''A
-        nice description'']}]}},{''groupValue''=>''Workfile 1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workfile
-        1000008'',''file_name_texts''=>[''sql.sql''],''description_texts''=>[''A nice
-        description'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',19,''Workfile'',13,''Workspace'',12,''GpdbInstance'',10,''Attachment'',5,''Dataset'',5,''HadoopInstance'',3,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+        1000021'',''body_texts''=>[''notesearch forever'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',19,''Workfile'',13,''Workspace'',12,''GpdbInstance'',10,''Attachment'',9,''Dataset'',5,''HadoopInstance'',3,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
-  recorded_at: Fri, 05 Oct 2012 00:22:50 GMT
+  recorded_at: Fri, 05 Oct 2012 20:48:41 GMT
 recorded_with: VCR 2.1.1
 ...

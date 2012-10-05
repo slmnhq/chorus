@@ -363,7 +363,7 @@ describe Search do
 
       it "returns the Attachment objects found" do
         create_and_record_search do |search|
-          search.attachments.length.should == 3
+          search.attachments.length.should == 7
           search.attachments.first.should == attachment
         end
       end
