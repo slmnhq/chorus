@@ -36,7 +36,8 @@
         "gif":"img",
         "png":"img",
         "jpg":"img",
-        "jpeg":"img"
+        "jpeg":"img",
+        "twb":"tableau"
     }
 
     chorus.urlHelpers.fileIconUrl = function fileIconUrl(key, size) {
