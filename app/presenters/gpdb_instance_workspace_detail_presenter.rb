@@ -13,7 +13,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
 
     used_by_workspaces(current_user).each do |workspace|
       sandbox_size = workspace.sandbox.disk_space_used(account)
-      sandbox_sizes[workspace.sandbox.id] = sandbox_size
+      sandbox_sizes[workspace.sandbox.id] = sandbox_size || 0
 
       workspaces << {
           :id => workspace.id,
