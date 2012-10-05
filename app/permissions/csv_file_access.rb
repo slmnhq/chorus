@@ -1,5 +1,5 @@
 class CsvFileAccess < AdminFullAccess
-  def import?(csv_file)
+  def create?(csv_file)
     csv_file.user == current_user
   end
 end
