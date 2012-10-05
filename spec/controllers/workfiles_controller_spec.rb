@@ -145,6 +145,7 @@ describe WorkfilesController do
       generate_workfile_fixture(:"text.txt", "text.json")
       generate_workfile_fixture(:"image.png", "image.json")
       generate_workfile_fixture(:"binary.tar.gz", "binary.json")
+      generate_workfile_fixture(:"tableau", "tableau.json")
     end
   end
 

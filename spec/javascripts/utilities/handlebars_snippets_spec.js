@@ -821,6 +821,19 @@ describe("handlebars", function () {
             });
         });
 
+        describe("fromTableau", function () {
+            beforeEach(function () {
+                this.workfile = rspecFixtures.workfile.tableau();
+            });
+
+            it("show the tableau information", function () {
+                var $result = $('<div>' + Handlebars.helpers.fromTableau(this.workfile) + '</div>');
+                expect($result.find('a.tableau')).toHaveHref(this.workfile.get('workbookUrl'));
+                expect($result.find('a.tableau')).toHaveText(this.workfile.get('workbookName'));
+                expect($result.find('span.tableau_icon')).toExist();
+            });
+        });
+
         describe("attachmentFoundIn", function () {
             context("on a dataset in a workspace", function () {
                 beforeEach(function () {

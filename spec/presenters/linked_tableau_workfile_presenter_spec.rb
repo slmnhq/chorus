@@ -18,6 +18,7 @@ describe LinkedTableauWorkfilePresenter, :type => :view do
       hash.should have_key(:file_type)
       hash[:latest_version_id].should be_nil
       hash[:has_draft].should be_false
+      hash[:version_info][:updated_at].should == model.created_at
     end
 
     it "should have tableau workbook specific keys" do

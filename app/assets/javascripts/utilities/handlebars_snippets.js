@@ -341,7 +341,7 @@
         fromTableau: function(workfile) {
             return new Handlebars.SafeString(t('workfiles.tableau.from', {
                     tableauIcon: chorus.helpers.tableauIcon(),
-                    tableauLink: chorus.helpers.linkTo(workfile.get('workbookUrl'), workfile.get('workbookName'))
+                    tableauLink: chorus.helpers.linkTo(workfile.get('workbookUrl'), workfile.get('workbookName'), { class:'tableau' })
                 }
             ));
         },

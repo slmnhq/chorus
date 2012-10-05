@@ -82,7 +82,8 @@ window.rspecFixtureDefinitions = {
             sql: {},
             binary: {},
             image: {},
-            text: {}
+            text: {},
+            tableau: {}
         }
     },
     workfileSet: {},
