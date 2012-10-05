@@ -9,11 +9,11 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
     recommended_bytes = recommended_gb * 1024 * 1024 * 1024
 
     workspaces = []
-    total_size_in_bytes = 0
+    sandbox_sizes = {}
 
     used_by_workspaces(current_user).each do |workspace|
       sandbox_size = workspace.sandbox.disk_space_used(account)
-      total_size_in_bytes += sandbox_size || 0
+      sandbox_sizes[workspace.sandbox.id] = sandbox_size
 
       workspaces << {
           :id => workspace.id,
@@ -26,7 +26,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
           :database_name => workspace.sandbox.database.name
       }
     end
-    results_hash(workspaces, total_size_in_bytes)
+    results_hash(workspaces, sandbox_sizes.values.sum)
   end
 
   def complete_json?

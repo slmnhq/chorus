@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpdbInstancePresenter, :type => :view do
+describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
   let(:gpdb_instance) { gpdb_instances(:owners) }
   let(:user) { gpdb_instance.owner }
   let(:presenter) { GpdbInstanceWorkspaceDetailPresenter.new(gpdb_instance, view, {}) }
@@ -27,6 +27,17 @@ describe GpdbInstancePresenter, :type => :view do
 
     it "has a human text for size" do
       hash[:sandboxes_size].should == view.number_to_human_size(10 * gpdb_instance.used_by_workspaces(user).count)
+    end
+
+    context "with several workspaces using the same sandbox" do
+      let(:sandbox) { gpdb_schemas(:default) }
+      let(:duplicate_sandbox_workspace1) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
+      let(:duplicate_sandbox_workspace2) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
+
+      it "doesn't add up the sandbox size of the duplicate sandboxes" do
+        sandbox_ids = Workspace.where(:sandbox_id => gpdb_instance.schema_ids).collect(&:sandbox_id).uniq
+        hash[:sandboxes_size_in_bytes].should == sandbox_ids.length * size
+      end
     end
 
     context "for the workspaces" do

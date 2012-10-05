@@ -35,7 +35,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def used_by_workspaces(viewing_user)
-    workspaces.workspaces_for(viewing_user)
+    workspaces.workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
   def self.accessible_to(user)

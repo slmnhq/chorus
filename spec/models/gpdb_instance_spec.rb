@@ -228,8 +228,8 @@ describe GpdbInstance do
     let!(:gpdb_instance) { FactoryGirl.create :gpdb_instance }
     let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :gpdb_instance => gpdb_instance, :name => 'db') }
     let!(:gpdb_schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => gpdb_database) }
-    let!(:workspace1) { FactoryGirl.create(:workspace, :name => "ws_1", :sandbox => gpdb_schema) }
-    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "ws_2", :sandbox => gpdb_schema, :public => false) }
+    let!(:workspace1) { FactoryGirl.create(:workspace, :name => "Z_workspace", :sandbox => gpdb_schema) }
+    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "a_workspace", :sandbox => gpdb_schema, :public => false) }
     let!(:workspace3) { FactoryGirl.create(:workspace, :name => "ws_3") }
 
     it "returns the workspaces that use this instance's schema as sandbox" do
@@ -244,6 +244,11 @@ describe GpdbInstance do
       workspaces = gpdb_instance.used_by_workspaces(users(:not_a_member))
       workspaces.count.should == 1
       workspaces.should include(workspace1)
+    end
+
+    it "sorts the workspaces alphabetically" do
+      workspaces = gpdb_instance.used_by_workspaces(users(:admin))
+      workspaces.should == [workspace2, workspace1]
     end
   end
 
