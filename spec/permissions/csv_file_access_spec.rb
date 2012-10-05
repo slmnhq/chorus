@@ -6,7 +6,7 @@ describe CsvFileAccess do
     described_class.new(controller)
   end
 
-  describe "#import?" do
+  describe "#create?" do
     let(:owner) { users(:owner) }
     let(:csv_file) do
       c = CsvFile.new
@@ -20,7 +20,7 @@ describe CsvFileAccess do
       let(:current_user) { owner }
 
       it "allows access" do
-        subject.can?(:import, csv_file).should be_true
+        subject.can?(:create, csv_file).should be_true
       end
     end
 
@@ -28,7 +28,7 @@ describe CsvFileAccess do
       let(:current_user) { users(:no_collaborators) }
 
       it "does not allow access" do
-        subject.can?(:import, csv_file).should be_false
+        subject.can?(:create, csv_file).should be_false
       end
     end
   end
