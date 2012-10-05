@@ -16,7 +16,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             url = URI('/AlpineIlluminator/alpine/result/runflow.jsp?')
                   .addQuery("flowFilePath", "/tmp/run_file_test.afm");
             url.addQuery('actions[create_workfile_insight]',
-                          'http://' + window.location.host + '/notes');
+                          'http://' + window.location.host + '/notes/');
             expect(this.view.$('a.button.run_file')).toHaveHref(url);
         });
 
