@@ -79,6 +79,39 @@ function monitor () {
   done
 }
 
+function backup () {
+  echo "Backing up chorus data..."
+
+  while getopts "d:r:" OPTION
+  do
+       case $OPTION in
+           d)
+               BACKUP_DIR=$OPTARG
+               ;;
+           r)
+               ROLLING_DAYS=$OPTARG
+               ;;
+           ?)
+               usage
+               exit
+               ;;
+       esac
+  done
+
+  if [ -z "$BACKUP_DIR" ]; then
+      usage
+      exit
+  fi
+
+  mkdir -p "$BACKUP_DIR" || exit 1
+  if [ ! -r $BACKUP_DIR ] || [ ! -w $BACKUP_DIR ]; then
+      echo "Error: Could not write to directory \"$BACKUP_DIR\"." > /dev/stderr
+      exit 1
+  fi
+  BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
+  rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
+}
+
 function usage () {
   script=`basename $0`
   echo "$script is a utility to start, stop, restart, or monitor the Chorus services."
@@ -88,6 +121,7 @@ function usage () {
   echo "  $script stop    [services]         stop services"
   echo "  $script restart [services]         stop and start services"
   echo "  $script monitor [services]         monitor and restart services as needed"
+  echo "  $script backup  [-d dir] [-r days] backup Chorus data"
   echo
   echo "The following services are available: postgres, workers, scheduler, solr, webserver."
   echo "If no services are specified on the command line, $script manages all services."
@@ -103,9 +137,12 @@ function usage () {
   echo "  $script restart webserver          restart specific services"
   echo "  $script monitor workers            monitor specific services"
   echo
+  echo "  $script backup -d backup_dir       backup Chorus data"
+  echo
 
   return 1
 }
+
 
 case $command in
     start )
@@ -118,10 +155,13 @@ case $command in
         stop
         start
         ;;
-     monitor )
-        monitor
-        ;;
+    monitor )
+       monitor
+       ;;
+    backup )
+       backup ${@}
+       ;;
     * )
-        usage
-        ;;
+       usage
+       ;;
 esac
