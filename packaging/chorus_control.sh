@@ -108,8 +108,18 @@ function backup () {
       echo "Error: Could not write to directory \"$BACKUP_DIR\"." > /dev/stderr
       exit 1
   fi
-  BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
-  rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
+
+  if ! kill -0 `head -1 $POSTGRES_PID_FILE 2>&1` >& /dev/null; then
+      postgres_started="1"
+      $bin/start-postgres.sh
+  fi
+
+   BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
+   rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
+
+   if [ -n "$postgres_started" ]; then
+       $bin/stop-postgres.sh
+   fi
 }
 
 function usage () {
