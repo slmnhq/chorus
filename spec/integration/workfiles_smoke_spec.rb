@@ -80,8 +80,8 @@ describe "Workfiles" do
         wait_for_ajax
         workfiles = page.all("li.workfile")
 
-        workfiles.first.text.should == workfile_first_by_date.file_name
-        workfiles.last.text.should == workfile_last_by_date.file_name
+        workfiles.first.text.should include workfile_first_by_date.file_name
+        workfiles.last.text.should include workfile_last_by_date.file_name
       end
     end
   end
