@@ -14,18 +14,5 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
             workspaceId: this.options.workspaceId
         });
         this._super("makeModel", arguments);
-    },
-
-    save: function(e) {
-        e && e.preventDefault();
-        this.model.set({
-            body: this.getTextBody()
-        });
-        console.log(this.model);
-        this.model.save();
-    },
-
-    getTextBody: function() {
-        return this.$("textarea").val();
     }
 });

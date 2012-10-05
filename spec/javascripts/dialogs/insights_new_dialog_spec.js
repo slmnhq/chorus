@@ -32,7 +32,7 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
 
         describe("clicking the submit button", function() {
             beforeEach(function() {
-                spyOn(this.dialog.model, 'save');
+                spyOn(this.dialog.model, 'save').andCallThrough();
                 this.dialog.$("textarea").val("a fine selection of text, especially considering the price point");
                 this.dialog.$("button.submit").click();
             });

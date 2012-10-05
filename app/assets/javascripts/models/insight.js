@@ -1,7 +1,14 @@
-chorus.models.Insight = chorus.models.Comment.extend({
+chorus.models.Insight = chorus.models.Note.extend({
     constructorName: "Insight",
-    urlTemplate: "notes",
     parameterWrapper: "note",
+
+    urlTemplate:function (options) {
+        if (options && options.isFile) {
+            return "notes/{{id}}/attachments"
+        } else {
+            return "notes/{{id}}";
+        }
+    },
 
     initialize: function() {
         this._super('initialize');
