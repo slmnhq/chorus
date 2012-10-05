@@ -9,7 +9,7 @@ class DataMigrator
     SandboxMigrator.migrate
     AssociatedDatasetMigrator.migrate
     ActivityMigrator.migrate(options)
-    NoteAttachmentMigrator.migrate(options)
+    AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
     # Note attachments
@@ -24,7 +24,7 @@ class DataMigrator
     InstanceAccountMigrator.validate
     GpdbInstanceMigrator.validate
     MembershipMigrator.validate
-    NoteAttachmentMigrator.validate
+    AttachmentMigrator.validate
     NoteMigrator.validate
     NotificationMigrator.validate
     UserMigrator.validate

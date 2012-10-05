@@ -4,7 +4,7 @@ resource "Notes" do
   let(:user) { users(:owner) }
   let(:note) { events(:note_on_hdfs_file) }
   let(:hdfs_file) { HdfsEntry.files.first }
-  let(:attachment) { note_attachments(:sql) }
+  let(:attachment) { attachments(:sql) }
 
   before do
     log_in user

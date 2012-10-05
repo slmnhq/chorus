@@ -1,4 +1,4 @@
-class NoteAttachment < ActiveRecord::Base
+class Attachment < ActiveRecord::Base
   attr_accessible :contents
 
   has_attached_file :contents,
@@ -10,7 +10,7 @@ class NoteAttachment < ActiveRecord::Base
 
   belongs_to :note, :class_name => 'Events::Note'
 
-  validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['note_attachment'].megabytes, :message => :file_size_exceeded
+  validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['attachment'].megabytes, :message => :file_size_exceeded
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do

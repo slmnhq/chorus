@@ -1,4 +1,4 @@
-class NoteAttachmentMigrator < AbstractMigrator
+class AttachmentMigrator < AbstractMigrator
   class << self
     def prerequisites(options)
       NoteMigrator.migrate(options)
@@ -82,23 +82,23 @@ class NoteAttachmentMigrator < AbstractMigrator
           next
         end
 
-        note_attachment = NoteAttachment.new
-        note_attachment.note_id = event.id
+        attachment = Attachment.new
+        attachment.note_id = event.id
 
         fake_file = FakeFileUpload.new(file)
         fake_file.original_filename = file_name
         fake_file.content_type = MIME::Types.type_for(file_name).first
 
-        note_attachment.contents = fake_file
-        note_attachment.legacy_id = attachment_legacy_id
-        note_attachment.save!
+        attachment.contents = fake_file
+        attachment.legacy_id = attachment_legacy_id
+        attachment.save!
       end
     end
 
     def get_file
       sql = "SELECT ef.file file, ec.id note_legacy_id, ef.file_name file_name , eca.id attachment_legacy_id
       FROM edc_file ef, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'file' AND
-      eca.comment_id = ec.id AND eca.entity_id = ef.id AND eca.id NOT IN (SELECT legacy_id from note_attachments );"
+      eca.comment_id = ec.id AND eca.entity_id = ef.id AND eca.id NOT IN (SELECT legacy_id from attachments );"
       comment_file_data = Legacy.connection.exec_query(sql)
       comment_file_data.map do |comment_data|
         yield comment_data["note_legacy_id"], comment_data["file_name"], comment_data["file"], comment_data["attachment_legacy_id"]

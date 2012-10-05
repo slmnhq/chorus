@@ -24,7 +24,7 @@ describe DataMigrator do
       mock.proxy(InstanceAccountMigrator).validate
       mock.proxy(GpdbInstanceMigrator).validate
       mock.proxy(MembershipMigrator).validate
-      mock.proxy(NoteAttachmentMigrator).validate
+      mock.proxy(AttachmentMigrator).validate
       mock.proxy(NoteMigrator).validate
       mock.proxy(NotificationMigrator).validate
       mock.proxy(UserMigrator).validate

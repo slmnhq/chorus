@@ -7,7 +7,7 @@ class Search
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry, NoteAttachment] unless @models_to_search.present?
+    @models_to_search = [User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry, Attachment] unless @models_to_search.present?
     self.query = params[:query]
     self.per_type = params[:per_type]
     self.workspace_id = params[:workspace_id]
@@ -97,8 +97,8 @@ class Search
     models[:hdfs_entries]
   end
 
-  def note_attachments
-    models[:note_attachments]
+  def attachments
+    models[:attachments]
   end
 
   def this_workspace

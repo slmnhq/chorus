@@ -37,7 +37,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)
       Sunspot.session.should be_a_search_for(HdfsEntry)
-      Sunspot.session.should be_a_search_for(NoteAttachment)
+      Sunspot.session.should be_a_search_for(Attachment)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
       Sunspot.session.should have_search_params(:facet, :type_name)
       Sunspot.session.should have_search_params(:group, Proc.new {
@@ -62,7 +62,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :per_type => 3)
         stub(search).num_found do
           hsh = Hash.new(0)
-          hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :note_attachments => 100})
+          hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
         end
         stub(search.search).each_hit_with_result { [] }
         search.models
@@ -170,7 +170,7 @@ describe Search do
     let(:gpdb_instance) { gpdb_instances(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
-    let(:note_attachment) { note_attachments(:note_attachment) }
+    let(:attachment) { attachments(:attachment) }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
     let(:private_workspace) { workspaces(:private) }
     let(:private_workspace_not_a_member) { workspaces(:private_with_no_collaborators) }
@@ -210,7 +210,7 @@ describe Search do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
           search.num_found[:gpdb_instances].should == 1
-          search.num_found[:datasets].should == 4
+          search.num_found[:datasets].should == 5
         end
       end
 
@@ -224,7 +224,7 @@ describe Search do
       it "includes the number of workspace specific results found" do
         workspace = workspaces(:search_public)
         create_and_record_search(owner, :query => 'searchquery', :workspace_id => workspace.id) do |search|
-          search.num_found[:this_workspace].should == 5
+          search.num_found[:this_workspace].should == 6
         end
       end
     end
@@ -299,7 +299,7 @@ describe Search do
 
       it "returns the Dataset objects found" do
         create_and_record_search do |search|
-          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset]
+          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view)]
         end
       end
 
@@ -352,19 +352,19 @@ describe Search do
       end
     end
 
-    describe "#note_attachments" do
+    describe "#attachments" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
-          attachment = search.note_attachments.first
+          attachment = search.attachments.first
           attachment.highlighted_attributes.length.should == 1
-          attachment.highlighted_attributes[:contents_file_name][0].should == "<em>searchquery</em>"
+          attachment.highlighted_attributes[:contents_file_name][0].should =~ /\<em\>searchquery\<\/em\>/
         end
       end
 
-      it "returns the NoteAttachment objects found" do
+      it "returns the Attachment objects found" do
         create_and_record_search do |search|
-          search.note_attachments.length.should == 1
-          search.note_attachments.first.should == note_attachment
+          search.attachments.length.should == 3
+          search.attachments.first.should == attachment
         end
       end
     end

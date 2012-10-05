@@ -4,7 +4,7 @@ class EventPresenter < Presenter
       merge(targets_hash).
       merge(additional_data_hash).
       merge(note_action_type_hash).
-      merge(note_attachment_hash).
+      merge(attachment_hash).
       merge(notification_hash).
       merge(comments_hash).
       merge(insight_hash)
@@ -14,7 +14,7 @@ class EventPresenter < Presenter
     basic_hash.merge(targets_hash).
         merge(additional_data_hash).
         merge(note_action_type_hash).
-        merge(note_attachment_hash)
+        merge(attachment_hash)
   end
 
   def complete_json?
@@ -78,7 +78,7 @@ class EventPresenter < Presenter
     end
   end
 
-  def note_attachment_hash
+  def attachment_hash
     hash = []
     if model.is_a?(Events::Note)
       attachments = model.attachments

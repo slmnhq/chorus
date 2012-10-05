@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NoteAttachmentsController do
+describe AttachmentsController do
   ignore_authorization!
   let(:user) { users(:owner) }
 
@@ -30,7 +30,7 @@ describe NoteAttachmentsController do
   end
 
   describe "#show" do
-    let(:attachment) { note_attachments(:image) }
+    let(:attachment) { attachments(:image) }
 
     it "uses send_file" do
       mock(controller).send_file(attachment.contents.path('icon'), :type => attachment.contents_content_type, :disposition => 'inline') {

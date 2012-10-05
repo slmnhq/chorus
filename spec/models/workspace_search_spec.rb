@@ -69,7 +69,7 @@ describe WorkspaceSearch do
       it "returns the total number of results found" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.num_found.should == 5
+          search.num_found.should == 6
         end
       end
     end
@@ -78,7 +78,7 @@ describe WorkspaceSearch do
       it "returns the founds results" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.results.should =~ [workfile, matching_table, matching_view, workspace, typeahead_dataset]
+          search.results.should =~ [workfile, matching_table, matching_view, workspace, typeahead_dataset, datasets(:typeahead_chorus_view)]
         end
       end
 

@@ -11,7 +11,7 @@ resource "Attachments" do
     parameter :attachment_id, "Attachment id"
     required_parameters :attachment_id
 
-    let(:attachment_id) { note_attachments(:sql).id }
+    let(:attachment_id) { attachments(:sql).id }
 
     example_request "Downloads attachment" do
       status.should == 200

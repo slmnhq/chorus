@@ -99,7 +99,7 @@ module Events
   end
 end
 
-# Preload all note classes, otherwise, note_attachment.note will not work in dev mode.
+# Preload all note classes, otherwise, attachment.note will not work in dev mode.
 require 'events/note_on_dataset'
 require 'events/note_on_greenplum_instance'
 require 'events/note_on_hadoop_instance'

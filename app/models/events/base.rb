@@ -25,7 +25,7 @@ module Events
     has_many :comments, :foreign_key => :event_id
 
     # subclass associations on parent to facilitate .includes
-    has_many :attachments, :class_name => 'NoteAttachment', :foreign_key => 'note_id'
+    has_many :attachments, :class_name => 'Attachment', :foreign_key => 'note_id'
     has_many :notes_workfiles, :foreign_key => 'note_id'
     has_many :workfiles, :through => :notes_workfiles
     has_many :datasets_notes, :foreign_key => 'note_id'

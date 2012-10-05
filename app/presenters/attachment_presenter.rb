@@ -1,4 +1,4 @@
-class NoteAttachmentPresenter < Presenter
+class AttachmentPresenter < Presenter
   delegate :id, :contents, :created_at, :contents_are_image?, :note, to: :model
 
   def to_hash

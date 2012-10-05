@@ -1,7 +1,7 @@
-class NoteAttachmentsController < ApplicationController
+class AttachmentsController < ApplicationController
   def create
     event = Events::Base.find(params[:note_id])
-    authorize! :create, NoteAttachment, event
+    authorize! :create, Attachment, event
 
     if params[:contents]
       attachment_content = params[:contents]
@@ -15,7 +15,7 @@ class NoteAttachmentsController < ApplicationController
   end
 
   def show
-    attachment = NoteAttachment.find(params[:id])
+    attachment = Attachment.find(params[:id])
     send_file(attachment.contents.path(params[:style]), :type => attachment.contents_content_type, :disposition => 'inline')
   end
 end

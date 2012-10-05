@@ -140,7 +140,7 @@ describe EventPresenter, :type => :view do
 
       context "with an attachment" do
         let(:event) { FactoryGirl.create(:note_on_workspace_event) }
-        let(:attachment) { NoteAttachment.first }
+        let(:attachment) { Attachment.first }
         let(:dataset) { datasets(:table) }
         let(:workfile) { workfiles(:public) }
 

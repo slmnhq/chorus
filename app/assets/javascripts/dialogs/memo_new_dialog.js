@@ -224,7 +224,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.$("button.submit").removeAttr("disabled");
         if (!this.model) return;
 
-        var maxFileSize = this.config.get("fileSizesMbNoteAttachment");
+        var maxFileSize = this.config.get("fileSizesMbAttachment");
 
         var isValid = true;
         _.each( this.model.files, function(file) {

@@ -8,7 +8,7 @@ class AttachmentDownloadsController < ApplicationController
   private
 
   def download_file(attachment_id)
-    attachment = NoteAttachment.find(attachment_id)
+    attachment = Attachment.find(attachment_id)
 
     send_file attachment.contents.path,
               :disposition => 'attachment'

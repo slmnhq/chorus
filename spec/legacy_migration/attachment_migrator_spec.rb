@@ -1,13 +1,13 @@
 require 'legacy_migration_spec_helper'
 
-describe NoteAttachmentMigrator do
+describe AttachmentMigrator do
   before :all do
     any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
       # Stub everything with a PNG so paperclip doesn't blow up
       stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
     end
 
-    NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+    AttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
   end
 
   describe ".migrate" do
@@ -54,7 +54,7 @@ describe NoteAttachmentMigrator do
           WHERE eca.entity_type = 'file' AND eca.comment_id = ec.id AND ef.id = eca.entity_id
         ").each do |legacy_attachment|
 
-          attachment = NoteAttachment.find_by_legacy_id(legacy_attachment["attachment_id"])
+          attachment = Attachment.find_by_legacy_id(legacy_attachment["attachment_id"])
           if attachment
             attachment.contents_file_name.should == legacy_attachment["file_name"].gsub(" ", "_")
             File.open(attachment.contents.path, 'r').read == legacy_attachment["file"]
@@ -65,27 +65,27 @@ describe NoteAttachmentMigrator do
 
     it "is idempotent for workfiles" do
       count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
-      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      AttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       after_migration_count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
       after_migration_count.should == count
     end
 
     it "is idempotent for datasets" do
       count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
-      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      AttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
       after_migration_count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
       after_migration_count.should == count
     end
 
     it "is idempotent for desktop attachments" do
-      count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
-      NoteAttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
-      after_migration_count = Legacy.connection.select_all("select count(*) from note_attachments").first["count"]
+      count = Legacy.connection.select_all("select count(*) from attachments").first["count"]
+      AttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      after_migration_count = Legacy.connection.select_all("select count(*) from attachments").first["count"]
       after_migration_count.should == count
     end
 
     it "migrates all the desktop attachments" do
-      count = Legacy.connection.select_all("select count(*) from note_attachments").first
+      count = Legacy.connection.select_all("select count(*) from attachments").first
       Legacy.connection.select_all("
         SELECT count(*) as count
         FROM edc_comment_artifact

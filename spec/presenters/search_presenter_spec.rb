@@ -117,7 +117,7 @@ describe SearchPresenter, :type => :view do
         attachments_hash.should have_key(:numFound)
         attachments_hash.should have_key(:results)
         attachments_hash[:results][0][:highlighted_attributes].should have_key(:name)
-        attachments_hash[:results][0][:entity_type].should == 'note_attachment'
+        attachments_hash[:results][0][:entity_type].should == 'attachment'
       end
 
       it "does not include the this_workspace key" do
