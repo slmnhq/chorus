@@ -7,7 +7,7 @@
         } else {
             return I18n.t(key, _.rest(arguments));
         }
-    }
+    };
 
     $.jGrowl.defaults.closerTemplate = '';
 

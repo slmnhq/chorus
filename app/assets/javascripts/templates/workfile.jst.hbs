@@ -15,7 +15,11 @@
         <a title="{{fileName}}" class="name" href="{{url}}">{{fileName}}</a>
     </div>
 
-    <div class="details"/>
+    <div class="details">
+        {{#if tableauWorkbook}}
+            {{fromTableau model}}
+        {{/if}}
+    </div>
 
     {{#if lastComment}}
         <div class="comment">

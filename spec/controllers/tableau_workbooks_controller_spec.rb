@@ -81,6 +81,12 @@ describe TableauWorkbooksController do
           post :create, params
         }.to change { LinkedTableauWorkfile.count }.by(1)
       end
+
+      it "should associate the publication with the workfile" do
+        post :create, params
+        publication = TableauWorkbookPublication.find(decoded_response.id)
+        LinkedTableauWorkfile.last.tableau_workbook_publication.should == publication
+      end
     end
 
     context "when the save fails" do

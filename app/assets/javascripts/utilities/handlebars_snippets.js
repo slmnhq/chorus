@@ -321,7 +321,7 @@
 
             result.append(t('tableau.body',
                 {
-                    tableauIcon: ($('<span/>').addClass('tableau_icon')).outerHtml(),
+                    tableauIcon: chorus.helpers.tableauIcon(),
                     workbookLink: workbookLink,
                     otherWorkbooksMenu: otherWorkbooksMenu,
                     count: tableauWorkbookSet.length
@@ -331,11 +331,23 @@
                 var list = $('<ul></ul>').addClass('other_menu');
                 _.each(_.rest(tableauWorkbookSet.models), function(workbook) {
                     list.append($('<li></li>').html(linkToContextObject(workbook)));
-                })
+                });
                 result.append(list);
             }
 
             return new Handlebars.SafeString(result.outerHtml());
+        },
+
+        fromTableau: function(workfile) {
+            return new Handlebars.SafeString(t('workfiles.tableau.from', {
+                    tableauIcon: chorus.helpers.tableauIcon(),
+                    tableauLink: chorus.helpers.linkTo(workfile.get('workbookUrl'), workfile.get('workbookName'))
+                }
+            ));
+        },
+
+        tableauIcon: function () {
+            return new Handlebars.SafeString(($('<span/>').addClass('tableau_icon')).outerHtml());
         },
         
         attachmentFoundIn: function(model) {

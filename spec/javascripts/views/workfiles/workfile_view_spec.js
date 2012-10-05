@@ -18,6 +18,17 @@ describe("chorus.views.Workfile", function() {
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
     });
 
+    context("when the workfile is a tableau workbook link", function () {
+        beforeEach(function () {
+            this.model.set({fileType: 'tableau_workbook', workbookUrl: 'http://tableau/hi', workbookName: 'Hi'});
+        });
+
+        it("should show workbook details", function () {
+            expect(this.view.$('.details a.tableau')).toHaveHref(this.model.get('workbookUrl'));
+            expect(this.view.$('.details a.tableau')).toHaveText(this.model.get('workbookName'));
+        });
+    });
+
     // TODO: make these work with new api and fixtures [#37135825]
     xcontext("when the workfile has one comment", function() {
         it("includes the most recent comment body", function() {

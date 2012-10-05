@@ -3,6 +3,7 @@ class TableauWorkbookPublication < ActiveRecord::Base
 
   belongs_to :dataset
   belongs_to :workspace
+  belongs_to :linked_tableau_workfile
 
   def workbook_url
     base_url = Chorus::Application.config.chorus['tableau.url']

@@ -197,6 +197,12 @@ FixtureBuilder.configure do |fbuilder|
         :project_url => publication.project_url
     )
 
+    LinkedTableauWorkfile.create({:file_name => 'tableau',
+                                  :workspace => public_workspace,
+                                  :owner => owner,
+                                  :tableau_workbook_publication => publication
+                                 }, :without_protection => true)
+
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
 

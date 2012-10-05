@@ -1,18 +1,6 @@
 .published_to {
   @extend .dataset_metadata;
   display: inline-block;
-
-  .tableau_icon {
-    display:inline-block;
-    vertical-align:-3px;
-
-    margin-left:1px;
-    margin-right:2px;
-
-    height: 16px;
-    width:16px;
-    background-image: url("/images/tableau_icon.png");
-  }
 }
 
 .workspace_association {

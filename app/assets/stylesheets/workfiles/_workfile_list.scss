@@ -2,4 +2,17 @@
 
 ul.workfile_list {
     @include recent-comment;
+
+  li .details {
+    position: relative;
+    margin: 4px 0;
+    color: $color-text2;
+    font-size: 12px;
+    vertical-align: top;
+    line-height: 18px;
+
+    a {
+      font-size: 12px;
+    }
+  }
 }

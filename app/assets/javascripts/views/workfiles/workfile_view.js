@@ -23,15 +23,18 @@ chorus.views.Workfile = chorus.views.Base.extend({
 
         ctx.activeWorkspace = this.options.activeWorkspace;
 
+        ctx.tableauWorkbook = this.model.get('fileType') == 'tableau_workbook';
+        ctx.tableauIcon = chorus.helpers.tableauIcon();
+
         var lastComment = this.model.lastComment();
         if (lastComment) {
-            var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"))
+            var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"));
 
             ctx.lastComment = {
                 body:lastComment.get("body"),
                 creator:lastComment.author(),
                 on:date && date.toString("MMM d")
-            }
+            };
 
             ctx.otherCommentCount = parseInt(this.model.get("commentCount"), 10) - 1;
         }
