@@ -305,26 +305,26 @@ resource "Workspaces" do
     end
   end
 
-  put "/workspaces/:workspace_id/csv/:id/import" do
+  post "/workspaces/:workspace_id/csv/:id/import" do
     parameter :workspace_id, "Workspace Id"
-    parameter :id, "CSV File Id"
+    parameter :csv_id, "CSV File Id"
     parameter :type, "Table type ( existingTable, newTable )"
     parameter :columns_map, "Mapping of columns from CSV to table ( only for existing table )"
     parameter :to_table, "Target table name"
     parameter :file_contains_header, "Does the CSV file contain a header row? ( true, false )"
 
-    required_parameters :workspace_id, :id, :type, :to_table, :file_contains_header
+    required_parameters :workspace_id, :csv_id, :type, :to_table, :file_contains_header
     scope_parameters :csvimport, [:type, :columns_map, :to_table, :file_contains_header]
 
     let(:csv_file) { csv_files(:default) }
 
-    let(:id)           { csv_file.id }
+    let(:csv_id)       { csv_file.id }
     let(:type)         { "existingTable" }
     let(:to_table)     { "a_fine_table" }
     let(:file_contains_header) { "true" }
     let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
 
-    example_request "Import a CSV file" do
+    example_request "Complete import of a CSV file" do
       status.should == 200
     end
   end
