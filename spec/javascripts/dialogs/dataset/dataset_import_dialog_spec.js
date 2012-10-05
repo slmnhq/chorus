@@ -424,7 +424,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("does not modify the existing CSV (so that if someone cancels back to this modal, old data doesn't bleed through to future versions of import)", function() {
-                            expect(this.dialog.csv.has('contents')).toBeFalsy();
+                            expect(this.dialog.csvImport.has('contents')).toBeFalsy();
                         });
 
                         it("launches the import new table dialog", function() {
@@ -466,7 +466,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("does not modify the dialog's CSV (to avoid weirdness when cancelling)", function() {
-                            expect(this.dialog.csv.has('contents')).toBeFalsy();
+                            expect(this.dialog.csvImport.has('contents')).toBeFalsy();
                         });
 
                         it("does not launch the import new table dialog", function() {

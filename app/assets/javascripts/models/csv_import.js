@@ -1,6 +1,6 @@
 chorus.models.CSVImport = chorus.models.Base.extend({
     constructorName: "CSVImport",
-    urlTemplate: "workspaces/{{workspaceId}}/csv/{{id}}/import",
+    urlTemplate: "workspaces/{{workspaceId}}/csv/{{csvId}}/imports",
 
     declareValidations:function (newAttrs) {
         if (this.get("destinationType") !== "existing") {

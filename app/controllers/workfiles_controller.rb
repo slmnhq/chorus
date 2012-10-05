@@ -1,7 +1,7 @@
 require 'will_paginate/array'
 
 class WorkfilesController < ApplicationController
-  wrap_parameters :exclude => []
+  wrap_parameters :csv, :exclude => []
 
   def show
     workfile = Workfile.find(params[:id])
@@ -53,17 +53,18 @@ class WorkfilesController < ApplicationController
 
   def create_workfile(workspace)
     workfile = nil
+    workfile_params = params[:csv]
     Workfile.transaction do
-      if params[:workfile][:svg_data]
-        workfile = Workfile.create_from_svg(params[:workfile], workspace, current_user)
+      if workfile_params[:svg_data]
+        workfile = Workfile.create_from_svg(workfile_params, workspace, current_user)
       else
-        workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
+        workfile = Workfile.create_from_file_upload(workfile_params, workspace, current_user)
       end
 
       Events::WorkfileCreated.by(current_user).add(
         :workfile => workfile,
         :workspace => workspace,
-        :commit_message => params[:workfile][:description]
+        :commit_message => workfile_params[:description]
       )
 
       workspace.has_added_workfile = true

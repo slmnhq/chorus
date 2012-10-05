@@ -77,7 +77,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     makeModel: function() {
-        this.resource = this.model = this.csv = new chorus.models.CSVImport({ workspaceId: this.options.workspaceId });
+        this.resource = this.model = this.csvImport = new chorus.models.CSVImport({ workspaceId: this.options.workspaceId });
         this.csvOptions = {hasHeader: true};
     },
 
@@ -96,25 +96,34 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".import_controls input[type=radio]").prop("disabled", true);
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/workspace/" + this.options.workspaceId + "/workfile";
+            this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/workfiles";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
 
         } else {
             this.csvOptions.tableName = this.importDestination();
 
-            this.csv.set({
+            this.csvImport.set({
                 destinationType: this.importTarget,
                 toTable: this.importDestination(),
                 truncate: this.$(".existing_table input#truncate").is(':checked')
             }, {silent: true});
 
-            this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/csv";
-
-            if (this.csv.performValidation()) {
+            if (this.csvImport.performValidation()) {
                 this.$("button.submit").startLoading("actions.uploading");
                 this.clearErrors();
+                this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/csv";
+                this.uploadObj.type = "POST";
+                this.uploadObj.source = "fs";
                 this.request = this.uploadObj.submit();
+//
+//                this.request = $.ajax({
+//                    type: 'POST',
+//                    url: "/workspaces/" + this.options.workspaceId + "/csv",
+//                    source: "fs",
+//                    data: this.uploadObj.data
+//                });
+//                this.request = this.uploadObj.submit();
             } else {
                 this.$("button.choose").prop("disabled", false);
                 this.$(".file-wrapper a").removeClass("hidden");
@@ -170,21 +179,24 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
             chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
         } else {
-            var workingCsv = this.model.clone();
-            workingCsv.set(workingCsv.parse(data.result), {silent: true});
+            var workingCsvImport = this.csvImport.clone();
+            var contents = data.result.response.contents;
+            this.csvOptions.contents = contents;
+            var csvId = data.result.response.id;
+            workingCsvImport.set({
+                csvId:csvId,
+                contents:contents});
 
-            this.csvOptions.contents = workingCsv.get('contents');
-
-            var csvParser = new chorus.utilities.CsvParser(workingCsv.get('contents'), this.csvOptions);
+            var csvParser = new chorus.utilities.CsvParser(contents, this.csvOptions);
             if ((csvParser.getColumnOrientedData().length === 0) && !csvParser.serverErrors) {
                 var alert = new chorus.alerts.EmptyCSV();
                 alert.launchModal();
             } else {
                 var dialog;
                 if (this.importTarget === "existing") {
-                    dialog = new chorus.dialogs.ExistingTableImportCSV({model: workingCsv, datasetId: this.selectedDataset.get("id"), csvOptions: this.csvOptions});
+                    dialog = new chorus.dialogs.ExistingTableImportCSV({model: workingCsvImport, datasetId: this.selectedDataset.get("id"), csvOptions: this.csvOptions});
                 } else {
-                    dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsv, csvOptions: this.csvOptions});
+                    dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsvImport, csvOptions: this.csvOptions});
                 }
                 chorus.PageEvents.subscribe("csv_import:started", this.closeModal, this);
                 dialog.launchModal();

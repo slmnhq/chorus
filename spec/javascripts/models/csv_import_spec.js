@@ -1,13 +1,17 @@
 describe("chorus.models.CSVImport", function() {
     beforeEach(function() {
         this.model = rspecFixtures.csvImport();
+        this.model.set({
+                csvId:this.model.id,
+                id:null
+            });
     });
 
     describe("#urlTemplate", function() {
         it("should have the correct url", function() {
             this.model.set({workspaceId: '7'});
 
-            expect(this.model.url()).toMatchUrl("/workspaces/7/csv/" + this.model.get('id') + "/import");
+            expect(this.model.url()).toMatchUrl("/workspaces/7/csv/" + this.model.get('csvId') + "/imports");
         });
     });
 
