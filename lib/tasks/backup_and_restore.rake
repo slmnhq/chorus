@@ -10,13 +10,15 @@ namespace :backup do
 
       db_config = Rails.application.config.database_configuration[Rails.env]
       timestamp = Time.current.strftime('%Y%m%d_%H%M%S')
-      db_filename = "#{backup_dir}/greenplum_chorus_pg_db_#{timestamp}.sql.gz"
+      db_filename = "database.sql.gz"
 
-      system "pg_dump -p #{db_config['port']} #{db_config['database']} | gzip > #{db_filename}" or raise "Backing up data failed."
-      puts "Wrote file #{db_filename}"
+      temp_dir = Dir.mktmpdir("greenplum_chorus_backup_")
 
-      puts "Backing up assets..."
-      asset_filename = "#{backup_dir}/greenplum_chorus_assets_#{timestamp}.tgz"
+      puts "Dumping database contents..."
+      system "pg_dump -p #{db_config['port']} #{db_config['database']} | gzip > #{temp_dir}/#{db_filename}" or raise "Backing up data failed."
+
+      puts "Compressing assets..."
+      asset_filename = "assets.tgz"
 
       files = ['config/chorus.yml',
                config_path('csv_import_file_storage_path'),
@@ -26,12 +28,15 @@ namespace :backup do
       ]
 
       asset_list = files.join ' '
-      system "tar czf #{asset_filename} #{asset_list}" or raise "Backing up assets failed."
+      system "tar czf #{temp_dir}/#{asset_filename} #{asset_list}" or raise "Backing up assets failed."
 
-      puts "Wrote file #{asset_filename}"
-    rescue => e
-      system "rm -f #{db_filename} #{asset_filename}"
-      raise e
+      system "cp version_build #{temp_dir}" or raise "Backing up version_build file failed."
+
+      backup_filename = "#{backup_dir}/greenplum_chorus_#{timestamp}.tar"
+      system "cd #{temp_dir} && (tar cf #{backup_filename} .)" or raise "Packaging backup failed."
+      puts "Wrote file #{backup_filename}."
+    ensure
+      system "rm -rf #{temp_dir}"
     end
   end
 
