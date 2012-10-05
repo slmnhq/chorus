@@ -22,11 +22,13 @@ describe WorkspaceCsvController do
       }
     end
 
-    it "saves the user and workspace onto the csv file" do
+    it "returns a saved model including the user and workspace of the csv file" do
+      mock_present do |csv_file|
+        csv_file.user.should == user
+        csv_file.workspace.should == workspace
+        csv_file.should be_persisted
+      end
       post :create, csv_file_params
-      csv_file = CsvFile.last
-      csv_file.user.should == user
-      csv_file.workspace.should == workspace
     end
 
     context "when truncate is set to true" do
