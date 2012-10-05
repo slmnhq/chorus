@@ -305,7 +305,7 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:workspace_id/csv/:id/import" do
+  post "/workspaces/:workspace_id/csv/:csv_id/imports" do
     parameter :workspace_id, "Workspace Id"
     parameter :csv_id, "CSV File Id"
     parameter :type, "Table type ( existingTable, newTable )"
