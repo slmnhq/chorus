@@ -29,6 +29,7 @@ install_answers.txt
 /system/users/*
 /system/workspaces/*
 /system/note_attachments/*
+/system/attachments/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
