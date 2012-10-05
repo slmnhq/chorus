@@ -26,7 +26,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
     end
 
     it "has a human text for size" do
-      hash[:sandboxes_size].should == view.number_to_human_size(10 * gpdb_instance.used_by_workspaces(user).count)
+      hash[:sandboxes_size].should == view.number_to_human_size(hash[:sandboxes_size_in_bytes])
     end
 
     context "with several workspaces using the same sandbox" do
