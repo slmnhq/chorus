@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # run this from the rails root.
-# Actual link: http://bitcast-a.v1.sjc1.bitgravity.com/greenplum/Greenplum_CE_Database/database_server/4.2.1.0/gpdb421ee.tar.gz
 
 command=$1
 
@@ -17,7 +16,7 @@ function start () {
 		mkdir -p tmp/
 		if [ ! -e tmp/gpdb421ee.tar.gz ]; then
 			echo "Greenplum VM archive not found. Downloading from local mirror..."
-			wget -O tmp/gpdb421ee.tar.gz http://greenplum-ci/~ci/gpdb421ee.tar.gz
+			wget -O tmp/gpdb421ee.tar.gz http://bitcast-a.v1.sjc1.bitgravity.com/greenplum/Greenplum_CE_Database/database_server/4.2.1.0/gpdb421ee.tar.gz
 		fi
 
 		# Download it here from a mirror or the Greenplum website
