@@ -75,7 +75,7 @@ describe WorkspaceCsvImportsController do
           end
 
           it "makes a FILE_IMPORT_CREATED event with no associated dataset" do
-            post :create nts::FileImportCreated.first
+            post :create, Events::FileImportCreated.first
             event.actor.should == user
             event.dataset.should be_nil
             event.workspace.should == workspace
