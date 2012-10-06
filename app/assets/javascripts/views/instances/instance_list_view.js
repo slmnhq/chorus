@@ -35,7 +35,9 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         if (this.selectedInstance) {
             this.$('.instance_provider li[' + this.selectedInstance.dataBinding + '=' + this.selectedInstance.get("id") + ']').click();
         } else {
-            this.$('.instance_provider li:first').click();
+            if(this.greenplumInstances.loaded) {
+                this.$('.instance_provider li:first').click();
+            }
         }
     },
 

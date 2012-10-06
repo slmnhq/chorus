@@ -27,16 +27,15 @@ describe("chorus.views.InstanceList", function() {
 
     context("when the instances are fetched", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.greenplumInstances, [
-                rspecFixtures.greenplumInstance({name : "GP9", id:"g9"}),
-                rspecFixtures.greenplumInstance({name : "gP1", id: "g1"}),
-                rspecFixtures.greenplumInstance({name : "GP10", id: "g10"})
-            ]);
-
             this.server.completeFetchFor(this.hadoopInstances, [
                 rspecFixtures.hadoopInstance({name : "Hadoop9", id: "h9"}),
                 rspecFixtures.hadoopInstance({name : "hadoop1", id: "h1"}),
                 rspecFixtures.hadoopInstance({name : "Hadoop10", id: "h10"})
+            ]);
+            this.server.completeFetchFor(this.greenplumInstances, [
+                rspecFixtures.greenplumInstance({name : "GP9", id:"g9"}),
+                rspecFixtures.greenplumInstance({name : "gP1", id: "g1"}),
+                rspecFixtures.greenplumInstance({name : "GP10", id: "g10"})
             ]);
         });
 
@@ -71,6 +70,7 @@ describe("chorus.views.InstanceList", function() {
         it("pre-selects the first instance", function() {
             expect(this.view.$("li:first-child")).toHaveClass("selected");
             expect(this.view.$("li.selected").length).toBe(1);
+            expect(this.view.$("li.selected").data("type")).toBe("greenplum");
         });
 
         describe("when an instance is destroyed", function() {
