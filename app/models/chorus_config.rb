@@ -33,6 +33,10 @@ class ChorusConfig
      self['tableau.password'] && true)
   end
 
+  def kaggle_configured?
+    (self['kaggle.url'] && self['kaggle.token'] && true)
+  end
+
   def self.config_file_path(root_dir=nil)
     root_dir = Rails.root unless root_dir
     File.join root_dir, 'config/chorus.yml'

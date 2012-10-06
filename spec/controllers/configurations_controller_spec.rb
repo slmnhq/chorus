@@ -24,6 +24,13 @@ describe ConfigurationsController do
       decoded_response.tableau_configured.should == 'value'
     end
 
+    it "includes the kaggle_configured? value" do
+      stub(Chorus::Application.config.chorus).kaggle_configured? { 'value' }
+      get :show
+      response.code.should == "200"
+      decoded_response.kaggle_configured.should == 'value'
+    end
+
     it "gpfdist_configured is true when config.gpfdist_configured? is true" do
       stub(Chorus::Application.config.chorus).gpfdist_configured? { true }
       get :show

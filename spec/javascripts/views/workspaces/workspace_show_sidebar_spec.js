@@ -79,6 +79,22 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
         });
 
+        context("when kaggle is configured", function() {
+            it("displays the find kaggle contributors link", function() {
+                chorus.models.Config.instance().set({ kaggleConfigured: true });
+                this.view.render();
+                expect(this.view.$("a.kaggle")).toExist();
+            });
+        });
+
+        context("when kaggle isnt configured", function() {
+            it("doesnt display the find kaggle contributors link", function() {
+                chorus.models.Config.instance().set({ kaggleConfigured: false });
+                this.view.render();
+                expect(this.view.$("a.kaggle")).not.toExist();
+            });
+        });
+
         context("when the current user has workspace admin permissions on the workspace", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(true);
@@ -169,6 +185,14 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             it("does not have 'add a note' or 'ad an insight' link", function() {
                expect(this.view.$('a[data-dialog="NotesNew"]')).not.toExist();
                expect(this.view.$('a[data-dialog="InsightsNew"]')).not.toExist();
+            });
+
+            context("when kaggle is configured", function() {
+                it("does not display the find kaggle contributor button", function() {
+                    chorus.models.Config.instance().set({ kaggleConfigured: true });
+                    this.view.render();
+                    expect(this.view.$("a.kaggle")).not.toExist();
+                });
             });
         });
 

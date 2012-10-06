@@ -37,6 +37,10 @@ tableau:
   username: 'chorusadmin'
   password: 'secret'
 
+kaggle:
+  url: 'blah.com'
+  token: 'blahtoken'
+
 ldap:
   host: 10.32.88.212
   enable: false

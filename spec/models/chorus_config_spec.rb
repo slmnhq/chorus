@@ -65,6 +65,28 @@ describe ChorusConfig do
     end
   end
 
+  describe "#kaggle_configured?" do
+    let(:kaggle_config) do
+      {
+          'url' => 'localhost',
+          'token' => '1234'
+      }
+    end
+
+    it 'returns true if the tableau url/port and username/password are configured' do
+      config.config = { 'kaggle' =>  kaggle_config }
+      config.kaggle_configured?.should be_true
+    end
+
+    it 'returns false if any of the keys are missing' do
+      kaggle_config.each do |key, _value|
+        invalid_config = kaggle_config.reject { |attr, _value| attr == key }
+        config.config = { 'kaggle' => invalid_config }
+        config.should_not be_kaggle_configured
+      end
+    end
+  end
+
   describe "#gpfdist_configured?" do
     it "returns true if all the gpfdist keys are set" do
       config.config = {

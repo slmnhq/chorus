@@ -26,7 +26,12 @@
                         <li><a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="{{id}}">{{t "sandbox.create_a_sandbox"}}</a></li>
                     {{/unless}}
                 {{/if}}
-            <li><a class="alert" href="#" data-alert="WorkspaceDelete">{{t "actions.delete_workspace"}}</a></li>
+            {{/if}}
+            {{#if kaggleConfigured}}
+                <li><a class="kaggle" href="#" >{{t "actions.workspace_find_kaggle_contributors"}}</a></li>
+            {{/if}}
+            {{#if workspaceAdmin}}
+                <li><a class="alert" href="#" data-alert="WorkspaceDelete">{{t "actions.delete_workspace"}}</a></li>
             {{/if}}
         </ul>
     </div>
