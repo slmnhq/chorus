@@ -25,31 +25,12 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         var self = this;
         var url, params;
 
-        if (this.model.get("type") == "CHORUS_VIEW") {
-            url = "/workspaces/" + this.model.get("workspace").id + "/datasets/" + this.model.get("id");
-            params = {
-                targetWorkspaceId: this.selectedItem().get("id"),
-                objectName: this.model.get("objectName")
-            };
+        var datasetSet = this.selectedItem().datasets();
+        datasetSet.reset([this.model]);
+        this.bindings.add(datasetSet, "saved", this.saved);
+        this.bindings.add(datasetSet, "saveFailed", this.bulkSaveFailed);
 
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: "json",
-
-                data: params,
-
-                success: this.saved,
-                error: this.saveFailed
-            });
-        } else {
-            var datasetSet = this.selectedItem().datasets();
-            datasetSet.reset([this.model]);
-            this.bindings.add(datasetSet, "saved", this.saved);
-            this.bindings.add(datasetSet, "saveFailed", this.bulkSaveFailed);
-
-            datasetSet.save();
-        }
+        datasetSet.save();
         this.$("button.submit").startLoading("actions.associating");
     },
 

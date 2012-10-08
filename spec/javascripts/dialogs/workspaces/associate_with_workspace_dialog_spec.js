@@ -56,7 +56,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     });
 
     describe("clicking Associate Dataset", function() {
-        context("for anything except a Chorus View", function() {
+        context("for a dataset that is not a chorus_view", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.dataset();
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one" });
@@ -169,13 +169,15 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("calls the API", function() {
-                expect(_.last(this.server.requests).url).toMatchUrl("/workspaces/987/datasets/" + this.model.get("id"));
-                expect(_.last(this.server.requests).params()).toEqual({
-                    targetWorkspaceId: this.workspace.get("id"),
-                    objectName: this.model.get("objectName")
+            it("calls the API for associating datasets with a workspace", function() {
+                var uri = new URI(this.server.lastCreate().url);
+
+                expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
+                expect(uri.query(true)).toEqual({
+                    'dataset_ids': this.model.id,
+                    page: '1',
+                    per_page: '50'
                 });
-                expect(_.last(this.server.requests).method).toBe("POST");
             });
         });
     });
