@@ -1,7 +1,3 @@
-
-
-
-
 describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.InstancesNew();
@@ -172,6 +168,32 @@ describe("chorus.dialogs.InstancesNew", function() {
                     });
                 });
             });
+        });
+    });
+
+    context("when gnip is configured", function() {
+        beforeEach(function() {
+            chorus.models.Config.instance().set({ gnipConfigured: true });
+            this.dialog = new chorus.dialogs.InstancesNew();
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.dialog.render();
+        });
+
+        it("shows the 'Register an existing GNIP instance' option", function() {
+            expect(this.dialog.$(".register_existing_gnip input[type=radio]")).toExist();
+        });
+    });
+
+    context("when gnip is not configured", function() {
+        beforeEach(function() {
+            chorus.models.Config.instance().set({ gnipConfigured: false });
+            this.dialog = new chorus.dialogs.InstancesNew();
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.dialog.render();
+        });
+
+        it("does not show the 'Register an existing GNIP instance' option", function() {
+            expect(this.dialog.$(".register_existing_gnip input[type=radio]")).not.toExist();
         });
     });
 

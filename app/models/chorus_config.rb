@@ -33,6 +33,10 @@ class ChorusConfig
      self['tableau.password'] && true)
   end
 
+  def gnip_configured?
+    (self['gnip.url'] && self['gnip.port'] && true)
+  end
+
   def kaggle_configured?
     (self['kaggle.url'] && self['kaggle.token'] && true)
   end

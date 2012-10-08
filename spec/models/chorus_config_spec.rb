@@ -87,6 +87,28 @@ describe ChorusConfig do
     end
   end
 
+  describe "#gnip_configured?" do
+    let(:gnip_config) do
+      {
+          'url' => 'localhost',
+          'port' => '1234'
+      }
+    end
+
+    it 'returns true if the gnip url/port' do
+      config.config = { 'gnip' =>  gnip_config }
+      config.gnip_configured?.should be_true
+    end
+
+    it 'returns false if any of the keys are missing' do
+      gnip_config.each do |key, _value|
+        invalid_config = gnip_config.reject { |attr, _value| attr == key }
+        config.config = { 'gnip' => invalid_config }
+        config.should_not be_gnip_configured
+      end
+    end
+  end
+
   describe "#gpfdist_configured?" do
     it "returns true if all the gpfdist keys are set" do
       config.config = {
