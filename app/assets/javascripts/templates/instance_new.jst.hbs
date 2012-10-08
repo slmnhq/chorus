@@ -81,8 +81,7 @@
         <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_gnip_help_text"}}'/>
     </legend>
     <div><form>
-        <input type="hidden" name="provision_type" value="registergnip" />
-        <input class="hidden" type="checkbox" name="shared" checked="checked"/>
+        <input type="hidden" name="provision_type" value="registerGnip" />
 
         <label class="required">{{t "instances.dialog.gnip_instance_name"}}</label>
         <input type="text" name="name" maxlength="44"/>
@@ -98,7 +97,7 @@
         <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
         <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>
         <input class="gnip_username" type="text" name="username" maxlength="255"/>
-        <input class="gnip_password" type="text" name="password" maxlength="255"/>
+        <input class="gnip_password" type="password" name="password" maxlength="255"/>
     </form></div>
 </fieldset>
 {{/if}}

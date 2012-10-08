@@ -77,6 +77,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         var instanceType = this.$("input[name=instance_type]").filter(":checked").attr("id");
         if (instanceType === "register_existing_hadoop") {
             return chorus.models.HadoopInstance;
+        } else if (instanceType === "register_existing_gnip") {
+            return chorus.models.GnipInstance;
         } else {
             return chorus.models.GreenplumInstance;
         }

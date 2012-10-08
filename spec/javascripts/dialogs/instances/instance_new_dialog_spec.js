@@ -210,7 +210,7 @@ describe("chorus.dialogs.InstancesNew", function() {
         beforeEach(function() {
             this.dialog.render();
             chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
-            this.server.completeFetchFor(chorus.models.Config.instance());
+            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433 }));
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
         });
 
@@ -363,6 +363,38 @@ describe("chorus.dialogs.InstancesNew", function() {
                         expect(attrs.host).toBeUndefined();
                     });
                 });
+            });
+
+            testUpload();
+        });
+
+        context("using register existing gnip instance", function() {
+            beforeEach(function() {
+                section = this.dialog.$(".register_existing_gnip");
+                section.find("input[type=radio]").attr('checked', true).change();
+                section.find("input[name=name]").val("Gnip_Name");
+                section.find("textarea[name=description]").val("Gnip Description");
+                section.find("input[name=host]").val("gnip.bar");
+                section.find("input[name=port]").val("1234");
+                section.find("input[name=username]").val("gnip_user");
+                section.find("input[name=password]").val("my_password");
+
+                spyOn(chorus.models.GnipInstance.prototype, "save").andCallThrough();
+            });
+
+            it("calls save on the dialog's model", function() {
+                this.dialog.$("button.submit").click();
+                expect(this.dialog.model.save).toHaveBeenCalled();
+
+                var attrs = this.dialog.model.save.calls[0].args[0];
+
+                expect(attrs.name).toBe("Gnip_Name");
+                expect(attrs.provision_type).toBe("registerGnip");
+                expect(attrs.description).toBe("Gnip Description");
+                expect(attrs.host).toBe("gnip.bar");
+                expect(attrs.port).toBe("1234");
+                expect(attrs.username).toBe("gnip_user");
+                expect(attrs.password).toBe("my_password");
             });
 
             testUpload();
