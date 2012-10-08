@@ -8,7 +8,8 @@ class Attachment < ActiveRecord::Base
 
   before_post_process :contents_are_image?
 
-  belongs_to :note, :class_name => 'Events::Note'
+  #TODO: eager loading :attachments => :note requires this condition to be here, eager loading bug? - BL
+  belongs_to :note, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'"
 
   validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['attachment'].megabytes, :message => :file_size_exceeded
 
