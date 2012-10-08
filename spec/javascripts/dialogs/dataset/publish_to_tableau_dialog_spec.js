@@ -14,6 +14,12 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         expect(this.dialog.$("input[name='create_work_file']")).toBeChecked();
     });
 
+    it("unchecking the create workfile checkbox", function() {
+        this.dialog.$("input[name='create_work_file']").attr('checked', false);
+        this.dialog.$("button.submit").click();
+        expect(this.dialog.$("input[name='create_work_file']")).not.toBeChecked();
+    });
+
     describe("when publish is clicked", function () {
         beforeEach(function () {
             this.dialog.$("input[name='name']").val("foo");
