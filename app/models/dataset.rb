@@ -88,7 +88,7 @@ class Dataset < ActiveRecord::Base
       begin
         dataset.save! if dataset.changed?
         found_datasets << dataset
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, MultipleResultsetQuery::QueryError
       end
     end
 
