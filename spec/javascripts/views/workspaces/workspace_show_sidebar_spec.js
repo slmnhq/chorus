@@ -83,7 +83,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             it("displays the find kaggle contributors link", function() {
                 chorus.models.Config.instance().set({ kaggleConfigured: true });
                 this.view.render();
-                expect(this.view.$("a.kaggle")).toExist();
+                expect(this.view.$("a.kaggle")).toHaveHref(this.view.model.showUrl()+"/kaggle")
             });
         });
 

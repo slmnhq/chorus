@@ -1,0 +1,14 @@
+@import "_common.scss";
+
+.kaggle_header {
+  .summary {
+    @include font-normal-delta;
+    width: 75%;
+    margin-bottom: 10px;
+  }
+
+  img {
+    height: 50px;
+    width: 150px;
+  }
+}
