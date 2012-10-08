@@ -95,19 +95,27 @@ describe WorkspacePresenter, :type => :view do
           Timecop.freeze(1.day.ago) do
             @comment = Comment.create!(:text => 'comment body of event', :author_id => @user.id, :event_id => event.id)
           end
-          insight = Events::NoteOnWorkspace.create(:workspace => @workspace, :body => 'insight body', :actor => @user, :insight => true)
-          Comment.create!(:text => 'comment body of insight', :author_id => @user.id, :event_id => insight.id)
-          Comment.create!(:text => 'comment body of insight 2', :author_id => @user.id, :event_id => insight.id)
-          Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -1', :actor => @user)
-          Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -2', :actor => @user)
+          Timecop.freeze(1.minute.ago) do
+            insight = Events::NoteOnWorkspace.create(:workspace => @workspace, :body => 'insight body', :actor => @user, :insight => true)
+            Comment.create!(:text => 'comment body of insight', :author_id => @user.id, :event_id => insight.id)
+            Comment.create!(:text => 'comment body of insight 2', :author_id => @user.id, :event_id => insight.id)
+            @event_to_be_promoted = Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -1', :actor => @user)
+            Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -2', :actor => @user)
+          end
+          @event_to_be_promoted.insight = true
+          @event_to_be_promoted.save!
         end
 
         it "should have the correct values for latest comments/insights" do
-          hash[:number_of_comments].should == 5
-          hash[:number_of_insights].should == 1
+          hash[:number_of_comments].should == 4
+          hash[:number_of_insights].should == 2
           hash[:latest_comment_list].size.should == 5
           hash[:latest_comment_list].should_not include(@presenter.present(event))
           hash[:latest_comment_list].should_not include(@presenter.present(@comment))
+        end
+
+        it "uses updated_at timestamp to sort" do
+          hash[:latest_comment_list][4].should == (@presenter.present(@event_to_be_promoted))
         end
       end
     end
