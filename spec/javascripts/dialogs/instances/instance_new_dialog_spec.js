@@ -173,7 +173,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
     context("when gnip is configured", function() {
         beforeEach(function() {
-            chorus.models.Config.instance().set({ gnipConfigured: true });
+            chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: "443" });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
@@ -181,6 +181,15 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         it("shows the 'Register an existing GNIP instance' option", function() {
             expect(this.dialog.$(".register_existing_gnip input[type=radio]")).toExist();
+        });
+
+        describe("clicking on the radio button", function () {
+            it("shows the gnip url and port", function () {
+                expect(this.dialog.$(".register_existing_gnip input[name=host]").val()).toBe("www.example.com");
+                expect(this.dialog.$(".register_existing_gnip input[name=host]")).toBeDisabled();
+                expect(this.dialog.$(".register_existing_gnip input[name=port]").val()).toBe("443");
+                expect(this.dialog.$(".register_existing_gnip input[name=port]")).toBeDisabled();
+            });
         });
     });
 

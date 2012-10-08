@@ -90,10 +90,10 @@
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "instances.dialog.host"}} </label>
-        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
-        <input type="text" name="host"/>
-        <input type="text" name="port"/>
+        <label class="required" name="host">{{t "instances.dialog.gnip_url"}} </label>
+        <label class="required" name="port">{{t "instances.dialog.gnip_port"}}</label>
+        <input type="text" name="host" value="{{gnipUrl}}" disabled="disabled"/>
+        <input type="text" name="port" value="{{gnipPort}}" disabled="disabled"/>
 
         <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
         <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>
