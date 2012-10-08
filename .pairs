@@ -18,7 +18,7 @@ pairs:
   gd: George Dean; gdean
   ft: Fiona Tay; fiona
   do: Daniel Onggunhao; donggunhao
-  cb: Chris Brown
+  cb: Chris Brown; cbrown
 
 email:
   prefix: pair
