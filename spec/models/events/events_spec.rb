@@ -576,4 +576,27 @@ describe "Event types" do
     it_creates_activities_for { [actor, workspace, dataset] }
     it_does_not_create_a_global_activity
   end
+
+  describe "TableauWorkfileCreated" do
+    let(:workfile) { workfiles(:tableau) }
+
+    subject do
+      Events::TableauWorkfileCreated.add(
+          :actor => actor,
+          :workspace => workspace,
+          :dataset => dataset,
+          :workfile => workfile,
+          :workbook_name => "testingbook",
+          :workbook_url => "test.com/workbook/testingbook"
+      )
+    end
+
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == { :workspace => workspace, :dataset => dataset, :workfile => workfile } }
+    its(:additional_data) { should == { 'workbook_name' => "testingbook", 'workbook_url' => 'test.com/workbook/testingbook'} }
+
+    it_creates_activities_for { [actor, workspace, dataset, workfile] }
+    it_does_not_create_a_global_activity
+  end
 end

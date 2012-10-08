@@ -71,6 +71,12 @@ describe TableauWorkbooksController do
           post :create, params
         }.not_to change { Workfile.count }
       end
+
+      it "should only create one event, for publishing the tableau workbook" do
+        expect {
+          post :create, params
+        }.to change { Events::Base.count }.by(1)
+      end
     end
 
     context "when also creating tableau workfile" do
@@ -86,6 +92,22 @@ describe TableauWorkbooksController do
         post :create, params
         publication = TableauWorkbookPublication.find(decoded_response.id)
         LinkedTableauWorkfile.last.tableau_workbook_publication.should == publication
+      end
+
+      it "should add two events, for both publishing the workbook and creating the workfile" do
+        any_instance_of(TableauWorkbookPublication) do |workbook|
+          stub(workbook).workbook_url { "foo.com" }
+        end
+
+        expect {
+          post :create, params
+        }.to change { Events::Base.count }.by(2)
+        event = Events::TableauWorkfileCreated.first
+        event.dataset.should == dataset
+        event.workfile.should == LinkedTableauWorkfile.last
+        event.workspace.should == workspace
+        event.workbook_name.should == "myTableauWorkbook"
+        event.workbook_url.should == "foo.com"
       end
     end
 

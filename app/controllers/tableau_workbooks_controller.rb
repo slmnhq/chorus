@@ -26,6 +26,14 @@ class TableauWorkbooksController < ApplicationController
         workfile.owner = current_user
         workfile.tableau_workbook_publication = publication
         publication.workspace.workfiles << workfile
+
+        Events::TableauWorkfileCreated.by(current_user).add(
+            :dataset => publication.dataset,
+            :workfile => publication.linked_tableau_workfile,
+            :workspace => publication.workspace,
+            :workbook_name => publication.name,
+            :workbook_url => publication.workbook_url
+        )
       end
       render :json => {
           :response => {

@@ -1253,6 +1253,36 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("tableau workbook published", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.tableauWorkfileCreated({
+                workspace: { id: 55, name: "paleo_eaters" },
+                workbookName: "fancy_workbook",
+                workbookUrl: "http://example.com/workbooks/fancy_workbook"
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            workfile = model.workfile();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.TableauWorkfileCreated.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    datasetType: t("dataset.types.query"),
+                    tableauWorkbookLink: "<a href='http://example.com/workbooks/fancy_workbook' target='_blank'>fancy_workbook</a>",
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

@@ -262,6 +262,11 @@
                 computed: ["datasetType", "tableauWorkbookLink", "tableauProjectLink"]
             },
 
+            TableauWorkfileCreated: {
+                links: ["actor", "workspace", "dataset", "workfile"],
+                computed: ["datasetType", "tableauWorkbookLink"]
+            },
+
             SUB_COMMENT: {
                 links: ["author"]
             }
