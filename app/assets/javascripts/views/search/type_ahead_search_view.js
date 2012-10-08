@@ -82,7 +82,10 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     },
 
     searchFor: function(query) {
-        this.model.set({query: query}, {silent: true});
-        this.model.fetch();
+        var trimmedQuery = query.trim();
+        if (trimmedQuery && trimmedQuery !== "" ){
+            this.model.set({query: trimmedQuery}, {silent: true});
+            this.model.fetch();
+        }
     }
 });

@@ -319,4 +319,18 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
     });
+
+    describe("when the query is a blank string", function() {
+        beforeEach(function() {
+            this.result = rspecFixtures.typeAheadSearchResult();
+            this.result.set({query: " "});
+            this.view = new chorus.views.TypeAheadSearch();
+            this.view.searchFor(' ');
+            spyOn(this.view.model, "fetch").andCallThrough();
+        });
+
+        it("should not fetch any", function() {
+            expect(this.view.model.fetch).not.toHaveBeenCalled();
+        });
+    });
 })
