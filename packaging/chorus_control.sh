@@ -80,7 +80,11 @@ function monitor () {
 }
 
 function backup () {
+  pushd $CHORUS_HOME > /dev/null
+
   echo "Backing up chorus data..."
+
+  BACKUP_DIR="data/chorus/bak"
 
   while getopts "d:r:" OPTION
   do
@@ -114,12 +118,14 @@ function backup () {
       $bin/start-postgres.sh
   fi
 
-   BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
-   rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
+  BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
+  rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
 
-   if [ -n "$postgres_started" ]; then
-       $bin/stop-postgres.sh
-   fi
+  if [ -n "$postgres_started" ]; then
+      $bin/stop-postgres.sh
+  fi
+
+  popd > /dev/null
 }
 
 function usage () {
