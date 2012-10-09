@@ -23,29 +23,34 @@ describe 'BackupRestore' do
 
         FakeFS::FileSystem.clone "#{Rails.root}/config"
         touch "#{Rails.root}/version_build"
-        FileUtils.mkdir_p File.expand_path("backup_dir")
+        FileUtils.mkdir_p File.expand_path(backup_dir)
+      end
+
+      let(:backup_dir) {"backup_dir"}
+      let(:rolling_days) {3}
+
+      def run_backup
+        Timecop.freeze do
+          BackupRestore.backup backup_dir, rolling_days
+          @expected_backup_file = File.expand_path File.join(backup_dir, backup_filename(Time.current))
+        end
       end
 
       it "creates a backup file with the correct timestamp" do
-        Timecop.freeze do
-          BackupRestore.backup "backup_dir", 3
-          backup_file = File.join("backup_dir", backup_filename(Time.current))
-          File.exists?(backup_file).should be_true
-        end
+        run_backup
+        File.exists?(@expected_backup_file).should be_true
       end
 
       it "creates only the backup file and leaves no other trace" do
-        Timecop.freeze do
-          new_files_created_by do
-            BackupRestore.backup "backup_dir", 3
-          end.should == [File.expand_path(File.join "backup_dir", backup_filename(Time.current))]
-        end
+        new_files_created_by do
+          run_backup
+        end.should == [@expected_backup_file]
       end
 
       context "when the backup directory does not exist" do
         it "raises an exception" do
           expect {
-            BackupRestore.backup "missing_dir", 3
+            BackupRestore.backup "missing_dir"
           }.to raise_error(/missing/)
         end
       end
@@ -57,7 +62,7 @@ describe 'BackupRestore' do
           end
           new_files_created_by do
             expect {
-              BackupRestore.backup "backup_dir", 3
+              run_backup
             }.to raise_error("you can't do that!")
           end.should == []
         end
@@ -65,17 +70,17 @@ describe 'BackupRestore' do
 
       it "requires a positive integer for the number of rolling days" do
         expect {
-          BackupRestore.backup "backup_dir", 0
+          BackupRestore.backup backup_dir, 0
         }.to raise_error(/positive integer/)
       end
 
       describe "rolling backups: " do
-        let(:old_backup) {"backup_dir/#{backup_filename(backup_time)}"}
+        let(:old_backup) {File.join backup_dir, backup_filename(old_backup_time)}
         let(:rolling_days) { nil }
 
         before do
           touch old_backup
-          BackupRestore.backup *["backup_dir", rolling_days].compact
+          BackupRestore.backup *[backup_dir, rolling_days].compact
         end
 
         shared_examples_for "it deletes backups older than" do |expected_rolling_days|
@@ -84,7 +89,7 @@ describe 'BackupRestore' do
           end
 
           context "when the old backup was created more than the stated time ago" do
-            let(:backup_time) { expected_rolling_days.days.ago - 1.hour }
+            let(:old_backup_time) { expected_rolling_days.days.ago - 1.hour }
 
             it "deletes it" do
               File.exists?(old_backup).should be_false
@@ -92,7 +97,7 @@ describe 'BackupRestore' do
           end
 
           context "when old backup was created within stated time" do
-            let(:backup_time) { expected_rolling_days.days.ago + 1.hour }
+            let(:old_backup_time) { expected_rolling_days.days.ago + 1.hour }
 
             it "keeps it" do
               File.exists?(old_backup).should be_true
@@ -108,7 +113,6 @@ describe 'BackupRestore' do
 
           it_should_behave_like "it deletes backups older than", 11.days
         end
-
       end
     end
 

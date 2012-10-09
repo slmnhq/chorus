@@ -36,7 +36,7 @@ module BackupRestore
 
       db_config = Rails.application.config.database_configuration[Rails.env]
       db_filename = "database.sql.gz"
-      system "pg_dump -p #{db_config['port']} #{db_config['database']} | gzip > #{db_filename}" or raise "Backing up data failed."
+      system "pg_dump -p #{db_config['port']} #{db_config['database']} | gzip > #{db_filename}" or raise "Database dump failed."
     end
 
     def compress_assets
@@ -52,7 +52,7 @@ module BackupRestore
       ]
 
       asset_list = files.join ' '
-      system "(cd #{Rails.root} && tar cz #{asset_list}) > #{asset_filename}" or raise "Backing up assets failed."
+      system "(cd #{Rails.root} && tar cz #{asset_list}) > #{asset_filename}" or raise "Compressing assets failed."
     end
 
     def delete_old_backups
