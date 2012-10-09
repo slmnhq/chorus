@@ -160,6 +160,22 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         });
     });
 
+    context("when it is a tableau workbook", function () {
+        beforeEach(function () {
+            this.view.model.set({fileType: 'tableau_workbook'});
+            this.view.render();
+        });
+
+        it("hide the copy and download links", function () {
+            expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
+            expect(this.view.$('.actions a.download')).not.toExist();
+        });
+
+        it("hide the updated information", function () {
+            expect(this.view.$('.info .updated')).not.toExist();
+        });
+    });
+
     context("with an archived workspace", function() {
         beforeEach(function() {
             this.model = rspecFixtures.workfile.sql();

@@ -71,12 +71,20 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function (ctx) {
         var modifier = this.model.modifier();
-        return {
+        var ctx = {
             updatedBy: modifier.displayShortName(),
             modifierUrl: modifier.showUrl(),
             downloadUrl: this.model.downloadUrl(),
             activeWorkspace: this.model.workspace().isActive(),
             canUpdate: this.model.workspace().canUpdate()
         }
+
+        if(this.model.isTableau()) {
+            ctx.hideCopyLink = true;
+            ctx.hideDownloadLink = true;
+            ctx.hideUpdatedTime = true;
+        }
+
+        return ctx;
     }
 });

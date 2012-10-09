@@ -569,7 +569,6 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         context("when the user has update permissions", function() {
                             it("displays the publish to tableau button", function() {
-                                //this.workspace.permission = ["read","commenting","update"];
                                 this.dataset.workspace().set({permission: ['read', 'commenting', 'update']});
                                 this.view.render();
                                 expect(this.view.$("button.publish")).toExist();
@@ -578,7 +577,6 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         context("when the user does not have update permissions", function() {
                             it("does not display the publish to tableau button", function() {
-                                //this.workspace.permission = ["read","commenting"];
                                 this.dataset.workspace().set({permission: ['read', 'commenting']});
                                 this.view.render();
                                 expect(this.view.$("button.publish")).not.toExist();

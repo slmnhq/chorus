@@ -52,7 +52,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
             attributes.modifierUrl = modifier.showUrl();
             attributes.downloadUrl = this.workfile.downloadUrl();
             ctx.workfile = attributes;
-            if(this.workfile.get('fileType') == "tableau_workbook") {
+            if(this.workfile.isTableau()) {
                 ctx.hideCopyLink = true;
                 ctx.hideDownloadLink = true;
                 ctx.hideUpdatedTime = true;
