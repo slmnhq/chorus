@@ -18,5 +18,5 @@ $SCRIPT_DIR/bootstrap-queue.sh
 
 echo "***** setting up project"
 bundle
-${HOME}/workspace/chorusrails/script/test
+${HOME}/workspace/chorusrails/script/ci-test
 pg_ctl stop -D ${CHORUSDIR}/var/db

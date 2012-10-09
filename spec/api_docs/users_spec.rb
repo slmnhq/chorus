@@ -1,5 +1,5 @@
 require 'spec_helper'
-require './spec/acceptance/image_hack'
+require './spec/api_docs/image_hack'
 
 resource "Users" do
   let(:user) { users(:admin) }

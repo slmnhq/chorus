@@ -110,7 +110,11 @@ Application will be on http://localhost:3000
 	
 ### Testing:
 
-    script/test
+    rake
+
+    and
+
+    rake all
 
 #### Re-creating the database:
 

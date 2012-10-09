@@ -15,7 +15,11 @@ namespace :api_docs do
 
   desc "Check and generate API docs"
   task :generate => :check do
-    Rake::Task['docs:generate'].invoke
+    RSpec::Core::RakeTask.new('api_docs:generate') do |t|
+      t.pattern = 'spec/api_docs/**/*_spec.rb'
+      t.rspec_opts = ["--format RspecApiDocumentation::ApiFormatter"]
+    end
+    Rake::Task['api_docs:generate'].invoke
   end
 
   desc "Package api docs"
