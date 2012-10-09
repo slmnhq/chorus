@@ -252,6 +252,12 @@ FactoryGirl.define do
       association :workspace, :factory => :workspace
       body "This is a note on a workspace"
     end
+
+    factory :dataset_import_created_event, :class => Events::DatasetImportCreated do
+      association :source_dataset, :factory => :gpdb_table
+      destination_table "new_table_for_import"
+      workspace
+    end
   end
 
   factory :import_schedule do
@@ -260,6 +266,19 @@ FactoryGirl.define do
     frequency 'monthly'
     truncate false
     sample_count 1
+    dataset_import_created_event_id 2
+  end
+
+  factory :import do
+    created_at Time.now
+    association :import_schedule, :factory => :import_schedule
+    association :workspace, :factory => :workspace
+    association :source_dataset, :factory => :gpdb_table
+    user
+    to_table "import_target_dataset"
+    truncate false
+    new_table true
+    sample_count 10
   end
 
   factory :comment do

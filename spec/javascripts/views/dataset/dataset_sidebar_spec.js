@@ -265,17 +265,20 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                context("and the dataset has received an import from a dataset", function() {
+                xcontext("and the dataset has received an import from a dataset", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.getImport(), {
+                        this.import = rspecFixtures.importSchedule({
+                            datasetId: this.dataset.id,
+                            workspaceId: this.dataset.workspace().id,
                             executionInfo: {
                                 startedStamp: "2012-02-29T14:35:38Z",
-                                completedStamp: "2012-02-29T14:35:38Z"
+                                completedStamp: "2012-02-29T14:35:38Z",
+                                sourceId: this.dataset.id,
+                                sourceTable: "some_source_table"
                             },
-                            id: "123",
-                            sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
-                            sourceTable: "some_source_table"
+                            id: "123"
                         });
+                        this.server.completeFetchFor(this.dataset.getImport(), this.import);
                     });
 
                     it("has an 'imported xx ago' description", function() {

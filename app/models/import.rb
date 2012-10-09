@@ -19,4 +19,11 @@ class Import < ActiveRecord::Base
     end
     import_schedule.update_attribute(:new_table, false) if new_table? && import_schedule
   end
+
+  def target_dataset_id
+    if dataset_import_created_event_id
+      event = Events::DatasetImportCreated.find(dataset_import_created_event_id)
+      event.target2_id if event
+    end
+  end
 end

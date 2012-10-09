@@ -271,7 +271,31 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :default, FactoryGirl.create(:workfile_draft, :owner => owner)
 
-    fbuilder.name :default, ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04', :frequency => 'weekly', :workspace_id => public_workspace.id, :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't', :new_table => 't', :user_id => owner.id} , :without_protection => true)
+    dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
+        :workspace => public_workspace, :dataset => nil,
+        :source_dataset => default_table, :destination_table => 'new_table_for_import'
+    )
+    fbuilder.name :dataset_import_created, dataset_import_created
+
+    import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
+                        :frequency => 'weekly', :workspace_id => public_workspace.id,
+                        :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
+                        :new_table => 't', :user_id => owner.id, :dataset_import_created_event_id => dataset_import_created.id
+                        )
+    fbuilder.name :default, import_schedule
+
+    import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
+                  :import_schedule => import_schedule,
+                  :dataset_import_created_event_id => dataset_import_created.id,
+                  :created_at => Time.now,
+                  :source_dataset_id => default_table.id)
+    fbuilder.name :default, import
+
+    previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
+                                         :import_schedule => import_schedule, :created_at => '2012-09-04 23:00:00-07',
+                                         :dataset_import_created_event_id => dataset_import_created.id,
+                                         :source_dataset_id => default_table.id)
+    fbuilder.name :previous, previous_import
 
     #CSV File
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)

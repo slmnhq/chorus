@@ -230,4 +230,17 @@ describe("chorus.models.DatasetImport", function() {
         };
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
     });
+
+    describe("#lastDestination", function() {
+        it("sets the model correctly", function() {
+            this.model = rspecFixtures.importSchedule({
+                datasetId: '102',
+                workspaceId: '1',
+                executionInfo: {
+                    toTableId: '103'
+                }
+            });
+           expect(this.model.lastDestination().url()).toContain("/workspaces/1/datasets/103");
+        });
+    });
 });

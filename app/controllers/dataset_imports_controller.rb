@@ -2,7 +2,15 @@ class DatasetImportsController < ApplicationController
 
   def show
     import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
-    present import_schedule
+    if import_schedule
+      present import_schedule
+    else
+      import = Import.where(:workspace_id => params[:workspace_id],
+                             :source_dataset_id => params[:dataset_id])
+                      .order("created_at asc").last
+
+      present import
+    end
   end
 
   def create
@@ -39,7 +47,7 @@ class DatasetImportsController < ApplicationController
     import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
     begin
       import_schedule.destroy
-    rescue Exception =>e
+    rescue Exception => e
       raise ApiValidationError.new(:base, :delete_unsuccessful)
 
     end
@@ -71,13 +79,13 @@ class DatasetImportsController < ApplicationController
 
     if attributes[:new_table] && destination_change
       raise ApiValidationError.new(:base, :table_exists,
-                                   { :table_name => dst_table_name }) if dst_table
+                                   {:table_name => dst_table_name}) if dst_table
     elsif destination_change
       raise ApiValidationError.new(:base, :table_not_exists,
-                                   { :table_name => dst_table_name }) unless dst_table
+                                   {:table_name => dst_table_name}) unless dst_table
       raise ApiValidationError.new(:base, :table_not_consistent,
-                                   { :src_table_name => src_table.name,
-                                     :dest_table_name => dst_table_name }) unless src_table.dataset_consistent?(dst_table)
+                                   {:src_table_name => src_table.name,
+                                    :dest_table_name => dst_table_name}) unless src_table.dataset_consistent?(dst_table)
     end
   end
 end

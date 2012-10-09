@@ -73,7 +73,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         return new chorus.models.WorkspaceDataset({
             id: this.get("executionInfo").toTableId,
             objectName: this.get("executionInfo").toTable,
-            workspaceId: this.get("workspaceId")
+            workspace: {id: this.get("workspaceId")}
         });
     },
 

@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe ImportSchedulePresenter, :type => :view do
   before do
-    @user = FactoryGirl.create :user
     @presenter = ImportSchedulePresenter.new(import_schedule, view)
   end
   let(:import_schedule) { import_schedules(:default) }
@@ -27,7 +26,9 @@ describe ImportSchedulePresenter, :type => :view do
     end
 
     context "when deleted" do
-      let(:import_schedule) { FactoryGirl.create(:import_schedule, deleted_at: Time.now)}
+      before do
+        stub(import_schedule).is_active { false }
+      end
 
       it "does not include an id" do
         hash[:id].should be_nil
