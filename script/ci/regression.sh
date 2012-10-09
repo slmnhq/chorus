@@ -18,7 +18,7 @@ sleep 20
 set +e
 
 echo "Running regression tests"
-script/ci-test spec/regression/ 2>&1
+b/rspec spec/regression/ 2>&1
 INTEGRATION_TESTS_RESULT=$?
 
 echo "Cleaning up solr process $solr_pid"
