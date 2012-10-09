@@ -7,7 +7,7 @@ describe("chorus.views.KaggleHeader", function() {
         beforeEach(function() {
             this.view.render();
         });
-        it("shows the dipslay name", function() {
+        it("shows the kaggle summary", function() {
             expect(this.view.$(".summary").text()).toContainTranslation("kaggle.summary");
         });
         it("shows the kaggle logo", function() {

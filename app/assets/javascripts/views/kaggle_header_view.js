@@ -4,7 +4,8 @@ chorus.views.KaggleHeader = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            title: t("kaggle.summary")
+            summary: t("kaggle.summary"),
+            listed_below: t("kaggle.listed_below")
         }
     }
 });
