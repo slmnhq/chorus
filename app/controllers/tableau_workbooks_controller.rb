@@ -3,6 +3,8 @@ require 'optparse'
 
 class TableauWorkbooksController < ApplicationController
   def create
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :can_edit_sub_objects, workspace
     dataset = Dataset.find(params[:dataset_id])
     workbook = create_new_workbook(dataset, params[:tableau_workbook][:name])
 

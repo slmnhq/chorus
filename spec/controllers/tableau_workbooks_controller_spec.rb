@@ -35,6 +35,11 @@ describe TableauWorkbooksController do
       end
     end
 
+    it "is authenticated" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, params
+    end
+
     it "returns 201 created with data when the save succeeds" do
       any_instance_of(TableauWorkbookPublication) do |workbook|
         stub(workbook).workbook_url { "foo.com" }
