@@ -2,11 +2,12 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     constructorName: "ActivitySet",
     model: chorus.models.Activity,
 
-    url: function() {
+    url: function(options) {
         if (this.attributes.insights) {
             return this.getInsightUrl();
         } else {
-            return this.attributes.url;
+            var page = (options && options.page)|| 1;
+            return this.attributes.url + "&page=" + page;
         }
     },
 

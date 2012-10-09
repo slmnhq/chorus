@@ -48,7 +48,7 @@ describe("chorus.collections.ActivitySet", function() {
                 });
 
                 it("includes the entity_type, the ", function() {
-                    expect(activities.url()).toBe("/activities?entity_type=hdfs_file&entity_id=8789" );
+                    expect(activities.url()).toContain("/activities?entity_type=hdfs_file&entity_id=8789" );
                 });
             });
 
@@ -59,7 +59,7 @@ describe("chorus.collections.ActivitySet", function() {
                     activities = chorus.collections.ActivitySet.forModel(model);
                 });
                 it("includes the entity_type and the id of the model", function() {
-                    expect(activities.url()).toBe("/activities?entity_type=hello&entity_id=" + model.id );
+                    expect(activities.url()).toContain("/activities?entity_type=hello&entity_id=" + model.id );
                 });
             });
         });
