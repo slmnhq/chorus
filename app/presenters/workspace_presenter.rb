@@ -32,13 +32,15 @@ class WorkspacePresenter < Presenter
     !rendering_activities?
   end
 
+  private
+
   def latest_comments_hash
     return {} unless @options[:show_latest_comments]
     recent_notes = model.owned_notes.recent
     recent_comments = model.comments.recent
     recent_insights = recent_notes.select { |note| note.insight? }
     all = recent_notes + recent_comments
-    latest_5 = all.sort_by(&:updated_at)[-5..-1]
+    latest_5 = all.sort_by(&:updated_at).last(5)
 
     {
         :number_of_insights => recent_insights.size,
