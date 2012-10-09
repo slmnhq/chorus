@@ -11,6 +11,13 @@ module GpdbIntegration
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
   REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
 
+  def self.real_gpdb_hostname
+    if REAL_GPDB_HOST.match /^([0-9]{1,3}\.){3}[0-9]{1,3}$/
+      return "local_greenplum"
+    end
+    REAL_GPDB_HOST.gsub('-', '_')
+  end
+
   def self.execute_sql(sql_file)
     puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
@@ -102,7 +109,7 @@ module GpdbIntegration
   end
 
   def self.real_gpdb_instance
-    GpdbInstance.find_by_name(REAL_GPDB_HOST.gsub("-", "_"))
+    GpdbInstance.find_by_name(real_gpdb_hostname)
   end
 
   def self.real_database

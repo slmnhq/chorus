@@ -169,7 +169,7 @@ describe GpdbSchema do
     end
   end
 
-  describe "#disk_space_used" do
+  describe "#disk_space_used", :database_integration => true do
     let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema3') }
     let(:account) { GpdbIntegration.real_gpdb_instance.owner_account }
 

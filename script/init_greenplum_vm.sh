@@ -50,18 +50,12 @@ function start () {
         "$FUSION_BIN_PATH/vmrun" -gu root -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo '$VMHOST_IP $VMHOST_HOSTNAME' >> /etc/hosts"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "echo 'host     all         test_superuser         $GREENPLUM_IP/24     md5' >> /dbfast1/master/gpseg-1/pg_hba.conf"
 
-
-
 		echo "starting Greenplum database"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "source /home/gpadmin/.profile; /usr/local/greenplum-db/bin/gpstart -a"
 		echo "Creating chorus user"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "createuser -s test_superuser"
 		echo "Creating chorus password"
 		"$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password runScriptInGuest gpdb421ee/Greenplum\ 4.2.1.vmx /bin/sh "psql postgres -c \"alter user test_superuser with password 'secret';\""
-
-
-		echo "Add the following to /etc/hosts with sudo:"
-		echo "$GREENPLUM_IP local_greenplum"
 	else
 		"$FUSION_BIN_PATH/vmrun" -T fusion start gpdb421ee/Greenplum\ 4.2.1.vmx nogui
 		echo "starting Greenplum database"
@@ -97,8 +91,6 @@ function status() {
 	"$FUSION_BIN_PATH/vmrun" list
     "$FUSION_BIN_PATH/vmrun" -gu gpadmin -gp password copyFileFromGuestToHost gpdb421ee/Greenplum\ 4.2.1.vmx /home/gpadmin/GREENPLUM_IP ./GREENPLUM_IP
     GREENPLUM_IP=`cat ./GREENPLUM_IP`
-    echo "Add the following to /etc/hosts with sudo:"
-    echo "$GREENPLUM_IP local_greenplum"
 }
 
 function remove() {

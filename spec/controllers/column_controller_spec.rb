@@ -36,7 +36,7 @@ describe ColumnController do
       end
     end
 
-    context "with real data" do
+    context "with real data", :database_integration => true do
       let(:account) { GpdbIntegration.real_gpdb_account }
       let(:user) { account.owner }
 

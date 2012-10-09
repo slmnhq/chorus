@@ -81,7 +81,7 @@ FixtureBuilder.configure do |fbuilder|
 
     chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
     chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
-    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::REAL_GPDB_HOST.gsub('-', '_'), :owner => admin))
+    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::real_gpdb_hostname, :owner => admin))
 
     # Instance Accounts
     @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)
@@ -355,15 +355,17 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:attachment_hdfs, note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file'))))
     fbuilder.name(:attachment_workspace_dataset, note_on_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset'))))
 
-    GpdbIntegration.refresh_chorus
-    chorus_gpdb42_instance.refresh_databases
-    GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name), :refresh_all => true)
+    if ENV['GPDB_HOST']
+      GpdbIntegration.refresh_chorus
+      chorus_gpdb42_instance.refresh_databases
+      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name), :refresh_all => true)
 
-    test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
-    test_schema = test_database.schemas.find_by_name('test_schema')
-    @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
-    @executable_chorus_view.bound_workspaces << public_workspace
-    @executable_chorus_view.save!(:validate => false)
+      test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
+      test_schema = test_database.schemas.find_by_name('test_schema')
+      @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
+      @executable_chorus_view.bound_workspaces << public_workspace
+      @executable_chorus_view.save!(:validate => false)
+    end
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner)

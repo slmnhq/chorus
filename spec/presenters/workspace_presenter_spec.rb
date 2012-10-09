@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 describe WorkspacePresenter, :type => :view do
+  let(:user) { users(:owner) }
+  let(:archiver) { users(:the_collaborator) }
+  let(:schema) { gpdb_schemas(:default) }
+  let(:workspace) { FactoryGirl.build :workspace, :owner => user, :archiver => archiver, :sandbox => schema }
+  let(:presenter) { WorkspacePresenter.new(workspace, view, options) }
+
   before(:each) do
-    @user = GpdbIntegration.real_gpdb_instance.owner
-    stub(ActiveRecord::Base).current_user { @user }
-    @archiver = users(:the_collaborator)
-    @schema = GpdbIntegration.real_database.schemas.find_by_name('test_schema3')
-    @workspace = FactoryGirl.build :workspace, :owner => @user, :archiver => @archiver, :sandbox => @schema
-    @presenter = WorkspacePresenter.new(@workspace, view, options)
+    stub(ActiveRecord::Base).current_user { user }
   end
 
   let(:options) { {} }
 
   describe "#to_hash" do
-    let(:hash) { @presenter.to_hash }
+    let(:hash) { presenter.to_hash }
 
     it "includes the right keys" do
       hash.should have_key(:id)
@@ -36,7 +37,7 @@ describe WorkspacePresenter, :type => :view do
     end
 
     it "uses the image presenter to serialize the image urls" do
-      hash[:image].to_hash.should == (ImagePresenter.new(@workspace.image, view).presentation_hash)
+      hash[:image].to_hash.should == (ImagePresenter.new(workspace.image, view).presentation_hash)
     end
 
     it "should respond with the current user's permissions (as an owner of the workspace)'" do
@@ -44,18 +45,18 @@ describe WorkspacePresenter, :type => :view do
     end
 
     it "should use ownerPresenter Hash method for owner" do
-      owner = hash[:owner]
-      owner.to_hash.should == (UserPresenter.new(@user, view).presentation_hash)
+      new_owner = hash[:owner]
+      new_owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
     it "should use ownerPresenter Hash method for owner" do
-      archiver = hash[:archiver]
-      archiver.to_hash.should == (UserPresenter.new(@archiver, view).presentation_hash)
+      new_archiver = hash[:archiver]
+      new_archiver.to_hash.should == (UserPresenter.new(archiver, view).presentation_hash)
     end
 
     it "should use gpdbSchemaPresenter Hash method for sandbox_info" do
-      sandbox = hash[:sandbox_info]
-      sandbox.to_hash.should == (GpdbSchemaPresenter.new(@schema, view).presentation_hash)
+      new_sandbox = hash[:sandbox_info]
+      new_sandbox.to_hash.should == (GpdbSchemaPresenter.new(schema, view).presentation_hash)
     end
 
     it_behaves_like "sanitized presenter", :workspace, :summary
@@ -64,8 +65,8 @@ describe WorkspacePresenter, :type => :view do
       let(:options) { {:activity_stream => true} }
 
       it "should only render the sandbox id" do
-        hash[:id].should == @workspace.id
-        hash[:name].should == @workspace.name
+        hash[:id].should == workspace.id
+        hash[:name].should == workspace.name
         hash.keys.size.should == 2
       end
     end
@@ -73,7 +74,7 @@ describe WorkspacePresenter, :type => :view do
     context "when rendering latest comments" do
       let(:options) { {:show_latest_comments => true} }
       before do
-        @workspace.save!
+        workspace.save!
       end
 
       it "should render the latest comment hash" do
@@ -86,21 +87,21 @@ describe WorkspacePresenter, :type => :view do
         let(:event) do
           evt = nil
           Timecop.freeze(8.days.ago) do
-            evt = Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body', :actor => @user)
+            evt = Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body', :actor => user)
           end
           evt
         end
 
         before do
           Timecop.freeze(1.day.ago) do
-            @comment = Comment.create!(:text => 'comment body of event', :author_id => @user.id, :event_id => event.id)
+            @comment = Comment.create!(:text => 'comment body of event', :author_id => user.id, :event_id => event.id)
           end
           Timecop.freeze(1.minute.ago) do
-            insight = Events::NoteOnWorkspace.create(:workspace => @workspace, :body => 'insight body', :actor => @user, :insight => true)
-            Comment.create!(:text => 'comment body of insight', :author_id => @user.id, :event_id => insight.id)
-            Comment.create!(:text => 'comment body of insight 2', :author_id => @user.id, :event_id => insight.id)
-            @event_to_be_promoted = Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -1', :actor => @user)
-            Events::NoteOnWorkspace.create!(:workspace => @workspace, :body => 'event body -2', :actor => @user)
+            insight = Events::NoteOnWorkspace.create(:workspace => workspace, :body => 'insight body', :actor => user, :insight => true)
+            Comment.create!(:text => 'comment body of insight', :author_id => user.id, :event_id => insight.id)
+            Comment.create!(:text => 'comment body of insight 2', :author_id => user.id, :event_id => insight.id)
+            @event_to_be_promoted = Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -1', :actor => user)
+            Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -2', :actor => user)
           end
           @event_to_be_promoted.insight = true
           @event_to_be_promoted.save!
@@ -110,12 +111,12 @@ describe WorkspacePresenter, :type => :view do
           hash[:number_of_comments].should == 4
           hash[:number_of_insights].should == 2
           hash[:latest_comment_list].size.should == 5
-          hash[:latest_comment_list].should_not include(@presenter.present(event))
-          hash[:latest_comment_list].should_not include(@presenter.present(@comment))
+          hash[:latest_comment_list].should_not include(presenter.present(event))
+          hash[:latest_comment_list].should_not include(presenter.present(@comment))
         end
 
         it "uses updated_at timestamp to sort" do
-          hash[:latest_comment_list][4].should == (@presenter.present(@event_to_be_promoted))
+          hash[:latest_comment_list][4].should == (presenter.present(@event_to_be_promoted))
         end
       end
     end
@@ -125,13 +126,13 @@ describe WorkspacePresenter, :type => :view do
     context "when rendering activities" do
       let(:options) { {:activity_stream => true} }
       it "is not true" do
-        @presenter.complete_json?.should_not be_true
+        presenter.complete_json?.should_not be_true
       end
     end
 
     context "when not rendering activities" do
       it "is true" do
-        @presenter.complete_json?.should be_true
+        presenter.complete_json?.should be_true
       end
     end
   end

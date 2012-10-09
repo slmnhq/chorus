@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "gpdb instances", :network => true do
+describe "gpdb instances", :database_integration => true, :network => true do
   let(:valid_attributes) do
     {
         :name => "chorusgpdb42",

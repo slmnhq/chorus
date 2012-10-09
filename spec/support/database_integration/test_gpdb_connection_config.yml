@@ -26,3 +26,10 @@ instances:
     account:
       db_username: "test_superuser"
       db_password: "secret"
+
+  - host: "172.16.120.128"
+    port: 5432
+    maintenance_db: "postgres"
+    account:
+      db_username: "test_superuser"
+      db_password: "secret"
