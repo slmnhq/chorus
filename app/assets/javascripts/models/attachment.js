@@ -1,9 +1,6 @@
 chorus.models.Attachment = chorus.models.Base.extend({
     constructorName: "Attachment",
-
-    name: function() {
-        return this.attributes && this.attributes.name;
-    },
+    entityType: "attachment",
 
     showUrl: function(){
         var workspaceUrl = this.workspace() && this.workspace().get('id') && this.workspace().showUrl();

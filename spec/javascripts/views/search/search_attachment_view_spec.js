@@ -132,6 +132,6 @@ describe("chorus.views.SearchAttachment", function() {
     });
 
     it("shows matching name", function() {
-        expect(this.view.$(".name").html()).toContain("<em>searchquery<\/em>");
+        expect(this.view.$(".name").html()).toContain("<em>searchquery<\/em>_<em>workspace<\/em>");
     });
 });

@@ -36,19 +36,20 @@ class Dataset < ActiveRecord::Base
 
   attr_accessor :highlighted_attributes, :search_result_notes
 
-  searchable :unless => :stale? do |s|
-    s.text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    s.text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    s.text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    s.text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    s.string :grouping_id
-    s.string :type_name
+  searchable :unless => :stale? do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+    string :security_type_name
   end
 
   has_shared_search_fields [
                                {:type => :integer, :name => :instance_account_ids, :options => {:multiple => true}},
-                               {:type => :integer, :name => :workspace_id, :options => {:multiple => true, :using => :searchable_workspace_ids }}
+                               {:type => :integer, :name => :found_in_workspace_id, :options => {:multiple => true}}
                            ]
 
   def instance_account_ids
@@ -59,14 +60,14 @@ class Dataset < ActiveRecord::Base
     schema.database.gpdb_instance.accessible_to(user)
   end
 
-  def searchable_workspace_ids
+  def found_in_workspace_id
     (bound_workspace_ids + schema.workspace_ids).uniq
   end
 
   def self.add_search_permissions(current_user, search)
     search.build do
       any_of do
-        without :type_name, Dataset.type_name
+        without :security_type_name, Dataset.security_type_name
         account_ids = current_user.accessible_account_ids
         with :instance_account_ids, account_ids unless account_ids.blank?
       end

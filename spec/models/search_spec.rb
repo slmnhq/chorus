@@ -110,7 +110,7 @@ describe Search do
         Search.new(user, :query => 'whatever', :entity_type => :dataset).search
         Sunspot.session.should have_search_params(:with, Proc.new {
           any_of do
-            without :type_name, Dataset.type_name
+            without :security_type_name, Dataset.security_type_name
           end
         })
       end
@@ -357,14 +357,53 @@ describe Search do
         create_and_record_search do |search|
           attachment = search.attachments.first
           attachment.highlighted_attributes.length.should == 1
-          attachment.highlighted_attributes[:contents_file_name][0].should =~ /\<em\>searchquery\<\/em\>/
+          attachment.highlighted_attributes[:name][0].should =~ /\<em\>searchquery\<\/em\>/
         end
       end
 
       it "returns the Attachment objects found" do
         create_and_record_search do |search|
-          search.attachments.length.should == 7
-          search.attachments.first.should == attachment
+          search.attachments.first.should be_an Attachment
+        end
+      end
+
+      let(:private_workfile_attachment) { attachments(:attachment_private_workfile) }
+      let(:private_workspace_attachment) { attachments(:attachment_private_workspace) }
+      let(:dataset_attachment) { attachments(:attachment_dataset) }
+
+      context "when the attachment belongs on workspace and workfile" do
+        let(:user_with_access) { users(:no_collaborators) }
+        let(:user_without_access) { owner }
+
+        it "excludes them where the user does not have access" do
+          create_and_record_search(user_without_access, :query => 'searchquery', :entity_type => :attachment) do |search|
+            search.attachments.should_not include(private_workspace_attachment)
+            search.attachments.should_not include(private_workfile_attachment)
+          end
+        end
+
+        it "includes them for users with access" do
+          create_and_record_search(user_with_access, :query => 'searchquery', :entity_type => :attachment) do |search|
+            search.attachments.should include(private_workspace_attachment)
+            search.attachments.should include(private_workfile_attachment)
+          end
+        end
+      end
+
+      context "when the attachment belongs on datasets" do
+        let(:user_with_access) { owner }
+        let(:user_without_access) { users(:no_collaborators) }
+
+        it "excludes them where the user does not have access" do
+          create_and_record_search(user_without_access, :query => 'searchquery', :entity_type => :attachment) do |search|
+            search.attachments.should_not include(dataset_attachment)
+          end
+        end
+
+        it "includes them for users with access" do
+          create_and_record_search(user_with_access, :query => 'searchquery', :entity_type => :attachment) do |search|
+            search.attachments.should include(dataset_attachment)
+          end
         end
       end
     end

@@ -12,7 +12,10 @@ class WorkspaceSearch < Search
   def build_search
     super
     @search.build do
-      with :workspace_id, workspace_id
+      any_of do
+        with :workspace_id, workspace_id if models_to_search.include?(Workspace) || models_to_search.include?(Workfile)
+        with :found_in_workspace_id, workspace_id if models_to_search.include?(Dataset)
+      end
     end
   end
 

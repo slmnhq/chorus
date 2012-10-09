@@ -33,6 +33,8 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 case "hadoop_instance":
                     return new chorus.models.HadoopInstance(result);
                     break;
+                case "attachment":
+                    return new chorus.models.Attachment(result);
                 default:
                     break;
             }

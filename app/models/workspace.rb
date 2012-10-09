@@ -42,6 +42,7 @@ class Workspace < ActiveRecord::Base
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
+    string :security_type_name
   end
 
   has_shared_search_fields [
@@ -54,7 +55,7 @@ class Workspace < ActiveRecord::Base
     unless current_user.admin?
       search.build do
         any_of do
-          without :type_name, Workspace.type_name
+          without :security_type_name, Workspace.security_type_name
           with :member_ids, current_user.id
           with :public, true
         end

@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3A%28Attachment+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Attachment%29&fq=-%28security_type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000002+OR+1000004%29%29&fq=-%28security_type_name_s%3AWorkspace+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_s%3AWorkfile+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=searchquery&fl=%2A+score&qf=contents_file_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''contents_file_name_texts
+        body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
+        score'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Attachment
+        OR Events\\:\\:Note)'',''type_name_s:(Attachment)'',''-(security_type_name_s:Dataset
+        AND -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'',''-(security_type_name_s:Workspace
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_s:Workfile
+        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>6,''ngroups''=>6,''groups''=>[{''groupValue''=>''Attachment
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1674420.6,''docs''=>[{''id''=>''Attachment
+        1000002'',''contents_file_name_texts''=>[''searchquery_instance''],''score''=>1674420.6}]}},{''groupValue''=>''Attachment
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1674420.6,''docs''=>[{''id''=>''Attachment
+        1000003'',''contents_file_name_texts''=>[''searchquery_workspace''],''score''=>1674420.6}]}},{''groupValue''=>''Attachment
+        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1674420.6,''docs''=>[{''id''=>''Attachment
+        1000005'',''contents_file_name_texts''=>[''searchquery_workfile''],''score''=>1674420.6}]}},{''groupValue''=>''Attachment
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1674420.6,''docs''=>[{''id''=>''Attachment
+        1000007'',''contents_file_name_texts''=>[''searchquery_dataset''],''score''=>1674420.6}]}},{''groupValue''=>''Attachment
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1674420.6,''docs''=>[{''id''=>''Attachment
+        1000008'',''contents_file_name_texts''=>[''searchquery_hadoop''],''score''=>1674420.6}]}},{''groupValue''=>''Attachment
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1339536.5,''docs''=>[{''id''=>''Attachment
+        1000009'',''contents_file_name_texts''=>[''searchquery_hdfs_file''],''score''=>1339536.5}]}}]}},''highlighting''=>{''Attachment
+        1000002''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_instance'']},''Attachment
+        1000003''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace'']},''Attachment
+        1000005''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workfile'']},''Attachment
+        1000007''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_dataset'']},''Attachment
+        1000008''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''Attachment
+        1000009''=>{''contents_file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hdfs_file'']}}}'
+    http_version: '1.1'
+  recorded_at: Mon, 08 Oct 2012 23:24:57 GMT
+recorded_with: VCR 2.1.1
+...

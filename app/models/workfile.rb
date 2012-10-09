@@ -30,13 +30,14 @@ class Workfile < ActiveRecord::Base
     boolean :public
     string :grouping_id
     string :type_name
+    string :security_type_name
   end
 
   def self.add_search_permissions(current_user, search)
     unless current_user.admin?
       search.build do
         any_of do
-          without :type_name, Workfile.type_name
+          without :security_type_name, Workfile.security_type_name
           with :member_ids, current_user.id
           with :public, true
         end

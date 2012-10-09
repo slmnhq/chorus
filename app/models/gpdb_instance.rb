@@ -20,6 +20,7 @@ class GpdbInstance < ActiveRecord::Base
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
+    string :security_type_name
   end
 
   def self.unshared

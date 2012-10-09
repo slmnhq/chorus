@@ -15,6 +15,7 @@ describe TypeAheadSearch do
     it "searches for all types with query" do
       search = described_class.new(owner, :query => 'bob')
       search.search
+      Sunspot.session.should be_a_search_for(Attachment)
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(GpdbInstance)
       Sunspot.session.should be_a_search_for(HadoopInstance)
@@ -48,7 +49,7 @@ describe TypeAheadSearch do
     def create_and_record_search(*args)
       if args.empty?
         tape_name = "type_ahead_search_spec"
-        args = [owner, {:query => 'typeahead', :per_page => 10}]
+        args = [owner, {:query => 'typeahead', :per_page => 15}]
       end
       record_with_vcr(tape_name) do
         search = described_class.new(*args)

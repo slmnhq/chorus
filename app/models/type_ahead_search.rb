@@ -2,7 +2,7 @@ class TypeAheadSearch
   attr_accessor :query, :per_page
   attr_reader :current_user
 
-  MODELS_TO_SEARCH = [User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry]
+  MODELS_TO_SEARCH = [Attachment, User, GpdbInstance, HadoopInstance, Workspace, Workfile, Dataset, HdfsEntry]
 
   delegate :results, to: :search
 

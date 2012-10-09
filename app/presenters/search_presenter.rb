@@ -40,7 +40,7 @@ class SearchPresenter < SearchPresenterBase
         },
 
         :attachment => {
-            :results => present_attachments_with_highlights(attachments),
+            :results => present_models_with_highlights(attachments),
             :numFound => num_found[:attachments]
         }
     }.merge(workspace_specific_results)

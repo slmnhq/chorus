@@ -10,18 +10,28 @@ module SearchExtensions
       name
     end
 
+    def security_type_name
+      type_name
+    end
+
     def has_shared_search_fields(field_definitions)
       self.shared_search_fields = field_definitions
       define_shared_search_fields(field_definitions)
     end
 
-    def define_shared_search_fields(field_definitions, receiver_name=nil)
+    def define_shared_search_fields(field_definitions, receiver_name=nil, options = {})
       searchable do |s|
         field_definitions.each do |field_def|
           field_def = field_def.dup
           method_name = (field_def[:options] && field_def[:options][:using]) || field_def[:name]
           if receiver_name
-            delegate method_name, :to => receiver_name, :prefix => :search
+            if options[:proc]
+              define_method :"search_#{method_name}" do
+                instance_exec(method_name, &options[:proc])
+              end
+            else
+              delegate method_name, :to => receiver_name, :prefix => :search
+            end
             field_def[:options] = field_def[:options].try(:dup) || {}
             field_def[:options][:using] = "search_#{method_name}"
           end
@@ -37,6 +47,10 @@ module SearchExtensions
 
   def type_name
     self.class.type_name
+  end
+
+  def security_type_name
+    type_name
   end
 
   def entity_type_name

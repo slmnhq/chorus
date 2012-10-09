@@ -49,6 +49,7 @@ class User < ActiveRecord::Base
     text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
+    string :security_type_name
   end
 
   before_save :update_password_digest, :unless => lambda { password.blank? }

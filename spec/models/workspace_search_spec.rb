@@ -31,7 +31,12 @@ describe WorkspaceSearch do
 
         it "scopes the search to the workspace" do
           search.results
-          Sunspot.session.should have_search_params(:with, :workspace_id, 7)
+          Sunspot.session.should have_search_params(:with, Proc.new{
+            any_of do
+              with :workspace_id, 7
+              with :found_in_workspace_id, 7
+            end
+          })
         end
 
         it "should not facet by type_name" do

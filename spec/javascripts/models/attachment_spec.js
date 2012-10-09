@@ -2,7 +2,7 @@ describe("chorus.models.Attachment", function() {
     beforeEach(function() {
         var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
         this.model = search.attachments().at(0);
-        this.model.set({ id: "97", name: "helmut" });
+        this.model.set({ id: "97", name: "attachmentName" });
     });
 
     describe("#downloadUrl", function() {
@@ -29,7 +29,7 @@ describe("chorus.models.Attachment", function() {
     })
 
     it("returns its name", function() {
-        expect(this.model.name()).toBe("helmut");
+        expect(this.model.name()).toBe("attachmentName");
     });
 
     describe("#thumbnailUrl", function() {

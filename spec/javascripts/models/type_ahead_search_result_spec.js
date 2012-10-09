@@ -7,7 +7,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
         it('gives us what we expect', function() {
             var entityTypes = _.pluck(this.result.results(), 'entityType');
             var expectedEntityTypes = [
-//                'attachment',
+                'attachment',
                 'hdfs_file',
                 'workspace',
                 'greenplum_instance',

@@ -44,7 +44,7 @@ FixtureBuilder.configure do |fbuilder|
     owner.image = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'User.png'), "image/png")
     owner.save!
 
-    fbuilder.name :admin_creates_owner, Events::UserAdded.by(admin).add(:new_user => owner)
+    @admin_creates_owner = Events::UserAdded.by(admin).add(:new_user => owner)
 
     the_collaborator = FactoryGirl.create(:user, :username => 'the_collaborator')
     Events::UserAdded.by(admin).add(:new_user => the_collaborator)
@@ -71,7 +71,7 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:gpdb_instance, :name => "Offline", :owner => owner, :state => "offline")
     provisioning = FactoryGirl.create(:gpdb_instance, :name => "Provisioning", :owner => owner, :state => "provisioning")
 
-    fbuilder.name :owner_creates_greenplum_instance, Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => owners_instance)
+    @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => owners_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
@@ -133,13 +133,17 @@ FixtureBuilder.configure do |fbuilder|
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
-    fbuilder.name :typeahead, FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead')#, :owner => type_ahead_user)
-    [:workspace, :greenplum_instance, :hadoop_instance].each do |model|
+    @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead')#, :owner => type_ahead_user)
+    typeahead_instance = FactoryGirl.create :greenplum_instance, :name => 'typeahead'
+    [:workspace, :hadoop_instance].each do |model|
       FactoryGirl.create model, :name => 'typeahead'
     end
     FactoryGirl.create :workspace, :name => "typeahead_private", :public => false, :owner => owner
     typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
     FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
+
+    note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
+    note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
 
     typeahead_public_workspace.bound_datasets << typeahead_chorus_view
 
@@ -149,7 +153,8 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workspaces
     workspaces = []
-    workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators", :summary => 'searchquery can see I guess')
+    workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators except collaborator", :summary => 'searchquery can see I guess')
+    @public_with_no_collaborators = no_collaborators_public_workspace
     workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for searchquery, ha ha", :public => false)
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators}, :without_protection => true)
     workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema}, :without_protection => true)
@@ -174,8 +179,8 @@ FixtureBuilder.configure do |fbuilder|
     public_workspace.bound_datasets << source_view
     search_public_workspace.bound_datasets << searchquery_chorus_view
 
-    fbuilder.name :owner_creates_public_workspace, Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
-    fbuilder.name :owner_creates_private_workspace, Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
+    @owner_creates_public_workspace = Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
+    @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
 
     Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace, :actor => owner)
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
@@ -188,7 +193,7 @@ FixtureBuilder.configure do |fbuilder|
     # Tableau publications
     publication = FactoryGirl.create :tableau_workbook_publication, :name => "default",
                                      :workspace => public_workspace, :dataset => chorus_view, :project_name => "Default"
-    fbuilder.name :owner_publishes_to_tableau, Events::TableauWorkbookPublished.by(owner).add(
+    @owner_publishes_to_tableau = Events::TableauWorkbookPublished.by(owner).add(
         :workbook_name => publication.name,
         :dataset => publication.dataset,
         :workspace => publication.workspace,
@@ -237,13 +242,13 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
 
-      fbuilder.name :no_collaborators_creates_private_workfile, Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace, :commit_message => "Fix all the bugs!")
-      fbuilder.name :public_workfile_created, Events::WorkfileCreated.by(owner).add(:workfile => public_workfile, :workspace => public_workspace, :commit_message => "There be dragons!")
-      fbuilder.name :private_workfile_created, Events::WorkfileCreated.by(owner).add(:workfile => private_workfile, :workspace => private_workspace, :commit_message => "Chorus chorus chorus, i made you out of clay")
+      @no_collaborators_creates_private_workfile = Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace, :commit_message => "Fix all the bugs!")
+      @public_workfile_created = Events::WorkfileCreated.by(owner).add(:workfile => public_workfile, :workspace => public_workspace, :commit_message => "There be dragons!")
+      @private_workfile_created = Events::WorkfileCreated.by(owner).add(:workfile => private_workfile, :workspace => private_workspace, :commit_message => "Chorus chorus chorus, i made you out of clay")
       Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_public, :workspace => no_collaborators_public_workspace, :commit_message => "Chorus chorus chorus, with chorus I will play")
 
-      fbuilder.name :note_on_public_workfile, Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => public_workfile, :body => 'notesearch forever')
-      fbuilder.name :note_on_no_collaborators_private_workfile, Events::NoteOnWorkfile.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :body => 'notesearch never')
+      @note_on_public_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => public_workfile, :body => 'notesearch forever')
+      @note_on_no_collaborators_private_workfile = Events::NoteOnWorkfile.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :body => 'notesearch never')
       Events::WorkfileUpgradedVersion.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :commit_message => 'commit message', :version_id => no_collaborators_workfile_version.id.to_s, :version_num => "1")
 
       Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => public_workfile)
@@ -327,9 +332,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
     note_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_dataset, note_on_dataset
-    Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
-    note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
-    fbuilder.name :note_on_workspace_dataset, note_on_workspace_dataset
+    @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
+    @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
@@ -343,9 +347,6 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :comment_on_note_on_no_collaborators_private,
                   Comment.create!({:text => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
-
-    #fbuilder.name :comment_on_note_on_public_workfile,
-    #              Comment.create!({:text => "Comment on public workfile", :event_id => note_on_public_workfile.id, :author_id => no_collaborators.id})
 
     #Events
     Timecop.travel(-1.day)
@@ -369,15 +370,17 @@ FixtureBuilder.configure do |fbuilder|
     Timecop.return
 
     #NotesAttachment
-    fbuilder.name(:sql, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql'))))
-    fbuilder.name(:image, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png'))))
-    fbuilder.name(:attachment, note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance'))))
-    fbuilder.name(:attachment_workspace, note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace'))))
-    fbuilder.name(:attachment_workfile, note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile'))))
-    fbuilder.name(:attachment_dataset, note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset'))))
-    fbuilder.name(:attachment_hadoop, note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop'))))
-    fbuilder.name(:attachment_hdfs, note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file'))))
-    fbuilder.name(:attachment_workspace_dataset, note_on_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset'))))
+    @sql = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql')))
+    @image = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png')))
+    @attachment = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance')))
+    @attachment_workspace = note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
+    @attachment_private_workspace = note_on_no_collaborators_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
+    @attachment_workfile = note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile')))
+    @attachment_private_workfile = @note_on_no_collaborators_private_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
+    @attachment_dataset = note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset')))
+    @attachment_hadoop = note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
+    @attachment_hdfs = note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
+    @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
 
     if ENV['GPDB_HOST']
       GpdbIntegration.refresh_chorus
@@ -393,10 +396,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner)
-    fbuilder.name(:notification1, Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true) )
-    fbuilder.name(:notification2, Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true) )
-    fbuilder.name(:notification3, Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true) )
-    fbuilder.name(:notification4, Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true) )
+    @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
+    @notification2 = Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true)
+    @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
+    @notification4 = Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true)
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
     #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.

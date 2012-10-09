@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchController do
   describe "#show" do
-    let(:user) { users(:no_collaborators) }
+    let(:user) { users(:owner) }
 
     before do
       log_in user
@@ -90,6 +90,7 @@ describe SearchController do
         get :show, :query => 'searchquery_hdfs_file'
       end
     end
+
     generate_fixture "searchResultWithAttachmentOnWorkspaceDatasetNote.json" do
       reindex_solr_fixtures
 
@@ -142,7 +143,7 @@ describe SearchController do
         reindex_solr_fixtures
 
         VCR.use_cassette "type_ahead_search_fixture" do
-          get :type_ahead, :query => 'typeahead', :per_page => 10
+          get :type_ahead, :query => 'typeahead', :per_page => 15
         end
       end
     end

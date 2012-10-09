@@ -363,14 +363,6 @@ describe Dataset do
       dataset.database_name.should == dataset.schema.database.name
     end
 
-    it "returns the grouping_id " do
-      dataset.grouping_id.should == "Dataset #{dataset.id}"
-    end
-
-    it "returns the type_name of target1" do
-      dataset.type_name.should == 'Dataset'
-    end
-
     it "un-indexes the dataset when it becomes stale" do
       mock(dataset).solr_remove_from_index
       dataset.stale_at = Time.now
@@ -390,11 +382,11 @@ describe Dataset do
       let(:chorus_view) { datasets(:searchquery_chorus_view) }
 
       it "includes the id of all associated workspaces" do
-        chorus_view.searchable_workspace_ids.should include(workspace.id)
+        chorus_view.found_in_workspace_id.should include(workspace.id)
       end
 
       it "includes the id of all workspaces that include the dataset through a sandbox" do
-        dataset.searchable_workspace_ids.should include(workspace.id)
+        dataset.found_in_workspace_id.should include(workspace.id)
       end
     end
   end

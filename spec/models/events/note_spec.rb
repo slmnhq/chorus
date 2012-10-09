@@ -204,11 +204,12 @@ describe Events::Note do
       end
       let(:note) { subclass1.new(:workspace => workspace, :workfile => workfile) }
 
-      it "groups with its first 'target'" do
+      it "delegates grouping, type, and security fields to its first 'target'" do
         note.grouping_id.should == workspace.grouping_id
         note.grouping_id.should_not be_blank
         note.type_name.should == workspace.type_name
         note.type_name.should_not be_blank
+        note.security_type_name.should == workspace.security_type_name
       end
     end
 

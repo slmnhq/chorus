@@ -106,6 +106,16 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(result.find(".name").attr("href")).toBe(chorusView.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
         });
+
+        it("should display the correct name and type for attachment", function() {
+            var attachment = resultForEntityType(this.results, 'attachment');
+            var resultIndex = this.results.indexOf(attachment);
+            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            expect(result.find(".name").html()).toBe(attachment.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(attachment.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.attachment");
+        });
+
         function resultForEntityType(results, type) {
             return _.find(results, function(result) {
                 return result.get("entityType") == type;

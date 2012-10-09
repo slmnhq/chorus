@@ -6,12 +6,13 @@ module Events
     validates_presence_of :actor_id
     belongs_to :promoted_by, :class_name => 'User'
 
-    searchable do |s|
-      s.text :body, :stored => true do
+    searchable do
+      text :body, :stored => true do
         search_body
       end
-      s.string :grouping_id
-      s.string :type_name
+      string :grouping_id
+      string :type_name
+      string :security_type_name
     end
     attr_accessible :dataset_ids, :workfile_ids
 
