@@ -99,6 +99,25 @@ describe SearchController do
     end
   end
 
+  describe "#workspaces" do
+    let(:user) { users(:no_collaborators) }
+    let(:search_object) { Object.new }
+
+    it_behaves_like "an action that requires authentication", :get, :workspaces
+
+    context "when logged in" do
+      before do
+        log_in user
+      end
+
+      it "should search within the users workspaces and present the results" do
+        stub(MyWorkspacesSearch).new(user, hash_including(:query => 'searchything')) { search_object }
+        mock(@controller).present(search_object, :presenter_options => { :presenter_class => 'SearchPresenter' }) { @controller.render :json => {} }
+        get :workspaces, :query => 'searchything'
+      end
+    end
+  end
+
   describe "#type_ahead" do
     it_behaves_like "an action that requires authentication", :get, :type_ahead
 

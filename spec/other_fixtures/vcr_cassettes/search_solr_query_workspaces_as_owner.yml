@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3A%28Workspace+OR+Workfile+OR+Dataset+OR+Events%5C%3A%5C%3ANote%29&fq=type_name_s%3A%28Workspace+OR+Workfile+OR+Dataset%29&fq=-%28type_name_s%3AWorkspace+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3AWorkfile+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28type_name_s%3ADataset+AND+-instance_account_ids_im%3A%281000000+OR+1000002+OR+1000004%29%29&fq=workspace_id_im%3A%281000002+OR+1000002+OR+1000003+OR+1000003+OR+1000008+OR+1000009+OR+1000010+OR+1000011%29&q=searchquery&fl=%2A+score&qf=name_texts+summary_texts+file_name_texts+description_texts+database_name_texts+schema_name_texts+column_name_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=100&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>103,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+        summary_texts file_name_texts description_texts database_name_texts schema_name_texts
+        column_name_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''100'',''defType''=>''edismax'',''fl''=>''*
+        score'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(Workspace
+        OR Workfile OR Dataset OR Events\\:\\:Note)'',''type_name_s:(Workspace OR
+        Workfile OR Dataset)'',''-(type_name_s:Workspace AND -member_ids_im:1000006
+        AND -public_b:true)'',''-(type_name_s:Workfile AND -member_ids_im:1000006
+        AND -public_b:true)'',''-(type_name_s:Dataset AND -instance_account_ids_im:(1000000
+        OR 1000002 OR 1000004))'',''workspace_id_im:(1000002 OR 1000002 OR 1000003
+        OR 1000003 OR 1000008 OR 1000009 OR 1000010 OR 1000011)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{}}'
+    http_version: '1.1'
+  recorded_at: Tue, 09 Oct 2012 18:43:58 GMT
+recorded_with: VCR 2.1.1
+...

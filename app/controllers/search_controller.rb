@@ -5,6 +5,10 @@ class SearchController < ApplicationController
     present Search.new(current_user, params)
   end
 
+  def workspaces
+    present MyWorkspacesSearch.new(current_user, params), :presenter_options => { :presenter_class => 'SearchPresenter' }
+  end
+
   def type_ahead
     present TypeAheadSearch.new(current_user, params)
   end

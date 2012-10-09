@@ -39,6 +39,20 @@ resource "Search" do
     end
   end
 
+  get "/search/workspaces" do
+    parameter :query, "Search term"
+    parameter :per_type, "Number of each entity to return"
+
+    required_parameters :query
+
+    example "Search all joined workspaces" do
+      VCR.use_cassette('search_solr_query_workspaces_as_owner') do
+        do_request(:query => 'searchquery', :per_type => 3)
+        status.should == 200
+      end
+    end
+  end
+
   get "/workspaces/:workspace_id/search" do
     let(:workspace_id) { workspace.id }
     parameter :query, "Search term"

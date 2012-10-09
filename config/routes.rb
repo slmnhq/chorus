@@ -110,6 +110,7 @@ Chorus::Application.routes.draw do
 
   resource :search, :only => [:show], :controller => 'search' do
     get :type_ahead
+    get :workspaces
     member do
       post :reindex
     end
