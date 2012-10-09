@@ -40,7 +40,7 @@ case $RAILS_ENV in
             log "starting mizuno on port 3000..."
             #running mizuno in daemon mode (-D) is causing the command prompt to get screwed up
             if bundle exec mizuno -p 3000 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
-                wait_for_start $MIZUNO_PID_FILE
+                wait_for_start $MIZUNO_PID_FILE && reset
             fi
         fi
         ;;
