@@ -59,7 +59,7 @@ class Gppipe < GpTableCopier
   def read_pipe(count)
     done_read = 0
     while done_read != count
-      p "Inside the read loop: done read = #{done_read}, count = #{count}"
+      # p "Inside the read loop: done read = #{done_read}, count = #{count}"
       result = dst_conn.exec_query("INSERT INTO #{destination_table_fullname} (SELECT * FROM \"#{destination_schema.name}\".#{pipe_name}_r);")
       done_read += result
     end
