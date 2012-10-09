@@ -28,7 +28,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
         it("renders the 'Preview Data' button", function() {
             expect(this.view.$(".column_count .preview").text().trim()).toMatchTranslation("dataset.data_preview");
-        })
+        });
 
         it("sets up the result console to show the dataset download dialog", function() {
             var console = this.view.resultsConsole;
@@ -95,7 +95,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
-                    var dataset = newFixtures.workspaceDataset.chorusView();
+                    var dataset = rspecFixtures.workspaceDataset.chorusView();
                     this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
                     this.server.completeFetchFor(dataset.statistics());
                     this.view.render();
@@ -237,7 +237,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             describe("clicking the publish button", function() {
                 beforeEach(function() {
-                    this.modalSpy = stubModals()
+                    this.modalSpy = stubModals();
                     chorus.models.Config.instance().set({ tableauConfigured: true });
                     this.view.render();
                     this.view.$("button.publish").click();
@@ -486,7 +486,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("swap the Create Bar to green definition bar", function() {
                         expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
                         expect(this.view.$(".definition")).not.toHaveClass("hidden");
-                    })
+                    });
 
                     it("hides the filters section", function() {
                         expect(this.view.$(".filters")).toHaveClass("hidden")
@@ -514,7 +514,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
                     });
                 });
-            })
+            });
 
             context("when the dataset is not a chorus view", function() {
                 it("should not display the edit chorus view button", function() {
@@ -547,7 +547,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                 context("when the workspace is active", function() {
                     beforeEach(function() {
                         var dataset = rspecFixtures.workspaceDataset.datasetTable();
-                        var workspace = rspecFixtures.workspace({archivedAt: null});
+                        this.dataset = dataset;
+                        var workspace = dataset.workspace();
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(dataset.statistics());
@@ -558,11 +559,30 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
 
                     context("when tableau is configured", function() {
-
-                        it("displays the publish to tableau button", function() {
+                        beforeEach(function() {
                             chorus.models.Config.instance().set({ tableauConfigured: true });
+                        });
+                        it("displays the publish to tableau button", function() {
                             this.view.render();
                             expect(this.view.$("button.publish")).toExist();
+                        });
+
+                        context("when the user has update permissions", function() {
+                            it("displays the publish to tableau button", function() {
+                                //this.workspace.permission = ["read","commenting","update"];
+                                this.dataset.workspace().set({permission: ['read', 'commenting', 'update']});
+                                this.view.render();
+                                expect(this.view.$("button.publish")).toExist();
+                            });
+                        });
+
+                        context("when the user does not have update permissions", function() {
+                            it("does not display the publish to tableau button", function() {
+                                //this.workspace.permission = ["read","commenting"];
+                                this.dataset.workspace().set({permission: ['read', 'commenting']});
+                                this.view.render();
+                                expect(this.view.$("button.publish")).not.toExist();
+                            });
                         });
                     });
 
@@ -580,7 +600,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var dataset = newFixtures.workspaceDataset.chorusView();
+                        var dataset = rspecFixtures.workspaceDataset.chorusView();
                         var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" });
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
@@ -599,9 +619,9 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is not archived", function() {
                     beforeEach(function() {
-                        var dataset = newFixtures.workspaceDataset.chorusView();
+                        var dataset = rspecFixtures.workspaceDataset.chorusView();
                         dataset.initialQuery = "select * from abc";
-                        var workspace = rspecFixtures.workspace({archivedAt: null})
+                        var workspace = dataset.workspace();
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(dataset.statistics());
                         this.view.render();

@@ -225,11 +225,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         var workspaceArchived = this.options.workspace && !this.options.workspace.isActive();
+        var canUpdate = this.dataset.workspace() && this.dataset.workspace().canUpdate();
         return {
             definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition"),
             showEdit: this.dataset.isChorusView() && !workspaceArchived,
             showDerive: !this.dataset.isChorusView() && !this.options.isInstanceBrowser && !workspaceArchived,
-            showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isInstanceBrowser && !workspaceArchived
+            showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isInstanceBrowser && !workspaceArchived && canUpdate
         }
     },
 
