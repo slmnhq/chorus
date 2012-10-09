@@ -34,4 +34,11 @@ resource "Gnip instances" do
       status.should == 200
     end
   end
+
+  get "/gnip_instances/:id" do
+    let(:id) { gnip_instances(:default).id }
+    example_request "Get a registered Gnip Instance" do
+      status.should == 200
+    end
+  end
 end
