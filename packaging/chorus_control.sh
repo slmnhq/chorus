@@ -80,10 +80,6 @@ function monitor () {
 }
 
 function backup () {
-  pushd $CHORUS_HOME > /dev/null
-
-  echo "Backing up chorus data..."
-
   while getopts "d:r:" OPTION
   do
        case $OPTION in
@@ -100,29 +96,53 @@ function backup () {
        esac
   done
 
-  if [ -z "$BACKUP_DIR" ]; then
-      while true; do
-          read -p "Please enter a destination directory for your backup:" BACKUP_DIR
-          case $BACKUP_DIR in
-              '' | ' '* ) echo "Please try again.";;
-              * ) break;;
-          esac
-      done
-  fi
+  while true; do
+      if [ -z "$BACKUP_DIR" ]; then
+         read -p "Please enter the destination directory for your backup: " BACKUP_DIR
+      else
+          if mkdir -p "$BACKUP_DIR" && [ -r "$BACKUP_DIR" ] && [ -x "$BACKUP_DIR" ] && [ -w "$BACKUP_DIR" ]; then
+              break;
+          fi
+          read -p "Directory \"$BACKUP_DIR\" could not be accessed or created.  Please enter a different directory: " BACKUP_DIR
+      fi
+  done
 
-  mkdir -p "$BACKUP_DIR" || exit 1
-  if [ ! -r $BACKUP_DIR ] || [ ! -w $BACKUP_DIR ]; then
-      echo "Error: Could not write to directory \"$BACKUP_DIR\"." > /dev/stderr
-      exit 1
-  fi
+  BACKUP_ABSOLUTE_PATH=`cd $BACKUP_DIR && echo $PWD`
+
+  echo "Backing up chorus data..."
+  run_in_root_dir_with_postgres "rake backup:create[$BACKUP_ABSOLUTE_PATH,$ROLLING_DAYS]"
+}
+
+function restore () {
+
+  while true; do
+      if [ -z "$BACKUP_FILENAME" ]; then
+          read -p "Please enter the name of a backup file to restore: " BACKUP_FILENAME
+      else
+          if [ -r "$BACKUP_FILENAME" ] && [ -f "$BACKUP_FILENAME" ]; then
+              break;
+          fi
+          read -p "File \"$BACKUP_FILENAME\" does not exist or could not be read.  Please enter a different file: " BACKUP_FILENAME
+      fi
+  done
+
+  BACKUP_DIR=`dirname $BACKUP_FILENAME`
+  BACKUP_ABSOLUTE_DIR=`cd $BACKUP_DIR && echo $PWD`
+  BACKUP_ABSOLUTE_FILENAME="$BACKUP_ABSOLUTE_DIR/"`basename $BACKUP_FILENAME`
+
+  echo "Restoring chorus data..."
+  run_in_root_dir_with_postgres "rake backup:restore[$BACKUP_ABSOLUTE_FILENAME]"
+}
+
+function run_in_root_dir_with_postgres () {
+  pushd $CHORUS_HOME > /dev/null
 
   if ! kill -0 `head -1 $POSTGRES_PID_FILE 2>&1` >& /dev/null; then
       postgres_started="1"
       $bin/start-postgres.sh
   fi
 
-  BACKUP_PATH=`cd $BACKUP_DIR && echo $PWD`
-  rake "backup:create[$BACKUP_PATH,$ROLLING_DAYS]"
+  ${@}
 
   if [ -n "$postgres_started" ]; then
       $bin/stop-postgres.sh
@@ -141,6 +161,7 @@ function usage () {
   echo "  $script restart [services]         stop and start services"
   echo "  $script monitor [services]         monitor and restart services as needed"
   echo "  $script backup  [-d dir] [-r days] backup Chorus data"
+  echo "  $script restore [file]             restore Chorus data"
   echo
   echo "The following services are available: postgres, workers, scheduler, solr, webserver."
   echo "If no services are specified on the command line, $script manages all services."
@@ -157,6 +178,7 @@ function usage () {
   echo "  $script monitor workers            monitor specific services"
   echo
   echo "  $script backup -d backup_dir       backup Chorus data"
+  echo "  $script restore -d backup_filename restore Chorus data"
   echo
 
   return 1
@@ -179,6 +201,9 @@ case $command in
        ;;
     backup )
        backup ${@}
+       ;;
+    restore )
+       restore ${@}
        ;;
     * )
        usage
