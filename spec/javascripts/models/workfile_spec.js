@@ -238,6 +238,13 @@ describe("chorus.models.Workfile", function() {
         })
     });
 
+    describe("isTableau", function() {
+        it("returns true when the workfile is a tableau file", function() {
+            var workfile = rspecFixtures.workfile.tableau();
+            expect(workfile.isTableau()).toBeTruthy();
+        })
+    });
+
     describe("isBinary", function() {
         it("returns true when the workfile is a binary file", function() {
             var workfile = rspecFixtures.workfile.binary();

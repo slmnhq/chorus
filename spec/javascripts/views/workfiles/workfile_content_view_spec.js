@@ -52,6 +52,18 @@ describe("chorus.views.WorkfileContent", function() {
             });
         })
 
+        context("when the given workfile is a tableau file", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.workfile.tableau();
+                spyOn(chorus.views, "TableauWorkfileContent");
+                chorus.views.WorkfileContent.buildFor(this.model);
+            });
+
+            it("instantiates a TableauWorkfileContent view with the given workfile", function() {
+                expect(chorus.views.TableauWorkfileContent).toHaveBeenCalledWith({ model : this.model });
+            });
+        })
+
         context("when the given workfile is nothing special", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.binary();

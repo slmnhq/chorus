@@ -7,6 +7,7 @@
     var CODE = 'code';
     var TEXT = 'text';
     var ALPINE = 'alpine';
+    var TABLEAU = 'tableau_workbook';
     var OTHER = 'other';
 
     chorus.models.Workfile = chorus.models.Base.extend({
@@ -139,6 +140,10 @@
 
         isAlpine: function() {
             return this.get("fileType") == ALPINE;
+        },
+
+        isTableau: function() {
+            return this.get("fileType") == TABLEAU;
         },
 
         isBinary: function() {
