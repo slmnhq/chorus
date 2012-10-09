@@ -19,7 +19,7 @@ describe GnipInstancesController do
     it "reports that the instance was created with the correct owner" do
       post :create, parameters
       response.code.should == "201"
-      GnipInstance.last.owner_id.should == @user.id
+      GnipInstance.last.owner.should == @user
     end
 
     it "should add a gnip instance" do
@@ -27,5 +27,18 @@ describe GnipInstancesController do
         post :create, parameters
       }.to change(GnipInstance, :count).by(1)
     end
+  end
+
+  describe "#index" do
+    let(:gnip_instance) { gnip_instances(:gnip) }
+
+    it "should return correct response code" do
+      get :index
+      response.code.should == "200"
+      decoded_response.length == 1
+      decoded_response[0].id = gnip_instance.id
+      decoded_response[0].owner.id = gnip_instance.owner_id
+    end
+
   end
 end

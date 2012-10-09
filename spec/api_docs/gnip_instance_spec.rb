@@ -29,4 +29,9 @@ resource "Gnip instances" do
     end
   end
 
+  get "/gnip_instances" do
+    example_request "Get a list of registered Gnip Instances" do
+      status.should == 200
+    end
+  end
 end
