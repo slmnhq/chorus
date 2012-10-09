@@ -13,17 +13,16 @@ namespace :api_docs do
     end
   end
 
-  desc "Check and generate API docs"
-  task :generate => :check do
-    RSpec::Core::RakeTask.new('api_docs:generate') do |t|
-      t.pattern = 'spec/api_docs/**/*_spec.rb'
-      t.rspec_opts = ["--format RspecApiDocumentation::ApiFormatter"]
-    end
-    Rake::Task['api_docs:generate'].invoke
+  RSpec::Core::RakeTask.new(:build) do |t|
+    t.pattern = 'spec/api_docs/**/*_spec.rb'
+    t.rspec_opts = ["--format RspecApiDocumentation::ApiFormatter"]
   end
 
+  desc "Check and generate API docs"
+  task :generate => [:check, :build]
+
   desc "Package api docs"
-  task :package => "docs:generate" do
+  task :package => :build do
     destination_archive = File.expand_path(File.dirname(__FILE__) + '../../../doc/api_documentation.tar.gz')
     source_directory = File.expand_path(File.dirname(__FILE__) + '../../../public')
     `tar czf #{destination_archive} -C #{source_directory} api/`

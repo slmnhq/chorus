@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user, :aliases => [:owner, :modifier, :actor] do
-    sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}#{(Random.rand * 100000).ceil}" }
+    sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     password "password"
     first_name {Faker::Name.first_name}
     last_name {Faker::Name.last_name}
