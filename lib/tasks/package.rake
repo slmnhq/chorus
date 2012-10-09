@@ -76,6 +76,7 @@ module PackageMaker
 
   PATHS_TO_EXCLUDE = %w{
     config/secret.key
+    lib/tasks/api_docs.rake
   }
 
   extend self
