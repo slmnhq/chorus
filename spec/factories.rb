@@ -32,6 +32,15 @@ FactoryGirl.define do
     owner
   end
 
+  factory :gnip_instance do
+    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.gnip.com" }
+    sequence(:port) { |n| 5000+n }
+    sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    password "secret"
+    owner
+  end
+
   factory :instance_account do
     sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"

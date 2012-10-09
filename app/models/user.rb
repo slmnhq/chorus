@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_accessor :password
 
+  has_many :gnip_instances, :foreign_key => :owner_id
   has_many :gpdb_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships

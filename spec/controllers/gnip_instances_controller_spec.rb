@@ -30,15 +30,29 @@ describe GnipInstancesController do
   end
 
   describe "#index" do
-    let(:gnip_instance) { gnip_instances(:gnip) }
+    let(:gnip_instance) { gnip_instances(:default) }
 
     it "should return correct response code" do
       get :index
       response.code.should == "200"
-      decoded_response.length == 1
-      decoded_response[0].id = gnip_instance.id
-      decoded_response[0].owner.id = gnip_instance.owner_id
+      decoded_response.length.should == 1
+      decoded_response[0].id.should == gnip_instance.id
+      decoded_response[0].owner.id.should == gnip_instance.owner_id
     end
 
+  end
+
+  describe '#show' do
+    let(:gnip_instance) { gnip_instances(:default) }
+
+    it 'presents the gnip instance' do
+      get :show, :id => gnip_instance.to_param
+      response.code.should == '200'
+      decoded_response['name'].should == gnip_instance.name
+    end
+
+    generate_fixture 'gnipInstance.json' do
+      get :show, :id => gnip_instance.to_param
+    end
   end
 end

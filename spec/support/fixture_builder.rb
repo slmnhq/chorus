@@ -83,8 +83,8 @@ FixtureBuilder.configure do |fbuilder|
     chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
     chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::real_gpdb_hostname, :owner => admin))
 
-    gnip_instance = GnipInstance.create!({ :name => "sample gnip account", :description => "an example gnip account", :host => "https://stream.gnip.com", :port => "443", :owner_id => admin.id, :username => "gpadmin", :password => "hola"}, :without_protection => true)
-    fbuilder.name :gnip, gnip_instance
+    gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "sample gnip account", :description => "an example gnip account")
+    fbuilder.name :default, gnip_instance
 
     # Instance Accounts
     @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)
