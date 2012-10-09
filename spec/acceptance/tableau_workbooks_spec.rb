@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Tableau Workbooks" do
-  let(:dataset) { datasets(:executable_chorus_view) }
+  let(:dataset) { datasets(:chorus_view) }
   let(:workspace) { workspaces(:public) }
   let(:user) { dataset.gpdb_instance.owner }
 

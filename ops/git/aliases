@@ -19,8 +19,8 @@ alias vim='mvim -p'
 alias l='ls'
 alias ll='ls -la'
 
-alias st='script/test'
-alias sta='script/test && script/test spec/legacy_migration && rake api_docs'
+alias st='echo "Please use ~rake~ for unit tests or ~rake spec/blah~ to run a specific spec"'
+alias sta='echo "Please use ~rake all~ to run all the tests, including legacy_migration and api_docs"'
 alias rage='bundle exec rake db:migrate db:test:prepare'
 alias run_all_tests='sta && rake phantom && rspec spec/integration'
 
