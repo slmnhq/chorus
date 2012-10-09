@@ -84,8 +84,6 @@ function backup () {
 
   echo "Backing up chorus data..."
 
-  BACKUP_DIR="data/chorus/bak"
-
   while getopts "d:r:" OPTION
   do
        case $OPTION in
@@ -103,8 +101,13 @@ function backup () {
   done
 
   if [ -z "$BACKUP_DIR" ]; then
-      usage
-      exit
+      while true; do
+          read -p "Please enter a destination directory for your backup:" BACKUP_DIR
+          case $BACKUP_DIR in
+              '' | ' '* ) echo "Please try again.";;
+              * ) break;;
+          esac
+      done
   fi
 
   mkdir -p "$BACKUP_DIR" || exit 1
