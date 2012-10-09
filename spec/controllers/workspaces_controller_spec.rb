@@ -125,6 +125,7 @@ describe WorkspacesController do
   end
 
   describe "#show" do
+    let(:owner) { users(:owner) }
     let(:workspace) { workspaces(:public) }
 
     context "with a valid workspace id" do

@@ -22,7 +22,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
             hasSandbox:!!this.model.sandbox(),
             canUpdate: this.model.canUpdate(),
             active: this.model.isActive(),
-            kaggleConfigured: chorus.models.Config.instance().get("kaggleConfigured") && this.model.isActive(),
+            canKaggle: chorus.models.Config.instance().get("kaggleConfigured") && this.model.canUpdate() && this.model.isActive(),
             kaggleUrl: this.model.showUrl()+"/kaggle"
         };
     },
