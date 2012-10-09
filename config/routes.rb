@@ -28,6 +28,8 @@ Chorus::Application.routes.draw do
     end
   end
 
+  resources :gnip_instances, :only => [:create]
+
   resources :databases, :only => [:show], :controller => 'instance_databases' do
     resources :schemas, :only => [:index]
   end
