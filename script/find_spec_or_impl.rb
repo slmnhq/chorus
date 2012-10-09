@@ -6,6 +6,8 @@ in_js = filename =~ /js$/
 
 if in_js
   impl_prefix, spec_prefix, extension = "app/assets/javascripts/", "spec/javascripts/", ".js"
+elsif filename =~ %r{^(lib|spec/lib)}
+  impl_prefix, spec_prefix, extension = "lib/", "spec/lib/", ".rb"
 else
   impl_prefix, spec_prefix, extension = "app/", "spec/", ".rb"
 end
