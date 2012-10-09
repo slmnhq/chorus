@@ -1,18 +1,19 @@
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
 
-  def self.backup(*args)
-    backup = Backup.new *args
+  def self.backup(backup_dir, rolling_days = nil)
+    backup = Backup.new backup_dir, rolling_days
     backup.run
   end
 
   class Backup
     attr_accessor :backup_dir, :rolling_days
 
-    def initialize(backup_dir, rolling_days)
+    def initialize(backup_dir, rolling_days = nil)
+      rolling_days ||= 7
       rolling_days > 0 or raise "Must specify a positive integer for the number of rolling days (value was #{rolling_days})."
 
-      self.backup_dir = backup_dir
+      self.backup_dir = File.expand_path(backup_dir)
       self.rolling_days = rolling_days
     end
 
@@ -25,13 +26,13 @@ module BackupRestore
           package_backup
         end
       ensure
-        system "rm -rf #{temp_dir}" or raise "Could not remove temporary directory: #{temp_dir}"
+        FileUtils.rm_r temp_dir or raise "Could not remove temporary directory: #{temp_dir}"
       end
       delete_old_backups
     end
 
     def dump_database
-      puts "Dumping database contents..."
+      log "Dumping database contents..."
 
       db_config = Rails.application.config.database_configuration[Rails.env]
       db_filename = "database.sql.gz"
@@ -39,7 +40,7 @@ module BackupRestore
     end
 
     def compress_assets
-      puts "Compressing assets..."
+      log "Compressing assets..."
 
       asset_filename = "assets.tgz"
 
@@ -55,7 +56,7 @@ module BackupRestore
     end
 
     def delete_old_backups
-      puts "Removing backups more than #{rolling_days} #{"day".pluralize(rolling_days)} old..."
+      log "Removing backups more than #{rolling_days} #{"day".pluralize(rolling_days)} old..."
 
       oldest_allowed_timestamp = rolling_days.days.ago.strftime('%Y%m%d_%H%M%S')
 
@@ -65,20 +66,20 @@ module BackupRestore
         timestamp = filename.gsub(backup_dir + "/" + BACKUP_FILE_PREFIX, "")
 
         if timestamp < oldest_allowed_timestamp
-          puts "Deleting '#{filename}'"
+          log "Deleting '#{filename}'"
           File.delete(filename)
         end
       end
     end
 
     def package_backup
-      system "cp #{Rails.root}/version_build ." or raise "Could not find version file."
+      FileUtils.cp "#{Rails.root}/version_build", "."
 
-      timestamp = Time.current.strftime('%Y%m%d_%H%M%S')
+      timestamp = Time.current.strftime '%Y%m%d_%H%M%S'
       backup_filename = backup_dir + "/#{BACKUP_FILE_PREFIX}#{timestamp}.tar"
 
-      system "tar cf #{backup_filename} *" or raise "Packaging backup failed."
-      puts "Wrote file #{backup_filename}."
+      system "tar cf #{backup_filename} *" or raise "Packaging failed."
+      log "Wrote file #{backup_filename}."
     end
 
     def config_path(name)
@@ -87,6 +88,10 @@ module BackupRestore
 
     def chorus_config
       @chorus_config ||= ChorusConfig.new
+    end
+
+    def log(*args)
+      puts *args
     end
   end
 end
