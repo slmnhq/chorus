@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: git@github.com:GreenplumChorus/tableau.git
-  revision: 0be66575a6633de9c20b526c840ede8e80759901
+  revision: 639445622039e5fb9ba0b252e7ecdde28352ba09
   specs:
     tabcmd_gem (0.0.1)
       highline
