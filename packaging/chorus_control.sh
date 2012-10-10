@@ -115,6 +115,7 @@ function backup () {
 
 function restore () {
 
+  BACKUP_FILENAME=${@}
   while true; do
       if [ -z "$BACKUP_FILENAME" ]; then
           read -p "Please enter the name of a backup file to restore: " BACKUP_FILENAME
@@ -178,7 +179,7 @@ function usage () {
   echo "  $script monitor workers            monitor specific services"
   echo
   echo "  $script backup -d backup_dir       backup Chorus data"
-  echo "  $script restore -d backup_filename restore Chorus data"
+  echo "  $script restore backup_filename    restore Chorus data"
   echo
 
   return 1
