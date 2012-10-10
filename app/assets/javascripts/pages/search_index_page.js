@@ -82,6 +82,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             dataset: new chorus.views.DatasetSidebar({listMode: true}),
             instance: new chorus.views.InstanceListSidebar(),
             hadoopInstance: new chorus.views.InstanceListSidebar(),
+            gnipInstance: new chorus.views.InstanceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
 
@@ -93,6 +94,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
         chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
         chorus.PageEvents.subscribe("hadoop_instance:selected", this.hadoopInstanceSelected, this);
+        chorus.PageEvents.subscribe("gnip_instance:selected", this.gnipInstanceSelected, this);
         chorus.PageEvents.subscribe("attachment:selected", this.attachmentSelected, this);
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
@@ -128,6 +130,11 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     hadoopInstanceSelected: function(hadoop_instance) {
         this.sidebars.hadoopInstance.setInstance(hadoop_instance);
         this.renderSidebar(this.sidebars.hadoopInstance);
+    },
+
+    gnipInstanceSelected: function(gnip_instance) {
+        this.sidebars.gnipInstance.setInstance(gnip_instance);
+        this.renderSidebar(this.sidebars.gnipInstance);
     },
 
     attachmentSelected: function(attachment) {

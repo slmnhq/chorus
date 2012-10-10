@@ -21,7 +21,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, fixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
             });
 
             it("has breadcrumbs", function() {
@@ -104,7 +104,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows that workfile in the sidebar", function() {
-                        expect(this.page.sidebar.$(".fileName")).toHaveText("test.sql");
+                        expect(this.page.sidebar.$(".fileName")).toHaveText("Public");
                     });
 
                     it("sets the workfile as the selectedItem on the search result", function() {
@@ -132,12 +132,12 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows that workspace in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("other_ws");
+                        expect(this.page.sidebar.$(".info .name")).toHaveText("Private");
                     });
 
                     it("show the 'add a note' link in the sidebar", function() {
                         expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).toExist()
-                    })
+                    });
 
                     it("show the 'add an insight' link in the sidebar", function() {
                         expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist()
@@ -164,7 +164,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the tabular data item in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("test1");
+                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead");
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
@@ -219,8 +219,34 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the hadoop instance in the sidebar", function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
                         expect(this.page.sidebars.hadoopInstance.setInstance).toHaveBeenCalledWith(this.page.search.hadoopInstances().at(0))
+                    });
+                });
+            });
+
+            describe("the gnip instance section", function() {
+                beforeEach(function() {
+                    this.gnipInstanceLIs = this.page.$(".gnip_instance_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.gnipInstanceLIs.length).toBe(1)
+                });
+
+                describe("clicking on an gnip instance search result", function() {
+                    beforeEach(function() {
+                        spyOn(this.page.sidebars.gnipInstance, "setInstance");
+                        this.gnipInstanceLIs.eq(0).trigger("click");
+                    });
+
+                    it("selects that gnip instance", function() {
+                        expect(this.gnipInstanceLIs.eq(0)).toHaveClass("selected");
+                    });
+
+                    it("shows the gnip instance in the sidebar", function() {
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
+                        expect(this.page.sidebars.gnipInstance.setInstance).toHaveBeenCalledWith(this.page.search.gnipInstances().at(0))
                     });
                 });
             });
@@ -237,12 +263,12 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 describe("clicking on a user search result", function() {
                     beforeEach(function() {
-                        this.clickedUser = this.users.at(1);
-                        this.userLis.eq(1).trigger("click");
+                        this.clickedUser = this.users.at(0);
+                        this.userLis.eq(0).trigger("click");
                     });
 
                     it("selects that user", function() {
-                        expect(this.userLis.eq(1)).toHaveClass("selected");
+                        expect(this.userLis.eq(0)).toHaveClass("selected");
                     });
 
                     it("fetches the user's activities'", function() {
@@ -256,7 +282,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                         });
 
                         it("shows that user in the sidebar", function() {
-                            expect(this.page.sidebar.$(".info .full_name")).toHaveText(this.users.at(1).displayName());
+                            expect(this.page.sidebar.$(".info .full_name")).toHaveText(this.users.at(0).displayName());
                         });
                     });
                 });
@@ -305,7 +331,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.attachmentLis.length).toBe(2);
+                    expect(this.attachmentLis.length).toBe(7);
                 });
 
                 describe("clicking on a search result", function() {
