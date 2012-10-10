@@ -1,5 +1,5 @@
 describe("chorus.presenters.InstanceList", function() {
-    var greenplumInstances, hadoopInstances, presenter;
+    var greenplumInstances, hadoopInstances, gnipInstances, presenter;
 
     beforeEach(function() {
         greenplumInstances = new chorus.collections.InstanceSet([
@@ -13,29 +13,41 @@ describe("chorus.presenters.InstanceList", function() {
             rspecFixtures.hadoopInstance({ state: null })
         ]);
 
-        presenter = new chorus.presenters.InstanceList({ greenplum: greenplumInstances, hadoop: hadoopInstances });
+        gnipInstances = new chorus.collections.GnipInstanceSet([
+            rspecFixtures.gnipInstance({ name: "Gnip1" }),
+            rspecFixtures.gnipInstance({ name: "Gnip2" }),
+            rspecFixtures.gnipInstance({ name: "Gnip3", description: "I am a turnip" })
+        ]);
+        
+        presenter = new chorus.presenters.InstanceList({ 
+            greenplum: greenplumInstances, 
+            hadoop: hadoopInstances,
+            gnip: gnipInstances
+        });
         presenter.present();
     });
 
-    it("returns an object with three arrays 'greenplum', 'hadoop', and 'other'", function() {
+    it("returns an object with three arrays 'greenplum', 'hadoop', and 'gnip'", function() {
         expect(presenter.greenplum.length).toBe(2);
         expect(presenter.hadoop.length).toBe(3);
-        expect(presenter.other.length).toBe(0);
+        expect(presenter.gnip.length).toBe(3);
     });
 
-    it("has the keys 'hasGreenplum', 'hasHadoop' and 'hasOther'", function() {
+    it("has the keys 'hasGreenplum', 'hasHadoop' and 'hasGnip'", function() {
         expect(presenter.hasGreenplum).toBeTruthy();
         expect(presenter.hasHadoop).toBeTruthy();
-        expect(presenter.hasOther).toBeFalsy();
+        expect(presenter.hasGnip).toBeTruthy();
 
         presenter = new chorus.presenters.InstanceList({
             greenplum: new chorus.collections.InstanceSet(),
-            hadoop: new chorus.collections.HadoopInstanceSet()
+            hadoop: new chorus.collections.HadoopInstanceSet(),
+            gnip: new chorus.collections.GnipInstanceSet()
+
         });
 
         expect(presenter.hasGreenplum).toBeFalsy();
         expect(presenter.hasHadoop).toBeFalsy();
-        expect(presenter.hasOther).toBeFalsy();
+        expect(presenter.hasGnip).toBeFalsy();
     });
 
     describe("#present", function() {
@@ -64,6 +76,10 @@ describe("chorus.presenters.InstanceList", function() {
             hadoopInstances.each(function(model, i) {
                 expect(presenter.hadoop[i][name]).toBe(model.get(name));
             });
+
+            gnipInstances.each(function(model, i) {
+                expect(presenter.gnip[i][name]).toBe(model.get(name));
+            });
         });
     }
 
@@ -77,6 +93,10 @@ describe("chorus.presenters.InstanceList", function() {
 
             hadoopInstances.each(function(model, i) {
                 expect(presenter.hadoop[i][presentedName]).toBe(model[methodName]());
+            });
+
+            gnipInstances.each(function(model, i) {
+                expect(presenter.gnip[i][presentedName]).toBe(model[methodName]());
             });
         });
     }

@@ -8,14 +8,17 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
     setup:function () {
         var greenplumInstances = new chorus.collections.InstanceSet();
         var hadoopInstances = new chorus.collections.HadoopInstanceSet();
+        var gnipInstances = new chorus.collections.GnipInstanceSet();
         greenplumInstances.fetchAll();
         hadoopInstances.fetchAll();
+        gnipInstances.fetchAll();
 
         this.dependOn(greenplumInstances, this.setPreselection);
 
         var options = {
             greenplumInstances: greenplumInstances,
-            hadoopInstances: hadoopInstances
+            hadoopInstances: hadoopInstances,
+            gnipInstances: gnipInstances
         };
 
         this.mainContent = new chorus.views.MainContentView({

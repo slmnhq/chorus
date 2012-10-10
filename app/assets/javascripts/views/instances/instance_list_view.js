@@ -9,21 +9,27 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     makeModel: function() {
         this.greenplumInstances = this.options.greenplumInstances;
         this.hadoopInstances = this.options.hadoopInstances;
+        this.gnipInstances = this.options.gnipInstances;
 
         this.bindings.add(this.greenplumInstances, "change", this.render);
         this.bindings.add(this.hadoopInstances, "change", this.render);
+        this.bindings.add(this.gnipInstances, "change", this.render);
+
         this.bindings.add(this.greenplumInstances, "reset", this.render);
         this.bindings.add(this.hadoopInstances, "reset", this.render);
+        this.bindings.add(this.gnipInstances, "reset", this.render);
     },
 
     setup: function() {
         chorus.PageEvents.subscribe("instance:added", function (instance) {
             this.greenplumInstances.fetchAll();
             this.hadoopInstances.fetchAll();
+            this.gnipInstances.fetchAll();
             this.selectedInstance = instance;
         }, this);
         this.bindings.add(this.greenplumInstances, "remove", this.instanceDestroyed);
         this.bindings.add(this.hadoopInstances, "remove", this.instanceDestroyed);
+        this.bindings.add(this.gnipInstances, "remove", this.instanceDestroyed);
     },
 
     instanceDestroyed: function(model) {
@@ -33,7 +39,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
 
     postRender: function() {
         if (this.selectedInstance) {
-            this.$('.instance_provider li[' + this.selectedInstance.dataBinding + '=' + this.selectedInstance.get("id") + ']').click();
+            this.$('.instance_provider li[data-instance-id=' + this.selectedInstance.get("id") + ']').click();
         } else {
             if(this.greenplumInstances.loaded) {
                 this.$('.instance_provider li:first').click();
@@ -42,7 +48,11 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     context: function() {
-        var presenter = new chorus.presenters.InstanceList({ hadoop: this.hadoopInstances, greenplum: this.greenplumInstances });
+        var presenter = new chorus.presenters.InstanceList({
+            hadoop: this.hadoopInstances,
+            greenplum: this.greenplumInstances,
+            gnip: this.gnipInstances
+        });
         return presenter.present();
     },
 
@@ -55,15 +65,11 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         this.$("li").removeClass("selected");
         target.addClass("selected");
 
-        var collection = (target.data("type") === "hadoop") ? this.hadoopInstances : this.greenplumInstances;
-        if(target.data("greenplumInstanceId")) {
-            var instance = collection.get(target.data("greenplumInstanceId"))
-            this.selectedInstance = instance;
-            chorus.PageEvents.broadcast("instance:selected", instance);
-        } else {
-            var hadoopInstance = collection.get(target.data("hadoopInstanceId"));
-            this.selectedInstance = hadoopInstance;
-            chorus.PageEvents.broadcast("instance:selected", hadoopInstance);
-        }
+        var map = {greenplum: this.greenplumInstances, hadoop: this.hadoopInstances, gnip: this.gnipInstances};
+        var collection = map[target.data("type")];
+
+        var instance = collection.get(target.data("instanceId"));
+        this.selectedInstance = instance;
+        chorus.PageEvents.broadcast("instance:selected", instance);
     }
 });

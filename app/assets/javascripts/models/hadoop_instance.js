@@ -5,8 +5,6 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
     shared: true,
     entityType: "hadoop_instance",
 
-    dataBinding: 'data-hadoop-instance-id',
-
     isShared: function() {
         return true;
     },
@@ -26,6 +24,10 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
 
     isHadoop: function() {
         return true;
+    },
+
+    isGnip: function() {
+        return false;
     },
 
     declareValidations: function(newAttrs) {

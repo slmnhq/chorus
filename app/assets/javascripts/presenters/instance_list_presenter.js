@@ -12,11 +12,13 @@ _.extend(chorus.presenters.InstanceList.prototype, {
             return this.presentModel(model);
         }, this);
 
-        this.other = [];
+        this.gnip = this.options.gnip.map(function(model) {
+            return this.presentModel(model);
+        }, this);
 
         this.hasGreenplum = this.greenplum.length > 0;
         this.hasHadoop = this.hadoop.length > 0;
-        this.hasOther = this.other.length > 0;
+        this.hasGnip = this.gnip.length > 0;
 
         return this;
     },

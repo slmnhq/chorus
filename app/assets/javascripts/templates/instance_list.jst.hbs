@@ -2,7 +2,7 @@
     <div class="details">{{t "instances.list.type.greenplum"}}</div>
     <ul class="list selectable">
         {{#each greenplum}}
-            <li class="instance" data-type="greenplum" data-greenplum-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            <li class="instance" data-type="greenplum" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasGreenplum}}
@@ -14,7 +14,7 @@
     <div class="details">{{t "instances.list.type.hdfs"}}</div>
     <ul class="list selectable">
         {{#each hadoop}}
-            <li class="instance" data-type="hadoop" data-hadoop-instance-id="{{id}}">{{renderTemplate "hadoop_instance" this}}</li>
+            <li class="instance" data-type="hadoop" data-instance-id="{{id}}">{{renderTemplate "hadoop_instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasHadoop}}
@@ -22,14 +22,14 @@
     {{/unless}}
 </div>
 
-<div class="instance_provider other_instance">
-    <div class="details">{{t "instances.list.type.other"}}</div>
+<div class="instance_provider gnip_instance">
+    <div class="details">{{t "instances.list.type.gnip"}}</div>
     <ul class="list selectable">
-        {{#each other}}
-            <li class="instance" data-type="other" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+        {{#each gnip}}
+        <li class="instance" data-type="gnip" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
-    {{#unless hasOther}}
-        <div class="no_instances">{{t "instances.none"}}</div>
+    {{#unless hasGnip}}
+    <div class="no_instances">{{t "instances.none"}}</div>
     {{/unless}}
 </div>

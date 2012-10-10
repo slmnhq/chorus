@@ -8,8 +8,6 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
 
     parameterWrapper: "gpdb_instance",
 
-    dataBinding: 'data-greenplum-instance-id',
-
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");

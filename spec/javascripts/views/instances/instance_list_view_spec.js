@@ -2,12 +2,15 @@ describe("chorus.views.InstanceList", function() {
     beforeEach(function() {
         this.greenplumInstances = new chorus.collections.InstanceSet();
         this.hadoopInstances = new chorus.collections.HadoopInstanceSet();
+        this.gnipInstances = new chorus.collections.GnipInstanceSet();
         this.greenplumInstances.fetch();
         this.hadoopInstances.fetch();
+        this.gnipInstances.fetch();
 
         this.view = new chorus.views.InstanceList({
             greenplumInstances: this.greenplumInstances,
-            hadoopInstances: this.hadoopInstances
+            hadoopInstances: this.hadoopInstances,
+            gnipInstances: this.gnipInstances
         });
     });
 
@@ -20,7 +23,7 @@ describe("chorus.views.InstanceList", function() {
             it("renders empty text for each instance type", function() {
                 expect(this.view.$(".greenplum_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
-                expect(this.view.$(".other_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
         });
     });
@@ -36,6 +39,11 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.greenplumInstance({name : "GP9", id:"g9"}),
                 rspecFixtures.greenplumInstance({name : "gP1", id: "g1"}),
                 rspecFixtures.greenplumInstance({name : "GP10", id: "g10"})
+            ]);
+            this.server.completeFetchFor(this.gnipInstances, [
+                rspecFixtures.gnipInstance({name : "Gnip1", id:"gnip9"}),
+                rspecFixtures.gnipInstance({name : "Gnip2", id: "gnip1"}),
+                rspecFixtures.gnipInstance({name : "Gnip3", id: "gnip10"})
             ]);
         });
 
@@ -67,6 +75,14 @@ describe("chorus.views.InstanceList", function() {
             expect(hadoopItems).toContainText("Hadoop10");
         });
 
+        it("renders the gnip instances in the correct instance div", function() {
+            var gnipItems = this.view.$(".gnip_instance li.instance");
+            expect(gnipItems.length).toBe(3);
+            expect(gnipItems).toContainText("Gnip1");
+            expect(gnipItems).toContainText("Gnip2");
+            expect(gnipItems).toContainText("Gnip3");
+        });
+
         it("pre-selects the first instance", function() {
             expect(this.view.$("li:first-child")).toHaveClass("selected");
             expect(this.view.$("li.selected").length).toBe(1);
@@ -78,7 +94,7 @@ describe("chorus.views.InstanceList", function() {
                 this.oldLength = this.greenplumInstances.length;
                 var liToSelect = this.view.$("li").eq(2);
                 liToSelect.click();
-                this.selectedId = liToSelect.data("greenplumInstanceId");
+                this.selectedId = liToSelect.data("instanceId");
             });
 
             context("when it is currently selected", function() {
@@ -101,13 +117,13 @@ describe("chorus.views.InstanceList", function() {
             context("when a non-selected instance is destroyed", function() {
                 beforeEach(function() {
                     var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
-                    var id = nonSelectedLi.data("greenplumInstanceId");
+                    var id = nonSelectedLi.data("instanceId");
                     this.greenplumInstances.get(id).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
                 it("leaves the same instance selected", function() {
-                    expect(this.view.$("li.selected").data("greenplumInstanceId")).toBe(this.selectedId);
+                    expect(this.view.$("li.selected").data("instanceId")).toBe(this.selectedId);
                 });
             });
         });
@@ -153,19 +169,21 @@ describe("chorus.views.InstanceList", function() {
                 this.newInstance = rspecFixtures.greenplumInstance({id: "1234567"});
                 spyOn(this.view.greenplumInstances, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
+                spyOn(this.view.gnipInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
-            it("re-fetches the greenplum and hadoop instances", function() {
+            it("re-fetches the greenplum, hadoop and gnip instances", function() {
                 expect(this.view.greenplumInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
+                expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
             });
 
             it("selects the li with a matching id when fetch completes", function() {
                 this.greenplumInstances.add(this.newInstance);
                 this.view.render(); // re-renders when fetch completes
 
-                expect(this.view.$("li[data-greenplum-instance-id=1234567]")).toHaveClass("selected");
+                expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
                 expect(this.view.$("li.selected").length).toBe(1);
             });
         });
@@ -233,6 +251,25 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.eventSpy).toHaveBeenCalled();
                 var instancePassed = this.eventSpy.mostRecentCall.args[0];
                 expect(instancePassed.get("name")).toBe("Hadoop10");
+            });
+
+            it("adds the selected class to that item", function() {
+                expect(this.liToClick).toHaveClass("selected");
+            });
+        });
+
+        describe("clicking on a gnip instance", function() {
+            beforeEach(function() {
+                this.eventSpy = jasmine.createSpy();
+                chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
+                this.liToClick = this.view.$('li:contains("Gnip1")');
+                this.liToClick.click();
+            });
+
+            it("triggers the instance:selected event", function() {
+                expect(this.eventSpy).toHaveBeenCalled();
+                var instancePassed = this.eventSpy.mostRecentCall.args[0];
+                expect(instancePassed.get("name")).toBe("Gnip1");
             });
 
             it("adds the selected class to that item", function() {

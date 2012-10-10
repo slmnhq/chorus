@@ -3,6 +3,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
         this.page = new chorus.pages.InstanceIndexPage();
         this.instanceSet = new chorus.collections.InstanceSet();
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
+        this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();
     });
 
     describe("#initialize", function() {
@@ -18,16 +19,22 @@ describe("chorus.pages.InstanceIndexPage", function() {
             expect(this.hadoopInstanceSet).toHaveBeenFetched();
         });
 
-        it("passes the greenplumn and hadoop instances to the content details view", function() {
+        it("fetches all registered gnip instances", function() {
+            expect(this.gnipInstanceSet).toHaveBeenFetched();
+        });
+
+        it("passes the greenplum and hadoop instances to the content details view", function() {
             var contentDetails = this.page.mainContent.contentDetails;
             expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
             expect(contentDetails.options.greenplumInstances).toBeA(chorus.collections.InstanceSet);
+            expect(contentDetails.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
         });
 
-        it("passes the greenplumn and hadoop instances to the list view", function() {
+        it("passes the greenplum, hadoop and gnip instances to the list view", function() {
             var list = this.page.mainContent.content;
             expect(list.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
             expect(list.options.greenplumInstances).toBeA(chorus.collections.InstanceSet);
+            expect(list.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
         });
     });
 
@@ -48,7 +55,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
             it("pre-selects the instance with ID specified in chorus.pageOptions, when available", function() {
                 this.page.pageOptions = {selectId: 123456};
                 this.page.render();
-                expect(this.page.mainContent.content.$(".greenplum_instance li.instance[data-greenplum-instance-id='123456']")).toHaveClass("selected");
+                expect(this.page.mainContent.content.$(".greenplum_instance li.instance[data-instance-id='123456']")).toHaveClass("selected");
             });
         });
 
@@ -76,20 +83,23 @@ describe("chorus.pages.InstanceIndexPage", function() {
             });
 
 
-            describe("when the hadoopInstances are fetched", function() {
+            describe("when the hadoopInstances and gnipInstances are fetched", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.hadoopInstanceSet, [
                         rspecFixtures.hadoopInstance(),
                         rspecFixtures.hadoopInstance({id: 123456})
                     ]);
+                    this.server.completeFetchAllFor(this.gnipInstanceSet, [
+                        rspecFixtures.gnipInstance(),
+                        rspecFixtures.gnipInstance({id: 123456})
+                    ]);
                 });
 
-                it("doesn't display the loading text and display the instances count", function() {
+                it("doesn't display the loading text and display the correct instances count", function() {
                     expect(this.page.mainContent.contentDetails.$(".loading")).not.toExist();
-                    expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("4");
+                    expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("6");
                 });
             });
-
         });
     });
 });

@@ -8,8 +8,16 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             rspecFixtures.hadoopInstance(),
             rspecFixtures.hadoopInstance()
         ]);
+        var gnipInstances = new chorus.collections.GnipInstanceSet([
+            rspecFixtures.gnipInstance(),
+            rspecFixtures.gnipInstance()
+        ]);
 
-        this.view = new chorus.views.InstanceIndexContentDetails({greenplumInstances : greenplumInstances, hadoopInstances: hadoopInstances});
+        this.view = new chorus.views.InstanceIndexContentDetails({
+            greenplumInstances : greenplumInstances,
+            hadoopInstances: hadoopInstances,
+            gnipInstances: gnipInstances
+        });
         this.view.render();
     });
 
@@ -21,6 +29,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         beforeEach(function() {
             this.view.options.greenplumInstances.loaded = true;
             this.view.options.hadoopInstances.loaded = true;
+            this.view.options.gnipInstances.loaded = true;
             this.view.render();
         });
 
@@ -29,7 +38,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         });
 
         it("shows the instances count", function() {
-            expect(this.view.$(".number")).toContainText(4);
+            expect(this.view.$(".number")).toContainText(6);
         });
     });
 });

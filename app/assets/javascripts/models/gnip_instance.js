@@ -1,9 +1,13 @@
 chorus.models.GnipInstance = chorus.models.Instance.extend({
     constructorName: "GnipInstance",
     urlTemplate: "gnip_instances/{{id}}",
-    showUrlTemplate: "hadoop_instances/{{id}}/browse/",
+    showUrlTemplate: "gnip_instances/{{id}}/browse/",
     shared: true,
     entityType: "gnip_instance",
+
+    providerIconUrl: function() {
+        return this._imagePrefix + "gnip.png"
+    },
 
     isGreenplum: function() {
         return false;
@@ -26,6 +30,18 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         this.require("username", newAttrs);
         this.require("password", newAttrs);
+    },
+
+    accountForCurrentUser: function() {
+        return null;
+    },
+
+    accounts: function() {
+        return [];
+    },
+
+    usage: function() {
+        return false;
     }
 
 });
