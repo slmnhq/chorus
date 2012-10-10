@@ -9,7 +9,7 @@ describe("chorus.models.GnipInstance", function() {
     });
 
     it("has the right showUrlTempalate", function() {
-        expect(this.model.showUrl()).toBe("/gnip_instances/123");
+        expect(this.model.showUrl()).toBe("#/gnip_instances/123");
     });
 
     it("has the correct entityType", function() {
