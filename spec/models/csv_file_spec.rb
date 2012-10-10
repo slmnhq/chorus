@@ -43,21 +43,26 @@ describe CsvFile do
     end
   end
 
-  describe "#table_already_exists" do
+  describe "#table_already_exists", :database_integration => true do
     let(:csv_file) { CsvFile.first }
+    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:user) { account.owner }
+    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id!(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+    let(:schema) { database.schemas.find_by_name('test_schema') }
+    let(:workspace) { workspaces(:public) }
 
-    context "when the table name already exists" do
-      it "returns true" do
-        mock(csv_file).check_table.with_any_args { }
-        csv_file.table_already_exists("foo").should be_true
-      end
+    before do
+      csv_file.update_attribute(:user, user)
+      workspace.sandbox = schema
+      workspace.save!
     end
 
-    context "when the table name does not already exist" do
-      it "returns false" do
-        mock(csv_file).check_table.with_any_args { raise ApiValidationError }
-        csv_file.table_already_exists("foo").should be_false
-      end
+    it "returns true when the table name already exists" do
+      csv_file.table_already_exists("base_table1").should be_true
+    end
+
+    it "returns false" do
+      csv_file.table_already_exists("non_existent_table").should be_false
     end
   end
 end

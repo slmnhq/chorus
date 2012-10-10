@@ -11,6 +11,7 @@ describe WorkspaceCsvImportsController do
 
   before do
     log_in user
+    any_instance_of(CsvFile) { |csv| stub(csv).table_already_exists.with_any_args { false } }
   end
 
   describe "#create" do
@@ -75,7 +76,10 @@ describe WorkspaceCsvImportsController do
           end
 
           it "makes a FILE_IMPORT_CREATED event with no associated dataset" do
-            post :create, csv_import_params
+            expect {
+              post :create, csv_import_params
+            }.to change(Events::FileImportCreated, :count).by(1)
+
             event = Events::FileImportCreated.first
             event.actor.should == user
             event.dataset.should be_nil

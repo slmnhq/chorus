@@ -22,14 +22,14 @@ class CsvFile < ActiveRecord::Base
     schema = workspace.sandbox
     account = schema.gpdb_instance.account_for_user!(user)
     check_table(table_name, account, schema)
-    true
-  rescue Exception => e
-    false
   end
+
+  private
 
   def check_table(table_name, account, schema)
     schema.with_gpdb_connection(account) do |connection|
-      connection.exec_query("SELECT * FROM #{table_name} LIMIT 1")
+      check_results = connection.exec_query("select table_name FROM information_schema.tables where table_name = '#{table_name}'")
+      check_results.count > 0
     end
   end
 end

@@ -20,7 +20,7 @@ class CsvImporter
   def import
     schema.with_gpdb_connection(account) do |connection|
       begin
-        it_exists = check_if_table_exists(csv_file.to_table, connection)
+        it_exists = check_if_table_exists(csv_file.to_table, csv_file)
         if csv_file.new_table
           connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
         end
@@ -42,11 +42,8 @@ class CsvImporter
     create_failure_event(e.message)
   end
 
-  def check_if_table_exists(table_name, connection)
-    connection.exec_query("SELECT * FROM #{table_name} LIMIT 1")
-    true
-  rescue
-    false
+  def check_if_table_exists(table_name, csv_file)
+    csv_file.table_already_exists(table_name)
   end
 
   def create_success_event
