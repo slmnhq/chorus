@@ -23,6 +23,11 @@ describe ModelMap do
       ModelMap.model_from_params("greenplum_instance", model.id).should == model
     end
 
+    it "works for gnip instances" do
+      model = gnip_instances(:default)
+      ModelMap.model_from_params("gnip_instance", model.id).should == model
+    end
+
     it "works for datasets" do
       model = datasets(:table)
       ModelMap.model_from_params("dataset", model.id).should == model

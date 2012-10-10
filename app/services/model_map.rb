@@ -5,6 +5,7 @@ module ModelMap
     "greenplum_instance" => GpdbInstance,
     "hdfs_file" => HdfsEntry,
     "hadoop_instance" => HadoopInstance,
+    "gnip_instance" => GnipInstance,
     "workspace" => Workspace,
     "dataset" => Dataset,
     "workfile" => Workfile,

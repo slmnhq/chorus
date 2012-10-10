@@ -8,6 +8,7 @@ describe Events::Note do
   let(:actor) { users(:not_a_member) }
   let(:greenplum_instance) { gpdb_instances(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:workfile) { workfiles(:public)}
   let(:dataset) { datasets(:table) }
@@ -190,6 +191,23 @@ describe Events::Note do
     it_does_not_create_a_global_activity
   end
 
+  describe "NoteOnGnipInstance" do
+    subject do
+      Events::NoteOnGnipInstance.add(
+          :actor => actor,
+          :gnip_instance => gnip_instance,
+          :body => "This is the body"
+      )
+    end
+
+    its(:gnip_instance) { should == gnip_instance }
+    its(:targets) { should == {:gnip_instance => gnip_instance} }
+    its(:additional_data) { should == {'body' => "This is the body"} }
+
+    it_creates_activities_for { [actor, gnip_instance] }
+    it_creates_a_global_activity
+  end
+
   describe "search" do
     it "indexes text fields" do
       Events::Note.should have_searchable_field :body
@@ -300,6 +318,21 @@ describe Events::Note do
       last_note.hdfs_file.path.should == "/data/test.csv"
       last_note.body.should == "Some crazy content"
     end
+
+    it "creates a note on a Gnip Instance" do
+      Events::Note.create_from_params({
+          :entity_type => "gnip_instance",
+          :entity_id => gnip_instance.id,
+          :body => "Some crazy content",
+      }, user)
+
+      last_note = Events::Note.first
+      last_note.gnip_instance.should == gnip_instance
+      last_note.action.should == "NoteOnGnipInstance"
+      last_note.body.should == "Some crazy content"
+      last_note.actor.should == user
+    end
+
 
     context "workspace not archived" do
       it "creates a note on a workspace" do
