@@ -186,6 +186,10 @@ chorus.models = {
             return this.get(this.nameAttribute || "name");
         },
 
+        displayName: function() {
+            return this.name();
+        },
+
         shortName: function(length) {
             length = length || 20;
 

@@ -10,7 +10,7 @@ chorus.pages.KaggleShowPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentView({
             model: this.workspace,
 //            content: new chorus.views.UserShow({model: this.model}),
-            contentHeader: new chorus.views.KaggleHeader(),
+            contentHeader: new chorus.views.KaggleHeader()
 //            contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         });
 

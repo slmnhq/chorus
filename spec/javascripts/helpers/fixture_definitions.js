@@ -102,6 +102,8 @@ window.rspecFixtureDefinitions = {
 
     hadoopInstance: {},
 
+    gnipInstance: {},
+
     image: {},
 
     greenplumInstance: { unique: [ "id" ] },

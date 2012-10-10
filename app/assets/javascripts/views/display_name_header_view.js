@@ -4,7 +4,8 @@ chorus.views.DisplayNameHeader = chorus.views.Base.extend({
 
     additionalContext:function (ctx) {
         return {
-            title:this.model && this.model.loaded ? this.model.displayName() : ""
+            title:this.model && this.model.loaded ? this.model.displayName() : "",
+            imageUrl: this.options.imageUrl
         }
     }
 })
