@@ -37,15 +37,14 @@ describe Hdfs::InstanceRegistrar do
       end
 
       it "saves the hdfs instance" do
-        Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+        instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
 
-        cached_instance = HadoopInstance.find_by_name_and_owner_id(instance_attributes[:name], owner.id)
-        cached_instance.host.should == instance_attributes[:host]
-        cached_instance.port.should == instance_attributes[:port]
-        cached_instance.description.should == instance_attributes[:description]
-        cached_instance.description.should == instance_attributes[:description]
-        cached_instance.username.should == instance_attributes[:username]
-        cached_instance.group_list.should == instance_attributes[:group_list]
+        instance.should be_persisted
+        instance.host.should == instance_attributes[:host]
+        instance.port.should == instance_attributes[:port]
+        instance.description.should == instance_attributes[:description]
+        instance.username.should == instance_attributes[:username]
+        instance.group_list.should == instance_attributes[:group_list]
       end
 
       it "makes a HadoopInstanceCreated event" do

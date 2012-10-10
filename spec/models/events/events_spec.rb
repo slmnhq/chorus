@@ -9,6 +9,7 @@ describe "Event types" do
   let(:greenplum_instance) { gpdb_instances(:default) }
   let(:aurora_instance) { gpdb_instances(:aurora) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { users(:the_collaborator) }
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
@@ -52,7 +53,7 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceCreated.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance,
+          :greenplum_instance => greenplum_instance
       )
     end
 
@@ -68,7 +69,7 @@ describe "Event types" do
     subject do
       Events::HadoopInstanceCreated.add(
           :actor => actor,
-          :hadoop_instance => hadoop_instance,
+          :hadoop_instance => hadoop_instance
       )
     end
 
@@ -77,6 +78,22 @@ describe "Event types" do
     its(:targets) { should == {:hadoop_instance => hadoop_instance} }
 
     it_creates_activities_for { [actor, hadoop_instance] }
+    it_creates_a_global_activity
+  end
+
+  describe "GnipInstanceCreated" do
+    subject do
+      Events::GnipInstanceCreated.add(
+          :actor => actor,
+          :gnip_instance => gnip_instance
+      )
+    end
+
+    its(:action) { should == "GnipInstanceCreated" }
+    its(:gnip_instance) { should == gnip_instance }
+    its(:targets) { should == {:gnip_instance => gnip_instance} }
+
+    it_creates_activities_for { [actor, gnip_instance] }
     it_creates_a_global_activity
   end
 
@@ -143,7 +160,7 @@ describe "Event types" do
     subject do
       Events::ProvisioningSuccess.add(
           :actor => actor,
-          :greenplum_instance => aurora_instance,
+          :greenplum_instance => aurora_instance
       )
     end
 

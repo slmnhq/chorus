@@ -6,40 +6,24 @@ describe GnipInstancesController do
     log_in @user
   end
 
-  describe "#create" do
-    let(:parameters) { {:gnip_instance => {
-        :name => 'gnip_instance_name',
-        :stream_url => 'http://www.example.com',
-        :description => 'poopoo',
-        :username => 'gnip_username',
-        :password => 'gnip_password'
-    }} }
+  let(:gnip_instance) { gnip_instances(:default) }
 
+  describe "#create" do
     context "with Valid credentials" do
+
       before do
-        any_instance_of(ChorusGnip) do |c|
-          mock(c).auth { true }
-        end
+        stub(Gnip::InstanceRegistrar).create!({}, @user) { gnip_instance }
       end
 
       it "reports that the instance was created with the correct owner" do
-        post :create, parameters
+        post :create
         response.code.should == "201"
-        GnipInstance.last.owner.should == @user
-      end
-
-      it "should add a gnip instance" do
-        expect {
-          post :create, parameters
-        }.to change(GnipInstance, :count).by(1)
       end
     end
 
     context "With Invalid credentials" do
       before do
-        any_instance_of(ChorusGnip) do |c|
-          mock(c).auth { false }
-        end
+        stub(Gnip::InstanceRegistrar).create!({}, @user) { raise(ApiValidationError) }
       end
       it "raise an error" do
         post :create, parameters
