@@ -182,6 +182,18 @@ describe("chorus.models.Activity", function() {
                 });
             });
 
+            context("for a NoteOnGnipInstance", function() {
+                it("returns a gnipInstance with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnGnipInstanceCreated({
+                        gnipInstance: { id: 13 }
+                    });
+
+                    var instance = activity.gnipInstance();
+                    expect(instance).toBeA(chorus.models.GnipInstance);
+                    expect(instance.id).toBe(13);
+                });
+            });
+
             context("for a NoteOnHdfsFile", function() {
                 it("returns a hdfsFile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnHdfsFileCreated({

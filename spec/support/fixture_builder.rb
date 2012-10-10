@@ -329,6 +329,10 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_workspace, note_on_workspace
     note_on_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => text_workfile, :body => "My awesome workfile")
     fbuilder.name :note_on_workfile, note_on_workfile
+    note_on_gnip_instance = Events::NoteOnGnipInstance.by(owner).add(:gnip_instance => gnip_instance, :body => 'i am a comment with gnipsearch in me', :created_at => '2010-01-01 02:00')
+    fbuilder.name :note_on_gnip_instance, note_on_gnip_instance
+    insight_on_gnip_instance = Events::NoteOnGnipInstance.by(owner).add(:gnip_instance => gnip_instance, :body => 'i am an insight with gnipinsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
+    fbuilder.name :insight_on_gnip_instance, insight_on_gnip_instance
 
     Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
     Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')

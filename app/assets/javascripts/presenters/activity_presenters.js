@@ -375,6 +375,8 @@
                     return "Greenplum instance";
                 case "NoteOnHadoopInstance":
                     return "Hadoop instance";
+                case "NoteOnGnipInstance":
+                    return "Gnip instance";
                 case "NoteOnHdfsFile":
                     return "file";
                 case "NoteOnWorkspace":

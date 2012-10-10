@@ -164,21 +164,21 @@ describe InsightsController do
         log_in user
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 2
+        decoded_response[:number_of_insight].should == 3
       end
 
       it "returns a count of all the insights visible to another user" do
         log_in not_a_member
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 1
+        decoded_response[:number_of_insight].should == 2
       end
 
       it "returns a count of all the insights visible to the admin" do
         log_in admin
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 2
+        decoded_response[:number_of_insight].should == 3
       end
 
       context "with an empty entity_type" do
@@ -186,7 +186,7 @@ describe InsightsController do
           log_in user
           get :count
           response.code.should == "200"
-          decoded_response[:number_of_insight].should == 2
+          decoded_response[:number_of_insight].should == 3
         end
       end
     end

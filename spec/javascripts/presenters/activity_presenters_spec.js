@@ -752,6 +752,33 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("note on a gnip instance", function() {
+        var instance;
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnGnipInstanceCreated({
+                gnipInstance: {
+                    id: 42,
+                    name: 'my_gnip_instance'
+                }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            instance = rspecFixtures.gnipInstance({id: 42, name: 'my_gnip_instance'});
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(instance.showUrl(), instance.name()),
+                    noteObjectType: "Gnip instance"
+                }
+            )
+        });
+    });
+
     context("note on a workspace ", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnWorkspaceCreated({

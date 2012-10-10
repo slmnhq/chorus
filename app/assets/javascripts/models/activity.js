@@ -3,6 +3,7 @@
         "actor": "User",
         "dataset": "WorkspaceDataset",
         "greenplumInstance": "GreenplumInstance",
+        "gnipInstance": "GnipInstance",
         "newOwner": "User",
         "hadoopInstance": "HadoopInstance",
         "workfile": "Workfile",
@@ -34,6 +35,7 @@
         workspace: makeAssociationMethod("workspace"),
         actor: makeAssociationMethod("actor"),
         greenplumInstance: makeAssociationMethod("greenplumInstance"),
+        gnipInstance: makeAssociationMethod("gnipInstance"),
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
@@ -71,6 +73,10 @@
                 case "NoteOnGreenplumInstance":
                     model = new chorus.models.GreenplumInstance();
                     model.set(this.get("greenplumInstance"));
+                    break;
+                case "NoteOnGnipInstance":
+                    model = new chorus.models.GnipInstance();
+                    model.set(this.get("gnipInstance"));
                     break;
                 case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsEntry();

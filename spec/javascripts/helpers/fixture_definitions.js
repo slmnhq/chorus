@@ -142,6 +142,7 @@ window.rspecFixtureDefinitions = {
             sourceTableCreated: {},
             userCreated: {},
             sandboxAdded: {},
+            noteOnGnipInstanceCreated: {},
             noteOnGreenplumInstanceCreated: {},
             noteOnHadoopInstanceCreated: {},
             insightOnGreenplumInstance: {},

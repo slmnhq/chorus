@@ -142,6 +142,8 @@ describe EventsController do
         "sandboxAdded" => Events::WorkspaceAddSandbox,
         "noteOnGreenplumInstanceCreated" => Events::NoteOnGreenplumInstance.where(:insight => false),
         "insightOnGreenplumInstance" => Events::NoteOnGreenplumInstance.where(:insight => true),
+        "noteOnGnipInstanceCreated" => Events::NoteOnGnipInstance.where(:insight => false),
+        "insightOnGnipInstanceCreated" => Events::NoteOnGnipInstance.where(:insight => true),
         "noteOnHadoopInstanceCreated" => Events::NoteOnHadoopInstance,
         "hdfsExternalTableCreated" => Events::WorkspaceAddHdfsAsExtTable,
         "noteOnHdfsFileCreated" => Events::NoteOnHdfsFile,
