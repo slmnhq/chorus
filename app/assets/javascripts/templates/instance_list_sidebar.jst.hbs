@@ -61,10 +61,8 @@
         {{/if}}
         {{#if isGreenplum}}
             <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="greenplum_instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
-        {{else}}
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="hadoop_instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         {{/if}}
+        <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>
 <div class="tab_control"></div>

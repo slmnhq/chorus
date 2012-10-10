@@ -19,7 +19,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         return {
             isGreenplum: this.model.isGreenplum(),
-            isHadoop: this.model.isHadoop(),
             userHasAccount: this.model.accountForCurrentUser() && this.model.accountForCurrentUser().has("id"),
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditInstance: this.canEditInstance(),
@@ -29,7 +28,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             isProvisioning: this.instance.isProvisioning(),
             provisioningFailed: this.instance.provisioningFailed(),
             isOnline: this.instance.isOnline(),
-            instanceProvider: this.instance.isGreenplum() ? "Greenplum Database" : "Hadoop"
+            entityType: this.model.entityType,
+            instanceProvider: t("instances.provider." + this.model.entityType)
         };
     },
 

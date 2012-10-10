@@ -482,6 +482,10 @@ describe("chorus.views.InstanceListSidebar", function() {
             this.server.completeFetchFor(this.instance.activities());
         });
 
+        it("displays instance type", function() {
+            expect(this.view.$(".instance_type")).toContainText("Hadoop");
+        });
+
         it("has a 'add a note' link", function() {
             expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
@@ -490,6 +494,31 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
 
         it("shows the shared account", function() {
+            var shared_account_info = this.instance.get("username") + ", " + this.instance.get("groupList");
+            expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
+        });
+    });
+
+    context("when a gnip instance is selected", function() {
+        beforeEach(function() {
+            this.instance = rspecFixtures.gnipInstance({name: "Harry's House of Glamour", username: "gnip" });
+            this.view = new chorus.views.InstanceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.instance);
+            this.server.completeFetchFor(this.instance.activities());
+        });
+
+        it("displays instance type", function() {
+            expect(this.view.$(".instance_type")).toContainText("Gnip Account");
+        });
+
+        xit("has a 'add a note' link", function() {
+            expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
+            expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
+            expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
+            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_instance');
+        });
+
+        xit("shows the shared account", function() {
             var shared_account_info = this.instance.get("username") + ", " + this.instance.get("groupList");
             expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });

@@ -8,7 +8,7 @@ describe("chorus.models.GnipInstance", function() {
         expect(this.model.url()).toBe("/gnip_instances/123");
     });
 
-    it("has the right showUrlTempalate", function() {
+    it("has the right showUrlTemplate", function() {
         expect(this.model.showUrl()).toBe("#/gnip_instances/123");
     });
 
