@@ -13,11 +13,6 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
         return this._imagePrefix + "hadoop_instance.png";
     },
 
-    initialize: function() {
-        this._super("initialize", arguments);
-        this.set({shared: true});
-    },
-
     isGreenplum: function() {
         return false;
     },

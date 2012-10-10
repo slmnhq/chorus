@@ -9,7 +9,7 @@ describe("chorus.models.HadoopInstance", function() {
     });
 
     it("is shared", function() {
-        expect(this.model.get("shared")).toBeTruthy();
+        expect(this.model.isShared()).toBeTruthy();
     });
 
     it("has the correct entityType", function() {

@@ -511,15 +511,15 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$(".instance_type")).toContainText("Gnip Account");
         });
 
-        xit("has a 'add a note' link", function() {
+        it("has a 'add a note' link", function() {
             expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
             expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_instance');
         });
 
-        xit("shows the shared account", function() {
-            var shared_account_info = this.instance.get("username") + ", " + this.instance.get("groupList");
+        it("shows the shared account", function() {
+            var shared_account_info = this.instance.get("username");
             expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });
     });

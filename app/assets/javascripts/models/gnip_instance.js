@@ -9,6 +9,10 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         return this._imagePrefix + "gnip.png"
     },
 
+    isShared: function() {
+        return true;
+    },
+
     isGreenplum: function() {
         return false;
     },
@@ -42,6 +46,10 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
 
     usage: function() {
         return false;
+    },
+
+    sharedAccountDetails: function() {
+        return this.get("username");
     }
 
 });

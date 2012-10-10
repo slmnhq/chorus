@@ -29,7 +29,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             provisioningFailed: this.instance.provisioningFailed(),
             isOnline: this.instance.isOnline(),
             entityType: this.model.entityType,
-            instanceProvider: t("instances.provider." + this.model.entityType)
+            instanceProvider: t("instances.provider." + this.model.entityType),
+            shared: this.model.isShared && this.model.isShared()
         };
     },
 
@@ -86,7 +87,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditPermissions: function() {
-        return !this.resource.isHadoop() && this.canEditInstance();
+        return this.resource.isGreenplum() && this.canEditInstance();
     },
 
     canEditInstance: function() {
