@@ -13,16 +13,8 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
         return this._imagePrefix + "hadoop_instance.png";
     },
 
-    isGreenplum: function() {
-        return false;
-    },
-
     isHadoop: function() {
         return true;
-    },
-
-    isGnip: function() {
-        return false;
     },
 
     declareValidations: function(newAttrs) {
@@ -36,20 +28,8 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
     },
 
-    accountForCurrentUser: function() {
-        return null;
-    },
-
-    accounts: function() {
-        return [];
-    },
-
     sharedAccountDetails: function() {
         return this.get("username") + ", " + this.get("groupList");
-    },
-
-    usage: function() {
-        return false;
     }
 
 });

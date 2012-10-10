@@ -1,6 +1,6 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.greenplumInstance({id: 1, version: "1234", owner:{firstName: "John", lastName: "Doe"}});
+        this.instance = new chorus.models.Instance({id : 1, version: "1234", owner:{firstName: "John", lastName: "Doe", id: 2}})
     });
 
     describe("#stateIconUrl and #stateText", function() {
@@ -35,7 +35,7 @@ describe("chorus.models.Instance", function() {
             expect(owner.get("id")).toBe(this.instance.get("owner").id);
             expect(owner.get("username")).toBe(this.instance.get("owner").username);
             expect(owner.displayName()).toBe(this.instance.get("owner").firstName + " " + this.instance.get("owner").lastName);
-        })
+        });
     });
 
     describe("#isOwner", function() {
@@ -43,15 +43,39 @@ describe("chorus.models.Instance", function() {
             var owner = this.instance.owner();
             var otherOwnerUser = rspecFixtures.user({id: owner.get('id')});
             expect(this.instance.isOwner(otherOwnerUser)).toBeTruthy();
-        })
+        });
         it("returns false if id is different", function() {
             var otherOwnerUser = rspecFixtures.user({id: 'notanowner'});
             expect(this.instance.isOwner(otherOwnerUser)).toBeFalsy();
-        })
+        });
         it("returns false if object is of different type", function() {
             var owner = this.instance.owner();
             var brokenParameter = rspecFixtures.greenplumInstance({id: owner.get('id')});
             expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
-        })
+        });
+    });
+
+    it("returns true for isHadoop", function() {
+        expect(this.instance.isHadoop()).toBeFalsy();
+    });
+
+    it("returns false for isGreenplum", function() {
+        expect(this.instance.isGreenplum()).toBeFalsy();
+    });
+
+    it("returns false for isGnip", function() {
+        expect(this.instance.isGnip()).toBeFalsy();
+    });
+
+    it("returns null for accountForCurrentUser", function() {
+        expect(this.instance.accountForCurrentUser()).toBeNull();
+    });
+
+    it("returns empty array for accountForCurrentUser", function() {
+        expect(this.instance.accounts()).toEqual([]);
+    });
+
+    it("returns false for usage", function() {
+        expect(this.instance.usage()).toBeFalsy();
     });
 });

@@ -28,10 +28,6 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.isHadoop()).toBeTruthy();
     });
 
-    it("returns false for isGreenplum", function() {
-        expect(this.model.isGreenplum()).toBeFalsy();
-    });
-
     _.each(["name", "host", "username", "groupList", "port"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";

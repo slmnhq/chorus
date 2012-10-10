@@ -24,15 +24,7 @@ describe("chorus.models.GnipInstance", function() {
         expect(this.model.entityType).toBe("gnip_instance");
     });
 
-    it("returns true for isHadoop", function() {
-        expect(this.model.isHadoop()).toBeFalsy();
-    });
-
-    it("returns false for isGreenplum", function() {
-        expect(this.model.isGreenplum()).toBeFalsy();
-    });
-
-    it("returns false for isGnip", function() {
+    it("returns true for isGnip", function() {
         expect(this.model.isGnip()).toBeTruthy();
     });
 

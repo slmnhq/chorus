@@ -45,5 +45,29 @@ chorus.models.Instance = chorus.models.Base.extend({
 
     isOwner: function(user) {
         return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
+    },
+
+    isGreenplum: function() {
+        return false;
+    },
+
+    isHadoop: function() {
+        return false;
+    },
+
+    isGnip: function() {
+        return false;
+    },
+
+    accountForCurrentUser: function() {
+        return null;
+    },
+
+    accounts: function() {
+        return [];
+    },
+
+    usage: function() {
+        return false;
     }
-})
+});

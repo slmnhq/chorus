@@ -504,7 +504,8 @@ describe("chorus.views.InstanceListSidebar", function() {
             this.instance = rspecFixtures.gnipInstance({name: "Harry's House of Glamour", username: "gnip" });
             this.view = new chorus.views.InstanceListSidebar();
             chorus.PageEvents.broadcast("instance:selected", this.instance);
-            this.server.completeFetchFor(this.instance.activities());
+//            TODO: uncomment this line when gnip_instance activities are implemented
+//            this.server.completeFetchFor(this.instance.activities());
         });
 
         it("displays instance type", function() {

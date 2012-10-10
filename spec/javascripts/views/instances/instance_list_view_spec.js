@@ -31,19 +31,19 @@ describe("chorus.views.InstanceList", function() {
     context("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.hadoopInstances, [
-                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "h9"}),
-                rspecFixtures.hadoopInstance({name : "hadoop1", id: "h1"}),
-                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "h10"})
+                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "1"}),
+                rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
+                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
             ]);
             this.server.completeFetchFor(this.greenplumInstances, [
-                rspecFixtures.greenplumInstance({name : "GP9", id:"g9"}),
-                rspecFixtures.greenplumInstance({name : "gP1", id: "g1"}),
-                rspecFixtures.greenplumInstance({name : "GP10", id: "g10"})
+                rspecFixtures.greenplumInstance({name : "GP9", id: "1"}),
+                rspecFixtures.greenplumInstance({name : "gP1", id: "2"}),
+                rspecFixtures.greenplumInstance({name : "GP10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
-                rspecFixtures.gnipInstance({name : "Gnip1", id:"gnip9"}),
-                rspecFixtures.gnipInstance({name : "Gnip2", id: "gnip1"}),
-                rspecFixtures.gnipInstance({name : "Gnip3", id: "gnip10"})
+                rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
+                rspecFixtures.gnipInstance({name : "Gnip2", id: "2"}),
+                rspecFixtures.gnipInstance({name : "Gnip3", id: "3"})
             ]);
         });
 

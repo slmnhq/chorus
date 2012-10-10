@@ -101,10 +101,6 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
         return true;
     },
 
-    isHadoop: function() {
-        return false;
-    },
-
     hasWorkspaceUsageInfo: function() {
         return !this.isHadoop() && this.usage().has("workspaces");
     },

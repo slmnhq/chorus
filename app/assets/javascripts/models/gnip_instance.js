@@ -13,14 +13,6 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         return true;
     },
 
-    isGreenplum: function() {
-        return false;
-    },
-
-    isHadoop: function() {
-        return false;
-    },
-
     isGnip: function() {
         return true;
     },
@@ -34,18 +26,6 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         this.require("username", newAttrs);
         this.require("password", newAttrs);
-    },
-
-    accountForCurrentUser: function() {
-        return null;
-    },
-
-    accounts: function() {
-        return [];
-    },
-
-    usage: function() {
-        return false;
     },
 
     sharedAccountDetails: function() {
