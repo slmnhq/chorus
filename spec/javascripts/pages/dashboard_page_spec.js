@@ -19,6 +19,10 @@ describe("chorus.pages.DashboardPage", function() {
                                          rspecFixtures.hadoopInstance(),
                                          rspecFixtures.hadoopInstance()
             ]);
+            this.server.completeFetchFor(new chorus.collections.GnipInstanceSet(), [
+                                         rspecFixtures.gnipInstance(),
+                                         rspecFixtures.gnipInstance()
+            ]);
 
             this.page.render();
         })
@@ -73,6 +77,10 @@ describe("chorus.pages.DashboardPage", function() {
                                          rspecFixtures.hadoopInstance(),
                                          rspecFixtures.hadoopInstance()
             ]);
+            this.server.completeFetchFor(new chorus.collections.GnipInstanceSet(), [
+                                         rspecFixtures.gnipInstance(),
+                                         rspecFixtures.gnipInstance()
+            ]);
         });
 
         it("sets chorus.session.user as the model", function() {
@@ -114,16 +122,27 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.hadoopInstanceSet).toHaveBeenFetched();
         });
 
+        it("fetches the gnip instances", function() {
+            expect(this.page.gnipInstanceSet).toBeA(chorus.collections.GnipInstanceSet);
+            expect(this.page.gnipInstanceSet).toHaveBeenFetched();
+        });
+
         it("passes the instance set through to the instance list view", function() {
             var packedUpGreenplumSet = _.map(this.page.instanceSet.models, function(instance) {
                 return new chorus.models.Base({ theInstance: instance });
             });
-            var packedUpHadoopSet = _.map(this.page.instanceSet.models, function(instance) {
+            var packedUpHadoopSet = _.map(this.page.hadoopInstanceSet.models, function(instance) {
+                return new chorus.models.Base({ theInstance: instance });
+            });
+            var packedUpGnipSet = _.map(this.page.gnipInstanceSet.models, function(instance) {
                 return new chorus.models.Base({ theInstance: instance });
             });
             var packedUpInstanceSet = new chorus.collections.Base();
-            packedUpInstanceSet.add(packedUpGreenplumSet)
-            packedUpInstanceSet.add(packedUpHadoopSet)
+            packedUpInstanceSet.add(packedUpGreenplumSet);
+            packedUpInstanceSet.add(packedUpHadoopSet);
+            packedUpInstanceSet.add(packedUpGnipSet);
+
+            expect(packedUpInstanceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
 
             _.each(this.page.mainContent.instanceList.collection, function(instance, i) {
                 expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.models[i].get("name"));

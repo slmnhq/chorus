@@ -16,6 +16,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
         this.instanceSet = new chorus.collections.InstanceSet([], { hasCredentials: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
+        this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
         chorus.PageEvents.subscribe("instance:added", function() { this.fetchInstances() }, this);
 
@@ -33,25 +34,37 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     fetchInstances: function() {
         this.instanceSet.fetch().success(_.bind(this.mergeInstances, this));
         this.hadoopInstanceSet.fetch().success(_.bind(this.mergeInstances, this));
+        this.gnipInstanceSet.fetch().success(_.bind(this.mergeInstances, this));
+    },
+
+    instancesLoaded: function() {
+        return (this.instanceSet && this.instanceSet.loaded &&
+            this.hadoopInstanceSet && this.hadoopInstanceSet.loaded &&
+                this.gnipInstanceSet && this.gnipInstanceSet.loaded);
     },
 
     mergeInstances: function() {
-        if(this.instanceSet && this.instanceSet.loaded && this.hadoopInstanceSet && this.hadoopInstanceSet.loaded) {
+        if(this.instancesLoaded()) {
             var package = function(set) {
                 return _.map(set, function(instance) {
                     return new chorus.models.Base({ theInstance: instance })
                 });
-            }
+            };
 
             var proxyInstances = package(this.instanceSet.models);
             var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
+            var proxyGnipInstances = package(this.gnipInstanceSet.models);
 
             this.arraySet = new chorus.collections.Base();
             this.arraySet.add(proxyInstances);
             this.arraySet.add(proxyHadoopInstances);
+            this.arraySet.add(proxyGnipInstances);
             this.arraySet.loaded = true;
 
-            this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
+            this.mainContent = new chorus.views.Dashboard({
+                collection: this.workspaceSet,
+                instanceSet: this.arraySet
+            });
             this.render();
         }
     },

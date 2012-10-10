@@ -10,7 +10,6 @@ chorus.views.DashboardInstanceList = chorus.views.Base.extend({
             id: model.get("theInstance").get("id"),
             name: model.get("theInstance").get("name"),
             imageUrl: model.get("theInstance").providerIconUrl(),
-            isHadoop: model.get("theInstance").isHadoop(),
             showUrl: model.get("theInstance").showUrl()
         }
     }

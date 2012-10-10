@@ -5,12 +5,16 @@ describe("chorus.views.DashboardInstanceList", function() {
         this.instance3 = rspecFixtures.hadoopInstance({ name: "doppler" });
         this.instance4 = rspecFixtures.greenplumInstance({ name: "Ego" });
         this.instance5 = rspecFixtures.greenplumInstance({ name: "fatoush" });
+        this.instance6 = rspecFixtures.gnipInstance({ name: "kangaroo" });
+        this.instance7 = rspecFixtures.gnipInstance({ name: "chicken" });
         this.collection = new chorus.collections.InstanceSet([
             this.instance5,
             this.instance2,
             this.instance4,
+            this.instance6,
             this.instance3,
-            this.instance1
+            this.instance1,
+            this.instance7
         ]);
 
         var proxySet = new chorus.collections.Base(
@@ -40,9 +44,11 @@ describe("chorus.views.DashboardInstanceList", function() {
         it("sorts the instances case-insensitively", function() {
             expect(this.view.$(".name").eq(0)).toContainText("broccoli");
             expect(this.view.$(".name").eq(1)).toContainText("Camels");
-            expect(this.view.$(".name").eq(2)).toContainText("doppler");
-            expect(this.view.$(".name").eq(3)).toContainText("Ego");
-            expect(this.view.$(".name").eq(4)).toContainText("fatoush");
+            expect(this.view.$(".name").eq(2)).toContainText("chicken");
+            expect(this.view.$(".name").eq(3)).toContainText("doppler");
+            expect(this.view.$(".name").eq(4)).toContainText("Ego");
+            expect(this.view.$(".name").eq(5)).toContainText("fatoush");
+            expect(this.view.$(".name").eq(6)).toContainText("kangaroo");
         });
 
         it("displays the icon for each instance", function() {
