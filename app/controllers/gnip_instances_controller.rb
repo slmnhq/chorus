@@ -1,6 +1,6 @@
 class GnipInstancesController < ApplicationController
   def create
-    current_user.gnip_instances.create!(params[:gnip_instance])
+    Gnip::InstanceRegistrar.create!(params[:gnip_instance], current_user)
     render :json => {}, :status => :created
   end
 
