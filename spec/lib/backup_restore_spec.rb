@@ -135,7 +135,7 @@ describe 'BackupRestore' do
     before do
       FakeFS.deactivate!
       any_instance_of(BackupRestore::Restore) do |instance|
-        stub(instance).log
+        #stub(instance).log
         stub(instance).restore_database
         stub(instance).restore_assets
       end
@@ -151,6 +151,8 @@ describe 'BackupRestore' do
       around do |example|
         Dir.mktmpdir("rspec_backup_restore") do |tmp_dir|
           @tmp_dir = tmp_dir
+
+          system "chmod -R 755 #{tmp_dir}"
 
           Dir.mkdir chorus_dir and Dir.chdir chorus_dir do
             create_version_build(current_version_string)
