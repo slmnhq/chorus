@@ -7,7 +7,7 @@ GPDB_HOST=chorus-gpdb42
 
 set -e
 
-b/rake assets:precompile
+b/rake assets:precompile --trace
 
 echo "starting gpfdist (Linux RHEL5 only)"
 export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
