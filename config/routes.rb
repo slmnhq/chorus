@@ -118,6 +118,10 @@ Chorus::Application.routes.draw do
     end
   end
 
+  namespace :kaggle do
+    resources :users, :only => [:index]
+  end
+
   post 'download_chart', :controller => 'image_downloads'
 
   match "/" => "root#index"
