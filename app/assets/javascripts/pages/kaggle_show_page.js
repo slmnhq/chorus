@@ -6,12 +6,13 @@ chorus.pages.KaggleShowPage = chorus.pages.Base.extend({
         var that = this;
         this.dependOn(this.workspace);
         this.workspace.fetch();
+        this.collection = new chorus.collections.KaggleUserSet();
+        this.collection.fetch();
 
-        this.mainContent = new chorus.views.MainContentView({
-            model: this.workspace,
-//            content: new chorus.views.UserShow({model: this.model}),
+        this.mainContent = new chorus.views.MainContentList({
+            modelClass:"KaggleUser",
+            collection:this.collection,
             contentHeader: new chorus.views.KaggleHeader()
-//            contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         });
 
     },

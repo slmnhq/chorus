@@ -51,6 +51,7 @@ window.rspecFixtureDefinitions = {
     user:    { unique: [ "id" ] },
     userWithErrors: { model:'User' },
     userSet: { unique: [ "id" ] },
+    kaggleUserSet: {},
 
     workspaceDataset: {
         unique: ["id"],

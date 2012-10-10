@@ -1,36 +1,52 @@
 [
-{
-	"Username":"CatWoman",
-	"KaggleRank":1,
-	"KagglePoints":100,
-	"FavoriteTechnique":"Claw fighting",
-	"FavoriteSoftware":"Rappelling down buildings",
-	"LegalName":"Selina Kyle",
-	"Location":"San Francisco, United States",
-	"Gravatar":"https://secure.gravatar.com/avatar/kaggleImage.jpg",
-	"PastCompetitionTypes":["Fashion", "Astronomy"],
-	"PastCompetitions": [
-		{"CompetitionName":"Breakins",
-			"Finish":1,"TotalTeamCount":2,"PartOfTeam":true},
-		{"CompetitionName":"Analyzing Who Batman Really Is",
-			"Finish":1,"TotalTeamCount":1,"PartOfTeam":false}
-	]
-},
     {
-        "Username":"Batman",
-        "KaggleRank":2,
-        "KagglePoints":100,
-        "FavoriteTechnique":"Flying",
-        "FavoriteSoftware":"Batmobile",
-        "LegalName":"Bruce Wayne",
-        "Location":"San Francisco, United States",
-        "Gravatar":"https://secure.gravatar.com/avatar/batman.jpg",
-        "PastCompetitionTypes":["Automobiles"],
+        "Username": "CatWoman",
+        "KaggleRank": 1,
+        "KagglePoints": 100,
+        "FavoriteTechnique": "Claw fighting",
+        "FavoriteSoftware": "Rappelling down buildings",
+        "LegalName": "Selina Kyle",
+        "Location": "San Francisco, United States",
+        "Gravatar": "https://secure.gravatar.com/avatar/kaggleImage.jpg",
+        "PastCompetitionTypes": ["Fashion", "Astronomy"],
         "PastCompetitions": [
-            {"CompetitionName":"Fight Joker",
-                "Finish":1,"TotalTeamCount":2,"PartOfTeam":true},
-            {"CompetitionName":"Be Most Badass In Gotham City",
-                "Finish":1,"TotalTeamCount":1,"PartOfTeam":false}
+            {
+                "CompetitionName": "Breakins",
+                "Finish": 1,
+                "TotalTeamCount": 2,
+                "PartOfTeam": true
+            },
+            {
+                "CompetitionName": "Analyzing Who Batman Really Is",
+                "Finish": 1,
+                "TotalTeamCount": 1,
+                "PartOfTeam": false
+            }
+        ]
+    },
+    {
+        "Username": "Batman",
+        "KaggleRank": 2,
+        "KagglePoints": 100,
+        "FavoriteTechnique": "Flying",
+        "FavoriteSoftware": "Batmobile",
+        "LegalName": "Bruce Wayne",
+        "Location": "San Francisco, United States",
+        "Gravatar": "https://secure.gravatar.com/avatar/batman.jpg",
+        "PastCompetitionTypes": ["Automobiles"],
+        "PastCompetitions": [
+            {
+                "CompetitionName": "Fight Joker",
+                "Finish": 1,
+                "TotalTeamCount": 2,
+                "PartOfTeam": true
+            },
+            {
+                "CompetitionName": "Be Most Badass In Gotham City",
+                "Finish": 1,
+                "TotalTeamCount": 1,
+                "PartOfTeam": false
+            }
         ]
     }
 ]

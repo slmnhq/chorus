@@ -1,8 +1,15 @@
 describe("chorus.pages.KaggleShowPage", function() {
-   beforeEach(function() {
-       this.workspace = rspecFixtures.workspace({name: "kagSpace"});
-       this.page = new chorus.pages.KaggleShowPage(this.workspace.id);
-   });
+    beforeEach(function() {
+        this.workspace = rspecFixtures.workspace({name: "kagSpace"});
+        this.kaggleUsers = rspecFixtures.kaggleUserSet();
+        this.page = new chorus.pages.KaggleShowPage(this.workspace.id);
+    });
+
+    describe("setup", function() {
+        it("fetches the kaggle users", function() {
+            expect(this.kaggleUsers).toHaveBeenFetched();
+        });
+    });
 
     context("while the workspace is loading", function() {
         beforeEach(function() {
@@ -34,6 +41,17 @@ describe("chorus.pages.KaggleShowPage", function() {
 
         it("shows the kaggle header", function() {
            expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary")
+        });
+    });
+
+    describe("render", function() {
+        beforeEach(function() {
+            this.page.render();
+            this.server.completeFetchFor(this.kaggleUsers);
+        });
+
+        it("creates a KaggleUserList view", function() {
+            expect(this.page.$(".kaggle_user_list")).toExist();
         });
     });
 });
