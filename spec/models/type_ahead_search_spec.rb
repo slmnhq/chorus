@@ -19,6 +19,7 @@ describe TypeAheadSearch do
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(GpdbInstance)
       Sunspot.session.should be_a_search_for(HadoopInstance)
+      Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)

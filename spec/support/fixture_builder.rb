@@ -79,12 +79,14 @@ FixtureBuilder.configure do |fbuilder|
 
     HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
+
     chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
     chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
     chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::real_gpdb_hostname, :owner => admin))
 
-    gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "sample gnip account", :description => "an example gnip account")
+    gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "searchquery", :description => "an example gnip account")
     fbuilder.name :default, gnip_instance
+    FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead')
 
     # Instance Accounts
     @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)

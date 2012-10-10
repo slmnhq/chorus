@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
 
   has_many :instance_accounts, :foreign_key => :owner_id
   has_many :hadoop_instances, :foreign_key => :owner_id
+  has_many :gnip_instances, :foreign_key => :owner_id
 
   has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",

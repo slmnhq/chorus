@@ -12,6 +12,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'workspace',
                 'greenplum_instance',
                 'hadoop_instance',
+                'gnip_instance',
                 'user',
                 'workfile',
                 'dataset'
@@ -45,6 +46,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.Workspace);
             expectToContainClass(this.searchResults, chorus.models.GreenplumInstance);
             expectToContainClass(this.searchResults, chorus.models.HadoopInstance);
+            expectToContainClass(this.searchResults, chorus.models.GnipInstance);
             expectToContainClass(this.searchResults, chorus.models.User);
             expectToContainClass(this.searchResults, chorus.models.Workfile);
             expectToContainClass(this.searchResults, chorus.models.Dataset);

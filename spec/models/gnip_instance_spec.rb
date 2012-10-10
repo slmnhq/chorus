@@ -9,4 +9,8 @@ describe GnipInstance do
     it { should validate_presence_of :password }
     it { should validate_presence_of :owner }
   end
+
+  describe "associations" do
+    it { should belong_to(:owner).class_name('User') }
+  end
 end

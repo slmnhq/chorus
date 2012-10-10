@@ -35,7 +35,7 @@ describe GnipInstancesController do
     it "should return correct response code" do
       get :index
       response.code.should == "200"
-      decoded_response.length.should == 1
+      decoded_response.length.should == 2
       decoded_response[0].id.should == gnip_instance.id
       decoded_response[0].owner.id.should == gnip_instance.owner_id
     end

@@ -49,6 +49,15 @@ describe SearchPresenter, :type => :view do
         hadoop_instance_hash[:results][0][:entity_type].should == 'hadoop_instance'
       end
 
+      it "includes the right gnip instance keys" do
+        @hash.should have_key(:gnip_instances)
+        gnip_instance_hash = @hash[:gnip_instances]
+        gnip_instance_hash.should have_key(:numFound)
+        gnip_instance_hash.should have_key(:results)
+        gnip_instance_hash[:results][0].should have_key(:highlighted_attributes)
+        gnip_instance_hash[:results][0][:entity_type].should == 'gnip_instance'
+      end
+
       it "includes the right workspace keys" do
         @hash.should have_key(:workspaces)
         workspaces_hash = @hash[:workspaces]

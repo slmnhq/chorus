@@ -33,6 +33,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(GpdbInstance)
       Sunspot.session.should be_a_search_for(HadoopInstance)
+      Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)
@@ -62,7 +63,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :per_type => 3)
         stub(search).num_found do
           hsh = Hash.new(0)
-          hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
+          hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :gnip_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
         end
         stub(search.search).each_hit_with_result { [] }
         search.models
