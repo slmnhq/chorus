@@ -14,7 +14,7 @@ class InstallerIO
   end
 
   def prompt(message, default=nil)
-    print "\n#{MESSAGES[message]} #{default.nil? ? '' : "[#{default}]: "}"
+    print "\n#{MESSAGES[message]}#{default.nil? ? '' : " [#{default}]"}: "
     get_input
   end
 
