@@ -13,9 +13,13 @@ namespace :api_docs do
     end
   end
 
-  RSpec::Core::RakeTask.new(:build) do |t|
-    t.pattern = 'spec/api_docs/**/*_spec.rb'
-    t.rspec_opts = ["--format RspecApiDocumentation::ApiFormatter"]
+  desc "Check and generate API docs"
+  task :build do
+    RSpec::Core::RakeTask.new(:build_docs) do |t|
+      t.pattern = 'spec/api_docs/**/*_spec.rb'
+      t.rspec_opts = ["--format RspecApiDocumentation::ApiFormatter"]
+    end
+    Rake::Task[:build_docs].invoke
   end
 
   desc "Check and generate API docs"
