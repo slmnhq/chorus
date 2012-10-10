@@ -1,7 +1,7 @@
 chorus.models.GnipInstance = chorus.models.Instance.extend({
     constructorName: "GnipInstance",
     urlTemplate: "gnip_instances/{{id}}",
-    showUrlTemplate: "gnip_instances/{{id}}/browse/",
+    showUrlTemplate: "gnip_instances/{{id}}",
     shared: true,
     entityType: "gnip_instance",
 
