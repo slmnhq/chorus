@@ -7,6 +7,7 @@
         workspaceItems: "WorkspaceItemSet",
         instances: "InstanceSet",
         hadoopInstances: "HadoopInstanceSet",
+        gnipInstances: "GnipInstanceSet",
         users: "UserSet",
         attachments: "AttachmentSet"
     };
@@ -127,6 +128,7 @@
         workspaces: makeCollectionMethod("workspaces"),
         instances: makeCollectionMethod("instances"),
         hadoopInstances: makeCollectionMethod("hadoopInstances"),
+        gnipInstances: makeCollectionMethod("gnipInstances"),
         users: makeCollectionMethod("users"),
         hdfs: makeCollectionMethod("hdfs"),
         workspaceItems: makeCollectionMethod("workspaceItems"),

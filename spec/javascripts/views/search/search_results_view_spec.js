@@ -65,6 +65,8 @@ describe("chorus.views.SearchResults", function() {
                 expect(sections.filter(".workspace_list.selectable")).toExist();
                 expect(sections.filter(".hdfs_list.selectable")).toExist();
                 expect(sections.filter(".instance_list.selectable")).toExist();
+                expect(sections.filter(".hadoop_instance_list.selectable")).toExist();
+                expect(sections.filter(".gnip_instance_list.selectable")).toExist();
             });
         });
 
@@ -207,6 +209,22 @@ describe("chorus.views.SearchResults", function() {
                     var modelToClick = this.model.instances().at(0);
                     this.view.$(".instance_list li").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
+                });
+            });
+
+            context("when the li is for a hadoop instance", function() {
+                it("broadcasts the 'hadoop_instance:selected' page event with the clicked instance", function() {
+                    var modelToClick = this.model.hadoopInstances().at(0);
+                    this.view.$(".hadoop_instance_list li").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hadoop_instance:selected", modelToClick);
+                });
+            });
+
+            context("when the li is for a gnip instance", function() {
+                it("broadcasts the 'gnip_instance:selected' page event with the clicked instance", function() {
+                    var modelToClick = this.model.gnipInstances().at(0);
+                    this.view.$(".gnip_instance_list li").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("gnip_instance:selected", modelToClick);
                 });
             });
         });

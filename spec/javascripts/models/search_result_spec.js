@@ -315,7 +315,13 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#hadoopInstances", function() {
             it("returns a Search HadoopInstanceSet", function() {
-                expect(this.model.hadoopInstances()).toBeA(chorus.collections.Search.HadoopInstanceSet)
+                expect(this.model.hadoopInstances()).toBeA(chorus.collections.Search.HadoopInstanceSet);
+            });
+        });
+
+        describe("#gnipInstances", function() {
+            it("returns a Search GnipInstanceSet", function() {
+                expect(this.model.gnipInstances()).toBeA(chorus.collections.Search.GnipInstanceSet);
             });
         });
 
@@ -337,6 +343,7 @@ describe("chorus.models.SearchResult", function() {
                     workspaceItems: "WorkspaceItemSet",
                     instances: "InstanceSet",
                     hadoopInstances: "HadoopInstanceSet",
+                    gnipInstances: "GnipInstanceSet",
                     users: "UserSet",
                     attachments: "AttachmentSet"
                 };
@@ -433,7 +440,7 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.model.total()).toBe(0)
             });
         });
-    })
+    });
 
     describe("#isConstrained", function() {
         beforeEach(function() {
@@ -472,7 +479,7 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.model.isConstrained()).toBeFalsy();
             });
         });
-    })
+    });
 
     describe("triggering invalidated", function() {
         beforeEach(function() {

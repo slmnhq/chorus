@@ -57,8 +57,14 @@
     chorus.collections.Search.HadoopInstanceSet = chorus.collections.HadoopInstanceSet.include(
         searchCollectionMixins
     ).extend({
-            searchKey: "hadoopInstances"
-        });
+        searchKey: "hadoopInstances"
+    });
+
+    chorus.collections.Search.GnipInstanceSet = chorus.collections.GnipInstanceSet.include(
+        searchCollectionMixins
+    ).extend({
+        searchKey: "gnipInstances"
+    });
 
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
         searchCollectionMixins

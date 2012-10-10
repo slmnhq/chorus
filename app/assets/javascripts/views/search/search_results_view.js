@@ -11,6 +11,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".dataset_list":         "datasetList",
         ".instance_list":        "instanceList",
         ".hadoop_instance_list": "hadoopInstanceList",
+        ".gnip_instance_list":   "gnipInstanceList",
         ".attachment_list":      "attachmentList"
     },
 
@@ -39,6 +40,9 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         }
         if (this.model.hadoopInstances().length) {
             this.hadoopInstanceList = this.buildListView('hadoop_instance', this.model.hadoopInstances());
+        }
+        if (this.model.gnipInstances().length) {
+            this.gnipInstanceList = this.buildListView('gnip_instance', this.model.gnipInstances());
         }
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());
