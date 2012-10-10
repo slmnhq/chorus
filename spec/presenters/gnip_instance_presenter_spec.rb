@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbInstancePresenter, :type => :view do
-  let(:gnip_instance) { gnip_instances(:gnip) }
+  let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { gnip_instance.owner }
   let(:presenter) { GnipInstancePresenter.new(gnip_instance, view, options) }
   let(:options) { {} }
