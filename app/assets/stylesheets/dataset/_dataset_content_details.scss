@@ -1,5 +1,3 @@
-@import "../_common";
-
 @mixin chart_icon($name) {
     .#{$name}.chart_icon, .chorusview {
         background-image: url("/images/visualizations/create_icons/#{$name}_off.png");

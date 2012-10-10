@@ -1,5 +1,3 @@
-@import "_common.scss";
-
 .hadoop_instance_list, .instance_list {
     .instance_provider .details{
         @include list-section-heading;

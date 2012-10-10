@@ -1,5 +1,3 @@
-@import "../_common.scss";
-
 .list {
     position: relative;
 
@@ -91,6 +89,9 @@
 
         * {
             vertical-align: top
+        }
+
+        .main {
         }
 
         .name {

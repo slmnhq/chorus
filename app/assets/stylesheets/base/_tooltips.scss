@@ -1,5 +1,3 @@
-@import "common.scss";
-
 @mixin tooltip($text, $bg, $border){
     .ui-tooltip-content {
         color: $text;

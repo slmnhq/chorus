@@ -1,5 +1,3 @@
-@import "../_common.scss";
-
 .errors, .sql_errors, .dataset_errors {
     @include after-clearfix;
     background-color: $error-background-color;
