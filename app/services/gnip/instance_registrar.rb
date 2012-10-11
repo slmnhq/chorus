@@ -2,7 +2,7 @@ module Gnip
   class InstanceRegistrar
 
     def self.create!(instance_attributes, owner)
-      chorus_gnip = ChorusGnip.new({:url => instance_attributes[:host],
+      chorus_gnip = ChorusGnip.new({:url => instance_attributes[:stream_url],
                                     :username => instance_attributes[:username],
                                     :password => instance_attributes[:password]
                                    })
