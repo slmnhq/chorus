@@ -17,6 +17,7 @@ describe GnipInstancesController do
       it "reports that the instance was created with the correct owner" do
         post :create
         response.code.should == "201"
+        decoded_response.owner.id.should == @user.id
       end
     end
 
