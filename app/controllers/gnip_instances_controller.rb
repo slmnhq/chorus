@@ -1,7 +1,7 @@
 class GnipInstancesController < ApplicationController
   def create
     gnip_params = params[:gnip_instance]
-    chorus_gnip = ChorusGnip.new({:url => gnip_params[:host],
+    chorus_gnip = ChorusGnip.new({:url => gnip_params[:stream_url],
                                   :username => gnip_params[:username],
                                   :password => gnip_params[:password]
                                  })

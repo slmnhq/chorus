@@ -22,7 +22,7 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
-        this.require("host", newAttrs);
+        this.require("stream_url", newAttrs);
         this.require("username", newAttrs);
         this.require("password", newAttrs);
     },

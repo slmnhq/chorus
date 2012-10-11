@@ -89,9 +89,11 @@
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label name="help_text">{{t "instances.dialog.gnip_help_text"}} </label>
-        <label class="required gnip_host" name="host">{{t "instances.dialog.gnip_url"}} </label>
-        <input class= "gnip_host" type="text" name="host" />
+        <label class="required gnip_host" name="host">
+            {{t "instances.dialog.gnip_url"}}
+            <img src="/images/more-info.png" class="help" data-text='{{t "instances.dialog.gnip_help_text"}}'/>
+        </label>
+        <input class= "gnip_host" type="text" name="stream_url" />
 
         <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
         <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>

@@ -9,7 +9,7 @@ describe GnipInstancesController do
   describe "#create" do
     let(:parameters) { {:gnip_instance => {
         :name => 'gnip_instance_name',
-        :host => 'http://www.example.com',
+        :stream_url => 'http://www.example.com',
         :description => 'poopoo',
         :username => 'gnip_username',
         :password => 'gnip_password'

@@ -11,8 +11,7 @@ describe GpdbInstancePresenter, :type => :view do
 
     it "includes the right keys" do
       hash.should have_key(:name)
-      hash.should have_key(:host)
-      hash.should have_key(:port)
+      hash.should have_key(:stream_url)
       hash.should have_key(:id)
       hash.should have_key(:owner)
       hash.should have_key(:description)

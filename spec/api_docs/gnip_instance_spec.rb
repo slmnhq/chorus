@@ -5,24 +5,25 @@ resource "Gnip instances" do
 
   before do
     log_in user
+    any_instance_of(ChorusGnip) do |c|
+      stub(c).auth { true }
+    end
   end
 
   post "/gnip_instances" do
     parameter :name, "gnip account name"
     parameter :description, "gnip account description"
-    parameter :host, "gnip host url"
-    parameter :port, "gnip host port"
+    parameter :stream_url, "gnip stream url"
     parameter :username, "gnip account username"
     parameter :password, "gnip account password"
 
     let(:name) { "example name" }
     let(:description) { "Can you tell me how to get..." }
-    let(:host) { "https://stream.gnip.com" }
-    let(:port) { 443 }
+    let(:stream_url) { "https://stream.gnip.com" }
     let(:username) { "example_user" }
     let(:password) { "sample_password" }
 
-    required_parameters :name, :host, :port, :username, :password
+    required_parameters :name, :stream_url, :username, :password
 
     example_request "Register a Gnip Account" do
       status.should == 201

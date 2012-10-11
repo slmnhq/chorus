@@ -1,11 +1,10 @@
 class GnipInstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, :description, :username, :password, to: :model
+  delegate :name, :stream_url, :id, :owner, :description, :username, :password, to: :model
 
   def to_hash
     {
         :name => h(name),
-        :host => h(host),
-        :port => port,
+        :stream_url => h(stream_url),
         :id => id,
         :owner => owner,
         :description => description,

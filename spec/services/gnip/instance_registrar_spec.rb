@@ -8,7 +8,7 @@ describe Gnip::InstanceRegistrar do
         :name => "new_gnip_instance",
         :description => "some description",
         :port => 12345,
-        :host => "server.gnip.com",
+        :stream_url => "server.gnip.com",
         :username => "gnip_user",
         :password => "secret"
     }

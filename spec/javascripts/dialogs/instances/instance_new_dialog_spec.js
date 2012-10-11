@@ -184,8 +184,8 @@ describe("chorus.dialogs.InstancesNew", function() {
         });
 
         describe("clicking on the radio button", function () {
-            it("shows the gnip url and port", function () {
-                expect(this.dialog.$(".register_existing_gnip input[name=host]").val()).toBe("");
+            it("shows the gnip stream_url", function () {
+                expect(this.dialog.$(".register_existing_gnip input[name=stream_url]").val()).toBe("");
             });
         });
     });
@@ -371,7 +371,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 section.find("input[type=radio]").attr('checked', true).change();
                 section.find("input[name=name]").val("Gnip_Name");
                 section.find("textarea[name=description]").val("Gnip Description");
-                section.find("input[name=host]").val("gnip.bar");
+                section.find("input[name=stream_url]").val("gnip.bar");
                 section.find("input[name=username]").val("gnip_user");
                 section.find("input[name=password]").val("my_password");
 
@@ -387,7 +387,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 expect(attrs.name).toBe("Gnip_Name");
                 expect(attrs.provision_type).toBe("registerGnip");
                 expect(attrs.description).toBe("Gnip Description");
-                expect(attrs.host).toBe("gnip.bar");
+                expect(attrs.stream_url).toBe("gnip.bar");
                 expect(attrs.username).toBe("gnip_user");
                 expect(attrs.password).toBe("my_password");
             });
