@@ -1,6 +1,6 @@
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
-  DATABASE_SQL_FILENAME = "database.sql"
+  DATABASE_SQL_FILENAME = "database.sql.gz"
   ASSETS_FILENAME = "assets.tgz"
 
   def self.backup(backup_dir, rolling_days = nil)
@@ -22,7 +22,7 @@ module BackupRestore
     end
 
     def config_path(name)
-      chorus_config[name].gsub ":rails_root/", ""
+      chorus_config[name].gsub ":rails_root", Rails.root
     end
 
     def chorus_config
@@ -30,7 +30,7 @@ module BackupRestore
     end
 
     def asset_paths
-      ['config/chorus.yml',
+      [Rails.root.join("config/chorus.yml"),
        config_path('csv_import_file_storage_path'),
        config_path('workfile_storage_path'),
        config_path('image_storage'),
@@ -74,7 +74,7 @@ module BackupRestore
     def dump_database
       log "Dumping database contents..."
 
-      db_filename = "#{DATABASE_SQL_FILENAME}.gz"
+      db_filename = "#{DATABASE_SQL_FILENAME}"
       capture_output "pg_dump #{database_params} | gzip > #{db_filename}", :error => "Database dump failed."
     end
 
@@ -130,9 +130,8 @@ module BackupRestore
           Dir.chdir tmp_dir do
             capture_output_or_throw "tar xf #{full_backup_filename}", :unpack_failed
             backup_version = capture_output_or_throw("cat version_build", :unpack_failed).strip
-            current_version = capture_output_or_throw("cat #{File.join Rails.root, 'version_build'}", :unpack_failed).strip
+            current_version = capture_output_or_throw("cat #{Rails.root.join 'version_build'}", :unpack_failed).strip
             compare_versions(backup_version, current_version)
-            capture_output "gunzip #{DATABASE_SQL_FILENAME}.gz", :error => "Could not uncompress database."
             restore_assets
             restore_database
           end
@@ -142,14 +141,15 @@ module BackupRestore
     end
 
     def restore_assets
-      FileUtils.rm_r asset_paths
+      tmp_dir = Dir.pwd
+      FileUtils.rm_r asset_paths.uniq
       Dir.chdir(Rails.root) do
-        capture_output "tar zxf #{ASSETS_FILENAME}", :error => "Could not uncompress assets."
+        capture_output "tar zxf #{tmp_dir}/#{ASSETS_FILENAME}", :error => "Could not uncompress assets."
       end
     end
 
     def restore_database
-      capture_output "pg_restore #{database_params} #{DATABASE_SQL_FILENAME}", :error => "Could not restore database."
+      capture_output "gunzip -c database.sql.gz | pg_restore #{database_params}", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)
