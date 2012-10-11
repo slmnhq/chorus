@@ -42,7 +42,7 @@ describe GnipInstancesController do
         {
             :name => "new_gnip_instance",
             :description => "some description",
-            :host => "http://www.example.com",
+            :stream_url => "http://www.example.com",
             :username => "gnip_username",
             :password => "gnip_password"
         }
