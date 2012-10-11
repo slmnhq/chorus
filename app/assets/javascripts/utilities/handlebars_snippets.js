@@ -159,7 +159,7 @@
         },
 
         spanFor: function(text, attributes) {
-            return $("<span></span>").text(text).attr(attributes || {}).outerHtml()
+            return new Handlebars.SafeString($("<span></span>").text(text).attr(attributes || {}).outerHtml());
         },
 
         renderTemplate: function(templateName, context) {

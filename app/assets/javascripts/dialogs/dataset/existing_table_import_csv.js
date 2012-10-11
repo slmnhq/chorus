@@ -193,7 +193,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             destinationColumns: this.destinationColumns,
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
-                toTable: new Handlebars.SafeString(chorus.helpers.spanFor(this.model.get("tableName"), {"class": "destination"}))
+                toTable: chorus.helpers.spanFor(this.model.get("tableName"), {"class": "destination"})
             })
         };
     },

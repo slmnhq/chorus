@@ -213,6 +213,12 @@ $summary-line-height: 19px;
     color: $color-text2;
 }
 
+@mixin list-item-details-area {
+    @include debugging-mixin;
+    font-size: 14px;
+    color: $color-text4;
+}
+
 @mixin database-column-type {
     @include debugging-mixin;
     font-size: 11px;

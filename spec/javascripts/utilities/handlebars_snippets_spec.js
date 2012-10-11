@@ -494,11 +494,27 @@ describe("handlebars", function () {
             });
         });
 
+        describe("spanFor", function() {
+            it("wraps text in span and applies attributes", function() {
+                var span = Handlebars.helpers.spanFor("text", {'class': 'my_class'}).toString();
+                expect(span).toEqual('<span class="my_class">text</span>');
+            });
+
+            it("escapes the text", function() {
+                var span = Handlebars.helpers.spanFor("<span>text</span>").toString();
+                expect(span).toEqual('<span>&lt;span&gt;text&lt;/span&gt;</span>');
+            });
+
+            it("should return a safe string", function() {
+                expect(Handlebars.helpers.spanFor("text")).toBeA(Handlebars.SafeString);
+            });
+        });
+
         describe("hotKeyName", function () {
             it("uses chorus.hotKeyMeta to construct a human-readable hot key description", function () {
                 expect(Handlebars.helpers.hotKeyName('k')).toBe(_.str.capitalize(chorus.hotKeyMeta) + " + k")
             })
-        })
+        });
 
         describe("workspaceUsage", function () {
             it("should never have a width greater than 100%", function () {

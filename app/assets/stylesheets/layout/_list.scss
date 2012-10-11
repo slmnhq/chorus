@@ -64,6 +64,13 @@
             bottom: 0;
         }
 
+        .details_area {
+            @include list-item-details-area;
+            .small {
+                font-size: 12px
+            }
+        }
+
         div.summary {
             color: $color-text4;
             @include summary-text;

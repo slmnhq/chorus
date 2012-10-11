@@ -1,4 +1,5 @@
 @import "_common.scss";
+@import "compass/css3/border-radius";
 
 .kaggle_header {
     .summary {
@@ -16,5 +17,20 @@
 .kaggle_user_list {
     .name {
         color: $color-text2;
+    }
+
+    img.profile {
+        display: block;
+        float: left;
+        width: $icon-image-width;
+        height: $icon-image-height;
+    }
+
+    .kaggle_rank {
+        background-color: $color-text3;
+        color: white;
+        padding: 0 2px;
+        @include border-radius(3px);
+        margin-right: 5px;
     }
 }

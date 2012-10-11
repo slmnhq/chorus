@@ -21,6 +21,24 @@ describe("chorus.views.KaggleUserList", function() {
             expect(this.view.$(".name:contains("+ this.collection.at(0).get("username") +")")).toExist();
         });
 
+        it("displays the location", function() {
+            expect(this.view.$(".location:contains("+ this.collection.at(0).get("location") +")")).toExist();
+        });
+
+        it("displays the rank", function() {
+            expect(this.view.$(".kaggle_rank:contains("+ this.collection.at(0).get("rank") +")")).toExist();
+        });
+
+        it("displays the gravatar url when the user has one", function() {
+            expect(this.view.$("img.profile:eq(0)")).toHaveAttr("src", this.collection.at(0).gravatarUrl);
+        });
+
+        it("displays the default gravatar image when the user does not have one", function() {
+            this.collection.at(0).set({gravatarUrl: ''});
+            this.view.render();
+            expect(this.view.$("img.profile:eq(0)")).toHaveAttr("src", "/images/kaggle/default_user.jpeg");
+        });
+
         it("broadcasts kaggle_user:selected when a user's entry is selected", function() {
             spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
             var user = this.collection.at(0);
