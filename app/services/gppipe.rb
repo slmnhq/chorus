@@ -34,20 +34,6 @@ class Gppipe < GpTableCopier
     self.protocol
   end
 
-  def table_definition
-    return @table_definition if @table_definition
-    # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-    arr = src_conn.exec_query(describe_table)
-    @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
-  end
-
-  def table_definition_with_keys
-    return @table_definition_with_keys if @table_definition_with_keys
-    primary_key_rows = src_conn.exec_query(primary_key_sql)
-    primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
-    @table_definition_with_keys = "#{table_definition}#{primary_key_clause}"
-  end
-
   def pipe_name
     @pipe_name ||= "pipe_#{Process.pid}_#{Time.now.to_i}"
   end
@@ -88,16 +74,16 @@ class Gppipe < GpTableCopier
       count = row_limit if row_limit && row_limit < count
 
       if create_new_table?
-        dst_conn.exec_query("CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}")
+        dst_conn.exec_query("CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys(src_conn)}) #{distribution_key_clause}")
       elsif truncate?
         dst_conn.exec_query("TRUNCATE TABLE #{destination_table_fullname}")
       end
       unless no_rows_to_import
         begin
           system "mkfifo #{pipe_file}"
-          src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition})
+          src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition(src_conn)})
                                  LOCATION ('#{Gppipe.write_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
-          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition})
+          dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition(src_conn)})
                                LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
 
           semaphore = java.util.concurrent.Semaphore.new(0)
@@ -199,38 +185,4 @@ class Gppipe < GpTableCopier
         :adapter => "jdbcpostgresql"
     )
   end
-
-  def primary_key_sql
-    <<-PRIMARYKEYSQL
-      SELECT attname
-      FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
-      FROM   pg_constraint where conrelid = '#{source_schema.name}.#{source_table.name}'::regclass and contype='p'
-      ) y, pg_attribute WHERE attrelid = '#{source_schema.name}.#{source_table.name}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
-    PRIMARYKEYSQL
-  end
-
-  def describe_table
-    <<-DESCRIBETABLESQL
-      SELECT a.attname as column_name,
-        pg_catalog.format_type(a.atttypid, a.atttypmod) as data_type,
-        (SELECT substring(pg_catalog.pg_get_expr(d.adbin, d.adrelid) for 128)
-         FROM pg_catalog.pg_attrdef d
-         WHERE d.adrelid = a.attrelid
-          AND d.adnum = a.attnum
-          AND a.atthasdef),
-        a.attnotnull, a.attnum,
-        NULL AS attcollation
-      FROM pg_catalog.pg_attribute a
-      WHERE a.attrelid =
-          (SELECT c.oid
-          FROM pg_catalog.pg_class c
-            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-          WHERE c.relname ~ '^(#{source_table.name})$'
-            AND n.nspname ~ '^(#{source_schema.name})$')
-        AND a.attnum > 0
-        AND NOT a.attisdropped
-      ORDER BY a.attnum;
-    DESCRIBETABLESQL
-  end
-
 end

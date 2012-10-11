@@ -79,69 +79,11 @@ describe Gppipe, :database_integration => true do
     Gppipe.protocol.should == 'gpfdist'
   end
 
-  context "for a table with 0 columns" do
-    let(:source_table) { 'candy_empty' }
-    let(:table_def) { '' }
-
-    after do
-      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
-    end
-
-    it "should have the correct table definition" do
-      gp_pipe.table_definition.should == table_def
-    end
-
-    it "should have the correct table definition with keys" do
-      gp_pipe.table_definition_with_keys.should == table_def
-    end
-  end
-
-  context "for a table with 1 column and no primary key, distributed randomly" do
-    let(:table_def) { '"2id" integer' }
-    let(:source_table) { 'candy_one_column' }
-    let(:distrib_def) { "DISTRIBUTED RANDOMLY" }
-
-    after do
-      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
-    end
-
-    it "should have the correct table definition" do
-      gp_pipe.table_definition.should == table_def
-    end
-
-    it "should have the correct table definition with keys" do
-      gp_pipe.table_definition_with_keys.should == table_def
-    end
-
-    it "should have DISTRIBUTED RANDOMLY for its distribution key clause" do
-      gp_pipe.distribution_key_clause.should == "DISTRIBUTED RANDOMLY"
-    end
-  end
-
-  context "for a table with a composite primary key" do
-    let(:table_def) { '"id" integer, "id2" integer, PRIMARY KEY("id", "id2")' }
-    let(:source_table) { 'candy_composite' }
-
-    after do
-      gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
-    end
-
-    it "should have the correct table definition with keys" do
-      gp_pipe.table_definition_with_keys.should == table_def
-    end
-  end
-
-
   context "actually running the query" do
 
     after do
       gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
       gpdb2.exec_query("drop table if exists #{gp_pipe.destination_table_fullname};")
-    end
-
-    it "has the correct DDL for create table" do
-      setup_data
-      gp_pipe.table_definition_with_keys.should == table_def
     end
 
     describe ".run_import" do

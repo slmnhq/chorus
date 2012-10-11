@@ -18,7 +18,7 @@ describe GpTableCopier, :database_integration => true do
 
   let(:account) { GpdbIntegration.real_gpdb_account }
   let(:user) { account.owner }
-  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+  let(:database) { GpdbIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:source_table_name) { "src_table" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table_name) }
@@ -26,7 +26,7 @@ describe GpTableCopier, :database_integration => true do
   let(:destination_table_name) { "dst_table" }
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
-  let(:attributes) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true" }.merge(extra_attributes) }
+  let(:attributes) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true"}.merge(extra_attributes) }
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, attributes) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
@@ -40,9 +40,9 @@ describe GpTableCopier, :database_integration => true do
   let(:extra_attributes) { {:dataset_import_created_event_id => dataset_import_created_event_id} }
 
   after do
-    call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{source_table_name}\";")
+    call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{source_table_name}\";") unless source_table_name =~ /^candy/
     call_sql("DROP TABLE IF EXISTS \"#{sandbox.name}\".\"#{destination_table_name}\";") unless (
-    (destination_table_name ==  source_table_name) || destination_table_name == "other_base_table")
+    (destination_table_name == source_table_name) || destination_table_name == "other_base_table")
   end
 
   context "actually running the query" do
@@ -207,6 +207,39 @@ describe GpTableCopier, :database_integration => true do
       end
     end
 
+    context "when the source dataset is a chorus view" do
+      let(:source_dataset) { datasets(:executable_chorus_view) }
+
+      context "when creating a new table" do
+        before do
+          call_sql("drop table if exists \"#{destination_table_name}\";")
+        end
+
+        it "should still work" do
+          copier.run
+          GpdbTable.refresh(account, schema)
+          database.find_dataset_in_schema(destination_table_name, sandbox.name).should be_a(GpdbTable)
+        end
+      end
+
+      context "in existing table" do
+        let(:table_def) { 'LIKE "test_schema"."base_table1"' }
+        let(:distrib_def) { 'DISTRIBUTED RANDOMLY' }
+        let(:add_rows) { false }
+
+        before do
+          extra_attributes.merge!("new_table" => false)
+          call_sql("create table \"#{destination_table_name}\"(#{table_def}) DISTRIBUTED RANDOMLY;")
+        end
+
+        it "should still work" do
+          copier.run
+          GpdbTable.refresh(account, schema)
+          database.find_dataset_in_schema(destination_table_name, sandbox.name).should be_a(GpdbTable)
+        end
+      end
+    end
+
     context "with standard input" do
       before do
         copier.run
@@ -339,6 +372,59 @@ describe GpTableCopier, :database_integration => true do
 
       it "display the sql error message" do
         lambda { copier.run }.should raise_error(GpTableCopier::ImportFailed, "Internal Error")
+      end
+    end
+  end
+
+  describe "#table_definition" do
+    let(:definition) do
+      schema.with_gpdb_connection(account) do |conn|
+        copier.table_definition(conn)
+      end
+    end
+    let(:definition_with_keys) do
+      schema.with_gpdb_connection(account) do |conn|
+        copier.table_definition_with_keys(conn)
+      end
+    end
+
+    context "for a table with 0 columns" do
+      let(:source_table_name) { 'candy_empty' }
+      let(:table_def) { '' }
+
+      it "should have the correct table definition" do
+        definition.should == table_def
+      end
+
+      it "should have the correct table definition with keys" do
+        definition_with_keys.should == table_def
+      end
+    end
+
+    context "for a table with 1 column and no primary key, distributed randomly" do
+      let(:table_def) { '"2id" integer' }
+      let(:source_table_name) { 'candy_one_column' }
+      let(:distrib_def) { "DISTRIBUTED RANDOMLY" }
+
+      it "should have the correct table definition" do
+        definition.should == table_def
+      end
+
+      it "should have the correct table definition with keys" do
+        definition_with_keys.should == table_def
+      end
+
+      it "should have DISTRIBUTED RANDOMLY for its distribution key clause" do
+        copier.distribution_key_clause.should == "DISTRIBUTED RANDOMLY"
+      end
+    end
+
+    context "for a table with a composite primary key" do
+      let(:table_def) { '"id" integer, "id2" integer, PRIMARY KEY("id", "id2")' }
+      let(:source_table_name) { 'candy_composite' }
+
+      it "should have the correct table definition with keys" do
+        definition_with_keys.should == table_def
       end
     end
   end

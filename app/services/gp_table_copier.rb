@@ -30,6 +30,7 @@ class GpTableCopier
   end
 
   def distribution_key_clause
+    return 'DISTRIBUTED RANDOMLY' if source_table.is_a?(ChorusView)
     return @distribution_key_clause if @distribution_key_clause
     @distribution_key_clause = source_schema.with_gpdb_connection(source_account) do |connection|
       rows = connection.exec_query(distribution_key_sql)
@@ -48,7 +49,7 @@ class GpTableCopier
   end
 
   def run
-    create_command = "CREATE TABLE #{destination_table_fullname} (LIKE #{source_table_fullname} INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES) #{distribution_key_clause};"
+    create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
     copy_command = "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{source_table_fullname} #{limit_clause});"
     truncate_command = "TRUNCATE TABLE #{destination_table_fullname};"
     internal_error_message = nil
@@ -56,10 +57,14 @@ class GpTableCopier
     begin
       destination_schema.with_gpdb_connection(destination_account) do |connection|
         connection.transaction do
+
           begin
+            unless source_table.query_setup_sql.blank?
+              execute_sql(connection, source_table.query_setup_sql)
+            end
 
             if create_new_table?
-              execute_sql(connection, create_command)
+              execute_sql(connection, create_command % [table_definition_with_keys(connection)])
             elsif truncate?
               execute_sql(connection, truncate_command)
             end
@@ -164,11 +169,25 @@ class GpTableCopier
   end
 
   def source_table_fullname
-    @source_table_fullname ||= "\"#{source_schema.name}\".\"#{source_table.name}\""
+    @source_table_fullname ||= source_table.scoped_name
   end
 
   def truncate?
     attributes["truncate"].to_s == "true"
+  end
+
+  def table_definition(connection)
+    return @table_definition if @table_definition
+    # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
+    arr = connection.exec_query(describe_table)
+    @table_definition = arr.map { |col_def| "\"#{col_def["column_name"]}\" #{col_def["data_type"]}" }.join(", ")
+  end
+
+  def table_definition_with_keys(connection)
+    return @table_definition_with_keys if @table_definition_with_keys
+    primary_key_rows = connection.exec_query(primary_key_sql)
+    primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
+    @table_definition_with_keys = "#{table_definition(connection)}#{primary_key_clause}"
   end
 
   private
@@ -177,8 +196,41 @@ class GpTableCopier
     <<-DISTRIBUTION_KEY_SQL
       SELECT attname
       FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
-      FROM   gp_distribution_policy where localoid = '#{source_schema.name}.#{source_table.name}'::regclass
-      ) y, pg_attribute WHERE attrelid = '#{source_schema.name}.#{source_table.name}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
+      FROM   gp_distribution_policy where localoid = '#{source_table_fullname}'::regclass
+      ) y, pg_attribute WHERE attrelid = '#{source_table_fullname}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
     DISTRIBUTION_KEY_SQL
+  end
+
+  def primary_key_sql
+    <<-PRIMARYKEYSQL
+      SELECT attname
+      FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
+      FROM   pg_constraint where conrelid = '#{source_table_fullname}'::regclass and contype='p'
+      ) y, pg_attribute WHERE attrelid = '#{source_table_fullname}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
+    PRIMARYKEYSQL
+  end
+
+  def describe_table
+    <<-DESCRIBETABLESQL
+      SELECT a.attname as column_name,
+        pg_catalog.format_type(a.atttypid, a.atttypmod) as data_type,
+        (SELECT substring(pg_catalog.pg_get_expr(d.adbin, d.adrelid) for 128)
+         FROM pg_catalog.pg_attrdef d
+         WHERE d.adrelid = a.attrelid
+          AND d.adnum = a.attnum
+          AND a.atthasdef),
+        a.attnotnull, a.attnum,
+        NULL AS attcollation
+      FROM pg_catalog.pg_attribute a
+      WHERE a.attrelid =
+          (SELECT c.oid
+          FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+          WHERE c.relname ~ '^(#{source_table.name})$'
+            #{source_table.is_a?(ChorusView) ? '' : "AND n.nspname ~ '^(#{source_schema.name})$'"})
+        AND a.attnum > 0
+        AND NOT a.attisdropped
+      ORDER BY a.attnum;
+    DESCRIBETABLESQL
   end
 end
