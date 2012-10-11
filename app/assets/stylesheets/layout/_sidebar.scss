@@ -3,7 +3,7 @@ body .ui-draggable-dragging {
         max-width: 60%;
     }
 
-    .type {
+    .details {
         float: right;
         margin-top: 8px;
         color: $color-text3;
@@ -38,7 +38,8 @@ body .ui-draggable-dragging {
             @include heading-sidebar;
             margin-bottom: 5px;
         }
-        .type {
+
+        .details {
             @include secondary-text-small;
         }
     }
@@ -162,7 +163,7 @@ body .ui-draggable-dragging {
                         vertical-align: middle;
                     }
 
-                    .name, .type {
+                    .name, .details {
                         margin-top: 2px;
                         font-size: 14px;
                         display: inline-block;
@@ -222,7 +223,7 @@ body .ui-draggable-dragging {
                     .name {
                         max-width: 60%;
                     }
-                    .type {
+                    .details {
                         float: right;
                         margin-top: 8px;
                         color: $color-text3;

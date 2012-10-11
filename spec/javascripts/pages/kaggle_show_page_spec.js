@@ -53,5 +53,9 @@ describe("chorus.pages.KaggleShowPage", function() {
         it("creates a KaggleUserList view", function() {
             expect(this.page.$(".kaggle_user_list")).toExist();
         });
+
+        it("creates a KaggleUserSidebar view", function() {
+            expect(this.page.$(".kaggle_user_sidebar")).toExist();
+        });
     });
 });

@@ -15,6 +15,7 @@ chorus.pages.KaggleShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.KaggleHeader()
         });
 
+        this.sidebar = new chorus.views.KaggleUserSidebar();
     },
 
     crumbs: function() {

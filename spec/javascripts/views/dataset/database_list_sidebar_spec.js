@@ -17,7 +17,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
     });
 
     it("displays the database type", function() {
-        expect(this.view.$(".type")).toContainTranslation("database_list.sidebar.type");
+        expect(this.view.$(".details")).toContainTranslation("database_list.sidebar.type");
     });
 
     it("displays nothing when a database is deselected", function() {

@@ -17,7 +17,7 @@ describe("chorus.views.SchemaListSidebar", function() {
     })
 
     it("displays the schema type", function() {
-        expect(this.view.$(".type")).toContainTranslation("schema_list.sidebar.type");
+        expect(this.view.$(".details")).toContainTranslation("schema_list.sidebar.type");
     });
 
     it("displays nothing when a schema is deselected", function() {
