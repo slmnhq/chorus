@@ -17,6 +17,7 @@ gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
 gem 'attr_encrypted'
 gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
 gem 'turbo-sprockets-rails3'
+gem 'chorusgnip', :github => 'pivotal-leopold/gnip'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

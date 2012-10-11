@@ -9,6 +9,12 @@ GIT
       jdbc-postgres (>= 9.0, < 9.2)
 
 GIT
+  remote: git://github.com/pivotal-leopold/gnip.git
+  revision: 453250b3233057ead3e80d1257713af6e1ab89d8
+  specs:
+    chorusgnip (0.0.1)
+
+GIT
   remote: git://github.com/pivotal-leopold/jetpack.git
   revision: 529c16d730de7e15840f0b2826254faeaf67f53e
   specs:
@@ -326,6 +332,7 @@ DEPENDENCIES
   attr_encrypted
   capybara
   capybara-screenshot
+  chorusgnip!
   chunky_png
   ci_reporter
   clockwork
