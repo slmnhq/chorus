@@ -4,6 +4,7 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
     showUrlTemplate: "gnip_instances/{{id}}",
     shared: true,
     entityType: "gnip_instance",
+    parameterWrapper: "gnip_instance",
 
     providerIconUrl: function() {
         return this._imagePrefix + "gnip.png"
@@ -22,8 +23,6 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
         this.require("host", newAttrs);
-        this.require("port", newAttrs);
-        this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         this.require("username", newAttrs);
         this.require("password", newAttrs);
     },

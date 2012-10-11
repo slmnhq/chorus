@@ -7,25 +7,44 @@ describe GnipInstancesController do
   end
 
   describe "#create" do
-    let(:parameters) { { :gnip_instance => {
+    let(:parameters) { {:gnip_instance => {
         :name => 'gnip_instance_name',
         :host => 'http://www.example.com',
-        :port => 443,
         :description => 'poopoo',
         :username => 'gnip_username',
         :password => 'gnip_password'
-    } } }
+    }} }
 
-    it "reports that the instance was created with the correct owner" do
-      post :create, parameters
-      response.code.should == "201"
-      GnipInstance.last.owner.should == @user
+    context "with Valid credentials" do
+      before do
+        any_instance_of(ChorusGnip) do |c|
+          mock(c).auth { true }
+        end
+      end
+
+      it "reports that the instance was created with the correct owner" do
+        post :create, parameters
+        response.code.should == "201"
+        GnipInstance.last.owner.should == @user
+      end
+
+      it "should add a gnip instance" do
+        expect {
+          post :create, parameters
+        }.to change(GnipInstance, :count).by(1)
+      end
     end
 
-    it "should add a gnip instance" do
-      expect {
+    context "With Invalid credentials" do
+      before do
+        any_instance_of(ChorusGnip) do |c|
+          mock(c).auth { false }
+        end
+      end
+      it "raise an error" do
         post :create, parameters
-      }.to change(GnipInstance, :count).by(1)
+        response.code.should == "422"
+      end
     end
   end
 

@@ -47,9 +47,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         return {
             auroraInstalled: chorus.models.GreenplumInstance.aurora().isInstalled(),
             provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGb"),
-            gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured'),
-            gnipUrl: chorus.models.Config.instance().get('gnipUrl'),
-            gnipPort: chorus.models.Config.instance().get('gnipPort')
+            gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured')
         }
     },
 

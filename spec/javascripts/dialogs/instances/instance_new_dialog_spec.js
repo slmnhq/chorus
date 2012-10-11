@@ -173,7 +173,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
     context("when gnip is configured", function() {
         beforeEach(function() {
-            chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: "443" });
+            chorus.models.Config.instance().set({ gnipConfigured: true  });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
@@ -185,10 +185,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         describe("clicking on the radio button", function () {
             it("shows the gnip url and port", function () {
-                expect(this.dialog.$(".register_existing_gnip input[name=host]").val()).toBe("www.example.com");
-                expect(this.dialog.$(".register_existing_gnip input[name=host]")).toBeDisabled();
-                expect(this.dialog.$(".register_existing_gnip input[name=port]").val()).toBe("443");
-                expect(this.dialog.$(".register_existing_gnip input[name=port]")).toBeDisabled();
+                expect(this.dialog.$(".register_existing_gnip input[name=host]").val()).toBe("");
             });
         });
     });
@@ -375,7 +372,6 @@ describe("chorus.dialogs.InstancesNew", function() {
                 section.find("input[name=name]").val("Gnip_Name");
                 section.find("textarea[name=description]").val("Gnip Description");
                 section.find("input[name=host]").val("gnip.bar");
-                section.find("input[name=port]").val("1234");
                 section.find("input[name=username]").val("gnip_user");
                 section.find("input[name=password]").val("my_password");
 
@@ -392,7 +388,6 @@ describe("chorus.dialogs.InstancesNew", function() {
                 expect(attrs.provision_type).toBe("registerGnip");
                 expect(attrs.description).toBe("Gnip Description");
                 expect(attrs.host).toBe("gnip.bar");
-                expect(attrs.port).toBe("1234");
                 expect(attrs.username).toBe("gnip_user");
                 expect(attrs.password).toBe("my_password");
             });
