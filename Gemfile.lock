@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/gnip.git
-  revision: 453250b3233057ead3e80d1257713af6e1ab89d8
+  revision: cf54a03eeb6ab3c76ef430d82ae73335e2f2247b
   specs:
     chorusgnip (0.0.1)
 
