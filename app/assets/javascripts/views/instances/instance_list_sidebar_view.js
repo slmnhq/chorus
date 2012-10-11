@@ -30,7 +30,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             isOnline: this.instance.isOnline(),
             entityType: this.model.entityType,
             instanceProvider: t("instances.provider." + this.model.entityType),
-            shared: this.model.isShared && this.model.isShared()
+            shared: this.model.isShared && this.model.isShared(),
+            isGnip: this.model.isGnip()
         };
     },
 

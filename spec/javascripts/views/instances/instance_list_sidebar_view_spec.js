@@ -518,6 +518,11 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_instance');
         });
 
+        it("has a 'import stream' link", function() {
+            expect(this.view.$("a[data-dialog=ImportGnipStream]")).toExist();
+            expect(this.view.$("a[data-dialog=ImportGnipStream]").text()).toMatchTranslation("actions.import_gnip_stream");
+        });
+
         it("shows the shared account", function() {
             var shared_account_info = this.instance.get("username");
             expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
