@@ -7,7 +7,7 @@ describe Gnip::InstanceRegistrar do
     {
         :name => "new_gnip_instance",
         :description => "some description",
-        :host => "http://www.example.com",
+        :stream_url => "http://www.example.com",
         :username => "gnip_username",
         :password => "gnip_password"
     }
@@ -28,7 +28,7 @@ describe Gnip::InstanceRegistrar do
         instance.should be_persisted
         instance.name.should == "new_gnip_instance"
         instance.description.should == "some description"
-        instance.host.should == "http://www.example.com"
+        instance.stream_url.should == "http://www.example.com"
         instance.username.should == "gnip_username"
         instance.password.should == "gnip_password"
         instance.id.should_not be_nil
