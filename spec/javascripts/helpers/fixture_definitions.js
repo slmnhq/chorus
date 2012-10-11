@@ -127,6 +127,7 @@ window.rspecFixtureDefinitions = {
 
         children :{
             greenplumInstanceCreated: {},
+            gnipInstanceCreated: {},
             auroraInstanceProvisioned: {},
             auroraInstanceProvisioningFailed: {},
             greenplumInstanceChangedOwner: {},

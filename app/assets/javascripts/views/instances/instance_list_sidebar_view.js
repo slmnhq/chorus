@@ -50,10 +50,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         this.resource.loaded = true;
 
-//      TODO: remove this if statement once gnip activities are done. Prevents annoying server error toasts
-        if(this.instance.entityType !== "gnip_instance") {
-            this.instance.activities().fetch();
-        }
+        this.instance.activities().fetch();
 
         this.requiredResources.reset();
         this.bindings.removeAll();

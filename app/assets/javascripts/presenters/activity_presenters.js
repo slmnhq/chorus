@@ -130,6 +130,10 @@
                 links: [ "actor", "greenplumInstance" ]
             },
 
+            GnipInstanceCreated: {
+                links: [ "actor", "gnipInstance" ]
+            },
+
             ProvisioningSuccess: {
                 links: ["greenplumInstance"],
                 computed: ["instanceAddress"]

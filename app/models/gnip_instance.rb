@@ -5,6 +5,8 @@ class GnipInstance < ActiveRecord::Base
   validates_presence_of :name, :stream_url, :username, :password, :owner
 
   belongs_to :owner, :class_name => 'User'
+  has_many :events, :through => :activities
+  has_many :activities, :as => :entity
 
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -12,5 +14,9 @@ class GnipInstance < ActiveRecord::Base
     string :grouping_id
     string :type_name
     string :security_type_name
+  end
+
+  def entity_type_name
+    'gnip_instance'
   end
 end

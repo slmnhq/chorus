@@ -87,6 +87,7 @@ FixtureBuilder.configure do |fbuilder|
     gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "searchquery", :description => "an example gnip account")
     fbuilder.name :default, gnip_instance
     FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead')
+    Events::GnipInstanceCreated.by(admin).add(:gnip_instance => gnip_instance)
 
     # Instance Accounts
     @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)

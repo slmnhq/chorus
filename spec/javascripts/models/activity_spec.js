@@ -77,6 +77,18 @@ describe("chorus.models.Activity", function() {
             });
         });
 
+        describe("#gnipInstance", function() {
+            it("returns a gnip instance with the right data", function() {
+                activity = rspecFixtures.activity.gnipInstanceCreated({
+                    gnipInstance: { id: 8 }
+                });
+
+                var gnipInstance = activity.gnipInstance();
+                expect(gnipInstance).toBeA(chorus.models.GnipInstance);
+                expect(gnipInstance.id).toBe(8);
+            });
+        });
+
         describe("#greenplumInstance", function() {
             it("returns a greenplum instance with the right data", function() {
                 activity = rspecFixtures.activity.greenplumInstanceChangedOwner({

@@ -265,6 +265,28 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("gnip instance created", function() {
+        var gnipInstance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.gnipInstanceCreated();
+            presenter = new chorus.presenters.Activity(model);
+            gnipInstance = model.gnipInstance();
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.GnipInstanceCreated.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                }
+            );
+        });
+    });
+
     context("greenplum instance changed owner", function() {
         var greenplumInstance, newOwner;
 

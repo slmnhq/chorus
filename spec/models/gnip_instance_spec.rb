@@ -11,5 +11,7 @@ describe GnipInstance do
 
   describe "associations" do
     it { should belong_to(:owner).class_name('User') }
+    it { should have_many :events }
+    it { should have_many :activities }
   end
 end
