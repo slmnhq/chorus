@@ -56,6 +56,10 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
             var proxyGnipInstances = package(this.gnipInstanceSet.models);
 
             this.arraySet = new chorus.collections.Base();
+            this.arraySet.comparator = function(instanceWrapper) {
+                return instanceWrapper.get("theInstance").name().toLowerCase();
+            };
+
             this.arraySet.add(proxyInstances);
             this.arraySet.add(proxyHadoopInstances);
             this.arraySet.add(proxyGnipInstances);
