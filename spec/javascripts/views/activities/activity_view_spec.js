@@ -215,7 +215,8 @@ describe("chorus.views.Activity", function() {
                         fullName:"John Commenter",
                         image:{icon:"foo"}
                     },
-                    text:'I love you all'
+                    text:'I love you all',
+                    eventId: this.model.id
                 });
 
                 var comment2 = new chorus.models.Comment({
@@ -224,7 +225,8 @@ describe("chorus.views.Activity", function() {
                         fullName:"Jane Commenter",
                         image:{icon:"bar"}
                     },
-                    text:'I do too'
+                    text:'I do too',
+                    eventId: this.model.id
                 });
                 comments.add([ comment1, comment2 ]);
 
@@ -270,13 +272,15 @@ describe("chorus.views.Activity", function() {
                             author:{
                                 id:10102
                             },
-                            text:'I love you all'
+                            text:'I love you all',
+                            eventId: this.model.id
                         }),
                         new chorus.models.Comment({
                             author:{
                                 id:10103
                             },
-                            text:'I love you all'
+                            text:'I love you all',
+                            eventId: this.model.id
                         })
                     ]);
                     this.view.render();
