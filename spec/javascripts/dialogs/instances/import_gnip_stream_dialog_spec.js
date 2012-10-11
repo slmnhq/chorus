@@ -11,6 +11,11 @@ describe("ImportGnipStream", function () {
         it("has the correct title", function () {
             expect(this.dialog.$("h1")).toContainTranslation("gnip.import_stream.title");
         });
+
+        it("has 'import into a sandbox' fieldset legend", function() {
+           expect(this.dialog.$("fieldset legend")).toContainTranslation("gnip.import_stream.import_into_sandbox")
+           expect(this.dialog.$("fieldset legend a")).toContainTranslation("gnip.import_stream.select_workspace")
+        });
     });
     
 });

@@ -1,1 +1,15 @@
-<div>hello</div>
+<fieldset>
+    <legend>{{t "gnip.import_stream.import_into_sandbox"}}
+        <a>{{t "gnip.import_stream.select_workspace"}}</a>
+    </legend>
+    <div class="to_table">
+        <label for="to_table">{{t "gnip.import_stream.new_table"}}</label>
+        <input id="to_table" type="text" name="to_table"/>
+    </div>
+
+</fieldset>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99">{{t "import.begin"}}</button>
+</div>
