@@ -4,10 +4,11 @@ require 'timecop'
 
 require 'backup_restore'
 
-include SafeMktmpdir
-
 describe 'BackupRestore' do
   include FakeFS::SpecHelpers
+  before do
+    stub(FileUtils).chmod.with(0755,anything) {}
+  end
 
   describe 'Backup' do
     describe ".backup" do
@@ -137,98 +138,98 @@ describe 'BackupRestore' do
     before do
       FakeFS.deactivate!
       any_instance_of(BackupRestore::Restore) do |instance|
-        #stub(instance).log
+        stub(instance).log
         stub(instance).restore_database
         stub(instance).restore_assets
       end
     end
 
-    #describe ".restore" do
-    #  let(:chorus_dir) { File.join @tmp_dir, "chorus" }
-    #  let(:backup_dir) { File.join @tmp_dir, "backup" }
-    #  let(:current_version_string) {"0.2.0.0-1d012455"}
-    #  let(:backup_version_string) { current_version_string }
-    #  let(:backup_tar) { File.join backup_dir, "backup.tar" }
-    #
-    #  around do |example|
-    #    mktmpdir("rspec_backup_restore") do |tmp_dir|
-    #      @tmp_dir = tmp_dir
-    #
-    #      Dir.mkdir chorus_dir and Dir.chdir chorus_dir do
-    #        create_version_build(current_version_string)
-    #      end
-    #
-    #      Dir.mkdir backup_dir and Dir.chdir backup_dir do
-    #        create_version_build(backup_version_string)
-    #        system "echo database | gzip > database.sql.gz"
-    #        system "tar cf #{backup_tar} version_build database.sql.gz"
-    #      end
-    #
-    #      Dir.chdir chorus_dir do
-    #        example.call
-    #      end
-    #    end
-    #  end
-    #
-    #  it "restores the backed-up data" do
-    #    BackupRestore.restore backup_tar
-    #  end
-    #
-    #  it "works with relative paths" do
-    #    BackupRestore.restore "../backup/backup.tar"
-    #  end
-    #
-    #  context "when the backup file does not exist" do
-    #    it "raises an exception" do
-    #      expect {
-    #        BackupRestore.restore "missing_backup.tar"
-    #      }.to raise_error("Could not unpack backup file 'missing_backup.tar'")
-    #    end
-    #  end
-    #
-    #  #context "when the restore is not run in rails root directory" do
-      #  before do
-      #    sub_dir = File.join(chorus_dir, 'sub_dir')
-      #    FileUtils.mkdir_p sub_dir
-      #    Dir.chdir sub_dir
-      #  end
-      #
-      #  it "still unpacks files in the root directory and returns to the starting directory" do
-      #    mock(BackupRestore).system.with_any_args do |*args|
-      #      current_directory_should_be(chorus_dir)
-      #      Kernel.send :system, *args
-      #      true
-      #    end
-      #    stub(Rails).root { chorus_dir }
-      #    expect {
-      #      BackupRestore.restore backup_tar
-      #    }.not_to change(Dir, :pwd)
-      #  end
-      #end
+    describe ".restore" do
+      let(:chorus_dir) { File.join @tmp_dir, "chorus" }
+      let(:backup_dir) { File.join @tmp_dir, "backup" }
+      let(:current_version_string) {"0.2.0.0-1d012455"}
+      let(:backup_version_string) { current_version_string }
+      let(:backup_tar) { File.join backup_dir, "backup.tar" }
 
-      #context "when the backup version doesn't match the current version" do
-      #  let(:backup_version_string) { current_version_string + " not!" }
-      #
-      #  it "raises an exception" do
-      #    expect {
-      #      BackupRestore.restore backup_tar
-      #    }.to raise_error(/differs from installed chorus version/)
-      #  end
-      #end
-      #
-      #def create_version_build(version_string)
-      #  File.open "version_build", "w" do |file|
-      #    file.puts version_string
-      #  end
-      #end
+      around do |example|
+        SafeMktmpdir.mktmpdir("rspec_backup_restore") do |tmp_dir|
+          @tmp_dir = tmp_dir
 
-      #def current_directory_should_be(dir)
-      #  current_dir = Dir.pwd
-      #  Dir.chdir(dir) do
-      #    Dir.pwd.should == current_dir
-      #  end
-      #end
-    #end
+          Dir.mkdir chorus_dir and Dir.chdir chorus_dir do
+            create_version_build(current_version_string)
+          end
+
+          Dir.mkdir backup_dir and Dir.chdir backup_dir do
+            create_version_build(backup_version_string)
+            system "echo database | gzip > database.sql.gz"
+            system "tar cf #{backup_tar} version_build database.sql.gz"
+          end
+
+          Dir.chdir chorus_dir do
+            example.call
+          end
+        end
+      end
+
+      xit "restores the backed-up data" do
+        BackupRestore.restore backup_tar
+      end
+
+      xit "works with relative paths" do
+        BackupRestore.restore "../backup/backup.tar"
+      end
+
+      context "when the backup file does not exist" do
+        it "raises an exception" do
+          expect {
+            BackupRestore.restore "missing_backup.tar"
+          }.to raise_error("Could not unpack backup file 'missing_backup.tar'")
+        end
+      end
+
+      context "when the restore is not run in rails root directory" do
+        before do
+          sub_dir = File.join(chorus_dir, 'sub_dir')
+          FileUtils.mkdir_p sub_dir
+          Dir.chdir sub_dir
+        end
+
+        #it "still unpacks files in the root directory and returns to the starting directory" do
+        #  mock(BackupRestore).system.with_any_args do |*args|
+        #    current_directory_should_be(chorus_dir)
+        #    Kernel.send :system, *args
+        #    true
+        #  end
+        #  stub(Rails).root { Pathname.new chorus_dir }
+        #  expect {
+        #    BackupRestore.restore backup_tar
+        #  }.not_to change(Dir, :pwd)
+        #end
+      end
+
+      context "when the backup version doesn't match the current version" do
+        let(:backup_version_string) { current_version_string + " not!" }
+
+        xit "raises an exception" do
+          expect {
+            BackupRestore.restore backup_tar
+          }.to raise_error(/differs from installed chorus version/)
+        end
+      end
+
+      def create_version_build(version_string)
+        File.open "version_build", "w" do |file|
+          file.puts version_string
+        end
+      end
+
+      def current_directory_should_be(dir)
+        current_dir = Dir.pwd
+        Dir.chdir(dir) do
+          Dir.pwd.should == current_dir
+        end
+      end
+    end
   end
 
   # need this because File.touch doesn't exist in FakeFS
@@ -241,9 +242,8 @@ describe "deployment" do
   include Deployment
 
   xit "backs up and restores the data" do
-    mktmpdir("rspec_backup_restore") do |tmp_dir|
+    SafeMktmpdir.mktmpdir("rspec_backup_restore") do |tmp_dir|
       BackupRestore.backup(tmp_dir)
-      #p `tar tvf #{tmp_dir}/*`
     end
   end
 end

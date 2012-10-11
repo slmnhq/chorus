@@ -1,10 +1,12 @@
 require 'safe_mktmpdir'
+require 'pathname'
 
 module BackupRestore
-
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_SQL_FILENAME = "database.sql.gz"
   ASSETS_FILENAME = "assets.tgz"
+  MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
+  ASSET_PATHS = %w{csv_import_file_storage_path workfile_storage_path image_storage attachment_storage}
 
   def self.backup(backup_dir, rolling_days = nil)
     Backup.new(backup_dir, rolling_days).backup
@@ -15,8 +17,6 @@ module BackupRestore
   end
 
   module SharedMethods
-    include SafeMktmpdir
-
     def log(*args)
       puts *args
     end
@@ -27,6 +27,7 @@ module BackupRestore
     end
 
     def config_path(name)
+      raise "Could not find path for ''#{name}' in chorus_config.yml" unless chorus_config[name]
       chorus_config[name].gsub ":rails_root", Rails.root.to_s
     end
 
@@ -34,16 +35,12 @@ module BackupRestore
       @chorus_config ||= ChorusConfig.new
     end
 
-    def asset_paths
-      [Rails.root.join("config/chorus.yml"),
-       config_path('csv_import_file_storage_path'),
-       config_path('workfile_storage_path'),
-       config_path('image_storage'),
-       config_path('attachment_storage')].uniq
+    def asset_path_wildcard
+      "{" + (MODELS_WITH_ASSETS.join ",") + "}"
     end
 
     def capture_output(command, options = {})
-      `#{command}`.tap do |output|
+      `#{command} 2>&1`.tap do |output|
         failure_message = options[:error] || "Command '#{command}': #{output}"
         raise failure_message unless $?.success?
       end
@@ -52,7 +49,7 @@ module BackupRestore
 
   class Backup
     include BackupRestore::SharedMethods
-    attr_accessor :backup_dir, :rolling_days
+    attr_accessor :backup_dir, :rolling_days, :temp_dir
 
     def initialize(backup_dir, rolling_days = nil)
       rolling_days ||= 7
@@ -63,7 +60,8 @@ module BackupRestore
     end
 
     def backup
-      mktmpdir(BACKUP_FILE_PREFIX) do |temp_dir|
+      SafeMktmpdir.mktmpdir(BACKUP_FILE_PREFIX) do |temp_dir|
+        self.temp_dir = Pathname.new(temp_dir)
         Dir.chdir(temp_dir) do
           dump_database
           compress_assets
@@ -80,12 +78,20 @@ module BackupRestore
       capture_output "pg_dump #{database_params} | gzip > #{db_filename}", :error => "Database dump failed."
     end
 
+    def compress_asset_path(path)
+      Dir.chdir config_path(path) do
+        asset_list = Dir.glob asset_path_wildcard
+        asset_string = asset_list.join " "
+        capture_output "tar cz #{asset_string} > #{temp_dir.join path + ".tgz"}",
+                       :error => "Compressing assets failed." unless asset_list.empty?
+      end
+    rescue Errno::ENOENT
+    end
+
     def compress_assets
       log "Compressing assets..."
 
-      asset_filename = "#{ASSETS_FILENAME}"
-      asset_list = asset_paths.join ' '
-      capture_output "(cd #{Rails.root} && tar cz #{asset_list}) > #{asset_filename}", :error => "Compressing assets failed."
+      ASSET_PATHS.map { |path| compress_asset_path path }
     end
 
     def delete_old_backups
@@ -106,7 +112,9 @@ module BackupRestore
     end
 
     def package_backup
-      FileUtils.cp "#{Rails.root}/version_build", "."
+      %w{version_build config/chorus.yml}.each do |file|
+        FileUtils.cp Rails.root.join(file), "."
+      end
 
       timestamp = Time.current.strftime '%Y%m%d_%H%M%S'
       backup_filename = backup_dir + "/#{BACKUP_FILE_PREFIX}#{timestamp}.tar"
@@ -127,7 +135,7 @@ module BackupRestore
     def restore
       full_backup_filename = File.expand_path(backup_filename)
       catch(:unpack_failed) do
-        mktmpdir do |tmp_dir|
+        SafeMktmpdir.mktmpdir do |tmp_dir|
           Dir.chdir tmp_dir do
             capture_output_or_throw "tar xf #{full_backup_filename}", :unpack_failed
             backup_version = capture_output_or_throw("cat version_build", :unpack_failed).strip
