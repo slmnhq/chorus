@@ -10,9 +10,8 @@ describe GnipInstancesController do
 
   describe "#create" do
     context "with Valid credentials" do
-
       before do
-        stub(Gnip::InstanceRegistrar).create!({}, @user) { gnip_instance }
+        stub(Gnip::InstanceRegistrar).create!(anything, @user) { gnip_instance }
       end
 
       it "reports that the instance was created with the correct owner" do
@@ -23,11 +22,36 @@ describe GnipInstancesController do
 
     context "With Invalid credentials" do
       before do
-        stub(Gnip::InstanceRegistrar).create!({}, @user) { raise(ApiValidationError) }
+        stub(Gnip::InstanceRegistrar).create!(anything, @user) { raise(ApiValidationError) }
       end
       it "raise an error" do
-        post :create, parameters
+        post :create
         response.code.should == "422"
+      end
+    end
+
+    context "accepts non-nested parameters" do
+      before do
+        any_instance_of(ChorusGnip) do |c|
+          mock(c).auth { true }
+        end
+      end
+
+      let(:params) do
+        {
+            :name => "new_gnip_instance",
+            :description => "some description",
+            :host => "http://www.example.com",
+            :username => "gnip_username",
+            :password => "gnip_password"
+        }
+      end
+
+      it "creates a Gnip instance and returns 201" do
+        expect {
+          post :create, params
+        }.to change(GnipInstance, :count).by(1)
+        response.code.should == "201"
       end
     end
   end

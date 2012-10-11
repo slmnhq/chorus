@@ -7,14 +7,12 @@ module Gnip
                                     :password => instance_attributes[:password]
                                    })
       if chorus_gnip.auth
-        p "Not Raising error"
         instance = GnipInstance.new(instance_attributes)
         instance.owner = owner
         instance.save!
         Events::GnipInstanceCreated.by(owner).add(:gnip_instance => instance)
         instance
       else
-        p "Raising error"
         raise ApiValidationError.new(:connection, :generic, {:message => "Url, username and password combination is Invalid"})
       end
     end

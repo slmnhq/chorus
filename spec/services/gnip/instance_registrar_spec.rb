@@ -9,7 +9,7 @@ describe Gnip::InstanceRegistrar do
         :description => "some description",
         :host => "http://www.example.com",
         :username => "gnip_username",
-        :password => "gnpi_password"
+        :password => "gnip_password"
     }
   end
 
@@ -27,6 +27,10 @@ describe Gnip::InstanceRegistrar do
 
         instance.should be_persisted
         instance.name.should == "new_gnip_instance"
+        instance.description.should == "some description"
+        instance.host.should == "http://www.example.com"
+        instance.username.should == "gnip_username"
+        instance.password.should == "gnip_password"
         instance.id.should_not be_nil
         instance.should be_valid
       end
@@ -49,7 +53,7 @@ describe Gnip::InstanceRegistrar do
       it "raise an error" do
         expect {
           Gnip::InstanceRegistrar.create!(instance_attributes, owner)
-        }.to raise_error(ApiValidationError, {:connection => {:generic => {:message => "Url, username and password combination is Invalid"}}})
+        }.to raise_error(ApiValidationError)
       end
     end
   end
