@@ -34,7 +34,7 @@ class ChorusConfig
   end
 
   def gnip_configured?
-    (self['gnip.url'] && self['gnip.port'] && true)
+    (self['gnip_enabled']  && true)
   end
 
   def kaggle_configured?

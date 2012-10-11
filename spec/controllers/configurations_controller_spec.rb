@@ -38,15 +38,6 @@ describe ConfigurationsController do
       decoded_response.gnip_configured.should == 'value'
     end
 
-    it "includes the gnip_url and gnip_port value" do
-      stub(Chorus::Application.config.chorus).[]('gnip.url') { "http://www.example.com" }
-      stub(Chorus::Application.config.chorus).[]('gnip.port') { 443 }
-      get :show
-      response.code.should == "200"
-      decoded_response.gnip_url.should == 'http://www.example.com'
-      decoded_response.gnip_port.should == 443
-    end
-
     it "gpfdist_configured is true when config.gpfdist_configured? is true" do
       stub(Chorus::Application.config.chorus).gpfdist_configured? { true }
       get :show

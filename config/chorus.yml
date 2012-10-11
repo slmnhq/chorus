@@ -37,9 +37,7 @@ tableau:
   username: 'chorusadmin'
   password: 'secret'
 
-gnip:
-  url: 'https://stream.gnip.com'
-  port: 443
+gnip_enabled: true
 
 kaggle:
   url: 'blah.com'

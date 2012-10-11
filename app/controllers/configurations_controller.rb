@@ -17,9 +17,7 @@ class ConfigurationsController < ApplicationController
       :timezone_offset => Chorus::Application.config.chorus['timezone_offset'],
       :provision_max_size_in_gb => Chorus::Application.config.chorus['provision_max_size_in_gb'],
       :kaggle_configured => Chorus::Application.config.chorus.kaggle_configured?,
-      :gnip_configured => Chorus::Application.config.chorus.gnip_configured?,
-      :gnip_url => Chorus::Application.config.chorus['gnip.url'],
-      :gnip_port => Chorus::Application.config.chorus['gnip.port']
+      :gnip_configured => Chorus::Application.config.chorus.gnip_configured?
     } }
   end
 
