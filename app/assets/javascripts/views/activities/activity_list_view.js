@@ -39,6 +39,10 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     },
 
     postRender:function () {
+        _.each(this.activities, function(activity){
+            activity.cleanup();
+          });
+
         $(this.el).addClass(this.options.additionalClass);
         var ul = this.$("ul");
         this.activities = [];

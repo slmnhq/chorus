@@ -22,6 +22,12 @@ describe("chorus.views.ActivityList", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);
         });
 
+        it("cleans up old activity views", function() {
+            var cleanedUp = false;
+            spyOn(this.view.activities[0], "cleanup").andCallFake(function() {cleanedUp = true});
+            this.view.render();
+            expect(cleanedUp).toBeTruthy();
+        });
 
         describe("when there are no activity items", function() {
             context("and there is an type", function() {

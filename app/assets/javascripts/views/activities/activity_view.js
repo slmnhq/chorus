@@ -15,6 +15,18 @@ chorus.views.Activity = chorus.views.Base.extend({
         ".activity_content > .actions > .error_details": "failureContent"
     },
 
+    setup: function() {
+        this.addCommentHandle = chorus.PageEvents.subscribe("comment:added", this.addComment, this);
+    },
+
+    addComment: function(comment) {
+        if (this.model.id === comment.get('eventId')) {
+            var comments = this.model.comments();
+            comments.add(comment);
+            this.render();
+        }
+    },
+
     context: function () {
         return new chorus.presenters.Activity(this.model, this.options);
     },
@@ -62,5 +74,14 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     show: function() {
         this.htmlContent && this.htmlContent.show();
+    },
+
+    cleanup: function() {
+        this._super("cleanup");
+        chorus.PageEvents.unsubscribe(this.addCommentHandle);
+        this.unbind();
+        this.bindings.removeAll();
+        this.requiredResources.cleanUp();
+        $(this.el).remove();
     }
 });

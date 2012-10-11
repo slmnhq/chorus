@@ -283,7 +283,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 it("renders a 'more comments' link", function () {
-                    expect(this.view.$(".comments a.more")).toExist();
+                    expect(this.view.$(".comments ul.morelinks a")).toExist();
                 });
 
                 it("applies the 'more' class to trailing elements", function () {
@@ -291,6 +291,28 @@ describe("chorus.views.Activity", function() {
                     expect(this.view.$(".comments li:eq(1)")).toHaveClass("more");
                     expect(this.view.$(".comments li:eq(2)")).not.toHaveClass("more");
                     expect(this.view.$(".comments li:eq(3)")).not.toHaveClass("more");
+                });
+            });
+
+            context("when adding a comment", function() {
+                beforeEach(function() {
+                   this.newComment = new chorus.models.Comment({
+                       author:{
+                           id:10102
+                       },
+                       text:'I love you all',
+                       eventId: this.model.id
+                   });
+
+                    expect(this.view.$(".comments ul .morelinks a")).not.toExist();
+                    expect(this.view.$(".comments li").length).toBe(2);
+
+                    chorus.PageEvents.broadcast("comment:added", this.newComment);
+                });
+
+                it("updates the comment list", function() {
+                    expect(this.view.$(".comments ul.morelinks a")).toExist();
+                    expect(this.view.model.comments().length).toBe(3);
                 });
             });
         });
