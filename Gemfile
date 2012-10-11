@@ -35,7 +35,6 @@ end
 
 group :integration do
   gem 'capybara',            :require => false
-  gem 'capybara-webkit'
   gem 'headless'
   gem 'capybara-screenshot'
 end
