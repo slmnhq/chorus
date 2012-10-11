@@ -25,7 +25,7 @@ describe("chorus.views.Workfile", function() {
 
         it("should show workbook details", function () {
             expect(this.view.$('.details a.tableau')).toHaveHref(this.model.get('workbookUrl'));
-            expect(this.view.$('.details a.tableau')).toHaveText(this.model.get('workbookName'));
+            expect(this.view.$('.details a.tableau')).toHaveText(this.model.get('workbookUrl'));
         });
     });
 

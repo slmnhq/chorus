@@ -845,7 +845,7 @@ describe("handlebars", function () {
             it("show the tableau information", function () {
                 var $result = $('<div>' + Handlebars.helpers.fromTableau(this.workfile) + '</div>');
                 expect($result.find('a.tableau')).toHaveHref(this.workfile.get('workbookUrl'));
-                expect($result.find('a.tableau')).toHaveText(this.workfile.get('workbookName'));
+                expect($result.find('a.tableau')).toHaveText(this.workfile.get('workbookUrl'));
                 expect($result.find('span.tableau_icon')).toExist();
             });
         });
