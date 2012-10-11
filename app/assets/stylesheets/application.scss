@@ -1,31 +1,21 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
+ *= require base
+ *= require dashboard
+ *= require error
+ *= require gnip
+ *= require hdfs
+ *= require instances
+ *= require jasmine
+ *= require kaggle
+ *= require layout
+ *= require login
+ *= require modals
+ *= require search_results
+ *= require style_guide
+ *= require dataset
+ *= require users
+ *= require visualizations
+ *= require widgets
+ *= require workfiles
+ *= require workspaces
  */
-
-@import "base.scss";
-@import "dashboard.scss";
-@import "error.scss";
-@import "gnip.scss";
-@import "hdfs.scss";
-@import "instances.scss";
-@import "jasmine.scss";
-@import "kaggle.scss";
-@import "layout.scss";
-@import "login.scss";
-@import "modals.scss";
-@import "search_results.scss";
-@import "style_guide.scss";
-@import "dataset.scss";
-@import "users.scss";
-@import "visualizations.scss";
-@import "widgets.scss";
-@import "workfiles.scss";
-@import "workspaces.scss";
