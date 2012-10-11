@@ -1,8 +1,8 @@
 class GnipInstance < ActiveRecord::Base
-  attr_accessible :name, :host, :port, :description, :username, :password, :owner
+  attr_accessible :name, :host, :description, :username, :password, :owner
   attr_accessor :highlighted_attributes, :search_result_notes
 
-  validates_presence_of :name, :host, :port, :username, :password, :owner
+  validates_presence_of :name, :host, :username, :password, :owner
 
   belongs_to :owner, :class_name => 'User'
 
