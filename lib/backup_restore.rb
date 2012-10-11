@@ -1,4 +1,7 @@
+require 'safe_mktmpdir'
+
 module BackupRestore
+
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_SQL_FILENAME = "database.sql.gz"
   ASSETS_FILENAME = "assets.tgz"
@@ -12,6 +15,8 @@ module BackupRestore
   end
 
   module SharedMethods
+    include SafeMktmpdir
+
     def log(*args)
       puts *args
     end
@@ -22,7 +27,7 @@ module BackupRestore
     end
 
     def config_path(name)
-      chorus_config[name].gsub ":rails_root", Rails.root
+      chorus_config[name].gsub ":rails_root", Rails.root.to_s
     end
 
     def chorus_config
@@ -34,12 +39,12 @@ module BackupRestore
        config_path('csv_import_file_storage_path'),
        config_path('workfile_storage_path'),
        config_path('image_storage'),
-       config_path('attachment_storage')]
+       config_path('attachment_storage')].uniq
     end
 
     def capture_output(command, options = {})
-      `#{command} 2>& 1`.tap do |output|
-        failure_message = options[:error] || output
+      `#{command}`.tap do |output|
+        failure_message = options[:error] || "Command '#{command}': #{output}"
         raise failure_message unless $?.success?
       end
     end
@@ -58,15 +63,12 @@ module BackupRestore
     end
 
     def backup
-      temp_dir = Dir.mktmpdir(BACKUP_FILE_PREFIX)
-      begin
+      mktmpdir(BACKUP_FILE_PREFIX) do |temp_dir|
         Dir.chdir(temp_dir) do
           dump_database
           compress_assets
           package_backup
         end
-      ensure
-        FileUtils.rm_r temp_dir or raise "Could not remove temporary directory: #{temp_dir}"
       end
       delete_old_backups
     end
@@ -84,7 +86,6 @@ module BackupRestore
       asset_filename = "#{ASSETS_FILENAME}"
       asset_list = asset_paths.join ' '
       capture_output "(cd #{Rails.root} && tar cz #{asset_list}) > #{asset_filename}", :error => "Compressing assets failed."
-      raise "Compressing assets failed." unless $?.success?
     end
 
     def delete_old_backups
@@ -126,7 +127,7 @@ module BackupRestore
     def restore
       full_backup_filename = File.expand_path(backup_filename)
       catch(:unpack_failed) do
-        Dir.mktmpdir do |tmp_dir|
+        mktmpdir do |tmp_dir|
           Dir.chdir tmp_dir do
             capture_output_or_throw "tar xf #{full_backup_filename}", :unpack_failed
             backup_version = capture_output_or_throw("cat version_build", :unpack_failed).strip
@@ -142,7 +143,7 @@ module BackupRestore
 
     def restore_assets
       tmp_dir = Dir.pwd
-      FileUtils.rm_r asset_paths.uniq
+      FileUtils.rm_r asset_paths
       Dir.chdir(Rails.root) do
         capture_output "tar zxf #{tmp_dir}/#{ASSETS_FILENAME}", :error => "Could not uncompress assets."
       end

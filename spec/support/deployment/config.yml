@@ -1,0 +1,5 @@
+instances:
+  - host: localhost
+    port: 8080
+    path: ~/tmp/chorus_back_and_restore
+    database: chorus_rails_test

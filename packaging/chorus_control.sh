@@ -132,7 +132,7 @@ function restore () {
   BACKUP_ABSOLUTE_FILENAME="$BACKUP_ABSOLUTE_DIR/"`basename $BACKUP_FILENAME`
 
   echo "Restoring chorus data..."
-  run_in_root_dir_with_postgres "rake backup:restore[$BACKUP_ABSOLUTE_FILENAME]"
+  run_in_root_dir_with_postgres "rake backup:restore[$BACKUP_ABSOLUTE_FILENAME] --trace"
 }
 
 function run_in_root_dir_with_postgres () {

@@ -4,6 +4,8 @@ require 'timecop'
 
 require 'backup_restore'
 
+include SafeMktmpdir
+
 describe 'BackupRestore' do
   include FakeFS::SpecHelpers
 
@@ -149,10 +151,8 @@ describe 'BackupRestore' do
       let(:backup_tar) { File.join backup_dir, "backup.tar" }
 
       around do |example|
-        Dir.mktmpdir("rspec_backup_restore") do |tmp_dir|
+        mktmpdir("rspec_backup_restore") do |tmp_dir|
           @tmp_dir = tmp_dir
-
-          system "chmod -R 755 #{tmp_dir}"
 
           Dir.mkdir chorus_dir and Dir.chdir chorus_dir do
             create_version_build(current_version_string)
@@ -234,5 +234,16 @@ describe 'BackupRestore' do
   # need this because File.touch doesn't exist in FakeFS
   def touch(filename)
     File.open(filename, 'w') {}
+  end
+end
+
+describe "deployment" do
+  include Deployment
+
+  it "backs up and restores the data" do
+    mktmpdir("rspec_backup_restore") do |tmp_dir|
+      BackupRestore.backup(tmp_dir)
+      #p `tar tvf #{tmp_dir}/*`
+    end
   end
 end
