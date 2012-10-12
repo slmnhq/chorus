@@ -216,12 +216,6 @@ describe 'BackupRestore' do
         end
       end
 
-      def create_version_build(version_string)
-        File.open "version_build", "w" do |file|
-          file.puts version_string
-        end
-      end
-
       def current_directory_should_be(dir)
         current_dir = Dir.pwd
         Dir.chdir(dir) do
@@ -279,8 +273,9 @@ describe "deployment" do
   end
 
   def populate_chorus_install(install_path)
-    %w{config version_build}.each do |path|
-      FileUtils.cp_r Rails.root.join(path), install_path
+    FileUtils.cp_r Rails.root.join("config"), install_path
+    Dir.chdir install_path do
+      create_version_build("0.2.0.0-1d012455")
     end
   end
 
@@ -316,6 +311,12 @@ describe "deployment" do
     all_filesystem_entries(path).map do |entry|
       Pathname.new(entry).relative_path_from(pathname).to_s
     end.sort.uniq
+  end
+end
+
+def create_version_build(version_string)
+  File.open "version_build", "w" do |file|
+    file.puts version_string
   end
 end
 
