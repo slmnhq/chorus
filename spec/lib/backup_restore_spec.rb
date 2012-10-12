@@ -16,7 +16,7 @@ describe 'BackupRestore' do
       before do
         # stub out system calls
         any_instance_of(BackupRestore::Backup) do |instance|
-          stub(instance).log
+          stub(instance).log.with_any_args
           stub(instance).dump_database { touch "database.sql.gz" }
           stub(instance).compress_assets { touch "assets.tgz" }
           stub(instance).capture_output.with_any_args do |cmd|
@@ -27,16 +27,16 @@ describe 'BackupRestore' do
 
         FakeFS::FileSystem.clone "#{Rails.root}/config"
         touch "#{Rails.root}/version_build"
-        FileUtils.mkdir_p File.expand_path(backup_dir)
+        FileUtils.mkdir_p File.expand_path(backup_path)
       end
 
-      let(:backup_dir) { "backup_dir" }
+      let(:backup_path) { Pathname.new "backup_path" }
       let(:rolling_days) { 3 }
 
       def run_backup
         Timecop.freeze do
-          BackupRestore.backup backup_dir, rolling_days
-          @expected_backup_file = File.expand_path File.join(backup_dir, backup_filename(Time.current))
+          BackupRestore.backup backup_path, rolling_days
+          @expected_backup_file = File.expand_path backup_path.join(backup_filename(Time.current))
         end
       end
 
@@ -74,17 +74,17 @@ describe 'BackupRestore' do
 
       it "requires a positive integer for the number of rolling days" do
         expect {
-          BackupRestore.backup backup_dir, 0
+          BackupRestore.backup backup_path, 0
         }.to raise_error(/positive integer/)
       end
 
       describe "rolling backups: " do
-        let(:old_backup) { File.join backup_dir, backup_filename(old_backup_time) }
+        let(:old_backup) { backup_path.join backup_filename(old_backup_time) }
         let(:rolling_days) { nil }
 
         before do
           touch old_backup
-          BackupRestore.backup *[backup_dir, rolling_days].compact
+          BackupRestore.backup *[backup_path, rolling_days].compact
         end
 
         shared_examples_for "it deletes backups older than" do |expected_rolling_days|
@@ -135,34 +135,34 @@ describe 'BackupRestore' do
     before do
       FakeFS.deactivate!
       any_instance_of(BackupRestore::Restore) do |instance|
-        stub(instance).log
+        stub(instance).log.with_any_args
         stub(instance).restore_database
         stub(instance).restore_assets
       end
     end
 
     describe ".restore" do
-      let(:chorus_dir) { File.join @tmp_dir, "chorus" }
-      let(:backup_dir) { File.join @tmp_dir, "backup" }
+      let(:chorus_path) { @tmp_path.join "chorus" }
+      let(:backup_path) { @tmp_path.join "backup" }
       let(:current_version_string) {"0.2.0.0-1d012455"}
       let(:backup_version_string) { current_version_string }
-      let(:backup_tar) { File.join backup_dir, "backup.tar" }
+      let(:backup_tar) { backup_path.join "backup.tar" }
 
       around do |example|
-        SafeMktmpdir.mktmpdir("rspec_backup_restore") do |tmp_dir|
-          @tmp_dir = tmp_dir
+        make_tmp_path("rspec_backup_restore") do |tmp_path|
+          @tmp_path = tmp_path
 
-          Dir.mkdir chorus_dir and Dir.chdir chorus_dir do
+          Dir.mkdir chorus_path and Dir.chdir chorus_path do
             create_version_build(current_version_string)
           end
 
-          Dir.mkdir backup_dir and Dir.chdir backup_dir do
+          Dir.mkdir backup_path and Dir.chdir backup_path do
             create_version_build(backup_version_string)
             system "echo database | gzip > database.sql.gz"
             system "tar cf #{backup_tar} version_build database.sql.gz"
           end
 
-          Dir.chdir chorus_dir do
+          Dir.chdir chorus_path do
             example.call
           end
         end
@@ -181,14 +181,14 @@ describe 'BackupRestore' do
           capture(:stderr) do
             expect {
               BackupRestore.restore "missing_backup.tar"
-            }.to raise_error("Could not unpack backup file 'missing_backup.tar'")
-          end.should include("Could not unpack backup file 'missing_backup.tar'")
+            }.to raise_error "Could not unpack backup file 'missing_backup.tar'"
+          end.should include "Could not unpack backup file 'missing_backup.tar'"
         end
       end
 
       context "when the restore is not run in rails root directory" do
         before do
-          sub_dir = File.join(chorus_dir, 'sub_dir')
+          sub_dir = chorus_path.join 'sub_dir'
           FileUtils.mkdir_p sub_dir
           Dir.chdir sub_dir
         end
@@ -241,60 +241,63 @@ describe "deployment" do
   include Deployment
 
   before do
+    any_instance_of(BackupRestore::Backup) do |backup|
+      stub(backup).log.with_any_args
+    end
     any_instance_of(BackupRestore::Restore) do |restore|
       stub(restore).restore_database
+      stub(restore).log.with_any_args
     end
   end
 
   around do |example|
     # create fake original and restored install
-    SafeMktmpdir.mktmpdir("rspec_backup_restore_original") do |original_dir|
-      SafeMktmpdir.mktmpdir("rspec_backup_restore_restored") do |restore_dir|
-        @original_dir = original_dir
-        @restore_dir = restore_dir
+    make_tmp_path("rspec_backup_restore_original") do |original_path|
+      make_tmp_path("rspec_backup_restore_restored") do |restore_path|
+        @original_path = original_path
+        @restore_path = restore_path
 
         # populate original directory from development tree
-        populate_chorus_install original_dir
+        populate_chorus_install @original_path
 
         # create a fake asset in original
-        stub(Rails).root { Pathname.new original_dir }
+        stub(Rails).root { @original_path }
         chorus_config = ChorusConfig.new
         asset_path = Rails.root.join chorus_config['image_storage'].gsub(":rails_root/", "")
         FileUtils.mkdir_p asset_path.join "users"
         FileUtils.touch "#{asset_path}/users/asset_file.icon"
 
         # populate restore target with just config directory minus chorus.yml
-        populate_chorus_install restore_dir
+        populate_chorus_install @restore_path
 
         # remove chorus.yml file from restore dir so we can replace it later
-        FileUtils.rm restore_dir + "/config/chorus.yml"
+        FileUtils.rm @restore_path.join "config/chorus.yml"
 
         example.call
       end
     end
   end
 
-  def populate_chorus_install(install_dir)
+  def populate_chorus_install(install_path)
     %w{config version_build}.each do |path|
-      FileUtils.cp_r Rails.root.join(path), install_dir
+      FileUtils.cp_r Rails.root.join(path), install_path
     end
   end
 
-  xit "backs up and restores the data" do
-    SafeMktmpdir.mktmpdir("rspec_backup_restore_backup") do |backup_dir|
-
-      with_rails_root @original_dir do
-        BackupRestore.backup backup_dir
+  it "backs up and restores the data" do
+    make_tmp_path("rspec_backup_restore_backup") do |backup_path|
+      with_rails_root @original_path do
+        BackupRestore.backup backup_path
       end
 
-      backup_filename = Dir.glob("#{backup_dir}/*.tar").first
+      backup_filename = Dir.glob(backup_path.join "*.tar").first
 
-      with_rails_root @restore_dir do
+      with_rails_root @restore_path do
         BackupRestore.restore backup_filename
       end
 
-      original_entries = get_filesystem_entries_at_path @original_dir
-      restored_entries = get_filesystem_entries_at_path @restore_dir
+      original_entries = get_filesystem_entries_at_path @original_path
+      restored_entries = get_filesystem_entries_at_path @restore_path
 
       restored_entries.should == original_entries
     end
@@ -316,6 +319,19 @@ describe "deployment" do
   end
 end
 
+def make_tmp_path(*args)
+  SafeMktmpdir.mktmpdir *args do |tmp_dir|
+    yield Pathname.new tmp_dir
+  end
+end
+
+def all_filesystem_entries(path)
+  path = Pathname.new(path)
+  %w{. **/ **/*}.map do |wildcard|
+    Dir.glob path.join wildcard
+  end.flatten.sort.uniq
+end
+
 require 'stringio'
 
 def capture(*streams)
@@ -328,11 +344,4 @@ def capture(*streams)
     streams.each { |stream| eval("$#{stream} = #{stream.upcase}") }
   end
   result.string
-end
-
-def all_filesystem_entries(path)
-  path.gsub!(/\.$/,"/")
-  %w{* */* */**/* */**/}.map do |wildcard|
-    Dir.glob path + wildcard
-  end.flatten.sort.uniq
 end
