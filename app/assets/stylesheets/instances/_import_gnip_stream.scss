@@ -22,6 +22,8 @@
       @include link-with-dotted-underline;
       font-size: 13px;
       display: inline-block;
+      max-width: 240px;
+      @include ellipsis;
     }
   }
 }
