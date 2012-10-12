@@ -133,7 +133,7 @@ FixtureBuilder.configure do |fbuilder|
     # type ahead search fixtures
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
-    typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead", :schema => searchquery_schema)
+    typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :schema => searchquery_schema)
     fbuilder.name :typeahead_chorus_view, typeahead_chorus_view
     typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead'#, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
