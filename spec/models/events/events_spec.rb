@@ -515,6 +515,23 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
+  describe "GnipStreamImportCreated" do
+    let(:gnip_instance) { gnip_instances(:default) }
+    subject do
+      Events::GnipStreamImportCreated.add(
+          :dataset => dataset,
+          :gnip_instance => gnip_instance,
+          :workspace => workspace
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
+
+    it_creates_activities_for { [workspace, dataset, gnip_instance] }
+    it_creates_a_global_activity
+  end
+
   describe "MembersAdded" do
     subject do
       Events::MembersAdded.add(

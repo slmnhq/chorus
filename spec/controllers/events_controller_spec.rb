@@ -165,7 +165,8 @@ describe EventsController do
         "chorusViewChanged" => Events::ChorusViewChanged,
         "workspaceChangeName" => Events::WorkspaceChangeName,
         "tableauWorkbookPublished" => Events::TableauWorkbookPublished,
-        "tableauWorkfileCreated" => Events::TableauWorkfileCreated
+        "tableauWorkfileCreated" => Events::TableauWorkfileCreated,
+        "gnipStreamImportCreated" => Events::GnipStreamImportCreated
     }
 
     FIXTURE_FILES.each do |filename, event_relation|
