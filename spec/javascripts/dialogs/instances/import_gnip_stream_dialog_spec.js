@@ -21,6 +21,10 @@ describe("ImportGnipStream", function () {
            expect(this.dialog.$("fieldset legend a.select_workspace")).toContainTranslation("gnip.import_stream.select_workspace");
         });
 
+        it("disable the button if workspace and new table is still empty", function () {
+            expect(this.dialog.$(".submit")).toBeDisabled();
+        });
+
         describe("clicking on Select workspace link", function () {
             beforeEach(function () {
                 this.modalSpy = stubModals();
@@ -42,14 +46,48 @@ describe("ImportGnipStream", function () {
 
                 context("clicking on submit", function () {
                     beforeEach(function () {
-                        spyOn(this.dialog.model, "save");
-                        this.dialog.$("input[name=toTable]").val("MyNewTable");
+                        spyOn(this.dialog.model, "save").andCallThrough();
+                        this.dialog.$("input[name=toTable]").val("MyNewTable").keyup();
                         this.dialog.$(".submit").click();
                     });
                     it("calls save on the model", function () {
                         expect(this.dialog.model.get("workspaceId")).toBe(this.workspace.id);
                         expect(this.dialog.model.get("toTable")).toBe("MyNewTable");
                         expect(this.dialog.model.save).toHaveBeenCalled();
+                    });
+
+                    it("shows the loading button", function () {
+                        expect(this.dialog.$(".submit").isLoading()).toBeTruthy();
+                    });
+
+                    context("when save is successful", function() {
+                        beforeEach(function () {
+                            spyOn(chorus, "toast");
+                            spyOnEvent($(document), "close.facebox");
+                            this.server.completeSaveFor(this.dialog.model);
+                        });
+                        it("closes the dialog", function() {
+                            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+                        });
+
+                        it("display a toast message", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith("gnip.import_stream.toast.start_import");
+                        });
+                    });
+
+                    context("when save is unsuccessful", function() {
+                        beforeEach(function () {
+                            this.dialog.model.set({serverErrors : { fields: { a: { GENERIC: {message: "abc"} } } }});
+                            this.dialog.model.trigger("saveFailed");
+                        });
+
+                        it("stops the 'loading' submit button", function () {
+                            expect(this.dialog.$(".submit").isLoading()).toBeFalsy();
+                        });
+
+                        it("populates the dialog's errors div", function() {
+                            expect(this.dialog.$(".errors").text()).toContain("abc");
+                        });
                     });
                 });
             });
