@@ -34,5 +34,13 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
             expect(this.page.$(".content_header img").attr("src")).toContain("/images/instances/gnip.png");
         });
 
+        it("displays the sidebar", function() {
+            var sidebar = this.page.sidebar;
+            expect(sidebar).toBeDefined();
+            expect(sidebar).toBeA(chorus.views.InstanceListSidebar);
+            expect(sidebar.model.id).toBe(this.model.id);
+            expect(this.page.$('.sidebar_content')).toContainText('Import Stream');
+        })
+
     });
 });
