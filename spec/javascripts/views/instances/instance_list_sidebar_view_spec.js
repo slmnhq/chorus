@@ -527,5 +527,10 @@ describe("chorus.views.InstanceListSidebar", function() {
             var shared_account_info = this.instance.get("username");
             expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });
+
+        it("shows the stream url", function() {
+            var shared_account_info = this.instance.get("streamUrl");
+            expect(this.view.$(".instance_configuration_details .streamUrl")).toContainText(shared_account_info);
+        });
     });
 });

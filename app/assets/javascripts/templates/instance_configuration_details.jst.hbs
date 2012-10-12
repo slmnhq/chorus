@@ -4,6 +4,11 @@
     <dd title="{{host}}">{{host}}</dd>
     <br />
     {{/if}}
+    {{#if streamUrl}}
+    <dt>{{t "instances.sidebar.stream_url"}}</dt>
+    <dd class="streamUrl" title="{{streamUrl}}">{{streamUrl}}</dd>
+    <br />
+    {{/if}}
     {{#if port}}
     <dt>{{t "instances.sidebar.port"}}</dt>
     <dd title="{{port}}">{{port}}</dd>

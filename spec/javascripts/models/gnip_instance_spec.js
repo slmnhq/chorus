@@ -28,7 +28,7 @@ describe("chorus.models.GnipInstance", function() {
         expect(this.model.isGnip()).toBeTruthy();
     });
 
-    _.each(["name", "stream_url", "username", "password"], function(attr) {
+    _.each(["name", "streamUrl", "username", "password"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
