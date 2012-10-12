@@ -1,4 +1,5 @@
-chorus.pages.KaggleShowPage = chorus.pages.Base.extend({
+chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
+    constructorName: "KaggleUserIndexPage",
 
     setup: function(workspaceId) {
         this.workspaceId = workspaceId;
@@ -10,8 +11,8 @@ chorus.pages.KaggleShowPage = chorus.pages.Base.extend({
         this.collection.fetch();
 
         this.mainContent = new chorus.views.MainContentList({
-            modelClass:"KaggleUser",
-            collection:this.collection,
+            modelClass: "KaggleUser",
+            collection: this.collection,
             contentHeader: new chorus.views.KaggleHeader()
         });
 

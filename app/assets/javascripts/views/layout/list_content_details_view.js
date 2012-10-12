@@ -1,8 +1,8 @@
 chorus.views.ListContentDetails = chorus.views.Base.extend({
     constructorName: "ListContentDetailsView",
-    templateName:"list_content_details",
+    templateName: "list_content_details",
 
-    events:{
+    events: {
         "click a.next": "fetchNextPage",
         "click a.previous": "fetchPreviousPage",
         "click a.close_provisioning": "closeProvisioningBar",
@@ -10,19 +10,19 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         "click a.select_none": "selectNone"
     },
 
-    fetchNextPage:function () {
+    fetchNextPage: function() {
         var page = parseInt(this.collection.pagination.page);
         this.collection.fetchPage(page + 1);
         this.scrollToTopOfPage();
     },
 
-    fetchPreviousPage:function () {
+    fetchPreviousPage: function() {
         var page = parseInt(this.collection.pagination.page);
         this.collection.fetchPage(page - 1);
         this.scrollToTopOfPage();
     },
 
-    scrollToTopOfPage:function () {
+    scrollToTopOfPage: function() {
         window.scroll(0, 0);
     },
 
@@ -36,7 +36,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("selectNone");
     },
 
-    postRender:function (el) {
+    postRender: function(el) {
         this.updatePagination();
         if (this.$(".pagination").hasClass("hidden") && this.options.hideIfNoPagination) {
             el.addClass("hidden");
@@ -108,14 +108,14 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         }
     },
 
-    additionalContext:function (ctx) {
+    additionalContext: function(ctx) {
         var hash = {
-            hideCounts:this.options.hideCounts,
-            buttons:this.options.buttons,
+            hideCounts: this.options.hideCounts,
+            buttons: this.options.buttons,
             search: this.options.search,
             workspaceId: this.collection && this.collection.attributes && this.collection.attributes.workspaceId,
             multiSelect: this.options.multiSelect
-        }
+        };
 
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);

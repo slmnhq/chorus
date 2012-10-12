@@ -1,8 +1,8 @@
-describe("chorus.pages.KaggleShowPage", function() {
+describe("chorus.pages.KaggleUserIndexPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({name: "kagSpace"});
         this.kaggleUsers = rspecFixtures.kaggleUserSet();
-        this.page = new chorus.pages.KaggleShowPage(this.workspace.id);
+        this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 
     describe("setup", function() {

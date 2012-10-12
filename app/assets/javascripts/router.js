@@ -30,7 +30,7 @@
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["/workspaces/:workspaceId/datasets", "WorkspaceDatasetIndex"],
-            ["/workspaces/:workspaceId/kaggle", "KaggleShow"],
+            ["/workspaces/:workspaceId/kaggle", "KaggleUserIndex"],
             ["/workspaces/:workspaceId/search/:query", "WorkspaceSearchIndex"],
             ["/workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
             ["/instances", "InstanceIndex"],
