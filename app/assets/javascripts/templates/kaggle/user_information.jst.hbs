@@ -1,0 +1,24 @@
+<div class="pairs">
+    <div class="pair rank">
+        <div class="key">{{t "kaggle.information.rank"}}</div>
+        <div class="value" title="{{rank}}">{{rank}}</div>
+    </div>
+    <div class="pair points">
+        <div class="key">{{t "kaggle.information.points"}}</div>
+        <div class="value" title="{{points}}">{{points}}</div>
+    </div>
+    <div class="pair number_of_competitions">
+        <div class="key">{{t "kaggle.information.number_of_competitions"}}</div>
+        <div class="value" title="{{numberOfCompetitions}}">{{numberOfCompetitions}}</div>
+    </div>
+    <div class="pair past_competition_types">
+        <div class="key">{{t "kaggle.information.past_competition_types"}}</div>
+        <div class="value" title="{{firstPastCompetition}}">{{firstPastCompetition}}</div>
+    </div>
+    {{#each otherPastCompetitions}}
+        <div class="pair past_competition_types">
+            <div class="key"></div>
+            <div class="value" title="{{this}}">{{this}}</div>
+        </div>
+    {{/each}}
+</div>

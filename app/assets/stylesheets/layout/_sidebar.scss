@@ -23,8 +23,8 @@ body .ui-draggable-dragging {
     bottom: 0;
 
     #help {
-      top: 1px;
-      left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
+        top: 1px;
+        left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
     }
 
     .spacer {
@@ -70,13 +70,60 @@ body .ui-draggable-dragging {
             margin-left: 10px;
         }
     }
+    .pairs {
+        font-size: 14px;
+        line-height: 18px;
 
+        .pair {
+            display: block;
+            border-bottom: $dotted-list-item-border;
+            margin-right: 10px;
+        }
+
+        .key {
+            display: inline-block;
+            color: $color-text2;
+            width: 49%;
+        }
+
+        .value {
+            width: 47%;
+            color: black;
+            max-width: 120px;
+            text-align: right;
+            vertical-align: top;
+            display: inline-block;
+            @include ellipsis;
+        }
+
+        .multiline {
+            margin-right: 10px;
+
+            .key {
+                border-bottom: $dotted-list-item-border;
+            }
+
+            .value {
+                width: auto;
+                max-width: 100%;
+                padding-left: 0;
+                display: block;
+                border-bottom: $dotted-list-item-border;
+
+                &:nth-child(2) {
+                    width: 47%;
+                    max-width: 120px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
 
     img {
         max-width: $sidebar-width - 20px;
     }
 
-    .members{
+    .members {
 
         li {
             display: inline-block;
@@ -85,7 +132,7 @@ body .ui-draggable-dragging {
             padding-bottom: 3px;
         }
 
-        img{
+        img {
             width: $icon-image-width;
             height: $icon-image-height;
         }

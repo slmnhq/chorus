@@ -26,9 +26,11 @@ describe Kaggle::UsersController do
       user.should have_key('username')
       user.should have_key('location')
       user.should have_key('rank')
+      user.should have_key('points')
       user.should have_key('number_of_competitions')
       user.should have_key('gravatar_url')
       user.should have_key('full_name')
+      user.should have_key('past_competition_types')
     end
 
     it "sorts by rank" do
