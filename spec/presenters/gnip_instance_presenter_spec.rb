@@ -16,8 +16,11 @@ describe GpdbInstancePresenter, :type => :view do
       hash.should have_key(:owner)
       hash.should have_key(:description)
       hash.should have_key(:username)
-      hash.should have_key(:password)
       hash.should have_key(:state)
+    end
+
+    it "should not present the password" do
+      hash.should_not have_key(:password)
     end
   end
 end

@@ -18,6 +18,7 @@ describe GnipInstancesController do
         post :create
         response.code.should == "201"
         decoded_response.owner.id.should == @user.id
+        decoded_response.password.should be_nil
       end
     end
 
@@ -32,12 +33,6 @@ describe GnipInstancesController do
     end
 
     context "accepts non-nested parameters" do
-      before do
-        any_instance_of(ChorusGnip) do |c|
-          mock(c).auth { true }
-        end
-      end
-
       let(:params) do
         {
             :name => "new_gnip_instance",
@@ -46,12 +41,13 @@ describe GnipInstancesController do
             :username => "gnip_username",
             :password => "gnip_password"
         }
+
       end
 
-      it "creates a Gnip instance and returns 201" do
-        expect {
-          post :create, params
-        }.to change(GnipInstance, :count).by(1)
+      it "nests the params" do
+        stub(Gnip::InstanceRegistrar).create!(params.stringify_keys, anything) { gnip_instance }
+
+        post :create, params
         response.code.should == "201"
       end
     end
@@ -82,5 +78,35 @@ describe GnipInstancesController do
     generate_fixture 'gnipInstance.json' do
       get :show, :id => gnip_instance.to_param
     end
+  end
+
+  describe '#update' do
+    let(:gnip_instance) { gnip_instances(:default) }
+    let(:params) { { :id => gnip_instance.id } }
+
+    context "With valid credentials" do
+      before do
+        stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+      end
+
+      it 'correctly updates the gnip instance' do
+        put :update, params
+
+        response.code.should == '200'
+        decoded_response.description.should_not be_blank
+        decoded_response.password.should be_blank
+      end
+    end
+
+    context "With Invalid credentials" do
+      before do
+        stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { raise(ApiValidationError) }
+      end
+      it "raise an error" do
+        post :create, params
+        response.code.should == "422"
+      end
+    end
+
   end
 end

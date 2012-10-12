@@ -2,6 +2,7 @@ require 'spec_helper'
 
 resource "Gnip instances" do
   let(:user) { users(:owner) }
+  let(:gnip_instance) { gnip_instances(:default) }
 
   before do
     log_in user
@@ -25,7 +26,7 @@ resource "Gnip instances" do
 
     required_parameters :name, :stream_url, :username, :password
 
-    example_request "Register a Gnip Account" do
+    example_request "Register a Gnip Instance" do
       status.should == 201
     end
   end
@@ -39,6 +40,27 @@ resource "Gnip instances" do
   get "/gnip_instances/:id" do
     let(:id) { gnip_instances(:default).id }
     example_request "Get a registered Gnip Instance" do
+      status.should == 200
+    end
+  end
+
+  put "/gnip_instances/:id" do
+    parameter :name, "gnip account name"
+    parameter :description, "gnip account description"
+    parameter :stream_url, "gnip stream url"
+    parameter :username, "gnip account username"
+    parameter :password, "gnip account password"
+
+    let(:id) { gnip_instance.to_param }
+    let(:name) { "example name" }
+    let(:description) { "Can you tell me how to get..." }
+    let(:stream_url) { "https://stream.gnip.com" }
+    let(:username) { "example_user" }
+    let(:password) { "" }
+
+    required_parameters :name, :stream_url, :username
+
+    example_request "Update a Gnip Instance" do
       status.should == 200
     end
   end

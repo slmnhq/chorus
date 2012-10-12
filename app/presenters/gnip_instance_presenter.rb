@@ -9,7 +9,6 @@ class GnipInstancePresenter < Presenter
         :owner => owner,
         :description => description,
         :username => username,
-        :password => password,
         :state => "online"
     }
   end

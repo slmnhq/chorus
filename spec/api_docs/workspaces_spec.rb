@@ -9,7 +9,7 @@ resource "Workspaces" do
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:greenplum_instance) { database.gpdb_instance}
   let(:instance_id) { greenplum_instance.id }
-  let(:database) { sandbox.database }
+  let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
   let(:sandbox_id) { sandbox.id }

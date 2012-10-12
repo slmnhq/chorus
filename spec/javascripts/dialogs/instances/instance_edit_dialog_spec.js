@@ -124,7 +124,6 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 this.instance = rspecFixtures.gnipInstance({
                     name: "myGnip",
                     username: "me@fun.com",
-                    password: "",
                     streamUrl: "https://some.thing.com",
                     description: "a gnip instance"
                 });
@@ -154,7 +153,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.$("input[name=username]").prop("disabled")).toBeFalsy();
             });
 
-            it("has a pre-populated and enabled 'password' field", function() {
+            it("shows an empty 'password' field", function() {
                 expect(this.dialog.$("input[name=password]").val()).toBe("");
                 expect(this.dialog.$("input[name=password]").prop("disabled")).toBeFalsy();
             });
