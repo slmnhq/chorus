@@ -36,6 +36,20 @@
         <input class="group_list" type="text" name="groupList" value="{{groupList}}" maxlength="255"/>
     {{/if}}
 
+    {{#if gnipInstance}}
+        <label class="gnip_host required" name="streamUrl">
+            {{t "instances.dialog.gnip_url"}}
+            <img src="/images/more-info.png" class="help" data-text='{{t "instances.dialog.gnip_help_text"}}'/>
+        </label>
+        <input class="gnip_host" type="text" name="streamUrl" value="{{streamUrl}}" maxlength="255"/>
+
+        <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
+        <label class="gnip_password" name="password">{{t "instances.dialog.gnip_password"}}</label>
+
+        <input class="gnip_username" type="text" name="username"   value="{{username}}" maxlength="255"/>
+        <input class="gnip_password" type="password" name="password"   value="" maxlength="255"/>
+    {{/if}}
+
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
         <button type="submit" class="submit" tabindex="99">{{t "instances.edit_dialog.save"}}</button>

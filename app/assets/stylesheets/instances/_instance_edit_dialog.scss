@@ -26,13 +26,13 @@
         width: $host-width;
     }
 
-    .username, .group_list
+    .username, .group_list, .gnip_username, .gnip_password
     {
         display: inline-block;
         width: $account_width;
     }
 
-    .group_list {
+    .group_list, .gnip_password {
         margin-left: $input-spacing;
     }
 

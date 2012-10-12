@@ -22,7 +22,8 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
         return {
             registeredInstance: this.model.get("provisionType") == "register",
             provisionedInstance: this.model.get("provisionType") == "create",
-            hadoopInstance: this.model.constructorName == "HadoopInstance"
+            hadoopInstance: this.model.constructorName == "HadoopInstance",
+            gnipInstance: this.model.constructorName == "GnipInstance"
         };
     },
 
@@ -33,10 +34,10 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             provisionType: this.model.get("provisionType")
         };
 
-        _.each(["name", "host", "port", "size", "maintenanceDb", "username", "groupList"], function(name) {
+        _.each(["name", "host", "port", "size", "maintenanceDb", "username", "groupList", "streamUrl", "password"], function(name) {
             var input = this.$("input[name=" + name + "]");
-            if (input) {
-                attrs[name] = input.val() &&  input.val().trim();
+            if (input.length) {
+                attrs[name] = input.val().trim();
             }
         }, this);
 

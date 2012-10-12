@@ -24,7 +24,10 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
         this.require("streamUrl", newAttrs);
         this.require("username", newAttrs);
-        this.require("password", newAttrs);
+
+        if (!this.get('id')) {
+            this.require("password", newAttrs);
+        }
     },
 
     sharedAccountDetails: function() {

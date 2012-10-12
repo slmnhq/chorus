@@ -118,6 +118,47 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.$("input[name=groupList]").prop("disabled")).toBeFalsy();
             });
         });
+
+        describe("when editing a gnip instance", function() {
+            beforeEach(function() {
+                this.instance = rspecFixtures.gnipInstance({
+                    name: "myGnip",
+                    username: "me@fun.com",
+                    password: "",
+                    streamUrl: "https://some.thing.com",
+                    description: "a gnip instance"
+                });
+                this.dialog = new chorus.dialogs.InstanceEdit({ instance: this.instance });
+
+                this.dialog.model = new chorus.models.GnipInstance(this.dialog.model.attributes);
+                this.dialog.render();
+            });
+
+            it("has a pre-populated and enabled 'name' field", function() {
+                expect(this.dialog.$("input[name=name]").val()).toBe("myGnip");
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'description' field", function() {
+                expect(this.dialog.$("textarea[name=description]").val()).toBe("a gnip instance");
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'streamUrl' field", function() {
+                expect(this.dialog.$("input[name=streamUrl]").val()).toBe("https://some.thing.com");
+                expect(this.dialog.$("input[name=streamUrl]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'username' field", function() {
+                expect(this.dialog.$("input[name=username]").val()).toBe("me@fun.com");
+                expect(this.dialog.$("input[name=username]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'password' field", function() {
+                expect(this.dialog.$("input[name=password]").val()).toBe("");
+                expect(this.dialog.$("input[name=password]").prop("disabled")).toBeFalsy();
+            });
+        });
     });
 
     describe("saving", function() {
@@ -218,6 +259,27 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.model.get("username")).toBe("username");
                 expect(this.dialog.model.get("groupList")).toBe("groupList");
                 expect(this.dialog.model.has("maintenanceDb")).toBeFalsy();
+            });
+        });
+
+        context("with a gnip instance", function() {
+            beforeEach(function() {
+                this.dialog.model = new chorus.models.GnipInstance();
+                this.dialog.render();
+                this.dialog.$("input[name=name]").val("test3");
+                this.dialog.$("input[name=streamUrl]").val("https://www.test.me");
+                this.dialog.$("input[name=username]").val("username");
+                this.dialog.$("textarea[name=description]").val("some description");
+                this.dialog.$("input[name=password]").val("newpass");
+                this.dialog.$("button[type=submit]").submit();
+            });
+
+            it("updates the model", function() {
+                expect(this.dialog.model.get("name")).toBe("test3");
+                expect(this.dialog.model.get("streamUrl")).toBe("https://www.test.me");
+                expect(this.dialog.model.get("username")).toBe("username");
+                expect(this.dialog.model.get("description")).toBe("some description");
+                expect(this.dialog.model.get("password")).toBe("newpass");
             });
         });
 
