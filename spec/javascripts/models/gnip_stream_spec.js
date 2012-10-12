@@ -1,6 +1,7 @@
 describe("chorus.models.GnipStream", function() {
     beforeEach(function() {
         this.model = new chorus.models.GnipStream();
+        this.model.set({gnip_instance_id: 33});
         this.attrs = {};
     });
 
@@ -10,6 +11,10 @@ describe("chorus.models.GnipStream", function() {
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
             expect(this.model.errors[attr]).toBeTruthy();
         });
+    });
+
+    it("has the correct urlTemplate", function() {
+        expect(this.model.url()).toBe("/gnip_instances/33/imports");
     });
 
 });

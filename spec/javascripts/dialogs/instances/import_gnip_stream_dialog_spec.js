@@ -1,11 +1,15 @@
 describe("ImportGnipStream", function () {
     beforeEach(function () {
-        this.gnip = rspecFixtures.gnipInstance();
-        this.dialog = new chorus.dialogs.ImportGnipStream();
+        this.gnip = rspecFixtures.gnipInstance({id: 123});
+        this.dialog = new chorus.dialogs.ImportGnipStream({pageModel: this.gnip});
     });
 
     it("uses a GnipStream model", function() {
        expect(this.dialog.resource).toBeA(chorus.models.GnipStream);
+    });
+
+    it("set the gnip_instance_id in the model", function() {
+        expect(this.dialog.model.get("gnip_instance_id")).toBe(123);
     });
 
     describe("render", function () {
