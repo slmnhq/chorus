@@ -268,7 +268,7 @@
 
             TableauWorkfileCreated: {
                 links: ["actor", "workspace", "dataset", "workfile"],
-                computed: ["datasetType", "tableauWorkbookLink"]
+                computed: ["datasetType"]
             },
 
             SUB_COMMENT: {

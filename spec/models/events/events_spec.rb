@@ -603,15 +603,14 @@ describe "Event types" do
           :workspace => workspace,
           :dataset => dataset,
           :workfile => workfile,
-          :workbook_name => "testingbook",
-          :workbook_url => "test.com/workbook/testingbook"
+          :workbook_name => "testingbook"
       )
     end
 
     its(:workspace) { should == workspace }
 
     its(:targets) { should == { :workspace => workspace, :dataset => dataset, :workfile => workfile } }
-    its(:additional_data) { should == { 'workbook_name' => "testingbook", 'workbook_url' => 'test.com/workbook/testingbook'} }
+    its(:additional_data) { should == { 'workbook_name' => "testingbook"} }
 
     it_creates_activities_for { [actor, workspace, dataset, workfile] }
     it_does_not_create_a_global_activity

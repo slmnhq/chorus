@@ -218,7 +218,6 @@ FixtureBuilder.configure do |fbuilder|
         :workbook_name => publication.name,
         :dataset => publication.dataset,
         :workspace => publication.workspace,
-        :workbook_url => publication.workbook_url,
         :workfile => tableau_workfile
     )
 

@@ -1306,8 +1306,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.tableauWorkfileCreated({
                 workspace: { id: 55, name: "paleo_eaters" },
-                workbookName: "fancy_workbook",
-                workbookUrl: "http://example.com/workbooks/fancy_workbook"
+                workbookName: "fancy_workbook"
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
@@ -1324,7 +1323,6 @@ describe("chorus.presenters.Activity", function() {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     datasetType: t("dataset.types.query"),
-                    tableauWorkbookLink: "<a href='http://example.com/workbooks/fancy_workbook' target='_blank'>fancy_workbook</a>",
                     workfileLink: linkTo(workfile.showUrl(), workfile.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }

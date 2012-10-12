@@ -33,8 +33,7 @@ class TableauWorkbooksController < ApplicationController
             :dataset => publication.dataset,
             :workfile => publication.linked_tableau_workfile,
             :workspace => publication.workspace,
-            :workbook_name => publication.name,
-            :workbook_url => publication.workbook_url
+            :workbook_name => publication.name
         )
       end
       render :json => {

@@ -112,7 +112,6 @@ describe TableauWorkbooksController do
         event.workfile.should == LinkedTableauWorkfile.last
         event.workspace.should == workspace
         event.workbook_name.should == "myTableauWorkbook"
-        event.workbook_url.should == "foo.com"
       end
     end
 
