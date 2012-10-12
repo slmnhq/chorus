@@ -17,7 +17,7 @@ cd $CHORUS_HOME
 case $RAILS_ENV in
     development )
         log_inline "stopping mizuno "
-        mizuno --stop --pidfile $MIZUNO_PID_FILE &>/dev/null
+        bundle exec mizuno --stop --pidfile $MIZUNO_PID_FILE &>/dev/null
         wait_for_stop $MIZUNO_PID_FILE
         ;;
     * )
