@@ -3,6 +3,7 @@ require 'fakefs/spec_helpers'
 require 'timecop'
 
 require 'backup_restore'
+require 'pathname'
 
 describe 'BackupRestore' do
   include FakeFS::SpecHelpers
@@ -120,13 +121,9 @@ describe 'BackupRestore' do
     end
 
     def new_files_created_by
-      entries_before_block = all_filesystem_entries
+      entries_before_block = all_filesystem_entries("/")
       yield
-      all_filesystem_entries - entries_before_block
-    end
-
-    def all_filesystem_entries
-      (Dir.glob('/**/**/') + Dir.glob('/**/**') + Dir.glob('/**/') + Dir.glob('/**') + Dir.glob('/*')).uniq
+      all_filesystem_entries("/") - entries_before_block
     end
 
     def backup_filename(time)
@@ -241,9 +238,85 @@ end
 describe "deployment" do
   include Deployment
 
-  xit "backs up and restores the data" do
-    SafeMktmpdir.mktmpdir("rspec_backup_restore") do |tmp_dir|
-      BackupRestore.backup(tmp_dir)
+  before do
+    any_instance_of(BackupRestore::Restore) do |restore|
+      stub(restore).restore_database
     end
   end
+
+  around do |example|
+    # create fake original and restored install
+    SafeMktmpdir.mktmpdir("rspec_backup_restore_original") do |original_dir|
+      SafeMktmpdir.mktmpdir("rspec_backup_restore_restored") do |restore_dir|
+        @original_dir = original_dir
+        @restore_dir = restore_dir
+
+        # populate original directory from development tree
+        populate_chorus_install original_dir
+
+        # create a fake asset in original
+        stub(Rails).root { Pathname.new original_dir }
+        chorus_config = ChorusConfig.new
+        asset_path = Rails.root.join chorus_config['image_storage'].gsub(":rails_root/", "")
+        FileUtils.mkdir_p asset_path.join "users"
+        FileUtils.touch "#{asset_path}/users/asset_file.icon"
+
+        # populate restore target with just config directory minus chorus.yml
+        populate_chorus_install restore_dir
+
+        # remove chorus.yml file from restore dir so we can replace it later
+        FileUtils.rm restore_dir + "/config/chorus.yml"
+
+        example.call
+      end
+    end
+  end
+
+  def populate_chorus_install(install_dir)
+    %w{config version_build}.each do |path|
+      FileUtils.cp_r Rails.root.join(path), install_dir
+    end
+  end
+
+  xit "backs up and restores the data" do
+    SafeMktmpdir.mktmpdir("rspec_backup_restore_backup") do |backup_dir|
+
+      with_rails_root @original_dir do
+        BackupRestore.backup backup_dir
+      end
+
+      backup_filename = Dir.glob("#{backup_dir}/*.tar").first
+
+      with_rails_root @restore_dir do
+        BackupRestore.restore backup_filename
+      end
+
+      original_entries = get_filesystem_entries_at_path @original_dir
+      restored_entries = get_filesystem_entries_at_path @restore_dir
+
+      restored_entries.should == original_entries
+    end
+  end
+
+  def with_rails_root(root)
+    original_rails_root = Rails.root
+    stub(Rails).root { Pathname.new root }
+    yield
+  ensure
+    stub(Rails).root { original_rails_root }
+  end
+
+  def get_filesystem_entries_at_path(path)
+    pathname = Pathname.new(path)
+    all_filesystem_entries(path).map do |entry|
+      Pathname.new(entry).relative_path_from(pathname).to_s
+    end.sort.uniq
+  end
+end
+
+def all_filesystem_entries(path)
+  path.gsub!(/\.$/,"/")
+  %w{* */* */**/* */**/}.map do |wildcard|
+    Dir.glob path + wildcard
+  end.flatten.sort.uniq
 end

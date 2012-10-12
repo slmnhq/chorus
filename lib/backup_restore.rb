@@ -5,8 +5,8 @@ module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_SQL_FILENAME = "database.sql.gz"
   ASSETS_FILENAME = "assets.tgz"
-  MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
   ASSET_PATHS = %w{csv_import_file_storage_path workfile_storage_path image_storage attachment_storage}
+  MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
     Backup.new(backup_dir, rolling_days).backup
@@ -33,6 +33,10 @@ module BackupRestore
 
     def chorus_config
       @chorus_config ||= ChorusConfig.new
+    end
+
+    def chorus_config=(value)
+      @chorus_config = value
     end
 
     def asset_path_wildcard
@@ -90,7 +94,6 @@ module BackupRestore
 
     def compress_assets
       log "Compressing assets..."
-
       ASSET_PATHS.map { |path| compress_asset_path path }
     end
 
@@ -126,7 +129,7 @@ module BackupRestore
 
   class Restore
     include BackupRestore::SharedMethods
-    attr_accessor :backup_filename
+    attr_accessor :backup_filename, :temp_dir
 
     def initialize(backup_filename)
       self.backup_filename = backup_filename
@@ -136,11 +139,16 @@ module BackupRestore
       full_backup_filename = File.expand_path(backup_filename)
       catch(:unpack_failed) do
         SafeMktmpdir.mktmpdir do |tmp_dir|
+          self.temp_dir = Pathname.new tmp_dir
           Dir.chdir tmp_dir do
             capture_output_or_throw "tar xf #{full_backup_filename}", :unpack_failed
             backup_version = capture_output_or_throw("cat version_build", :unpack_failed).strip
             current_version = capture_output_or_throw("cat #{Rails.root.join 'version_build'}", :unpack_failed).strip
+
             compare_versions(backup_version, current_version)
+
+            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
+            self.chorus_config = ChorusConfig.new
             restore_assets
             restore_database
           end
@@ -150,11 +158,25 @@ module BackupRestore
     end
 
     def restore_assets
-      tmp_dir = Dir.pwd
-      FileUtils.rm_r asset_paths
-      Dir.chdir(Rails.root) do
-        capture_output "tar zxf #{tmp_dir}/#{ASSETS_FILENAME}", :error => "Could not uncompress assets."
+      log "Restoring assets..."
+      ASSET_PATHS.map { |path| restore_asset_path path }
+    end
+
+    def restore_asset_path(path)
+      full_path = config_path path
+      FileUtils.mkdir_p full_path and Dir.chdir full_path do
+        MODELS_WITH_ASSETS.each do |model|
+          # TODO: make sure that we only remove top-level model paths that are in the tar ball
+          FileUtils.rm_r File.join(path, model) if asset_path_in_tar(path) rescue Errno::ENOENT
+        end
+
+        capture_output "tar xf #{temp_dir.join path + ".tgz"}",
+                       :error => "Restoring assets failed."
       end
+    end
+
+    def asset_path_in_tar(path)
+      true
     end
 
     def restore_database
