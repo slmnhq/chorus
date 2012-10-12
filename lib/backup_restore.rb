@@ -1,5 +1,6 @@
 require 'safe_mktmpdir'
 require 'pathname'
+require 'open3'
 
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
@@ -45,8 +46,11 @@ module BackupRestore
 
     def capture_output(command, options = {})
       `#{command} 2>&1`.tap do |output|
-        failure_message = options[:error] || "Command '#{command}': #{output}"
-        raise failure_message unless $?.success?
+        unless $?.success?
+          failure_message = options[:error] || "Command '#{command}' failed."
+          $stderr.puts [failure_message, output]
+          raise failure_message
+        end
       end
     end
   end
@@ -137,24 +141,23 @@ module BackupRestore
 
     def restore
       full_backup_filename = File.expand_path(backup_filename)
-      catch(:unpack_failed) do
-        SafeMktmpdir.mktmpdir do |tmp_dir|
-          self.temp_dir = Pathname.new tmp_dir
-          Dir.chdir tmp_dir do
-            capture_output_or_throw "tar xf #{full_backup_filename}", :unpack_failed
-            backup_version = capture_output_or_throw("cat version_build", :unpack_failed).strip
-            current_version = capture_output_or_throw("cat #{Rails.root.join 'version_build'}", :unpack_failed).strip
+      SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
+        self.temp_dir = Pathname.new tmp_dir
+        Dir.chdir tmp_dir do
+          capture_options = { :error => "Could not unpack backup file '#{backup_filename}'" }
+          capture_output "tar xf #{full_backup_filename}", capture_options
+          backup_version = capture_output("cat version_build", capture_options).strip
+          current_version = capture_output("cat #{Rails.root.join 'version_build'}", capture_options).strip
 
-            compare_versions(backup_version, current_version)
+          compare_versions(backup_version, current_version)
 
-            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
-            self.chorus_config = ChorusConfig.new
-            restore_assets
-            restore_database
-          end
+          FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
+          self.chorus_config = ChorusConfig.new
+          restore_assets
+          restore_database
         end
-        true
-      end or raise "Could not unpack backup file '#{backup_filename}'"
+      end
+      true
     end
 
     def restore_assets
@@ -187,13 +190,6 @@ module BackupRestore
       if backup_version != current_version
         raise "Backup version ('#{backup_version}') differs from installed chorus version ('#{current_version}')"
       end
-    end
-
-    def capture_output_or_throw(command, ball)
-      capture_output(command, :error => "throw instead!")
-    rescue => e
-      throw ball if e.message == "throw instead!"
-      raise e
     end
   end
 end

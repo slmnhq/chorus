@@ -178,9 +178,11 @@ describe 'BackupRestore' do
 
       context "when the backup file does not exist" do
         it "raises an exception" do
-          expect {
-            BackupRestore.restore "missing_backup.tar"
-          }.to raise_error("Could not unpack backup file 'missing_backup.tar'")
+          capture(:stderr) do
+            expect {
+              BackupRestore.restore "missing_backup.tar"
+            }.to raise_error("Could not unpack backup file 'missing_backup.tar'")
+          end.should include("Could not unpack backup file 'missing_backup.tar'")
         end
       end
 
@@ -312,6 +314,20 @@ describe "deployment" do
       Pathname.new(entry).relative_path_from(pathname).to_s
     end.sort.uniq
   end
+end
+
+require 'stringio'
+
+def capture(*streams)
+  streams.map! { |stream| stream.to_s }
+  begin
+    result = StringIO.new
+    streams.each { |stream| eval "$#{stream} = result" }
+    yield
+  ensure
+    streams.each { |stream| eval("$#{stream} = #{stream.upcase}") }
+  end
+  result.string
 end
 
 def all_filesystem_entries(path)
