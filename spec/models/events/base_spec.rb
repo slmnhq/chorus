@@ -16,9 +16,9 @@ describe Events::Base do
       Events::GreenplumInstanceChangedOwner.by(user2).add(:greenplum_instance => gpdb_instance2, :new_owner => user3)
       Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
-      event1 = Events::GreenplumInstanceCreated.first
-      event2 = Events::GreenplumInstanceChangedOwner.first
-      event3 = Events::WorkspaceAddHdfsAsExtTable.first
+      event1 = Events::GreenplumInstanceCreated.last
+      event2 = Events::GreenplumInstanceChangedOwner.last
+      event3 = Events::WorkspaceAddHdfsAsExtTable.last
 
       event1.actor.should == user1
       event1.greenplum_instance.should == gpdb_instance1
@@ -34,7 +34,7 @@ describe Events::Base do
   it_should_behave_like "recent"
 
   describe '.notification_for_current_user' do
-    let(:event) { event_owner.notifications.first.event }
+    let(:event) { event_owner.notifications.last.event }
     let(:event_owner) { users(:owner) }
 
     it "retrieves the notification for the event" do
@@ -102,7 +102,7 @@ describe Events::Base do
   end
 
   it "destroys all of its associated activities when it is destroyed" do
-    event = Events::SourceTableCreated.first
+    event = Events::SourceTableCreated.last
     Activity.where(:event_id => event.id).size.should > 0
     event.destroy
     Activity.where(:event_id => event.id).size.should == 0
@@ -111,7 +111,7 @@ describe Events::Base do
   describe "with deleted" do
     describe "workspace" do
       it "still has access to the workspace" do
-        workspace = Workspace.first
+        workspace = Workspace.last
         event = Events::Base.create!(:workspace => workspace)
         workspace.destroy
         event.reload.workspace.should == workspace
@@ -129,7 +129,7 @@ describe Events::Base do
 
     describe "targets" do
       it "still has access to the targets" do
-        event = Events::Base.where("target1_id IS NOT NULL AND target2_id IS NOT NULL").first
+        event = Events::Base.where("target1_id IS NOT NULL AND target2_id IS NOT NULL").last
         target1 = event.target1
         target2 = event.target2
         target1.destroy

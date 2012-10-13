@@ -54,7 +54,7 @@ describe TableauWorkbooksController do
 
     it "should create a TableauWorkbookPublished event" do
       post :create, params
-      the_event = Events::Base.first
+      the_event = Events::Base.last
       the_event.action.should == "TableauWorkbookPublished"
       the_event.dataset.should == dataset
       the_event.workspace.should == workspace
@@ -107,7 +107,7 @@ describe TableauWorkbooksController do
         expect {
           post :create, params
         }.to change { Events::Base.count }.by(2)
-        event = Events::TableauWorkfileCreated.first
+        event = Events::TableauWorkfileCreated.last
         event.dataset.should == dataset
         event.workfile.should == LinkedTableauWorkfile.last
         event.workspace.should == workspace

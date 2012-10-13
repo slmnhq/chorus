@@ -395,7 +395,7 @@ describe Workspace do
           workspace.save
         }.to change{ Events::WorkspaceChangeName.count }.by(1)
         workspace.reload.name.should == 'new_workspace_name'
-        Events::WorkspaceChangeName.first.additional_data.should == {'workspace_old_name' => old_name}
+        Events::WorkspaceChangeName.last.additional_data.should == {'workspace_old_name' => old_name}
       end
 
       it "does not create an event if the workspace name was not changed" do

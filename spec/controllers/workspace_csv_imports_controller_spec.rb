@@ -38,7 +38,7 @@ describe WorkspaceCsvImportsController do
     context "when there's no table conflict" do
       before do
         mock(QC.default_queue).enqueue.with("CsvImporter.import_file", csv_file.id, anything) do | method, file_id, event_id |
-          Events::FileImportCreated.by(user).first.id.should == event_id
+          Events::FileImportCreated.by(user).last.id.should == event_id
         end
       end
 
@@ -80,7 +80,7 @@ describe WorkspaceCsvImportsController do
               post :create, csv_import_params
             }.to change(Events::FileImportCreated, :count).by(1)
 
-            event = Events::FileImportCreated.first
+            event = Events::FileImportCreated.last
             event.actor.should == user
             event.dataset.should be_nil
             event.workspace.should == workspace
@@ -109,7 +109,7 @@ describe WorkspaceCsvImportsController do
 
             post :create, csv_import_params.merge(:to_table => dataset.name)
 
-            event = Events::FileImportCreated.first
+            event = Events::FileImportCreated.last
             event.actor.should == user
             event.dataset.should == dataset
             event.workspace.should == workspace
