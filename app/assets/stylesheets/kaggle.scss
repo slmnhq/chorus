@@ -22,6 +22,7 @@
     img.profile {
         display: block;
         float: left;
+        margin-top: 12px;
         width: $icon-image-width;
         height: $icon-image-height;
     }
@@ -33,8 +34,13 @@
         @include border-radius(3px);
         margin-right: 5px;
     }
-}
 
+    input[type=checkbox] {
+      float: left;
+      margin-top: 28px;
+      margin-right: 10px;
+    }
+}
 .kaggle_compose_kaggle_message_dialog {
   width: 735px;
   height: 590px;

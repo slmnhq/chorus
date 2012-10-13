@@ -11,6 +11,10 @@ describe("chorus.views.KaggleUserList", function() {
         beforeEach(function() {
             this.view = new chorus.views.KaggleUserList({collection: this.collection});
             this.view.render();
+//            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+//            this.view.options.checkable = true;
+//            this.view.render();
+            this.checkboxes = this.view.$("> li input[type=checkbox]");
         });
 
         it("displays the list of users", function() {
@@ -27,6 +31,10 @@ describe("chorus.views.KaggleUserList", function() {
 
         it("displays the rank", function() {
             expect(this.view.$(".kaggle_rank:contains("+ this.collection.at(0).get("rank") +")")).toExist();
+        });
+
+        it("displays a checkbox for each kaggle user", function() {
+            expect(this.checkboxes.length).toBe(this.collection.length);
         });
 
         it("displays the gravatar url when the user has one", function() {

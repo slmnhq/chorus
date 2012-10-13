@@ -1,15 +1,20 @@
 {{#each models}}
 <li data-userId="{{id}}">
     <span class="spacer_left"/>
-    <img src="{{avatarUrl}}" class="profile"/>
-    <div class="text">
-        <div class="main">
-            <span class="name" title="{{username}}">{{username}}</span>
-        </div>
-        <div class="details_area">
-            <div class="location">{{location}}</div>
-            <div class="small">
-                {{kaggleRank}} {{t "kaggle.competition" count=numberOfCompetitions}}
+    <input type="checkbox"/>
+    <span class="image">
+        <img src="{{avatarUrl}}" class="profile"/>
+    </span>
+    <div class="right">
+        <div class="text">
+            <div class="main">
+                <span class="name" title="{{username}}">{{username}}</span>
+            </div>
+            <div class="details_area">
+                <div class="location">{{location}}</div>
+                <div class="small">
+                    {{kaggleRank}} {{t "kaggle.competition" count=numberOfCompetitions}}
+                </div>
             </div>
         </div>
     </div>
