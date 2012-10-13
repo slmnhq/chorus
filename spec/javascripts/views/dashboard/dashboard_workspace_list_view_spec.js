@@ -27,15 +27,12 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
         context("when a workspace has recent comments", function() {
             beforeEach(function() {
-                this.comment = fixtures.comment({
-                    timestamp: (50).hours().ago().toString("yyyy-MM-ddThh:mm:ssZ"),
-                    text: "I prefer my lemonade with whiskey",
-                    author: {
-                        firstName: "Boa",
-                        lastName: "Constrictor"
-                    }
+                var workspace = rspecFixtures.workspace();
+                this.workspace1.comments().reset(workspace.comments().models);
+                this.workspace1.comments().each(function(comment, index) {
+                    var timestamp = (50 - index).hours().ago().toString("yyyy-MM-ddThh:mm:ssZ");
+                    comment.set({timestamp: timestamp});
                 });
-                this.workspace1.comments().add(this.comment);
                 this.view.render();
             });
 
@@ -48,12 +45,12 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("displays only the number of recent comments", function() {
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.recent_comments", {count: 4})
-                })
+                });
 
                 it("doesn't display the badge", function() {
                     expect(this.view.$("li:first-child .badge")).not.toExist();
                 });
-            })
+            });
 
             context("when there are no comments", function() {
                 beforeEach(function() {
@@ -69,7 +66,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("displays the badge", function() {
                     expect(this.view.$("li:first-child .badge")).toExist();
                 });
-            })
+            });
 
             context("when both insights and comments are available", function() {
                 beforeEach(function() {
@@ -88,7 +85,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("displays the badge", function() {
                     expect(this.view.$("li:first-child .badge")).toExist();
                 });
-            })
+            });
 
             context("when there are no insights or comments", function() {
                 it("displays no insights or comments when 0", function() {
@@ -96,7 +93,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")
-                })
+                });
 
                 it("displays no insights or comments when null", function() {
                     this.workspace1.set({numberOfComments: null, numberOfInsights: null});
@@ -108,22 +105,23 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("doesn't display the badge", function() {
                     expect(this.view.$("li:first-child .badge")).not.toExist();
                 });
-            })
+            });
 
             it("displays the relative time of the most recent comment", function() {
                 expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("2 days ago")
-            })
+            });
 
             it("displays the name of the most recent commenter", function() {
-                expect(this.view.$("li:first-child .comment .recent .author").text().trim()).toBe("Boa Constrictor")
+                expect(this.view.$("li:first-child .comment .recent .author").text().trim()).toBe(this.workspace1.comments().last().author().name());
             });
 
             describe("the comments tooltip", function() {
                 beforeEach(function() {
-                    spyOn($.fn, 'qtip');
+                    this.qtipElement = stubQtip();
                     spyOn(chorus.views.ActivityList.prototype, 'initialize').andCallThrough();
                     this.view.render();
                     this.qtipCall = $.fn.qtip.calls[0];
+                    this.view.$('.comment .count').mouseover();
                 });
 
                 it("makes a tooltip for each workspace", function() {
@@ -140,12 +138,20 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 });
 
                 it("renders the activity lists in read-only mode", function() {
-                    var $target = this.qtipCall.args[0].content;
-                    expect($target.find("a.publish")).not.toExist();
-                    expect($target.find("a.unpublish")).not.toExist();
+                    expect(this.qtipElement.find("a.publish")).not.toExist();
+                    expect(this.qtipElement.find("a.unpublish")).not.toExist();
+                });
+
+                it("sorts them with the newest first", function() {
+                    var commentsCollection = this.workspace1.comments();
+                    var timestamps = [];
+                    this.qtipElement.find("li.activity").each(function() {
+                        timestamps.push(commentsCollection.get($(this).data('activityId')).get("timestamp"))
+                    });
+                    expect(timestamps).toEqual(_.clone(timestamps).sort().reverse());
                 });
             });
-        })
+        });
     });
 
     describe("event handling", function() {

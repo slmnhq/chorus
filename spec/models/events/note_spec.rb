@@ -282,7 +282,7 @@ describe Events::Note do
         :body => "Some crazy content",
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.action.should == "NoteOnGreenplumInstance"
       last_note.greenplum_instance.should == greenplum_instance
       last_note.body.should == "Some crazy content"
@@ -297,7 +297,7 @@ describe Events::Note do
         :body => "Some crazy content",
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.hadoop_instance.should == hadoop_instance
       last_note.action.should == "NoteOnHadoopInstance"
       last_note.body.should == "Some crazy content"
@@ -311,7 +311,7 @@ describe Events::Note do
         :body => "Some crazy content",
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.action.should == "NoteOnHdfsFile"
       last_note.actor.should == user
       last_note.hdfs_file.hadoop_instance.should == hadoop_instance
@@ -326,7 +326,7 @@ describe Events::Note do
           :body => "Some crazy content",
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.gnip_instance.should == gnip_instance
       last_note.action.should == "NoteOnGnipInstance"
       last_note.body.should == "Some crazy content"
@@ -342,7 +342,7 @@ describe Events::Note do
           :body => "More crazy content",
         }, user)
 
-        last_note = Events::Note.first
+        last_note = Events::Note.last
         last_note.action.should == "NoteOnWorkspace"
         last_note.actor.should == user
         last_note.workspace.should == workspace
@@ -373,7 +373,7 @@ describe Events::Note do
         :workspace_id => workspace.id
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.action.should == "NoteOnWorkfile"
       last_note.actor.should == user
       last_note.workfile.should == workfile
@@ -388,7 +388,7 @@ describe Events::Note do
         :body => "Crazy dataset content",
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.action.should == "NoteOnDataset"
       last_note.actor.should == user
       last_note.dataset.should == dataset
@@ -403,7 +403,7 @@ describe Events::Note do
         :workspace_id => workspace.id
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.action.should == "NoteOnWorkspaceDataset"
       last_note.actor.should == user
       last_note.dataset == dataset
@@ -419,7 +419,7 @@ describe Events::Note do
         :workspace_id => workspace.id
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.insight.should_not == true
       last_note.promoted_by.should == nil
       last_note.promotion_time.should == nil
@@ -434,7 +434,7 @@ describe Events::Note do
         :is_insight => true,
       }, user)
 
-      last_note = Events::Note.first
+      last_note = Events::Note.last
       last_note.insight.should == true
       last_note.promoted_by.should == user
       last_note.promotion_time.should_not == nil

@@ -49,6 +49,10 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     postRender: function() {
         this.collection.each(function(workspace) {
             var comments = workspace.comments();
+            comments.comparator = function(comment) {
+                return -(new Date(comment.get('timestamp')).valueOf());
+            };
+            comments.sort();
             comments.loaded = true;
             var commentList = new chorus.views.ActivityList({
                 collection: comments,
@@ -65,7 +69,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
             var top = $("#header").height();
             viewport.offset = function() {
                 return { left: 0, top: top };
-            }
+            };
 
             var li = this.$("li[data-id=" + workspace.get("id") + "]");
             li.find(".comment .count").qtip({

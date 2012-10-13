@@ -8,100 +8,108 @@ describe EventsController do
   end
 
   describe "#index" do
-    let(:event) { Events::Base.first }
+   it "returns the events with the newest one first" do
+     mock_present { |models| models.first.id.should > models.second.id }
+     get :index, :entity_type => "dashboard"
+     response.code.should == "200"
+   end
 
-    before do
-      Activity.create!(:entity => object, :event => event)
-    end
-
-    context "when getting the activities for a gpdb instance" do
-      let(:object) { gpdb_instances(:default) }
-
-      it "presents the gpdb instance's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "greenplum_instance", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for a hadoop instance" do
-      let(:object) { hadoop_instances(:hadoop) }
-
-      it "presents the hadoop instance's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "hadoop_instance", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for a user" do
-      let(:object) { users(:owner) }
-
-      it "presents the user's activities" do
-        any_instance_of(User) { |u| mock.proxy(u).accessible_events(current_user) }
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "user", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for a workfile" do
-      let(:object) { workfiles(:public) }
-
-      it "presents the workfile's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "workfile", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for a workspace" do
-      let(:object) { workspaces(:public_with_no_collaborators) }
-
-      it "presents the workspace's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "workspace", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for a gpdb_table" do
-      let(:object) { datasets(:table) }
-
-      it "presents the gpdb_table's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "dataset", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for an hdfs file" do
-      let(:object) { HdfsEntry.first }
-
-      it "presents the workspace's activities" do
-        mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "hdfs_file", :entity_id => object.id
-        response.code.should == "200"
-      end
-    end
-
-    context "when getting the activities for the current user's home page" do
-      let(:object) { datasets(:table) }
-
+    context "getting activities for a particular model" do
+      let(:event) { Events::Base.last }
       before do
-        mock(Events::Base).for_dashboard_of(current_user) { fake_relation [event] }
+        Activity.create!(:entity => object, :event => event)
       end
 
-      it "presents the user's activities" do
-        mock_present do |models,view,options|
-          models.should == [event]
-          options[:activity_stream].should be_true
+      context "for a gpdb instance" do
+        let(:object) { gpdb_instances(:default) }
+
+        it "presents the gpdb instance's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "greenplum_instance", :entity_id => object.id
+          response.code.should == "200"
         end
-        get :index, :entity_type => "dashboard"
-        response.code.should == "200"
+      end
+
+      context "for a hadoop instance" do
+        let(:object) { hadoop_instances(:hadoop) }
+
+        it "presents the hadoop instance's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "hadoop_instance", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for a user" do
+        let(:object) { users(:owner) }
+
+        it "presents the user's activities" do
+          any_instance_of(User) { |u| mock.proxy(u).accessible_events(current_user) }
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "user", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for a workfile" do
+        let(:object) { workfiles(:public) }
+
+        it "presents the workfile's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "workfile", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for a workspace" do
+        let(:object) { workspaces(:public_with_no_collaborators) }
+
+        it "presents the workspace's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "workspace", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for a gpdb_table" do
+        let(:object) { datasets(:table) }
+
+        it "presents the gpdb_table's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "dataset", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for an hdfs file" do
+        let(:object) { HdfsEntry.last }
+
+        it "presents the workspace's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "hdfs_file", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
+      context "for the current user's home page" do
+        let(:object) { datasets(:table) }
+
+        before do
+          mock(Events::Base).for_dashboard_of(current_user) { fake_relation [event] }
+        end
+
+        it "presents the user's activities" do
+          mock_present do |models, view, options|
+            models.should == [event]
+            options[:activity_stream].should be_true
+          end
+          get :index, :entity_type => "dashboard"
+          response.code.should == "200"
+        end
       end
     end
   end
+
 
   describe "#show" do
     let(:event) { events(:note_on_no_collaborators_private) }
@@ -172,7 +180,7 @@ describe EventsController do
     FIXTURE_FILES.each do |filename, event_relation|
 
       generate_fixture "activity/#{filename}.json" do
-        event = event_relation.first
+        event = event_relation.last
         Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end

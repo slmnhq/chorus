@@ -23,7 +23,7 @@ class InsightsController < ApplicationController
   private
 
   def get_insights
-    insight_query = Events::Base.where(insight: true)
+    insight_query = Events::Base.where(insight: true).order("events.id DESC")
     insight_query = insight_query.visible_to(current_user) unless current_user.admin?
     insight_query = insight_query.where(workspace_id: params[:workspace_id]) if params[:entity_type] == "workspace"
     insight_query

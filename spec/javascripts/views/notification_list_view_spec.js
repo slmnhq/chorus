@@ -2,8 +2,8 @@ describe("chorus.views.NotificationList", function() {
     beforeEach(function() {
         this.collection = rspecFixtures.notificationSet();
         var brokenNotification = new chorus.models.Notification();
-        brokenNotification.set({ action: "IMPORT_SUCCESS" })
-        this.collection.add(brokenNotification)
+        brokenNotification.set({ action: "IMPORT_SUCCESS" });
+        this.collection.add(brokenNotification);
         this.view = new chorus.views.NotificationList({ collection: this.collection });
     });
 
@@ -16,7 +16,7 @@ describe("chorus.views.NotificationList", function() {
         });
 
         it("renders an li for each notification in the collection", function() {
-            expect(this.view.$("li").length).toBe(4);
+            expect(this.view.$("li.activity").length).toBe(4);
         });
 
         it("does not render the links section in the handlebars template", function() {
@@ -117,7 +117,7 @@ describe("chorus.views.NotificationList", function() {
                         });
 
                         it("renders the new notifications", function() {
-                            expect(this.view.$("li").length).toBe(8);
+                            expect(this.view.$("li.activity").length).toBe(8);
                         });
 
                         it("marks all notification read again", function() {

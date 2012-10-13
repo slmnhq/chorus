@@ -7,7 +7,7 @@ describe InsightsController do
     end
 
     let(:user) { note.actor }
-    let(:note) { Events::NoteOnGreenplumInstance.first }
+    let(:note) { Events::NoteOnGreenplumInstance.last }
 
     subject { post :promote, :note_id => note.id}
 
@@ -79,6 +79,13 @@ describe InsightsController do
     it "should not include any non-insights" do
       mock_present do |models|
         models.should_not include(non_insight)
+      end
+      subject
+    end
+
+    it "orders insights with the most recent first" do
+      mock_present do |models|
+        models.first.id.should > models.second.id
       end
       subject
     end

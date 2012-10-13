@@ -35,10 +35,9 @@ describe NotesController do
       let(:entity_id) { workspace.id }
 
       it "associates the datasets to the Note" do
-        associated_datasets_ids = workspace.bound_datasets[0..1]
         post :create, attributes.merge(:dataset_ids => associated_datasets.to_param)
         response.code.should == "201"
-        Events::NoteOnWorkspace.first.datasets.should == associated_datasets
+        Events::NoteOnWorkspace.last.datasets.should == associated_datasets
       end
 
       it "associates the workfiles to the Note" do
@@ -46,7 +45,7 @@ describe NotesController do
         associated_workfile_ids = associated_workfiles.map(&:id)
         post :create, attributes.merge(:workfile_ids => associated_workfile_ids)
         response.code.should == "201"
-        Events::NoteOnWorkspace.first.workfiles.should =~ associated_workfiles
+        Events::NoteOnWorkspace.last.workfiles.should =~ associated_workfiles
       end
 
       context "when the workspace is archived" do

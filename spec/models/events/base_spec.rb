@@ -33,11 +33,6 @@ describe Events::Base do
 
   it_should_behave_like "recent"
 
-  it "is ordered with the most recent items first, by default" do
-    events = Events::Base.limit(2).to_a
-    events[0].created_at.should > events[1].created_at
-  end
-
   describe '.notification_for_current_user' do
     let(:event) { event_owner.notifications.first.event }
     let(:event_owner) { users(:owner) }

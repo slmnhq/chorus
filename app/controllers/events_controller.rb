@@ -7,7 +7,7 @@ class EventsController < ApplicationController
      else
        ModelMap.model_from_params(params[:entity_type], params[:entity_id]).events.includes(:actor, :target1, :target2)
      end
-    present paginate(events), :presenter_options => {:activity_stream => true}
+    present paginate(events.order("events.id DESC")), :presenter_options => {:activity_stream => true}
   end
 
   def show

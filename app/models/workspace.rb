@@ -16,7 +16,7 @@ class Workspace < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :owned_notes, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'"
   has_many :owned_events, :class_name => 'Events::Base'
-  has_many :comments, :through => :owned_notes
+  has_many :comments, :through => :owned_events
   belongs_to :sandbox, :class_name => 'GpdbSchema'
 
   has_many :csv_files

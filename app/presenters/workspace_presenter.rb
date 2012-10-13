@@ -38,9 +38,12 @@ class WorkspacePresenter < Presenter
     return {} unless @options[:show_latest_comments]
     recent_notes = model.owned_notes.recent
     recent_comments = model.comments.recent
-    recent_insights = recent_notes.select { |note| note.insight? }
-    all = recent_notes + recent_comments
-    latest_5 = all.sort_by(&:updated_at).last(5)
+
+    recent_insights = recent_notes.where(:insight => true)
+
+    recent_notes_and_comments = recent_notes.order("updated_at desc").limit(5) + recent_comments.order("updated_at desc").limit(5)
+
+    latest_5 = recent_notes_and_comments.sort_by(&:updated_at).last(5)
 
     {
         :number_of_insights => recent_insights.size,
