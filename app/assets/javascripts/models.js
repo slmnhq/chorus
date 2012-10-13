@@ -138,6 +138,11 @@ chorus.models = {
             }
         },
 
+        requireValidEmailAddress:function (name, newAttrs) {
+
+            this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
+        },
+
         requireConfirmation: function(attr, newAttrs, messageKey) {
             var confAttrName = attr + "Confirmation";
             var value, conf;

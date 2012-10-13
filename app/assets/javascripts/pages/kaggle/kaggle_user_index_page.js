@@ -16,7 +16,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.KaggleHeader()
         });
 
-        this.sidebar = new chorus.views.KaggleUserSidebar();
+        this.sidebar = new chorus.views.KaggleUserSidebar({workspace: this.workspace});
     },
 
     crumbs: function() {

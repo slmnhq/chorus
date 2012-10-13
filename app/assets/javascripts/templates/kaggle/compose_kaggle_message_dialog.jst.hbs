@@ -1,0 +1,28 @@
+<form>
+    <div class="inline-field">
+        <label>{{t "kaggle.compose.to"}}</label>
+        <span class="kaggle_recipient">{{recipientName}}</span>
+    </div>
+
+    <div class="inline-field">
+        <label name="from" class="required">{{t "kaggle.compose.from"}}</label>
+        <input type="text" name="from" value="{{fromEmail}}"></input>
+    </div>
+
+    <div>
+        <label name="subject" class="required">{{t "kaggle.compose.subject"}}</label>
+        <input type="text" name="subject" value="{{t "kaggle.compose.default_subject"}}" maxlength="80"></input>
+    </div>
+
+    <div>
+        <label name="message" class="required">{{t "kaggle.compose.message"}}</label>
+        <a class="additional_options" href="#">{{t "kaggle.compose.insert_schema"}}</a>
+
+        <textarea name="message">{{t "kaggle.compose.message_body"}}</textarea>
+    </div>
+
+    <div class="modal_controls">
+        <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+        <button type="submit" class="submit" tabindex="99">{{t "kaggle.compose.submit"}}</button>
+    </div>
+</form>

@@ -35,10 +35,6 @@ chorus.models.User = chorus.models.Base.extend({
         }
     },
 
-    requireValidEmailAddress:function (name, newAttrs) {
-        this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
-    },
-
     requireConfirmationForChange:function (name, newAttrs) {
         if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty(name))) {
             this.require(name, newAttrs);

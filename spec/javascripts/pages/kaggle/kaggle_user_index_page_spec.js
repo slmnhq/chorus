@@ -9,6 +9,12 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         it("fetches the kaggle users", function() {
             expect(this.kaggleUsers).toHaveBeenFetched();
         });
+
+        it("has a sidebar with the workspace", function() {
+            expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
+            console.log(this.page.sidebar)
+            expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
+        })
     });
 
     context("while the workspace is loading", function() {

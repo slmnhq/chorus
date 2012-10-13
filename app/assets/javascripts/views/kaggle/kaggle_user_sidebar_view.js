@@ -5,7 +5,8 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
         '.tab_control': 'tabs'
     },
 
-    setup: function() {
+    setup: function(options) {
+        this.workspace = options.workspace;
         chorus.PageEvents.subscribe("kaggle_user:selected", this.setKaggleUser, this);
         this.tabs = new chorus.views.TabControl(["information"]);
     },
@@ -16,5 +17,10 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
             model: user
         });
         this.render();
+    },
+
+    postRender: function() {
+        this.$('a.dialog').data('recipient', this.model);
+        this.$('a.dialog').data('workspace', this.workspace);
     }
 });
