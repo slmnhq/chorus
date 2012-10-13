@@ -39,7 +39,7 @@ describe Gnip::InstanceRegistrar do
       it "makes a GnipInstanceCreated event" do
         instance = Gnip::InstanceRegistrar.create!(instance_attributes, owner)
 
-        event = Events::GnipInstanceCreated.first
+        event = Events::GnipInstanceCreated.last
         event.gnip_instance.should == instance
         event.actor.should == owner
       end

@@ -112,7 +112,7 @@ describe UsersController do
       end
 
       it "makes a UserAdded event" do
-        event = Events::UserAdded.first
+        event = Events::UserAdded.last
         event.new_user.should == User.find_by_username(params[:username])
         event.actor.should == user
       end
