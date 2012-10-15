@@ -129,6 +129,8 @@ window.rspecFixtureDefinitions = {
             greenplumInstanceCreated: {},
             gnipInstanceCreated: {},
             gnipStreamImportCreated: {},
+            gnipStreamImportSuccess: {},
+            gnipStreamImportFailed: {},
             auroraInstanceProvisioned: {},
             auroraInstanceProvisioningFailed: {},
             greenplumInstanceChangedOwner: {},

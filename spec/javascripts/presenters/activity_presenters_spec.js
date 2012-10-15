@@ -1113,6 +1113,55 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("gnip import success event", function() {
+        var activity_data;
+        beforeEach(function () {
+            model = rspecFixtures.activity.gnipStreamImportSuccess();
+            presenter = new chorus.presenters.Activity(model);
+            workspace = model.workspace();
+            dataset = model.dataset();
+            gnipInstance = model.gnipInstance();
+
+            activity_data = {
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+            };
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.GnipStreamImportSuccess.default",
+                activity_data
+            );
+        });
+    });
+
+    context("gnip import failure event", function() {
+        var activity_data;
+        beforeEach(function () {
+            model = rspecFixtures.activity.gnipStreamImportFailed();
+            presenter = new chorus.presenters.Activity(model);
+            workspace = model.workspace();
+            dataset = model.dataset();
+            gnipInstance = model.gnipInstance();
+
+            activity_data = {
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+            };
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.GnipStreamImportFailed.default",
+                activity_data
+            );
+            expect(presenter.isFailure()).toBe(true);
+        });
+    });
+
     context("dataset import created event", function() {
         var activity_data;
         beforeEach(function () {

@@ -231,11 +231,11 @@
         },
 
         isFailure: function() {
-            return this.get("action") === "FileImportFailed" ||  this.get("action") === "DatasetImportFailed" ;
+            return this.get('action') === "GnipStreamImportFailed" || this.get("action") === "FileImportFailed" ||  this.get("action") === "DatasetImportFailed";
         },
 
         isSuccessfulImport: function() {
-            return this.get("action") === "FileImportSuccess" ||  this.get("action") === "DatasetImportSuccess" ;
+            return this.get('action') === "GnipStreamImportSuccess" || this.get("action") === "FileImportSuccess" ||  this.get("action") === "DatasetImportSuccess" ;
         },
 
         promoterLink: function() {

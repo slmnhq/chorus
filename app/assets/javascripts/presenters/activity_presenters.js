@@ -246,6 +246,14 @@
                 links: ["actor", "gnipInstance", "dataset"]
             },
 
+            GnipStreamImportSuccess: {
+                links: ["workspace", "gnipInstance", "dataset"]
+            },
+
+            GnipStreamImportFailed: {
+                links: ["workspace", "gnipInstance", "dataset"]
+            },
+
             WorkfileUpgradedVersion: {
                 links: [ "actor", "workfile", "workspace" ],
                 computed: ["versionLink"]
