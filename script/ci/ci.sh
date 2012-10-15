@@ -25,7 +25,8 @@ sleep 30
 set +e
 
 echo "Running unit tests"
-GPDB_HOST=$GPDB_HOST b/rake spec 2>&1
+echo `ruby -v`
+GPDB_HOST=$GPDB_HOST b/rake spec --trace 2>&1
 RUBY_TESTS_RESULT=$?
 
 echo "Running javascript tests"
