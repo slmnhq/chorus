@@ -1,7 +1,7 @@
 describe("chorus.pages.KaggleUserIndexPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({name: "kagSpace"});
-        this.kaggleUsers = rspecFixtures.kaggleUserSet();
+        this.kaggleUsers = new chorus.collections.KaggleUserSet([], {workspace: this.workspace})
         this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 
@@ -12,7 +12,6 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
         it("has a sidebar with the workspace", function() {
             expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
-            console.log(this.page.sidebar)
             expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
         })
     });

@@ -71,6 +71,11 @@ Chorus::Application.routes.draw do
     resources :csv, :only => [:create], :controller => 'workspace_csv' do
       resources :imports, :only => [:create], :controller => 'workspace_csv_imports'
     end
+
+    namespace :kaggle do
+      resources :messages, :only => [:create]
+      resources :users, :only => [:index]
+    end
   end
 
   resources :workfiles, :only => [:show, :destroy] do
@@ -116,10 +121,6 @@ Chorus::Application.routes.draw do
     member do
       post :reindex
     end
-  end
-
-  namespace :kaggle do
-    resources :users, :only => [:index]
   end
 
   post 'download_chart', :controller => 'image_downloads'

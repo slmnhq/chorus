@@ -31,6 +31,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             this.dialog.$('textarea[name=message]').val('Some stuff');
 
             spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
+            spyOn(this.dialog, "closeModal");
+            spyOn(chorus, "toast");
             this.dialog.$('button.submit').click();
         });
 
@@ -46,5 +48,16 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             expect(model.get('subject')).toEqual('Something cool');
             expect(model.get('message')).toEqual('Some stuff');
         });
+
+        it("closes the dialog box if saved successfully", function () {
+            this.dialog.model.trigger("saved");
+            expect(this.dialog.closeModal).toHaveBeenCalled();
+        });
+
+        it("shows a toast message if saved successfully", function() {
+            this.dialog.model.trigger("saved");
+            expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
+        });
+
     });
 });

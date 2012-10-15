@@ -28,5 +28,11 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
             recipient: options.recipient,
             workspace: options.workspace
         });
+        this.bindings.add(this.model, "saved", this.saved);
+    },
+
+    saved: function () {
+        this.closeModal();
+        chorus.toast('kaggle.compose.success');
     }
 });
