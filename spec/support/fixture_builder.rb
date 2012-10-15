@@ -375,7 +375,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::DatasetImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
     Events::DatasetImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :source_dataset => default_table)
     Events::DatasetImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
-    Events::GnipStreamImportCreated.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_instance)
+    fbuilder.name :gnip_stream_import_created, Events::GnipStreamImportCreated.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_instance)
     Events::GnipStreamImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_instance)
     Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_instance)
     Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => default_table)

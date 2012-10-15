@@ -29,7 +29,7 @@ class GnipInstanceImportsController < ApplicationController
     csv_file.user = current_user
 
     if csv_file.save
-      event = create_import_event(csv_file)
+      event = create_import_event(csv_file, gnip_instance)
       GnipImporter.import_file(csv_file, event)
       render :json => [], :status => :ok
     end
@@ -37,14 +37,12 @@ class GnipInstanceImportsController < ApplicationController
 
   private
 
-  def create_import_event(csv_file)
+  def create_import_event(csv_file, gnip_instance)
     schema = csv_file.workspace.sandbox
-    Events::FileImportCreated.by(csv_file.user).add(
+    Events::GnipStreamImportCreated.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :dataset => schema.datasets.find_by_name(csv_file.to_table),
-        :file_name => csv_file.contents_file_name,
-        :import_type => 'file',
-        :destination_table => csv_file.to_table
+        :gnip_instance => gnip_instance
     )
   end
 end

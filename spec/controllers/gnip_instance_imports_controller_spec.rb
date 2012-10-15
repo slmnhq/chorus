@@ -60,7 +60,7 @@ describe GnipInstanceImportsController do
       it "creates an event before it is run" do
         expect {
           post :create, gnip_instance_import_params
-        }.to change(Events::FileImportCreated, :count).by(1)
+        }.to change(Events::GnipStreamImportCreated, :count).by(1)
       end
     end
 
