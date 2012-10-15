@@ -20,7 +20,7 @@ resource "Gnip instances" do
 
     let(:name) { "example name" }
     let(:description) { "Can you tell me how to get..." }
-    let(:stream_url) { "https://stream.gnip.com" }
+    let(:stream_url) { "https://historical.gnip.com/fake" }
     let(:username) { "example_user" }
     let(:password) { "sample_password" }
 
@@ -54,7 +54,7 @@ resource "Gnip instances" do
     let(:id) { gnip_instance.to_param }
     let(:name) { "example name" }
     let(:description) { "Can you tell me how to get..." }
-    let(:stream_url) { "https://stream.gnip.com" }
+    let(:stream_url) { "https://historical.gnip.com/fake" }
     let(:username) { "example_user" }
     let(:password) { "" }
 
@@ -63,5 +63,16 @@ resource "Gnip instances" do
     example_request "Update a Gnip Instance" do
       status.should == 200
     end
+  end
+
+  post "/gnip_instances/:gnip_instance_id/imports" do
+    parameter :workspace_id, "gnip account name"
+    parameter :to_table, "gnip account name"
+
+    required_parameters :workspace_id, :to_table
+
+    let(:id) { gnip_instance.to_param }
+    let(:workspace_id) { workspaces(:public).id }
+    let(:to_table) { "target_table" }
   end
 end
