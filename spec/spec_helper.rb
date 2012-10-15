@@ -63,6 +63,11 @@ RSpec.configure do |config|
 
   config.filter_run_excluding :legacy_migration => true
 
+  unless ENV['GPDB_HOST']
+    warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
+    config.filter_run_excluding :database_integration => true
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

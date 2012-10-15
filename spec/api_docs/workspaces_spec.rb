@@ -56,7 +56,7 @@ resource "Workspaces" do
     end
   end
 
-  put "/workspaces/:id" do
+  put "/workspaces/:id", :database_integration do
     parameter :instance_id, "id of instance to create database in"
     parameter :database_name, "name of a new database"
     parameter :schema_name, "Name of new schema"
@@ -81,7 +81,7 @@ resource "Workspaces" do
     end
   end
 
-  put "/workspaces/:id" do
+  put "/workspaces/:id", :database_integration do
     parameter :instance_id, "id of instance to create database in"
     parameter :database_id, "id of a database"
     parameter :schema_name, "Name of new schema"

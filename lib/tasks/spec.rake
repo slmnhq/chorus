@@ -1,25 +1,22 @@
-desc 'Regenerate JSON fixtures for jasmine tests'
-task :default => [:spec]
+unless Rails.env.production?
+  task :default => [:spec]
 
-task :gpdb_host_check_stale do
-  `echo "#{ENV['GPDB_HOST']}" > tmp/GPDB_HOST_STALE`
-end
-
-task :spec => [:gpdb_host_check_stale] do
-  base = "ruby -S bundle exec rspec spec/controllers spec/permissions spec/models spec/lib spec/presenters spec/requests spec/services spec/install"
-  if ENV['GPDB_HOST']
-    exec base
-  else
-    warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
-    exec(base + " --tag ~database_integration")
+  task :gpdb_host_check_stale do
+    `echo "#{ENV['GPDB_HOST']}" > tmp/GPDB_HOST_STALE`
   end
-end
 
-task :all => [:gpdb_host_check_stale] do
-  base = "ruby -S bundle exec rspec spec/controllers spec/permissions spec/models spec/lib spec/presenters spec/requests spec/services spec/install"
-  unless ENV['GPDB_HOST']
-    warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
-    base += " --tag ~database_integration"
+  desc 'Run backend specs'
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.pattern = 'spec/{controllers,permissions,models,lib,presenters,requests,services,install}/**/*_spec.rb'
   end
-  exec("#{base} && ruby -S bundle exec rspec spec/legacy_migration && rake api_docs")
+  task :spec => [:gpdb_host_check_stale]
+
+  desc 'Run legacy migration specs'
+  RSpec::Core::RakeTask.new('spec:legacy_migration') do |t|
+    t.pattern = 'spec/legacy_migration/**/*_spec.rb'
+  end
+
+  desc 'Run all backend specs including legacy migration and api doc specs'
+  task :all => [:spec, :api_docs, 'spec:legacy_migration']
+
 end
