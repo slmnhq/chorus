@@ -14,7 +14,7 @@ class CsvFile < ActiveRecord::Base
 
   validates :column_names, :presence => true
   validates :types, :presence => true
-  validates :delimiter, :presence => true
+  validates :delimiter, :exclusion => {:in => ['', nil]}
   validates :to_table, :presence => true
   validates :user, :presence => true
   validates :workspace, :presence => true
