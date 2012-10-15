@@ -242,6 +242,10 @@
                 computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
             },
 
+            GnipStreamImportCreated: {
+                links: ["actor", "gnipInstance", "dataset"]
+            },
+
             WorkfileUpgradedVersion: {
                 links: [ "actor", "workfile", "workspace" ],
                 computed: ["versionLink"]
