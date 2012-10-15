@@ -3,7 +3,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .multiple_selection .associate": "launchMultipleUserKaggleSendMessageDialog",
-        "click .info .associate": "launchSingleUserKaggleSendMessageDialog"
+        "click .actions .associate": "launchSingleUserKaggleSendMessageDialog"
     },
 
     subviews: {
