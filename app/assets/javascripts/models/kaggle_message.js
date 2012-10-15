@@ -10,7 +10,7 @@ chorus.models.KaggleMessage = chorus.models.Base.extend({
     },
 
     recipient_ids: function() {
-        var ids = _.pluck(this.get('recipients'), 'id');
+        var ids = _.pluck(this.get('recipients').models, 'id');
         return (ids);
     }
 });

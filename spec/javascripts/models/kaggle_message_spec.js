@@ -3,7 +3,7 @@ describe("chorus.models.KaggleMessage", function() {
         this.kaggleUser = rspecFixtures.kaggleUserSet().at(0);
         this.kaggleUser.set({'id': 1});
         this.attrs = {
-            recipient: this.kaggleUser,
+            recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),
             subject: 'This is a valid subject',
             from: 'user@emc.com',
             message: 'Please analyze my data',
