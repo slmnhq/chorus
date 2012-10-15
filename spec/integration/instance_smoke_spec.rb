@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Instances" do
+describe "Instances", :database_integration do
   before do
     login(users(:admin))
     visit("#/instances")

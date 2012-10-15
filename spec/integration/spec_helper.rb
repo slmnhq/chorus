@@ -40,6 +40,12 @@ require "#{Rails.root}/spec/support/fixture_builder.rb"
 require "#{Rails.root}/spec/support/database_integration/setup_gpdb.rb"
 
 RSpec.configure do |config|
+  unless ENV['GPDB_HOST']
+    warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
+    config.filter_run_excluding :database_integration => true
+  end
+
+  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.mock_with :rr
   config.fixture_path = "#{Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true

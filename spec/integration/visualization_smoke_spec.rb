@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 #These tests actually create the charts from the instances view. Need to write separate tests for visulaization from sandbox
 
-describe "Visualizations" do
+describe "Visualizations", :database_integration do
   let(:instance) { GpdbIntegration.real_gpdb_instance }
   let(:database) { GpdbIntegration.real_database }
   let(:schema) { database.schemas.find_by_name("test_schema") }

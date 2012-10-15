@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Sandbox" do
+describe "Sandbox", :database_integration do
 
   let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:instance) { GpdbIntegration.real_gpdb_instance }
