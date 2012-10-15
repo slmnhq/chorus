@@ -103,7 +103,7 @@ describe GnipInstancesController do
         stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { raise(ApiValidationError) }
       end
       it "raise an error" do
-        post :create, params
+        post :update, params
         response.code.should == "422"
       end
     end

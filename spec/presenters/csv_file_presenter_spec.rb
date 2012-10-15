@@ -2,12 +2,8 @@ require 'spec_helper'
 
 describe CsvFilePresenter, :type => :view do
   let(:file) { test_file("test.csv", "text/csv") }
-  let(:csv_file) { CsvFile.create(:contents => file) }
+  let(:csv_file) { FactoryGirl.create(:csv_file, :contents => file) }
   let(:presenter) { CsvFilePresenter.new(csv_file, view) }
-
-  before do
-
-  end
 
   describe "#to_hash" do
     before do
