@@ -1,7 +1,7 @@
 module Kaggle
   class UsersController < ApplicationController
     def index
-      user_list = JSON.parse(File.read("kaggleSearchResults.json"))
+      user_list = JSON.parse(File.read(Rails.root + "kaggleSearchResults.json"))
 
       sorted_user_list = user_list.map do |user_attributes|
         {
