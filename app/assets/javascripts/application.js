@@ -45,6 +45,7 @@
 //= require views/workfiles/text_workfile_content_view
 //= require views/search/search_item_base
 //= require views/search/search_gpdb_instance_view
+//= require views/filter_wizard_view
 //= require_tree ./views
 //= require dialogs/pick_items_dialog
 //= require dialogs/workspaces/pick_workspace_dialog

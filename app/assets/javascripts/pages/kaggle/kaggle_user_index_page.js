@@ -13,7 +13,8 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "KaggleUser",
             collection: this.collection,
-            contentHeader: new chorus.views.KaggleHeader()
+            contentHeader: new chorus.views.KaggleHeader(),
+            contentDetails : new chorus.views.KaggleUserListContentDetails()
         });
 
         this.sidebar = new chorus.views.KaggleUserSidebar({workspace: this.workspace});
