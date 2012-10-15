@@ -174,7 +174,9 @@ describe EventsController do
         "workspaceChangeName" => Events::WorkspaceChangeName,
         "tableauWorkbookPublished" => Events::TableauWorkbookPublished,
         "tableauWorkfileCreated" => Events::TableauWorkfileCreated,
-        "gnipStreamImportCreated" => Events::GnipStreamImportCreated
+        "gnipStreamImportCreated" => Events::GnipStreamImportCreated,
+        "gnipStreamImportSuccess" => Events::GnipStreamImportSuccess,
+        "gnipStreamImportFailed" => Events::GnipStreamImportFailed
     }
 
     FIXTURE_FILES.each do |filename, event_relation|
