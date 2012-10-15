@@ -1,5 +1,6 @@
 describe("chorus.dialogs.ComposeKaggleMessage", function () {
     beforeEach(function () {
+        this.qtip = stubQtip(".more-info");
         setLoggedInUser(rspecFixtures.user({email: 'user@chorus.com'}));
         this.kaggleUser = new chorus.models.KaggleUser({fullName: "Batman"});
         this.workspace = rspecFixtures.workspace();
@@ -22,6 +23,11 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
         it("displays the name of the kaggle recipient", function() {
             expect(this.dialog.$('.kaggle_recipient')).toContainText("Batman");
         });
+
+        it('shows a tooltip with Kaggle tips', function () {
+            this.dialog.$(".more-info").mouseenter();
+            expect(this.qtip.find('div')).toContainText("Call to Action");
+        })
     });
 
     describe("saving", function () {
@@ -58,6 +64,5 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             this.dialog.model.trigger("saved");
             expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
         });
-
     });
 });

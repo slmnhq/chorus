@@ -6,6 +6,26 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         "click button.submit": 'save'
     },
 
+    postRender: function() {
+        this.$(".more-info").qtip({
+            content: "<h1>" + t('kaggle.compose.tooltip.title') + "</h1>\
+                <dl>\
+                    <dt>" + t('kaggle.compose.tooltip.callToAction.title') + "</dt><dd>" + t('kaggle.compose.tooltip.callToAction.description') + "</dd> \
+                    <dt>" + t('kaggle.compose.tooltip.bePositive.title') + "</dt><dd>" + t('kaggle.compose.tooltip.bePositive.description') + "</dd>\
+                    <dt>" + t('kaggle.compose.tooltip.support.title') + "</dt><dd>" + t('kaggle.compose.tooltip.support.description') + "</dd>\
+                    <dt>" + t('kaggle.compose.tooltip.characterCount.title') + "</dt><dd>" + t('kaggle.compose.tooltip.characterCount.description') + "</dd>\
+                 </dl>",
+            style: {
+                classes: "tooltip-tips tooltip-modal",
+                tip: {
+                    def: false,
+                    height: 5,
+                    classes: 'hidden'
+                }
+            }
+        });
+    },
+
     save: function (e) {
         e.preventDefault();
         this.model.save({

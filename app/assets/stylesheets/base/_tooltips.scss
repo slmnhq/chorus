@@ -103,3 +103,36 @@
         cursor: pointer;
     }
 }
+
+.more-info {
+  background-image: url('/images/more-info.png');
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+}
+
+
+.tooltip-tips {
+  @include tooltip(white, #282828, #282828);
+
+  line-height: 14px;
+
+  h1 {
+    font-size: 16px;
+  }
+
+  dt {
+    padding-top: 10px;
+    font-weight: bold;
+  }
+
+  dd {
+    padding-top: 5px;
+    padding-left: 5px;
+  }
+
+  .ui-tooltip-content {
+    font-size: 14px;
+    width: 450px;
+  }
+}
