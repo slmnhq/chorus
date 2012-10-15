@@ -27,7 +27,8 @@ set +e
 unset RAILS_ENV
 
 echo "Running unit tests"
-GPDB_HOST=$GPDB_HOST b/rake spec 2>&1
+mv .rspec-ci .rspec
+GPDB_HOST=$GPDB_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
 RUBY_TESTS_RESULT=$?
 
 echo "Running javascript tests"
