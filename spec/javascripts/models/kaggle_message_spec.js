@@ -1,7 +1,9 @@
 describe("chorus.models.KaggleMessage", function() {
     beforeEach(function () {
+        this.kaggleUser = rspecFixtures.kaggleUserSet().at(0);
+        this.kaggleUser.set({'id': 1});
         this.attrs = {
-            recipient: rspecFixtures.kaggleUserSet().at(0),
+            recipient: this.kaggleUser,
             subject: 'This is a valid subject',
             from: 'user@emc.com',
             message: 'Please analyze my data',
@@ -15,6 +17,13 @@ describe("chorus.models.KaggleMessage", function() {
             expect(this.model.url()).toEqual('/workspaces/100/kaggle/messages');
         })
     });
+
+    describe("params", function() {
+        it("includes the recipient id", function() {
+            this.model.save();
+            expect(this.server.lastCreate().params()["recipient_ids[]"]).toEqual("1");
+        });
+    })
 
     describe("validations", function() {
         it("can be valid", function() {
