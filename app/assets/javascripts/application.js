@@ -64,6 +64,7 @@
 //= require models/activity
 //= require models/note
 //= require models/insight
+//= require models/filter
 //= require_tree ./models
 //= require collections/instance_set
 //= require collections/hdfs_entry_set

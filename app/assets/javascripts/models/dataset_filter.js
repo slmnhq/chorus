@@ -1,21 +1,5 @@
-chorus.models.DatasetFilter = chorus.models.Base.extend({
+chorus.models.DatasetFilter = chorus.models.Filter.extend({
     constructorName: "DatasetFilter",
-
-    setColumn: function(column) {
-        if (!this.get("column") || (this.get("column").cid !== column.cid)) {
-            this.set({column: column});
-            this.unset("comparator");
-            this.unset("input");
-        }
-    },
-
-    setComparator: function(comparator) {
-        this.set({comparator: comparator});
-    },
-
-    setInput: function(inputHash) {
-        this.set({input: inputHash});
-    },
 
     getFilterMap: function() {
         switch (this.has("column") && this.get("column").get("typeCategory")) {
