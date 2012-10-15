@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Insights" do
   let(:user) { users(:owner) }
-  let(:note) { Events::NoteOnGreenplumInstance.first }
+  let(:note) { Events::NoteOnGreenplumInstance.last }
 
   before do
     log_in user

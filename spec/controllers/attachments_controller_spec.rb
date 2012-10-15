@@ -9,7 +9,7 @@ describe AttachmentsController do
   end
 
   context "#create" do
-    let(:event) { Events::NoteOnGreenplumInstance.first }
+    let(:event) { Events::NoteOnGreenplumInstance.last }
 
     context "with a binary file" do
       it "changes the file content" do

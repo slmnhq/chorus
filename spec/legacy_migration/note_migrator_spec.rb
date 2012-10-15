@@ -23,7 +23,7 @@ describe NoteMigrator do
         WHERE entity_type = 'instance'
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnGreenplumInstance.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnGreenplumInstance.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -47,7 +47,7 @@ describe NoteMigrator do
         WHERE entity_type = 'instance'
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnHadoopInstance.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnHadoopInstance.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -69,7 +69,7 @@ describe NoteMigrator do
           AND ec.author_name = eu.user_name
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnHdfsFile.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnHdfsFile.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -90,7 +90,7 @@ describe NoteMigrator do
         WHERE entity_type = 'workspace' and ec.author_name = eu.user_name
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnWorkspace.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnWorkspace.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -110,7 +110,7 @@ describe NoteMigrator do
         WHERE entity_type = 'workfile' and ec.author_name = eu.user_name
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnWorkfile.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnWorkfile.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -130,7 +130,7 @@ describe NoteMigrator do
         WHERE entity_type IN ('databaseObject', 'chorusView') and ec.author_name = eu.user_name AND ec.workspace_id IS NOT NULL
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnWorkspaceDataset.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnWorkspaceDataset.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -151,7 +151,7 @@ describe NoteMigrator do
         WHERE entity_type = 'databaseObject' and ec.author_name = eu.user_name AND ec.workspace_id IS NULL
       ").each do |legacy_comment|
         count += 1
-        note = Events::NoteOnDataset.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::NoteOnDataset.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -169,7 +169,7 @@ describe NoteMigrator do
         FROM edc_comment ec
         WHERE entity_type NOT IN ('comment', 'activitystream')
       ").each do |legacy_comment|
-        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
+        note = Events::Note.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_comment["id"]})
         note.insight.should == (legacy_comment["is_insight"] == "t" ? true : false)
         note.promotion_time.should == legacy_comment["promotion_time"]
         note.promoted_by_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["promotion_actioner"]}).id if legacy_comment["promotion_actioner"]

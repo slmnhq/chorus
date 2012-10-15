@@ -77,7 +77,7 @@ class AttachmentMigrator < AbstractMigrator
 
     def migrate_desktop_attachment_on_notes
       get_file do |note_legacy_id, file_name, file, attachment_legacy_id|
-        event = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => note_legacy_id})
+        event = Events::Note.find_with_destroyed(:last, :conditions => {:legacy_id => note_legacy_id})
         unless event
           next
         end

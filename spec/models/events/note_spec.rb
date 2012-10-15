@@ -233,7 +233,7 @@ describe Events::Note do
 
     describe "#search_body" do
       it "removes tags from the body" do
-        note = Events::Note.first
+        note = Events::Note.last
         note.body = 'this<div>is text</div>'
         note.search_body.should == 'this is text'
       end

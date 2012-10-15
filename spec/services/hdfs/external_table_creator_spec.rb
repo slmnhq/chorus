@@ -49,7 +49,7 @@ describe Hdfs::ExternalTableCreator do
 
       it "creates a WorkspaceAddHdfsAsExtTable event" do
         dataset = Hdfs::ExternalTableCreator.create(workspace, account, parameters, user)
-        Events::WorkspaceAddHdfsAsExtTable.first.tap do |event|
+        Events::WorkspaceAddHdfsAsExtTable.last.tap do |event|
           event.hdfs_file.should == hdfs_file
           event.dataset.should == dataset
           event.workspace.should == workspace

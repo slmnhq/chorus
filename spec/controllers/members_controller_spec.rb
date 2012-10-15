@@ -104,7 +104,7 @@ describe MembersController do
           post :create, parameters
         }.to change(Events::MembersAdded, :count).by(1)
 
-        Events::MembersAdded.limit(1).order('id desc').first.num_added.should == "2"
+        Events::MembersAdded.last.num_added.should == "2"
       end
 
       it "creates a notification for each member of the workspace" do

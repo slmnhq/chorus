@@ -67,7 +67,7 @@ describe GpTableCopier, :database_integration => true do
 
         it "creates a DatasetImportSuccess on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          event = Events::DatasetImportSuccess.first
+          event = Events::DatasetImportSuccess.last
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
@@ -79,14 +79,14 @@ describe GpTableCopier, :database_integration => true do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
           notification = Notification.last
           notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportSuccess.first.id
+          notification.event_id.should == Events::DatasetImportSuccess.last.id
         end
 
         it "creates a DatasetImportFailed on a failed import" do
           expect {
             GpTableCopier.run_import(-1, user.id, attributes)
           }.to raise_exception(ActiveRecord::RecordNotFound)
-          event = Events::DatasetImportFailed.first
+          event = Events::DatasetImportFailed.last
           event.actor.should == user
           event.error_message.should match "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace
@@ -101,12 +101,12 @@ describe GpTableCopier, :database_integration => true do
 
           notification = Notification.last
           notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportFailed.first.id
+          notification.event_id.should == Events::DatasetImportFailed.last.id
         end
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          event = Events::DatasetImportCreated.first
+          event = Events::DatasetImportCreated.last
           event.id = dataset_import_created_event_id
           event.actor.should == user
           event.dataset.name.should == destination_table_name
@@ -119,7 +119,7 @@ describe GpTableCopier, :database_integration => true do
           expect {
             GpTableCopier.run_import(source_dataset.id, user.id, attributes)
           }.to raise_exception(ActiveRecord::RecordNotFound)
-          Events::DatasetImportFailed.first.tap do |event|
+          Events::DatasetImportFailed.last.tap do |event|
             event.actor.should == user
             event.destination_table.should == destination_table_name
             event.workspace.should == workspace
@@ -185,7 +185,7 @@ describe GpTableCopier, :database_integration => true do
 
         it "creates a DatasetImportSuccess on a successful import" do
           GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          event = Events::DatasetImportSuccess.first
+          event = Events::DatasetImportSuccess.last
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
@@ -197,7 +197,7 @@ describe GpTableCopier, :database_integration => true do
           expect {
             GpTableCopier.run_import(-1, user.id, attributes)
           }.to raise_exception(ActiveRecord::RecordNotFound)
-          event = Events::DatasetImportFailed.first
+          event = Events::DatasetImportFailed.last
           event.actor.should == user
           event.error_message.should match "Couldn't find Dataset with id=-1"
           event.workspace.should == workspace

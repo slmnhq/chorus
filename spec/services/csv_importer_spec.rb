@@ -19,7 +19,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { account.owner }
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
-    let(:file_import_created_event) { Events::FileImportCreated.first }
+    let(:file_import_created_event) { Events::FileImportCreated.last }
 
     def fetch_from_gpdb(sql)
       schema.with_gpdb_connection(account) do |connection|
@@ -249,7 +249,7 @@ describe CsvImporter, :database_integration => true do
     let(:user) { csv_file.user }
     let(:dataset) { datasets(:table) }
     let(:instance_account) { csv_file.workspace.sandbox.gpdb_instance.account_for_user!(csv_file.user) }
-    let(:file_import_created_event) { Events::FileImportCreated.first }
+    let(:file_import_created_event) { Events::FileImportCreated.last }
 
     describe "destination_dataset" do
       before do
@@ -270,7 +270,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "makes a IMPORT_SUCCESS event" do
-        event = Events::FileImportSuccess.first
+        event = Events::FileImportSuccess.last
         event.actor.should == user
         event.dataset.should == dataset
         event.workspace.should == csv_file.workspace
@@ -293,7 +293,7 @@ describe CsvImporter, :database_integration => true do
       it "generates notification to import actor" do
         notification = Notification.last
         notification.recipient_id.should == user.id
-        notification.event_id.should == Events::FileImportSuccess.first.id
+        notification.event_id.should == Events::FileImportSuccess.last.id
       end
     end
 
@@ -306,7 +306,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "makes a IMPORT_FAILED event" do
-        event = Events::FileImportFailed.first
+        event = Events::FileImportFailed.last
         event.actor.should == user
         event.destination_table.should == dataset.name
         event.workspace.should == csv_file.workspace
@@ -322,7 +322,7 @@ describe CsvImporter, :database_integration => true do
       it "generates notification to import actor" do
         notification = Notification.last
         notification.recipient_id.should == user.id
-        notification.event_id.should == Events::FileImportFailed.first.id
+        notification.event_id.should == Events::FileImportFailed.last.id
       end
     end
   end

@@ -60,7 +60,7 @@ describe WorkfileVersionsController do
 
     it "creates the activity stream for upgrade" do
       post :create, params.merge(:commit_message => 'A new version -1')
-      event = Events::WorkfileUpgradedVersion.by(user).first
+      event = Events::WorkfileUpgradedVersion.by(user).last
       event.workfile.should == workfile
       event.workspace.to_param.should == workfile.workspace.id.to_s
       event.additional_data["version_num"].should == "2"

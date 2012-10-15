@@ -43,7 +43,7 @@ describe ChorusViewsController, :database_integration => true do
       it "creates an event" do
         post :create, options
 
-        the_event = Events::Base.first
+        the_event = Events::Base.last
         the_event.action.should == "ChorusViewCreated"
         the_event.source_object.id.should == dataset.id
         the_event.source_object.should be_a(Dataset)
@@ -84,7 +84,7 @@ describe ChorusViewsController, :database_integration => true do
       it "creates an event" do
         post :create, options
 
-        the_event = Events::Base.first
+        the_event = Events::Base.last
         the_event.action.should == "ChorusViewCreated"
         the_event.source_object.id.should == workfile.id
         the_event.source_object.should be_a(Workfile)
@@ -141,7 +141,7 @@ describe ChorusViewsController, :database_integration => true do
     it "creates an event" do
       put :update, options
 
-      the_event = Events::Base.first
+      the_event = Events::Base.last
       the_event.action.should == "ChorusViewChanged"
       the_event.dataset.should == chorus_view
       the_event.actor.should == user

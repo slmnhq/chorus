@@ -101,7 +101,7 @@ describe Gppipe, :database_integration => true do
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           Gppipe.run_import(source_dataset.id, user.id, options)
-          event = Events::DatasetImportCreated.first
+          event = Events::DatasetImportCreated.last
           event.id = options[:dataset_import_created_event_id]
           event.actor.should == user
           event.dataset.name.should == destination_table_name

@@ -14,7 +14,7 @@ resource "Activities" do
   end
 
   get "/activities/:id" do
-    let(:id) { Events::UserAdded.first.id }
+    let(:id) { Events::UserAdded.last.id }
 
     parameter :id, "Id of the activity/event"
     required_parameters :id

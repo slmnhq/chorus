@@ -23,7 +23,7 @@ describe CommentMigrator do
         count += 1
         comment = Comment.find_with_destroyed(:first, :conditions => { :legacy_id => legacy_comment["id"]} )
         comment.text.should == legacy_comment["body"]
-        comment.event_id.should == Events::Base.find_with_destroyed(:first, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_comment" }).id
+        comment.event_id.should == Events::Base.find_with_destroyed(:last, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_comment" }).id
         comment.author_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["author_name"]}).id
         comment.created_at.should == legacy_comment["created_stamp"]
         comment.updated_at.should == legacy_comment["last_updated_stamp"]
@@ -44,7 +44,7 @@ describe CommentMigrator do
         count += 1
         comment = Comment.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
         comment.text.should == legacy_comment["body"]
-        comment.event_id.should == Events::Base.find_with_destroyed(:first, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_activity_stream" }).id
+        comment.event_id.should == Events::Base.find_with_destroyed(:last, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_activity_stream" }).id
         comment.author_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["author_name"]}).id
         comment.created_at.should == legacy_comment["created_stamp"]
         comment.updated_at.should == legacy_comment["last_updated_stamp"]

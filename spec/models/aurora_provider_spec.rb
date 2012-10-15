@@ -92,7 +92,7 @@ describe AuroraProvider do
 
       it "generates a ProvisioningSuccess event" do
         AuroraProvider.provide!(gpdb_instance.id, attributes)
-        event = Events::ProvisioningSuccess.find_by_actor_id(gpdb_instance.owner)
+        event = Events::ProvisioningSuccess.where(:actor_id => gpdb_instance.owner.id).last
         event.greenplum_instance.should == gpdb_instance
       end
 

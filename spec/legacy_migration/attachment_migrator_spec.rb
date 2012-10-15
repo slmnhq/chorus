@@ -21,7 +21,7 @@ describe AttachmentMigrator do
             ON eca.comment_id = ec.id AND eca.entity_type = 'workfile'
       ").each do |legacy_attachment|
         count += 1
-        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
+        note = Events::Note.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
         workfile = Workfile.find_by_legacy_id(legacy_attachment["entity_id"])
         note.workfiles.should include(workfile)
       end
@@ -39,7 +39,7 @@ describe AttachmentMigrator do
             ON eca.comment_id = ec.id AND eca.entity_type = 'databaseObject'
       ").each do |legacy_attachment|
         count += 1
-        note = Events::Note.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
+        note = Events::Note.find_with_destroyed(:last, :conditions => {:legacy_id => legacy_attachment["comment_id"]})
         dataset = Dataset.find_by_legacy_id((legacy_attachment["dataset_id"]))
         note.datasets.should include(dataset)
       end
