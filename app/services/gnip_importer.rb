@@ -1,0 +1,3 @@
+class GnipImporter < CsvImporter
+
+end

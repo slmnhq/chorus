@@ -34,7 +34,7 @@ FactoryGirl.define do
 
   factory :gnip_instance do
     sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    sequence(:stream_url) { |n| "stream_url#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.gnip.com" }
+    sequence(:stream_url) { |n| "https://historical.gnip.com/stream_url#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     password "secret"
     owner
