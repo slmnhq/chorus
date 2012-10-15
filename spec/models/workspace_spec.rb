@@ -251,22 +251,46 @@ describe Workspace do
   end
 
   describe "#destroy" do
-    let(:workspace) { workspaces(:public_with_no_collaborators) }
-
-    before do
-      workspace.destroy
-    end
+    let(:workspace) { workspaces(:public) }
 
     it "should not delete the database entry" do
-      Workspace.find_with_destroyed(workspace.id).should_not be_nil
+      workspace.destroy
+      workspace.reload.should_not be_nil
     end
 
     it "should update the deleted_at field" do
-      Workspace.find_with_destroyed(workspace.id).deleted_at.should_not be_nil
+      workspace.destroy
+      workspace.reload.deleted_at.should_not be_nil
     end
 
     it "should be hidden from subsequent #find calls" do
+      workspace.destroy
       Workspace.find_by_id(workspace.id).should be_nil
+    end
+
+    it "does not reindex the workspace for each member" do
+      any_instance_of(Workspace) do |instance|
+        mock(instance).solr_reindex.with_any_args.times(0)
+      end
+      workspace.destroy
+    end
+  end
+
+  describe "#solr_reindex" do
+    let(:workspace) { workspaces(:public) }
+
+    it "reindexes itself" do
+      stub(Sunspot).index.with_any_args
+      mock(Sunspot).index(workspace)
+      workspace.solr_reindex
+    end
+
+    it "reindexes the workfiles" do
+      stub(Sunspot).index.with_any_args
+      workspace.workfiles.each do |workfile|
+        mock(Sunspot).index(workfile)
+      end
+      workspace.solr_reindex
     end
   end
 

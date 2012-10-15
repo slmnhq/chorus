@@ -8,9 +8,6 @@ class Membership < ActiveRecord::Base
   after_destroy :index_workspace
 
   def index_workspace
-    workspace.solr_index
-    (workspace.workfiles(:reload => true)).each do |workfile|
-      workfile.solr_index
-    end
+    workspace.solr_reindex
   end
 end

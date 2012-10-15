@@ -45,6 +45,11 @@ class Workspace < ActiveRecord::Base
     string :security_type_name
   end
 
+  def solr_reindex
+    solr_index
+    workfiles(:reload => true).each(&:solr_index)
+  end
+
   has_shared_search_fields [
     { :type => :integer, :name => :member_ids, :options => { :multiple => true } },
     { :type => :boolean, :name => :public },

@@ -10,6 +10,7 @@ module SoftDelete
       self.deleted_at = Time.now.utc
       save
     end
+    self
   end
 
   def deleted?

@@ -7,46 +7,22 @@ describe Membership do
   end
 
   describe "solr reindexing" do
-    let(:workfile) {workfiles(:public)}
-    let(:workspace) {workfile.workspace}
-    let(:user) {workspace.owner}
+    let(:workspace) {workspaces(:public_with_no_collaborators)}
+    let(:user) { FactoryGirl.create :user }
 
     it "reindexes the workspace after create" do
-      mock(workspace).solr_index
+      mock(workspace).solr_reindex
       workspace.members << user
-      end
-
-    it "reindexes the workfiles after create" do
-      called = false
-      any_instance_of(Workspace) do |workspace|
-        stub(workspace).solr_index { called = true }
-      end
-      workspace.members << user
-      called.should be_true
     end
 
     it "reindexes the workspace after destroy" do
       workspace.members << user
-
-      called = false
-      any_instance_of(Workspace) do |workspace|
-        stub(workspace).solr_index {called = true}
+      any_instance_of(Workspace) do |instance|
+        stub(instance).solr_reindex { raise "reindex" }
       end
-
-      workspace.memberships.last.destroy
-      called.should be_true
-    end
-
-    it "reindexes the workfiles after destroy" do
-      workspace.members << user
-
-      called = false
-      any_instance_of(Workfile) do |workfile|
-        stub(workfile).solr_index {called = true}
-      end
-
-      workspace.memberships.last.destroy
-      called.should be_true
+      expect {
+        workspace.memberships.last.destroy
+      }.to raise_error("reindex")
     end
   end
 end
