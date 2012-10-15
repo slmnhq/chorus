@@ -12,6 +12,13 @@ class CsvFile < ActiveRecord::Base
   validates :contents, :attachment_presence => true
   validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes, :message => :file_size_exceeded
 
+  validates :column_names, :presence => true
+  validates :types, :presence => true
+  validates :delimiter, :presence => true
+  validates :to_table, :presence => true
+  validates :user, :presence => true
+  validates :workspace, :presence => true
+
   def self.delete_old_files!
     age_limit = Chorus::Application.config.chorus['delete_unimported_csv_files_after_hours']
     return unless age_limit

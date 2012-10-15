@@ -1,6 +1,28 @@
 require 'spec_helper'
 
 describe CsvFile do
+  describe "validations" do
+    let(:default_params) { {
+        :contents => StringIO.new('a,b,c'),
+        :column_names => ['a', 'b', 'c'],
+        :types => ['a', 'b', 'c'],
+        :delimiter => '"',
+        :to_table => "new_table",
+        :file_contains_header => false,
+        :new_table => false,
+        :truncate => false,
+        :user => users(:owner),
+        :workspace => workspaces(:public)
+    }}
+
+    it { should validate_presence_of(:column_names) }
+    it { should validate_presence_of(:types) }
+    it { should validate_presence_of(:delimiter) }
+    it { should validate_presence_of(:to_table) }
+    it { should validate_presence_of(:user) }
+    it { should validate_presence_of(:workspace) }
+  end
+
   describe "delete old files" do
     let(:csv_file) { CsvFile.first }
     let(:hour_limit) { 1 }
