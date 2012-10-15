@@ -26,6 +26,12 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         });
     },
 
+    setup: function(options) {
+        this.recipients = options.recipients;
+        this.workspace = options.workspace
+        this._super('setup', arguments);
+    },
+
     save: function (e) {
         e.preventDefault();
         this.model.save({
@@ -39,16 +45,24 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     additionalContext: function () {
         return {
             fromEmail: chorus.session.user().get('email'),
-            recipientName: this.model.get('recipient').get('fullName')
+            recipientName: this.combineNames(this.model.get("recipients").models)
         };
     },
 
     makeModel: function (options) {
         this.model = new chorus.models.KaggleMessage({
-            recipient: options.recipient,
+            recipients: options.recipients,
             workspace: options.workspace
         });
         this.bindings.add(this.model, "saved", this.saved);
+    },
+
+    combineNames: function(recipients){
+       var recipientNames = _.reduce(recipients, function(result, recipient) {
+           return (result + recipient.get("fullName") + ", ");
+       }, "");
+       return recipientNames.substring(0, recipientNames.length - 2);
+
     },
 
     saved: function () {

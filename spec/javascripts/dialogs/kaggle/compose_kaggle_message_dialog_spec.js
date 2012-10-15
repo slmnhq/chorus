@@ -5,7 +5,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
         this.kaggleUser = new chorus.models.KaggleUser({fullName: "Batman"});
         this.workspace = rspecFixtures.workspace();
         this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-            recipient: this.kaggleUser,
+            recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),
             workspace: this.workspace
         });
         this.dialog.render();
@@ -22,6 +22,24 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
         it("displays the name of the kaggle recipient", function() {
             expect(this.dialog.$('.kaggle_recipient')).toContainText("Batman");
+        });
+
+        context("when more than one recipient", function() {
+            beforeEach(function() {
+                this.kaggleUsers = new chorus.collections.KaggleUserSet
+                (  [new chorus.models.KaggleUser({fullName: "Batman"}),
+                   new chorus.models.KaggleUser({fullName: "Catwoman"})]
+                );
+                this.dialog = new chorus.dialogs.ComposeKaggleMessage({
+                    recipients: this.kaggleUsers,
+                    workspace: this.workspace
+                });
+                this.dialog.render();
+            });
+
+            it("displays the name of the kaggle recipient", function() {
+                expect(this.dialog.$('.kaggle_recipient')).toContainText("Batman, Catwoman");
+            });
         });
 
         it('shows a tooltip with Kaggle tips', function () {

@@ -23,6 +23,7 @@ describe Kaggle::UsersController do
     it "shows attributes for the users" do
       get :index
       user = decoded_response.first
+      user.should have_key('id')
       user.should have_key('username')
       user.should have_key('location')
       user.should have_key('rank')

@@ -1,5 +1,6 @@
 [
     {
+        "Id": 1,
         "Username": "CatWoman",
         "KaggleRank": 1,
         "KagglePoints": 100,
@@ -25,6 +26,7 @@
         ]
     },
     {
+        "Id": 2,
         "Username": "Batman",
         "KaggleRank": 2,
         "KagglePoints": 100,
