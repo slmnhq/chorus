@@ -20,7 +20,7 @@ class GnipImporter < CsvImporter
       GnipImporter.import_file(csv_file, event)
     end
   rescue Exception => e
-    GnipImporter.create_failure_event(e.message, event)
+    GnipImporter.create_failure_event(e.message, event, table_name)
   end
 
   def create_success_event
@@ -39,13 +39,13 @@ class GnipImporter < CsvImporter
 
   def create_failure_event(error_message)
     gnip_event = Events::GnipStreamImportCreated.find(import_created_event_id)
-    GnipImporter.create_failure_event(error_message, gnip_event)
+    GnipImporter.create_failure_event(error_message, gnip_event, csv_file.to_table)
   end
 
-  def self.create_failure_event(error_message, gnip_event)
+  def self.create_failure_event(error_message, gnip_event, table_name)
     event = Events::GnipStreamImportFailed.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
-        :destination_table => csv_file.to_table,
+        :destination_table => table_name,
         :gnip_instance => gnip_event.gnip_instance,
         :error_message => error_message
     )
