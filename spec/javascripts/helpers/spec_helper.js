@@ -152,7 +152,8 @@
                 },
 
                 toContainText: function(text) {
-                    var actualText = _.isString(this.actual) ? this.actual : this.actual.text()
+                    var actualText = _.isString(this.actual) ? this.actual : this.actual.text();
+                    actualText = actualText.replace(/\s+/g, " ");
                     this.message = function() {
                         return [
                             'Expected "' + actualText + '" to contain "' + text + '"',

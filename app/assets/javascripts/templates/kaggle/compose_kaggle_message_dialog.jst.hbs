@@ -1,7 +1,14 @@
 <form>
     <div class="inline-field">
         <label>{{t "kaggle.compose.to"}}</label>
-        <span class="kaggle_recipient">{{recipientName}}</span>
+        <span class="kaggle_recipient full hidden">{{recipientNames.full}}
+            <a class='showLess' href='#'>{{t "kaggle.users.less"}}</a>
+        </span>
+        <span class="kaggle_recipient short">{{recipientNames.short}}
+        {{#if hasMoreRecipients}}
+            <a class='showMore' href='#'>{{t "kaggle.users.more" count=recipientNames.moreCount}}</a>
+        {{/if}}
+        </span>
     </div>
 
     <div class="inline-field">

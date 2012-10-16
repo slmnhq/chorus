@@ -3,7 +3,9 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     templateName: "kaggle/compose_kaggle_message_dialog",
     title: t("kaggle.compose.title"),
     events: {
-        "click button.submit": 'save'
+        "click button.submit": 'save',
+        "click .showMore": 'showMore',
+        "click .showLess": 'showLess'
     },
 
     postRender: function() {
@@ -28,7 +30,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
 
     setup: function(options) {
         this.recipients = options.recipients;
-        this.workspace = options.workspace
+        this.workspace = options.workspace;
+        this.maxRecipientCharacters = options.maxRecipientCharacters || 70;
         this._super('setup', arguments);
     },
 
@@ -43,9 +46,11 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function () {
+        var combinedNames = this.combineNames(this.model.get("recipients").models);
         return {
             fromEmail: chorus.session.user().get('email'),
-            recipientName: this.combineNames(this.model.get("recipients").models)
+            recipientNames: combinedNames,
+            hasMoreRecipients: (combinedNames.full.length != combinedNames.short.length)
         };
     },
 
@@ -58,15 +63,38 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     },
 
     combineNames: function(recipients){
+       var maxChars = this.maxRecipientCharacters;
+       var short = "";
+       var moreCount = 0;
        var recipientNames = _.reduce(recipients, function(result, recipient) {
-           return (result + recipient.get("fullName") + ", ");
+           var fullNamesList = result + recipient.get("fullName") + ", ";
+           if(fullNamesList.length <= maxChars + 2) {
+               short = fullNamesList
+           }
+           else {
+               moreCount += 1;
+           }
+           return fullNamesList;
        }, "");
-       return recipientNames.substring(0, recipientNames.length - 2);
-
+       return ( { short: short.substring(0, short.length - 2),
+           full: recipientNames.substring(0, recipientNames.length - 2),
+           moreCount: moreCount } );
     },
 
     saved: function () {
         this.closeModal();
         chorus.toast('kaggle.compose.success');
+    },
+
+    showMore: function(e) {
+        this.$('.kaggle_recipient.full').removeClass("hidden");
+        this.$('.kaggle_recipient.short').addClass("hidden");
+        return false;
+    },
+
+    showLess: function(e) {
+        this.$('.kaggle_recipient.short').removeClass("hidden");
+        this.$('.kaggle_recipient.full').addClass("hidden");
+        return false;
     }
 });
