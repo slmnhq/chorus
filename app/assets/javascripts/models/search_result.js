@@ -148,7 +148,7 @@
                 case "dataset":
                     return this.datasets();
                     break;
-                case "gpdb_instance":
+                case "instance":
                     return this.instances();
                     break;
                 case "hdfs":

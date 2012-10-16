@@ -44,7 +44,7 @@ class Search
         facet :type_name
       end
 
-      with :type_name, models_to_search.collect(&:type_name)
+      with :type_name, type_names_to_search
     end
     models_to_search.each do |model_to_search|
       model_to_search.add_search_permissions(current_user, @search) if model_to_search.respond_to? :add_search_permissions
@@ -105,7 +105,7 @@ class Search
     return @num_found if @num_found
 
     @num_found = Hash.new(0)
-    if models_to_search.length > 1
+    if count_using_facets?
       search.facet(:type_name).rows.each do |facet|
         @num_found[class_name_to_key(facet.value)] = facet.count
       end
