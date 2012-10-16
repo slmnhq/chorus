@@ -15,24 +15,16 @@ class GnipInstanceImportsController < ApplicationController
     end
 
     gnip_instance = GnipInstance.find(params['imports']['gnip_instance_id'])
-    c = ChorusGnip.from_stream(gnip_instance.stream_url, gnip_instance.username, gnip_instance.password)
-    result = c.to_result
+    event = create_import_event(temp_csv_file, gnip_instance)
 
-    csv_file = workspace.csv_files.new(
-      :contents => StringIO.new(result.contents),
-      :column_names => result.column_names,
-      :types => result.types,
-      :delimiter => ',',
-      :to_table => table_name,
-      :new_table => true
-    )
-    csv_file.user = current_user
+    QC.enqueue("GnipImporter.import_to_table",
+               table_name,
+               gnip_instance.id,
+               workspace.id,
+               current_user.id,
+               event.id)
 
-    if csv_file.save
-      event = create_import_event(csv_file, gnip_instance)
-      GnipImporter.import_file(csv_file, event)
-      render :json => [], :status => :ok
-    end
+    render :json => [], :status => :ok
   end
 
   private

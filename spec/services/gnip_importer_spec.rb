@@ -59,4 +59,59 @@ describe GnipImporter do
     end
   end
 
+  describe "#import_to_table" do
+    let(:user) { users(:owner) }
+    let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
+    let(:gnip_instance) { gnip_instances(:default) }
+    let(:workspace) { workspaces(:public) }
+
+    context "ChorusGnip imports successfully" do
+      before do
+        mock(ChorusGnip).from_stream(gnip_instance.stream_url,
+                                     gnip_instance.username,
+                                     gnip_instance.password) do |c|
+          o = Object.new
+          stub(o).to_result { gnip_csv_result_mock }
+        end
+
+        mock(GnipImporter).import_file(anything, gnip_import_created_event)
+      end
+
+      it "creates a csv file and passes it to import_file" do
+        expect {
+          GnipImporter.import_to_table('foobar', gnip_instance.id,
+                                       workspace.id, user.id, gnip_import_created_event.id)
+        }.to change(CsvFile, :count).by(1)
+
+        file = CsvFile.last
+        file.contents.should_not be_nil
+        file.column_names.should == gnip_csv_result_mock.column_names
+        file.types.should == ['text', 'text']
+        file.delimiter.should == ","
+        file.to_table.should == 'foobar'
+        file.new_table.should == true
+        file.user.should == user
+        file.workspace.should == workspace
+      end
+    end
+
+    context "ChorusGnip or something else raises an exception" do
+      before do
+        mock(ChorusGnip).from_stream(gnip_instance.stream_url,
+                                     gnip_instance.username,
+                                     gnip_instance.password) do |c|
+          raise Exception, "mock exception from test"
+        end
+
+        dont_allow(GnipImporter).import_file
+      end
+
+      it "creates a csv file and passes it to import_file" do
+        expect do
+          GnipImporter.import_to_table('foobar', gnip_instance.id,
+                                       workspace.id, user.id, gnip_import_created_event.id)
+        end.to change(Events::GnipStreamImportFailed, :count).by(1)
+      end
+    end
+  end
 end
