@@ -289,9 +289,9 @@ describe "Backup and Restore" do
       end
 
       backup_filename = Dir.glob(backup_path.join "*.tar").first
-      FileUtils.cp backup_filename, "/tmp"
 
       deleted_user = User.first.delete
+      all_models_before_restore = all_models
 
       with_rails_root @restore_path do
         BackupRestore.restore backup_filename
@@ -303,6 +303,15 @@ describe "Backup and Restore" do
       restored_entries.should == original_entries
 
       User.find_by_id(deleted_user.id).should == deleted_user
+
+      all_models.should == all_models_before_restore
+    end
+  end
+
+  def all_models
+    ActiveRecord::Base.subclasses.map(&:unscoped).map(&:all).flatten.map(&:reload).group_by(&:class).inject({}) do |hash, (key, value)|
+      hash[key] = value.map(&:attributes)
+      hash
     end
   end
 
