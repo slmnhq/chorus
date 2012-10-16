@@ -18,6 +18,7 @@ class CsvImporter
   end
 
   def import
+    raise Exception, "CSV file cannot be imported" unless csv_file.ready_to_import?
     schema.with_gpdb_connection(account) do |connection|
       begin
         it_exists = check_if_table_exists(csv_file.to_table, csv_file)

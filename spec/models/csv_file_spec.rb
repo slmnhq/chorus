@@ -15,29 +15,30 @@ describe CsvFile do
         :workspace => workspaces(:public)
     }}
 
-    it { should validate_presence_of(:column_names) }
-    it { should validate_presence_of(:types) }
-    it { should validate_presence_of(:to_table) }
-    it { should validate_presence_of(:user) }
-    it { should validate_presence_of(:workspace) }
+    it "is not ready to import if it is missing a column" do
+      [:column_names, :types, :delimiter, :file_contains_header, :to_table].each do |param|
+        c = CsvFile.new(default_params.reject{ |k,v| k == param }, :without_protection => true)
+        c.ready_to_import?.should be_false
+      end
+    end
 
     it "is valid when tab is the delimiter" do
-      c = CsvFile.new(default_params.merge(:delimiter => "\t"))
-      c.valid?
-      c.errors_on(:delimiter).should be_empty
+      c = CsvFile.new(default_params.merge(:delimiter => "\t"), :without_protection => true)
+      c.ready_to_import?.should be_true
     end
 
     it "requires a non-nil delimiter" do
-      c = CsvFile.new(default_params.merge(:delimiter => nil))
-      c.should_not be_valid
-      c.should have_at_least(1).errors_on(:delimiter)
+      c = CsvFile.new(default_params.merge(:delimiter => nil), :without_protection => true)
+      c.ready_to_import?.should be_false
     end
 
     it "requires a non-empty delimiter" do
-      c = CsvFile.new(default_params.merge(:delimiter => ''))
-      c.should_not be_valid
-      c.should have_at_least(1).errors_on(:delimiter)
+      c = CsvFile.new(default_params.merge(:delimiter => ''), :without_protection => true)
+      c.ready_to_import?.should be_false
     end
+
+    it { should validate_presence_of(:user) }
+    it { should validate_presence_of(:workspace) }
   end
 
   describe "delete old files" do

@@ -18,11 +18,7 @@ describe WorkspaceCsvController do
       {
           :workspace_id => workspace.to_param,
           :contents => file,
-          :truncate => truncate,
-          :to_table => 'some_new_table',
-          :column_names => ['id', 'body'],
-          :types => ['text', 'text'],
-          :delimiter => ','
+          :truncate => truncate
       }
     end
 

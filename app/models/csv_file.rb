@@ -12,10 +12,6 @@ class CsvFile < ActiveRecord::Base
   validates :contents, :attachment_presence => true
   validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes, :message => :file_size_exceeded
 
-  validates :column_names, :presence => true
-  validates :types, :presence => true
-  validates :delimiter, :exclusion => {:in => ['', nil]}
-  validates :to_table, :presence => true
   validates :user, :presence => true
   validates :workspace, :presence => true
 
@@ -29,6 +25,11 @@ class CsvFile < ActiveRecord::Base
     schema = workspace.sandbox
     account = schema.gpdb_instance.account_for_user!(user)
     check_table(table_name, account, schema)
+  end
+
+  def ready_to_import?
+    to_table.present? && column_names.present? && types.present? && file_contains_header != nil &&
+    delimiter != nil && delimiter.length > 0 && valid?
   end
 
   private
