@@ -19,6 +19,16 @@
     .content_details {
         height: auto;
         padding: 0;
+
+      .count {
+        margin-left: 10px;
+        display: inline-block;
+      }
+
+      .search_kaggle_user {
+        float: right;
+        margin-right: 10px;
+      }
     }
 
     .name {

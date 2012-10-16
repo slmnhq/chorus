@@ -13,7 +13,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         it("has a sidebar with the workspace", function() {
             expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
             expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
-        })
+        });
     });
 
     context("while the workspace is loading", function() {
@@ -53,6 +53,11 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         beforeEach(function() {
             this.page.render();
             this.server.completeFetchFor(this.kaggleUsers);
+        });
+
+        it("sets up the content details", function () {
+            expect(this.page.mainContent.contentDetails).toBeA(chorus.views.KaggleUserListContentDetails);
+            expect(this.page.mainContent.contentDetails.collection).toBeA(chorus.collections.KaggleUserSet);
         });
 
         it("creates a KaggleUserList view", function() {

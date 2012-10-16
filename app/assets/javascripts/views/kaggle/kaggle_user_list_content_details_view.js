@@ -7,6 +7,11 @@ chorus.views.KaggleUserListContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
+        this._super("setup", arguments)
         this.filterWizardView = new chorus.views.KaggleFilterWizard();
+    },
+
+    postRender: function() {
+        this.$(".count").text(t("entity.name.User", {count: this.collection.count()}));
     }
 });
