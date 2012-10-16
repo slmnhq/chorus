@@ -13,8 +13,8 @@ module BackupRestore
     Backup.new(backup_dir, rolling_days).backup
   end
 
-  def self.restore(backup_filename)
-    Restore.new(backup_filename).restore
+  def self.restore(backup_filename, do_not_warn=false)
+    Restore.new(backup_filename, do_not_warn).restore
   end
 
   module SharedMethods
@@ -130,22 +130,25 @@ module BackupRestore
       end
 
       timestamp = Time.current.strftime '%Y%m%d_%H%M%S'
-      backup_filename = backup_dir + "/#{BACKUP_FILE_PREFIX}#{timestamp}.tar"
+      backup_filename = File.join(backup_dir, "#{BACKUP_FILE_PREFIX}#{timestamp}.tar")
 
       capture_output "tar cf #{backup_filename} *", :error => "Packaging failed."
-      log "Wrote file #{backup_filename}."
+      log "Created backup archive file: #{backup_filename}"
     end
   end
 
   class Restore
     include BackupRestore::SharedMethods
-    attr_accessor :backup_filename, :temp_dir
+    attr_accessor :backup_filename, :temp_dir, :do_not_warn_before_restore
 
-    def initialize(backup_filename)
+    def initialize(backup_filename, do_not_warn)
       self.backup_filename = backup_filename
+      self.do_not_warn_before_restore = do_not_warn
     end
 
     def restore
+      prompt_user
+
       without_connection do
         full_backup_filename = File.expand_path(backup_filename)
         SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
@@ -160,12 +163,40 @@ module BackupRestore
 
             FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
             self.chorus_config = ChorusConfig.new
+
             restore_assets
             restore_database
           end
         end
         true
       end
+    end
+
+    PROMPT = <<PROMPT
+Continuing will overwrite existing assets and data. It is strongly advised that
+you have a recent backup available before performing a restore.
+
+Are you sure you want to continue? (Y/N):
+PROMPT
+
+    def prompt_user
+      unless do_not_warn_before_restore
+
+        loop do
+          print PROMPT
+          input = get_input
+          print "#{input}\n"
+
+          input.downcase!
+
+          break if 'y' == input
+          exit if 'n' == input
+        end
+      end
+    end
+
+    def get_input
+      STDIN.getc
     end
 
     def restore_assets

@@ -171,18 +171,18 @@ describe 'BackupRestore' do
       end
 
       xit "restores the backed-up data" do
-        BackupRestore.restore backup_tar
+        BackupRestore.restore backup_tar, true
       end
 
       xit "works with relative paths" do
-        BackupRestore.restore "../backup/backup.tar"
+        BackupRestore.restore "../backup/backup.tar", true
       end
 
       context "when the backup file does not exist" do
         it "raises an exception" do
           capture(:stderr) do
             expect {
-              BackupRestore.restore "missing_backup.tar"
+              BackupRestore.restore "missing_backup.tar", true
             }.to raise_error "Could not unpack backup file 'missing_backup.tar'"
           end.should include "Could not unpack backup file 'missing_backup.tar'"
         end
@@ -213,7 +213,7 @@ describe 'BackupRestore' do
 
         xit "raises an exception" do
           expect {
-            BackupRestore.restore backup_tar
+            BackupRestore.restore backup_tar, true
           }.to raise_error(/differs from installed chorus version/)
         end
       end
@@ -282,7 +282,7 @@ describe "Backup and Restore" do
     end
   end
 
-  xit "backs up and restores the data" do
+  it "backs up and restores the data" do
     make_tmp_path("rspec_backup_restore_backup") do |backup_path|
       with_rails_root @original_path do
         BackupRestore.backup backup_path
@@ -294,7 +294,7 @@ describe "Backup and Restore" do
       all_models_before_restore = all_models
 
       with_rails_root @restore_path do
-        BackupRestore.restore backup_filename
+        BackupRestore.restore backup_filename, true
       end
 
       original_entries = get_filesystem_entries_at_path @original_path
