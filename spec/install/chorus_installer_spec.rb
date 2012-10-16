@@ -209,7 +209,7 @@ describe ChorusInstaller do
         end
 
         it "returns the RedHat 5.5 build" do
-          installer.get_postgres_build.should == 'postgres-redhat5.5-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.1.tar.gz'
         end
       end
 
@@ -220,7 +220,7 @@ describe ChorusInstaller do
         end
 
         it "returns the RedHat 6.2 build" do
-          installer.get_postgres_build.should == 'postgres-redhat6.2-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-redhat6.2-9.2.1.tar.gz'
         end
       end
 
@@ -235,7 +235,7 @@ describe ChorusInstaller do
         end
 
         it "returns the suse11 build" do
-          installer.get_postgres_build.should == 'postgres-suse11-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-suse11-9.2.1.tar.gz'
         end
       end
     end
@@ -246,7 +246,7 @@ describe ChorusInstaller do
       end
 
       it "should return the OSX build" do
-        installer.get_postgres_build.should == 'postgres-osx-9.1.4.tar.gz'
+        installer.get_postgres_build.should == 'postgres-osx-9.2.1.tar.gz'
       end
     end
 
@@ -281,7 +281,7 @@ describe ChorusInstaller do
         let(:result) { "1" }
 
         it "returns the RedHat 5.5 build" do
-          installer.get_postgres_build.should == 'postgres-redhat5.5-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.1.tar.gz'
         end
       end
 
@@ -289,7 +289,7 @@ describe ChorusInstaller do
         let(:result) { "2" }
 
         it "returns the RedHat 6.2 build" do
-          installer.get_postgres_build.should == 'postgres-redhat6.2-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-redhat6.2-9.2.1.tar.gz'
         end
       end
 
@@ -297,7 +297,7 @@ describe ChorusInstaller do
         let(:result) { "3" }
 
         it "returns the Suse 11 build" do
-          installer.get_postgres_build.should == 'postgres-suse11-9.1.4.tar.gz'
+          installer.get_postgres_build.should == 'postgres-suse11-9.2.1.tar.gz'
         end
       end
 

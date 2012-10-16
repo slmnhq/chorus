@@ -124,13 +124,13 @@ class ChorusInstaller
 
     case input
       when 1
-        "postgres-redhat5.5-9.1.4.tar.gz"
+        "postgres-redhat5.5-9.2.1.tar.gz"
       when 2
-        "postgres-redhat6.2-9.1.4.tar.gz"
+        "postgres-redhat6.2-9.2.1.tar.gz"
       when 3
-        "postgres-suse11-9.1.4.tar.gz"
+        "postgres-suse11-9.2.1.tar.gz"
       when 5
-        "postgres-osx-9.1.4.tar.gz"
+        "postgres-osx-9.2.1.tar.gz"
       else
         raise InstallerErrors::InstallAborted, "Version not supported."
     end
