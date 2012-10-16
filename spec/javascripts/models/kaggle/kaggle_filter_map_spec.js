@@ -5,8 +5,10 @@ describe("chorus.models.KaggleFilterMaps", function() {
         })
 
         it("should return the correct comparator symbols", function() {
-            expect(this.kaggleFilterMap.comparators["greater"]).toBe(">");
-            expect(this.kaggleFilterMap.comparators["less"]).toBe("<");
+            expect(this.kaggleFilterMap.comparators["greater"].usesInput).toBeTruthy();
+            expect(this.kaggleFilterMap.comparators["less"].usesInput).toBeTruthy();
+            expect(this.kaggleFilterMap.comparators["less"].condition).toBe("<");
+            expect(this.kaggleFilterMap.comparators["greater"].condition).toBe(">");
         });
 
         it("marks whole numbers as valid", function() {
@@ -47,8 +49,9 @@ describe("chorus.models.KaggleFilterMaps", function() {
             this.kaggleFilterMap = new chorus.models.KaggleFilterMaps.String();
         })
 
-        it("should not have any comparators", function() {
-           expect(this.kaggleFilterMap.comparators).toBeUndefined();
+        it("should return the right comparators", function() {
+            expect(this.kaggleFilterMap.comparators["equal"].usesInput).toBeTruthy();
+            expect(this.kaggleFilterMap.comparators["equal"].condition).toBeTruthy("=");
         });
 
         it("should allow blank values", function() {
@@ -58,11 +61,12 @@ describe("chorus.models.KaggleFilterMaps", function() {
 
     describe("Type", function() {
         beforeEach(function() {
-            this.kaggleFilterMap = new chorus.models.KaggleFilterMaps.Type();
+            this.kaggleFilterMap = new chorus.models.KaggleFilterMaps.CompetitionType();
         });
 
         it("should not have any comparators", function() {
-            expect(this.kaggleFilterMap.comparators).toBeUndefined();
+            expect(this.kaggleFilterMap.comparators["equal"].usesSelect).toBeTruthy();
+            expect(this.kaggleFilterMap.comparators["equal"].condition).toBeTruthy("=");
         });
 
         it("requires a value", function() {

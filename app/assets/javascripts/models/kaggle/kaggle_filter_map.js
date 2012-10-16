@@ -3,8 +3,8 @@
 
     chorus.models.KaggleFilterMaps.Numeric = chorus.models.Base.extend({
         comparators: {
-            "greater": ">",
-            "less": "<"
+            "greater": { usesInput: true, condition: ">" },
+            "less": { usesInput: true, condition: "<" }
         },
 
         declareValidations: function(attrs) {
@@ -13,12 +13,19 @@
     });
 
     chorus.models.KaggleFilterMaps.String = chorus.models.Base.extend({
+        comparators: {
+            "equal": { usesInput: true, condition: "=" }
+        },
+
         declareValidations: function(attrs) {
             return true;
         }
     });
 
-    chorus.models.KaggleFilterMaps.Type = chorus.models.Base.extend({
+    chorus.models.KaggleFilterMaps.CompetitionType = chorus.models.Base.extend({
+        comparators: {
+            "equal": { usesSelect: true, condition: "=" }
+        },
         declareValidations: function(attrs) {
             return this.require('value', attrs)
         }
