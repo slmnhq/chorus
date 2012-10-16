@@ -176,4 +176,19 @@ describe("chorus.views.ColumnSelect", function() {
             });
         });
     });
+
+    describe("collectionModelContext", function () {
+        it("returns the quoted name", function () {
+            var model = fixtures.databaseColumn({ name: "source_column_1" });
+            model.dataset = this.dataset;
+            expect(this.view.collectionModelContext(model).quotedName).toBe(model.quotedName());
+        });
+
+        context("model does not have a quotedName", function() {
+            it("just returns the name", function() {
+                var model = new chorus.models.Base({ name: "hello_name" })
+                expect(this.view.collectionModelContext(model).quotedName).toBe(model.get("name"));
+            });
+        });
+    });
 });
