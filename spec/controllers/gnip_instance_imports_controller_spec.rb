@@ -22,7 +22,7 @@ describe GnipInstanceImportsController do
 
     context "table name doesn't exist already" do
       before do
-        mock(QC).enqueue("GnipImporter.import_to_table", 'foobar',
+        mock(QC.default_queue).enqueue("GnipImporter.import_to_table", 'foobar',
                          gnip_instance.id, workspace.id, user.id, anything)
 
         any_instance_of(CsvFile) do |file|
