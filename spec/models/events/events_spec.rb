@@ -529,7 +529,7 @@ describe "Event types" do
     its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
 
     it_creates_activities_for { [workspace, dataset, gnip_instance] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "GnipStreamImportSuccess" do
@@ -546,7 +546,7 @@ describe "Event types" do
     its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
 
     it_creates_activities_for { [workspace, dataset, gnip_instance] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "GnipStreamImportFailed" do
@@ -565,7 +565,7 @@ describe "Event types" do
     its(:error_message) { should == 'Flying Monkey Attack' }
 
     it_creates_activities_for { [workspace, gnip_instance] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "MembersAdded" do
