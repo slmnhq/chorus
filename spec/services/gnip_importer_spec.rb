@@ -5,6 +5,10 @@ describe GnipImporter do
   let(:csv_file) { csv_files(:default) }
 
   describe "#create_success_event" do
+    before do
+      importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
+      importer.create_success_event
+    end
 
     it "creates an import stream success event" do
       expect {
@@ -20,15 +24,19 @@ describe GnipImporter do
       event.workspace.should == gnip_import_created_event.workspace
     end
 
-    xit "creates notification for actor on import success" do
-      #  notification = Notification.last
-      #  notification.recipient_id.should == user.id
-      #  notification.event_id.should == Events::FileImportSuccess.last.id
+    it "creates notification for actor on import success" do
+      notification = Notification.last
+      notification.recipient_id.should == gnip_import_created_event.actor.id
+      notification.event_id.should == Events::GnipStreamImportSuccess.last.id
     end
   end
 
   describe "#create_failure_event" do
     let(:error_message) { "sample error message" }
+    before do
+      importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
+      importer.create_failure_event(error_message)
+    end
 
     it "creates an import stream success event" do
       expect {
@@ -44,10 +52,10 @@ describe GnipImporter do
       event.workspace.should == gnip_import_created_event.workspace
     end
 
-    xit "creates notification for actor on import failure" do
-      #  notification = Notification.last
-      #  notification.recipient_id.should == user.id
-      #  notification.event_id.should == Events::FileImportSuccess.last.id
+    it "creates notification for actor on import failure" do
+      notification = Notification.last
+      notification.recipient_id.should == gnip_import_created_event.actor.id
+      notification.event_id.should == Events::GnipStreamImportFailed.last.id
     end
   end
 
