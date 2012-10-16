@@ -2,8 +2,8 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     templateName:"kaggle/user_sidebar",
 
     events: {
-        "click .multiple_selection .associate": "launchMultipleUserKaggleSendMessageDialog",
-        "click .actions .associate": "launchSingleUserKaggleSendMessageDialog"
+        "click .multiple_selection .sendMessage": "launchMultipleUserKaggleSendMessageDialog",
+        "click .actions .sendMessage": "launchSingleUserKaggleSendMessageDialog"
     },
 
     subviews: {
@@ -56,7 +56,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        this.$('.actions a.associate').data('recipients', new chorus.collections.KaggleUserSet([this.model]));
-        this.$('.actions a.associate').data('workspace', this.workspace);
+        this.$('.actions a.sendMessage').data('recipients', new chorus.collections.KaggleUserSet([this.model]));
+        this.$('.actions a.sendMessage').data('workspace', this.workspace);
     }
 });

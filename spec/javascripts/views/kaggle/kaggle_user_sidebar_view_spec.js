@@ -37,7 +37,7 @@ describe("chorus.views.KaggleUserSidebar", function () {
             });
 
             it("opens the send message dialog", function () {
-                var dialogLink = this.view.$(".actions a.associate");
+                var dialogLink = this.view.$(".actions a.sendMessage");
                 expect(dialogLink.data("recipients").at(0).id).toBe(this.collection.at(0).id);
                 expect(dialogLink.data("workspace")).toBe(this.workspace);
                 expect(dialogLink.data("dialog")).toBe("ComposeKaggleMessage");
@@ -71,17 +71,17 @@ describe("chorus.views.KaggleUserSidebar", function () {
             });
 
             it("displays the 'send message' link", function () {
-                expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.send_kaggle_message");
+                expect(this.multiSelectSection.find("a.sendMessage")).toContainTranslation("actions.send_kaggle_message");
             });
 
             describe("clicking the 'send message' link", function () {
                 beforeEach(function () {
                     this.modalSpy.reset();
-                    this.multiSelectSection.find("a.associate").click();
+                    this.multiSelectSection.find("a.sendMessage").click();
                 });
 
                 it("launches the dialog for sending the message", function () {
-                    this.multiSelectSection.find("a.associate").click();
+                    this.multiSelectSection.find("a.sendMessage").click();
                     var dialog = this.modalSpy.lastModal();
                     expect(dialog).toBeA(chorus.dialogs.ComposeKaggleMessage);
                     expect(dialog.recipients).toBe(this.checkedKaggleUsers);
