@@ -67,8 +67,7 @@ module BackupRestore
     attr_accessor :backup_dir, :rolling_days, :temp_dir
 
     def initialize(backup_dir, rolling_days = nil)
-      rolling_days ||= 7
-      rolling_days > 0 or raise "Must specify a positive integer for the number of rolling days (value was #{rolling_days})."
+      rolling_days.nil? || rolling_days > 0 || raise("Must specify a positive integer for the number of rolling days (value was #{rolling_days}).")
 
       self.backup_dir = File.expand_path(backup_dir)
       self.rolling_days = rolling_days
@@ -108,6 +107,7 @@ module BackupRestore
     end
 
     def delete_old_backups
+      return unless rolling_days
       log "Removing backups more than #{rolling_days} #{"day".pluralize(rolling_days)} old..."
 
       oldest_allowed_timestamp = rolling_days.days.ago.strftime('%Y%m%d_%H%M%S')

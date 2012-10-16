@@ -87,13 +87,12 @@ describe 'BackupRestore' do
           BackupRestore.backup *[backup_path, rolling_days].compact
         end
 
-        shared_examples_for "it deletes backups older than" do |expected_rolling_days|
-          before do
-            expected_rolling_days /= 1.day
-          end
+        context "when rolling days parameter is provided" do
+
+          let(:rolling_days) { 11 }
 
           context "when the old backup was created more than the stated time ago" do
-            let(:old_backup_time) { expected_rolling_days.days.ago - 1.hour }
+            let(:old_backup_time) { rolling_days.days.ago - 1.hour }
 
             it "deletes it" do
               File.exists?(old_backup).should be_false
@@ -101,7 +100,7 @@ describe 'BackupRestore' do
           end
 
           context "when old backup was created within stated time" do
-            let(:old_backup_time) { expected_rolling_days.days.ago + 1.hour }
+            let(:old_backup_time) { rolling_days.days.ago + 1.hour }
 
             it "keeps it" do
               File.exists?(old_backup).should be_true
@@ -109,13 +108,14 @@ describe 'BackupRestore' do
           end
         end
 
-        it_should_behave_like "it deletes backups older than", 7.days
+        context "when rolling days parameter is not provided" do
 
-        context "when rolling days parameter is provided" do
+          let(:rolling_days) { nil }
+          let(:old_backup_time) { 1.year.ago }
 
-          let(:rolling_days) { 11 }
-
-          it_should_behave_like "it deletes backups older than", 11.days
+          it "does not remove old backups" do
+            File.exists?(old_backup).should be_true
+          end
         end
       end
     end
