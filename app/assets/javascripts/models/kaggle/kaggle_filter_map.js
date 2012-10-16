@@ -8,7 +8,7 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^-?[0-9]+[.,]?[0-9]*$/, attrs, "kaggle.filter.rank_required");
+            this.requirePattern("value", /^-?[0-9]+[.,]?[0-9]*$/, attrs, "kaggle.filter.rank_required", "allowBlank");
         }
     });
 

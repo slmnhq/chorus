@@ -69,6 +69,7 @@ chorus.views.Filter = chorus.views.Base.extend({
         this.$(".filter.default").toggleClass("hidden", !comparator.usesInput);
         this.$(".filter.time").toggleClass("hidden", !comparator.usesTimeInput);
         this.$(".filter.date").toggleClass("hidden", !comparator.usesDateInput);
+        this.$(".filter.select_type").toggleClass("hidden", !comparator.usesSelect);
 
         this.fillInput();
         this.validateInput();

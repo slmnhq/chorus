@@ -39,9 +39,6 @@ describe("chorus.models.KaggleFilterMaps", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "1-" })).toBeFalsy();
         })
 
-        it("marks the empty field invalid", function() {
-            expect(this.kaggleFilterMap.performValidation({ value: "" })).toBeFalsy();
-        })
     });
 
     describe("String", function() {

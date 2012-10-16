@@ -15,6 +15,12 @@
 }
 
 .kaggle_user_list {
+
+    .content_details {
+        height: auto;
+        padding: 0;
+    }
+
     .name {
         color: $color-text2;
     }
@@ -40,6 +46,14 @@
       margin-top: 28px;
       margin-right: 10px;
     }
+}
+
+.kaggle_user_list {
+  .kaggle_filter {
+    .comparator {
+      width: 240px;
+    }
+  }
 }
 .kaggle_compose_kaggle_message_dialog {
   width: 735px;

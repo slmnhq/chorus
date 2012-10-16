@@ -22,9 +22,29 @@ describe("chorus.views.KaggleFilter", function () {
         it("populates the filter's select options with the names of the columns", function() {
             expect(this.view.$(".column_filter option").length).toBe(this.view.collection.length);
             var view = this.view;
-            this.view.collection.each(function(model, index) {
+            view.collection.each(function(model, index) {
                 var option = view.$(".column_filter option:eq(" + index + ")");
                 expect(option).toContainText(model.get("name"));
+            }, this);
+        });
+
+        it("populates the competition_type's select options", function() {
+
+            var list = ["natural language processing", "high dimensionality", "unsupervised learning",
+                "supervised learning", "semi-supervised learning", "computer vision", "data manipulation",
+                "unstructured", "exploratory", "visualization", "graph", "social", "time series",
+                "binary classification", "multiclass classification", "regression", "ranking", "QSAR", "actuarial",
+                "insurance", "health", "life sciences", "research", "government", "public policy", "retail",
+                "start-ups", "finance", "credit", "natural language processing", "high dimensionality",
+                "unsupervised learning", "supervised learning", "semi-supervised learning", "computer vision",
+                "data manipulation", "unstructured", "exploratory", "visualization", "graph", "social",
+                "time series", "binary classification", "multiclass classification", "regression", "ranking", "QSAR"]
+
+            var view = this.view;
+            expect(this.view.$(".filter.competition_type select option").length).toBe(list.length);
+            _.each(list, function(name, index) {
+                var option = view.$(".filter.competition_type select option:eq(" + index + ")");
+                expect(option).toContainText(name);
             }, this);
         });
 
@@ -50,5 +70,108 @@ describe("chorus.views.KaggleFilter", function () {
                 expect("deleted").toHaveBeenTriggeredOn(this.view);
             });
         });
+
+        describe("#validateInput", function() {
+            describe("with a numeric column", function() {
+                beforeEach(function() {
+                    this.view.collection.models[0].set({name: "rank"});
+                    this.view.render();
+                    spyOn(this.view.map, "performValidation").andCallThrough();
+                    spyOn(this.view, "markInputAsInvalid");
+
+                    this.view.$(".filter.default input").val("123");
+                });
+
+                it("passes the input argument to the right method", function() {
+                    this.view.validateInput();
+                    expect(this.view.map).toBeA(chorus.models.KaggleFilterMaps.Numeric);
+                    expect(this.view.map.performValidation).toHaveBeenCalledWith({ value: "123" });
+                });
+
+                it("adds a qtip with invalid input", function() {
+                    this.view.$(".filter.default input").val("abc");
+                    this.view.validateInput();
+
+                    expect(this.view.markInputAsInvalid).toHaveBeenCalled();
+                    var args = this.view.markInputAsInvalid.mostRecentCall.args;
+
+                    expect(args[0]).toBe(this.view.$(".filter.default input"));
+                    expect(args[1]).toMatchTranslation("kaggle.filter.rank_required");
+                });
+
+                it("does not add a qtip with valid input", function() {
+                    this.view.validateInput();
+                    expect(this.view.markInputAsInvalid).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("columns with name: location ( String )", function() {
+            beforeEach(function() {
+                this.view.collection.models[1].set({name: "location"});
+                this.view.columnFilter.selectColumn(this.view.collection.at(1));
+            });
+
+            it("adds a second select with the string options", function() {
+                expect(this.view.$("option")).toContainTranslation("kaggle.filter.equal");
+            });
+
+            describe("when choosing a comparator", function() {
+                it("correctly shows the input for equal", function() {
+                    this.view.$(".comparator").val("equal").change();
+                    expect(this.view.$(".filter.default")).not.toHaveClass('hidden');
+                });
+            });
+
+        });
+
+        describe("columns with name: competition_type ( CompetitionType )", function() {
+            beforeEach(function() {
+                this.view.collection.models[1].set({name: "competition_types"});
+                this.view.columnFilter.selectColumn(this.view.collection.at(1));
+            });
+
+            it("adds a second select with the string options", function() {
+                expect(this.view.$("option")).toContainTranslation("kaggle.filter.equal");
+            });
+
+            describe("when choosing a comparator", function() {
+                it("correctly shows the input for equal comparator", function() {
+                    this.view.$(".comparator").val("equal").change();
+                    expect(this.view.$(".filter.competition_type")).not.toHaveClass('hidden');
+                });
+            });
+        });
+
+        describe("columns with name: Competition ( Numeric )", function() {
+            beforeEach(function() {
+                this.view.collection.models[0].set({typeCategory: "REAL_NUMBER"});
+                this.view.render();
+
+                this.keys = [
+                    "greater",
+                    "less"
+                ];
+            });
+
+            it("adds a second select with the numeric options", function() {
+                var view = this.view;
+
+                _.each(this.keys, function(key) {
+                    expect(view.$("option")).toContainTranslation("kaggle.filter." + key);
+                });
+            });
+
+            describe("when choosing an option", function () {
+                _.each(_.keys(chorus.models.DatasetFilterMaps.Numeric.prototype.comparators), function (key) {
+                    it("correctly shows the input for " + key, function () {
+                        this.view.$(".comparator").val(key).change();
+                        expect(this.view.$(".filter.default")).not.toHaveClass('hidden');
+                    });
+                });
+            });
+        });
+
+
     });
 });

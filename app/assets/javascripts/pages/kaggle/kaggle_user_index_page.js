@@ -1,5 +1,7 @@
 chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
     constructorName: "KaggleUserIndexPage",
+    additionalClass: 'kaggle_user_list',
+
 
     setup: function(workspaceId) {
         this.workspaceId = workspaceId;

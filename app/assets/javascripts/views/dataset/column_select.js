@@ -52,6 +52,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
 
     refresh: function() {
         this.$('select').selectmenu();
+        this.trigger("refresh") // require otherwise it won't render the first filter comparator in kaggle filter view
     },
 
     columnSelected: function() {
