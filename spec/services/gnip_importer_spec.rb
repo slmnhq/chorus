@@ -86,7 +86,7 @@ describe GnipImporter do
         file = CsvFile.last
         file.contents.should_not be_nil
         file.column_names.should == gnip_csv_result_mock.column_names
-        file.types.should == ['text', 'text']
+        file.types.should == gnip_csv_result_mock.types
         file.delimiter.should == ","
         file.to_table.should == 'foobar'
         file.new_table.should == true
