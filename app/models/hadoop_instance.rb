@@ -38,4 +38,9 @@ class HadoopInstance < ActiveRecord::Base
   def create_root_entry
     hdfs_entries.create({:hadoop_instance => self, :path => "/", :is_directory => true}, { :without_protection => true })
   end
+
+  def self.type_name
+    'Instance'
+  end
+
 end

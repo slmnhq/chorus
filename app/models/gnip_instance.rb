@@ -19,4 +19,8 @@ class GnipInstance < ActiveRecord::Base
   def entity_type_name
     'gnip_instance'
   end
+
+  def self.type_name
+    'Instance'
+  end
 end

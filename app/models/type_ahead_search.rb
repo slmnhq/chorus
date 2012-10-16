@@ -25,7 +25,7 @@ class TypeAheadSearch
   def build_search
     @search = Sunspot.new_search(MODELS_TO_SEARCH) do
       fulltext query, :highlight => true, :fields => [:name, :first_name, :last_name, :file_name]
-      with :type_name, MODELS_TO_SEARCH.collect(&:name)
+      with :type_name, MODELS_TO_SEARCH.collect(&:type_name).uniq
       paginate :page => 1, :per_page => per_page
     end
 

@@ -36,13 +36,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             this.datasetList = this.buildListView('dataset', this.model.datasets());
         }
         if (this.model.instances().length) {
-            this.instanceList = this.buildListView('gpdb_instance', this.model.instances());
-        }
-        if (this.model.hadoopInstances().length) {
-            this.hadoopInstanceList = this.buildListView('hadoop_instance', this.model.hadoopInstances());
-        }
-        if (this.model.gnipInstances().length) {
-            this.gnipInstanceList = this.buildListView('gnip_instance', this.model.gnipInstances());
+            this.instanceList = this.buildListView('instance', this.model.instances());
         }
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());
@@ -78,4 +72,4 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         this.$("li.result_item").removeClass("selected");
         $target.addClass("selected");
     }
-})
+});

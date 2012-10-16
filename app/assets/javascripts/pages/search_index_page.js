@@ -37,8 +37,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             {data: "attachment", text: t("search.type.attachment")},
             {data: "hdfs", text: t("search.type.hdfs")},
             {data: "dataset", text: t("search.type.dataset")},
-            {data: "gpdb_instance", text: t("search.type.gpdb_instance")},
-            {data: "hadoop_instance", text: t("search.type.hadoop_instance")},
+            {data: "instance", text: t("search.type.instance")},
             {data: "workspace", text: t("search.type.workspace")},
             {data: "user", text: t("search.type.user")}
         ]
@@ -81,8 +80,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             workspace: new chorus.views.WorkspaceListSidebar(),
             dataset: new chorus.views.DatasetSidebar({listMode: true}),
             instance: new chorus.views.InstanceListSidebar(),
-            hadoopInstance: new chorus.views.InstanceListSidebar(),
-            gnipInstance: new chorus.views.InstanceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
 
@@ -93,8 +90,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
         chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
-        chorus.PageEvents.subscribe("hadoop_instance:selected", this.hadoopInstanceSelected, this);
-        chorus.PageEvents.subscribe("gnip_instance:selected", this.gnipInstanceSelected, this);
         chorus.PageEvents.subscribe("attachment:selected", this.attachmentSelected, this);
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
@@ -125,16 +120,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     instanceSelected: function(instance) {
         this.sidebars.instance.setInstance(instance);
         this.renderSidebar(this.sidebars.instance);
-    },
-
-    hadoopInstanceSelected: function(hadoop_instance) {
-        this.sidebars.hadoopInstance.setInstance(hadoop_instance);
-        this.renderSidebar(this.sidebars.hadoopInstance);
-    },
-
-    gnipInstanceSelected: function(gnip_instance) {
-        this.sidebars.gnipInstance.setInstance(gnip_instance);
-        this.renderSidebar(this.sidebars.gnipInstance);
     },
 
     attachmentSelected: function(attachment) {

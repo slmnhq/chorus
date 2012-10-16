@@ -1,7 +1,7 @@
 
 class SearchPresenter < SearchPresenterBase
 
-  delegate :users, :gpdb_instances, :hadoop_instances, :gnip_instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :attachments, :this_workspace, :search_type, :results, to: :model
+  delegate :users, :instances, :num_found, :workspaces, :workfiles, :datasets, :hdfs_entries, :attachments, :this_workspace, :search_type, :results, to: :model
 
   def to_hash
     {
@@ -11,18 +11,8 @@ class SearchPresenter < SearchPresenterBase
         },
 
         :instances => {
-            :results => present_models_with_highlights(gpdb_instances),
-            :numFound => num_found[:gpdb_instances]
-        },
-
-        :hadoop_instances => {
-            :results => present_models_with_highlights(hadoop_instances),
-            :numFound => num_found[:hadoop_instances]
-        },
-
-        :gnip_instances => {
-            :results => present_models_with_highlights(gnip_instances),
-            :numFound => num_found[:gnip_instances]
+            :results => present_models_with_highlights(instances),
+            :numFound => num_found[:instances]
         },
 
         :workspaces => {

@@ -51,19 +51,8 @@
     chorus.collections.Search.InstanceSet = chorus.collections.InstanceSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "instances"
-    });
-
-    chorus.collections.Search.HadoopInstanceSet = chorus.collections.HadoopInstanceSet.include(
-        searchCollectionMixins
-    ).extend({
-        searchKey: "hadoopInstances"
-    });
-
-    chorus.collections.Search.GnipInstanceSet = chorus.collections.GnipInstanceSet.include(
-        searchCollectionMixins
-    ).extend({
-        searchKey: "gnipInstances"
+        searchKey: "instances",
+        model: chorus.models.DynamicInstance
     });
 
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(

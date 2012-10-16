@@ -4,11 +4,11 @@ describe("chorus.collections.Search", function() {
             instances: {
                 numFound: 131,
                 results: [
-                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance101", id: '101' } }).response,
-                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance102", id: '102' } }).response,
-                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance103", id: '103' } }).response,
-                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance104", id: '104' } }).response,
-                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance105", id: '105' } }).response
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.greenplumInstanceJson({ response: { name: "instance101", id: '101' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.greenplumInstanceJson({ response: { name: "instance102", id: '102' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.greenplumInstanceJson({ response: { name: "instance103", id: '103' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.greenplumInstanceJson({ response: { name: "instance104", id: '104' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.greenplumInstanceJson({ response: { name: "instance105", id: '105' } }).response)
                 ]
             }
         });

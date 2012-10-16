@@ -34,7 +34,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 var menuOptions = this.page.$(".default_content_header .link_menu.type li");
                 expect(menuOptions.find("a").length).toBe(4);
 
-                expect(menuOptions.filter("[data-type=gpdb_instance]")).not.toContain("a");
+                expect(menuOptions.filter("[data-type=instance]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=workspace]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=hdfs]")).not.toContain("a");
@@ -67,7 +67,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
             it("enables all options in the filter menu", function() {
                 var menuOptions = this.page.$(".default_content_header li");
 
-                expect(menuOptions.filter("[data-type=gpdb_instance]")).toContain("a");
+                expect(menuOptions.filter("[data-type=instance]")).toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).toContain("a");
                 expect(menuOptions.filter("[data-type=workspace]")).toContain("a");
                 expect(menuOptions.filter("[data-type=hdfs]")).toContain("a");

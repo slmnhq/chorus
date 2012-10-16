@@ -63,15 +63,23 @@ describe Search do
         search = Search.new(user, :query => 'bob', :per_type => 3)
         stub(search).num_found do
           hsh = Hash.new(0)
-          hsh.merge({:users => 100, :gpdb_instances => 100, :hadoop_instances => 100, :gnip_instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
+          hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
         end
         stub(search.search).each_hit_with_result { [] }
         search.models
-        Sunspot.session.searches.length.should == search.models_to_search.length + 1
-        search.models_to_search.each_with_index do |model, index|
+        types_to_search = search.models_to_search.inject(ActiveSupport::OrderedHash.new) do |hash, model|
+          hash[model.type_name] ||= []
+          hash[model.type_name] << model
+          hash
+        end
+        Sunspot.session.searches.length.should == types_to_search.keys.length + 1
+        types_to_search.each_with_index do |type_and_model, index|
+          models = type_and_model.last
           sunspot_search = Sunspot.session.searches[index+1]
-          sunspot_search.should be_a_search_for(model)
-          (search.models_to_search - [model]).each do |other_model|
+          models.each do |model|
+            sunspot_search.should be_a_search_for(model)
+          end
+          (search.models_to_search - models).each do |other_model|
             sunspot_search.should_not be_a_search_for(other_model)
           end
           sunspot_search.should have_search_params(:fulltext, 'bob')
@@ -89,10 +97,12 @@ describe Search do
 
     context "when limiting the type of model searched" do
       it "searches only the specified model type" do
-        search = Search.new(user, :query => 'bob', :entity_type => 'gpdb_instance')
+        search = Search.new(user, :query => 'bob', :entity_type => 'instance')
         search.search
         Sunspot.session.should_not be_a_search_for(User)
         Sunspot.session.should be_a_search_for(GpdbInstance)
+        Sunspot.session.should be_a_search_for(HadoopInstance)
+        Sunspot.session.should be_a_search_for(GnipInstance)
       end
 
       it "creates a search session just for that model" do
@@ -170,6 +180,7 @@ describe Search do
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_instance) { gpdb_instances(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:gnip_instance) { gnip_instances(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:attachment) { attachments(:attachment) }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
@@ -210,7 +221,7 @@ describe Search do
       it "returns a hash with the number found of each type" do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
-          search.num_found[:gpdb_instances].should == 1
+          search.num_found[:instances].should == 3
           search.num_found[:datasets].should == 5
         end
       end
@@ -218,7 +229,7 @@ describe Search do
       it "returns a hash with the total count for the given type" do
         create_and_record_search(owner, :query => 'searchquery', :entity_type => 'user') do |search|
           search.num_found[:users].should == 1
-          search.num_found[:gpdb_instances].should == 0
+          search.num_found[:instances].should == 0
         end
       end
 
@@ -246,36 +257,24 @@ describe Search do
       end
     end
 
-    describe "#gpdb_instances" do
-      it "includes the highlighted attributes" do
+    describe "#instances" do
+      it "should include Gpdb, Hadoop, and Gnip" do
         create_and_record_search do |search|
-          gpdb_instance = search.gpdb_instances.first
-          gpdb_instance.highlighted_attributes.length.should == 2
-          gpdb_instance.highlighted_attributes[:description][0].should == "Just for <em>searchquery</em> and greenplumsearch"
+          search.instances.should include(gpdb_instance)
+          search.instances.should include(hadoop_instance)
+          search.instances.should include(gnip_instance)
         end
       end
 
-      it "returns the GpdbInstance objects found" do
-        create_and_record_search do |search|
-          search.gpdb_instances.length.should == 1
-          search.gpdb_instances.first.should == gpdb_instance
-        end
-      end
-    end
-
-    describe "#hadoop_instances" do
-      it "includes the highlighted attributes" do
-        create_and_record_search do |search|
-          hadoop_instance = search.hadoop_instances.first
-          hadoop_instance.highlighted_attributes.length.should == 2
-          hadoop_instance.highlighted_attributes[:description][0].should == "<em>searchquery</em> for the hadoop instance"
-        end
-      end
-
-      it "returns the HadoopInstance objects found" do
-        create_and_record_search(owner, :query => 'hadoop instance') do |search|
-          search.hadoop_instances.length.should == 1
-          search.hadoop_instances.first.should == hadoop_instance
+      context "including highlighted attributes" do
+        [GpdbInstance, HadoopInstance, GnipInstance].each do |instance_type|
+          it "should include highlighted attributes for #{instance_type.name}" do
+            create_and_record_search do |search|
+              instance = search.instances.select { |instance| instance.is_a?(instance_type) }.first
+              instance.highlighted_attributes.length.should > 0
+              instance.highlighted_attributes[:description][0].should =~ /<em>searchquery<\/em>/
+            end
+          end
         end
       end
     end
@@ -412,8 +411,8 @@ describe Search do
     describe "#highlighted notes" do
       it "includes highlighted notes in the highlighted_attributes" do
         create_and_record_search(owner, :query => 'greenplumsearch') do |search|
-          search.gpdb_instances.length.should == 2
-          gpdb_instance_with_notes = search.gpdb_instances[1]
+          search.instances.length.should == 2
+          gpdb_instance_with_notes = search.instances[1]
           gpdb_instance_with_notes.search_result_notes.length.should == 2
           gpdb_instance_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end

@@ -313,18 +313,6 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
-        describe("#hadoopInstances", function() {
-            it("returns a Search HadoopInstanceSet", function() {
-                expect(this.model.hadoopInstances()).toBeA(chorus.collections.Search.HadoopInstanceSet);
-            });
-        });
-
-        describe("#gnipInstances", function() {
-            it("returns a Search GnipInstanceSet", function() {
-                expect(this.model.gnipInstances()).toBeA(chorus.collections.Search.GnipInstanceSet);
-            });
-        });
-
         describe("#attachments", function() {
             it("returns a Search ArtifactSet", function() {
                 expect(this.model.attachments()).toBeA(chorus.collections.Search.AttachmentSet)
@@ -342,8 +330,6 @@ describe("chorus.models.SearchResult", function() {
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",
                     instances: "InstanceSet",
-                    hadoopInstances: "HadoopInstanceSet",
-                    gnipInstances: "GnipInstanceSet",
                     users: "UserSet",
                     attachments: "AttachmentSet"
                 };

@@ -31,6 +31,7 @@ describe GpdbInstancePresenter, :type => :view do
       hash.should have_key(:description)
       hash.should have_key(:instance_provider)
       hash.should have_key(:version)
+      hash[:entity_type].should == "greenplum_instance"
     end
 
     it "should use ownerPresenter Hash method for owner" do

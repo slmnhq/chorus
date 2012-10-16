@@ -28,19 +28,19 @@ http_interactions:
         summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>6,''ngroups''=>6,''groups''=>[{''groupValue''=>''Workspace
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2766.872,''docs''=>[{''id''=>''Workspace
-        1000008'',''name_texts''=>[''Public''],''summary_texts''=>[''searchquery''],''score''=>2766.872}]}},{''groupValue''=>''Workspace
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2766.872,''docs''=>[{''id''=>''Workspace
-        1000009'',''name_texts''=>[''Private''],''summary_texts''=>[''searchquery''],''score''=>2766.872}]}},{''groupValue''=>''Workspace
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2766.872,''docs''=>[{''id''=>''Workspace
-        1000010'',''name_texts''=>[''Search Public''],''summary_texts''=>[''searchquery''],''score''=>2766.872}]}},{''groupValue''=>''Workspace
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2766.872,''docs''=>[{''id''=>''Workspace
-        1000011'',''name_texts''=>[''Search Private''],''summary_texts''=>[''searchquery''],''score''=>2766.872}]}},{''groupValue''=>''Workspace
-        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1185.8024,''docs''=>[{''id''=>''Workspace
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2806.2437,''docs''=>[{''id''=>''Workspace
+        1000008'',''name_texts''=>[''Public''],''summary_texts''=>[''searchquery''],''score''=>2806.2437}]}},{''groupValue''=>''Workspace
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2806.2437,''docs''=>[{''id''=>''Workspace
+        1000009'',''name_texts''=>[''Private''],''summary_texts''=>[''searchquery''],''score''=>2806.2437}]}},{''groupValue''=>''Workspace
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2806.2437,''docs''=>[{''id''=>''Workspace
+        1000010'',''name_texts''=>[''Search Public''],''summary_texts''=>[''searchquery''],''score''=>2806.2437}]}},{''groupValue''=>''Workspace
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2806.2437,''docs''=>[{''id''=>''Workspace
+        1000011'',''name_texts''=>[''Search Private''],''summary_texts''=>[''searchquery''],''score''=>2806.2437}]}},{''groupValue''=>''Workspace
+        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1202.6759,''docs''=>[{''id''=>''Workspace
         1000005'',''name_texts''=>[''Public with no collaborators except collaborator''],''summary_texts''=>[''searchquery
-        can see I guess''],''score''=>1185.8024}]}},{''groupValue''=>''Workspace 1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1185.8024,''docs''=>[{''id''=>''Workspace
+        can see I guess''],''score''=>1202.6759}]}},{''groupValue''=>''Workspace 1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1202.6759,''docs''=>[{''id''=>''Workspace
         1000006'',''name_texts''=>[''Private with no collaborators''],''summary_texts''=>[''Not
-        for searchquery, ha ha''],''score''=>1185.8024}]}}]}},''highlighting''=>{''Workspace
+        for searchquery, ha ha''],''score''=>1202.6759}]}}]}},''highlighting''=>{''Workspace
         1000008''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
         1000009''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
         1000010''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
@@ -49,6 +49,6 @@ http_interactions:
         guess'']},''Workspace 1000006''=>{''summary_texts''=>[''Not for @@@hl@@@searchquery@@@endhl@@@,
         ha ha'']}}}'
     http_version: '1.1'
-  recorded_at: Tue, 09 Oct 2012 18:45:14 GMT
+  recorded_at: Mon, 15 Oct 2012 22:19:19 GMT
 recorded_with: VCR 2.1.1
 ...

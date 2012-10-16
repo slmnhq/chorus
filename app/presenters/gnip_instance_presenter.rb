@@ -9,7 +9,8 @@ class GnipInstancePresenter < Presenter
         :owner => owner,
         :description => description,
         :username => username,
-        :state => "online"
+        :state => "online",
+        :entity_type => "gnip_instance"
     }
   end
 

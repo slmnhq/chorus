@@ -1,7 +1,11 @@
-chorus.views.SearchGpdbInstance = chorus.views.SearchItemBase.extend({
-    constructorName: "SearchGpdbInstanceView",
-    templateName: "search_gpdb_instance",
-    eventType: "instance",
+chorus.views.SearchInstance = chorus.views.SearchItemBase.extend({
+    constructorName: "SearchInstanceView",
+    templateName: "search_instance",
+    eventType: 'instance',
+
+    setup: function() {
+        this.additionalClass += " " + this.model.get("entityType");
+    },
 
     additionalContext: function () {
         return {
@@ -12,4 +16,5 @@ chorus.views.SearchGpdbInstance = chorus.views.SearchItemBase.extend({
             iconUrl: this.model.providerIconUrl()
         }
     }
-})
+
+});

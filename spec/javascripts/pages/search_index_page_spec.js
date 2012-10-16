@@ -46,8 +46,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user");
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.gpdb_instance");
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hadoop_instance");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance");
             });
 
             describe("filtering by result type", function() {
@@ -164,7 +163,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the tabular data item in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead");
+                        expect(this.page.sidebar.$(".info .name")).toHaveText("searchquery_shared_table");
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
@@ -179,7 +178,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.instanceLIs.length).toBe(1)
+                    expect(this.instanceLIs.length).toBe(3)
                 });
 
                 describe("clicking on an instance search result", function() {
@@ -195,58 +194,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                     it("shows the instance in the sidebar", function() {
                         expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
                         expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0))
-                    });
-                });
-            });
-
-            describe("the hadoop instance section", function() {
-                beforeEach(function() {
-                    this.hadoopInstanceLIs = this.page.$(".hadoop_instance_list li");
-                });
-
-                it("shows a list of search results", function() {
-                    expect(this.hadoopInstanceLIs.length).toBe(1)
-                });
-
-                describe("clicking on an hadoop instance search result", function() {
-                    beforeEach(function() {
-                        spyOn(this.page.sidebars.hadoopInstance, "setInstance");
-                        this.hadoopInstanceLIs.eq(0).trigger("click");
-                    });
-
-                    it("selects that hadoop instance", function() {
-                        expect(this.hadoopInstanceLIs.eq(0)).toHaveClass("selected");
-                    });
-
-                    it("shows the hadoop instance in the sidebar", function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
-                        expect(this.page.sidebars.hadoopInstance.setInstance).toHaveBeenCalledWith(this.page.search.hadoopInstances().at(0))
-                    });
-                });
-            });
-
-            describe("the gnip instance section", function() {
-                beforeEach(function() {
-                    this.gnipInstanceLIs = this.page.$(".gnip_instance_list li");
-                });
-
-                it("shows a list of search results", function() {
-                    expect(this.gnipInstanceLIs.length).toBe(1)
-                });
-
-                describe("clicking on an gnip instance search result", function() {
-                    beforeEach(function() {
-                        spyOn(this.page.sidebars.gnipInstance, "setInstance");
-                        this.gnipInstanceLIs.eq(0).trigger("click");
-                    });
-
-                    it("selects that gnip instance", function() {
-                        expect(this.gnipInstanceLIs.eq(0)).toHaveClass("selected");
-                    });
-
-                    it("shows the gnip instance in the sidebar", function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
-                        expect(this.page.sidebars.gnipInstance.setInstance).toHaveBeenCalledWith(this.page.search.gnipInstances().at(0))
                     });
                 });
             });
@@ -365,7 +312,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
             });
 
             it("selects the 'all of chorus' option in the 'search in' menu", function() {
@@ -404,7 +351,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {

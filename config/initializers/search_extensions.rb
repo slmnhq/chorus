@@ -42,7 +42,7 @@ module SearchExtensions
   end
 
   def grouping_id
-    "#{type_name} #{id}"
+    "#{self.class.name} #{id}"
   end
 
   def type_name

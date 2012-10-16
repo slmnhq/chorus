@@ -44,7 +44,7 @@ class Search
         facet :type_name
       end
 
-      with :type_name, models_to_search.collect(&:name)
+      with :type_name, models_to_search.collect(&:type_name)
     end
     models_to_search.each do |model_to_search|
       model_to_search.add_search_permissions(current_user, @search) if model_to_search.respond_to? :add_search_permissions
@@ -73,16 +73,8 @@ class Search
     models[:users]
   end
 
-  def gpdb_instances
-    models[:gpdb_instances]
-  end
-
-  def hadoop_instances
-    models[:hadoop_instances]
-  end
-
-  def gnip_instances
-    models[:gnip_instances]
+  def instances
+    models[:instances]
   end
 
   def workspaces
@@ -118,7 +110,7 @@ class Search
         @num_found[class_name_to_key(facet.value)] = facet.count
       end
     else
-      @num_found[class_name_to_key(models_to_search.first.name)] = search.group(:grouping_id).total
+      @num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
     end
 
     populate_workspace_specific_results
@@ -136,7 +128,7 @@ class Search
   def entity_type=(new_type)
     return unless new_type
     models_to_search.select! do |model|
-      class_name_to_key(model.name) == class_name_to_key(new_type)
+      class_name_to_key(model.type_name) == class_name_to_key(new_type)
     end
   end
 
@@ -147,7 +139,7 @@ class Search
   private
 
   def count_using_facets?
-    models_to_search.length > 1
+    type_names_to_search.length > 1
   end
 
   def class_name_to_key(name)
@@ -156,14 +148,19 @@ class Search
 
   def populate_missing_records
     return unless per_type
-    models_to_search.each do |model|
-      model_key = class_name_to_key(model.name)
+
+    type_names_to_search.each do |type_name|
+      model_key = class_name_to_key(type_name)
       found_count = models[model_key].length
-      if (found_count < per_type && found_count < num_found[model_key])
-        model_search = Search.new(current_user, :query => query, :per_page => per_type, :entity_type => model.name)
+      if found_count < per_type && found_count < num_found[model_key]
+        model_search = Search.new(current_user, :query => query, :per_page => per_type, :entity_type => type_name)
         models[model_key] = model_search.models[model_key]
       end
     end
+  end
+
+  def type_names_to_search
+    models_to_search.map(&:type_name).uniq
   end
 
   def populate_workspace_specific_results

@@ -12,7 +12,8 @@ class HadoopInstancePresenter < Presenter
         :description => description,
         :version => version,
         :username => username,
-        :group_list => group_list
+        :group_list => group_list,
+        :entity_type => "hadoop_instance"
     }
   end
 

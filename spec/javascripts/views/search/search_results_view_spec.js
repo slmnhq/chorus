@@ -60,13 +60,10 @@ describe("chorus.views.SearchResults", function() {
                 var sections = this.view.$(".search_result_list");
                 expect(sections.filter(".user_list.selectable")).toExist();
                 expect(sections.filter(".workfile_list.selectable")).toExist();
-                // TODO: Enable when attachments are added to search
-//                expect(sections.filter(".attachment_list.selectable")).toExist();
+                expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
                 expect(sections.filter(".hdfs_list.selectable")).toExist();
                 expect(sections.filter(".instance_list.selectable")).toExist();
-                expect(sections.filter(".hadoop_instance_list.selectable")).toExist();
-                expect(sections.filter(".gnip_instance_list.selectable")).toExist();
             });
         });
 
@@ -171,8 +168,7 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
 
-            //TODO: Enable when attachments are added to search
-            xcontext("when the li is for an attachment", function() {
+            context("when the li is for an attachment", function() {
                 it("triggers the 'attachment:selected' event on itself, with the clicked attachment", function() {
                     var attachmentToClick = this.model.attachments().at(1);
                     this.view.$(".attachment_list li").eq(1).click();
@@ -206,25 +202,25 @@ describe("chorus.views.SearchResults", function() {
 
             context("when the li is for an instance", function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.instances().at(0);
-                    this.view.$(".instance_list li").eq(0).click();
+                    var modelToClick = this.model.instances().find(function (instance) { return instance.isGreenplum(); });
+                    this.view.$(".instance_list li.greenplum_instance").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
                 });
             });
 
             context("when the li is for a hadoop instance", function() {
-                it("broadcasts the 'hadoop_instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.hadoopInstances().at(0);
-                    this.view.$(".hadoop_instance_list li").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hadoop_instance:selected", modelToClick);
+                it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
+                    var modelToClick = this.model.instances().find(function (instance) { return instance.isHadoop(); });
+                    this.view.$(".instance_list li.hadoop_instance").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
                 });
             });
 
             context("when the li is for a gnip instance", function() {
-                it("broadcasts the 'gnip_instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.gnipInstances().at(0);
-                    this.view.$(".gnip_instance_list li").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("gnip_instance:selected", modelToClick);
+                it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
+                    var modelToClick = this.model.instances().find(function (instance) { return instance.isGnip(); });
+                    this.view.$(".instance_list li.gnip_instance").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
                 });
             });
         });

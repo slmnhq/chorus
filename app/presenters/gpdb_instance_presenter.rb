@@ -15,7 +15,8 @@ class GpdbInstancePresenter < Presenter
       :maintenance_db => maintenance_db,
       :description => description,
       :instance_provider => instance_provider,
-      :version => version
+      :version => version,
+      :entity_type => 'greenplum_instance'
     }
   end
 

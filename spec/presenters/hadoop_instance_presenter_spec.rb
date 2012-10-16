@@ -24,6 +24,7 @@ describe HadoopInstancePresenter, :type => :view do
       hash.should have_key(:version)
       hash.should have_key(:username)
       hash.should have_key(:group_list)
+      hash[:entity_type].should == 'hadoop_instance'
     end
 
     it "should use ownerPresenter Hash method for owner" do

@@ -26,7 +26,7 @@ describe("chorus.models.Attachment", function() {
             this.model.set({iconUrl: 'note/2/attachments?style=icon'});
             expect(this.model.iconUrl()).toBe('note/2/attachments?style=icon');
         });
-    })
+    });
 
     it("returns its name", function() {
         expect(this.model.name()).toBe("attachmentName");
@@ -84,7 +84,8 @@ describe("chorus.models.Attachment", function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             var model = search.attachments().at(0);
             var instance = model.instance();
-            expect(model.showUrl()).toBe("#/instances/" + instance.id + "/databases");
+            expect(instance.id).toBeDefined();
+            expect(model.showUrl()).toBe(instance.showUrl());
         });
 
         it("shows the URL for an hdfsFile", function() {
@@ -176,12 +177,19 @@ describe("chorus.models.Attachment", function() {
 
         it("returns the instance", function() {
             this.instance = this.model.instance();
-            expect(this.instance.get('name')).toBe(this.model.get('gpdbInstance').name);
-            expect(this.instance.get('id')).toBe(this.model.get('gpdbInstance').id);
+            expect(this.instance.get('name')).toBe(this.model.get('instance').name);
+            expect(this.instance.get('id')).toBe(this.model.get('instance').id);
+        });
+
+        it("dynamically assigns the instance type", function() {
+            expect(this.model.instance()).toBeA(chorus.models.GreenplumInstance);
+            var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
+            var model = search.attachments().at(0);
+            expect(model.instance()).toBeA(chorus.models.HadoopInstance);
         });
 
         it("returns falsy when there is no instance", function() {
-            this.model.unset('gpdbInstance');
+            this.model.unset('instance');
             expect(this.model.instance()).toBeFalsy();
         });
 

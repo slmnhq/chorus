@@ -33,29 +33,14 @@ describe SearchPresenter, :type => :view do
 
       it "includes the right instance keys" do
         @hash.should have_key(:instances)
-        gpdb_instance_hash = @hash[:instances]
-        gpdb_instance_hash.should have_key(:numFound)
-        gpdb_instance_hash.should have_key(:results)
-        gpdb_instance_hash[:results][0].should have_key(:highlighted_attributes)
-        gpdb_instance_hash[:results][0][:entity_type].should == 'greenplum_instance'
-      end
-
-      it "includes the right hadoop instance keys" do
-        @hash.should have_key(:hadoop_instances)
-        hadoop_instance_hash = @hash[:hadoop_instances]
-        hadoop_instance_hash.should have_key(:numFound)
-        hadoop_instance_hash.should have_key(:results)
-        hadoop_instance_hash[:results][0].should have_key(:highlighted_attributes)
-        hadoop_instance_hash[:results][0][:entity_type].should == 'hadoop_instance'
-      end
-
-      it "includes the right gnip instance keys" do
-        @hash.should have_key(:gnip_instances)
-        gnip_instance_hash = @hash[:gnip_instances]
-        gnip_instance_hash.should have_key(:numFound)
-        gnip_instance_hash.should have_key(:results)
-        gnip_instance_hash[:results][0].should have_key(:highlighted_attributes)
-        gnip_instance_hash[:results][0][:entity_type].should == 'gnip_instance'
+        instance_hash = @hash[:instances]
+        instance_hash.should have_key(:numFound)
+        instance_hash.should have_key(:results)
+        instance_types = instance_hash[:results].map {|result| result[:entity_type]}.uniq
+        instance_types.should =~ ['greenplum_instance', 'hadoop_instance', 'gnip_instance']
+        instance_hash[:results].each do |result|
+          result.should have_key(:highlighted_attributes)
+        end
       end
 
       it "includes the right workspace keys" do

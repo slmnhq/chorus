@@ -1,14 +1,14 @@
 describe("chorus.views.SearchResultList", function() {
     context("body", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult();
+            this.result = rspecFixtures.searchResult();
             this.result.set({ query: "foo" });
 
             var instances = this.result.instances();
             instances.pagination.records = 24;
 
             this.view = new chorus.views.SearchResultList({
-                entityType: "gpdb_instance",
+                entityType: "instance",
                 collection: instances,
                 search: this.result
             });
@@ -17,7 +17,7 @@ describe("chorus.views.SearchResultList", function() {
         });
 
         it("has a list element for each model in the collection", function() {
-            expect(this.view.$('li').length).toBe(1);
+            expect(this.view.$('li').length).toBe(3);
         });
     });
 
