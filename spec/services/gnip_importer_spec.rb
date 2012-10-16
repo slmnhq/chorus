@@ -4,8 +4,14 @@ describe GnipImporter do
   let(:gnip_import_created_event) { events(:gnip_stream_import_created) }
   let(:csv_file) { csv_files(:default) }
 
+  before do
+    any_instance_of(GnipImporter) { |importer| stub(importer).destination_dataset { datasets(:table) } }
+  end
+
   describe "#create_success_event" do
     before do
+      gnip_import_created_event.dataset = nil
+      gnip_import_created_event.save!
       importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
       importer.create_success_event
     end
@@ -20,6 +26,7 @@ describe GnipImporter do
     it "creates a success event with correct attributes" do
       event = Events::GnipStreamImportSuccess.last
       event.actor.should == gnip_import_created_event.actor
+      gnip_import_created_event.reload.dataset.should_not be_nil
       event.dataset.should == gnip_import_created_event.dataset
       event.workspace.should == gnip_import_created_event.workspace
     end
@@ -38,7 +45,7 @@ describe GnipImporter do
       importer.create_failure_event(error_message)
     end
 
-    it "creates an import stream success event" do
+    it "creates an import stream failure event" do
       expect {
         importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
         importer.create_failure_event(error_message)
@@ -48,7 +55,8 @@ describe GnipImporter do
     it "creates a failure event with correct attributes" do
       event = Events::GnipStreamImportFailed.last
       event.actor.should == gnip_import_created_event.actor
-      event.dataset.should == gnip_import_created_event.dataset
+      event.destination_table.should == csv_file.to_table
+      event.error_message.should == error_message
       event.workspace.should == gnip_import_created_event.workspace
     end
 

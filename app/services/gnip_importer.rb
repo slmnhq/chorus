@@ -24,7 +24,10 @@ class GnipImporter < CsvImporter
   end
 
   def create_success_event
-    gnip_event = Events::GnipStreamImportCreated.find(import_created_event_id)
+    gnip_event = Events::GnipStreamImportCreated.find(import_created_event_id).tap do |event|
+      event.dataset = destination_dataset
+      event.save!
+    end
 
     event = Events::GnipStreamImportSuccess.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
@@ -42,7 +45,7 @@ class GnipImporter < CsvImporter
   def self.create_failure_event(error_message, gnip_event)
     event = Events::GnipStreamImportFailed.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
-        :dataset => gnip_event.dataset,
+        :destination_table => csv_file.to_table,
         :gnip_instance => gnip_event.gnip_instance,
         :error_message => error_message
     )

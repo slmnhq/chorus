@@ -1143,13 +1143,12 @@ describe("chorus.presenters.Activity", function() {
             model = rspecFixtures.activity.gnipStreamImportFailed();
             presenter = new chorus.presenters.Activity(model);
             workspace = model.workspace();
-            dataset = model.dataset();
             gnipInstance = model.gnipInstance();
 
             activity_data = {
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
-                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name()),
+                destinationTable: model.get('destinationTable')
             };
         });
 

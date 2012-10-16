@@ -251,7 +251,8 @@
             },
 
             GnipStreamImportFailed: {
-                links: ["workspace", "gnipInstance", "dataset"]
+                links: ["workspace", "gnipInstance"],
+                attrs: ["destinationTable"]
             },
 
             WorkfileUpgradedVersion: {

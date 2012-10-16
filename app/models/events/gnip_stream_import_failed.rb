@@ -2,8 +2,8 @@ require 'events/base'
 
 module Events
   class GnipStreamImportFailed < Base
-    has_targets :gnip_instance, :dataset, :workspace
-    has_activities :workspace, :dataset, :gnip_instance, :global
-    has_additional_data :error_message
+    has_targets :gnip_instance, :workspace
+    has_activities :workspace, :gnip_instance, :global
+    has_additional_data :destination_table, :error_message
   end
 end

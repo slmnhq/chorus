@@ -553,18 +553,18 @@ describe "Event types" do
     let(:gnip_instance) { gnip_instances(:default) }
     subject do
       Events::GnipStreamImportFailed.add(
-          :dataset => dataset,
+          :destination_table => dataset.name,
           :gnip_instance => gnip_instance,
           :workspace => workspace,
           :error_message => 'Flying Monkey Attack'
       )
     end
 
-    its(:dataset) { should == dataset }
-    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
-    its(:additional_data) { should == {'error_message' => 'Flying Monkey Attack'} }
+    its(:destination_table) { should == dataset.name }
+    its(:targets) { should == {:workspace => workspace, :gnip_instance => gnip_instance} }
+    its(:error_message) { should == 'Flying Monkey Attack' }
 
-    it_creates_activities_for { [workspace, dataset, gnip_instance] }
+    it_creates_activities_for { [workspace, gnip_instance] }
     it_creates_a_global_activity
   end
 
