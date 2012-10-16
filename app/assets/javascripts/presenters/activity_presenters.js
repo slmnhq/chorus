@@ -243,7 +243,9 @@
             },
 
             GnipStreamImportCreated: {
-                links: ["actor", "gnipInstance", "dataset"]
+                links: ["actor", "gnipInstance", "dataset"],
+                attrs: ["destinationTable"],
+                computed: ["destObjectOrName"]
             },
 
             GnipStreamImportSuccess: {

@@ -26,7 +26,9 @@ describe GnipImporter do
     it "creates a success event with correct attributes" do
       event = Events::GnipStreamImportSuccess.last
       event.actor.should == gnip_import_created_event.actor
+
       gnip_import_created_event.reload.dataset.should_not be_nil
+
       event.dataset.should == gnip_import_created_event.dataset
       event.workspace.should == gnip_import_created_event.workspace
     end

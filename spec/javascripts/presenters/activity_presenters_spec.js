@@ -1090,26 +1090,56 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("gnip import created event", function() {
-        var activity_data;
-        beforeEach(function () {
-            model = rspecFixtures.activity.gnipStreamImportCreated();
-            presenter = new chorus.presenters.Activity(model);
-            actor = model.actor();
-            dataset = model.dataset();
-            gnipInstance = model.gnipInstance();
+        context("when dataset does not yet exist", function() {
+            var activity_data;
+            beforeEach(function () {
+                model = rspecFixtures.activity.gnipStreamImportCreated();
+                dataset = rspecFixtures.dataset();
+                presenter = new chorus.presenters.Activity(model);
+                actor = model.actor();
+                gnipInstance = model.gnipInstance();
 
-            activity_data = {
-                actorLink: linkTo(actor.showUrl(), actor.name()),
-                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
-            };
+                activity_data = {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name()),
+                    destObjectOrName: model.get('destinationTable')
+                };
+            });
+
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.GnipStreamImportCreated.default",
+                    activity_data
+                );
+            });
         });
 
-        it("has the right header html", function() {
-            expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.GnipStreamImportCreated.default",
-                activity_data
-            );
+        context("when dataset exists", function() {
+            var activity_data;
+            beforeEach(function () {
+                model = rspecFixtures.activity.gnipStreamImportCreated();
+                dataset = rspecFixtures.dataset();
+                dataset.set({ workspace: model.get('workspace') });
+                var workspaceDataset = new chorus.models.WorkspaceDataset(dataset);
+                model.set({ dataset: dataset });
+
+                presenter = new chorus.presenters.Activity(model);
+                actor = model.actor();
+                gnipInstance = model.gnipInstance();
+
+                activity_data = {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    destObjectOrName: linkTo(workspaceDataset.showUrl(), workspaceDataset.name()),
+                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                };
+            });
+
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.GnipStreamImportCreated.default",
+                    activity_data
+                );
+            });
         });
     });
 

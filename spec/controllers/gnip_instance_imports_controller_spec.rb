@@ -46,6 +46,10 @@ describe GnipInstanceImportsController do
         expect {
           post :create, gnip_instance_import_params
         }.to change(Events::GnipStreamImportCreated, :count).by(1)
+
+        created_event = Events::GnipStreamImportCreated.last
+        created_event.destination_table.should == 'foobar'
+        created_event.dataset.should_not be_present
       end
     end
 

@@ -33,7 +33,7 @@ class GnipInstanceImportsController < ApplicationController
     schema = csv_file.workspace.sandbox
     Events::GnipStreamImportCreated.by(csv_file.user).add(
         :workspace => csv_file.workspace,
-        :dataset => schema.datasets.find_by_name(csv_file.to_table),
+        :destination_table => csv_file.to_table,
         :gnip_instance => gnip_instance
     )
   end
