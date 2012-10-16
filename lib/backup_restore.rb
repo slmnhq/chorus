@@ -4,7 +4,8 @@ require 'open3'
 
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
-  DATABASE_SQL_FILENAME = "database.sql.gz"
+  DATABASE_DDL_FILENAME = "database_recreate.sql"
+  DATABASE_DATA_FILENAME = "database.gz"
   ASSETS_FILENAME = "assets.tgz"
   ASSET_PATHS = %w{csv_import_file_storage_path workfile_storage_path image_storage attachment_storage}
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
@@ -22,9 +23,16 @@ module BackupRestore
       puts *args
     end
 
-    def database_params
-      db_config = Rails.application.config.database_configuration[Rails.env]
-      "-p #{db_config['port']} #{db_config['database']}"
+    def db_config
+      Rails.application.config.database_configuration[Rails.env]
+    end
+
+    def database_name
+      db_config['database']
+    end
+
+    def database_port
+      db_config['port']
     end
 
     def config_path(name)
@@ -82,8 +90,13 @@ module BackupRestore
     def dump_database
       log "Dumping database contents..."
 
-      db_filename = "#{DATABASE_SQL_FILENAME}"
-      capture_output "pg_dump #{database_params} | gzip > #{db_filename}", :error => "Database dump failed."
+      File.open(DATABASE_DDL_FILENAME, 'w') do |f|
+        f.puts "\\c postgres"
+        f.puts "DROP DATABASE #{database_name};"
+      end
+      # restore the schema separately because the binary dump cannot create the database
+      capture_output "pg_dump --create --schema-only -p #{database_port} #{database_name} >> #{DATABASE_DDL_FILENAME}", :error => "Database dump failed."
+      capture_output "pg_dump --data-only -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
     def compress_asset_path(path)
@@ -140,6 +153,9 @@ module BackupRestore
     end
 
     def restore
+      connection_config = ActiveRecord::Base.connection_config
+      ActiveRecord::Base.connection.disconnect!
+
       full_backup_filename = File.expand_path(backup_filename)
       SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
         self.temp_dir = Pathname.new tmp_dir
@@ -158,6 +174,8 @@ module BackupRestore
         end
       end
       true
+    ensure
+      ActiveRecord::Base.establish_connection connection_config
     end
 
     def restore_assets
@@ -170,7 +188,7 @@ module BackupRestore
       FileUtils.mkdir_p full_path and Dir.chdir full_path do
         MODELS_WITH_ASSETS.each do |model|
           # TODO: make sure that we only remove top-level model paths that are in the tar ball
-          FileUtils.rm_r File.join(path, model) if asset_path_in_tar(path) rescue Errno::ENOENT
+          FileUtils.rm_r File.join(path, model) if asset_path_in_tar?(path) rescue Errno::ENOENT
         end
 
         capture_output "tar xf #{temp_dir.join path + ".tgz"}",
@@ -178,12 +196,13 @@ module BackupRestore
       end
     end
 
-    def asset_path_in_tar(path)
+    def asset_path_in_tar?(path)
       true
     end
 
     def restore_database
-      capture_output "gunzip -c database.sql.gz | pg_restore #{database_params}", :error => "Could not restore database."
+      capture_output "psql -p #{database_port} postgres < #{DATABASE_DDL_FILENAME}", :error => "Could not restore database."
+      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | pg_restore -p #{database_port} -d #{database_name}", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)

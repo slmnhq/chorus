@@ -132,6 +132,8 @@ describe 'BackupRestore' do
   end
 
   describe 'Restore' do
+    self.use_transactional_fixtures = false
+
     before do
       FakeFS.deactivate!
       any_instance_of(BackupRestore::Restore) do |instance|
@@ -231,15 +233,16 @@ describe 'BackupRestore' do
   end
 end
 
-describe "deployment" do
+describe "Backup and Restore" do
   include Deployment
+  self.use_transactional_fixtures = false
 
   before do
     any_instance_of(BackupRestore::Backup) do |backup|
       stub(backup).log.with_any_args
     end
     any_instance_of(BackupRestore::Restore) do |restore|
-      stub(restore).restore_database
+      #stub(restore).restore_database
       stub(restore).log.with_any_args
     end
   end
@@ -286,6 +289,9 @@ describe "deployment" do
       end
 
       backup_filename = Dir.glob(backup_path.join "*.tar").first
+      FileUtils.cp backup_filename, "/tmp"
+
+      deleted_user = User.first.delete
 
       with_rails_root @restore_path do
         BackupRestore.restore backup_filename
@@ -295,6 +301,8 @@ describe "deployment" do
       restored_entries = get_filesystem_entries_at_path @restore_path
 
       restored_entries.should == original_entries
+
+      User.find_by_id(deleted_user.id).should == deleted_user
     end
   end
 
