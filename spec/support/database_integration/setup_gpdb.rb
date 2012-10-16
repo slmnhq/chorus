@@ -5,7 +5,7 @@ module GpdbIntegration
   config_file = "test_gpdb_connection_config.yml"
 
   REAL_GPDB_HOST = ENV['GPDB_HOST'] || 'local_greenplum'
-  CONFIG          = YAML.load_file(File.expand_path("../#{config_file}", __FILE__))
+  CONFIG          = YAML.load_file(Rails.root + "config/#{config_file}")
   INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == REAL_GPDB_HOST }
   ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
