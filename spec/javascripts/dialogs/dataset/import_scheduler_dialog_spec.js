@@ -24,8 +24,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("takes the workspace from the options passed", function() {
-//                expect(this.dialog.workspace).toBe(this.workspace);
-                expect(1).toBe(1);
+                expect(this.dialog.workspace).toBe(this.workspace);
             });
 
             it("has the 'importType' parameter set to 'schedule'", function() {
@@ -222,7 +221,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should put the values in the correct API form fields", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import[truncate]"]).toBe("false");
-                    expect(params["dataset_import[sample_count]"]).toBe("0");
+                    expect(params["dataset_import[sample_count]"]).toBe("");
                     expect(params["dataset_import[start_datetime]"]).toBe("2012-02-29 12:09:00.0");
                     expect(params["dataset_import[end_date]"]).toBe("2012-03-21");
                 });
@@ -394,7 +393,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     });
 
                     it('correctly sets sampleCount to undefined when limit_num_rows is unchecked', function() {
-                        expect(this.server.lastUpdate().params()["dataset_import[sample_count]"]).toBe("0");
+                        expect(this.server.lastUpdate().params()["dataset_import[sample_count]"]).toBe("");
                     });
 
                     context("when the save completes", function() {

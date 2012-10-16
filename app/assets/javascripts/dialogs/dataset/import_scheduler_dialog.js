@@ -253,7 +253,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
         var useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
         if (!useLimitRows) {
-            updates.sampleCount = 0;
+            updates.sampleCount = '';
         } else {
             updates.sampleCount = $enabledFieldSet.find("input[name='sampleCount']").val();
         }
