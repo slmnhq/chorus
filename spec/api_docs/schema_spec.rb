@@ -22,7 +22,7 @@ resource "Greenplum DB schemas" do
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).verify_in_source
       stub(schema).stored_functions(owner_account) {
-        GpdbSchemaFunction.new(
+        [ GpdbSchemaFunction.new(
           db_schema.name,
           "test_function",
           "SQL",
@@ -31,7 +31,7 @@ resource "Greenplum DB schemas" do
           "{int4,int4}",
           "select pg_sleep(100)",
           "does nothing. do not call."
-        )
+        )]
       }
     end
   end
