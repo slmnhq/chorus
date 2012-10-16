@@ -5,7 +5,7 @@ module Kaggle
 
       sorted_user_list = user_list.map do |user_attributes|
         {
-            "id" => user_attributes['Id'],
+            "id" => user_attributes['UserId'],
             "username" => user_attributes['Username'],
             "location" => user_attributes['Location'],
             "rank" => user_attributes['KaggleRank'],

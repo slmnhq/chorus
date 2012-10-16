@@ -1,53 +1,75 @@
 [
     {
-        "Id": 1,
-        "Username": "CatWoman",
-        "KaggleRank": 1,
-        "KagglePoints": 100,
-        "FavoriteTechnique": "Claw fighting",
-        "FavoriteSoftware": "Rappelling down buildings",
-        "LegalName": "Selina Kyle",
-        "Location": "San Francisco, United States",
-        "Gravatar": "https://secure.gravatar.com/avatar/kaggleImage.jpg",
-        "PastCompetitionTypes": ["Fashion", "Astronomy"],
-        "PastCompetitions": [
+        "Username":"CatWoman",
+        "UserId":7657,
+        "KaggleRank":9,
+        "KagglePoints":298690.9,
+        "FavoriteTechnique":"",
+        "FavoriteSoftware":"R with a little SAS",
+        "LegalName":"Selina Kyle",
+        "Location":"San Francisco, United States",
+        "Gravatar":"https://secure.gravatar.com/avatar/kaggleImage.jpg",
+        "PastCompetitionTypes":[
+            "Life Sciences",
+            "Retail",
+            "Psychology",
+            "Natural Language Processing",
+            "High Dimensional Data",
+            "Education",
+            "Credit",
+            "Geospatial",
+            "Insurance",
+            "Consumer Behavior",
+            "Astronomy"
+        ],
+        "PastCompetitions":[
             {
-                "CompetitionName": "Breakins",
-                "Finish": 1,
-                "TotalTeamCount": 2,
-                "PartOfTeam": true
+                "CompetitionName":"Breakins",
+                "Finish":1,
+                "TotalTeamCount":2,
+                "PartOfTeam":true
             },
             {
-                "CompetitionName": "Analyzing Who Batman Really Is",
-                "Finish": 1,
-                "TotalTeamCount": 1,
-                "PartOfTeam": false
+                "CompetitionName":"Analyzing Who Batman Really Is",
+                "Finish":1,
+                "TotalTeamCount":1,
+                "PartOfTeam":false
             }
         ]
     },
     {
-        "Id": 2,
-        "Username": "Batman",
-        "KaggleRank": 2,
-        "KagglePoints": 100,
-        "FavoriteTechnique": "Flying",
-        "FavoriteSoftware": "Batmobile",
-        "LegalName": "Bruce Wayne",
-        "Location": "San Francisco, United States",
-        "Gravatar": "https://secure.gravatar.com/avatar/batman.jpg",
-        "PastCompetitionTypes": ["Automobiles"],
-        "PastCompetitions": [
+        "Username":"Batman",
+        "UserId":6732,
+        "KaggleRank":17,
+        "KagglePoints":245095.8,
+        "FavoriteTechnique":"SVM",
+        "FavoriteSoftware":"R",
+        "LegalName":"Bruce Wayne",
+        "Location":"San Francisco, United States",
+        "Gravatar":"https://secure.gravatar.com/avatar/batman.jpg",
+        "PastCompetitionTypes":[
+            "High Dimensional Data",
+            "Psychology",
+            "Natural Language Processing",
+            "Life Sciences",
+            "Financial",
+            "Time Series",
+            "Retail",
+            "Consumer Behavior",
+            "Astronomy"
+        ],
+        "PastCompetitions":[
             {
-                "CompetitionName": "Fight Joker",
-                "Finish": 1,
-                "TotalTeamCount": 2,
-                "PartOfTeam": true
+                "CompetitionName":"Fight Joker",
+                "Finish":1,
+                "TotalTeamCount":2,
+                "PartOfTeam":true
             },
             {
-                "CompetitionName": "Be Most Badass In Gotham City",
-                "Finish": 1,
-                "TotalTeamCount": 1,
-                "PartOfTeam": false
+                "CompetitionName":"Be Most Badass In Gotham City",
+                "Finish":1,
+                "TotalTeamCount":1,
+                "PartOfTeam":false
             }
         ]
     }
