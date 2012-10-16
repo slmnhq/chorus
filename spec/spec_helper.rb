@@ -97,6 +97,7 @@ RSpec.configure do |config|
   end
 
   config.after do
+    QC::Conn.disconnect
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 

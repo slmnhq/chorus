@@ -4,7 +4,6 @@ require 'open3'
 
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
-  DATABASE_DDL_FILENAME = "database_recreate.sql"
   DATABASE_DATA_FILENAME = "database.gz"
   ASSETS_FILENAME = "assets.tgz"
   ASSET_PATHS = %w{csv_import_file_storage_path workfile_storage_path image_storage attachment_storage}
@@ -36,7 +35,7 @@ module BackupRestore
     end
 
     def config_path(name)
-      raise "Could not find path for ''#{name}' in chorus_config.yml" unless chorus_config[name]
+      raise "Could not find path for ''#{name}' in chorus.yml" unless chorus_config[name]
       chorus_config[name].gsub ":rails_root", Rails.root.to_s
     end
 
@@ -90,13 +89,7 @@ module BackupRestore
     def dump_database
       log "Dumping database contents..."
 
-      File.open(DATABASE_DDL_FILENAME, 'w') do |f|
-        f.puts "\\c postgres"
-        f.puts "DROP DATABASE #{database_name};"
-      end
-      # restore the schema separately because the binary dump cannot create the database
-      capture_output "pg_dump --create --schema-only -p #{database_port} #{database_name} >> #{DATABASE_DDL_FILENAME}", :error => "Database dump failed."
-      capture_output "pg_dump --data-only -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
+      capture_output "pg_dump -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
     def compress_asset_path(path)
@@ -153,29 +146,26 @@ module BackupRestore
     end
 
     def restore
-      connection_config = ActiveRecord::Base.connection_config
-      ActiveRecord::Base.connection.disconnect!
+      without_connection do
+        full_backup_filename = File.expand_path(backup_filename)
+        SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
+          self.temp_dir = Pathname.new tmp_dir
+          Dir.chdir tmp_dir do
+            capture_options = {:error => "Could not unpack backup file '#{backup_filename}'"}
+            capture_output "tar xf #{full_backup_filename}", capture_options
+            backup_version = capture_output("cat version_build", capture_options).strip
+            current_version = capture_output("cat #{Rails.root.join 'version_build'}", capture_options).strip
 
-      full_backup_filename = File.expand_path(backup_filename)
-      SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
-        self.temp_dir = Pathname.new tmp_dir
-        Dir.chdir tmp_dir do
-          capture_options = { :error => "Could not unpack backup file '#{backup_filename}'" }
-          capture_output "tar xf #{full_backup_filename}", capture_options
-          backup_version = capture_output("cat version_build", capture_options).strip
-          current_version = capture_output("cat #{Rails.root.join 'version_build'}", capture_options).strip
+            compare_versions(backup_version, current_version)
 
-          compare_versions(backup_version, current_version)
-
-          FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
-          self.chorus_config = ChorusConfig.new
-          restore_assets
-          restore_database
+            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
+            self.chorus_config = ChorusConfig.new
+            restore_assets
+            restore_database
+          end
         end
+        true
       end
-      true
-    ensure
-      ActiveRecord::Base.establish_connection connection_config
     end
 
     def restore_assets
@@ -201,14 +191,26 @@ module BackupRestore
     end
 
     def restore_database
-      capture_output "psql -p #{database_port} postgres < #{DATABASE_DDL_FILENAME}", :error => "Could not restore database."
-      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | pg_restore -p #{database_port} -d #{database_name}", :error => "Could not restore database."
+      log "Restoring database..."
+      capture_output "dropdb -p #{database_port} #{database_name}", :error => "Existing database could not be dropped."
+      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | pg_restore -C -p #{database_port} -d postgres", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)
       if backup_version != current_version
         raise "Backup version ('#{backup_version}') differs from installed chorus version ('#{current_version}')"
       end
+    end
+
+    def without_connection
+      existing_connection = ActiveRecord::Base.connection_handler.active_connections?
+      if existing_connection
+        connection_config = ActiveRecord::Base.connection_config
+        ActiveRecord::Base.connection.disconnect!
+      end
+      yield
+    ensure
+      ActiveRecord::Base.establish_connection connection_config if existing_connection
     end
   end
 end

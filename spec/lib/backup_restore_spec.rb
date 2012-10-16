@@ -282,7 +282,7 @@ describe "Backup and Restore" do
     end
   end
 
-  xit "backs up and restores the data" do
+  it "backs up and restores the data" do
     make_tmp_path("rspec_backup_restore_backup") do |backup_path|
       with_rails_root @original_path do
         BackupRestore.backup backup_path
