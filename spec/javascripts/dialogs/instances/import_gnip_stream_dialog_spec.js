@@ -93,6 +93,16 @@ describe("ImportGnipStream", function () {
                             expect(this.dialog.$(".errors").text()).toContain("abc");
                         });
                     });
+
+                    context("when model is invalid", function() {
+                        beforeEach(function () {
+                            this.dialog.model.trigger("validationFailed");
+                        });
+
+                        it("stops the 'loading' submit button", function () {
+                            expect(this.dialog.$(".submit").isLoading()).toBeFalsy();
+                        });
+                    });
                 });
             });
         });

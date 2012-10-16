@@ -12,6 +12,7 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
     setup: function() {
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     makeModel: function() {
@@ -40,8 +41,8 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
 
     saveModel: function() {
         this.setFieldValues();
-        this.model.save();
         this.$("button.submit").startLoading("loading");
+        this.model.save();
     },
 
     enableSubmitButton: function() {
