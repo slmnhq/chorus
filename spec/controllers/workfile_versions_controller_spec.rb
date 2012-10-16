@@ -107,6 +107,10 @@ describe WorkfileVersionsController do
       decoded_response[0].version_num = 3
       decoded_response[1].version_num = 2
     end
+
+    it_behaves_like "a paginated list" do
+      let(:params) {{ :workfile_id => workfile.to_param }}
+    end
   end
 
   def draft_count(workfile, user)

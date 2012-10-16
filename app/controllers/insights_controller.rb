@@ -10,7 +10,7 @@ class InsightsController < ApplicationController
 
   def index
     params[:entity_type] ||= 'dashboard'
-    present get_insights
+    present paginate get_insights
   end
 
   def count

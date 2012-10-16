@@ -9,10 +9,8 @@ describe InsightsController do
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.last }
 
-    subject { post :promote, :note_id => note.id}
-
     it "returns status 201" do
-      subject
+      post :promote, :note_id => note.id
       response.code.should == "201"
     end
 
@@ -20,33 +18,36 @@ describe InsightsController do
       mock_present do |insight|
         insight.should == note
       end
-      subject
+      post :promote, :note_id => note.id
     end
 
     it "marks the NOTE as an insight" do
-      subject
+      post :promote, :note_id => note.id
       note.reload.should be_insight
       note.promoted_by.should == user
       note.promotion_time.should_not be_nil
     end
 
-    context "when the current user is an admin" do
+    context 'when the note is private' do
       let(:note) { events(:note_on_no_collaborators_private_workfile) }
+
+      context 'when the user does not have access' do
+        let(:user) { users(:not_a_member) }
+
+        it "returns permission denied status code" do
+          post :promote, :note_id => note.id
+
+          response.code.should == "403"
+        end
+      end
+
+      context "when the user is admin" do
       let(:user) { users(:admin) }
 
       it "returns status 201" do
-        subject
+        post :promote, :note_id => note.id
         response.code.should == "201"
       end
-    end
-
-    context "when the current user does not have permission to see the note" do
-      let(:note) { events(:note_on_no_collaborators_private_workfile) }
-      let(:user) { users(:not_a_member) }
-
-      it "returns permission denied status code" do
-        subject
-        response.code.should == "403"
       end
     end
   end
@@ -59,7 +60,6 @@ describe InsightsController do
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
-    let(:subject) { get :index, :entity_type => 'dashboard' }
     let(:workspace) { workspaces(:public) }
     let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
         :workspace => workspace,
@@ -72,25 +72,27 @@ describe InsightsController do
       mock_present do |models|
         models.should include(insight)
       end
-      subject
+      get :index, :entity_type => 'dashboard'
       response.code.should == "200"
     end
+
+    it_behaves_like "a paginated list"
 
     it "should not include any non-insights" do
       mock_present do |models|
         models.should_not include(non_insight)
       end
-      subject
+      get :index, :entity_type => 'dashboard'
     end
 
     it "orders insights with the most recent first" do
       mock_present do |models|
         models.first.id.should > models.second.id
       end
-      subject
+      get :index, :entity_type => 'dashboard'
     end
 
-    context "Permissions to see insights" do
+    context "when the insight is private" do
       let(:private_insight) { events(:note_on_no_collaborators_private_workfile) }
       let(:user) { users(:not_a_member) }
 
@@ -101,11 +103,11 @@ describe InsightsController do
         private_insight.save!
       end
 
-      it "should not include " do
+      it "is not shown to a non-admin" do
         mock_present do |models|
           models.should_not include(private_insight)
         end
-        subject
+        get :index, :entity_type => 'dashboard'
       end
 
       context "when user is an admin" do
@@ -114,7 +116,7 @@ describe InsightsController do
           mock_present do |models|
             models.should include(private_insight)
           end
-          subject
+          get :index, :entity_type => 'dashboard'
         end
       end
 

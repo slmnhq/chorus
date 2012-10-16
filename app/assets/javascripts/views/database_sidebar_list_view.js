@@ -156,7 +156,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         if (this.schema && (!oldSchema || oldSchema.database().id != this.schema.database().id)) {
             this.schemas = this.schema.database().schemas();
             this.requiredResources.add(this.schemas);
-            this.schemas.fetch();
+            this.schemas.fetchAll();
             this.fetchResourceAfterSchemaSelected();
         }
     },

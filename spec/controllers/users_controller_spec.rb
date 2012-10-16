@@ -20,6 +20,8 @@ describe UsersController do
       decoded_response.length.should == User.count
     end
 
+    it_behaves_like "a paginated list"
+
     describe "sorting" do
       it "sorts by first name" do
         get :index

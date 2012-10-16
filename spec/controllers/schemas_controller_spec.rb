@@ -41,6 +41,10 @@ describe SchemasController do
       decoded_response[1].dataset_count.should == schema2.datasets_count
     end
 
+    it_behaves_like "a paginated list" do
+      let(:params) {{ :database_id => database.to_param }}
+    end
+
     generate_fixture "schemaSet.json" do
       get :index, :database_id => database.to_param
     end

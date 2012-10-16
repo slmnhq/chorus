@@ -28,6 +28,10 @@ describe ColumnController do
         get :index, :dataset_id => table.to_param
       end
 
+      it_behaves_like "a paginated list" do
+        let(:params) {{ :dataset_id => table.to_param }}
+      end
+
       it "should retrieve column for a table" do
         get :index, :dataset_id => table.to_param
 

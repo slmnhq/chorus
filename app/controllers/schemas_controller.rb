@@ -2,7 +2,7 @@ class SchemasController < GpdbController
   def index
     database = GpdbDatabase.find(params[:database_id])
     schemas = GpdbSchema.visible_to(authorized_gpdb_account(database), database)
-    present schemas
+    present paginate schemas
   end
 
   def show

@@ -40,7 +40,7 @@ class WorkfileVersionsController < ApplicationController
     workfile = Workfile.find(params[:workfile_id])
     authorize! :show, workfile.workspace
 
-    present workfile.versions
+    present paginate(workfile.versions)
   end
 
   private

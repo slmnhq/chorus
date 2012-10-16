@@ -8,7 +8,7 @@ chorus.pages.NotificationIndexPage = chorus.pages.Base.extend({
     setup: function() {
         this.collection = new chorus.collections.NotificationSet([]);
         this.bindings.add(this.collection, "loaded", this.notificationsFetched, this);
-        this.collection.fetch();
+        this.collection.fetchAll();
 
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
 

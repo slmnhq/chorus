@@ -64,6 +64,7 @@ describe GnipInstancesController do
       decoded_response[0].owner.id.should == gnip_instance.owner_id
     end
 
+    it_behaves_like "a paginated list"
   end
 
   describe '#show' do

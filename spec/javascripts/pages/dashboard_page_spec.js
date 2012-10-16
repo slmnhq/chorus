@@ -1,40 +1,52 @@
 describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
-        chorus.session = new chorus.models.Session({ id: "foo" })
+        chorus.session = new chorus.models.Session({ id: "foo" });
         this.page = new chorus.pages.DashboardPage();
     });
 
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("dashboard")
-    })
+    });
+
+    it("uses fetch all for the collections", function() {
+        spyOn(chorus.collections.UserSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.InstanceSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.HadoopInstanceSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.GnipInstanceSet.prototype, "fetchAll").andCallThrough();
+        var page = new chorus.pages.DashboardPage();
+        expect(page.userSet.fetchAll).toHaveBeenCalled();
+        expect(page.instanceSet.fetchAll).toHaveBeenCalled();
+        expect(page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
+        expect(page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
+    });
+
 
     describe("#render", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(new chorus.collections.InstanceSet([], { hasCredentials: true }), [
+            this.server.completeFetchAllFor(this.page.instanceSet, [
                                          rspecFixtures.greenplumInstance(),
                                          rspecFixtures.greenplumInstance()
-            ], { accessible: true }, { accessible: true });
-
-            this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
+            ]);
+            this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
                                          rspecFixtures.hadoopInstance(),
                                          rspecFixtures.hadoopInstance()
             ]);
-            this.server.completeFetchFor(new chorus.collections.GnipInstanceSet(), [
+            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
                                          rspecFixtures.gnipInstance(),
                                          rspecFixtures.gnipInstance()
             ]);
 
             this.page.render();
-        })
+        });
 
         it("creates a Header view", function() {
             expect(this.page.$("#header.header")).toExist();
-        })
+        });
 
         context("the workspace list", function() {
             beforeEach(function() {
                 this.workspaceList = this.page.mainContent.workspaceList;
-            })
+            });
 
             it("has a title", function() {
                 expect(this.workspaceList.$("h1").text()).toBe("My Workspaces");
@@ -51,16 +63,14 @@ describe("chorus.pages.DashboardPage", function() {
 
         context("when the users fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(
-                    new chorus.collections.UserSet([], {page:1, per_page:1}),
-                    [rspecFixtures.user()],
-                    null,
-                    {page:1, total: 1234, records: 1234}
+                this.server.completeFetchAllFor(
+                    this.page.userSet,
+                    rspecFixtures.userSet()
                 );
             });
 
             it("shows the number of users", function() {
-                expect(this.page.$("#user_count a")).toContainTranslation("dashboard.user_count", {count: 1234});
+                expect(this.page.$("#user_count a")).toContainTranslation("dashboard.user_count", {count: rspecFixtures.userSet().length});
                 expect(this.page.$("#user_count")).not.toHaveClass("hidden");
             });
         });
@@ -68,18 +78,19 @@ describe("chorus.pages.DashboardPage", function() {
 
     context("#setup", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(new chorus.collections.InstanceSet([], { hasCredentials: true }), [
-                                         rspecFixtures.greenplumInstance(),
-                                         rspecFixtures.greenplumInstance()
-            ], { accessible: true }, { accessible: true });
-
-            this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
-                                         rspecFixtures.hadoopInstance(),
-                                         rspecFixtures.hadoopInstance()
+            this.server.completeFetchAllFor(this.page.instanceSet, [
+                rspecFixtures.greenplumInstance(),
+                rspecFixtures.greenplumInstance()
             ]);
-            this.server.completeFetchFor(new chorus.collections.GnipInstanceSet(), [
-                                         rspecFixtures.gnipInstance(),
-                                         rspecFixtures.gnipInstance()
+
+            this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
+                rspecFixtures.hadoopInstance(),
+                rspecFixtures.hadoopInstance()
+            ]);
+
+            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
+                rspecFixtures.gnipInstance(),
+                rspecFixtures.gnipInstance()
             ]);
         });
 

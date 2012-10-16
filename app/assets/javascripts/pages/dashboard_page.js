@@ -28,13 +28,16 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
             this.userCount = this.userSet.pagination.records;
             this.showUserCount()
         }, this);
-        this.userSet.fetch();
+        this.userSet.fetchAll();
     },
 
     fetchInstances: function() {
-        this.instanceSet.fetch().success(_.bind(this.mergeInstances, this));
-        this.hadoopInstanceSet.fetch().success(_.bind(this.mergeInstances, this));
-        this.gnipInstanceSet.fetch().success(_.bind(this.mergeInstances, this));
+        this.instanceSet.onLoaded(this.mergeInstances, this);
+        this.instanceSet.fetchAll();
+        this.hadoopInstanceSet.onLoaded(this.mergeInstances, this);
+        this.hadoopInstanceSet.fetchAll();
+        this.gnipInstanceSet.onLoaded(this.mergeInstances, this);
+        this.gnipInstanceSet.fetchAll();
     },
 
     instancesLoaded: function() {

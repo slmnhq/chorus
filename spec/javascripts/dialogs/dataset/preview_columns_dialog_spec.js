@@ -17,7 +17,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
 
     describe("when the fetch completes successfully", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.dataset.columns(), [
+            this.server.completeFetchAllFor(this.dataset.columns(), [
                 fixtures.databaseColumn({name: "Rhino", recentComment: "awesome", type: "text" }),
                 fixtures.databaseColumn({name: "Giraffe", recentComment: "tall", type: "float8" }),
                 fixtures.databaseColumn({name: "Sloth", recentComment: "lazy", type: "int4" }),

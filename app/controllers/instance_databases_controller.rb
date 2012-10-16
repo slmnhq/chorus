@@ -3,7 +3,7 @@ class InstanceDatabasesController < GpdbController
     gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
     databases = GpdbDatabase.visible_to(authorized_gpdb_account(gpdb_instance))
 
-    present databases
+    present paginate databases
   end
 
   def show

@@ -31,6 +31,10 @@ describe FunctionsController do
       response.code.should == "200"
     end
 
+    it_behaves_like "a paginated list" do
+      let(:params) {{ :schema_id => schema.to_param }}
+    end
+
     it "should check for permissions" do
       mock(subject).authorize! :show_contents, schema.gpdb_instance
       get :index, :schema_id => schema.to_param

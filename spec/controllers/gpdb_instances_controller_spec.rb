@@ -16,6 +16,8 @@ describe GpdbInstancesController do
       decoded_response.size.should == GpdbInstance.count
     end
 
+    it_behaves_like "a paginated list"
+
     it "returns online gpdb instances that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"

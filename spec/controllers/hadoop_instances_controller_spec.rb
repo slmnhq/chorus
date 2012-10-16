@@ -66,6 +66,8 @@ describe HadoopInstancesController do
       mock_present { |model| model.should =~ HadoopInstance.all }
       get :index
     end
+
+    it_behaves_like "a paginated list"
   end
 
   describe "#show" do

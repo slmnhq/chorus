@@ -6,7 +6,7 @@ class GnipInstancesController < ApplicationController
   end
 
   def index
-    present GnipInstance.all
+    present paginate GnipInstance.all
   end
 
   def show

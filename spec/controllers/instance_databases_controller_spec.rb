@@ -59,6 +59,10 @@ describe InstanceDatabasesController do
           decoded_response[0].instance.id.should == gpdb_instance.id
           decoded_response.size.should == 2
         end
+
+        it_behaves_like "a paginated list" do
+          let(:params) {{ :gpdb_instance_id => gpdb_instance.id }}
+        end
       end
     end
   end

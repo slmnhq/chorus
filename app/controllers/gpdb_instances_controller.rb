@@ -8,7 +8,7 @@ class GpdbInstancesController < GpdbController
                        GpdbInstance.scoped
                      end
 
-    present gpdb_instances
+    present paginate gpdb_instances
   end
 
   def show

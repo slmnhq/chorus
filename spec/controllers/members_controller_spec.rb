@@ -60,6 +60,10 @@ describe MembersController do
         response.code.should == "200"
         decoded_response.should have(public_workspace.members.length).items # including the owner
       end
+
+      it_behaves_like "a paginated list" do
+        let(:params) {{ :workspace_id => public_workspace.id }}
+      end
     end
   end
 

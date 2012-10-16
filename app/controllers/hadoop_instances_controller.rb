@@ -9,7 +9,7 @@ class HadoopInstancesController < ApplicationController
   end
 
   def index
-    present HadoopInstance.scoped
+    present paginate HadoopInstance.scoped
   end
 
   def show
