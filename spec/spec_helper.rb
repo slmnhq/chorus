@@ -93,11 +93,6 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = true
 
   config.before do
-    queries = ActiveRecord::Base.connection.select("select * from pg_stat_activity where current_query NOT ILIKE '%pg_stat_activity%' AND datname = 'chorus_rails_test'")
-    if queries.length > 0
-      puts "!!!!!!!! Extra queries"
-      puts queries
-    end
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
   end
 
