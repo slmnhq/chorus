@@ -10,8 +10,9 @@ resource "Kaggle" do
   end
 
   get "/workspaces/:workspace_id/kaggle/users" do
+    parameter :kaggle_user, "Array of Filter in format of 'filter|comparator|value'"
+
     example_request "Get a list of Kaggle users" do
-      parameter :kaggle_user, "Array of Filter in format of 'filter|comparator|value'"
       status.should == 200
     end
   end
