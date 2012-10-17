@@ -70,6 +70,7 @@ module BackupRestore
       rolling_days.nil? || rolling_days > 0 || raise("Must specify a positive integer for the number of rolling days (value was #{rolling_days}).")
 
       self.backup_dir = File.expand_path(backup_dir)
+      FileUtils.mkdir_p backup_dir
       self.rolling_days = rolling_days
     end
 

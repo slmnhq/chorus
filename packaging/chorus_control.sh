@@ -96,21 +96,12 @@ function backup () {
        esac
   done
 
-  while true; do
-      if [ -z "$BACKUP_DIR" ]; then
-         read -p "Please enter the destination directory for your backup: " BACKUP_DIR
-      else
-          if mkdir -p "$BACKUP_DIR" && [ -r "$BACKUP_DIR" ] && [ -x "$BACKUP_DIR" ] && [ -w "$BACKUP_DIR" ]; then
-              break;
-          fi
-          read -p "Directory \"$BACKUP_DIR\" could not be accessed or created.  Please enter a different directory: " BACKUP_DIR
-      fi
-  done
-
-  BACKUP_ABSOLUTE_PATH=`cd $BACKUP_DIR && echo $PWD`
+  if [ -z "$BACKUP_DIR" ]; then
+     read -p "Please enter the destination directory for your backup: " BACKUP_DIR
+  fi
 
   echo "Backing up chorus data..."
-  run_in_root_dir_with_postgres "rake backup:create[$BACKUP_ABSOLUTE_PATH,$ROLLING_DAYS]"
+  run_in_root_dir_with_postgres "rake backup:create[$BACKUP_DIR,$ROLLING_DAYS]"
 }
 
 function restore () {

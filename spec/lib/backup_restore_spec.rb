@@ -41,6 +41,14 @@ describe 'BackupRestore' do
         end
       end
 
+      it "creates the backup directory if it does not exist" do
+        backup_dir = File.expand_path backup_path
+        FileUtils.rm_rf backup_dir
+        Dir.exists?(backup_dir).should be_false
+        run_backup
+        Dir.exists?(backup_dir).should be_true
+      end
+
       it "creates a backup file with the correct timestamp" do
         run_backup
         File.exists?(@expected_backup_file).should be_true
@@ -50,14 +58,6 @@ describe 'BackupRestore' do
         new_files_created_by do
           run_backup
         end.should == [@expected_backup_file]
-      end
-
-      context "when the backup directory does not exist" do
-        it "raises an exception" do
-          expect {
-            BackupRestore.backup "missing_dir"
-          }.to raise_error(/missing/)
-        end
       end
 
       context "when a system command fails" do
