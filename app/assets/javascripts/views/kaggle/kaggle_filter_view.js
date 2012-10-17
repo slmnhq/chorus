@@ -14,6 +14,8 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
         this.populateCompetitionType();
     },
 
+    //TODO populate the input values after the render or remove the filters
+
     populateCompetitionType: function() {
         //TODO: replace this with actual data from api once it's implemented
         var list = ["natural language processing", "high dimensionality", "unsupervised learning",

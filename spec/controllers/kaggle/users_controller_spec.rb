@@ -39,6 +39,13 @@ describe Kaggle::UsersController do
       decoded_response.first.rank.should <= decoded_response.second.rank
     end
 
+    it "filters the list" do
+      get:index, :kaggle_user => "rank%7Cgreater%7C10"
+      decoded_response.length.should == 1
+      user = decoded_response.first
+      user['rank'].should > 10
+    end
+
     generate_fixture "kaggleUserSet.json" do
       get :index
     end

@@ -20,12 +20,13 @@ chorus.views.KaggleUserListContentDetails = chorus.views.Base.extend({
     },
 
     submitSearch: function() {
-        var params = this.filterWizardView.collection.map(function(model) {
-            return encodeURI(model.get("column").get("name")) + "|" +
-                encodeURI(model.get("comparator")) +"|" + encodeURI((model.get("input").value))
+        var paramArray =[]
+        this.filterWizardView.collection.map(function(model) {
+            paramArray.push(encodeURIComponent(model.get("column").get("name")) + "|" +
+                encodeURIComponent(model.get("comparator")) +"|" + encodeURIComponent((model.get("input").value)))
         });
-
-        this.collection.urlParams = params;
+        //TODO pass the params as an array
+        this.collection.urlParams = {kaggleUser: encodeURI(paramArray)};
         this.collection.fetch();
     }
 });

@@ -10,7 +10,8 @@ chorus.views.Filter = chorus.views.Base.extend({
         "change select.comparator": "comparatorSelected",
         "paste input.validatable": "updateInput",
         "keyup input.validatable": "updateInput",
-        "blur input.validatable": "updateInput"
+        "blur input.validatable": "updateInput",
+        "change select.validatable": "updateInputSelect"
     },
 
     setup: function() {
@@ -73,6 +74,10 @@ chorus.views.Filter = chorus.views.Base.extend({
 
         this.fillInput();
         this.validateInput();
+
+        if(comparator.usesSelect) {
+            this.updateInputSelect();
+        }
     },
 
     selectComparator: function() {
@@ -105,6 +110,12 @@ chorus.views.Filter = chorus.views.Base.extend({
         this.validateInput();
     },
 
+    updateInputSelect: function() {
+            this.model.setInput(this.fieldSelectValues());
+            this.validateInput();
+
+    },
+
     validateInput: function() {
         if (!this.map) { return; }
         if (this.map.performValidation(this.fieldValues())) {
@@ -116,6 +127,10 @@ chorus.views.Filter = chorus.views.Base.extend({
 
     fieldValues: function() {
        return { value: this.$(".filter.default input").val() };
+    },
+
+    fieldSelectValues: function() {
+       return { value: this.$(".filter.select_type select").val() };
     },
 
     filtersForComparator: function(comparator) {
