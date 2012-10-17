@@ -295,6 +295,7 @@ beforeEach(function() {
 
         datasetStatisticsView: function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
+                rows: 123,
                 createdStamp: "2012-01-24 12:25:11.077",
                 createdTxStamp: "2012-01-24 12:25:10.701",
                 id: fixtures.nextId().toString(),

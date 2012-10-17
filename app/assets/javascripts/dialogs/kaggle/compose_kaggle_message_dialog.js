@@ -5,7 +5,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     events: {
         "click button.submit": 'save',
         "click .showMore": 'showMore',
-        "click .showLess": 'showLess'
+        "click .showLess": 'showLess',
+        "click .insert_dataset_schema": 'launchDatasetPickerDialog'
     },
 
     postRender: function() {
@@ -32,6 +33,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.recipients = options.recipients;
         this.workspace = options.workspace;
         this.maxRecipientCharacters = options.maxRecipientCharacters || 70;
+        this.requiredDatasets = new chorus.RequiredResources();
         this._super('setup', arguments);
     },
 
@@ -96,5 +98,63 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.$('.kaggle_recipient.short').removeClass("hidden");
         this.$('.kaggle_recipient.full').addClass("hidden");
         return false;
+    },
+
+    launchDatasetPickerDialog: function(e) {
+        e.preventDefault();
+        if (!this.saving) {
+            var datasetDialog = new chorus.dialogs.KaggleInsertDatasetSchema({
+                workspaceId: this.workspace.get('id')
+            });
+            this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.launchSubModal(datasetDialog);
+        }
+    },
+
+    datasetsChosen: function(datasets){
+        this.datasets = datasets;
+        this.requiredDatasets.cleanUp();
+
+        _.each(datasets, function (dataset) {
+            var collection = dataset.columns();
+            var statistic = dataset.statistics();
+
+            this.bindings.add(collection, 'loaded', this.columnsLoaded);
+            this.bindings.add(statistic, 'loaded', this.columnsLoaded);
+
+            this.requiredDatasets.push(statistic);
+            this.requiredDatasets.push(collection);
+        }, this);
+
+        _.each(datasets, function (dataset) {
+            dataset.columns().fetchAll();
+            dataset.statistics().fetch();
+        });
+    },
+
+    columnsLoaded: function() {
+        if (!this.requiredDatasets.allLoaded()) {
+            return;
+        }
+
+        var linebreak = "\n";
+        var $message = this.$("textarea[name=message]");
+        var message = $message.val() + linebreak + linebreak;
+
+        _.each(this.datasets, function(dataset) {
+            var statistic = "# of columns: " + dataset.columns().size() + ", # of rows: " + dataset.statistics().get("rows");
+            var name = dataset.get("objectName");
+            var title =  name + " " + statistic;
+            message += (title + linebreak);
+
+            _.each(dataset.columns().models, function(column) {
+                var columnName = column.get("name");
+                var columnType = column.get("typeClass");
+                message += columnName + "  " + columnType + linebreak;
+            }, this);
+            message += linebreak;
+        }, this);
+
+        $message.val(message);
     }
 });
