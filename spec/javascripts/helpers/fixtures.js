@@ -293,34 +293,6 @@ beforeEach(function() {
             return new chorus.models.ChorusView(attributes);
         },
 
-        datasetStatisticsView: function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
-                rows: 123,
-                createdStamp: "2012-01-24 12:25:11.077",
-                createdTxStamp: "2012-01-24 12:25:10.701",
-                id: fixtures.nextId().toString(),
-                lastUpdatedStamp: "2012-01-24 12:25:11.077",
-                lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
-                objectType: "VIEW",
-                type: "SOURCE_TABLE",
-                definition: "DROP TABLE users"
-            }, overrides);
-            return new chorus.models.DatasetStatistics(attributes);
-        },
-
-        datasetStatisticsTable: function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
-                createdStamp: "2012-01-24 12:25:11.077",
-                createdTxStamp: "2012-01-24 12:25:10.701",
-                id: fixtures.nextId().toString(),
-                lastUpdatedStamp: "2012-01-24 12:25:11.077",
-                lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
-                objectType: "TABLE",
-                type: "SOURCE_TABLE"
-            }, overrides);
-            return new chorus.models.DatasetStatistics(attributes);
-        },
-
         datasetImport: function(overrides) {
             var in1year = new Date();
             in1year.setFullYear(in1year.getFullYear() + 1);

@@ -66,7 +66,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var datasetDialog = new chorus.dialogs.ImportDatasetsPicker({
+            var datasetDialog = new chorus.dialogs.DatasetsPicker({
                 workspaceId: this.workspace.get('id'),
                 defaultSelection: this.model.nextDestination()
             });

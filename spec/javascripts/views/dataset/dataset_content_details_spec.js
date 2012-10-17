@@ -13,7 +13,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
             spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
             spyOn(chorus, "search");
-            this.server.completeFetchFor(this.dataset.statistics(), fixtures.datasetStatisticsView());
+            this.server.completeFetchFor(this.dataset.statistics(), rspecFixtures.datasetStatisticsView());
             this.view.render();
             $("#jasmine_content").append(this.view.el);
         });
@@ -83,7 +83,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     beforeEach(function() {
                         var dataset = rspecFixtures.workspaceDataset.datasetTable()
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                        this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
+                        this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable());
                         this.view.render();
                     });
 

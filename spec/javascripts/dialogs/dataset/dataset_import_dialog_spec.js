@@ -240,7 +240,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("should launch the dataset picker dialog", function() {
-                        expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.ImportDatasetsPicker);
+                        expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.DatasetsPicker);
                     });
 
                     context("when no dataset is selected", function() {

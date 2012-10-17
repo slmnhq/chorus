@@ -265,6 +265,8 @@ window.rspecFixtureDefinitions = {
     dataPreviewTaskResults: {
         model: "DataPreviewTask"
     },
+    datasetStatisticsTable: {},
+    datasetStatisticsView: {},
 
     schemaFunctionSet: {},
 

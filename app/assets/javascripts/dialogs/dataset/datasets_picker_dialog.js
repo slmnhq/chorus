@@ -1,4 +1,4 @@
-chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
+chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
     title: t("dataset.pick"),
     constructorName: "DatasetsPickerDialog",
     submitButtonTranslationKey: "actions.dataset_select",
@@ -16,8 +16,8 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
 
     setup: function() {
         this._super("setup");
-        this.pickItemsList.templateName = "import_datasets_picker_list";
-        this.pickItemsList.className = "import_datasets_picker_list";
+        this.pickItemsList.templateName = "datasets_picker_list";
+        this.pickItemsList.className = "datasets_picker_list";
     },
 
     makeModel: function() {

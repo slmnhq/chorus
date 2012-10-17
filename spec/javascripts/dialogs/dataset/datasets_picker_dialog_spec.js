@@ -1,8 +1,8 @@
-describe("chorus.dialogs.ImportDatasetsPicker", function() {
+describe("chorus.dialogs.DatasetsPicker", function() {
     var dialog, datasets, datasetModels;
     beforeEach(function() {
         stubModals();
-        dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
+        dialog = new chorus.dialogs.DatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
         datasetModels = [
                             newFixtures.workspaceDataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),

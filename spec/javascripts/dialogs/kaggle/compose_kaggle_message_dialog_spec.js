@@ -127,7 +127,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                                 fixtures.databaseColumn({name:"Rhino_" + i, recentComment:"awesome", typeCategory: "STRING" }),
                                 fixtures.databaseColumn({name:"Sloth_" + i, recentComment:"lazy", typeCategory: "WHOLE_NUMBER" })
                             ]);
-                            this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsView({ id: dataset.id, rows: 11 * (i + 1) }));
+                            this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable({ rows: 11 * (i + 1) }));
                         }, this);
                     });
 
