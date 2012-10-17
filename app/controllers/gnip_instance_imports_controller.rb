@@ -2,6 +2,7 @@ class GnipInstanceImportsController < ApplicationController
 
   def create
     workspace = Workspace.find(params['imports']['workspace_id'])
+    raise ApiValidationError.new(:base, :generic, {:message => "Workspace must have a sandbox"}) unless workspace.sandbox.present?
 
     authorize! :can_edit_sub_objects, workspace
     table_name = params['imports']['to_table']

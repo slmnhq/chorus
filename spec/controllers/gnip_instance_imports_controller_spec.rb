@@ -67,5 +67,17 @@ describe GnipInstanceImportsController do
         response.body.should include "TABLE_EXISTS"
       end
     end
+
+    context "workspace doesn't have a sandbox" do
+      let(:workspace) { workspaces(:private) }
+
+      it "should check and return an error" do
+        workspace.sandbox.should be_nil
+        dont_allow(ChorusGnip).from_stream
+        post :create, gnip_instance_import_params
+        response.code.should == "422"
+        response.body.should include "must have a sandbox"
+      end
+    end
   end
 end
