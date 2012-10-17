@@ -57,6 +57,7 @@ tags
 /b
 
 # Ignore postgres database
+/postgres
 /postgres-db
 
 # Ignore solr data
