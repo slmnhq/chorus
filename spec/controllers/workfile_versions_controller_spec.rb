@@ -113,6 +113,57 @@ describe WorkfileVersionsController do
     end
   end
 
+  describe "#destroy" do
+    let(:workspace) { workspaces(:public) }
+    let(:workfile) { workfiles(:public) }
+
+    context "when there's more than one versions" do
+      before do
+        workfile.reload.build_new_version(user, test_file('some.txt'), "commit message - 2").save
+        workfile.reload.build_new_version(user, test_file('some.txt'), "commit message - 3").save
+        workfile.reload.build_new_version(user, test_file('some.txt'), "commit message - 4").save
+      end
+
+      it "uses authorization" do
+        mock(subject).authorize! :can_edit_sub_objects, workspace
+        delete :destroy, :workfile_id => workfile.id, :id => workfile.versions[2].id
+      end
+
+      it "should deletes the version" do
+        delete :destroy, :workfile_id => workfile.id, :id => workfile.versions[2].id
+        workfile.reload.versions.length.should == 3
+      end
+
+      it "should respond with success" do
+        response.should be_success
+      end
+
+      context "deleting the last version" do
+        before do
+          delete :destroy, :workfile_id => workfile.id, :id => workfile.versions[0].id
+        end
+
+        it "should updates the lastest_version_id of the workfile" do
+          workfile.reload.latest_workfile_version_id.should == workfile.reload.versions[0].id
+        end
+
+        it "should deletes the version" do
+          workfile.reload.versions.length.should == 3
+        end
+      end
+    end
+
+    context "when there's only one version" do
+      it "raises an error" do
+        delete :destroy, :workfile_id => workfile.id, :id => workfile.versions[0].id
+
+        response.code.should == "422"
+        response.body.should include "ONLY_ONE_VERSION"
+      end
+
+    end
+  end
+
   def draft_count(workfile, user)
     workfile.drafts.where(:owner_id => user.id).count
   end

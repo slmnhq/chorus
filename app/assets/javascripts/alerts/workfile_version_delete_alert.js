@@ -9,7 +9,7 @@ chorus.alerts.WorkfileVersionDelete = chorus.alerts.ModelDelete.extend({
         this._super('makeModel', arguments);
         this.model = new chorus.models.WorkfileVersion(this.model.attributes);
         this.model.attributes.versionInfo = _.clone(this.model.attributes.versionInfo);
-        this.model.get("versionInfo").versionNum = this.options.launchElement.data("versionNumber");
+        this.model.get("versionInfo").versionNum = this.options.versionNumber;
     },
 
     setup: function() {

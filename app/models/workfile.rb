@@ -7,7 +7,7 @@ class Workfile < ActiveRecord::Base
   belongs_to :execution_schema, :class_name => 'GpdbSchema'
   belongs_to :owner, :class_name => 'User'
 
-  has_many :versions, :class_name => 'WorkfileVersion'
+  has_many :versions, :class_name => 'WorkfileVersion', :order => 'version_num DESC'
   has_many :drafts, :class_name => 'WorkfileDraft'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities

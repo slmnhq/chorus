@@ -1,8 +1,7 @@
 describe("chorus.alerts.WorkfileVersionDelete", function() {
     beforeEach(function() {
         this.workfile = rspecFixtures.workfile.sql();
-        this.launchElement = $("<a data-version-number='10'></a>")
-        this.alert = new chorus.alerts.WorkfileVersionDelete({ launchElement : this.launchElement, pageModel: this.workfile });
+        this.alert = new chorus.alerts.WorkfileVersionDelete({ versionNumber: 10, pageModel: this.workfile });
         stubModals();
         this.alert.launchModal();
     });

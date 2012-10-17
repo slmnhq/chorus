@@ -91,4 +91,14 @@ resource "Workfile versions" do
       status.should == 200
     end
   end
+
+  delete "/workfiles/:workfile_id/versions/:id" do
+    let!(:another_version) { workfile.build_new_version(owner, test_file('some.txt'), "commit message - 1")}
+    let!(:id) { another_version.to_param }
+
+
+    example_request "Delete workfile version" do
+      status.should == 200
+    end
+  end
 end

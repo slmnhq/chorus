@@ -43,6 +43,25 @@ class WorkfileVersionsController < ApplicationController
     present paginate(workfile.versions)
   end
 
+  def destroy
+    workfile = Workfile.find(params[:workfile_id])
+    authorize! :can_edit_sub_objects, workfile.workspace
+    workfile_versions = workfile.versions
+
+    Workfile.transaction do
+      if workfile_versions.length == 1
+        raise ApiValidationError.new(:base, :only_one_version)
+      elsif workfile.latest_workfile_version_id == params[:id].to_i
+        WorkfileVersion.find(params[:id]).destroy
+        workfile.update_attributes!({:latest_workfile_version_id => workfile_versions[1].id}, :without_protection => true)
+      else
+        WorkfileVersion.find(params[:id]).destroy
+      end
+    end
+
+    render :json => {}
+  end
+
   private
 
   def remove_draft(workfile)
