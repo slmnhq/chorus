@@ -207,7 +207,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     showVisualizationConfig: function(chartType) {
-        if(this.chartConfig) { this.chartConfig.teardown();}
+        if(this.chartConfig) { this.chartConfig.cleanup();}
 
         var options = { model: this.dataset, collection: this.collection, errorContainer: this };
         this.chartConfig = chorus.views.ChartConfiguration.buildForType(chartType, options);

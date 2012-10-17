@@ -21,7 +21,7 @@ describe "Notes" do
         wait_for_ajax
       end
 
-      instance.events.first.body.should == "Note on the instance"
+      instance.events.last.body.should == "Note on the instance"
     end
   end
 
@@ -37,7 +37,7 @@ describe "Notes" do
         click_button "Add Note"
         wait_for_ajax
       end
-      workspace.events.first.body.should == "Note on the workspace"
+      workspace.events.last.body.should == "Note on the workspace"
     end
   end
 
@@ -59,7 +59,7 @@ describe "Notes" do
         wait_for_ajax
       end
 
-      hadoop_instance.events.first.body.should == "Note on the hadoop instance"
+      hadoop_instance.events.last.body.should == "Note on the hadoop instance"
     end
   end
 
@@ -80,7 +80,7 @@ describe "Notes" do
         wait_for_ajax
       end
 
-      workfile.events.first.body.should == "Note on a workfile"
+      workfile.events.last.body.should == "Note on a workfile"
     end
   end
 end
