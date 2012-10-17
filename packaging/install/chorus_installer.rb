@@ -394,17 +394,14 @@ class ChorusInstaller
     end
   end
 
-  def configure_file_storage_directories
+  def configure_file_storage_directory
     return if upgrade_existing?
     chorus_config_file = "#{@destination_path}/shared/chorus.yml"
     config = YAML.load_file(chorus_config_file)
 
     default_path = "#{@destination_path}/shared"
     if File.expand_path(data_path) != File.expand_path(default_path)
-      config['csv_import_file_storage_path'] = "#{data_path}/system/"
-      config['workfile_storage_path'] = "#{data_path}/system/"
-      config['image_storage'] = "#{data_path}/system/"
-      config['attachment_storage'] = "#{data_path}/system/"
+      config['assets_storage_path'] = "#{data_path}/system/"
     end
 
     File.open(chorus_config_file, 'w') do |file|

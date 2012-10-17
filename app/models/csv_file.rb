@@ -7,7 +7,7 @@ class CsvFile < ActiveRecord::Base
   belongs_to :workspace
   belongs_to :user
 
-  has_attached_file :contents, :path => Chorus::Application.config.chorus['csv_import_file_storage_path']+ ":class/:id/:basename.:extension"
+  has_attached_file :contents, :path => Chorus::Application.config.chorus['assets_storage_path']+ ":class/:id/:basename.:extension"
 
   validates :contents, :attachment_presence => true
   validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes, :message => :file_size_exceeded

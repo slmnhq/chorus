@@ -2,7 +2,7 @@ class Attachment < ActiveRecord::Base
   attr_accessible :contents
 
   has_attached_file :contents,
-                    :path => Chorus::Application.config.chorus['attachment_storage'] + ":class/:id/:style/:basename.:extension",
+                    :path => Chorus::Application.config.chorus['assets_storage_path'] + ":class/:id/:style/:basename.:extension",
                     :url => "/notes/:note_id/attachments/:id?style=:style",
                     :styles => {:original => "", :icon => "50x50>" }
 

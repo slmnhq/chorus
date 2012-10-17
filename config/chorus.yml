@@ -4,10 +4,7 @@ instance_poll_interval_minutes: 5
 delete_unimported_csv_files_interval_hours: 1
 delete_unimported_csv_files_after_hours: 12
 reindex_datasets_interval_hours: 24
-csv_import_file_storage_path: ":rails_root/system/"
-workfile_storage_path : ":rails_root/system/"
-image_storage: ":rails_root/system/"
-attachment_storage: ":rails_root/system/"
+assets_storage_path: ":rails_root/system/"
 server_port: 8080
 ssl: false
 ssl_server_port: 8443

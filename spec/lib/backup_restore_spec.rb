@@ -261,7 +261,7 @@ describe "Backup and Restore" do
         # create a fake asset in original
         stub(Rails).root { @original_path }
         chorus_config = ChorusConfig.new
-        asset_path = Rails.root.join chorus_config['image_storage'].gsub(":rails_root/", "")
+        asset_path = Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
         FileUtils.mkdir_p asset_path.join "users"
         FileUtils.touch "#{asset_path}/users/asset_file.icon"
 

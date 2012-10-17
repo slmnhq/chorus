@@ -3,7 +3,7 @@ class Workspace < ActiveRecord::Base
   attr_accessor :archived
   attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings
 
-  has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
+  has_attached_file :image, :path => Chorus::Application.config.chorus['assets_storage_path'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
                     :default_url => "", :styles => {:icon => "50x50>"}
 

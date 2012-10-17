@@ -6,7 +6,7 @@ module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_DATA_FILENAME = "database.gz"
   ASSETS_FILENAME = "assets.tgz"
-  ASSET_PATHS = %w{csv_import_file_storage_path workfile_storage_path image_storage attachment_storage}
+  ASSET_PATHS = %w{assets_storage_path}
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
