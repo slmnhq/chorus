@@ -1,650 +1,3610 @@
---- 
-- name: "actionmailer"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionmailer-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionmailer-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionmailer-3.2.3/README.rdoc"
-- name: "actionpack"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionpack-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionpack-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/actionpack-3.2.3/README.rdoc"
-- name: "activemodel"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activemodel-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activemodel-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activemodel-3.2.3/README.rdoc"
-- name: "activerecord"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activerecord-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activerecord-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activerecord-3.2.3/README.rdoc"
-- name: "activeresource"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activeresource-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activeresource-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activeresource-3.2.3/README.rdoc"
-- name: "activesupport"
-  version: "3.2.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activesupport-3.2.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activesupport-3.2.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/activesupport-3.2.3/README.rdoc"
-- name: "allowy"
-  version: "0.2.5"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/allowy-0.2.5/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/allowy-0.2.5/README.md"
-- name: "arel"
-  version: "3.0.2"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/arel-3.0.2/MIT-LICENSE.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/arel-3.0.2/README.markdown"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/arel-3.0.2/README.markdown"
-- name: "bcrypt-ruby"
-  version: "3.0.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bcrypt-ruby-3.0.1/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bcrypt-ruby-3.0.1/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bcrypt-ruby-3.0.1/README.md"
-- name: "builder"
-  version: "3.0.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/builder-3.0.0/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/builder-3.0.0/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/builder-3.0.0/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/builder-3.0.0/README.rdoc"
-- name: "bundler"
-  version: "1.1.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/lib/bundler/templates/newgem/LICENSE.tt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/lib/bundler/templates/newgem/README.md.tt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/lib/bundler/templates/newgem/README.md.tt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/README.md"
-- name: "chunky_png"
-  version: "1.2.5"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/chunky_png-1.2.5/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/chunky_png-1.2.5/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/chunky_png-1.2.5/README.rdoc"
-- name: "clockwork"
-  version: "0.4.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/clockwork-0.4.0/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/clockwork-0.4.0/README.md"
-- name: "cocaine"
-  version: "0.2.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/cocaine-0.2.1/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/cocaine-0.2.1/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/cocaine-0.2.1/README.md"
-- name: "compass"
-  version: "0.12.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/frameworks/compass/templates/pie/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/frameworks/compass/templates/pie/LICENSE-APACHE2.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/frameworks/compass/templates/pie/LICENSE-GPL2.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/LICENSE.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/examples/README.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/README.markdown"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/examples/README.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-0.12.1/README.markdown"
-- name: "compass-rails"
-  version: "1.0.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-rails-1.0.1/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-rails-1.0.1/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/compass-rails-1.0.1/README.md"
-- name: "daemons"
-  version: "1.1.8"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/daemons-1.1.8/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/daemons-1.1.8/README"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/daemons-1.1.8/README"
-- name: "erubis"
-  version: "2.7.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/erubis-2.7.0/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/erubis-2.7.0/doc-api/files/README_txt.html"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/erubis-2.7.0/README.txt"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/erubis-2.7.0/doc-api/files/README_txt.html"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/erubis-2.7.0/README.txt"
-- name: "eventmachine"
-  version: "0.12.10"
-  license: "GPLv2"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/eventmachine-0.12.10/docs/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/eventmachine-0.12.10/README"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/eventmachine-0.12.10/README"
-- name: "execjs"
-  version: "1.4.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/execjs-1.4.0/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/execjs-1.4.0/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/execjs-1.4.0/README.md"
-- name: "foreman"
-  version: "0.46.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/foreman-0.46.0/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/foreman-0.46.0/README.md"
-- name: "fssm"
-  version: "0.2.9"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/fssm-0.2.9/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/fssm-0.2.9/README.markdown"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/fssm-0.2.9/README.markdown"
-- name: "handlebars_assets"
-  version: "0.4.4"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/handlebars_assets-0.4.4/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/handlebars_assets-0.4.4/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/handlebars_assets-0.4.4/README.md"
-- name: "hike"
-  version: "1.2.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/hike-1.2.1/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/hike-1.2.1/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/hike-1.2.1/README.md"
-- name: "httparty"
-  version: "0.8.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/httparty-0.8.3/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/httparty-0.8.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/httparty-0.8.3/README.rdoc"
-- name: "i18n"
-  version: "0.6.0"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/i18n-0.6.0/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/i18n-0.6.0/README.textile"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/i18n-0.6.0/README.textile"
-- name: "journey"
-  version: "1.0.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/journey-1.0.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/journey-1.0.3/README.rdoc"
-- name: "json"
-  version: "1.7.3"
-  license: "ruby"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/COPYING-json-jruby"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/README-json-jruby.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/README-json-jruby.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/json-1.7.3/README.rdoc"
-- name: "mail"
-  version: "2.4.4"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/mail-2.4.4/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/mail-2.4.4/README.md"
-- name: "mime-types"
-  version: "1.18"
-  license: "GPLv2"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/mime-types-1.18/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/mime-types-1.18/README.rdoc"
-- name: "multi_json"
-  version: "1.3.5"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_json-1.3.5/LICENSE.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_json-1.3.5/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_json-1.3.5/README.md"
-- name: "multi_xml"
-  version: "0.5.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_xml-0.5.1/LICENSE.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_xml-0.5.1/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/multi_xml-0.5.1/README.md"
-- name: "net-ldap"
-  version: "0.3.1"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/net-ldap-0.3.1/License.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/net-ldap-0.3.1/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/net-ldap-0.3.1/README.rdoc"
-- name: "paperclip"
-  version: "3.0.4"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/paperclip-3.0.4/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/paperclip-3.0.4/README.md"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/paperclip-3.0.4/README.md"
-- name: "pg"
-  version: "0.13.2"
-  license: "BSD"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README-OS_X.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README-Windows.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README.ja.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README.rdoc"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README-OS_X.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README-Windows.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README.ja.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/pg-0.13.2/README.rdoc"
-- name: "polyglot"
-  version: "0.3.3"
-  license: "MIT"
-  approved: true
-  license_url: ""
-  notes: ""
-  license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/polyglot-0.3.3/License.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/polyglot-0.3.3/README.txt"
-  readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/polyglot-0.3.3/README.txt"
-- name: "queue_classic"
-  version: "2.0.0rc14"
-  license: "none"
+---
+- name: jquery
+  version: 1.7.1
+  license: MIT
   approved: false
-  license_url: ""
-  notes: ""
-  license_files:
-  readme_files:
-- name: "rack"
-  version: "1.4.1"
-  license: "MIT"
+- name: jquery-ui
+  version: Formerly HEAD
+  license: MIT
+  approved: false
+- name: codemirror
+  version: '2.2'
+  license: MIT
+  approved: false
+- name: Backbone
+  version: 0.5.3
+  license: MIT
+  approved: false
+- name: Underscore
+  version: 1.2.1
+  license: MIT
+  approved: false
+- name: Underscore.string
+  version: 2.2.0rc
+  license: MIT
+  approved: false
+- name: Sinon.JS
+  version: 1.2.0
+  license: BSD
+  approved: false
+- name: d3.js
+  version: 2.7.4
+  license: BSD
+  approved: false
+- name: jQuery Cookie plugin
+  version: None
+  license: MIT
+  approved: false
+- name: javascript-browser-detection
+  version: None
+  license: Custom
+  approved: false
+- name: Javascript Relative Time Helper
+  version: None
+  license: MIT
+  approved: false
+- name: date.js
+  version: 1.0 Alpha-1
+  license: MIT
+  approved: false
+- name: DatePicker
+  version: v6a
+  license: MIT
+  approved: false
+- name: es5-shim.js
+  version: None
+  license: MIT
+  approved: false
+- name: facebox.js
+  version: '1.2'
+  license: MIT
+  approved: false
+- name: i18n-js
+  version: None
+  license: MIT
+  approved: false
+- name: CLEditor
+  version: 1.3.0
+  license: MIT
+  approved: false
+- name: jQuery File Download
+  version: 1.3.2
+  license: MIT
+  approved: false
+- name: jQuery File Upload
+  version: '5.6'
+  license: MIT
+  approved: false
+- name: jQuery Hot Keys Plugin
+  version: '0.8'
+  license: MIT
+  approved: false
+- name: jQuery IFrame Transport Plugin
+  version: 1.2.5
+  license: MIT
+  approved: false
+- name: jGrowl
+  version: 1.2.5
+  license: MIT
+  approved: false
+- name: jScrollPane
+  version: 2.0.0beta11
+  license: MIT
+  approved: false
+- name: jQuery Placeholder Plugin
+  version: None
+  license: MIT
+  approved: false
+- name: qTip2
+  version: 2.0.0pre
+  license: MIT
+  approved: false
+- name: spin.js
+  version: 1.2.2
+  license: MIT
+  approved: false
+- name: jQuery Textarea Limit Max Length Plugin
+  version: None
+  license: Public Domain
+  approved: false
+- name: jQuery TextChange Plugin
+  version: None
+  license: MIT
+  approved: false
+- name: jQuery Mousewheel Plugin
+  version: 3.0.6
+  license: MIT
+  approved: false
+- name: jStat
+  version: None
+  license: MIT
+  approved: false
+- name: Natural Sort algorithm for Javascript
+  version: '0.6'
+  license: MIT
+  approved: false
+- name: node-csv-parser
+  version: None
+  license: BSD
+  approved: false
+- name: Punycode.js
+  version: '0.30'
+  license: MIT
+  approved: false
+- name: URL.js
+  version: 1.4.3
+  license: MIT
+  approved: false
+- name: IPv6.js
+  version: None
+  license: Custom
+  approved: false
+- name: rake
+  source: bundle
+  version: 0.9.2.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-1.4.1/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-1.4.1/README.rdoc"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rake-0.9.2.2/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rake-0.9.2.2/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-1.4.1/README.rdoc"
-- name: "rack-cache"
-  version: "1.2"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rake-0.9.2.2/README.rdoc
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Ruby based make-like utility.
+  description: Rake is a Make-like program implemented in Ruby. Tasks and dependencies arespecified in standard Ruby syntax.
+  homepage: http://rake.rubyforge.org
+  children:
+  - minitest
+  parents:
+  - multi_json
+  - rack
+  - sprockets
+  - treetop
+  - addressable
+  - nokogiri
+  - childprocess
+  - chunky_png
+  - cocaine
+  - fssm
+  - execjs
+  - fixture_builder
+  - thor
+  - rspec-core
+  - rspec-expectations
+  - rspec-mocks
+  - handlebars_assets
+  - hashie
+  - license_finder
+  - log4r
+  - paperclip
+  - railties
+  - rsolr
+  - rspec-rails
+  - rspec_api_documentation
+  - shoulda-matchers
+  - sunspot_matchers
+  - therubyrhino
+  - vcr
+- name: open4
+  source: bundle
+  version: 1.3.0
+  license: ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-cache-1.2/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-cache-1.2/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/open4-1.3.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/open4-1.3.0/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/open4-1.3.0/README.erb
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-cache-1.2/README"
-- name: "rack-ssl"
-  version: "1.3.2"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/open4-1.3.0/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/open4-1.3.0/README.erb
+  bundler_groups: []
+  summary: open4
+  description: ! 'description: open4 kicks the ass'
+  homepage: https://github.com/ahoward/open4
+  children: []
+  parents:
+  - POpen4
+- name: POpen4
+  source: bundle
+  version: 0.1.4
+  license: ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-ssl-1.3.2/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-ssl-1.3.2/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/POpen4-0.1.4/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/POpen4-0.1.4/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-ssl-1.3.2/README.md"
-- name: "rack-test"
-  version: "0.6.1"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/POpen4-0.1.4/README.rdoc
+  bundler_groups: []
+  summary: Open4 cross-platform
+  description: ''
+  homepage: http://github.com/pka/popen4
+  children:
+  - Platform
+  - open4
+  parents:
+  - yui-compressor
+- name: i18n
+  source: bundle
+  version: 0.6.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-test-0.6.1/MIT-LICENSE.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-test-0.6.1/README.rdoc"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/i18n-0.6.1/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/i18n-0.6.1/README.textile
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rack-test-0.6.1/README.rdoc"
-- name: "rails"
-  version: "3.2.3"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/i18n-0.6.1/README.textile
+  bundler_groups: []
+  summary: New wave Internationalization support for Ruby
+  description: New wave Internationalization support for Ruby.
+  homepage: http://github.com/svenfuchs/i18n
+  children:
+  - activesupport
+  - sqlite3
+  - mocha
+  - test_declarative
+  parents:
+  - activesupport
+  - treetop
+  - mail
+  - allowy
+  - faker
+  - rspec_api_documentation
+- name: multi_json
+  source: bundle
+  version: 1.3.6
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/multi_json-1.3.6/LICENSE.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/multi_json-1.3.6/README.md
   readme_files:
-- name: "railties"
-  version: "3.2.3"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/multi_json-1.3.6/README.md
+  bundler_groups: []
+  summary: A gem to provide swappable JSON backends.
+  description: A gem to provide easy switching between different JSON backends, including Oj, Yajl, the JSON gem (with C-extensions), the pure-Ruby JSON gem, and OkJson.
+  homepage: http://github.com/intridea/multi_json
+  children:
+  - rake
+  - rdoc
+  - rspec
+  - simplecov
+  parents:
+  - activesupport
+  - selenium-webdriver
+  - execjs
+  - uglifier
+  - vcr
+- name: activesupport
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/plugin_new/templates/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/assets/images/icons/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/code/getting_started/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/code/getting_started/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/app/templates/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/app/templates/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/plugin_new/templates/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/README.rdoc"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activesupport-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activesupport-3.2.5/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/assets/images/icons/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/code/getting_started/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/guides/code/getting_started/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/app/templates/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/app/templates/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/lib/rails/generators/rails/plugin_new/templates/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/railties-3.2.3/README.rdoc"
-- name: "rake"
-  version: "0.9.2.2"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activesupport-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.
+  description: A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.
+  homepage: http://www.rubyonrails.org
+  children:
+  - i18n
+  - multi_json
+  parents:
+  - i18n
+  - activemodel
+  - actionpack
+  - treetop
+  - activerecord
+  - activeresource
+  - allowy
+  - factory_girl
+  - fixture_builder
+  - paperclip
+  - railties
+  - rails
+  - rspec-rails
+  - rspec_api_documentation
+  - shoulda-matchers
+- name: builder
+  source: bundle
+  version: 3.0.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/builder-3.0.3/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/builder-3.0.3/README.rdoc
   readme_files:
-- name: "rdoc"
-  version: "3.12"
-  license: "GPLv2"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/builder-3.0.3/README.rdoc
+  bundler_groups: []
+  summary: Builders for MarkUp.
+  description: ! 'Builder provides a number of builder objects that make creating
+    structured data
+
+    simple to do.  Currently the following builder objects are supported:
+
+
+    * XML Markup
+
+    * XML Events
+
+    '
+  homepage: http://onestepback.org
+  children: []
+  parents:
+  - activemodel
+  - tilt
+  - actionpack
+  - ci_reporter
+  - rsolr
+- name: activemodel
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rdoc-3.12/LICENSE.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rdoc-3.12/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rdoc-3.12/test/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activemodel-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activemodel-3.2.5/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rdoc-3.12/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/rdoc-3.12/test/README"
-- name: "sass"
-  version: "3.1.18"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activemodel-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: A toolkit for building modeling frameworks (part of Rails).
+  description: A toolkit for building modeling frameworks like Active Record and Active Resource. Rich support for attributes, callbacks, validations, observers, serialization, internationalization, and testing.
+  homepage: http://www.rubyonrails.org
+  children:
+  - activesupport
+  - builder
+  parents:
+  - actionpack
+  - activerecord
+  - activeresource
+  - paperclip
+- name: erubis
+  source: bundle
+  version: 2.7.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/vendor/listen/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/README.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/vendor/listen/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/erubis-2.7.0/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/erubis-2.7.0/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/erubis-2.7.0/doc-api/files/README_txt.html
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/README.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-3.1.18/vendor/listen/README.md"
-- name: "sass-rails"
-  version: "3.2.5"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/erubis-2.7.0/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/erubis-2.7.0/doc-api/files/README_txt.html
+  bundler_groups: []
+  summary: a fast and extensible eRuby implementation which supports multi-language
+  description: ! "  Erubis is an implementation of eRuby and has the following features:\n\
+    \n  * Very fast, almost three times faster than ERB and about 10% faster than\
+    \ eruby.\n  * Multi-language support (Ruby/PHP/C/Java/Scheme/Perl/Javascript)\n\
+    \  * Auto escaping support\n  * Auto trimming spaces around '<% %>'\n  * Embedded\
+    \ pattern changeable (default '<% %>')\n  * Enable to handle Processing Instructions\
+    \ (PI) as embedded pattern (ex. '<?rb ... ?>')\n  * Context object available and\
+    \ easy to combine eRuby template with YAML datafile\n  * Print statement available\n\
+    \  * Easy to extend and customize in subclass\n  * Ruby on Rails support\n"
+  homepage: http://www.kuwata-lab.com/erubis/
+  children: []
+  parents:
+  - tilt
+  - actionpack
+- name: journey
+  source: bundle
+  version: 1.0.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/MIT-LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/README.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/engine_project/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/sass_project/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/sass_project/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/scss_project/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/scss_project/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/journey-1.0.3/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/README.markdown"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/engine_project/README.rdoc"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/sass_project/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/sass_project/README"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/scss_project/doc/README_FOR_APP"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sass-rails-3.2.5/test/fixtures/scss_project/README"
-- name: "scrolls"
-  version: "0.0.9"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/journey-1.0.3/README.rdoc
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Journey is a router
+  description: Journey is a router.  It routes requests.
+  homepage: http://github.com/rails/journey
+  children:
+  - minitest
+  - racc
+  - rdoc
+  - json
+  - rdoc
+  - hoe
+  parents:
+  - actionpack
+- name: rack
+  source: bundle
+  version: 1.4.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/scrolls-0.0.9/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/scrolls-0.0.9/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-1.4.1/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-1.4.1/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/scrolls-0.0.9/README.md"
-- name: "sprockets"
-  version: "2.1.3"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-1.4.1/README.rdoc
+  bundler_groups: []
+  summary: a modular Ruby webserver interface
+  description: ! 'Rack provides a minimal, modular and adaptable interface for developing
+
+    web applications in Ruby.  By wrapping HTTP requests and responses in
+
+    the simplest way possible, it unifies and distills the API for web
+
+    servers, web frameworks, and software in between (the so-called
+
+    middleware) into a single method call.
+
+
+    Also see http://rack.rubyforge.org.
+
+    '
+  homepage: http://rack.rubyforge.org
+  children:
+  - bacon
+  - rake
+  - ruby-fcgi
+  - memcache-client
+  - mongrel
+  - thin
+  parents:
+  - rack-cache
+  - rack-test
+  - sprockets
+  - actionpack
+  - selenium-webdriver
+  - capybara
+  - jasmine
+  - jasmine
+  - mizuno
+  - rack-ssl
+  - vcr
+- name: rack-cache
+  source: bundle
+  version: '1.2'
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sprockets-2.1.3/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sprockets-2.1.3/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-cache-1.2/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-cache-1.2/README
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/sprockets-2.1.3/README.md"
-- name: "thin"
-  version: "1.3.1"
-  license: "ruby"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-cache-1.2/README
+  bundler_groups: []
+  summary: HTTP Caching for Rack
+  description: Rack::Cache is suitable as a quick drop-in component to enable HTTP caching for Rack-based applications that produce freshness (Expires, Cache-Control) and/or validation (Last-Modified, ETag) information.
+  homepage: http://tomayko.com/src/rack-cache/
+  children:
+  - rack
+  - bacon
+  - memcached
+  - dalli
+  parents:
+  - actionpack
+- name: rack-test
+  source: bundle
+  version: 0.6.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thin-1.3.1/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-test-0.6.2/MIT-LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-test-0.6.2/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thin-1.3.1/README"
-- name: "thor"
-  version: "0.14.6"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-test-0.6.2/README.rdoc
+  bundler_groups: []
+  summary: Simple testing API built on Rack
+  description: ! 'Rack::Test is a small, simple testing API for Rack apps. It can
+    be used on its
+
+    own or as a reusable starting point for Web frameworks and testing libraries
+
+    to build on. Most of its initial functionality is an extraction of Merb 1.0''s
+
+    request helpers feature.'
+  homepage: http://github.com/brynary/rack-test
+  children:
+  - rack
+  parents:
+  - sprockets
+  - actionpack
+  - capybara
+  - jasmine
+  - rspec_api_documentation
+- name: hike
+  source: bundle
+  version: 1.2.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thor-0.14.6/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thor-0.14.6/README.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thor-0.14.6/spec/fixtures/doc/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hike-1.2.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hike-1.2.1/README.md
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thor-0.14.6/README.md"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/thor-0.14.6/spec/fixtures/doc/README"
-- name: "tilt"
-  version: "1.3.3"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hike-1.2.1/README.md
+  bundler_groups: []
+  summary: Find files in a set of paths
+  description: A Ruby library for finding files in a set of paths.
+  homepage: http://github.com/sstephenson/hike
+  children: []
+  parents:
+  - sprockets
+- name: tilt
+  source: bundle
+  version: 1.3.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tilt-1.3.3/COPYING"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tilt-1.3.3/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tilt-1.3.3/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tilt-1.3.3/README.md
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tilt-1.3.3/README.md"
-- name: "treetop"
-  version: "1.4.10"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tilt-1.3.3/README.md
+  bundler_groups: []
+  summary: Generic interface to multiple Ruby template engines
+  description: Generic interface to multiple Ruby template engines
+  homepage: http://github.com/rtomayko/tilt/
+  children:
+  - contest
+  - builder
+  - erubis
+  - haml
+  - sass
+  - rdiscount
+  - liquid
+  - less
+  - radius
+  - nokogiri
+  - markaby
+  - coffee-script
+  - bluecloth
+  - RedCloth
+  - maruku
+  - creole
+  - kramdown
+  - redcarpet
+  - creole
+  - yajl-ruby
+  - wikicloth
+  - redcarpet
+  - kramdown
+  parents:
+  - sprockets
+  - handlebars_assets
+  - sass-rails
+- name: sprockets
+  source: bundle
+  version: 2.1.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/treetop-1.4.10/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/treetop-1.4.10/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sprockets-2.1.3/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sprockets-2.1.3/README.md
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/treetop-1.4.10/README.md"
-- name: "tzinfo"
-  version: "0.3.33"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sprockets-2.1.3/README.md
+  bundler_groups: []
+  summary: Rack-based asset packaging system
+  description: Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.
+  homepage: http://getsprockets.org/
+  children:
+  - hike
+  - rack
+  - tilt
+  - coffee-script
+  - eco
+  - ejs
+  - execjs
+  - json
+  - rack-test
+  - rake
+  parents:
+  - actionpack
+  - handlebars_assets
+  - turbo-sprockets-rails3
+- name: actionpack
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tzinfo-0.3.33/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tzinfo-0.3.33/README"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionpack-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionpack-3.2.5/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/tzinfo-0.3.33/README"
-- name: "uglifier"
-  version: "1.2.4"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionpack-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: Web-flow and rendering framework putting the VC in MVC (part of Rails).
+  description: Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.
+  homepage: http://www.rubyonrails.org
+  children:
+  - activesupport
+  - activemodel
+  - rack-cache
+  - builder
+  - rack
+  - rack-test
+  - journey
+  - sprockets
+  - erubis
+  - tzinfo
+  parents:
+  - actionmailer
+  - railties
+  - rails
+  - rspec-rails
+- name: mime-types
+  source: bundle
+  version: '1.19'
+  license: ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/uglifier-1.2.4/LICENSE.txt"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/uglifier-1.2.4/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mime-types-1.19/Licence.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mime-types-1.19/README.rdoc
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/uglifier-1.2.4/README.md"
-- name: "will_paginate"
-  version: "3.0.3"
-  license: "MIT"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mime-types-1.19/README.rdoc
+  bundler_groups: []
+  summary: This library allows for the identification of a file's likely MIME content type
+  description: ! 'This library allows for the identification of a file''s likely MIME
+    content
+
+    type. This is release 1.19 with new MIME types. The identification of MIME
+
+    content type is based on a file''s filename extensions.
+
+
+    MIME::Types for Ruby was originally based on and synchronized with MIME::Types
+
+    for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
+
+    format for the MIME::Type list has changed and the synchronization will no
+
+    longer happen.
+
+
+    :include: Licence.rdoc'
+  homepage: http://mime-types.rubyforge.org/
+  children:
+  - rubyforge
+  - minitest
+  - rdoc
+  - nokogiri
+  - hoe-doofus
+  - hoe-gemspec
+  - hoe-git
+  - hoe-seattlerb
+  - hoe
+  parents:
+  - mail
+  - capybara
+  - paperclip
+- name: polyglot
+  source: bundle
+  version: 0.3.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
   approved: true
-  license_url: ""
-  notes: ""
+  notes:
   license_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/will_paginate-3.0.3/LICENSE"
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/will_paginate-3.0.3/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/polyglot-0.3.3/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/polyglot-0.3.3/README.txt
   readme_files:
-  - path: "/Users/pivotal/.rbenv/versions/1.9.3-p125/lib/ruby/gems/1.9.1/gems/will_paginate-3.0.3/README.md"
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/polyglot-0.3.3/README.txt
+  bundler_groups: []
+  summary: Augment 'require' to load non-Ruby file types
+  description: ! '
+
+    The Polyglot library allows a Ruby module to register a loader
+
+    for the file type associated with a filename extension, and it
+
+    augments ''require'' to find and load matching files.'
+  homepage: http://github.com/cjheath/polyglot
+  children: []
+  parents:
+  - treetop
+  - treetop
+- name: treetop
+  source: bundle
+  version: 1.4.10
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/treetop-1.4.10/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/treetop-1.4.10/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/treetop-1.4.10/README.md
+  bundler_groups: []
+  summary: A Ruby-based text parsing and interpretation DSL
+  description:
+  homepage: http://functionalform.blogspot.com
+  children:
+  - polyglot
+  - jeweler
+  - activesupport
+  - i18n
+  - rr
+  - rspec
+  - rake
+  - polyglot
+  parents:
+  - mail
+- name: mail
+  source: bundle
+  version: 2.4.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mail-2.4.4/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mail-2.4.4/README.md
+  bundler_groups: []
+  summary: Mail provides a nice Ruby DSL for making, sending and reading emails.
+  description: A really Ruby Mail handler.
+  homepage: http://github.com/mikel/mail
+  children:
+  - mime-types
+  - treetop
+  - i18n
+  parents:
+  - actionmailer
+- name: actionmailer
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionmailer-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionmailer-3.2.5/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/actionmailer-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: Email composition, delivery, and receiving framework (part of Rails).
+  description: Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.
+  homepage: http://www.rubyonrails.org
+  children:
+  - actionpack
+  - mail
+  parents:
+  - rails
+- name: arel
+  source: bundle
+  version: 3.0.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/arel-3.0.2/MIT-LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/arel-3.0.2/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/arel-3.0.2/README.markdown
+  bundler_groups: []
+  summary: Arel is a SQL AST manager for Ruby
+  description: ! 'Arel is a SQL AST manager for Ruby. It
+
+
+    1. Simplifies the generation of complex SQL queries
+
+    2. Adapts to various RDBMS systems
+
+
+    It is intended to be a framework framework; that is, you can build your own ORM
+
+    with it, focusing on innovative object and collection modeling as opposed to
+
+    database compatibility and query generation.'
+  homepage: http://github.com/rails/arel
+  children:
+  - minitest
+  - rdoc
+  - hoe
+  parents:
+  - activerecord
+- name: tzinfo
+  source: bundle
+  version: 0.3.33
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tzinfo-0.3.33/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tzinfo-0.3.33/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/tzinfo-0.3.33/README
+  bundler_groups: []
+  summary: Daylight-savings aware timezone library
+  description: TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.
+  homepage: http://tzinfo.rubyforge.org/
+  children: []
+  parents:
+  - actionpack
+  - activerecord
+  - clockwork
+- name: activerecord
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activerecord-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activerecord-3.2.5/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activerecord-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: Object-relational mapper framework (part of Rails).
+  description: Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.
+  homepage: http://www.rubyonrails.org
+  children:
+  - activesupport
+  - activemodel
+  - arel
+  - tzinfo
+  parents:
+  - attr_encrypted
+  - fixture_builder
+  - paperclip
+  - postgresql_cursor
+  - rails
+- name: activerecord-jdbc-adapter
+  source: bundle
+  version: 1.2.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcderby-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbch2-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbchsqldb-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmssql-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmysql-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcsqlite3-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-derby/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-h2/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-hsqldb/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-jtds/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-mysql/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-postgres/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-sqlite3/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcderby-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbch2-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbchsqldb-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmssql-adapter/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmysql-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcsqlite3-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-derby/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-h2/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-hsqldb/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-jtds/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-mysql/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-postgres/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-sqlite3/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcderby-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbch2-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbchsqldb-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmssql-adapter/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcmysql-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcsqlite3-adapter/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-derby/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-h2/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-hsqldb/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-jtds/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-mysql/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-postgres/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/jdbc-sqlite3/README.txt
+  bundler_groups: []
+  summary: JDBC adapter for ActiveRecord, for use within JRuby on Rails.
+  description: ! 'activerecord-jdbc-adapter is a database adapter for Rails\'' ActiveRecord
+
+    component that can be used with JRuby[http://www.jruby.org/]. It allows use of
+
+    virtually any JDBC-compliant database with your JRuby on Rails application.'
+  homepage: https://github.com/jruby/activerecord-jdbc-adapter
+  children: []
+  parents:
+  - activerecord-jdbcpostgresql-adapter
+- name: activerecord-jdbcpostgresql-adapter
+  source: bundle
+  version: 1.2.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/activerecord-jdbc-adapter-67b4bf0c62f0/activerecord-jdbcpostgresql-adapter/README.txt
+  bundler_groups:
+  - :default
+  summary: Postgres JDBC adapter for JRuby on Rails.
+  description: Install this gem to use Postgres with JRuby on Rails.
+  homepage: https://github.com/jruby/activerecord-jdbc-adapter
+  children:
+  - activerecord-jdbc-adapter
+  - jdbc-postgres
+  parents: []
+- name: activeresource
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activeresource-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activeresource-3.2.5/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/activeresource-3.2.5/README.rdoc
+  bundler_groups: []
+  summary: REST modeling framework (part of Rails).
+  description: REST on Rails. Wrap your RESTful web app with Ruby classes and work with them like Active Record models.
+  homepage: http://www.rubyonrails.org
+  children:
+  - activesupport
+  - activemodel
+  parents:
+  - rails
+- name: addressable
+  source: bundle
+  version: 2.3.2
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/addressable-2.3.2/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/addressable-2.3.2/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/addressable-2.3.2/README.md
+  bundler_groups: []
+  summary: URI Implementation
+  description: ! 'Addressable is a replacement for the URI implementation that is
+    part of
+
+    Ruby''s standard library. It more closely conforms to the relevant RFCs and
+
+    adds support for IRIs and URI templates.
+
+    '
+  homepage: http://addressable.rubyforge.org/
+  children:
+  - rake
+  - rspec
+  - launchy
+  parents:
+  - libwebsocket
+  - webmock
+- name: encryptor
+  source: bundle
+  version: 1.1.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/encryptor-1.1.3/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/encryptor-1.1.3/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/encryptor-1.1.3/README.rdoc
+  bundler_groups: []
+  summary: A simple wrapper for the standard ruby OpenSSL library
+  description: A simple wrapper for the standard ruby OpenSSL library to encrypt and decrypt strings
+  homepage: http://github.com/shuber/encryptor
+  children: []
+  parents:
+  - attr_encrypted
+- name: attr_encrypted
+  source: bundle
+  version: 1.2.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/attr_encrypted-1.2.1/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/attr_encrypted-1.2.1/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/attr_encrypted-1.2.1/README.rdoc
+  bundler_groups:
+  - :default
+  summary: Encrypt and decrypt attributes
+  description: Generates attr_accessors that encrypt and decrypt attributes transparently
+  homepage: http://github.com/shuber/attr_encrypted
+  children:
+  - encryptor
+  - activerecord
+  - datamapper
+  - mocha
+  - sequel
+  parents: []
+- name: bundler
+  source: bundle
+  version: 1.2.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/lib/bundler/templates/newgem/LICENSE.txt.tt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/lib/bundler/templates/newgem/README.md.tt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bundler-1.2.1/lib/bundler/templates/newgem/README.md.tt
+  bundler_groups: []
+  summary: The best way to manage your application's dependencies
+  description: Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably
+  homepage: http://gembundler.com
+  children:
+  - ronn
+  - rspec
+  parents:
+  - thor
+  - jetpack
+  - license_finder
+  - log4r
+  - paperclip
+  - rails
+  - shoulda-matchers
+  - sunspot_matchers
+  - uglifier
+  - vcr
+- name: nokogiri
+  source: bundle
+  version: 1.5.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/nokogiri-1.5.5-java/README.ja.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/nokogiri-1.5.5-java/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/nokogiri-1.5.5-java/README.ja.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/nokogiri-1.5.5-java/README.rdoc
+  bundler_groups:
+  - :default
+  summary: ! "Nokogiri is an HTML, XML, SAX, and Reader parser"
+  description: ! "Nokogiri is an HTML, XML, SAX, and Reader parser.  Among Nokogiri's\n\
+    many features is the ability to search documents via XPath or CSS3 selectors.\n\
+    \nXML is like violence - if it doesn't solve your problems, you are not using\n\
+    enough of it."
+  homepage: http://nokogiri.org
+  children:
+  - hoe-bundler
+  - hoe-debugging
+  - hoe-gemspec
+  - hoe-git
+  - mini_portile
+  - minitest
+  - rake
+  - rake-compiler
+  - rdoc
+  - hoe
+  parents:
+  - tilt
+  - mime-types
+  - xpath
+  - capybara
+  - rspec-core
+  - jasmine-core
+  - jasmine
+  - mizuno
+  - paperclip
+  - sunspot_rails
+- name: childprocess
+  source: bundle
+  version: 0.3.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/childprocess-0.3.5/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/childprocess-0.3.5/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/childprocess-0.3.5/README.md
+  bundler_groups: []
+  summary: This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.
+  description: This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.
+  homepage: http://github.com/jarib/childprocess
+  children:
+  - rspec
+  - yard
+  - rake
+  - ffi
+  parents:
+  - selenium-webdriver
+  - mizuno
+- name: rubyzip
+  source: bundle
+  version: 0.9.9
+  license: ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rubyzip-0.9.9/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rubyzip-0.9.9/README.md
+  bundler_groups: []
+  summary: rubyzip is a ruby module for reading and writing zip files
+  description:
+  homepage: http://github.com/aussiegeek/rubyzip
+  children: []
+  parents:
+  - selenium-webdriver
+- name: selenium-webdriver
+  source: bundle
+  version: 2.24.0
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/selenium-webdriver-2.24.0/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/selenium-webdriver-2.24.0/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/selenium-webdriver-2.24.0/README
+  bundler_groups: []
+  summary: The next generation developer focused tool for automated testing of webapps
+  description: WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.
+  homepage: http://selenium.googlecode.com
+  children:
+  - multi_json
+  - rubyzip
+  - childprocess
+  - libwebsocket
+  - rspec
+  - rack
+  - ci_reporter
+  - webmock
+  parents:
+  - capybara
+  - jasmine
+- name: xpath
+  source: bundle
+  version: 0.1.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/xpath-0.1.4/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/xpath-0.1.4/README.rdoc
+  bundler_groups: []
+  summary: Generate XPath expressions from Ruby
+  description: XPath is a Ruby DSL for generating XPath expressions
+  homepage: http://github.com/jnicklas/xpath
+  children:
+  - nokogiri
+  - rspec
+  - yard
+  parents:
+  - capybara
+- name: capybara
+  source: bundle
+  version: 1.1.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/capybara-1.1.2/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/capybara-1.1.2/README.rdoc
+  bundler_groups:
+  - :integration
+  summary: Capybara aims to simplify the process of integration testing Rack applications, such as Rails, Sinatra or Merb
+  description: Capybara is an integration testing tool for rack based web applications. It simulates how a user would interact with a website
+  homepage: http://github.com/jnicklas/capybara
+  children:
+  - nokogiri
+  - mime-types
+  - selenium-webdriver
+  - rack
+  - rack-test
+  - xpath
+  - sinatra
+  - rspec
+  - launchy
+  - yard
+  - fuubar
+  - cucumber
+  parents:
+  - capybara-screenshot
+  - license_finder
+  - paperclip
+  - rspec_api_documentation
+- name: capybara-screenshot
+  source: bundle
+  version: '0.2'
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/capybara-screenshot-0.2/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/capybara-screenshot-0.2/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/capybara-screenshot-0.2/README.md
+  bundler_groups:
+  - :integration
+  summary: Automatically create snapshots when Cucumber steps fail with Capybara and Rails
+  description: When a Cucumber step fails, it is useful to create a screenshot image and HTML file of the current page
+  homepage: http://github.com/mattheworiordan/capybara-screenshot
+  children:
+  - capybara
+  - rspec
+  - timecop
+  parents: []
+- name: choice
+  source: bundle
+  version: 0.1.6
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/choice-0.1.6/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/choice-0.1.6/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/choice-0.1.6/README.rdoc
+  bundler_groups: []
+  summary: Choice is a command line option parser.
+  description: Choice is a simple little gem for easily defining and parsing command line options with a friendly DSL.
+  homepage: http://choice.rubyforge.org/
+  children: []
+  parents:
+  - mizuno
+- name: chorusgnip
+  source: bundle
+  version: 0.0.1
+  license: NONE
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/gnip-9a6352a2012d/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/gnip-9a6352a2012d/README.md
+  bundler_groups:
+  - :default
+  summary: Summary
+  description: Description
+  homepage: ''
+  children: []
+  parents: []
+- name: chunky_png
+  source: bundle
+  version: 1.2.6
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/chunky_png-1.2.6/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/chunky_png-1.2.6/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/chunky_png-1.2.6/README.rdoc
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Pure ruby library for read/write, chunk-level access to PNG files
+  description: ! "    This pure Ruby library can read and write PNG images without\
+    \ depending on an external \n    image library, like RMagick. It tries to be memory\
+    \ efficient and reasonably fast.\n    \n    It supports reading and writing all\
+    \ PNG variants that are defined in the specification, \n    with one limitation:\
+    \ only 8-bit color depth is supported. It supports all transparency, \n    interlacing\
+    \ and filtering options the PNG specifications allows. It can also read and \n\
+    \    write textual metadata from PNG files. Low-level read/write access to PNG\
+    \ chunks is\n    also possible.\n    \n    This library supports simple drawing\
+    \ on the image canvas and simple operations like\n    alpha composition and cropping.\
+    \ Finally, it can import from and export to RMagick for \n    interoperability.\n\
+    \    \n    Also, have a look at OilyPNG at http://github.com/wvanbergen/oily_png.\
+    \ OilyPNG is a \n    drop in mixin module that implements some of the ChunkyPNG\
+    \ algorithms in C, which \n    provides a massive speed boost to encoding and\
+    \ decoding.\n"
+  homepage: http://wiki.github.com/wvanbergen/chunky_png
+  children:
+  - rake
+  - rspec
+  parents:
+  - compass
+- name: ci_reporter
+  source: bundle
+  version: 1.7.2
+  license: other
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ci_reporter-1.7.2/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ci_reporter-1.7.2/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ci_reporter-1.7.2/README.rdoc
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: CI::Reporter allows you to generate reams of XML for use with continuous integration systems.
+  description: CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
+  homepage: http://caldersphere.rubyforge.org/ci_reporter
+  children:
+  - builder
+  - rubyforge
+  - hoe
+  - rdoc
+  parents:
+  - selenium-webdriver
+- name: clockwork
+  source: bundle
+  version: 0.4.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/clockwork-0.4.0/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/clockwork-0.4.0/README.md
+  bundler_groups:
+  - :default
+  summary: A scheduler process to replace cron.
+  description: A scheduler process to replace cron, using a more flexible Ruby syntax running as a single long-running process.  Inspired by rufus-scheduler and resque-scheduler.
+  homepage: http://github.com/adamwiggins/clockwork
+  children:
+  - tzinfo
+  - jeweler
+  - contest
+  - mocha
+  parents: []
+- name: cocaine
+  source: bundle
+  version: 0.2.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/cocaine-0.2.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/cocaine-0.2.1/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/cocaine-0.2.1/README.md
+  bundler_groups: []
+  summary: A small library for doing (command) lines
+  description: A small library for doing (command) lines
+  homepage: http://www.thoughtbot.com/projects/cocaine
+  children:
+  - rspec
+  - bourne
+  - mocha
+  - rake
+  parents:
+  - paperclip
+  - paperclip
+- name: fssm
+  source: bundle
+  version: 0.2.9
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fssm-0.2.9/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fssm-0.2.9/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fssm-0.2.9/README.markdown
+  bundler_groups: []
+  summary: File System State Monitor
+  description: The File System State Monitor keeps track of the state of any number of paths and will fire events when said state changes (create/update/delete). FSSM supports using FSEvents on MacOS, Inotify on GNU/Linux, and polling anywhere else.
+  homepage: https://github.com/ttilley/fssm
+  children:
+  - rake
+  - rspec
+  parents:
+  - compass
+- name: sass
+  source: bundle
+  version: 3.2.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/vendor/listen/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/vendor/listen/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-3.2.1/vendor/listen/README.md
+  bundler_groups: []
+  summary: A powerful but elegant CSS compiler that makes CSS fun again.
+  description: ! "      Sass makes CSS fun again. Sass is an extension of CSS3, adding\n\
+    \      nested rules, variables, mixins, selector inheritance, and more.\n    \
+    \  It's translated to well-formatted, standard CSS using the\n      command line\
+    \ tool or a web-framework plugin.\n"
+  homepage: http://sass-lang.com/
+  children:
+  - yard
+  - maruku
+  parents:
+  - tilt
+  - compass
+  - jasmine-core
+  - sass-rails
+- name: compass
+  source: bundle
+  version: 0.12.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/LICENSE.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/frameworks/compass/templates/pie/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/frameworks/compass/templates/pie/LICENSE-APACHE2.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/frameworks/compass/templates/pie/LICENSE-GPL2.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/README.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/examples/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/README.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-0.12.2/examples/README.markdown
+  bundler_groups: []
+  summary: A Real Stylesheet Framework
+  description: Compass is a Sass-based Stylesheet Framework that streamlines the creation and maintainance of CSS.
+  homepage: http://compass-style.org
+  children:
+  - sass
+  - chunky_png
+  - fssm
+  parents:
+  - compass-rails
+  - jasmine-core
+- name: compass-rails
+  source: bundle
+  version: 1.0.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-rails-1.0.3/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-rails-1.0.3/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/compass-rails-1.0.3/README.md
+  bundler_groups:
+  - :assets
+  summary: Integrate Compass into Rails 2.3 and up.
+  description: Integrate Compass into Rails 2.3 and up.
+  homepage: https://github.com/Compass/compass-rails
+  children:
+  - compass
+  parents: []
+- name: crack
+  source: bundle
+  version: 0.3.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/crack-0.3.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/crack-0.3.1/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/crack-0.3.1/README.rdoc
+  bundler_groups: []
+  summary: Really simple JSON and XML parsing, ripped from Merb and Rails.
+  description:
+  homepage: http://github.com/jnunemaker/crack
+  children: []
+  parents:
+  - webmock
+- name: database_cleaner
+  source: bundle
+  version: 0.7.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/database_cleaner-0.7.2/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/database_cleaner-0.7.2/README.textile
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/database_cleaner-0.7.2/README.textile
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Strategies for cleaning databases.  Can be used to ensure a clean state for testing.
+  description: Strategies for cleaning databases.  Can be used to ensure a clean state for testing.
+  homepage: http://github.com/bmabey/database_cleaner
+  children: []
+  parents: []
+- name: diff-lcs
+  source: bundle
+  version: 1.1.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/diff-lcs-1.1.3/License.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/diff-lcs-1.1.3/docs/COPYING.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/diff-lcs-1.1.3/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/diff-lcs-1.1.3/README.rdoc
+  bundler_groups: []
+  summary: Diff::LCS is a port of Perl's Algorithm::Diff that uses the McIlroy-Hunt longest common subsequence (LCS) algorithm to compute intelligent differences between two sequenced enumerable containers
+  description: ! 'Diff::LCS is a port of Perl''s Algorithm::Diff that uses the McIlroy-Hunt
+
+    longest common subsequence (LCS) algorithm to compute intelligent differences
+
+    between two sequenced enumerable containers. The implementation is based on
+
+    Mario I. Wolczko''s {Smalltalk version 1.2}[ftp://st.cs.uiuc.edu/pub/Smalltalk/MANCHESTER/manchester/4.0/diff.st]
+
+    (1993) and Ned Konz''s Perl version
+
+    {Algorithm::Diff 1.15}[http://search.cpan.org/~nedkonz/Algorithm-Diff-1.15/].
+
+
+    This is release 1.1.3, fixing several small bugs found over the years. Version
+
+    1.1.0 added new features, including the ability to #patch and #unpatch changes
+
+    as well as a new contextual diff callback, Diff::LCS::ContextDiffCallbacks,
+
+    that should improve the context sensitivity of patching.
+
+
+    This library is called Diff::LCS because of an early version of Algorithm::Diff
+
+    which was restrictively licensed. This version has seen a minor license change:
+
+    instead of being under Ruby''s license as an option, the third optional license
+
+    is the MIT license.'
+  homepage:
+  children:
+  - rspec
+  - hoe
+  parents:
+  - rspec-expectations
+- name: execjs
+  source: bundle
+  version: 1.4.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/execjs-1.4.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/execjs-1.4.0/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/execjs-1.4.0/README.md
+  bundler_groups: []
+  summary: Run JavaScript code from Ruby
+  description: ExecJS lets you run JavaScript code from Ruby.
+  homepage: https://github.com/sstephenson/execjs
+  children:
+  - multi_json
+  - rake
+  parents:
+  - sprockets
+  - handlebars_assets
+  - uglifier
+- name: factory_girl
+  source: bundle
+  version: 3.3.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/factory_girl-3.3.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/factory_girl-3.3.0/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/factory_girl-3.3.0/README.md
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: factory_girl provides a framework and DSL for defining and using model instance factories.
+  description: ! "factory_girl provides a framework and DSL for defining and\n   \
+    \                   using factories - less error-prone, more explicit, and\n \
+    \                     all-around easier to work with than fixtures."
+  homepage: https://github.com/thoughtbot/factory_girl
+  children:
+  - activesupport
+  - rspec
+  - cucumber
+  - timecop
+  - simplecov
+  - aruba
+  - mocha
+  - bourne
+  - appraisal
+  - sqlite3-ruby
+  - yard
+  - bluecloth
+  parents: []
+- name: fakefs
+  source: bundle
+  version: 0.4.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakefs-0.4.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakefs-0.4.0/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakefs-0.4.0/README.markdown
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: A fake filesystem. Use it in your tests.
+  description: A fake filesystem. Use it in your tests.
+  homepage: http://github.com/defunkt/fakefs
+  children:
+  - rspec
+  - jeweler
+  - sdoc-helpers
+  - rdiscount
+  parents:
+  - rspec-core
+  - rspec_api_documentation
+- name: faker
+  source: bundle
+  version: 1.1.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/faker-1.1.2/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/faker-1.1.2/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/faker-1.1.2/README.md
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Easily generate fake data
+  description: ! 'Faker, a port of Data::Faker from Perl, is used to easily generate
+    fake data: names, addresses, phone numbers, etc.'
+  homepage: http://faker.rubyforge.org
+  children:
+  - i18n
+  parents: []
+- name: fakeweb
+  source: bundle
+  version: 1.3.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/test/vendor/samuel-0.2.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/test/vendor/right_http_connection-1.2.4/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/test/vendor/samuel-0.2.1/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/test/vendor/right_http_connection-1.2.4/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fakeweb-1.3.0/test/vendor/samuel-0.2.1/README.rdoc
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: A tool for faking responses to HTTP requests
+  description: FakeWeb is a helper for faking web requests in Ruby. It works at a global level, without modifying code or writing extensive stubs.
+  homepage: http://github.com/chrisk/fakeweb
+  children:
+  - mocha
+  parents:
+  - thor
+  - paperclip
+  - vcr
+- name: fixture_builder
+  source: bundle
+  version: 0.3.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fixture_builder-0.3.3/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fixture_builder-0.3.3/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fixture_builder-0.3.3/README.markdown
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Build YAML fixtures using object factories
+  description: FixtureBuilder allows testers to use their existing factories, like FactoryGirl, to generate high performance fixtures that can be shared across all your tests
+  homepage: http://github.com/rdy/fixture_builder
+  children:
+  - activerecord
+  - activesupport
+  - rake
+  - rails
+  - test-unit
+  - sqlite3
+  parents: []
+- name: thor
+  source: bundle
+  version: 0.16.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/LICENSE.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/spec/fixtures/app{1}/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/spec/fixtures/doc/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/spec/fixtures/app{1}/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/thor-0.16.0/spec/fixtures/doc/README
+  bundler_groups: []
+  summary: A scripting framework that replaces rake, sake and rubigen
+  description: A scripting framework that replaces rake, sake and rubigen
+  homepage: http://whatisthor.com/
+  children:
+  - bundler
+  - fakeweb
+  - rake
+  - rdoc
+  - rspec
+  - simplecov
+  - childlabor
+  parents:
+  - foreman
+  - jasmine-core
+  - railties
+- name: forgery
+  source: bundle
+  version: 0.5.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/forgery-0.5.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/forgery-0.5.0/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/forgery-0.5.0/README.markdown
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Easy and customizable generation of forged data.
+  description: Easy and customizable generation of forged data. Can be used as a gem or a rails plugin. Includes rails generators for creating your own forgeries.
+  homepage: http://github.com/sevenwire/forgery
+  children:
+  - rspec
+  parents: []
+- name: rspec-core
+  source: bundle
+  version: 2.11.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/features/command_line/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-core-2.11.1/features/command_line/README.md
+  bundler_groups: []
+  summary: rspec-core-2.11.1
+  description: BDD for Ruby. RSpec runner and example groups.
+  homepage: http://github.com/rspec/rspec-core
+  children:
+  - rake
+  - cucumber
+  - aruba
+  - ZenTest
+  - nokogiri
+  - fakefs
+  - syntax
+  - mocha
+  - rr
+  - flexmock
+  parents:
+  - rspec
+  - mizuno
+- name: rspec-expectations
+  source: bundle
+  version: 2.11.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/features/built_in_matchers/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-expectations-2.11.3/features/built_in_matchers/README.md
+  bundler_groups: []
+  summary: rspec-expectations-2.11.3
+  description: rspec expectations (should[_not] and matchers)
+  homepage: http://github.com/rspec/rspec-expectations
+  children:
+  - diff-lcs
+  - rake
+  - cucumber
+  - aruba
+  parents:
+  - rspec
+- name: rspec-mocks
+  source: bundle
+  version: 2.11.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/argument_matchers/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/message_expectations/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/method_stubs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/stubbing_constants/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/argument_matchers/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/message_expectations/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/method_stubs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-mocks-2.11.3/features/stubbing_constants/README.md
+  bundler_groups: []
+  summary: rspec-mocks-2.11.3
+  description: RSpec's 'test double' framework, with support for stubbing and mocking
+  homepage: http://github.com/rspec/rspec-mocks
+  children:
+  - rake
+  - cucumber
+  - aruba
+  parents:
+  - rspec
+- name: rspec
+  source: bundle
+  version: 2.11.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-2.11.0/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-2.11.0/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-2.11.0/README.md
+  bundler_groups: []
+  summary: rspec-2.11.0
+  description: BDD for Ruby
+  homepage: http://github.com/rspec
+  children:
+  - rspec-core
+  - rspec-expectations
+  - rspec-mocks
+  parents:
+  - multi_json
+  - treetop
+  - addressable
+  - allowy
+  - bundler
+  - childprocess
+  - selenium-webdriver
+  - xpath
+  - capybara
+  - capybara-screenshot
+  - chunky_png
+  - cocaine
+  - fssm
+  - diff-lcs
+  - factory_girl
+  - fakefs
+  - thor
+  - forgery
+  - fuubar
+  - hashie
+  - headless
+  - jasmine-core
+  - jasmine
+  - jasmine
+  - license_finder
+  - mizuno
+  - net-ldap
+  - rchardet19
+  - rsolr
+  - rspec-rails
+  - webmock
+  - rspec_api_documentation
+  - sunspot
+  - sunspot_matchers
+  - sunspot_rails
+  - sunspot_solr
+  - therubyrhino
+  - uglifier
+  - vcr
+- name: rspec-instafail
+  source: bundle
+  version: 0.2.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-instafail-0.2.4/Readme.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-instafail-0.2.4/Readme.md
+  bundler_groups: []
+  summary: Show failing specs instantly
+  description:
+  homepage: http://github.com/grosser/rspec-instafail
+  children: []
+  parents:
+  - fuubar
+- name: fuubar
+  source: bundle
+  version: 1.0.0
+  license: other
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fuubar-1.0.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fuubar-1.0.0/README.textile
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/fuubar-1.0.0/README.textile
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: the instafailing RSpec progress bar formatter
+  description: the instafailing RSpec progress bar formatter
+  homepage: https://github.com/jeffkreeftmeijer/fuubar
+  children:
+  - rspec
+  - ruby-progressbar
+  - rspec-instafail
+  parents:
+  - capybara
+  - jasmine-core
+- name: handlebars_assets
+  source: bundle
+  version: 0.4.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/handlebars_assets-0.4.4/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/handlebars_assets-0.4.4/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/handlebars_assets-0.4.4/README.md
+  bundler_groups:
+  - :assets
+  summary: Compile Handlebars templates in the Rails asset pipeline.
+  description: Compile Handlebars templates in the Rails asset pipeline.
+  homepage: ''
+  children:
+  - execjs
+  - tilt
+  - sprockets
+  - rake
+  parents: []
+- name: hashie
+  source: bundle
+  version: 1.2.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hashie-1.2.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hashie-1.2.0/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hashie-1.2.0/README.rdoc
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Your friendly neighborhood hash toolkit.
+  description: Hashie is a small collection of tools that make hashes more powerful. Currently includes Mash (Mocking Hash) and Dash (Discrete Hash).
+  homepage: https://github.com/intridea/hashie
+  children:
+  - rake
+  - rspec
+  - guard
+  - guard-rspec
+  parents: []
+- name: headless
+  source: bundle
+  version: 0.3.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/headless-0.3.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/headless-0.3.1/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/headless-0.3.1/README.md
+  bundler_groups:
+  - :integration
+  summary: Ruby headless display interface
+  description: ! '    Headless is a Ruby interface for Xvfb. It allows you to create
+    a headless display straight from Ruby code, hiding some low-level action.
+
+    '
+  homepage: http://leonid.shevtsov.me/en/headless
+  children:
+  - rspec
+  parents: []
+- name: highline
+  source: bundle
+  version: 1.6.15
+  license: ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/highline-1.6.15/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/highline-1.6.15/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/highline-1.6.15/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/highline-1.6.15/README.rdoc
+  bundler_groups: []
+  summary: HighLine is a high-level command-line IO library.
+  description: ! 'A high-level IO library that provides validation, type conversion,
+    and more for
+
+    command-line interfaces. HighLine also includes a complete menu system that can
+
+    crank out anything from simple list selection to complete shells with just
+
+    minutes of work.
+
+    '
+  homepage: http://highline.rubyforge.org
+  children: []
+  parents:
+  - tabcmd_gem
+- name: hpricot
+  source: bundle
+  version: 0.8.6
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hpricot-0.8.6-java/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hpricot-0.8.6-java/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/hpricot-0.8.6-java/README.md
+  bundler_groups: []
+  summary: a swift, liberal HTML parser with a fantastic library
+  description: a swift, liberal HTML parser with a fantastic library
+  homepage: http://code.whytheluckystiff.net/hpricot/
+  children: []
+  parents:
+  - tabcmd_gem
+- name: jasmine-core
+  source: bundle
+  version: 1.2.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files: []
+  readme_files: []
+  bundler_groups: []
+  summary: JavaScript BDD framework
+  description: Test your JavaScript without any framework dependencies, in any environment, and with a nice descriptive syntax.
+  homepage: http://pivotal.github.com/jasmine
+  children:
+  - json_pure
+  - frank
+  - sass
+  - compass
+  - ragaskar-jsdoc_helper
+  - rspec
+  - fuubar
+  - awesome_print
+  - thor
+  - nokogiri
+  parents:
+  - jasmine
+- name: jasmine
+  source: bundle
+  version: 1.2.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jasmine-1.2.0/MIT.LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jasmine-1.2.0/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jasmine-1.2.0/README.markdown
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: JavaScript BDD framework
+  description: Test your JavaScript without any framework dependencies, in any environment, and with a nice descriptive syntax.
+  homepage: http://pivotal.github.com/jasmine
+  children:
+  - rspec
+  - rails
+  - rack
+  - rack-test
+  - json_pure
+  - nokogiri
+  - jasmine-core
+  - rack
+  - rspec
+  - selenium-webdriver
+  parents: []
+- name: license_finder
+  source: bundle
+  version: 0.7.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/APACHE-2-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/ISC-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/MIT-LICENSE-with-varied-disclaimer
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/README-with-MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/LICENSE/BSD-2-Clause.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/LICENSE/GPL-2.0.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/LICENSE/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/LICENSE/MIT.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/LICENSE/RUBY.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/mit_licensed_gem/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/nested_gem/vendor/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/other_licensed_gem/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/Mit-License
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/Licence.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_directory/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/COPYING.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/nested_readme/vendor/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/utf8_gem/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/Readme.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/Project ReadMe
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/README-with-MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/license_names/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/nested_readme/vendor/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/utf8_gem/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/Readme.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/license_finder-0.7.0/spec/fixtures/readme/Project ReadMe
+  bundler_groups:
+  - :development
+  summary: Audit the OSS licenses of your application's dependencies.
+  description: ! "  Do you know the licenses of all your application's dependencies?\
+    \ What open source software licenses will your business accept?\n\n  LicenseFinder\
+    \ culls your Gemfile, detects the licenses of the gems in it, and gives you a\
+    \ report that you can act on. If you already know \n  what licenses your business\
+    \ is comfortable with, you can whitelist them, leaving you with an action report\
+    \ of only those dependencies that have \n  licenses that fall outside of the whitelist.\n"
+  homepage: https://github.com/pivotal/LicenseFinder
+  children:
+  - bundler
+  - rails
+  - rspec
+  - rake
+  - cucumber
+  - rails
+  - pry
+  - capybara
+  parents: []
+- name: mizuno
+  source: bundle
+  version: 0.6.4
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/mizuno-0643d9699e8d/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/mizuno-0643d9699e8d/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/mizuno-0643d9699e8d/README.markdown
+  bundler_groups:
+  - :development
+  summary: Rack handler for Jetty 8 on JRuby. Features multithreading, event-driven I/O, and async support.
+  description: Jetty-powered running shoes for JRuby/Rack.
+  homepage: http://github.com/matadon/mizuno
+  children:
+  - rack
+  - ffi
+  - choice
+  - childprocess
+  - rspec
+  - rspec-core
+  - json_pure
+  - nokogiri
+  parents: []
+- name: mustache
+  source: bundle
+  version: 0.99.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mustache-0.99.4/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mustache-0.99.4/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/mustache-0.99.4/README.md
+  bundler_groups: []
+  summary: Mustache is a framework-agnostic way to render logic-free views.
+  description: ! 'Inspired by ctemplate, Mustache is a framework-agnostic way to render
+
+    logic-free views.
+
+
+    As ctemplates says, "It emphasizes separating logic from presentation:
+
+    it is impossible to embed application logic in this template
+
+    language.
+
+
+    Think of Mustache as a replacement for your views. Instead of views
+
+    consisting of ERB or HAML with random helpers and arbitrary logic,
+
+    your views are broken into two parts: a Ruby class and an HTML
+
+    template.
+
+    '
+  homepage: http://github.com/defunkt/mustache
+  children: []
+  parents:
+  - rspec_api_documentation
+- name: net-ldap
+  source: bundle
+  version: 0.3.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/net-ldap-0.3.1/License.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/net-ldap-0.3.1/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/net-ldap-0.3.1/README.rdoc
+  bundler_groups:
+  - :default
+  summary: Net::LDAP for Ruby (also called net-ldap) implements client access for the Lightweight Directory Access Protocol (LDAP), an IETF standard protocol for accessing distributed directory services
+  description: ! 'Net::LDAP for Ruby (also called net-ldap) implements client access
+    for the
+
+    Lightweight Directory Access Protocol (LDAP), an IETF standard protocol for
+
+    accessing distributed directory services. Net::LDAP is written completely in
+
+    Ruby with no external dependencies. It supports most LDAP client features and
+    a
+
+    subset of server features as well.
+
+
+    Net::LDAP has been tested against modern popular LDAP servers including
+
+    OpenLDAP and Active Directory. The current release is mostly compliant with
+
+    earlier versions of the IETF LDAP RFCs (2251–2256, 2829–2830, 3377, and 3771).
+
+    Our roadmap for Net::LDAP 1.0 is to gain full <em>client</em> compliance with
+
+    the most recent LDAP RFCs (4510–4519, plus portions of 4520–4532).'
+  homepage: http://rubyldap.com/
+  children:
+  - hoe-git
+  - hoe-gemspec
+  - metaid
+  - flexmock
+  - rspec
+  - rdoc
+  - hoe
+  parents: []
+- name: newrelic_rpm
+  source: bundle
+  version: 3.4.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/newrelic_rpm-3.4.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/newrelic_rpm-3.4.1/vendor/gems/dependency_detection-0.0.1.build/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/newrelic_rpm-3.4.1/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/newrelic_rpm-3.4.1/README.rdoc
+  bundler_groups:
+  - :development
+  summary: New Relic Ruby Agent
+  description: ! 'New Relic is a performance management system, developed by New Relic,
+
+    Inc (http://www.newrelic.com).  New Relic provides you with deep
+
+    information about the performance of your web application as it runs
+
+    in production. The New Relic Ruby Agent is dual-purposed as a either a
+
+    Gem or plugin, hosted on
+
+    http://github.com/newrelic/rpm/
+
+    '
+  homepage: http://www.github.com/newrelic/rpm
+  children:
+  - jeweler
+  - mocha
+  - shoulda
+  parents: []
+- name: paperclip
+  source: bundle
+  version: 3.0.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/paperclip-3.0.4/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/paperclip-3.0.4/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/paperclip-3.0.4/README.md
+  bundler_groups:
+  - :default
+  summary: File attachments as attributes for ActiveRecord
+  description: Easy upload management for ActiveRecord
+  homepage: https://github.com/thoughtbot/paperclip
+  children:
+  - activerecord
+  - activemodel
+  - activesupport
+  - cocaine
+  - mime-types
+  - shoulda
+  - appraisal
+  - mocha
+  - aws-sdk
+  - bourne
+  - sqlite3
+  - cucumber
+  - aruba
+  - nokogiri
+  - capybara
+  - bundler
+  - cocaine
+  - fog
+  - pry
+  - launchy
+  - rake
+  - fakeweb
+  parents: []
+- name: postgresql_cursor
+  source: bundle
+  version: 0.4.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/postgresql_cursor-75b41556ef2c/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/postgresql_cursor-75b41556ef2c/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/postgresql_cursor-75b41556ef2c/README.rdoc
+  bundler_groups:
+  - :default
+  summary: ActiveRecord PostgreSQL Adapter extension for using a cursor to return a large result set
+  description: PostgreSQL Cursor is an extension to the ActiveRecord PostgreSQLAdapter for very large result sets. It provides a cursor open/fetch/close interface to access data without loading all rows into memory, and instead loads the result rows in "chunks" (default of 10_000 rows), buffers them, and returns the rows one at a time.
+  homepage: http://github.com/afair/postgresql_cursor
+  children:
+  - activerecord
+  parents: []
+- name: pr_geohash
+  source: bundle
+  version: 1.0.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/pr_geohash-1.0.0/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/pr_geohash-1.0.0/README.rdoc
+  bundler_groups: []
+  summary: GeoHash encode/decode library for pure Ruby
+  description: ! 'GeoHash encode/decode library for pure Ruby.
+
+
+    It''s implementation of http://en.wikipedia.org/wiki/Geohash'
+  homepage: http://github.com/masuidrive/pr_geohash
+  children:
+  - hoe
+  parents:
+  - sunspot
+- name: scrolls
+  source: bundle
+  version: 0.0.9
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/scrolls-0.0.9/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/scrolls-0.0.9/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/scrolls-0.0.9/README.md
+  bundler_groups: []
+  summary: When do we log? All the time.
+  description: Logging, easier, more consistent.
+  homepage: https://github.com/asenchi/scrolls
+  children: []
+  parents:
+  - queue_classic
+- name: queue_classic
+  source: bundle
+  version: 2.0.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/queue_classic-9cb4568adf5a/MIT-LICENSE
+  readme_files: []
+  bundler_groups:
+  - :default
+  summary: postgres backed queue
+  description: queue_classic is a queueing library for Ruby apps. (Rails, Sinatra, Etc...) queue_classic features asynchronous job polling, database maintained locks and no ridiculous dependencies. As a matter of fact, queue_classic only requires pg.
+  homepage: http://github.com/ryandotsmith/queue_classic
+  children:
+  - scrolls
+  parents: []
+- name: rack-ssl
+  source: bundle
+  version: 1.3.2
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-ssl-1.3.2/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-ssl-1.3.2/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rack-ssl-1.3.2/README.md
+  bundler_groups: []
+  summary: Force SSL/TLS in your app.
+  description: ! '    Rack middleware to force SSL/TLS.
+
+    '
+  homepage: https://github.com/josh/rack-ssl
+  children:
+  - rack
+  parents:
+  - railties
+- name: railties
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/plugin_new/templates/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/assets/images/icons/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/code/getting_started/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/code/getting_started/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/app/templates/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/app/templates/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/plugin_new/templates/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/assets/images/icons/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/code/getting_started/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/guides/code/getting_started/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/app/templates/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/app/templates/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/railties-3.2.5/lib/rails/generators/rails/plugin_new/templates/README.rdoc
+  bundler_groups: []
+  summary: Tools for creating, working with, and running Rails applications.
+  description: ! 'Rails internals: application bootup, plugins, generators, and rake
+    tasks.'
+  homepage: http://www.rubyonrails.org
+  children:
+  - rake
+  - rack-ssl
+  - thor
+  - rdoc
+  - activesupport
+  - actionpack
+  parents:
+  - quiet_assets
+  - rails
+  - rspec-rails
+  - sass-rails
+  - turbo-sprockets-rails3
+- name: rr
+  source: bundle
+  version: 1.0.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rr-1.0.4/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rr-1.0.4/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rr-1.0.4/README.rdoc
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: RR (Double Ruby) is a double framework that features a rich selection of double techniques and a terse syntax. http://xunitpatterns.com/Test%20Double.html
+  description: RR (Double Ruby) is a double framework that features a rich selection of double techniques and a terse syntax. http://xunitpatterns.com/Test%20Double.html
+  homepage: http://pivotallabs.com
+  children: []
+  parents:
+  - treetop
+  - rspec-core
+  - rspec_api_documentation
+- name: rspec-rails
+  source: bundle
+  version: 2.11.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/controller_specs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/matchers/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/model_specs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/routing_specs/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/controller_specs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/matchers/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/model_specs/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rspec-rails-2.11.0/features/routing_specs/README.md
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: rspec-rails-2.11.0
+  description: RSpec for Rails
+  homepage: http://github.com/rspec/rspec-rails
+  children:
+  - activesupport
+  - actionpack
+  - railties
+  - rspec
+  - rake
+  - cucumber
+  - aruba
+  - ZenTest
+  - ammeter
+  parents:
+  - shoulda-matchers
+  - sunspot_rails
+- name: webmock
+  source: bundle
+  version: 1.8.11
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/webmock-1.8.11/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/webmock-1.8.11/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/webmock-1.8.11/README.md
+  bundler_groups: []
+  summary: Library for stubbing HTTP requests in Ruby.
+  description: WebMock allows stubbing HTTP requests and setting expectations on HTTP requests.
+  homepage: http://github.com/bblimke/webmock
+  children:
+  - addressable
+  - crack
+  - rspec
+  - httpclient
+  - patron
+  - em-http-request
+  - curb
+  - typhoeus
+  - excon
+  - minitest
+  - rdoc
+  parents:
+  - selenium-webdriver
+  - rspec_api_documentation
+  - vcr
+- name: rspec_api_documentation
+  source: bundle
+  version: 0.8.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/LICENSE.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/lib/jasmine-1.2.0/MIT.LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/example/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/example/doc/README_FOR_APP
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/example/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/rspec_api_documentation-95f243546757/example/doc/README_FOR_APP
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: A double black belt for your docs
+  description: Generate API docs from your test suite
+  homepage: http://smartlogicsolutions.com
+  children:
+  - rspec
+  - activesupport
+  - i18n
+  - mustache
+  - webmock
+  - json
+  - fakefs
+  - rr
+  - sinatra
+  - aruba
+  - capybara
+  - rake
+  - rack-test
+  - rack-oauth2
+  parents: []
+- name: ruby-debug-base
+  source: bundle
+  version: 0.10.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-base-0.10.4-java/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-base-0.10.4-java/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-base-0.10.4-java/README
+  bundler_groups: []
+  summary: Java implementation of Fast Ruby Debugger
+  description: ! 'Java extension to make fast ruby debugger run on JRuby.
+
+    It is the same what ruby-debug-base is for native Ruby.
+
+    '
+  homepage: http://rubyforge.org/projects/debug-commons/
+  children: []
+  parents:
+  - ruby-debug
+- name: sass-rails
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/README.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/engine_project/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/sass_project/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/sass_project/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/scss_project/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/scss_project/doc/README_FOR_APP
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/README.markdown
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/engine_project/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/sass_project/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/sass_project/doc/README_FOR_APP
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/scss_project/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sass-rails-3.2.5/test/fixtures/scss_project/doc/README_FOR_APP
+  bundler_groups:
+  - :assets
+  summary: Sass adapter for the Rails asset pipeline.
+  description: Sass adapter for the Rails asset pipeline.
+  homepage: ''
+  children:
+  - sass
+  - railties
+  - tilt
+  parents: []
+- name: shoulda-matchers
+  source: bundle
+  version: 1.1.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/shoulda-matchers-1.1.0/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/shoulda-matchers-1.1.0/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/shoulda-matchers-1.1.0/README.md
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Making tests easy on the fingers and eyes
+  description: Making tests easy on the fingers and eyes
+  homepage: http://thoughtbot.com/community/
+  children:
+  - activesupport
+  - appraisal
+  - aruba
+  - bourne
+  - bundler
+  - cucumber
+  - rails
+  - rake
+  - rspec-rails
+  parents: []
+- name: sunspot
+  source: bundle
+  version: 2.0.0.pre.120720
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot-2.0.0.pre.120720/LICENSE
+  readme_files: []
+  bundler_groups: []
+  summary: Library for expressive, powerful interaction with the Solr search engine
+  description: ! "    Sunspot is a library providing a powerful, all-ruby API for\
+    \ the Solr search engine. Sunspot manages the configuration of persistent\n  \
+    \  Ruby classes for search and indexing and exposes Solr's most powerful features\
+    \ through a collection of DSLs. Complex search operations\n    can be performed\
+    \ without hand-writing any boolean queries or building Solr parameters by hand.\n"
+  homepage: http://outoftime.github.com/sunspot
+  children:
+  - rsolr
+  - pr_geohash
+  - rspec
+  - hanna
+  parents:
+  - sunspot_matchers
+  - sunspot_rails
+- name: sunspot_matchers
+  source: bundle
+  version: 2.0.0.pre.120417
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/sunspot_matchers-a4684f540c27/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/sunspot_matchers-a4684f540c27/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/sunspot_matchers-a4684f540c27/README.markdown
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: RSpec matchers and Test::Unit assertions for testing Sunspot
+  description: These matchers and assertions allow you to test what is happening inside the Sunspot Search DSL blocks
+  homepage: https://github.com/pivotal/sunspot_matchers
+  children:
+  - bundler
+  - rspec
+  - sunspot
+  - rake
+  parents: []
+- name: sunspot_rails
+  source: bundle
+  version: 2.0.0.pre.120720
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_rails-2.0.0.pre.120720/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_rails-2.0.0.pre.120720/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_rails-2.0.0.pre.120720/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_rails-2.0.0.pre.120720/README.rdoc
+  bundler_groups:
+  - :default
+  summary: Rails integration for the Sunspot Solr search library
+  description: ! "    Sunspot::Rails is an extension to the Sunspot library for Solr\
+    \ search.\n    Sunspot::Rails adds integration between Sunspot and ActiveRecord,\
+    \ including\n    defining search and indexing related methods on ActiveRecord\
+    \ models themselves,\n    running a Sunspot-compatible Solr instance for development\
+    \ and test\n    environments, and automatically commit Solr index changes at the\
+    \ end of each\n    Rails request.\n"
+  homepage: http://github.com/outoftime/sunspot/tree/master/sunspot_rails
+  children:
+  - sunspot
+  - nokogiri
+  - rspec
+  - rspec-rails
+  parents: []
+- name: tabcmd_gem
+  source: bundle
+  version: 0.0.1
+  license: NONE
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/tabcmd/common/ruby/rails-plugins/fixture_replacement2/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/tabcmd/common/ruby/rails-plugins/fixture_replacement2/etc/patches/2007_10_18_README.diff
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/tabcmd/common/ruby/rails-plugins/fixture_replacement2/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/tableau-9ad7a56f3ee4/tabcmd/common/ruby/rails-plugins/fixture_replacement2/etc/patches/2007_10_18_README.diff
+  bundler_groups:
+  - :default
+  summary: Summary
+  description: Description
+  homepage: http://pivotallabs.com
+  children:
+  - log4r
+  - rchardet19
+  - hpricot
+  - highline
+  parents: []
+- name: therubyrhino
+  source: bundle
+  version: 1.73.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/therubyrhino-1.73.4/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/therubyrhino-1.73.4/README.rdoc
+  bundler_groups:
+  - :assets
+  summary: Embed the Rhino JavaScript interpreter into JRuby
+  description: Call javascript code and manipulate javascript objects from ruby. Call ruby code and manipulate ruby objects from javascript.
+  homepage: http://github.com/cowboyd/therubyrhino
+  children:
+  - rake
+  - rspec
+  - mocha
+  - jruby-openssl
+  parents: []
+- name: timecop
+  source: bundle
+  version: 0.3.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/timecop-0.3.5/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/timecop-0.3.5/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/timecop-0.3.5/README.rdoc
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: A gem providing "time travel" and "time freezing" capabilities, making it dead simple to test time-dependent code.  It provides a unified method to mock Time.now, Date.today, and DateTime.now in a single call.
+  description: A gem providing "time travel" and "time freezing" capabilities, making it dead simple to test time-dependent code.  It provides a unified method to mock Time.now, Date.today, and DateTime.now in a single call.
+  homepage: http://github.com/jtrupiano/timecop
+  children: []
+  parents:
+  - capybara-screenshot
+  - factory_girl
+  - vcr
+- name: turbo-sprockets-rails3
+  source: bundle
+  version: 0.1.10
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/turbo-sprockets-rails3-0.1.10/MIT-LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/turbo-sprockets-rails3-0.1.10/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/turbo-sprockets-rails3-0.1.10/README.md
+  bundler_groups:
+  - :default
+  summary: Supercharge your Rails 3 asset pipeline
+  description: Speeds up the Rails 3 asset pipeline by only recompiling changed assets
+  homepage: https://github.com/ndbroadbent/turbo-sprockets-rails3
+  children:
+  - sprockets
+  - railties
+  parents: []
+- name: uglifier
+  source: bundle
+  version: 1.2.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/uglifier-1.2.4/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/uglifier-1.2.4/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/uglifier-1.2.4/README.md
+  bundler_groups:
+  - :assets
+  summary: Ruby wrapper for UglifyJS JavaScript compressor
+  description:
+  homepage: http://github.com/lautis/uglifier
+  children:
+  - execjs
+  - multi_json
+  - rspec
+  - bundler
+  - jeweler
+  - rdoc
+  parents: []
+- name: vcr
+  source: bundle
+  version: 2.1.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/vcr-2.1.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/vcr-2.1.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/vcr-2.1.1/features/request_matching/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/vcr-2.1.1/README.md
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/vcr-2.1.1/features/request_matching/README.md
+  bundler_groups:
+  - :test
+  - :integration
+  - :packaging
+  summary: Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests.
+  description: VCR provides a simple API to record and replay your test suite's HTTP interactions.  It works with a variety of HTTP client libraries, HTTP stubbing libraries and testing frameworks.
+  homepage: http://github.com/myronmarston/vcr
+  children:
+  - bundler
+  - rake
+  - cucumber
+  - aruba
+  - rspec
+  - shoulda
+  - fakeweb
+  - webmock
+  - faraday
+  - httpclient
+  - excon
+  - timecop
+  - rack
+  - sinatra
+  - multi_json
+  - json
+  - limited_red
+  - simplecov
+  - patron
+  - em-http-request
+  - curb
+  - typhoeus
+  - yajl-ruby
+  parents: []
+- name: will_paginate
+  source: bundle
+  version: 3.0.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/will_paginate-3.0.3/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/will_paginate-3.0.3/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/will_paginate-3.0.3/README.md
+  bundler_groups:
+  - :default
+  summary: Pagination plugin for web frameworks and other apps
+  description: will_paginate provides a simple API for performing paginated queries with Active Record, DataMapper and Sequel, and includes helpers for rendering pagination links in Rails, Sinatra and Merb web apps.
+  homepage: https://github.com/mislav/will_paginate/wiki
+  children: []
+  parents: []
+- name: Platform
+  source: bundle
+  version: 0.4.0
+  license: BSD
+  license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/Platform-0.4.0/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/Platform-0.4.0/README
+  bundler_groups: []
+  summary: Hopefully robust platform sensing
+  description:
+  homepage: http://rubyforge.org/projects/platform/
+  children: []
+  parents:
+  - POpen4
+- name: allowy
+  source: bundle
+  version: 0.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/allowy-0.2.5/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/allowy-0.2.5/README.md
+  bundler_groups:
+  - :default
+  summary: Authorization with simplicity and explicitness in mind
+  description: Allowy provides CanCan-like way of checking permission but doesn't enforce a tight DSL giving you more control
+  homepage: https://github.com/dnagir/allowy
+  children:
+  - i18n
+  - activesupport
+  - rspec
+  - pry
+  - guard
+  - guard-rspec
+  parents: []
+- name: bouncy-castle-java
+  source: bundle
+  version: 1.5.0146.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bouncy-castle-java-1.5.0146.1/LICENSE.html
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bouncy-castle-java-1.5.0146.1/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/bouncy-castle-java-1.5.0146.1/README
+  bundler_groups: []
+  summary: Gem redistribution of Bouncy Castle jars
+  description: Gem redistribution of "Legion of the Bouncy Castle Java cryptography APIs" jars at http://www.bouncycastle.org/java.html
+  homepage: http://github.com/nahi/bouncy-castle-java/
+  children: []
+  parents:
+  - jruby-openssl
+- name: columnize
+  source: bundle
+  version: 0.3.6
+  license: Ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/columnize-0.3.6/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/columnize-0.3.6/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/columnize-0.3.6/README.md
+  bundler_groups: []
+  summary: Module to format an Array as an Array of String aligned in columns
+  description: ! "\nIn showing a long lists, sometimes one would prefer to see the\
+    \ value\narranged aligned in columns. Some examples include listing methods\n\
+    of an object or debugger commands. \nSee Examples in the rdoc documentation for\
+    \ examples.\n"
+  homepage: https://github.com/rocky/columnize
+  children: []
+  parents:
+  - ruby-debug
+- name: ffi
+  source: bundle
+  version: 1.1.5
+  license: GPL3
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
+  bundler_groups: []
+  summary: A Ruby foreign function interface
+  description: ''
+  homepage: http://wiki.github.com/ffi/ffi
+  children: []
+  parents:
+  - childprocess
+  - mizuno
+- name: foreman
+  source: bundle
+  version: 0.46.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/foreman-0.46.0-java/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/foreman-0.46.0-java/README.md
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Process manager for applications with multiple components
+  description: Process manager for applications with multiple components
+  homepage: http://github.com/ddollar/foreman
+  children:
+  - thor
+  - posix-spawn
+  parents: []
+- name: jdbc-postgres
+  source: bundle
+  version: 9.0.801
+  license: BSD
+  license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jdbc-postgres-9.0.801/LICENSE.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jdbc-postgres-9.0.801/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jdbc-postgres-9.0.801/README.txt
+  bundler_groups: []
+  summary: PostgreSQL JDBC driver for Java and PostgreSQL/ActiveRecord-JDBC.
+  description: Install this gem and require 'postgres' within JRuby to load the driver.
+  homepage: http://jruby-extras.rubyforge.org/ActiveRecord-JDBC
+  children:
+  - rubyforge
+  parents:
+  - activerecord-jdbcpostgresql-adapter
+- name: jetpack
+  source: bundle
+  version: 0.1.2
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/jetpack-529c16d730de/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/jetpack-529c16d730de/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/bundler/gems/jetpack-529c16d730de/README.markdown
+  bundler_groups:
+  - :default
+  summary: Jetpack prepares your jRuby project for jvm deployment.
+  description:
+  homepage: https://github.com/square/jetpack
+  children:
+  - bundler
+  parents: []
+- name: libwebsocket
+  source: bundle
+  version: 0.1.3
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/libwebsocket-0.1.3/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/libwebsocket-0.1.3/README.md
+  bundler_groups: []
+  summary: Universal Ruby library to handle WebSocket protocol
+  description: Universal Ruby library to handle WebSocket protocol
+  homepage: http://github.com/imanel/libwebsocket
+  children:
+  - addressable
+  parents:
+  - selenium-webdriver
+- name: json
+  source: bundle
+  version: 1.7.5
+  license: Ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: false
+  notes:
+  license_files: []
+  readme_files: []
+  bundler_groups: []
+  summary: JSON implementation for JRuby
+  description: A JSON implementation as a JRuby extension.
+  homepage: http://json-jruby.rubyforge.org/
+  children: []
+  parents:
+  - journey
+  - sprockets
+  - rdoc
+  - rspec_api_documentation
+  - vcr
+- name: jruby-openssl
+  source: bundle
+  version: 0.7.7
+  license: CPL
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jruby-openssl-0.7.7/License.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jruby-openssl-0.7.7/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/jruby-openssl-0.7.7/README.txt
+  bundler_groups:
+  - :default
+  summary: OpenSSL add-on for JRuby
+  description: JRuby-OpenSSL is an add-on gem for JRuby that emulates the Ruby OpenSSL native library.
+  homepage: https://github.com/jruby/jruby-ossl
+  children:
+  - bouncy-castle-java
+  - rdoc
+  parents:
+  - therubyrhino
+- name: log4r
+  source: bundle
+  version: 1.1.10
+  license: LGPL3
+  license_url:
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/doc/dev/README.developers
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/examples/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/tests/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/doc/dev/README.developers
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/examples/README
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/log4r-1.1.10/tests/README
+  bundler_groups: []
+  summary: Log4r, logging framework for ruby
+  description: ! 'See also: http://logging.apache.org/log4j'
+  homepage: http://log4r.rubyforge.org
+  children:
+  - bundler
+  - rake
+  parents:
+  - tabcmd_gem
+- name: posix-spawn
+  source: bundle
+  version: 0.3.6
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/posix-spawn-0.3.6/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/posix-spawn-0.3.6/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/posix-spawn-0.3.6/README.md
+  bundler_groups: []
+  summary: posix_spawnp(2) for ruby
+  description: posix-spawn uses posix_spawnp(2) for faster process spawning
+  homepage: http://github.com/rtomayko/posix-spawn
+  children:
+  - rake-compiler
+  parents:
+  - foreman
+- name: quiet_assets
+  source: bundle
+  version: 1.0.1
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/quiet_assets-1.0.1/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/quiet_assets-1.0.1/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/quiet_assets-1.0.1/README.md
+  bundler_groups:
+  - :default
+  summary: Turn off rails assets log.
+  description: Quiet assets turn off rails assets log.
+  homepage: http://github.com/evrone/quiet_assets
+  children:
+  - railties
+  parents: []
+- name: rails
+  source: bundle
+  version: 3.2.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files: []
+  readme_files: []
+  bundler_groups:
+  - :default
+  summary: Full-stack web application framework.
+  description: Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.
+  homepage: http://www.rubyonrails.org
+  children:
+  - activesupport
+  - actionpack
+  - activerecord
+  - activeresource
+  - actionmailer
+  - railties
+  - bundler
+  parents:
+  - fixture_builder
+  - jasmine
+  - license_finder
+  - license_finder
+  - shoulda-matchers
+- name: rchardet19
+  source: bundle
+  version: 1.3.5
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rchardet19-1.3.5/COPYING
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rchardet19-1.3.5/README.markdown
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rchardet19-1.3.5/README.markdown
+  bundler_groups: []
+  summary: Character encoding auto-detection. Ruby 1.9 compat.
+  description: ! "Character encoding auto-detection in Ruby. This library is a port\
+    \ of the auto-detection code in Mozilla. It means taking a sequence of bytes in\
+    \ an unknown character encoding, and attempting to determine the encoding so you\
+    \ can read the text. It's like cracking a code when you don't have the decryption\
+    \ key."
+  homepage: https://github.com/oleander/rchardet
+  children:
+  - rspec
+  parents:
+  - tabcmd_gem
+- name: rdoc
+  source: bundle
+  version: '3.12'
+  license: Ruby
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rdoc-3.12/LICENSE.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rdoc-3.12/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rdoc-3.12/test/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rdoc-3.12/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rdoc-3.12/test/README
+  bundler_groups: []
+  summary: RDoc produces HTML and command-line documentation for Ruby projects
+  description: ! 'RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
+
+    includes the +rdoc+ and +ri+ tools for generating and displaying online
+
+    documentation.
+
+
+    See RDoc for a description of RDoc''s markup and basic use.'
+  homepage: http://docs.seattlerb.org/rdoc
+  children:
+  - json
+  - minitest
+  - racc
+  - minitest
+  - ZenTest
+  - hoe
+  parents:
+  - multi_json
+  - journey
+  - journey
+  - mime-types
+  - arel
+  - nokogiri
+  - ci_reporter
+  - thor
+  - jruby-openssl
+  - net-ldap
+  - railties
+  - rsolr
+  - webmock
+  - uglifier
+- name: rsolr
+  source: bundle
+  version: 1.0.8
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rsolr-1.0.8/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rsolr-1.0.8/README.rdoc
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/rsolr-1.0.8/README.rdoc
+  bundler_groups: []
+  summary: A Ruby client for Apache Solr
+  description: RSolr aims to provide a simple and extensible library for working with Solr
+  homepage: https://github.com/mwmitchell/rsolr
+  children:
+  - builder
+  - rake
+  - rdoc
+  - rspec
+  parents:
+  - sunspot
+- name: ruby-debug
+  source: bundle
+  version: 0.10.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-0.10.4/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-0.10.4/README
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-debug-0.10.4/README
+  bundler_groups:
+  - :test
+  - :development
+  - :integration
+  - :packaging
+  summary: Command line interface (CLI) for ruby-debug-base
+  description: ! 'A generic command line interface for ruby-debug.
+
+    '
+  homepage: http://rubyforge.org/projects/ruby-debug/
+  children:
+  - columnize
+  - ruby-debug-base
+  parents: []
+- name: ruby-progressbar
+  source: bundle
+  version: 0.0.10
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-progressbar-0.0.10/GPL_LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-progressbar-0.0.10/RUBY_LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-progressbar-0.0.10/README.md
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ruby-progressbar-0.0.10/README.md
+  bundler_groups: []
+  summary: Ruby/ProgressBar is a text progress bar library for Ruby. It can indicate progress with percentage, a progress bar, and estimated remaining time.
+  description: Ruby/ProgressBar is a text progress bar library for Ruby.
+  homepage: http://github.com/nex3/ruby-progressbar
+  children: []
+  parents:
+  - fuubar
+- name: sunspot_solr
+  source: bundle
+  version: 2.0.0.pre.120720
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/solr/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/solr/solr/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/README.rdoc
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/solr/README.txt
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/sunspot_solr-2.0.0.pre.120720/solr/solr/README.txt
+  bundler_groups:
+  - :default
+  summary: Bundled Solr distribution for Sunspot
+  description: ! "    Sunspot::Solr provides a bundled Solr distribution for use with\
+    \ Sunspot.\n    Typical deployment environments will require more configuration,\
+    \ but this\n    distribution is well suited to development and testing.\n"
+  homepage: https://github.com/outoftime/sunspot/tree/master/sunspot_solr
+  children:
+  - rspec
+  - hanna
+  parents: []
+- name: yui-compressor
+  source: bundle
+  version: 0.9.6
+  license: BSD
+  license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
+  approved: false
+  notes:
+  license_files: []
+  readme_files: []
+  bundler_groups:
+  - :assets
+  summary: JavaScript and CSS minification library
+  description: A Ruby interface to YUI Compressor for minifying JavaScript and CSS assets.
+  homepage: http://github.com/sstephenson/ruby-yui-compressor/
+  children:
+  - POpen4
+  parents: []
+...

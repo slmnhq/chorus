@@ -5,5 +5,3 @@ whitelist:
 - GPLv2
 - ruby
 ignore_groups:
-- test
-- development
