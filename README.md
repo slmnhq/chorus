@@ -23,6 +23,9 @@ If you don't have a `/etc/sysctl.conf` file, just create one.
 OSX Lion may not retain these settings between reboots, so you may see the message
 could not create shared memory segment: Invalid argument` indicating that the `sysctl` commands need to be run again.
 
+Chorus assumes you have a postgres installation at the root of the Chorus repo called "postgres/" so you will need to
+create a symlink from there to where you installed postgres.
+
 ### XCode
 
 You need XCode for a compiler

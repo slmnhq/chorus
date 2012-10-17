@@ -36,8 +36,8 @@ SCHEDULER_PID_FILE=$CHORUS_HOME/tmp/pids/scheduler.$RAILS_ENV.pid
 WORKER_PID_FILE=$CHORUS_HOME/tmp/pids/worker.$RAILS_ENV.pid
 MIZUNO_PID_FILE=$CHORUS_HOME/tmp/pids/mizuno.pid
 
-POSTGRES_DIR=$CHORUS_HOME/postgres-db
-POSTGRES_PID_FILE=$POSTGRES_DIR/postmaster.pid
+POSTGRES_DATA_DIR=$CHORUS_HOME/postgres-db
+POSTGRES_PID_FILE=$POSTGRES_DATA_DIR/postmaster.pid
 
 ##### Determine which nginx binary to use for this platform #####
 

@@ -59,13 +59,32 @@ function start () {
 }
 
 function stop () {
+  EXIT_STATUS=0
   pushd $CHORUS_HOME > /dev/null
-  if should_handle webserver;  then $bin/stop-webserver.sh;   fi
-  if should_handle solr;       then $bin/stop-solr.sh;        fi
-  if should_handle scheduler;  then $bin/stop-scheduler.sh;   fi
-  if should_handle workers;    then $bin/stop-workers.sh;     fi
-  if should_handle postgres;   then $bin/stop-postgres.sh;    fi
+  if should_handle webserver;  then
+    $bin/stop-webserver.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle solr;       then
+    $bin/stop-solr.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle scheduler;  then
+    $bin/stop-scheduler.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle workers;    then
+    $bin/stop-workers.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle postgres;   then
+    $bin/stop-postgres.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
   popd > /dev/null
+  if (($EXIT_STATUS > 0)); then
+    exit $EXIT_STATUS;
+  fi
 }
 
 function monitor () {
