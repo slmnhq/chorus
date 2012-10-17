@@ -100,6 +100,8 @@ describe GnipImporter do
         file.delimiter.should == ","
         file.to_table.should == 'foobar'
         file.new_table.should == true
+        file.file_contains_header.should == false
+        file.should be_ready_to_import
         file.user.should == user
         file.workspace.should == workspace
       end

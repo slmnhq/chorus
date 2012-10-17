@@ -13,7 +13,8 @@ class GnipImporter < CsvImporter
         :types => result.types,
         :delimiter => ',',
         :to_table => table_name,
-        :new_table => true
+        :new_table => true,
+        :file_contains_header => false
     )
     csv_file.user = User.find(user_id)
     if csv_file.save
