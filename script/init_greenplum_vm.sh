@@ -23,6 +23,9 @@ function start () {
 		echo "Extracting ./tmp/gpdb421ee.tar.gz  to ./gpdb421ee..."
 		tar xzf tmp/gpdb421ee.tar.gz
 
+		# Set the memory size to 1000
+		sed -i '' -e 's/memsize = "3000"/memsize = "1000"/g' gpdb421ee/Greenplum\ 4.2.1.vmx
+
 		echo "Starting greenplum."
 		"$FUSION_BIN_PATH/vmrun" -T fusion start gpdb421ee/Greenplum\ 4.2.1.vmx nogui
 
