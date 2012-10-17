@@ -46,7 +46,6 @@ class TableauWorkbooksController < ApplicationController
           }
       }, :status => :created
     else
-      puts workbook.errors.full_messages.join(". ")
       present_errors({:fields => {:tableau =>
              { :GENERIC => {:message => workbook.errors.full_messages.join(". ")}}}},
             {:status => :unprocessable_entity})
