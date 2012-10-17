@@ -91,7 +91,7 @@ resource "Workspaces" do
     required_parameters :schema_name
 
     let(:greenplum_instance) { GpdbIntegration.real_gpdb_instance }
-    let(:database) { greenplum_instance.databases.first }
+    let(:database) { GpdbIntegration.real_database }
     let(:schema_name) { "a_new_schema" }
     let(:user) { greenplum_instance.owner }
 

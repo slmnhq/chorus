@@ -44,7 +44,7 @@ killall gpfdist
 echo "Running legacy migration tests"
 b/rake db:test:prepare
 RAILS_ENV=test packaging/chorus_migrate.sh db/legacy/legacy.sql
-rspec --options .rspec-ci spec/legacy_migration
+b/rake spec:legacy_migration
 LEGACY_MIGRATION_TESTS_RESULT=$?
 
 echo "Running API docs check"
