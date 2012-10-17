@@ -10,7 +10,6 @@ require "paperclip/matchers"
 require 'rspec_api_documentation'
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
-require "vcr"
 require 'shoulda-matchers'
 
 module Shoulda # :nodoc:
@@ -25,17 +24,6 @@ module Shoulda # :nodoc:
       end
     end
   end
-end
-
-VCR.configure do |c|
-  c.cassette_library_dir = 'spec/other_fixtures/vcr_cassettes'
-  c.hook_into :fakeweb
-  c.default_cassette_options = { :record => :new_episodes }
-end
-
-def record_with_vcr(tape_name = nil, &block)
-  default_tape_name = example.full_description.downcase.gsub(/[^\w\d]+/, '_')
-  VCR.use_cassette(tape_name || default_tape_name, &block)
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -53,13 +41,6 @@ silence_warnings do
 end
 
 RSpec.configure do |config|
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  config.mock_with :rr
 
   config.filter_run_excluding :legacy_migration => true
 

@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.kaggle.com/connect/chorus-beta/message
+    body:
+      encoding: US-ASCII
+      string: subject=some%20subject&replyTo=test%40fun.com&htmlBody=message%20body&apiKey=TEST_API_KEY&userId=99999999
+    headers:
+      accept:
+      - ! '*/*'
+      user-agent:
+      - Ruby
+      content-type:
+      - application/x-www-form-urlencoded
+      connection:
+      - close
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      cache-control:
+      - private
+      content-type:
+      - application/json; charset=utf-8
+      server:
+      - Microsoft-IIS/7.5
+      date:
+      - Wed, 17 Oct 2012 21:05:01 GMT
+      connection:
+      - close
+      content-length:
+      - '71'
+    body:
+      encoding: US-ASCII
+      string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [],\r\n  \"failed\": [\r\n\
+        \    99999999\r\n  ]\r\n}"
+    http_version: '1.1'
+  recorded_at: Wed, 17 Oct 2012 21:04:59 GMT
+recorded_with: VCR 2.1.1
+...
