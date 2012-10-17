@@ -1,6 +1,6 @@
 require "net/https"
 require "uri"
-require 'JSON'
+require 'json'
 
 module Kaggle
   module API
