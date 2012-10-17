@@ -283,6 +283,8 @@ describe "Backup and Restore" do
   end
 
   it "backs up and restores the data" do
+    puts "!!!Active Connections!!!"
+    puts ActiveRecord::Base.connection.select("select * from pg_stat_activity")
     make_tmp_path("rspec_backup_restore_backup") do |backup_path|
       with_rails_root @original_path do
         BackupRestore.backup backup_path
