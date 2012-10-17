@@ -11,7 +11,9 @@ class ImportPresenter < Presenter
           :state => "success",
           :source_id => source_dataset_id,
           :source_table => Dataset.find(source_dataset_id).name
-        }
+        },
+        :source_id => source_dataset_id,
+        :source_table => Dataset.find(source_dataset_id).name
     }
   end
 end

@@ -6,57 +6,70 @@ describe DatasetImportsController do
     let(:import_schedule) { import_schedules(:default) }
     let(:import) { imports(:default) }
     let(:previous_import) { imports(:previous) }
+    let(:dataset) { import_schedule.source_dataset }
 
     before do
       log_in user
     end
 
-    context "with an import schedule and a last import" do
-      it "should retrieve the db object for a schema" do
-        get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
+    generate_fixture "importSchedule.json" do
+      get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+    end
 
-        response.code.should == "200"
-        decoded_response.to_table.should == import_schedule.to_table
-        decoded_response.frequency.should == import_schedule.frequency
+    shared_examples_for "import data" do
+      context "with an import schedule and a last import" do
+        it "should retrieve the db object for a schema" do
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+
+          response.code.should == "200"
+          decoded_response.should_not be_nil
+          decoded_response.to_table.should == import_schedule.to_table
+          decoded_response.frequency.should == import_schedule.frequency
+        end
+
+        it "should retrieve info from last import" do
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+          decoded_response.should_not be_nil
+          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
+        end
       end
 
-      it "should retrieve info from last import" do
-        get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
-        decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
+      context "with an import schedule, but no last import" do
+        it "should return empty execution_info" do
+          import.delete
+          previous_import.delete
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+          response.code.should == "200"
+          decoded_response.should_not be_nil
+          decoded_response.to_table.should == import_schedule.to_table
+          decoded_response.frequency.should == import_schedule.frequency
+          decoded_response.execution_info.should == {}
+        end
       end
 
-      generate_fixture "importSchedule.json" do
-        get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
+      context "without a schedule, but with an import" do
+        it "should still return the last import info" do
+          import_schedule.delete
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+          decoded_response.should_not be_nil
+          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
+        end
       end
     end
 
-    context "with an import schedule, but no last import" do
-      it "should return empty execution_info" do
-        import.delete
-        previous_import.delete
-        get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
-        response.code.should == "200"
-        decoded_response.to_table.should == import_schedule.to_table
-        decoded_response.frequency.should == import_schedule.frequency
-        decoded_response.execution_info.should == {}
-      end
+    it_should_behave_like "import data"
+
+    context "when requesting for the destination dataset" do
+      let!(:dataset) { FactoryGirl.create(:gpdb_table, :schema => import_schedule.workspace.sandbox, :name => import_schedule.to_table) }
+
+      it_should_behave_like "import data"
     end
-
-    context "without a schedule, but with an import" do
-      it "should still return the last import info" do
-        import_schedule.delete
-        get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => import_schedule.source_dataset_id
-        decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
-      end
-    end
-
-
   end
 
   describe "#create", :database_integration => true do
     let(:account) { GpdbIntegration.real_gpdb_account }
     let(:user) { account.owner }
-    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+    let(:database) { GpdbIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
@@ -236,7 +249,7 @@ describe DatasetImportsController do
   describe "#update", :database_integration => true do
     let(:user) { users(:owner) }
     let(:import_schedule) { import_schedules :default }
-    let(:src_table) {Dataset.find import_schedule[:source_dataset_id]}
+    let(:src_table) { Dataset.find import_schedule[:source_dataset_id] }
     let(:import_params) { import_schedule.attributes.symbolize_keys.merge :import_type => "schedule" }
 
     before do
@@ -244,11 +257,11 @@ describe DatasetImportsController do
     end
 
     describe "updating other values of Import schedule" do
-      let(:frequency) {"DAILY"}
-      let(:to_table) {import_schedule.workspace.sandbox.datasets.first}
+      let(:frequency) { "DAILY" }
+      let(:to_table) { import_schedule.workspace.sandbox.datasets.first }
 
       before do
-         import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
+        import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
       end
 
       it "updates the start time for the import schedule" do
@@ -283,7 +296,7 @@ describe DatasetImportsController do
   describe "#destroy" do
     let(:user) { users(:owner) }
     let(:import_schedule) { import_schedules(:default) }
-    let(:src_table) {Dataset.find(import_schedule[:source_dataset_id])}
+    let(:src_table) { Dataset.find(import_schedule[:source_dataset_id]) }
     before do
       log_in user
     end
@@ -308,7 +321,7 @@ describe DatasetImportsController do
     # In the test, use gpfdist to move data between tables in the same schema and database
     let(:instance_account) { GpdbIntegration.real_gpdb_account }
     let(:user) { instance_account.owner }
-    let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+    let(:database) { GpdbIntegration.real_database }
     let(:schema_name) { 'test_schema' }
     let(:schema) { database.schemas.find_by_name(schema_name) }
     let(:source_table) { "candy" }
