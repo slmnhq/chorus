@@ -21,12 +21,17 @@ chorus.views.KaggleUserListContentDetails = chorus.views.Base.extend({
 
     submitSearch: function() {
         var paramArray =[]
+        var convertKey = this.convertKey;
         this.filterWizardView.collection.map(function(model) {
-            paramArray.push(encodeURIComponent(model.get("column").get("name")) + "|" +
+            paramArray.push(encodeURIComponent(convertKey(model.get("column").get("name"))) + "|" +
                 encodeURIComponent(model.get("comparator")) +"|" + encodeURIComponent((model.get("input").value)))
         });
-        //TODO pass the params as an array
-        this.collection.urlParams = {kaggleUser: encodeURI(paramArray)};
+        this.collection.urlParams = {kaggleUser: JSON.stringify(paramArray)};
         this.collection.fetch();
+    },
+
+    convertKey: function(key) {
+
+        return key.replace(/ /g, "_").toLowerCase();
     }
 });

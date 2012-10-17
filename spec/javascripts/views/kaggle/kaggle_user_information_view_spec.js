@@ -14,7 +14,7 @@ describe("chorus.views.KaggleUserInformation", function() {
     });
 
     it("shows the user's entered competitions", function() {
-        expect(this.view.$(".pair.number_of_competitions")).toContainText(this.model.get("numberOfCompetitions"));
+        expect(this.view.$(".pair.number_of_entered_competitions")).toContainText(this.model.get("numberOfEnteredCompetitions"));
     });
 
     it("shows the user's past competition types", function() {

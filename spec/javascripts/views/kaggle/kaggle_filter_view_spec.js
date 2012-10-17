@@ -74,7 +74,7 @@ describe("chorus.views.KaggleFilter", function () {
         describe("#validateInput", function() {
             describe("with a numeric column", function() {
                 beforeEach(function() {
-                    this.view.collection.models[0].set({name: "rank"});
+                    this.view.collection.models[0].set({name: "Rank"});
                     this.view.render();
                     spyOn(this.view.map, "performValidation").andCallThrough();
                     spyOn(this.view, "markInputAsInvalid");
@@ -108,7 +108,7 @@ describe("chorus.views.KaggleFilter", function () {
 
         describe("columns with name: location ( String )", function() {
             beforeEach(function() {
-                this.view.collection.models[1].set({name: "location"});
+                this.view.collection.models[1].set({name: "Location"});
                 this.view.columnFilter.selectColumn(this.view.collection.at(1));
             });
 
@@ -127,7 +127,7 @@ describe("chorus.views.KaggleFilter", function () {
 
         describe("columns with name: competition_type ( CompetitionType )", function() {
             beforeEach(function() {
-                this.view.collection.models[1].set({name: "competition_types"});
+                this.view.collection.models[1].set({name: "Past Competition Types"});
                 this.view.columnFilter.selectColumn(this.view.collection.at(1));
             });
 

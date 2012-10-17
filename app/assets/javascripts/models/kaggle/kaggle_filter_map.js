@@ -29,5 +29,10 @@
         declareValidations: function(attrs) {
             return this.require('value', attrs)
         }
+    });    chorus.models.KaggleFilterMaps.Other = chorus.models.Base.extend({
+        type: "Other",
+
+        declareValidations: function(attrs) {
+        }
     });
 })();

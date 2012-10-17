@@ -28,10 +28,11 @@ describe Kaggle::UsersController do
       user.should have_key('location')
       user.should have_key('rank')
       user.should have_key('points')
-      user.should have_key('number_of_competitions')
+      user.should have_key('number_of_entered_competitions')
       user.should have_key('gravatar_url')
       user.should have_key('full_name')
-      user.should have_key('past_competition_types')
+      user.should have_key('favorite_techniques')
+      user.should have_key('favorite_software')
     end
 
     it "sorts by rank" do
@@ -40,7 +41,7 @@ describe Kaggle::UsersController do
     end
 
     it "filters the list" do
-      get:index, :kaggle_user => "rank%7Cgreater%7C10"
+      get:index, :kaggle_user => "[\"rank|greater|10\"]"
       decoded_response.length.should == 1
       user = decoded_response.first
       user['rank'].should > 10

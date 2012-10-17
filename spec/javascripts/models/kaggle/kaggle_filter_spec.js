@@ -8,7 +8,7 @@ describe("chorus.models.KaggleFilter", function () {
     describe("#getFilterMap", function () {
         describe("columns with name 'rank'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"rank"});
+                this.model.get("column").set({name:"Rank"});
             });
 
             it("has an 'numeric' kaggle filter map", function () {
@@ -18,7 +18,7 @@ describe("chorus.models.KaggleFilter", function () {
 
         describe("columns with name 'competitions'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"competitions"});
+                this.model.get("column").set({name:"Number of Entered Competitions"});
             });
 
             it("has an 'numeric' kaggle filter map", function () {
@@ -28,7 +28,7 @@ describe("chorus.models.KaggleFilter", function () {
 
         describe("columns with name 'competitions_types'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"competition_types"});
+                this.model.get("column").set({name:"Past Competition Types"});
             });
 
             it("has an 'competition type' kaggle filter map", function () {
@@ -36,9 +36,9 @@ describe("chorus.models.KaggleFilter", function () {
             });
         });
 
-        describe("columns with name 'fav_techniques'", function () {
+        describe("columns with name 'Favorite Techniques'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"fav_techniques"});
+                this.model.get("column").set({name:"Favorite Techniques"});
             });
 
             it("has an 'string' kaggle filter map", function () {
@@ -46,9 +46,9 @@ describe("chorus.models.KaggleFilter", function () {
             });
         });
 
-        describe("columns with name 'fav_software'", function () {
+        describe("columns with name 'Favorite Software'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"fav_software"});
+                this.model.get("column").set({name:"Favorite Software"});
             });
 
             it("has an 'string' kaggle filter map", function () {
@@ -58,7 +58,7 @@ describe("chorus.models.KaggleFilter", function () {
 
         describe("columns with name 'location'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"location"});
+                this.model.get("column").set({name:"Location"});
             });
 
             it("has an 'String' kaggle filter map", function () {

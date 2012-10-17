@@ -3,16 +3,16 @@ chorus.models.KaggleFilter = chorus.models.Filter.extend({
 
     getFilterMap: function() {
         switch (this.has("column") && this.get("column").get("name")) {
-            case "fav_techniques":
-            case "location":
-            case "fav_software":
+            case "Favorite Techniques":
+            case "Location":
+            case "Favorite Software":
                 return new chorus.models.KaggleFilterMaps.String
                 break;
-            case "rank":
-            case "competitions":
+            case "Rank":
+            case "Number of Entered Competitions":
                 return new chorus.models.KaggleFilterMaps.Numeric
                 break;
-            case "competition_types":
+            case "Past Competition Types":
                 return new chorus.models.KaggleFilterMaps.CompetitionType
                 break;
             default:
