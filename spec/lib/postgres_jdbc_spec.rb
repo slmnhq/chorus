@@ -5,6 +5,6 @@ describe "ActiveRecord.jdbcpostgresql_connection" do
     User.connection.execute('SHOW standard_conforming_strings').first["standard_conforming_strings"].should == "off"
     connection = User.connection_pool.checkout
     connection.execute('SHOW standard_conforming_strings').first["standard_conforming_strings"].should == "off"
-    connection.close
+    connection.disconnect!
   end
 end
