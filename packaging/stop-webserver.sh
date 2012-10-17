@@ -8,14 +8,19 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-log_inline "stopping nginx "
-cd $CHORUS_HOME/vendor/nginx/nginx_dist/
-OPENSSL_CONF=$OPENSSL_CONF ./$NGINX -s stop
-STOP_SUCCESS=$?
-if [ $STOP_SUCCESS -eq 0 ]; then
-    wait_for_stop $NGINX_PID_FILE
+if [ -f $NGINX_PID_FILE ]; then
+    log_inline "stopping nginx "
+    cd $CHORUS_HOME/vendor/nginx/nginx_dist/
+    OPENSSL_CONF=$OPENSSL_CONF ./$NGINX -s stop
+    STOP_SUCCESS=$?
+    if [ $STOP_SUCCESS -eq 0 ]; then
+        wait_for_stop $NGINX_PID_FILE
+    fi
+    cd $CHORUS_HOME
+else
+    log "no nginx to stop"
+    STOP_SUCCESS=1
 fi
-cd $CHORUS_HOME
 
 case $RAILS_ENV in
     development )
