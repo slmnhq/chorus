@@ -8,6 +8,7 @@ unless Rails.env.production?
   desc 'Run backend specs'
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = 'spec/{controllers,permissions,models,lib,presenters,requests,services,install}/**/*_spec.rb'
+    t.rspec_opts = ["--format d"]
   end
   task :spec => [:gpdb_host_check_stale]
 
