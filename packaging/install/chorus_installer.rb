@@ -342,7 +342,7 @@ class ChorusInstaller
       setup_database
     end
 
-    configure_file_storage_directories
+    configure_file_storage_directory
 
     if upgrade_legacy?
       #log "Migrating settings from previous version..."
