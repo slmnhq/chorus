@@ -83,7 +83,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         this.$('.sidebar_content.secondary').removeClass("hidden")
 
         if (this.secondarySidebar) {
-            this.secondarySidebar.cleanup()
+            this.secondarySidebar.teardown();
             delete this.secondarySidebar;
         }
 

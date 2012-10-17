@@ -23,10 +23,10 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it("cleans up old activity views", function() {
-            var cleanedUp = false;
-            spyOn(this.view.activities[0], "cleanup").andCallFake(function() {cleanedUp = true});
+            var tornDown = false;
+            spyOn(this.view.activities[0], "teardown").andCallFake(function() {tornDown = true});
             this.view.render();
-            expect(cleanedUp).toBeTruthy();
+            expect(tornDown).toBeTruthy();
         });
 
         describe("when there are no activity items", function() {
@@ -88,7 +88,7 @@ describe("chorus.views.ActivityList", function() {
 
             describe("when the more link is clicked", function() {
                 beforeEach(function() {
-                    spyOnEvent(this.view, "content:changed");
+                    spyOn(chorus.PageEvents, "broadcast");
                     this.view.$("li[data-activity-id]:eq(0) .comments a.more").click();
                 });
 
@@ -97,7 +97,7 @@ describe("chorus.views.ActivityList", function() {
                 });
 
                 it("triggers a content:changed event", function() {
-                    expect("content:changed").toHaveBeenTriggeredOn(this.view);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
                 });
 
                 describe("when the less link is clicked", function() {
@@ -111,7 +111,7 @@ describe("chorus.views.ActivityList", function() {
                     });
 
                     it("triggers a content:changed event", function() {
-                        expect("content:changed").toHaveBeenTriggeredOn(this.view);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
                     });
                 });
             });

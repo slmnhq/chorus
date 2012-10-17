@@ -271,14 +271,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         })
     });
 
-    describe("#cleanup", function() {
+    describe("#teardown", function() {
         beforeEach(function() {
             this.view.options.aggregateColumnSet.at(0).selected = true;
-            this.view.cleanup();
-        })
+            this.view.teardown();
+        });
 
         it("unselects all columns", function() {
             expect(this.view.options.aggregateColumnSet.all(function(column) {return !column.selected})).toBeTruthy();
-        })
-    })
+        });
+    });
 });

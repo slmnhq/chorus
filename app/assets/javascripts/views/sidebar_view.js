@@ -28,6 +28,8 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         }
     },
 
+    cleanup: $.noop,
+
     jumpToTop: function(e) {
         e && e.preventDefault && e.preventDefault()
         var api = $("#sidebar").data("jsp");

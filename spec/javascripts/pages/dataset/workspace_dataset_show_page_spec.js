@@ -195,19 +195,19 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 beforeEach(function() {
                     this.page.secondarySidebar = new chorus.views.Base();
                     this.originalSidebar = this.page.secondarySidebar;
-                    spyOn(this.originalSidebar, "cleanup");
+                    spyOn(this.originalSidebar, "teardown");
                     spyOn(this.page.mainContent.content, 'render').andCallThrough();
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
 
-                it("calls cleanup on the old sidebar", function() {
-                    expect(this.originalSidebar.cleanup).toHaveBeenCalled();
+                it("calls teardown on the old sidebar", function() {
+                    expect(this.originalSidebar.teardown).toHaveBeenCalled();
                 });
 
                 it("disables the sidebar", function() {
                     expect(this.page.sidebar.disabled).toBeTruthy();
-                })
+                });
 
                 it("sets the datasetNumber to 1", function() {
                     expect(this.page.dataset.datasetNumber).toBe(1);
@@ -244,8 +244,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
                     });
 
-                    it("calls cleanup on the old sidebar", function() {
-                        expect(this.originalSidebar.cleanup).toHaveBeenCalled();
+                    it("calls teardown on the old sidebar", function() {
+                        expect(this.originalSidebar.teardown).toHaveBeenCalled();
                     });
 
                     it("enables the sidebar", function() {

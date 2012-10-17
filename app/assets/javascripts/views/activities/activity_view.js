@@ -78,11 +78,13 @@ chorus.views.Activity = chorus.views.Base.extend({
         this.htmlContent && this.htmlContent.show();
     },
 
-    cleanup: function() {
-        this._super("cleanup");
+    teardown: function() {
+        this._super("teardown");
         chorus.PageEvents.unsubscribe(this.addCommentHandle);
         this.unbind();
         this.bindings.removeAll();
+        delete this.bindings.defaultContext;
+        chorus.PageEvents.broadcast("destroy:view", this);
         this.requiredResources.cleanUp();
         $(this.el).remove();
     }

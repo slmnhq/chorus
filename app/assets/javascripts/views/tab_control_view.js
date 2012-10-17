@@ -39,9 +39,6 @@ chorus.views.TabControl = chorus.views.Base.extend({
             if (view) {
                 this.$(".tabbed_area").append(view.render().el);
                 view.delegateEvents();
-                view.bind("content:changed", _.bind(function() {
-                    this.trigger("content:changed")
-                }, this));
             }
         }, this);
 

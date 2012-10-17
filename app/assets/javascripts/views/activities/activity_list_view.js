@@ -10,8 +10,8 @@ chorus.views.ActivityList = chorus.views.Base.extend({
 
     toggleCommentList:function (event) {
         event.preventDefault();
-        $(event.target).closest(".comments").toggleClass("more")
-        this.trigger("content:changed")
+        $(event.target).closest(".comments").toggleClass("more");
+        chorus.PageEvents.broadcast("content:changed")
     },
 
     fetchMoreActivities:function (ev) {
@@ -40,7 +40,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
 
     cleanupActivities:function () {
         _.each(this.activities, function (activity) {
-            activity.cleanup();
+            activity.teardown();
         });
     },
 

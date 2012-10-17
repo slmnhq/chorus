@@ -7,10 +7,11 @@ chorus.views.Bare = Backbone.View.include(
             this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
 
-            chorus.afterNavigate(_.bind(this.beforeNavigateAway, this));
+            chorus.viewsToTearDown.push(this);
+
             this.setup.apply(this, arguments);
-            this.bindCallbacks()
-            this.bindHotkeys()
+            this.bindCallbacks();
+            this.bindHotkeys();
 
             this.verifyResourcesLoaded(true);
         },
@@ -23,9 +24,8 @@ chorus.views.Bare = Backbone.View.include(
         setupSubviews: $.noop,
         resourcesLoaded: $.noop,
         displayLoadingSection: $.noop,
-        cleanup: $.noop,
 
-        beforeNavigateAway: function() {
+        teardown: function() {
             this.unbind();
             this.bindings.removeAll();
             this.requiredResources.cleanUp();
@@ -109,7 +109,7 @@ chorus.views.Bare = Backbone.View.include(
             this.renderSubviews();
             this.postRender($(this.el));
             this.renderHelps();
-            this.trigger("content:changed");
+            chorus.PageEvents.broadcast("content:changed");
             return this;
         },
 
@@ -148,9 +148,6 @@ chorus.views.Bare = Backbone.View.include(
                         view.render()
                     }
                     view.delegateEvents();
-                    view.bind("content:changed", function() {
-                        this.trigger("content:changed")
-                    }, this)
                 }
             }
         },
@@ -225,14 +222,7 @@ chorus.views.Bare = Backbone.View.include(
 
                     el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
-                    if (this.subviews) {
-                        _.each(this.subviews, _.bind(function(property, selector) {
-                            var view = this.getSubview(property);
-                            if (view) {
-                                view.unbind("content:changed").bind("content:changed", function() { this.recalculateScrolling(el) }, this)
-                            }
-                        }, this));
-                    }
+                    chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this);
 
                     if (!alreadyInitialized) {
                         el.addClass("custom_scroll");

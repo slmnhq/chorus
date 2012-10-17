@@ -577,10 +577,10 @@ describe("chorus.views.ResultsConsoleView", function() {
             }
         });
 
-        describe("#beforeNavigateAway", function() {
+        describe("#teardown", function() {
             beforeEach(function() {
                 spyOn(this.task, "cancel").andCallThrough();
-                this.view.beforeNavigateAway();
+                this.view.teardown();
             });
 
             it("cancels the task", function() {

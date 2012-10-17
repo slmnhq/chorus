@@ -90,15 +90,15 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         this.stopTimer();
         this.trigger("autosaved");
         this.model.content(this.editor.getValue(), {silent: true});
-        var overrides = {}
+        var overrides = {};
         if (this.model.get("hasDraft")) {
             overrides.method = 'update'
         }
         this.model.createDraft().save({}, overrides);
     },
 
-    beforeNavigateAway: function() {
-        this._super("beforeNavigateAway");
+    teardown: function() {
+        this._super("teardown");
         if (this.saveTimer) this.saveDraft();
     },
 

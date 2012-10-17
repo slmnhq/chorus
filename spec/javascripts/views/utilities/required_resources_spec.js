@@ -57,7 +57,7 @@ describe("chorus.RequiredResources", function() {
         });
     });
 
-    describe("#cleanup", function() {
+    describe("#cleanUp", function() {
         beforeEach(function() {
             spyOn(this.model, "unbind");
             this.requiredResources.add(this.model);

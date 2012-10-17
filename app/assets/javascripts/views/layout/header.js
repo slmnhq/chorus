@@ -122,13 +122,13 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$(".type_ahead_result").addClass("hidden");
     },
 
-    beforeNavigateAway: function() {
+    teardown: function() {
         $(document).unbind(this.popupEventName);
-        this._super("beforeNavigateAway");
+        this._super("teardown");
     },
 
     additionalContext: function(ctx) {
-        this.requiredResources.reset()
+        this.requiredResources.reset();
         var user = this.session.user();
 
         return _.extend(ctx, this.session.attributes, {

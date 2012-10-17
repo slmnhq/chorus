@@ -282,12 +282,12 @@ describe("chorus.views.Base", function() {
                         template: function() { return "<div class='foo'/>"; }
                     });
                     this.view = new SubClass();
-                    spyOnEvent(this.view, "content:changed");
+                    spyOn(chorus.PageEvents, "broadcast");
                     this.view.render();
                 });
 
                 it("triggers a 'content:changed' event on itself", function() {
-                    expect("content:changed").toHaveBeenTriggeredOn(this.view);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
                 });
 
                 it("adds the template name as a data-template", function() {
@@ -512,16 +512,16 @@ describe("chorus.views.Base", function() {
 
     describe("before navigating away", function() {
         beforeEach(function() {
-            var navSpy = jasmine.createSpy("beforeNavigateAway")
+            var navSpy = jasmine.createSpy("teardown");
             var klass = chorus.views.Base.extend({
-                beforeNavigateAway: navSpy
+                teardown: navSpy
             });
             this.view = new klass();
             chorus._navigated();
         });
 
-        it("calls the 'beforeNavigateAway' hook", function() {
-            expect(this.view.beforeNavigateAway).toHaveBeenCalled();
+        it("calls the 'teardown' hook", function() {
+            expect(this.view.teardown).toHaveBeenCalled();
         });
 
         describe("when another navigation occurs (after this view is long gone)", function() {
@@ -530,7 +530,7 @@ describe("chorus.views.Base", function() {
             });
 
             it("does not call the hook again", function() {
-                expect(this.view.beforeNavigateAway.callCount).toBe(1);
+                expect(this.view.teardown.callCount).toBe(1);
             });
         });
 
@@ -541,19 +541,19 @@ describe("chorus.views.Base", function() {
                 spyOn(this.view.requiredResources, 'cleanUp');
                 spyOn(this.view.bindings, 'removeAll');
                 spyOn(this.view, 'unbind');
-                this.view.beforeNavigateAway();
+                this.view.teardown();
             });
 
             it("calls $.fn.remove on its element", function() {
                 expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.view.el);
-            })
+            });
 
             it("removes its backbone event bindings", function() {
                 expect(this.view.unbind).toHaveBeenCalled();
                 expect(this.view.requiredResources.cleanUp).toHaveBeenCalled();
                 expect(this.view.bindings.removeAll).toHaveBeenCalled();
             });
-        })
+        });
     });
 
     describe("#showErrors", function() {
@@ -1171,25 +1171,21 @@ describe("chorus.views.Base", function() {
 
                 it("calls jScrollPane", function() {
                     expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
-                })
+                });
 
                 it("hides the scrollbars initially", function() {
                     expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
                     expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
-                })
+                });
 
                 it("does not re-bind the view to resized events on the page", function() {
                     expect(this.page.bind).not.toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
-                })
+                });
 
                 it("does not re-bind to the mousewheel event on the container", function() {
                     expect($.fn.bind).not.toHaveBeenCalledOnSelector(".foo .jspContainer");
                 })
-
-                it("re-bind content:changed event to it's subview", function() {
-                    expect(this.view.subfoo.bind).toHaveBeenCalled();
-                })
-            })
+            });
 
             describe("when a resized event occurs", function() {
                 beforeEach(function() {
@@ -1199,8 +1195,8 @@ describe("chorus.views.Base", function() {
 
                 it("recalculates scrolling", function() {
                     expect(this.view.$(".foo").data("jsp").reinitialise).toHaveBeenCalled();
-                })
-            })
+                });
+            });
 
             describe("when a mousewheel event occurs", function() {
                 beforeEach(function() {
@@ -1210,8 +1206,8 @@ describe("chorus.views.Base", function() {
 
                 it("prevents default", function() {
                     expect(this.event.isDefaultPrevented()).toBeTruthy();
-                })
-            })
+                });
+            });
 
             describe("when a subview is re-rendered", function() {
                 beforeEach(function() {
@@ -1221,19 +1217,19 @@ describe("chorus.views.Base", function() {
 
                 it("recalculates scrolling", function() {
                     expect(this.view.recalculateScrolling).toHaveBeenCalled()
-                })
-            })
+                });
+            });
 
             describe("when a subview triggers content:changed", function() {
                 beforeEach(function() {
                     this.view.recalculateScrolling.reset();
-                    this.view.subfoo.trigger("content:changed");
+                    chorus.PageEvents.broadcast("content:changed");
                 });
 
                 it("recalculates scrolling", function() {
                     expect(this.view.recalculateScrolling).toHaveBeenCalled()
-                })
-            })
+                });
+            });
 
             describe("when the element scrolls", function() {
                 beforeEach(function() {

@@ -799,8 +799,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                     chorus.views.ChartConfiguration.prototype, 'postRender'
                 ).andCallThrough();
                 this.view.chartConfig = new chorus.views.Base();
-                this.originalChartConfig = this.view.chartConfig
-                spyOn(this.originalChartConfig, "cleanup");
+                this.originalChartConfig = this.view.chartConfig;
+                spyOn(this.originalChartConfig, "teardown");
                 this.view.showVisualizationConfig(this.type);
 
                 expect(renderSpy).toHaveBeenCalled();
@@ -808,7 +808,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
 
             it("cleans up the old chartConfig", function() {
-                expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
+                expect(this.originalChartConfig.teardown).toHaveBeenCalled();
             });
 
             it("renders a visualization configuration view for the given chart type", function() {

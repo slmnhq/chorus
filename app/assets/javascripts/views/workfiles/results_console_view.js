@@ -21,9 +21,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:executionCancelled", this.hideSpinner, this);
     },
 
-    beforeNavigateAway: function() {
+    teardown: function() {
         this.model && this.model.cancel();
-        this._super("beforeNavigateAway", arguments);
+        this._super("teardown", arguments);
     },
 
     saveToDesktop: function(e) {

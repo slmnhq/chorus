@@ -16,13 +16,17 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.bindings.add(this.chorusView, "change", this.render);
     },
 
+    teardown: function() {
+        this.cleanup();
+        this._super("teardown");
+    },
+
     cleanup: function() {
-        this._super("cleanup");
         chorus.PageEvents.unsubscribe(this.selectedHandle);
         chorus.PageEvents.unsubscribe(this.deselectedHandle);
         this.options.aggregateColumnSet.each(function(column) {
             delete column.selected;
-        })
+        });
     },
 
     postRender: function() {

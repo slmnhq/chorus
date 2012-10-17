@@ -79,14 +79,14 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
             describe("clicking on cancel button when there's sql errors", function() {
                 beforeEach(function() {
                    spyOn(this.view, "clearSqlErrors");
-                   this.view.cleanup();
+                   this.view.teardown();
                 });
 
                 it("should clear the sql errors", function() {
                     expect(this.view.clearSqlErrors).toHaveBeenCalled();
                 });
             });
-        })
+        });
 
         context("with no columns", function() {
             beforeEach(function() {

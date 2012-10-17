@@ -13,6 +13,7 @@ window.Chorus = function chorus$Global() {
     self.utilities = {};
     self.locale = 'en';
     self.cleanupFunctions = [];
+    self.viewsToTearDown = [];
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
@@ -92,11 +93,22 @@ window.Chorus = function chorus$Global() {
 
     self._navigated = function() {
         self.PageEvents.reset();
+        self.PageEvents.subscribe("destroy:view", function(view) {
+            self.viewsToTearDown.splice(self.viewsToTearDown.indexOf(view), 1);
+        });
 
+        _.each(self.viewsToTearDown, function(view) {
+            view.teardown();
+        });
+
+        //remove reference from viewsToTearDown of each view
+        //self.viewsToTearDown = [] does not do this correctly
+        self.viewsToTearDown.splice(0, self.viewsToTearDown.length);
+
+        //TODO remove cleanupFunctions after dealing with bindHotKeys in views.js
         _.each(self.cleanupFunctions, function(func) {
             func();
         });
-
         self.cleanupFunctions = [];
     }
 

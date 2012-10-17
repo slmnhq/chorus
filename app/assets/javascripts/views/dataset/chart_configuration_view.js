@@ -66,10 +66,10 @@
             }
         },
 
-        cleanup: function() {
-            this._super("cleanup");
+        teardown: function() {
             this.clearSqlErrors();
             chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
+            this._super("teardown");
         },
 
         postRender: function() {
@@ -157,7 +157,7 @@
         },
 
         clearSqlErrors: function() {
-            this.options.errorContainer.closeError()
+            this.options.errorContainer && this.options.errorContainer.closeError();
         }
     }, {
         buildForType: function(chartType, options) {
