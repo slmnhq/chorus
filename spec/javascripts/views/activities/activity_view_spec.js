@@ -301,6 +301,7 @@ describe("chorus.views.Activity", function() {
             context("when adding a comment", function() {
                 beforeEach(function() {
                    this.newComment = new chorus.models.Comment({
+                       id: 12345,
                        author:{
                            id:10102
                        },
@@ -316,6 +317,11 @@ describe("chorus.views.Activity", function() {
 
                 it("updates the comment list", function() {
                     expect(this.view.$(".comments ul.morelinks a")).toExist();
+                    expect(this.view.model.comments().length).toBe(3);
+                });
+
+                it("won't try to add the same comment twice", function() {
+                    chorus.PageEvents.broadcast("comment:added", this.newComment);
                     expect(this.view.model.comments().length).toBe(3);
                 });
             });

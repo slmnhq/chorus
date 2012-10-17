@@ -22,7 +22,9 @@ chorus.views.Activity = chorus.views.Base.extend({
     addComment: function(comment) {
         if (this.model.id === comment.get('eventId')) {
             var comments = this.model.comments();
-            comments.add(comment);
+            if( !comments.get(comment.id)) {
+                comments.add(comment);
+            }
             this.render();
         }
     },

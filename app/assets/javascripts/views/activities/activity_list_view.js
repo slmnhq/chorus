@@ -38,11 +38,14 @@ chorus.views.ActivityList = chorus.views.Base.extend({
         return ctx;
     },
 
-    postRender:function () {
-        _.each(this.activities, function(activity){
+    cleanupActivities:function () {
+        _.each(this.activities, function (activity) {
             activity.cleanup();
-          });
+        });
+    },
 
+    postRender:function () {
+        this.cleanupActivities();
         $(this.el).addClass(this.options.additionalClass);
         var ul = this.$("ul");
         this.activities = [];
