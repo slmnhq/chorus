@@ -1,26 +1,6 @@
-#Greenplum Chorusrails
+#Greenplum Chorus
 
 This file contains instructions to get started on Mac OSX.  If you are running Linux, it shouldn't be too different.
-
-##Bootstrap
-
-Install homebrew
-
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"
-
-You need git
-
-    brew install git
-
-Get someone who has rights to the repository to add your github account to the repo.
-Check that you can get to Github correctly:
-
-    ssh git@github.com
-The response should have your username in it.  If it doesn't go to http://help.github.com/ssh-issues/
-
-Check out the repo in `~/workspace/chorusrails`, like so:
-
-    git clone git@github.com:GreenplumChorus/chorusrails.git ~/workspace/chorusrails
 
 ###Postgres
 
@@ -87,20 +67,20 @@ brew install qt
 
 ## Development
 
-    cd ~/workspace/chorusrails && foreman start
+    foreman start
     If foreman fails to start run:
-    bundle  
+    bundle
 
-    In another terminal window, run: 
-	cd ~/workspace/chorusrails && script/start_db.sh (or script/start_db_noisy.sh for verbouse db output.)
-   
+    In another terminal window, run:
+	RAILS_ENV=development CHORUS_HOME=. packaging/chorus_control.sh start
+
     Run the following rake commands, ignore DB errors.
     rake db:migrate
     rake db:test:prepare
 
-Application will be on http://localhost:3000
+Application will be on http://localhost:8080
 
-    If you cannot log in as edcadmin, you first need to initialize the it in the database with
+    If you cannot log in as chorusadmin, you first need to initialize the it in the database with
 
     rake db:seed
 
@@ -110,24 +90,9 @@ Application will be on http://localhost:3000
 	
 ### Testing:
 
-    rake
+    rake (to run specs for the application)
 
     and
 
-    rake all
+    rake all (to run specs for the application and to generate API docs)
 
-#### Re-creating the database:
-
-When the database has incoherent data (i.e. a suspicious amount of tests fails even though you didn't change much) you can re-create the database.
-
-1. Stop foreman by pressing Ctrl-C in the foreman terminal    
-2. Run script/reset_db.sh
-3. (If you get an error saying the database isn't online, run script/start_db.sh)
-4. Restart foreman by running 'foreman start' in the foreman window (chorusrails root)
-
-### CI
-
-http://greenplum-ci:3333/builds/chorusrails
-
-Delete all gems
-'gem list | cut -d" " -f1 | xargs gem uninstall -aIx'
