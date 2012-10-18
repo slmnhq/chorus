@@ -12,6 +12,7 @@ describe("chorus.models.Notification", function() {
 
     describe("#activity", function() {
         beforeEach(function() {
+            this.oldId = this.notification.attributes.event.id;
             this.activity = this.notification.activity();
         });
 
@@ -33,8 +34,8 @@ describe("chorus.models.Notification", function() {
             expect(this.activity.get("actor").lastName).toBe(this.notification.get("actor").lastName);
         });
 
-        it("has the right id", function() {
-           expect(this.activity.id).toBe(this.notification.id);
+        it("has the id of its activity, so it fetches the correct error details", function() {
+            expect(this.activity.id).toBe(this.oldId);
         });
 
         it("has the right timestamp", function() {
