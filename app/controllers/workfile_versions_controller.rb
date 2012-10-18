@@ -47,6 +47,7 @@ class WorkfileVersionsController < ApplicationController
     workfile = Workfile.find(params[:workfile_id])
     authorize! :can_edit_sub_objects, workfile.workspace
     workfile_versions = workfile.versions
+    version_num = WorkfileVersion.find(params[:id]).version_num
 
     Workfile.transaction do
       if workfile_versions.length == 1
@@ -57,6 +58,13 @@ class WorkfileVersionsController < ApplicationController
       else
         WorkfileVersion.find(params[:id]).destroy
       end
+
+      Events::WorkfileVersionDeleted.by(current_user).add(
+          :workfile => workfile,
+          :workspace => workfile.workspace,
+          :version_num => version_num
+      )
+
     end
 
     render :json => {}

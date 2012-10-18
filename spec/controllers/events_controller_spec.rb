@@ -168,6 +168,7 @@ describe EventsController do
         "datasetImportSuccess" => Events::DatasetImportSuccess,
         "datasetImportFailed" => Events::DatasetImportFailed,
         "workfileUpgradedVersion" => Events::WorkfileUpgradedVersion,
+        "workfileVersionDeleted" => Events::WorkfileVersionDeleted,
         "chorusViewCreatedFromWorkfile" => Events::ChorusViewCreated.from_workfile,
         "chorusViewCreatedFromDataset" => Events::ChorusViewCreated.from_dataset,
         "chorusViewChanged" => Events::ChorusViewChanged,

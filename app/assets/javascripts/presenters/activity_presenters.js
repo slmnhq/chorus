@@ -262,6 +262,11 @@
                 computed: ["versionLink"]
             },
 
+            WorkfileVersionDeleted: {
+                links: [ "actor", "workfile", "workspace" ],
+                attrs: ["versionNum"]
+            },
+
             ChorusViewCreated: {
                 links: [ "actor", "workspace", "dataset"],
                 computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
