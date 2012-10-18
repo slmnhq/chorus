@@ -182,6 +182,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             this.dialog.$('input[name=reply_to]').val('me@somewhere.com');
             this.dialog.$('input[name=subject]').val('Something cool');
             this.dialog.$('textarea[name=html_body]').val('Some stuff');
+            spyOn(this.dialog, "clearServerErrors");
 
             spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
@@ -210,6 +211,34 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
         it("shows a toast message if saved successfully", function() {
             this.dialog.model.trigger("saved");
             expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
+        });
+
+        context("when the dialog has errors", function() {
+            it("clears any errors on the model when the dialog is closed", function() {
+                this.dialog.model.serverErrors = { name: "wrong name" };
+                this.dialog.$("button.cancel").click();
+                expect(this.dialog.clearServerErrors).toHaveBeenCalled();
+            });
+
+            it("clears any errors on the model when the close_errors bar is closed", function() {
+                this.dialog.model.serverErrors = { name: "wrong name" };
+                this.dialog.showErrors();
+                this.dialog.$("a.close_errors").click();
+                expect(this.dialog.clearServerErrors).toHaveBeenCalled();
+            });
+        });
+
+        describe("when the save fails", function() {
+            beforeEach(function() {
+                this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+            });
+
+            it("displays the errors", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$(".errors")).toContainText("A can't be blank");
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("kaggle.compose.submit");
+            });
         });
     });
 });

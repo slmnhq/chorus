@@ -6,7 +6,9 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         "click button.submit": 'save',
         "click .showMore": 'showMore',
         "click .showLess": 'showLess',
-        "click .insert_dataset_schema": 'launchDatasetPickerDialog'
+        "click .insert_dataset_schema": 'launchDatasetPickerDialog',
+        "click a.close_errors": "clearServerErrors",
+        "click button.cancel": "clearServerErrors"
     },
 
     postRender: function() {
@@ -44,7 +46,16 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
             htmlBody: this.$('textarea[name=html_body]').val(),
             subject: this.$('input[name=subject]').val()
         });
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.$("button.submit").startLoading("kaggle.compose.saving");
+    },
+
+    saveFailed:function () {
+        this.$("button.submit").stopLoading();
+    },
+
+    clearServerErrors : function() {
+        this.model.serverErrors = {};
     },
 
     additionalContext: function () {

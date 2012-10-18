@@ -37,6 +37,8 @@ describe Kaggle::MessagesController do
       it "presents an error json" do
         post :create, params
         response.code.should == '422'
+        decoded_response = JSON.parse(response.body)
+        decoded_response['errors']['fields']['kaggle']['GENERIC']['message'].should_not be_nil
       end
     end
   end
