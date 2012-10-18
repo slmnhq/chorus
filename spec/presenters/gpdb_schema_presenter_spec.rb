@@ -9,6 +9,8 @@ describe GpdbSchemaPresenter, :type => :view do
     FactoryGirl.create(:gpdb_view, :id => 2, :name => "view1", :schema => schema)
     schema.reload
 
+    stub(ActiveRecord::Base).current_user { users(:owner) }
+
     @presenter = GpdbSchemaPresenter.new(schema, view)
   end
 
@@ -20,6 +22,7 @@ describe GpdbSchemaPresenter, :type => :view do
     it "includes the fields" do
       @hash[:id].should == 456
       @hash[:name].should == "abc"
+      @hash[:has_credentials].should == false
       @hash[:dataset_count].should == 2
       database = @hash[:database]
       database[:id].should == 789

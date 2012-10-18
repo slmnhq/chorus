@@ -8,6 +8,21 @@ describe GpdbSchema do
     it { should have_many(:workspaces) }
   end
 
+  describe '#accessible_to' do
+    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:account) { gpdb_instance.owner_account }
+    let(:schema) { gpdb_schemas(:default) }
+
+    it 'returns true if the user can access the gpdb instance' do
+      owner = account.owner
+      any_instance_of(GpdbInstance) do |instance|
+        mock(instance).accessible_to(owner) { true }
+      end
+
+      schema.accessible_to(owner).should be_true
+    end
+  end
+
   context ".refresh" do
     let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:account) { gpdb_instance.owner_account }

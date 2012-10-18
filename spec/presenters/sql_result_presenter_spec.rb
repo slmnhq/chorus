@@ -15,6 +15,10 @@ describe SqlResultPresenter, :type => :view do
   end
   let(:hash) { subject.to_hash }
 
+  before do
+    stub(ActiveRecord::Base).current_user { users(:owner) }
+  end
+
   subject { SqlResultPresenter.new(result, view) }
 
   describe "#to_hash" do

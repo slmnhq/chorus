@@ -5,7 +5,8 @@ class GpdbSchemaPresenter < Presenter
         :id => id,
         :name => h(name),
         :database => present(database),
-        :dataset_count => datasets.size
+        :dataset_count => datasets.size,
+        :has_credentials => model.accessible_to(current_user)
     }
   end
 
