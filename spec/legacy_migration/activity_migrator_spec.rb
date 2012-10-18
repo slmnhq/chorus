@@ -436,6 +436,26 @@ describe ActivityMigrator do
         Events::WorkfileUpgradedVersion.count.should == count
       end
 
+      it "copies WORKFILE_VERSION_DELETED from legacy activity" do
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_id as version_num, aso2.object_id as workfile_id, ewv.commit_message as commit_message from legacy_migrate.edc_activity_stream ed
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id AND aso.entity_type = 'version'
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso2 ON aso2.activity_stream_id = ed.id AND aso2.entity_type = 'workfile'
+          INNER JOIN legacy_migrate.edc_workfile_version ewv ON ewv.workfile_id = aso2.object_id AND ewv.version_num =aso.object_id ::integer
+          where  type = 'WORKFILE_VERSION_DELETED';").each do |row|
+          count += 1
+
+          event = Events::WorkfileVersionDeleted.find_by_legacy_id(row["id"])
+
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+          Workfile.unscoped.find_by_id(event.target1_id).legacy_id.should == row['workfile_id']
+          event.additional_data['version_num'].should == row['version_num']
+        end
+        count.should > 0
+        Events::WorkfileVersionDeleted.count.should == count
+      end
+
       it "copies WORKSPACE CHANGE NAME from legacy activity" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as workspace_old_name FROM legacy_migrate.edc_activity_stream ed
