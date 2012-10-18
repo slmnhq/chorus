@@ -3,13 +3,13 @@ require 'support/vcr'
 require 'support/rr'
 
 #Test Kaggle User 1
-#id: 63766
+#id: 47822
 #email: 2093j0qur890w3ur0@mailinator.com
 #Full name: Bruce Banner
 #username: bbanner
 
 #Test Kaggle User 2
-#id: 63767
+#id: 51196
 #email: jg93904u9fhwe9ry@mailinator.com
 #Full name: Tony Stark
 #username: tstark

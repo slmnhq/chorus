@@ -1,7 +1,7 @@
 [
     {
         "Username":"bbanner",
-        "UserId":63766,
+        "UserId":47822,
         "KaggleRank":9,
         "KagglePoints":298690.9,
         "FavoriteTechnique":"",
@@ -39,7 +39,7 @@
     },
     {
         "Username":"tstark",
-        "UserId":63767,
+        "UserId":51196,
         "KaggleRank":17,
         "KagglePoints":245095.8,
         "FavoriteTechnique":"SVM",
