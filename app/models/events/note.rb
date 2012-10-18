@@ -70,6 +70,11 @@ module Events
       save!
     end
 
+    def publish_insight(actor)
+      self.published = true
+      save!
+    end
+
     class << self
       private
 

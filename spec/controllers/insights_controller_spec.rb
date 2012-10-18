@@ -52,6 +52,94 @@ describe InsightsController do
     end
   end
 
+  describe "#publish (POST to /publish)" do
+    before do
+      log_in user
+      note.insight = true;
+      note.save!
+    end
+
+    let(:user) { note.actor }
+    let(:note) { Events::NoteOnWorkspace.last }
+
+    it "returns status 201" do
+
+      post :publish, :note_id => note.id
+      response.code.should == "201"
+    end
+
+    it "returns the note" do
+      mock_present do |insight|
+        insight.should == note
+      end
+      post :publish, :note_id => note.id
+    end
+
+    it "marks the NOTE as an published" do
+      post :publish, :note_id => note.id
+      note.reload.should be_published
+    end
+
+    context 'when the note is private' do
+      let(:note) { events(:note_on_no_collaborators_private_workfile) }
+
+      context 'when the user does not have access' do
+        let(:user) { users(:not_a_member) }
+
+        it "returns permission denied status code" do
+          post :publish, :note_id => note.id
+
+          response.code.should == "403"
+        end
+      end
+
+      context "when the user is admin" do
+        let(:user) { users(:admin) }
+
+        it "returns status 201" do
+          post :publish, :note_id => note.id
+          response.code.should == "201"
+        end
+      end
+
+      context "makes the note public" do
+        let(:admin_user) { users(:admin) }
+        let(:non_member_user) { users(:not_a_member) }
+        before do
+          log_in admin_user
+          post :publish, :note_id => note.id
+        end
+
+        it "returns the note for user" do
+          log_in non_member_user
+          get :index
+
+          response.code.should == "200"
+
+          decoded_response.map(&:id).should include(note.id)
+        end
+      end
+
+      context "checks the Note should be insight first" do
+        let(:note_on_workfile) { Events::NoteOnWorkfile.last }
+        let(:user) {note_on_workfile.actor}
+
+        before do
+          note_on_workfile.insight = false
+          note_on_workfile.save!
+        end
+
+        it "returns an error " do
+          post :publish, :note_id => note_on_workfile.id
+
+          response.code.should == '422'
+          response.body.should include "Note has to be an insight first"
+        end
+      end
+    end
+  end
+
+
   describe "#index (GET)" do
     before do
       log_in user

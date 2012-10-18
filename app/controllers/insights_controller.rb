@@ -8,6 +8,14 @@ class InsightsController < ApplicationController
     present note, :status => :created
   end
 
+  def publish
+    note = get_note_if_visible(params[:insight][:note_id])
+    raise SecurityTransgression unless note
+    raise ApiValidationError.new(:base, :generic, {:message => "Note has to be an insight first"}) unless note.insight
+    note.publish_insight current_user
+    present note, :status => :created
+  end
+
   def index
     params[:entity_type] ||= 'dashboard'
     present paginate get_insights

@@ -51,7 +51,7 @@ describe Kaggle::UsersController do
       get:index, :kaggle_user => "[\"past_competition_types|equal|Life Sciences\"]"
       decoded_response.length.should == 2
       user = decoded_response.first
-      user['past_competition_types'].map(&:downcase).include?(("Life Sciences").downcase)
+      user['past_competition_types'].map(&:downcase).should include(("Life Sciences").downcase)
     end
 
     generate_fixture "kaggleUserSet.json" do

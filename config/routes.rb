@@ -114,6 +114,7 @@ Chorus::Application.routes.draw do
     collection do
       get :count
       post :promote
+      post :publish
     end
   end
 
