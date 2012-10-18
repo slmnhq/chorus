@@ -173,6 +173,7 @@ describe NoteMigrator do
         note.insight.should == (legacy_comment["is_insight"] == "t" ? true : false)
         note.promotion_time.should == legacy_comment["promotion_time"]
         note.promoted_by_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["promotion_actioner"]}).id if legacy_comment["promotion_actioner"]
+        note.published.should == (legacy_comment["is_published"] == "t" ? true : false)
       end
     end
 

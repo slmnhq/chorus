@@ -333,11 +333,12 @@ class NoteMigrator < AbstractMigrator
     def migrate_insights_on_notes
       silence_activerecord do
         Events::Note.unscoped.all.each do |note|
-          row = Legacy.connection.exec_query("SELECT is_insight, promotion_time, promotion_actioner FROM edc_comment
+          row = Legacy.connection.exec_query("SELECT is_insight, promotion_time, promotion_actioner, is_published FROM edc_comment
                                           WHERE id = '#{note.legacy_id}'").first
           note.insight = (row['is_insight'] == 't' ? true : false)
           note.promotion_time = row['promotion_time']
           note.promoted_by_id = User.find_with_destroyed(:first, :conditions => {:username => row["promotion_actioner"]}).id if row["promotion_actioner"]
+          note.published = (row['is_published'] == 't' ? true : false)
           note.save!
         end
       end
