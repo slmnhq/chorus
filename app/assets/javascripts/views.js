@@ -33,7 +33,6 @@ chorus.views.Bare = Backbone.View.include(
             $(this.el).remove();
             _.each(this.subviews, function(subviewName, secondArg){
                     var subview = this[subviewName];
-                    if(subview && !subview.teardown) {debugger}
                     subview && subview.teardown();
                 },
             this);

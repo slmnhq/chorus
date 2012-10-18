@@ -798,9 +798,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                 var renderSpy = spyOn(
                     chorus.views.ChartConfiguration.prototype, 'postRender'
                 ).andCallThrough();
-                this.view.chartConfig = new chorus.views.Base();
-                this.originalChartConfig = this.view.chartConfig;
-                spyOn(this.originalChartConfig, "teardown");
+                this.view.chartConfig = stubView();
+                this.cleanupSpy = jasmine.createSpy("cleanup");
+                this.view.chartConfig.cleanup = this.cleanupSpy;
+
                 this.view.showVisualizationConfig(this.type);
 
                 expect(renderSpy).toHaveBeenCalled();
@@ -808,7 +809,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
 
             it("cleans up the old chartConfig", function() {
-                expect(this.originalChartConfig.teardown).toHaveBeenCalled();
+                expect(this.cleanupSpy).toHaveBeenCalled();
             });
 
             it("renders a visualization configuration view for the given chart type", function() {

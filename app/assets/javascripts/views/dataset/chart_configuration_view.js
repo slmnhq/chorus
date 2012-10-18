@@ -72,6 +72,11 @@
             chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
         },
 
+        teardown: function() {
+            this.cleanup();
+            this._super("teardown")
+        },
+
         postRender: function() {
             chorus.styleSelect(this.$('select'));
 
