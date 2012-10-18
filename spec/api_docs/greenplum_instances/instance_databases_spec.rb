@@ -14,6 +14,7 @@ resource "Greenplum DB: instances" do
 
   get "/gpdb_instances/:gpdb_instance_id/databases" do
     parameter :gpdb_instance_id, "Id of the instance to get the list of databases"
+    pagination
 
     example_request "Get a list of databases" do
       status.should == 200

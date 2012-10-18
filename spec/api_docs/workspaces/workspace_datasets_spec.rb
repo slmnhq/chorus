@@ -13,6 +13,8 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets" do
+    pagination
+
     example_request "Get a list of datasets associated with a workspace" do
       status.should == 200
     end

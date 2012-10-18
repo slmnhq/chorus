@@ -8,6 +8,8 @@ resource "Notifications" do
   end
 
   get "/notifications" do
+    pagination
+
     example_request "Return a list of notifications for the current user" do
       status.should == 200
     end
@@ -15,6 +17,7 @@ resource "Notifications" do
 
   put "/notifications/read" do
     parameter :'notification_ids[]', "IDs of events to be marked as read"
+    pagination
 
     let(:'notification_ids[]') { user.notifications[0..1].map(&:event_id) }
 

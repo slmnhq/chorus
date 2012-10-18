@@ -23,6 +23,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/members" do
+    pagination
 
     example_request "Get a list of members of the workspace" do
       status.should == 200

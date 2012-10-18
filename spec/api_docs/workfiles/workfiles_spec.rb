@@ -67,6 +67,7 @@ resource "Workfiles" do
 
   get "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
+    pagination
 
     example_request "Get a list of workfiles in a workspace" do
       status.should == 200

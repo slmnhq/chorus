@@ -66,6 +66,8 @@ resource "Hadoop" do
   end
 
   get "/hadoop_instances" do
+    pagination
+
     example_request "Get a list of registered Hadoop instances" do
       status.should == 200
     end
@@ -89,12 +91,6 @@ resource "Hadoop" do
     let(:id) { dir_entry.id }
 
     example_request "Get a list of files for a subdirectory of a specific hadoop instance"  do
-      status.should == 200
-    end
-  end
-
-  get "/hadoop_instances/:hadoop_instance_id/activities" do
-    example_request "List activities for a hadoop instance"  do
       status.should == 200
     end
   end

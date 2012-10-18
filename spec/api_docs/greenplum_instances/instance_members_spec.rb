@@ -15,6 +15,8 @@ resource "Greenplum DB: instance members" do
   end
 
   get "/gpdb_instances/:gpdb_instance_id/members" do
+    pagination
+
     example_request "List members with access to instance" do
       explanation <<-DESC
         For a Greenplum instance owner to manage which users can access their

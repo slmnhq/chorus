@@ -62,13 +62,9 @@ resource "Greenplum DB: datasets" do
     end
   end
 
-  get "/datasets/:dataset_id/activities" do
-    example_request "Get all activities for specified dataset" do
-      status.should == 200
-    end
-  end
-
   get "/datasets/:dataset_id/columns" do
+    pagination
+
     example_request "Get all columns for specified dataset" do
       status.should == 200
     end

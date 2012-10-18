@@ -103,4 +103,5 @@ RSpec.configure do |config|
   config.include GpdbIntegration, :database_integration => true
   config.include SunspotMatchers
   config.include SolrHelpers
+  config.extend ApiDocHelper, :api_doc_dsl => :endpoint
 end

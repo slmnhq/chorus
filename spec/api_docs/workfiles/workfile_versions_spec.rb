@@ -20,6 +20,7 @@ resource "Workfiles: versions" do
     let!(:workfile_id) { workfile.to_param }
 
     parameter :workfile_id, "Workfile id to which the version belongs"
+    pagination
 
     required_parameters :workfile_id
 

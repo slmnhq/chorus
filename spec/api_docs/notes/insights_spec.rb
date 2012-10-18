@@ -48,6 +48,7 @@ resource "Notes" do
   get "/insights" do
     parameter :entity_id, "Entity Id for filtering insights"
     parameter :entity_type, "Entity_type (dashboard or workspace)"
+    pagination
 
     required_parameters :entity_type
 

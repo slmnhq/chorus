@@ -10,6 +10,8 @@ resource "Users" do
   end
 
   get "/users" do
+    pagination
+
     example_request "Get a list of users" do
       status.should == 200
     end
