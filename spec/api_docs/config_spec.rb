@@ -12,4 +12,10 @@ resource "Config" do
       status.should == 200
     end
   end
+
+  get "/VERSION" do
+    example_request "Returns the version of Chorus" do
+      status.should == 200
+    end
+  end
 end
