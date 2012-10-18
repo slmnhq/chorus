@@ -3,6 +3,7 @@ describe("chorus.views.WorkfileVersionList", function() {
         var version2attributes = rspecFixtures.workfileVersion({
             versionInfo: {
                 modifier: {firstName: 'Bob', lastName: 'Doe'},
+                id: 1,
                 versionNum: 2,
                 updatedAt: '2012-11-29T10:00:00Z'
             }
@@ -12,6 +13,7 @@ describe("chorus.views.WorkfileVersionList", function() {
             versionInfo: {
                 modifier: {firstName: 'Rob', lastName: 'Doe'},
                 versionNum: 1,
+                id: 2,
                 updatedAt: '2011-11-29T10:00:00Z'
             }
         }).attributes;
@@ -29,6 +31,12 @@ describe("chorus.views.WorkfileVersionList", function() {
         expect(this.view.$("li:eq(0) .version_title")).toContainTranslation("workfile.version_title", {versionNum: 2});
         expect(this.view.$("li:eq(1) .version_title")).toContainTranslation("workfile.version_title", {versionNum: 1});
     });
+
+    it("has the versionId and versionNum as data attributes on the delete link", function () {
+        expect(this.view.$("li:eq(0) .delete_link").data("versionId")).toBe(1);
+        expect(this.view.$("li:eq(0) .delete_link").data("versionNumber")).toBe(2);
+    });
+
 
     it("displays the author and date for each item", function() {
         expect(this.view.$("li:eq(0) .version_details")).toContainTranslation("workfile.version_saved_by", {

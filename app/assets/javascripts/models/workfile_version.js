@@ -1,7 +1,7 @@
 chorus.models.WorkfileVersion = chorus.models.Base.extend({
     constructorName: "WorkfileVersion",
 
-    urlTemplate: "workfiles/{{id}}/versions/{{versionInfo.versionNum}}",
+    urlTemplate: "workfiles/{{id}}/versions/{{versionInfo.id}}",
 
     initialize: function() {
         this._super('initialize');

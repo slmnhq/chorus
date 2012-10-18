@@ -3,6 +3,7 @@ describe("chorus.models.WorkfileVersion", function() {
         this.model = rspecFixtures.workfileVersion({
             id: 1,
             versionInfo: {
+                id: 123,
                 versionNum: 2
             }
         });
@@ -10,7 +11,7 @@ describe("chorus.models.WorkfileVersion", function() {
 
     describe("url", function() {
         it("has the right backend URL", function() {
-            expect(this.model.url()).toBe("/workfiles/1/versions/2");
+            expect(this.model.url()).toBe("/workfiles/1/versions/123");
         });
     });
 

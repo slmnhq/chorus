@@ -1,7 +1,7 @@
 describe("chorus.alerts.WorkfileVersionDelete", function() {
     beforeEach(function() {
         this.workfile = rspecFixtures.workfile.sql();
-        this.alert = new chorus.alerts.WorkfileVersionDelete({ versionNumber: 10, pageModel: this.workfile });
+        this.alert = new chorus.alerts.WorkfileVersionDelete({ versionId: 12, versionNumber: 10, pageModel: this.workfile });
         stubModals();
         this.alert.launchModal();
     });
@@ -31,9 +31,11 @@ describe("chorus.alerts.WorkfileVersionDelete", function() {
         expect(this.alert.model.get("workspaceId")).toEqual(this.workfile.get("workspaceId"));
         expect(this.alert.model.get("id")).toEqual(this.workfile.id);
         expect(this.alert.model.get("versionInfo").versionNum).toEqual(10);
+        expect(this.alert.model.get("versionInfo").id).toEqual(12);
     });
 
     it("does not update the pageModel", function() {
         expect(this.workfile.get("versionInfo").versionNum).not.toBe(10);
+        expect(this.workfile.get("versionInfo").id).not.toBe(12);
     });
 });
