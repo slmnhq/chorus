@@ -26,13 +26,23 @@ chorus.views.Bare = Backbone.View.include(
         resourcesLoaded: $.noop,
         displayLoadingSection: $.noop,
 
+        registerSubView: function(view) {
+            if (_.indexOf(this.underviews, view) === -1) {
+                this.underviews.push(view);
+                chorus.viewsToTearDown.splice(chorus.viewsToTearDown.indexOf(view), 1);
+            }
+        },
+
+        getSubViews: function() {
+            return this.underviews;
+        },
+
         teardown: function() {
             this.unbind();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
             this.requiredResources.cleanUp();
             $(this.el).remove();
-            this.teardownSubviews();
 
             while(!_.isEmpty(this.underviews)) {
                 var underview = this.underviews.pop();
@@ -40,14 +50,6 @@ chorus.views.Bare = Backbone.View.include(
             }
 
             chorus.PageEvents.broadcast("destroy:view", this);
-        },
-
-        teardownSubviews: function() {
-            _.each(this.subviews, function(subviewName, secondArg) {
-                    var subview = this[subviewName];
-                    subview && subview.teardown();
-                },
-                this);
         },
 
         bindHotkeys: function() {
@@ -140,7 +142,11 @@ chorus.views.Bare = Backbone.View.include(
                 subviews = this.subviews
             }
 
-            _.each(subviews, this.renderSubview, this);
+            _.each(subviews, function(property, selector) {
+                var subview = this.getSubview(property);
+                if(subview) this.registerSubView(subview);
+                this.renderSubview(property, selector);
+            }, this);
         },
 
         renderSubview: function(property, selector) {

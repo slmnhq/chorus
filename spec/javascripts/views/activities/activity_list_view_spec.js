@@ -29,8 +29,10 @@ describe("chorus.views.ActivityList", function() {
             expect(tornDown).toBeTruthy();
         });
 
-        it("adds ActivityViews to underviews", function() {
-            expect(this.view.underviews).toEqual(this.view.activities);
+        it("registers ActivityViews as subviews", function() {
+            var activities = this.view.activities;
+            expect(this.view.getSubViews().length).toBeGreaterThan(0);
+            expect(_.intersection(this.view.getSubViews(), activities)).toEqual(activities);
         });
 
         describe("when there are no activity items", function() {

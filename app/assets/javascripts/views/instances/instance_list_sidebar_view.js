@@ -46,6 +46,9 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             });
 
             this.tabs.configuration = new chorus.views.InstanceConfigurationDetails({ model: this.instance });
+
+            this.registerSubView(this.tabs.activity);
+            this.registerSubView(this.tabs.configuration);
         }
     },
 

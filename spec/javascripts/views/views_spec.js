@@ -366,6 +366,10 @@ describe("chorus.views.Base", function() {
                             expect(this.view.$(".foo")[0]).toBe(this.subview.el);
                         })
 
+                        it("registers each subview", function() {
+                           expect(_.indexOf(this.view.getSubViews(), this.view.foo)).toBeGreaterThan(-1);
+                        });
+
                         describe("after a new subview has been assigned", function() {
                             beforeEach(function() {
                                 this.otherSubview =new chorus.views.Base();
@@ -968,7 +972,7 @@ describe("chorus.views.Base", function() {
                 it("does not render regular subviews", function() {
                     this.view.render();
                     expect(this.view.getSubview).toHaveBeenCalledWith('makeLoadingSectionView');
-                    expect(this.view.getSubview.callCount).toBe(1);
+                    expect(this.view.getSubview).not.toHaveBeenCalledWith("fdsa");
                 });
 
                 it("renders the loading template", function() {
@@ -1315,7 +1319,7 @@ describe("chorus.views.Base", function() {
                 this.view.requiredResources.add(this.model);
                 this.underview = stubView();
                 spyOn(this.underview, "teardown");
-                this.view.underviews.push(this.underview);
+                this.view.registerSubView(this.underview);
 
                 spyOn(this.view, "unbind");
                 spyOn(this.view.bindings, "removeAll");
@@ -1339,8 +1343,26 @@ describe("chorus.views.Base", function() {
                 expect($(this.view.el).closest("#jasmine_content")).not.toExist();
             });
 
-            it("should tear down underviews", function() {
+            it("should tear down registered subviews", function() {
                 expect(this.underview.teardown).toHaveBeenCalled();
+            });
+        });
+
+        describe("#registerSubViews", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Bare();
+                this.underview = stubView();
+                this.view.registerSubView(this.underview);
+            });
+
+            it("adds the view to the underviews array", function() {
+               expect(this.view.getSubViews()[0]).toBe(this.underview);
+            });
+
+            it("it doesn't add the same view twice", function() {
+                this.view.registerSubView(this.underview);
+                this.view.registerSubView(this.underview);
+                expect(this.view.getSubViews().length).toBe(1);
             });
         });
     });

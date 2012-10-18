@@ -58,7 +58,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                     isReadOnly: this.options.isReadOnly
                 });
                 this.activities.push(view);
-                this.underviews.push(view);
+                this.registerSubView(view);
                 ul.append(view.render().el);
             } catch (err) {
                 chorus.log("error", err, "processing activity", model);
