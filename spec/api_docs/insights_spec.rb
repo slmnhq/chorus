@@ -22,11 +22,25 @@ resource "Insights" do
   end
 
   post "/insights/publish" do
-    parameter :note_id, "Id of the Note being promoted"
+    parameter :note_id, "Id of the Note being published"
 
     let(:note_id) {note_on_workspace.id}
 
     example_request "publish the insight" do
+      status.should == 201
+    end
+  end
+
+  post "/insights/unpublish" do
+    before do
+      note_on_workspace.published = true
+      note_on_workspace.save!
+    end
+    parameter :note_id, "Id of the Note being unpublished"
+
+    let(:note_id) {note_on_workspace.id}
+
+    example_request "unpublish the insight" do
       status.should == 201
     end
   end
