@@ -1,11 +1,12 @@
 class GnipInstanceImportsController < ApplicationController
+  wrap_parameters :import, :exclude => []
 
   def create
-    workspace = Workspace.find(params['imports']['workspace_id'])
+    workspace = Workspace.find(params['import']['workspace_id'])
     raise ApiValidationError.new(:base, :generic, {:message => "Workspace must have a sandbox"}) unless workspace.sandbox.present?
 
     authorize! :can_edit_sub_objects, workspace
-    table_name = params['imports']['to_table']
+    table_name = params['import']['to_table']
 
     temp_csv_file = workspace.csv_files.new(
         :to_table => table_name,
@@ -15,7 +16,7 @@ class GnipInstanceImportsController < ApplicationController
       raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name })
     end
 
-    gnip_instance = GnipInstance.find(params['imports']['gnip_instance_id'])
+    gnip_instance = GnipInstance.find(params['gnip_instance_id'])
     event = create_import_event(temp_csv_file, gnip_instance)
 
     QC.enqueue("GnipImporter.import_to_table",

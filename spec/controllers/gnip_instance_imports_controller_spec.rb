@@ -8,8 +8,8 @@ describe GnipInstanceImportsController do
   let(:workspace) { workspaces(:public) }
 
   let(:gnip_instance_import_params) { {
-      :imports => {
-          :gnip_instance_id => gnip_instance.id,
+      :gnip_instance_id => gnip_instance.id,
+      :import => {
           :to_table => 'foobar',
           :workspace_id => workspace.id
       }

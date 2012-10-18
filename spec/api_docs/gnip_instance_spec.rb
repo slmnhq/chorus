@@ -60,19 +60,27 @@ resource "Gnip instances" do
 
     required_parameters :name, :stream_url, :username
 
-    example_request "Update a Gnip Instance" do
+    example_request "Update a registered Gnip Instance" do
       status.should == 200
     end
   end
 
   post "/gnip_instances/:gnip_instance_id/imports" do
+    before do
+      any_instance_of(CsvFile) {|file| stub(file).table_already_exists(anything) { false } }
+    end
+
     parameter :workspace_id, "gnip account name"
     parameter :to_table, "gnip account name"
 
     required_parameters :workspace_id, :to_table
 
-    let(:id) { gnip_instance.to_param }
+    let(:gnip_instance_id) { gnip_instance.to_param }
     let(:workspace_id) { workspaces(:public).id }
     let(:to_table) { "target_table" }
+
+    example_request "Import data from Gnip" do
+      status.should == 200
+    end
   end
 end
