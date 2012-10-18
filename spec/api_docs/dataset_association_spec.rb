@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Dataset Association" do
+resource "Workspace/Dataset association" do
   let(:user) { users(:owner) }
   let(:gpdb_table) { datasets(:source_table) }
   let(:workspace) { workspaces(:public)}
@@ -12,7 +12,7 @@ resource "Dataset Association" do
   end
 
   delete "/workspaces/:workspace_id/datasets/:id" do
-    example_request "Delete dataset association" do
+    example_request "Disassociate dataset from a workspace" do
       status.should == 200
     end
   end

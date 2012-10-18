@@ -13,7 +13,7 @@ resource "Attachments" do
 
     let(:attachment_id) { attachments(:sql).id }
 
-    example_request "Downloads attachment" do
+    example_request "Download an attachment" do
       status.should == 200
     end
   end

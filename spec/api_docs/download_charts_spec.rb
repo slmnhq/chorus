@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Download charts" do
+resource "Charts" do
   let(:user) { users(:admin) }
 
   before do
@@ -16,7 +16,7 @@ resource "Download charts" do
 
     let(:svg) { File.read(File.expand_path("spec/fixtures/SVG-logo.svg", Rails.root)) }
 
-    example_request "Downloads chart" do
+    example_request "Download a chart" do
       explanation <<-DESC
         The uploaded SVG file is converted into a PNG and downloaded.
         The supplied file name and chart type parameters are used to generate the default file name,
