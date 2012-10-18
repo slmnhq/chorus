@@ -5,7 +5,7 @@ http_interactions:
     uri: https://www.kaggle.com/connect/chorus-beta/message
     body:
       encoding: US-ASCII
-      string: subject=some%20subject&replyTo=test%40fun.com&htmlBody=message%20body&apiKey=TEST_API_KEY&userId=63766&userId=63767
+      string: <SUPPRESSED_KAGGLE_API_KEY>
     headers:
       accept:
       - ! '*/*'
@@ -27,7 +27,7 @@ http_interactions:
       server:
       - Microsoft-IIS/7.5
       date:
-      - Wed, 17 Oct 2012 21:05:00 GMT
+      - Thu, 18 Oct 2012 21:04:10 GMT
       connection:
       - close
       content-length:
@@ -37,6 +37,6 @@ http_interactions:
       string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
         \n  ],\r\n  \"failed\": []\r\n}"
     http_version: '1.1'
-  recorded_at: Wed, 17 Oct 2012 21:04:58 GMT
+  recorded_at: Thu, 18 Oct 2012 21:04:08 GMT
 recorded_with: VCR 2.1.1
 ...

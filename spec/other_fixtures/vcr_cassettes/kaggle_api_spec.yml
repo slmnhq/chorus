@@ -5,7 +5,7 @@ http_interactions:
     uri: https://www.kaggle.com/connect/chorus-beta/message
     body:
       encoding: US-ASCII
-      string: apiKey=TEST_API_KEY&subject=Please%20analyze%20my%20data&userId=63766&userId=63767&htmlBody=I%20have%20a%20lot%20of%20data%20that%20needs%20to%20be%20analyzed.&replyTo=user%40chorus.com
+      string: <SUPPRESSED_KAGGLE_API_KEY>
     headers:
       accept:
       - ! '*/*'
@@ -27,7 +27,7 @@ http_interactions:
       server:
       - Microsoft-IIS/7.5
       date:
-      - Wed, 17 Oct 2012 22:46:23 GMT
+      - Thu, 18 Oct 2012 21:05:01 GMT
       connection:
       - close
       content-length:
@@ -37,6 +37,6 @@ http_interactions:
       string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
         \n  ],\r\n  \"failed\": []\r\n}"
     http_version: '1.1'
-  recorded_at: Wed, 17 Oct 2012 22:46:23 GMT
+  recorded_at: Thu, 18 Oct 2012 21:04:59 GMT
 recorded_with: VCR 2.1.1
 ...

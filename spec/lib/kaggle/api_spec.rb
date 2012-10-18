@@ -25,7 +25,7 @@ describe Kaggle::API, :kaggle_api => true do
     } }
 
     it "should send a message and return true" do
-      VCR.use_cassette('kaggle_message_single') do
+      VCR.use_cassette('kaggle_message_single', :tag => :filter_kaggle_api_key) do
         described_class.send_message(params).should be_true
       end
     end
@@ -34,7 +34,7 @@ describe Kaggle::API, :kaggle_api => true do
       let(:user_ids) { [63766,63767] }
 
       it "succeeds with two valid ids" do
-        VCR.use_cassette('kaggle_message_multiple') do
+        VCR.use_cassette('kaggle_message_multiple', :tag => :filter_kaggle_api_key) do
           described_class.send_message(params).should be_true
         end
       end
@@ -43,7 +43,7 @@ describe Kaggle::API, :kaggle_api => true do
     context "when the send message fails" do
       let(:user_ids) { [99999999] }
       it "fails with an invalid id" do
-        VCR.use_cassette('kaggle_message_single_fail') do
+        VCR.use_cassette('kaggle_message_single_fail', :tag => :filter_kaggle_api_key) do
           expect {
             described_class.send_message(params)
           }.to raise_exception(Kaggle::API::MessageFailed)
@@ -54,7 +54,7 @@ describe Kaggle::API, :kaggle_api => true do
         let(:user_ids) { [63766,99999999] }
 
         it "fails with one invalid id" do
-          VCR.use_cassette('kaggle_message_multiple_fail') do
+          VCR.use_cassette('kaggle_message_multiple_fail', :tag => :filter_kaggle_api_key) do
             expect {
               described_class.send_message(params)
             }.to raise_exception(Kaggle::API::MessageFailed)
