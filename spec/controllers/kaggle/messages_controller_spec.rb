@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Kaggle::MessagesController do
+describe Kaggle::MessagesController, :kaggle_api => true do
   let(:user) { users(:owner) }
 
   before do
@@ -18,11 +18,8 @@ describe Kaggle::MessagesController do
     it_behaves_like "an action that requires authentication", :post, :create
 
     it "returns 200 when the message sends" do
-      mock(Kaggle::API).send_message(hash_including(
-                                         "subject" => "Example Subject",
-                                         "htmlBody" => "Example Body",
-                                         "replyTo" => "chorusadmin@example.com",
-                                         "userId" => ["6732"])) { true }
+      mock(Kaggle::API).send_message(satisfy {|arg| arg.values.select{|v| !v.nil? }.length == 5})
+
       post :create, params
       response.should be_success
     end

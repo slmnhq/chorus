@@ -49,6 +49,11 @@ RSpec.configure do |config|
     config.filter_run_excluding :database_integration => true
   end
 
+  unless Chorus::Application.config.chorus['kaggle'] && Chorus::Application.config.chorus['kaggle']['api_key']
+    warn "No Kaggle API key detected in chorus.yml.  Skipping Kaggle API tests.  See the project wiki for more information on running tests"
+    config.filter_run_excluding :kaggle_api => true
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

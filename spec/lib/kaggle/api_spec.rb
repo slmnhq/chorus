@@ -1,6 +1,4 @@
-require 'kaggle/api'
-require 'support/vcr'
-require 'support/rr'
+require 'spec_helper'
 
 #Test Kaggle User 1
 #id: 47822
@@ -14,10 +12,10 @@ require 'support/rr'
 #Full name: Tony Stark
 #username: tstark
 
-describe Kaggle::API do
+describe Kaggle::API, :kaggle_api => true do
   describe ".send_message" do
     let(:user_ids) { [63766] }
-    let(:api_key) { ENV['KAGGLE_API_KEY'] }
+    let(:api_key) { Chorus::Application.config.chorus['kaggle']['api_key'] }
     let(:params) { {
        "subject" => "some subject",
        "replyTo" => "test@fun.com",

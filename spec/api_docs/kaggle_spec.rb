@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Kaggle" do
+resource "Kaggle", :kaggle_api => true do
   let(:user) { users(:owner) }
   let(:workspace) { workspaces(:public) }
   let(:workspace_id) { workspace.id }

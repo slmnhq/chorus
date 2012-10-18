@@ -14,7 +14,8 @@ class Kaggle::MessagesController < ApplicationController
   private
   def prepared_parameters(input_params)
     params = {}
-    params["apiKey"] = ENV['KAGGLE_API_KEY']
+    kaggle_config = Chorus::Application.config.chorus['kaggle']
+    params["apiKey"] = kaggle_config['api_key'] if kaggle_config
     params["subject"] = input_params["subject"]
     params["userId"] = input_params["recipient_ids"]
     params["htmlBody"] = input_params["html_body"]
