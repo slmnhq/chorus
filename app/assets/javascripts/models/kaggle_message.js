@@ -1,15 +1,15 @@
 chorus.models.KaggleMessage = chorus.models.Base.extend({
     urlTemplate: "workspaces/{{workspace.id}}/kaggle/messages",
 
-    paramsToSave: ['from', 'subject', 'message', 'recipient_ids'],
+    paramsToSave: ['replyTo', 'subject', 'htmlBody', 'recipientIds'],
 
     declareValidations: function(newAttrs) {
-        this.requireValidEmailAddress('from', newAttrs);
+        this.requireValidEmailAddress('replyTo', newAttrs);
         this.require('subject', newAttrs);
-        this.require('message', newAttrs);
+        this.require('htmlBody', newAttrs);
     },
 
-    recipient_ids: function() {
+    recipientIds: function() {
         var ids = _.pluck(this.get('recipients').models, 'id');
         return (ids);
     }

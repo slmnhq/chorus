@@ -1,14 +1,14 @@
 [
     {
-        "Username":"CatWoman",
-        "UserId":7657,
+        "Username":"bbanner",
+        "UserId":63766,
         "KaggleRank":9,
         "KagglePoints":298690.9,
         "FavoriteTechnique":"",
         "FavoriteSoftware":"R with a little SAS",
-        "LegalName":"Selina Kyle",
+        "LegalName":"Bruce Banner",
         "Location":"San Francisco, United States",
-        "Gravatar":"https://secure.gravatar.com/avatar/kaggleImage.jpg",
+        "Gravatar":"http://moviecultists.com/wp-content/uploads/2011/09/Bruce-Banner-The-Avengers.jpg",
         "PastCompetitionTypes":[
             "Life Sciences",
             "Retail",
@@ -30,7 +30,7 @@
                 "PartOfTeam":true
             },
             {
-                "CompetitionName":"Analyzing Who Batman Really Is",
+                "CompetitionName":"Analyzing Who Iron Man Really Is",
                 "Finish":1,
                 "TotalTeamCount":1,
                 "PartOfTeam":false
@@ -38,15 +38,15 @@
         ]
     },
     {
-        "Username":"Batman",
-        "UserId":6732,
+        "Username":"tstark",
+        "UserId":63767,
         "KaggleRank":17,
         "KagglePoints":245095.8,
         "FavoriteTechnique":"SVM",
         "FavoriteSoftware":"R",
-        "LegalName":"Bruce Wayne",
+        "LegalName":"Tony Stark",
         "Location":"San Francisco, United States",
-        "Gravatar":"https://secure.gravatar.com/avatar/batman.jpg",
+        "Gravatar":"http://maxcdn.fooyoh.com/files/attach/images/1098/154/870/004/tony_stark_3d_.jpg",
         "PastCompetitionTypes":[
             "High Dimensional Data",
             "Psychology",
@@ -60,13 +60,13 @@
         ],
         "PastCompetitions":[
             {
-                "CompetitionName":"Fight Joker",
+                "CompetitionName":"Fight villains",
                 "Finish":1,
                 "TotalTeamCount":2,
                 "PartOfTeam":true
             },
             {
-                "CompetitionName":"Be Most Badass In Gotham City",
+                "CompetitionName":"Be Most Badass In My City",
                 "Finish":1,
                 "TotalTeamCount":1,
                 "PartOfTeam":false

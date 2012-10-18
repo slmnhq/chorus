@@ -13,7 +13,7 @@ module Kaggle
       result_status = decoded_response["status"]
 
       if result_status != 200 || !decoded_response['failed'].empty?
-        raise MessageFailed.new('Could not send to user')
+        raise MessageFailed.new(decoded_response.to_s)
       end
 
       true

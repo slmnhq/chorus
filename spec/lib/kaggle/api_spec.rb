@@ -48,7 +48,7 @@ describe Kaggle::API do
         VCR.use_cassette('kaggle_message_single_fail') do
           expect {
             described_class.send_message(params)
-          }.to raise_exception(Kaggle::API::MessageFailed, 'Could not send to user')
+          }.to raise_exception(Kaggle::API::MessageFailed)
         end
       end
 
@@ -59,7 +59,7 @@ describe Kaggle::API do
           VCR.use_cassette('kaggle_message_multiple_fail') do
             expect {
               described_class.send_message(params)
-            }.to raise_exception(Kaggle::API::MessageFailed, 'Could not send to user')
+            }.to raise_exception(Kaggle::API::MessageFailed)
           end
         end
       end

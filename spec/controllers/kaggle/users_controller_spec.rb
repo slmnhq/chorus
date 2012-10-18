@@ -41,7 +41,7 @@ describe Kaggle::UsersController do
     end
 
     it "filters the list" do
-      get:index, :kaggle_user => "[\"rank|greater|10\"]"
+      get :index, :kaggle_user => "[\"rank|greater|10\"]"
       decoded_response.length.should == 1
       user = decoded_response.first
       user['rank'].should > 10

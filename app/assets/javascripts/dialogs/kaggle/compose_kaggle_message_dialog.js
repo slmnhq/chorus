@@ -40,8 +40,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     save: function (e) {
         e.preventDefault();
         this.model.save({
-            from: this.$('input[name=from]').val(),
-            message: this.$('textarea[name=message]').val(),
+            replyTo: this.$('input[name=reply_to]').val(),
+            htmlBody: this.$('textarea[name=html_body]').val(),
             subject: this.$('input[name=subject]').val()
         });
         this.$("button.submit").startLoading("kaggle.compose.saving");
@@ -50,7 +50,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     additionalContext: function () {
         var combinedNames = this.combineNames(this.model.get("recipients").models);
         return {
-            fromEmail: chorus.session.user().get('email'),
+            replyTo: chorus.session.user().get('email'),
             recipientNames: combinedNames,
             hasMoreRecipients: (combinedNames.full.length != combinedNames.short.length)
         };
@@ -138,7 +138,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         }
 
         var linebreak = "\n";
-        var $message = this.$("textarea[name=message]");
+        var $message = this.$("textarea[name=html_body]");
         var message = $message.val() + linebreak + linebreak;
 
         _.each(this.datasets, function(dataset) {

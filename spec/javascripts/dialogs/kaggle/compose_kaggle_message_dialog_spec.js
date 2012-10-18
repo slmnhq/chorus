@@ -17,7 +17,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
         });
 
         it("sets the default value of the from field to the users email", function() {
-            expect(this.dialog.$('input[name=from]').val()).toBe('user@chorus.com');
+            expect(this.dialog.$('input[name=reply_to]').val()).toBe('user@chorus.com');
         });
 
         it("displays the name of the kaggle recipient", function() {
@@ -132,7 +132,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     });
 
                     it("inserts the chosen schemas into the text field", function () {
-                        message = this.dialog.$('textarea[name=message]').val();
+                        message = this.dialog.$('textarea[name=html_body]').val();
                         expect(message).toMatch("i_bought_a_zoo");
                         expect(message).toMatch("bourne_identity");
                         expect(message).toMatch(/Rhino_0\s*string/);
@@ -142,7 +142,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     });
 
                     it("displays the number of columns and the number of rows next to each table", function () {
-                        message = this.dialog.$('textarea[name=message]').val();
+                        message = this.dialog.$('textarea[name=html_body]').val();
                         expect(message).toMatch(/i_bought_a_zoo\s+# of columns: 2, # of rows: 11/);
                         expect(message).toMatch(/bourne_identity\s+# of columns: 2, # of rows: 22/);
                     });
@@ -164,7 +164,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     });
 
                     it("doesn't update the message", function () {
-                        message = this.dialog.$('textarea[name=message]').val();
+                        message = this.dialog.$('textarea[name=html_body]').val();
                         expect(message).not.toContain("Rhino_0");
                     });
                 });
@@ -179,9 +179,9 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
     describe("saving", function () {
         beforeEach(function () {
-            this.dialog.$('input[name=from]').val('me@somewhere.com');
+            this.dialog.$('input[name=reply_to]').val('me@somewhere.com');
             this.dialog.$('input[name=subject]').val('Something cool');
-            this.dialog.$('textarea[name=message]').val('Some stuff');
+            this.dialog.$('textarea[name=html_body]').val('Some stuff');
 
             spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
@@ -197,9 +197,9 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             var model = this.dialog.model;
             expect(model.save).toHaveBeenCalled();
 
-            expect(model.get('from')).toEqual('me@somewhere.com');
+            expect(model.get('replyTo')).toEqual('me@somewhere.com');
             expect(model.get('subject')).toEqual('Something cool');
-            expect(model.get('message')).toEqual('Some stuff');
+            expect(model.get('htmlBody')).toEqual('Some stuff');
         });
 
         it("closes the dialog box if saved successfully", function () {

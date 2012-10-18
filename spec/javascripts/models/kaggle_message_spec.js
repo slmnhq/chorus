@@ -5,8 +5,8 @@ describe("chorus.models.KaggleMessage", function() {
         this.attrs = {
             recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),
             subject: 'This is a valid subject',
-            from: 'user@emc.com',
-            message: 'Please analyze my data',
+            replyTo: 'user@emc.com',
+            htmlBody: 'Please analyze my data',
             workspace: rspecFixtures.workspace({id: 100})
         };
         this.model = new chorus.models.KaggleMessage(this.attrs);
@@ -19,11 +19,14 @@ describe("chorus.models.KaggleMessage", function() {
     });
 
     describe("params", function() {
-        it("includes the recipient id", function() {
+        it("includes the correct parameters", function() {
             this.model.save();
             expect(this.server.lastCreate().params()["recipient_ids[]"]).toEqual("1");
+            expect(this.server.lastCreate().params()["reply_to"]).toEqual("user@emc.com");
+            expect(this.server.lastCreate().params()["html_body"]).toEqual("Please analyze my data");
+            expect(this.server.lastCreate().params()["subject"]).toEqual("This is a valid subject");
         });
-    })
+    });
 
     describe("validations", function() {
         it("can be valid", function() {
@@ -31,15 +34,15 @@ describe("chorus.models.KaggleMessage", function() {
         });
 
         it("requires from address", function () {
-            this.attrs.from = "";
+            this.attrs.replyTo = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
-            expect(this.model.errors.from).toBeTruthy();
+            expect(this.model.errors.replyTo).toBeTruthy();
         });
 
         it("requires from address to be a valid email", function() {
-            this.attrs.from = "notavalid/email.com";
+            this.attrs.replyTo = "notavalid/email.com";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
-            expect(this.model.errors.from).toBeTruthy();
+            expect(this.model.errors.replyTo).toBeTruthy();
         });
 
         it("requires subject", function () {
@@ -49,9 +52,9 @@ describe("chorus.models.KaggleMessage", function() {
         });
 
         it("requires a message", function() {
-            this.attrs.message = "";
+            this.attrs.htmlBody = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
-            expect(this.model.errors.message).toBeTruthy();
+            expect(this.model.errors.htmlBody).toBeTruthy();
         });
     });
 });

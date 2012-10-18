@@ -12,8 +12,8 @@
     </div>
 
     <div class="inline-field">
-        <label name="from" class="required">{{t "kaggle.compose.from"}}</label>
-        <input type="text" name="from" value="{{fromEmail}}"></input>
+        <label name="reply_to" class="required">{{t "kaggle.compose.from"}}</label>
+        <input type="text" name="reply_to" value="{{replyTo}}"></input>
     </div>
 
     <div>
@@ -22,11 +22,11 @@
     </div>
 
     <div>
-        <label name="message" class="required">{{t "kaggle.compose.message"}}</label>
+        <label name="html_body" class="required">{{t "kaggle.compose.message"}}</label>
         <div class="more-info" />
         <a class="insert_dataset_schema additional_options" href="#">{{t "kaggle.compose.insert_schema"}}</a>
 
-        <textarea name="message">
+        <textarea name="html_body">
 {{t "kaggle.compose.body.1"}}
 
 {{t "kaggle.compose.body.2"}}
