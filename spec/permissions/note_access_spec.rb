@@ -24,8 +24,8 @@ describe Events::NoteAccess do
     context "when the note is on a workspace and the current user is the workspace owner" do
       let(:note) do
         Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
-          :workspace => workspaces(:public),
-          :body => "hi"
+            :workspace => workspaces(:public),
+            :body => "hi"
         )
       end
 
@@ -39,6 +39,21 @@ describe Events::NoteAccess do
       other_user = FactoryGirl.build(:user)
       stub(fake_controller).current_user { other_user }
       access.destroy?(note).should be_false
+    end
+  end
+
+  describe "#update?" do
+    context " when the current user is the note's actor" do
+      it "returns true" do
+        stub(fake_controller).current_user { users(:owner) }
+        access.update?(note).should be_true
+      end
+    end
+
+    it "returns false otherwise" do
+      other_user = FactoryGirl.build(:user)
+      stub(fake_controller).current_user { other_user }
+      access.update?(note).should be_false
     end
   end
 

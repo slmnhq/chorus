@@ -421,8 +421,7 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    //TODO activate this for unpublishing the insight
-    xdescribe("#unpublish", function() {
+    describe("#unpublish", function() {
         it("posts to the comment insight url with the unpublish action", function() {
             this.model.unpublish();
             expect(this.server.lastCreate().url).toBe("/insights/unpublish");

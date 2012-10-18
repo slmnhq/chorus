@@ -139,6 +139,94 @@ describe InsightsController do
     end
   end
 
+  describe "#unpublish (POST to /unpublish)" do
+    before do
+      log_in user
+      note.insight = true
+      note.published = true
+      note.save!
+    end
+
+    let(:user) { note.actor }
+    let(:note) { Events::NoteOnWorkspace.last }
+
+    it "returns status 201" do
+      post :unpublish, :note_id => note.id
+      response.code.should == "201"
+    end
+
+    it "returns the note" do
+      mock_present do |insight|
+        insight.should == note
+      end
+      post :unpublish, :note_id => note.id
+    end
+
+    it "marks the NOTE as unpublished" do
+      post :unpublish, :note_id => note.id
+      note.reload.should_not be_published
+    end
+
+    context 'when the note is private' do
+      let(:note) { events(:note_on_no_collaborators_private_workfile) }
+
+      context 'when the user does not have access' do
+        let(:user) { users(:not_a_member) }
+
+        it "returns permission denied status code" do
+          post :unpublish, :note_id => note.id
+
+          response.code.should == "403"
+        end
+      end
+
+      context "when the user is admin" do
+        let(:user) { users(:admin) }
+
+        it "returns status 201" do
+          post :unpublish, :note_id => note.id
+          response.code.should == "201"
+        end
+      end
+
+      context "makes the note private" do
+        let(:admin_user) { users(:admin) }
+        let(:non_member_user) { users(:not_a_member) }
+        before do
+          log_in admin_user
+          post :unpublish, :note_id => note.id
+        end
+
+        it "does not return the note for user" do
+          log_in non_member_user
+          get :index
+
+          response.code.should == "200"
+
+          decoded_response.map(&:id).should_not include(note.id)
+        end
+      end
+
+      context "checks the Note should be published first" do
+        let(:note_on_workfile) { Events::NoteOnWorkfile.last }
+        let(:user) {note_on_workfile.actor}
+
+        before do
+          note_on_workfile.insight = true
+          note_on_workfile.published = false
+          note_on_workfile.save!
+        end
+
+        it "returns an error " do
+          post :unpublish, :note_id => note_on_workfile.id
+
+          response.code.should == '422'
+          response.body.should include "Note has to be published first"
+        end
+      end
+    end
+  end
+
 
   describe "#index (GET)" do
     before do

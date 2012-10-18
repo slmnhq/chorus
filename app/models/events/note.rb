@@ -70,8 +70,8 @@ module Events
       save!
     end
 
-    def publish_insight(actor)
-      self.published = true
+    def set_insight_published(published)
+      self.published = published
       save!
     end
 

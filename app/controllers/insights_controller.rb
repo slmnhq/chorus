@@ -1,3 +1,5 @@
+require Rails.root + 'app/permissions/insight_access'
+
 class InsightsController < ApplicationController
   wrap_parameters :insight, :exclude => []
   
@@ -12,7 +14,15 @@ class InsightsController < ApplicationController
     note = get_note_if_visible(params[:insight][:note_id])
     raise SecurityTransgression unless note
     raise ApiValidationError.new(:base, :generic, {:message => "Note has to be an insight first"}) unless note.insight
-    note.publish_insight current_user
+    note.set_insight_published true
+    present note, :status => :created
+  end
+
+  def unpublish
+    note = Events::Note.find(params[:insight][:note_id])
+    authorize! :update, note
+    raise ApiValidationError.new(:base, :generic, {:message => "Note has to be published first"}) unless note.published
+    note.set_insight_published false
     present note, :status => :created
   end
 

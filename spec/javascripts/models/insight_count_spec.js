@@ -4,22 +4,42 @@ describe("chorus.models.InsightCount", function() {
     });
 
     context("with an id and action for promote", function() {
-        beforeEach(function() {
-            this.model = new chorus.models.InsightCount({ noteId: '41', action: "promote" });
+        beforeEach(function () {
+            this.model = new chorus.models.InsightCount({ noteId:'41', action:"promote" });
         });
 
-        it("has the right url", function() {
+        it("has the right url", function () {
             expect(this.model.url()).toBe("/insights/promote");
         });
     });
 
-    context("with an id and action for publish", function() {
+    context("with an id and action for promote", function () {
+        beforeEach(function () {
+            this.model = new chorus.models.InsightCount({  });
+        });
+
+        it("has the right url", function () {
+            expect(this.model.url()).toBe("/insights");
+        });
+    });
+
+    context("with an id and action for publish", function () {
         beforeEach(function() {
             this.model = new chorus.models.InsightCount({ noteId: '41', action: "publish" });
         });
 
         it("has the right url", function() {
             expect(this.model.url()).toBe("/insights/publish");
+        });
+    });
+
+    context("with an id and action for publish", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.InsightCount({ noteId: '41', action: "unpublish" });
+        });
+
+        it("has the right url", function() {
+            expect(this.model.url()).toBe("/insights/unpublish");
         });
     });
 
