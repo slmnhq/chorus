@@ -3188,26 +3188,6 @@
   children: []
   parents:
   - ruby-debug
-- name: ffi
-  source: bundle
-  version: 1.1.5
-  license: GPL3
-  license_url:
-  approved: false
-  notes:
-  license_files:
-  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/LICENSE
-  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
-  readme_files:
-  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
-  bundler_groups: []
-  summary: A Ruby foreign function interface
-  description: ''
-  homepage: http://wiki.github.com/ffi/ffi
-  children: []
-  parents:
-  - childprocess
-  - mizuno
 - name: foreman
   source: bundle
   version: 0.46.0
@@ -3607,4 +3587,24 @@
   children:
   - POpen4
   parents: []
+- name: ffi
+  source: bundle
+  version: 1.1.5
+  license: BSD
+  license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
+  approved: false
+  notes:
+  license_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/LICENSE
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
+  readme_files:
+  - /Users/pivotal/.rbenv/versions/jruby-1.6.8/lib/ruby/gems/1.8/gems/ffi-1.1.5-java/README.txt
+  bundler_groups: []
+  summary: A Ruby foreign function interface
+  description: ''
+  homepage: http://wiki.github.com/ffi/ffi
+  children: []
+  parents:
+  - childprocess
+  - mizuno
 ...
