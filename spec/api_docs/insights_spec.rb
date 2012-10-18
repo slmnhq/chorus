@@ -3,9 +3,12 @@ require 'spec_helper'
 resource "Insights" do
   let(:user) { users(:owner) }
   let(:note) { Events::NoteOnGreenplumInstance.last }
+  let(:note_on_workspace) { Events::NoteOnWorkspace.first }
 
   before do
     log_in user
+    note_on_workspace.insight = true
+    note_on_workspace.save!
   end
 
   post "/insights/promote" do
@@ -14,6 +17,16 @@ resource "Insights" do
     let(:note_id) { note.id }
 
     example_request "promote the note to insight" do
+      status.should == 201
+    end
+  end
+
+  post "/insights/publish" do
+    parameter :note_id, "Id of the Note being promoted"
+
+    let(:note_id) {note_on_workspace.id}
+
+    example_request "publish the insight" do
       status.should == 201
     end
   end
