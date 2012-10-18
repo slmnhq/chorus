@@ -26,8 +26,8 @@ describe JobScheduler do
   end
 
   describe "SolrIndexer.refresh_external_data" do
-    it "runs every Chorus::Application.config.chorus['reindex_datasets_interval_hours'] hours" do
-      job_scheduler.job_named('SolrIndexer.refresh_external_data').period.should == Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours
+    it "runs every Chorus::Application.config.chorus['reindex_search_data_interval_hours'] hours" do
+      job_scheduler.job_named('SolrIndexer.refresh_external_data').period.should == Chorus::Application.config.chorus['reindex_search_data_interval_hours'].hours
     end
 
     it "enqueues the 'SolrIndexer.refresh_external_data' job in QC" do
