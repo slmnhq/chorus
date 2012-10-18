@@ -11,11 +11,11 @@ resource "Workspace Members" do
   end
 
   post "/workspaces/:workspace_id/members" do
-    parameter :member_ids, "User ids"
+    parameter :'member_ids[]', "User ids"
 
-    let(:member_ids) { [user1.id, owner.id] }
+    let(:'member_ids[]') { [user1.id, owner.id] }
 
-    required_parameters :member_ids
+    required_parameters :'member_ids[]'
 
     example_request "Creates a member for the workspace" do
       status.should == 200

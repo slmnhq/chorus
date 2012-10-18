@@ -14,11 +14,11 @@ resource "Notifications" do
   end
 
   put "/notifications/read" do
-    parameter :notification_ids, "IDs of events to be marked as read"
+    parameter :'notification_ids[]', "IDs of events to be marked as read"
 
-    let(:notification_ids) { user.notifications[0..1].map(&:event_id) }
+    let(:'notification_ids[]') { user.notifications[0..1].map(&:event_id) }
 
-    required_parameters :notification_ids
+    required_parameters :'notification_ids[]'
 
     example_request "Marks notifications as read" do
       status.should == 200

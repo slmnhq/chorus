@@ -20,7 +20,7 @@ resource "Visualizations" do
     parameter :type, "The type of visualization to be created"
     parameter :bins, "Category limit"
     parameter :y_axis, "Categorical column"
-    parameter :filters, "Filters to be applied to the visualization"
+    parameter :'filters[]', "Filters to be applied to the visualization"
 
     required_parameters :dataset_id
     required_parameters :check_id
@@ -33,7 +33,7 @@ resource "Visualizations" do
     let(:type) { "frequency" }
     let(:bins) { "3" }
     let(:y_axis) { "category" }
-    let(:filters) { ['"base_table1"."column1" > 0', '"base_table1"."column2" < 5'] }
+    let(:'filters[]') { ['"base_table1"."column1" > 0', '"base_table1"."column2" < 5'] }
     let!(:rows) { [
         { :count => 2, :bucket => "orange" },
         { :count => 1, :bucket => 'apple' }
@@ -53,7 +53,7 @@ resource "Visualizations" do
     parameter :y_bins, "Number of y bins"
     parameter :x_axis, "X-Axis column ( numerical )"
     parameter :y_axis, "Y-Axis column ( numerical )"
-    parameter :filters, "Filters to be applied to the visualization"
+    parameter :'filters[]', "Filters to be applied to the visualization"
 
     required_parameters :dataset_id
     required_parameters :check_id
@@ -95,7 +95,7 @@ resource "Visualizations" do
     parameter :type, "The type of visualization to be created"
     parameter :bins, "Number of bins"
     parameter :x_axis, "X-Axis column ( categorical )"
-    parameter :filters, "Filters to be applied to the visualization"
+    parameter :'filters[]', "Filters to be applied to the visualization"
 
     required_parameters :dataset_id
     required_parameters :check_id
@@ -108,7 +108,7 @@ resource "Visualizations" do
     let(:type) { "histogram" }
     let(:bins) { "2" }
     let(:x_axis) { "category" }
-    let(:filters) { ['"base_table1"."category" = \'papaya\''] }
+    let(:'filters[]') { ['"base_table1"."category" = \'papaya\''] }
     let!(:rows) { [
         {:bin => [0, 0.5], :frequency => 3},
         {:bin => [0.5, 1.0], :frequency => 6}
@@ -128,7 +128,7 @@ resource "Visualizations" do
     parameter :aggregation, "Aggregation for x-axis column ( sum, minimum, maximum, average, count )"
     parameter :y_axis, "Y-Axis column ( categorical column )"
     parameter :time_interval, "Time interval ( minute, hour, day, week, month, year )"
-    parameter :filters, "Filters to be applied to the visualization"
+    parameter :'filters[]', "Filters to be applied to the visualization"
 
     required_parameters :dataset_id
     required_parameters :check_id
@@ -144,7 +144,7 @@ resource "Visualizations" do
     let(:y_axis) { "column1" }
     let(:time_interval) { "month" }
     let(:aggregation) { "sum" }
-    let(:filters) { ['"base_table1"."time_value" > \'2012-03-03\'', '"base_table1"."column1" < 5'] }
+    let(:'filters[]') { ['"base_table1"."time_value" > \'2012-03-03\'', '"base_table1"."column1" < 5'] }
     let!(:rows) { [
         {:value => 2, :time => "2012-03"},
         {:value => 2, :time => "2012-04"},
@@ -164,7 +164,7 @@ resource "Visualizations" do
     parameter :x_axis, "X-Axis column ( categorical )"
     parameter :y_axis, "Y-Axis column ( numerical )"
     parameter :bins, "Category Limit"
-    parameter :filters, "Filters to be applied to the visualization"
+    parameter :'filters[]', "Filters to be applied to the visualization"
 
     required_parameters :dataset_id
     required_parameters :check_id
@@ -179,7 +179,7 @@ resource "Visualizations" do
     let(:x_axis) { "category" }
     let(:y_axis) { "column2" }
     let(:bins) { "3" }
-    let(:filters) {  ["category != 'apple'"] }
+    let(:'filters[]') {  ["category != 'apple'"] }
     let!(:rows) { [
         {:bucket => "papaya", :min => 5.0, :median => 6.5, :max => 8.0, :first_quartile => 5.5, :third_quartile => 7.5, :percentage => "57.14%", :count => 4},
         {:bucket => "orange", :min => 2.0, :median => 3.0, :max => 4.0, :first_quartile => 2.5, :third_quartile => 3.5, :percentage => "42.86%", :count => 3}

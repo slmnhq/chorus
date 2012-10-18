@@ -264,18 +264,18 @@ resource "Workspaces" do
   post "/workspaces/:workspace_id/external_tables" do
     parameter :hdfs_entry_id, "Id of the source HDFS entry"
     parameter :has_header, "'true' if data contains a header column, 'false' otherwise"
-    parameter :column_names, "Array of column names"
-    parameter :types, "Array of column types"
+    parameter :'column_names[]', "Array of column names"
+    parameter :'types[]', "Array of column types"
     parameter :delimiter, "Delimiter (i.e. , or ;)"
     parameter :table_name, "Name of the table to be created"
     parameter :workspace_id, "Id of the workspace to create the table in"
 
-    required_parameters :hdfs_entry_id, :table_name, :workspace_id, :column_names, :delimiter, :types
+    required_parameters :hdfs_entry_id, :table_name, :workspace_id, :'column_names[]', :delimiter, :'types[]'
 
     let(:hdfs_entry_id) { hdfs_entries(:hdfs_file).id }
     let(:has_header) { true }
-    let(:column_names) { ["field1", "field2"] }
-    let(:types) { ["text", "text"] }
+    let(:'column_names[]') { ["field1", "field2"] }
+    let(:'types[]') { ["text", "text"] }
     let(:delimiter) { ',' }
     let(:table_name) { "highway_to_heaven" }
 

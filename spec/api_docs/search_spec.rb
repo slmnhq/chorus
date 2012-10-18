@@ -84,12 +84,12 @@ resource "Search" do
   end
 
   post "/search/reindex" do
-    parameter :types, "The types of entities to reindex (#{Sunspot.searchable.map(&:name).join(', ')}) or 'all' to reindex all"
+    parameter :'types[]', "The types of entities to reindex (#{Sunspot.searchable.map(&:name).join(', ')}) or 'all' to reindex all"
 
-    required_parameters :types
+    required_parameters :'types[]'
 
     let(:user) { users(:admin) }
-    let(:types) { ['Dataset', 'GpdbInstance'] }
+    let(:'types[]') { ['Dataset', 'GpdbInstance'] }
     example_request "Reindexing" do
       status.should == 200
     end

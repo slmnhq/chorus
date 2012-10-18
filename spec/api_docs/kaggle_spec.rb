@@ -21,14 +21,14 @@ resource "Kaggle", :kaggle_api => true do
     parameter :reply_to, "Email address of sender"
     parameter :subject, "Subject of message to Kaggle user"
     parameter :html_body, "Body of message to Kaggle user"
-    parameter :recipient_ids, "Kaggle user ids of recipients"
+    parameter :'recipient_ids[]', "Kaggle user ids of recipients"
 
     let(:reply_to) { "user@chorus.com" }
     let(:subject) { 'Please analyze my data'}
     let(:html_body) { 'I have a lot of data that needs to be analyzed.' }
     let(:recipient_ids) { ['63766', '63767'] }
 
-    required_parameters :reply_to, :subject, :html_body, :recipient_ids
+    required_parameters :reply_to, :subject, :html_body, :'recipient_ids[]'
 
     example "Send a message to Kaggle users" do
       VCR.use_cassette('kaggle_api_spec', :tag => :filter_kaggle_api_key) do
