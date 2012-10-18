@@ -29,6 +29,10 @@ describe("chorus.views.ActivityList", function() {
             expect(tornDown).toBeTruthy();
         });
 
+        it("adds ActivityViews to underviews", function() {
+            expect(this.view.underviews).toEqual(this.view.activities);
+        });
+
         describe("when there are no activity items", function() {
             context("and there is an type", function() {
                 beforeEach(function() {

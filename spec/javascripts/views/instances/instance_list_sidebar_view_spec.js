@@ -372,6 +372,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             beforeEach(function() {
                                 this.instance.accountForCurrentUser = this.instance.accountForCurrentUser.originalValue;
                                 this.instance.accountForCurrentUser().trigger("destroy");
+                                this.view.render();
                             });
 
                             it("shows the add credentials link", function() {

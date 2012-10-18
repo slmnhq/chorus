@@ -36,6 +36,9 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     setupSubviews: function() {
+        this.tabs.activity && this.tabs.activity.teardown();
+        this.tabs.configuration && this.tabs.configuration.teardown();
+
         if (this.instance) {
             this.tabs.activity = new chorus.views.ActivityList({
                 collection: this.instance.activities(),

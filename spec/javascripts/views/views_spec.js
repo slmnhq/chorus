@@ -1300,6 +1300,48 @@ describe("chorus.views.Base", function() {
                     expect(this.view.noEventsChildFunction).toHaveBeenCalled();
                 });
             });
-        })
-    })
-})
+        });
+
+        describe("#teardown", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Bare();
+                this.view.templateName = "plain_text";
+                this.view.context = function() { return { text: "Foo" }; };
+
+                $("#jasmine_content").append($(this.view.render().el));
+                expect($(this.view.el).closest("#jasmine_content")).toExist();
+
+                this.model = new chorus.models.Base();
+                this.view.requiredResources.add(this.model);
+                this.underview = stubView();
+                spyOn(this.underview, "teardown");
+                this.view.underviews.push(this.underview);
+
+                spyOn(this.view, "unbind");
+                spyOn(this.view.bindings, "removeAll");
+                expect(this.view.requiredResources.models.length).toBe(1);
+                spyOn(this.view, "teardownSubviews");
+
+                spyOn(chorus.PageEvents, "broadcast");
+
+                this.view.teardown();
+            });
+
+            it("should call cleanup functions", function() {
+                expect(this.view.unbind).toHaveBeenCalled();
+                expect(this.view.bindings.removeAll).toHaveBeenCalled();
+                expect(_.isEmpty(this.view.requiredResources.models)).toBeTruthy();
+                expect(this.view.teardownSubviews).toHaveBeenCalled();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("destroy:view", this.view);
+            });
+
+            it("should remove itself from the DOM", function() {
+                expect($(this.view.el).closest("#jasmine_content")).not.toExist();
+            });
+
+            it("should tear down underviews", function() {
+                expect(this.underview.teardown).toHaveBeenCalled();
+            });
+        });
+    });
+});
