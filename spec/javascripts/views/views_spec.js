@@ -764,25 +764,23 @@ describe("chorus.views.Base", function() {
 
             context("when no contentDetails is provided", function() {
                 beforeEach(function() {
-                    spyOn(chorus.views, "ListContentDetails")
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile" });
-                })
+                });
 
                 it("creates a ListContentDetails view", function() {
-                    expect(chorus.views.ListContentDetails).toHaveBeenCalled();
-                })
-            })
+                    expect(this.view.contentDetails).toBeA(chorus.views.ListContentDetails);
+                });
+            });
 
             context("when a custom contentDetails is provided", function() {
                 beforeEach(function() {
-                    spyOn(chorus.views, "ListContentDetails")
                     this.contentDetails = stubView();
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", contentDetails: this.contentDetails });
-                })
+                });
 
                 it("does not create a ListContentDetails view", function() {
-                    expect(chorus.views.ListContentDetails).not.toHaveBeenCalled();
-                })
+                    expect(this.view.contentDetails).not.toBeA(chorus.views.ListContentDetails);
+                });
 
                 it("uses the custom contentDetails", function() {
                     expect(this.view.contentDetails).toBe(this.contentDetails);

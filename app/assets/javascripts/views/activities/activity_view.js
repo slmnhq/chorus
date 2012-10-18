@@ -81,11 +81,5 @@ chorus.views.Activity = chorus.views.Base.extend({
     teardown: function() {
         this._super("teardown");
         chorus.PageEvents.unsubscribe(this.addCommentHandle);
-        this.unbind();
-        this.bindings.removeAll();
-        delete this.bindings.defaultContext;
-        chorus.PageEvents.broadcast("destroy:view", this);
-        this.requiredResources.cleanUp();
-        $(this.el).remove();
     }
 });

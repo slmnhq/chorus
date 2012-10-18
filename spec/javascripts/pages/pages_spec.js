@@ -13,13 +13,13 @@ describe("chorus.pages.Base", function() {
             spyOn(chorus.user, "bind");
             spyOn($.fn, "bind").andCallThrough();
             this.view = new chorus.pages.Base();
-            this.view.mainContent = Backbone.View;
+            this.view.mainContent = stubView();
         });
 
         it("binds to change on chorus.user", function() {
             expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
-        })
-    })
+        });
+    });
 
     describe("#dependOn", function() {
         context("when resource is not found", function() {
@@ -115,7 +115,7 @@ describe("chorus.pages.Base", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();
 
-            this.view.mainContent = new Backbone.View();
+            this.view.mainContent = stubView();
         })
 
         context("when the page already has a header", function() {
@@ -266,7 +266,7 @@ describe("chorus.pages.Base", function() {
 
             this.view = new chorus.pages.Base();
             chorus.page = this.view;
-            this.view.mainContent = new Backbone.View();
+            this.view.mainContent = stubView();
             chorus.bindModalLaunchingClicks(this.view);
         });
 

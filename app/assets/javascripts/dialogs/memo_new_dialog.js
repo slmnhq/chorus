@@ -16,8 +16,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
 
     setup: function() {
         this.notifications = new chorus.views.NotificationRecipient();
-        this.subviews[".notification_recipients"] = "notifications";
-        this.subviews[".recipients_menu"] = "recipients";
+        this.subviews = {
+            '.notification_recipients': 'notifications',
+            '.recipients_menu': 'recipients'
+        }
         this.config = chorus.models.Config.instance();
     },
 

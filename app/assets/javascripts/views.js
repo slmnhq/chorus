@@ -28,8 +28,16 @@ chorus.views.Bare = Backbone.View.include(
         teardown: function() {
             this.unbind();
             this.bindings.removeAll();
+            delete this.bindings.defaultContext;
             this.requiredResources.cleanUp();
             $(this.el).remove();
+            _.each(this.subviews, function(subviewName, secondArg){
+                    var subview = this[subviewName];
+                    if(subview && !subview.teardown) {debugger}
+                    subview && subview.teardown();
+                },
+            this);
+            chorus.PageEvents.broadcast("destroy:view", this);
         },
 
         bindHotkeys: function() {

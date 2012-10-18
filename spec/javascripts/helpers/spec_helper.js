@@ -412,7 +412,9 @@
             render: function() {
                 this.$(this.el).html(html)
                 return this;
-            }
+            },
+
+            teardown: $.noop
         });
 
         return new stubClass
