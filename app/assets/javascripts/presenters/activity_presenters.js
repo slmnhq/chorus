@@ -46,6 +46,10 @@
             return this.model.hasCommitMessage();
         },
 
+        isPublished: function() {
+            return this.model.isPublished();
+        },
+
         attachments: function() {
             return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
         },

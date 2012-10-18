@@ -2,7 +2,9 @@ chorus.models.InsightCount = chorus.models.Base.extend({
     constructorName: 'InsightCount',
     parameterWrapper : 'insight',
     urlTemplate: function() {
-        return this.get('noteId') ? "insights/promote" : "insights";
+        return this.get('noteId') ?
+            (this.get('action') == "publish" ? "insights/publish" :"insights/promote")
+            : "insights";
     }
 }, {
     count: function(options) {

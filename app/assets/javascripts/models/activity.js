@@ -133,7 +133,7 @@
 
         publish: function() {
             var insight = new chorus.models.InsightCount({
-                id: this.get("id"),
+                noteId: this.get("id"),
                 action: "publish"
             });
 
@@ -146,7 +146,7 @@
 
         unpublish: function() {
             var insight = new chorus.models.InsightCount({
-                id: this.get("id"),
+                noteId: this.get("id"),
                 action: "unpublish"
             });
 
@@ -223,7 +223,7 @@
         },
 
         isPublished: function() {
-            return this.get("isPublished") === true;
+            return this.get("isPublished");
         },
 
         isOwner: function() {

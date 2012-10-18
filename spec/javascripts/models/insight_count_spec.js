@@ -3,13 +3,23 @@ describe("chorus.models.InsightCount", function() {
         this.model = new chorus.models.InsightCount();
     });
 
-    context("with an id and action", function() {
+    context("with an id and action for promote", function() {
         beforeEach(function() {
-            this.model = new chorus.models.InsightCount({ id: '41', action: "promote" });
+            this.model = new chorus.models.InsightCount({ noteId: '41', action: "promote" });
         });
 
         it("has the right url", function() {
-            expect(this.model.url()).toBe("/insights");
+            expect(this.model.url()).toBe("/insights/promote");
+        });
+    });
+
+    context("with an id and action for publish", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.InsightCount({ noteId: '41', action: "publish" });
+        });
+
+        it("has the right url", function() {
+            expect(this.model.url()).toBe("/insights/publish");
         });
     });
 

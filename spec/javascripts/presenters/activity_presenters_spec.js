@@ -168,7 +168,7 @@ describe("chorus.presenters.Activity", function() {
             };
             presenter = new chorus.presenters.Activity(model, presenter_options);
         });
-        it('shows the promoting user and the promotion timesetamp', function() {
+        it('shows the promoting user and the promotion timestamp', function() {
             expect(presenter.promotionDetails().toString()).toContainTranslation(
                 "insight.promoted_by", {
                     relativeTimestamp: model.promotionTimestamp(),
@@ -176,6 +176,42 @@ describe("chorus.presenters.Activity", function() {
                 }
             );
         });
+    });
+
+    describe("#isPublished", function() {
+
+        context(" when insight is published", function () {
+            beforeEach(function () {
+                model = rspecFixtures.activity.insightOnGreenplumInstance({
+                    isPublished:true
+                });
+                presenter_options = {
+
+                };
+                presenter = new chorus.presenters.Activity(model, presenter_options);
+            });
+
+            it('when isPublished is true', function () {
+                expect(presenter.isPublished()).toBeTruthy();
+
+            });
+        });
+
+        context(" when insight is Not published", function () {
+            beforeEach(function () {
+                model = rspecFixtures.activity.insightOnGreenplumInstance({
+                    isPublished:false
+                });
+                presenter_options = {
+                };
+                presenter = new chorus.presenters.Activity(model, presenter_options);
+            })
+
+            it('when isPublished is false', function () {
+                expect(presenter.isPublished()).toBeFalsy();
+
+            });
+        })
     });
 
     context("greenplum instance created", function() {

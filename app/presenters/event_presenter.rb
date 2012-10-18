@@ -33,7 +33,8 @@ class EventPresenter < Presenter
     {
         :is_insight =>  model.insight?,
         :promoted_by => model.insight? ? present(model.promoted_by) : nil,
-        :promotion_time => model.insight? ? model.promotion_time : nil
+        :promotion_time => model.insight? ? model.promotion_time : nil,
+        :is_published => model.published?
     }
   end
 

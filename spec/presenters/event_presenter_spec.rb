@@ -208,6 +208,18 @@ describe EventPresenter, :type => :view do
         hash[:is_insight].should be_true
         hash[:promoted_by].should == Presenter.present(user, view)
         hash[:promotion_time].should == event.promotion_time
+        hash[:is_published].should == false
+      end
+
+      context "insights that are published" do
+        before do
+          event.published = true
+        end
+
+        it "should be published" do
+          hash = subject.to_hash
+          hash[:is_published].should == true
+        end
       end
     end
   end
