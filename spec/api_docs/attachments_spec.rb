@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Attachments" do
+resource "Notes" do
   let(:user) { users(:the_collaborator) }
 
   before do

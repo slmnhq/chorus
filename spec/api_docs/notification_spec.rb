@@ -8,7 +8,7 @@ resource "Notifications" do
   end
 
   get "/notifications" do
-    example_request "Returns a list of notifications" do
+    example_request "Return a list of notifications for the current user" do
       status.should == 200
     end
   end
@@ -20,7 +20,7 @@ resource "Notifications" do
 
     required_parameters :'notification_ids[]'
 
-    example_request "Marks notifications as read" do
+    example_request "Mark the specified notifications as read" do
       status.should == 200
     end
   end

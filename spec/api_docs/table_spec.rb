@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum Table" do
+resource "Greenplum DB: datasets" do
   let(:owner) { users(:owner) }
   let(:gpdb_table) { datasets(:table) }
   let(:table_id) { gpdb_table.to_param }

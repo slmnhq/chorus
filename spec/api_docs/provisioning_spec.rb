@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Provisioning" do
+resource "Greenplum DB: instances" do
   let(:user) { users(:admin) }
 
   before do
@@ -8,7 +8,7 @@ resource "Provisioning" do
   end
 
   get "/provisioning" do
-    example_request "Returns provisioning options json" do
+    example_request "Returns options for provisioning a Greenplum instance" do
       status.should == 200
     end
   end

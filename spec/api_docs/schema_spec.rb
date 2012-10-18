@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB schemas" do
+resource "Greenplum DB: schemas" do
   let(:owner) { owned_instance.owner }
   let!(:owned_instance) { gpdb_instances(:owners) }
   let!(:database) { gpdb_databases(:default) }
@@ -49,7 +49,7 @@ resource "Greenplum DB schemas" do
   end
 
   get "/schemas/:schema_id/functions" do
-    example_request "List of functions on a schema" do
+    example_request "List the functions in a schema" do
       status.should == 200
     end
   end

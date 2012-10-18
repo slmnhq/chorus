@@ -73,7 +73,7 @@ resource "Users" do
     let(:notes) { "great1" }
     let(:admin) { "true" }
 
-    example_request "Update a user" do
+    example_request "Update a user's details" do
       status.should == 200
     end
   end
@@ -117,7 +117,7 @@ resource "Users" do
 
     parameter :style, "Size of image ( original, icon )"
 
-    example_request "Show user's profile image" do
+    example_request "Get a user's profile image" do
       status.should == 200
     end
   end

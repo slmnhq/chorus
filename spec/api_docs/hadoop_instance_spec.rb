@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Hadoop DB instances" do
+resource "Hadoop" do
   let(:owner) { instance.owner }
   let!(:instance) { hadoop_instances(:hadoop) }
   let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.now.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
@@ -37,7 +37,7 @@ resource "Hadoop DB instances" do
 
     required_parameters :name, :host, :port, :username, :group_list
 
-    example_request "Register a Hadoop database" do
+    example_request "Register a Hadoop instance" do
       status.should == 201
     end
   end
@@ -66,7 +66,7 @@ resource "Hadoop DB instances" do
   end
 
   get "/hadoop_instances" do
-    example_request "Get a list of registered Hadoop databases" do
+    example_request "Get a list of registered Hadoop instances" do
       status.should == 200
     end
   end
@@ -74,7 +74,7 @@ resource "Hadoop DB instances" do
   get "/hadoop_instances/:id" do
     let(:id) { instance.to_param }
 
-    example_request "Show instance details"  do
+    example_request "Get instance details"  do
       status.should == 200
     end
   end

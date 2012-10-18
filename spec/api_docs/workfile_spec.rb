@@ -17,7 +17,7 @@ resource "Workfiles" do
   get "/workfiles/:id" do
     let(:id) { workfile.to_param }
 
-    example_request "Show workfile details" do
+    example_request "Get workfile details" do
       status.should == 200
     end
   end
@@ -33,7 +33,7 @@ resource "Workfiles" do
 
     let(:workspace_id) { workspace.to_param }
 
-    example_request "Downloads the file content" do
+    example_request "Download the current version of the file" do
       status.should == 200
     end
   end
@@ -68,7 +68,7 @@ resource "Workfiles" do
   get "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
 
-    example_request "Lists workfiles on a workspace" do
+    example_request "Get a list of workfiles in a workspace" do
       status.should == 200
     end
   end
@@ -86,7 +86,7 @@ resource "Workfiles" do
     let(:description) { "Get off my lawn, you darn kids!" }
     let(:file_name) { workfile.file_name }
 
-    example_request "Create a workfile on a workspace" do
+    example_request "Create a new workfile in a workspace" do
       status.should == 200
     end
   end
@@ -108,7 +108,7 @@ resource "Workfiles" do
       end
     end
 
-    example_request "Executes a workfile" do
+    example_request "Execute a workfile" do
       status.should == 200
     end
   end
@@ -123,7 +123,7 @@ resource "Workfiles" do
     let(:id) { 0 }
     let(:schema_id) { gpdb_schemas(:default).id }
 
-    example_request "Cancels execution of a workfile" do
+    example_request "Cancel execution of a workfile" do
       status.should == 200
     end
   end

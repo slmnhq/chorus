@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB account for current user" do
+resource "Greenplum DB: accounts" do
   let(:owner) { users(:owner) }
   let(:non_owner) { users(:no_collaborators) }
   let(:member) { users(:the_collaborator) }

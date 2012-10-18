@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Workfile drafts" do
+resource "Workfiles: drafts" do
   let(:owner) { workspace.owner }
   let!(:workspace) { workfile.workspace }
   let!(:workfile) { workfiles("sql.sql") }
@@ -21,7 +21,7 @@ resource "Workfile drafts" do
 
     required_parameters :workfile_id
 
-    example_request "Show workfile draft" do
+    example_request "Get the current user's draft of a workfile" do
       status.should == 200
     end
   end
@@ -37,7 +37,7 @@ resource "Workfile drafts" do
 
     required_parameters :workfile_id, :content
 
-    example_request "Updates the workfile draft" do
+    example_request "Update the current user's draft of a workfile" do
       status.should == 200
       response_body.should include(content)
     end
@@ -51,7 +51,7 @@ resource "Workfile drafts" do
 
     required_parameters :workfile_id, :content
 
-    example_request "Creates the draft for a workfile" do
+    example_request "Create a draft of a workfile for the current user" do
       status.should == 201
       response_body.should include(content)
     end
@@ -66,7 +66,7 @@ resource "Workfile drafts" do
 
     required_parameters :workfile_id
 
-    example_request "Delete workfile draft" do
+    example_request "Delete the current users's draft of a workfile" do
       status.should == 200
     end
   end

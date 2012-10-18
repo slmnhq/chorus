@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB instances" do
+resource "Greenplum DB: instances" do
   let(:owner) { users(:owner) }
   let(:owned_instance) { gpdb_instances(:owners) }
 
@@ -30,7 +30,7 @@ resource "Greenplum DB instances" do
 
     required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password
 
-    example_request "Register a Greenplum database" do
+    example_request "Register a Greenplum instance" do
       status.should == 201
     end
   end
@@ -39,7 +39,7 @@ resource "Greenplum DB instances" do
     parameter :accessible, "1 to limit the list to instances the current user can access, 0 for all instances"
     let(:accessible) { "1" }
 
-    example_request "Get a list of Greenplum instances" do
+    example_request "Get a list of registered Greenplum instances" do
       status.should == 200
     end
   end
@@ -47,7 +47,7 @@ resource "Greenplum DB instances" do
   get "/gpdb_instances/:id" do
     let(:id) { owned_instance.to_param }
 
-    example_request "Get the specific Instance" do
+    example_request "Get the specific registered Greenplum instance" do
       status.should == 200
     end
   end
@@ -82,7 +82,7 @@ resource "Greenplum DB instances" do
   get "/gpdb_instances/:gpdb_instance_id/workspace_detail" do
     let(:gpdb_instance_id) { owned_instance.to_param }
 
-    example_request "Get details for workspaces having sandboxes within an instance" do
+    example_request "Get details for workspaces with sandboxes on this instance" do
       status.should == 200
     end
   end

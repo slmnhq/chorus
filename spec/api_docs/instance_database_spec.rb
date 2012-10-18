@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB instances" do
+resource "Greenplum DB: instances" do
   let(:owner) { users(:owner) }
   let(:gpdb_instance) { gpdb_instances(:owners) }
   let!(:database) { gpdb_databases(:default) }

@@ -30,7 +30,7 @@ resource "Sessions" do
       log_in user
     end
 
-    example_request "Check the session for validity" do
+    example_request "Check if the current user is still logged in" do
       status.should == 200
     end
   end

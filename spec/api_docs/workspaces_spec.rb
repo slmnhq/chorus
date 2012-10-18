@@ -6,21 +6,17 @@ resource "Workspaces" do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:greenplum_instance) { database.gpdb_instance}
   let(:instance_id) { greenplum_instance.id }
   let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
   let(:sandbox_id) { sandbox.id }
-  let(:instance_account) { greenplum_instance.account_for_user!(user) }
   let(:dataset) { datasets(:table) }
   let(:dataset_id) { dataset.to_param }
-  let(:associated_dataset) { AssociatedDataset.find_by_dataset_id_and_workspace_id(dataset_id, workspace_id) }
 
   before do
     log_in user
-    stub(File).readlines.with_any_args { ["The river was there."] }
     stub(Dataset).refresh.with_any_args { |account, schema, options| schema.datasets }
   end
 
@@ -34,7 +30,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:id" do
-    example_request "Show workspace details" do
+    example_request "Get details for a workspace" do
       status.should == 200
     end
   end
@@ -141,122 +137,7 @@ resource "Workspaces" do
   get "/workspaces/:workspace_id/datasets/:id" do
     let(:id) { dataset_id }
 
-    example_request "Show details for a dataset" do
-      status.should == 200
-    end
-  end
-
-  get "/workspaces/:workspace_id/datasets" do
-    example_request "List datasets associated with a workspace" do
-      status.should == 200
-    end
-  end
-
-  post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-
-    parameter :dataset_id, "Id of the source dataset"
-    parameter :to_table, "Table name of the destination table"
-    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
-    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :is_active, "True/false: if true, import schedule is active"
-    parameter :import_type, "not yet implemented (currently oneTime)"
-    parameter :sample_count, "Maximum number of rows to import"
-
-    required_parameters :dataset_id, :to_table, :new_table
-
-
-    let(:to_table) { "fancyTable" }
-    let(:truncate) { "false" }
-    let(:new_table) { "true" }
-    let(:is_active) { "false" }
-    let(:import_type) { "oneTime" }
-    let(:sample_count) { "500" }
-    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
-
-    before do
-      any_instance_of(Dataset) do |dataset|
-        stub(dataset).verify_in_source
-        stub(dataset).add_metadata!.with_any_args { statistics }
-        stub(dataset).statistics.with_any_args { statistics }
-      end
-    end
-
-    example_request "Import an existing dataset into a workspace, or create an import for a dataset" do
-      status.should == 201
-    end
-  end
-
-  put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-
-    parameter :dataset_id, "Id of the source dataset"
-    parameter :id, "id of the import schedule"
-    parameter :to_table, "Table name of the destination table"
-    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
-    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :is_active, "True/false: if true , the schedule is active"
-    parameter :import_type, "not yet implemented (currently oneTime)"
-    parameter :sample_count, "Maximum number of rows to import"
-
-    required_parameters :dataset_id, :to_table, :new_table
-
-
-    let(:to_table) { "fancyTable" }
-    let(:truncate) { "false" }
-    let(:new_table) { "true" }
-    let(:is_active) { "true" }
-    let(:import_type) { "oneTime" }
-    let(:sample_count) { "500" }
-    let(:id) { import_schedules(:default).id }
-    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
-
-    before do
-      any_instance_of(Dataset) do |dataset|
-        stub(dataset).verify_in_source
-        stub(dataset).add_metadata!.with_any_args { statistics }
-        stub(dataset).statistics.with_any_args { statistics }
-      end
-    end
-
-    example_request "Update an import for a dataset" do
-      status.should == 200
-    end
-  end
-
-  get "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-    let!(:dataset_id) { dataset.to_param }
-
-    parameter :workspace_id, "Id of the workspace that the dataset belongs to"
-    parameter :dataset_id, "Id of the dataset"
-
-    before do
-        ImportSchedule.create!(
-          :start_datetime => '2012-09-04 23:00:00-07',
-          :end_date => '2012-12-04',
-          :frequency => 'weekly',
-          :workspace_id => workspace_id,
-          :to_table => "new_table_for_import",
-          :source_dataset_id => dataset_id,
-          :truncate => 't',
-          :new_table => 't',
-          :user_id => user.id)
-
-    end
-
-    example_request "Show import schedule for a dataset" do
-      status.should == 200
-    end
-  end
-
-  delete "/workspaces/:workspace_id/datasets/:dataset_id/import" do
-
-    parameter :workspace_id, "Id of the workspace that the dataset belongs to"
-    parameter :dataset_id, "Id of the dataset"
-    parameter :id, "id of the import schedule"
-
-    required_parameters :dataset_id , :id , :workspace_id
-    let(:id) { import_schedules(:default).id }
-
-    example_request "Delete import schedule for a dataset" do
+    example_request "Get details for a dataset" do
       status.should == 200
     end
   end
@@ -293,69 +174,11 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:workspace_id/datasets" do
-    parameter :workspace_id, "ID of the workspace with which to associate the datasets"
-    parameter :dataset_ids, "Comma-delimited list of dataset IDs to associate with the workspace"
-
-    before do
-      workspace.sandbox = gpdb_schemas(:searchquery_schema)
-      workspace.save
-    end
-
-    let(:view) { datasets(:view) }
-    let(:table) { datasets(:table) }
-    let(:dataset_ids) { view.to_param + "," + table.to_param }
-
-    example_request "Associate the specified datasets with the workspace" do
-      status.should == 201
-    end
-  end
-
-  post "/workspaces/:workspace_id/csv" do
-    parameter :workspace_id, "ID of the workspace"
-    parameter :file_name, "Name of the csv file to be imported"
-    parameter :contents, "The csv file being imported"
-
-    required_parameters :workspace_id, :file_name, :contents
-    scope_parameters :csv, [:contents]
-
-    let(:file_name) { "test.csv"}
-    let(:contents) { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
-
-    example_request "Upload a CSV file for import" do
-      status.should == 200
-    end
-  end
-
-  post "/workspaces/:workspace_id/csv/:csv_id/imports" do
-    parameter :workspace_id, "Workspace Id"
-    parameter :csv_id, "CSV File Id"
-    parameter :type, "Table type ( existingTable, newTable )"
-    parameter :columns_map, "Mapping of columns from CSV to table ( only for existing table )"
-    parameter :to_table, "Target table name"
-    parameter :file_contains_header, "Does the CSV file contain a header row? ( true, false )"
-
-    required_parameters :workspace_id, :csv_id, :type, :to_table, :file_contains_header
-    scope_parameters :csvimport, [:type, :columns_map, :to_table, :file_contains_header]
-
-    let(:csv_file) { csv_files(:default) }
-
-    let(:csv_id)       { csv_file.id }
-    let(:type)         { "existingTable" }
-    let(:to_table)     { "a_fine_table" }
-    let(:file_contains_header) { "true" }
-    let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
-
-    example_request "Complete import of a CSV file" do
-      status.should == 200
-    end
-  end
-
   get "/workspaces/:workspace_id/image" do
     let(:workspace) { workspaces(:image) }
     parameter :style, "Size of image ( original, icon )"
 
-    example_request "Show workspace image" do
+    example_request "Get the workspace image" do
       status.should == 200
     end
   end

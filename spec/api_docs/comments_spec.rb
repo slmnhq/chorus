@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Comments" do
+resource "Activities" do
   let(:author) { users(:admin) }
   let(:event) { events(:note_on_no_collaborators_private) }
   let(:comment) { comments(:comment_on_note_on_no_collaborators_private) }
@@ -18,7 +18,7 @@ resource "Comments" do
     let(:text) { "cookiemonster" }
     let(:event_id) { event.id }
 
-    example_request "Create a comment" do
+    example_request "Create a comment on an activity" do
       status.should == 201
     end
   end

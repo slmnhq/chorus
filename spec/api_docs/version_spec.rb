@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Version" do
+resource "Config" do
   let(:user) { users(:admin) }
 
   before do

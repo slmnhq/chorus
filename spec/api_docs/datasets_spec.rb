@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum Tables / Views" do
+resource "Greenplum DB: datasets" do
   let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 
@@ -34,7 +34,7 @@ resource "Greenplum Tables / Views" do
 
   get "/datasets/:id" do
     let(:id) { dataset.id }
-    example_request "Display a dataset" do
+    example_request "Get a dataset" do
       status.should == 200
     end
   end
@@ -46,7 +46,7 @@ resource "Greenplum Tables / Views" do
 
     let(:check_id) { '42' }
 
-    example_request "Preview 100 rows" do
+    example_request "Preview 100 rows from a dataset" do
       status.should == 201
     end
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Tableau Workbooks" do
+resource "Tableau" do
   let(:dataset) { datasets(:chorus_view) }
   let(:workspace) { workspaces(:public) }
   let(:user) { dataset.gpdb_instance.owner }

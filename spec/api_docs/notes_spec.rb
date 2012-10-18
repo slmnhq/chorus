@@ -61,7 +61,7 @@ resource "Notes" do
 
     let(:id) { note.id }
 
-    example_request "Deletes a note" do
+    example_request "Delete a note" do
       status.should == 200
     end
   end
@@ -75,7 +75,7 @@ resource "Notes" do
     let(:note_id) { note.id }
     let(:contents) { test_file("small1.gif") }
 
-    example_request "Attaches the contents of a file to a note" do
+    example_request "Attach the contents of a file to a note" do
       status.should == 200
     end
   end
@@ -89,7 +89,7 @@ resource "Notes" do
     let(:note_id) { note.id }
     let(:svg_data) { test_file("SVG-logo.svg").read }
 
-    example_request "Attaches a visualization to a note" do
+    example_request "Attach a visualization to a note" do
       status.should == 200
     end
   end
@@ -103,7 +103,7 @@ resource "Notes" do
     let(:note_id) { note.id }
     let(:id) { attachment.id }
 
-    example_request "Shows the contents of an attachment" do
+    example_request "Get the contents of an attachment" do
       status.should == 200
     end
   end

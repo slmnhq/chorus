@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Insights" do
+resource "Notes" do
   let(:user) { users(:owner) }
   let(:note) { Events::NoteOnGreenplumInstance.last }
   let(:note_on_workspace) { Events::NoteOnWorkspace.first }
@@ -16,7 +16,7 @@ resource "Insights" do
 
     let(:note_id) { note.id }
 
-    example_request "promote the note to insight" do
+    example_request "Promote the note to insight" do
       status.should == 201
     end
   end
@@ -54,20 +54,19 @@ resource "Insights" do
     let(:entity_type) {"workspace"}
     let(:entity_id) {1}
 
-    example_request "get the list of insights" do
+    example_request "Get the list of notes that are insights" do
       status.should == 200
     end
   end
 
   get "/insights/count" do
-
     parameter :entity_id, "Entity Id for filtering insights"
     parameter :entity_type, "Entity_type (dashboard or workspace)"
 
     required_parameters :entity_type
 
     let(:entity_type) {"dashboard"}
-    example_request "get the number of insights" do
+    example_request "Get the number of notes that are insights" do
       status.should == 200
     end
   end

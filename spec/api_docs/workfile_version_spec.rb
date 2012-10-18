@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Workfile versions" do
+resource "Workfiles: versions" do
   let(:owner) { users(:owner) }
   let!(:workspace) { workspaces(:public) }
   let!(:workfile) { workfiles(:public)}
@@ -23,7 +23,7 @@ resource "Workfile versions" do
 
     required_parameters :workfile_id
 
-    example_request "Show all workfile versions" do
+    example_request "Get a list of all versions of a workfile" do
       status.should == 200
     end
   end
@@ -37,7 +37,7 @@ resource "Workfile versions" do
 
     required_parameters :workfile_id, :id
 
-    example_request "Show the specified workfile version" do
+    example_request "Get the specified version of a workfile" do
       status.should == 200
     end
   end
@@ -57,7 +57,7 @@ resource "Workfile versions" do
     let(:modifier_id) { owner.to_param }
     let(:content) { workfile_version.contents }
 
-    example_request "Update workfile version" do
+    example_request "Update a version of a workfile" do
       status.should == 200
     end
   end
@@ -75,7 +75,7 @@ resource "Workfile versions" do
     let(:modifier_id) { owner.to_param }
     let(:content) { workfile_version.contents }
 
-    example_request "Create a workfile version" do
+    example_request "Create a new version of a workfile" do
       status.should == 200
     end
   end
@@ -87,7 +87,7 @@ resource "Workfile versions" do
     let!(:workfile_version_id) { workfile_version.to_param }
     let!(:file) { test_file("small1.gif", "image/gif") }
 
-    example_request "Show a workfile version image" do
+    example_request "Get the image for a version of a workfile" do
       status.should == 200
     end
   end
@@ -97,7 +97,7 @@ resource "Workfile versions" do
     let!(:id) { another_version.to_param }
 
 
-    example_request "Delete workfile version" do
+    example_request "Delete a version of a workfile" do
       status.should == 200
     end
   end

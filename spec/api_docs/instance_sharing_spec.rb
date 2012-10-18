@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB account sharing" do
+resource "Greenplum DB: instances" do
   let(:owner) {gpdb_instance.owner }
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
@@ -11,7 +11,7 @@ resource "Greenplum DB account sharing" do
   post "/gpdb_instances/:gpdb_instance_id/sharing" do
     let!(:gpdb_instance) { gpdb_instances(:owners) }
 
-    example_request "Make instance shared" do
+    example_request "Allow individual user's to share the instance owner's account" do
       status.should == 201
     end
   end
@@ -19,7 +19,7 @@ resource "Greenplum DB account sharing" do
   delete "/gpdb_instances/:gpdb_instance_id/sharing" do
     let!(:gpdb_instance) {gpdb_instances(:shared) }
 
-    example_request "Require individual accounts" do
+    example_request "Require individual accounts to access the instance" do
       status.should == 200
     end
   end

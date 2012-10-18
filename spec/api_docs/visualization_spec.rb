@@ -39,7 +39,7 @@ resource "Visualizations" do
         { :count => 1, :bucket => 'apple' }
     ]}
 
-    example_request "Create new frequency visualization" do
+    example_request "Create a new frequency visualization" do
       status.should == 200
     end
   end
@@ -83,7 +83,7 @@ resource "Visualizations" do
         {:x =>3, :y =>3, :value =>2, :xLabel =>[4.67, 6.0], :yLabel =>[4.67, 6.0]}
     ]}
 
-    example_request "Create new heatmap visualization" do
+    example_request "Create a new heatmap visualization" do
       status.should == 200
     end
   end
@@ -114,7 +114,7 @@ resource "Visualizations" do
         {:bin => [0.5, 1.0], :frequency => 6}
     ]}
 
-    example_request "Create new histogram visualization" do
+    example_request "Create a new histogram visualization" do
       status.should == 200
     end
   end
@@ -151,7 +151,7 @@ resource "Visualizations" do
         {:value => 1, :time => "2012-05"}
     ]}
 
-    example_request "Create new time series visualization" do
+    example_request "Create a new time series visualization" do
       status.should == 200
     end
   end
@@ -185,7 +185,7 @@ resource "Visualizations" do
         {:bucket => "orange", :min => 2.0, :median => 3.0, :max => 4.0, :first_quartile => 2.5, :third_quartile => 3.5, :percentage => "42.86%", :count => 3}
     ]}
 
-    example_request "Create new boxplot visualization" do
+    example_request "Create a new boxplot visualization" do
       status.should == 200
     end
   end

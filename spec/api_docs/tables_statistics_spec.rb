@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum Table statistics" do
+resource "Greenplum DB: datasets" do
   let(:owner) { gpdb_table.schema.gpdb_instance.owner }
   let(:gpdb_table) { datasets(:table) }
   let(:table_id) { gpdb_table.to_param }
@@ -30,7 +30,7 @@ resource "Greenplum Table statistics" do
     parameter :table_id, "Table ID"
     required_parameters :table_id
 
-    example_request "Retrieve database statistics" do
+    example_request "Retrieve table statistics" do
       status.should == 200
     end
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB ownership" do
+resource "Greenplum DB: instances" do
   let(:owner) { owned_instance.owner }
   let(:owned_instance) { gpdb_instances(:shared)}
   let(:new_owner) { users(:no_collaborators) }

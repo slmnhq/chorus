@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB members" do
+resource "Greenplum DB: instance members" do
   let(:owner) { users(:owner) }
   let(:non_member) { users(:no_collaborators) }
   let!(:member_account) { gpdb_instance.account_for_user(member) }
@@ -15,7 +15,7 @@ resource "Greenplum DB members" do
   end
 
   get "/gpdb_instances/:gpdb_instance_id/members" do
-    example_request "List members with access to DB" do
+    example_request "List members with access to instance" do
       explanation <<-DESC
         For a Greenplum instance owner to manage which users can access their
         instances.  When the instance is shared this list will only
@@ -39,7 +39,7 @@ resource "Greenplum DB members" do
 
     required_parameters :owner_id, :db_username, :db_password
 
-    example_request "Add member" do
+    example_request "Add account for member" do
       status.should == 201
     end
   end
@@ -55,7 +55,7 @@ resource "Greenplum DB members" do
 
     required_parameters :db_username, :db_password
 
-    example_request "Update member" do
+    example_request "Update member's account" do
       status.should == 200
     end
   end
@@ -65,7 +65,7 @@ resource "Greenplum DB members" do
 
     let(:id) { member_account.to_param }
 
-    example_request "Remove member" do
+    example_request "Remove member's account" do
       status.should == 200
     end
   end
