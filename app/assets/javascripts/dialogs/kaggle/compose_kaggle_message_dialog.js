@@ -15,10 +15,9 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.$(".more-info").qtip({
             content: "<h1>" + t('kaggle.compose.tooltip.title') + "</h1>\
                 <dl>\
-                    <dt>" + t('kaggle.compose.tooltip.callToAction.title') + "</dt><dd>" + t('kaggle.compose.tooltip.callToAction.description') + "</dd> \
-                    <dt>" + t('kaggle.compose.tooltip.bePositive.title') + "</dt><dd>" + t('kaggle.compose.tooltip.bePositive.description') + "</dd>\
-                    <dt>" + t('kaggle.compose.tooltip.support.title') + "</dt><dd>" + t('kaggle.compose.tooltip.support.description') + "</dd>\
-                    <dt>" + t('kaggle.compose.tooltip.characterCount.title') + "</dt><dd>" + t('kaggle.compose.tooltip.characterCount.description') + "</dd>\
+                    <dt>" + t('kaggle.compose.tooltip.section_1.title') + "</dt><dd>" + t('kaggle.compose.tooltip.section_1.description') + "</dd> \
+                    <dt>" + t('kaggle.compose.tooltip.section_2.title') + "</dt><dd>" + t('kaggle.compose.tooltip.section_2.description') + "</dd>\
+                    <dt>" + t('kaggle.compose.tooltip.section_3.title') + "</dt><dd>" + t('kaggle.compose.tooltip.section_3.description') + "</dd>\
                  </dl>",
             style: {
                 classes: "tooltip-tips tooltip-modal",

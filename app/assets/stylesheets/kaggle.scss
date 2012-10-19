@@ -4,7 +4,6 @@
 .kaggle_header {
     .summary {
         @include font-normal-delta;
-        width: 75%;
         margin-bottom: 10px;
     }
 
@@ -26,8 +25,19 @@
       }
 
       .search_kaggle_user {
-        float: right;
-        margin-right: 10px;
+          margin-left: 20px;
+          /* need to override the content-details style*/
+          @include border-radius(0px);
+          border: 1px solid $border-color;
+          background: white;
+          color: $link-color;
+          display: inline-block;
+          float: none;
+          &.is_loading {
+              color: $color-text4;
+          }
+          font-size: 16px;
+          font-weight: normal;
       }
     }
 
@@ -38,9 +48,8 @@
     img.profile {
         display: block;
         float: left;
-        margin-top: 12px;
-        width: $icon-image-width;
-        height: $icon-image-height;
+        width: 64px;
+        height: 64px;
     }
 
     .kaggle_rank {
@@ -61,7 +70,7 @@
 .kaggle_user_list {
   .kaggle_filter {
     .comparator {
-      width: 240px;
+      width: 215px;
     }
   }
 }

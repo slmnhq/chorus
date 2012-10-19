@@ -14,7 +14,8 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            title: t(this.title)
+            title: t(this.title),
+            extraContent: this.extraContent()
         }
     },
 
@@ -74,5 +75,9 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
 
     filterCount: function() {
         return this.collection.count();
+    },
+
+    extraContent: function () {
+        return '';
     }
 });

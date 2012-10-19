@@ -173,7 +173,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
         it('shows a tooltip with Kaggle tips', function () {
             this.dialog.$(".more-info").mouseenter();
-            expect(this.qtip.find('div')).toContainText("Call to Action");
+            expect(this.qtip.find('div')).toContainText("Tips for proposing a project");
         });
     });
 

@@ -4,8 +4,9 @@ chorus.views.KaggleHeader = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            summary: t("kaggle.summary"),
-            listed_below: t("kaggle.listed_below")
+            summary:  new Handlebars.SafeString(t("kaggle.summary", {kaggleLink: chorus.helpers.linkTo('https://www.kaggle.com', 'Kaggle')})),
+            listed_below: new Handlebars.SafeString(t("kaggle.listed_below", {termsOfUseLink: chorus.helpers.linkTo('https://www.kaggle.com/connect/terms', 'terms of use'),
+                agreementsLink: chorus.helpers.linkTo('https://www.kaggle.com/connect/agreements', 'here')}))
         }
     }
 });

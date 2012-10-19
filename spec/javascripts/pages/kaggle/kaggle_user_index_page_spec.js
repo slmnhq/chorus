@@ -45,7 +45,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         it("shows the kaggle header", function() {
-           expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary")
+           expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary", {kaggleLink: 'Kaggle'});
         });
     });
 

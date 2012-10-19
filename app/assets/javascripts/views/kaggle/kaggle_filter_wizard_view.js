@@ -15,5 +15,8 @@ chorus.views.KaggleFilterWizard = chorus.views.FilterWizard.extend({
 
     filterCollection: function() {
         return new chorus.collections.KaggleFilterSet();
+    },
+    extraContent: function() {
+        return new Handlebars.SafeString(Handlebars.compile('<button class="search_kaggle_user" type="button">{{t "kaggle.search.users"}}</button>')());
     }
 });
