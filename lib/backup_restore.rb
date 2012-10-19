@@ -126,8 +126,8 @@ module BackupRestore
     end
 
     def package_backup
-      %w{version_build config/chorus.yml}.each do |file|
-        FileUtils.cp Rails.root.join(file), "."
+      %w{version_build config/chorus.yml}.map {|f|Rails.root.join f}.each do |file|
+        FileUtils.cp file, "." if File.exists?(file)
       end
 
       timestamp = Time.current.strftime '%Y%m%d_%H%M%S'
@@ -162,7 +162,7 @@ module BackupRestore
 
             compare_versions(backup_version, current_version)
 
-            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml")
+            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml") if File.exists?("chorus.yml")
             self.chorus_config = ChorusConfig.new
 
             restore_assets

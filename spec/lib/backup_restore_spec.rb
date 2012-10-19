@@ -25,8 +25,8 @@ describe 'BackupRestore' do
           end
         end
 
-        FakeFS::FileSystem.clone "#{Rails.root}/config"
-        touch "#{Rails.root}/version_build"
+        FakeFS::FileSystem.clone Rails.root.join("config")
+        touch Rails.root.join("version_build")
         FileUtils.mkdir_p File.expand_path(backup_path)
       end
 
@@ -58,6 +58,13 @@ describe 'BackupRestore' do
         new_files_created_by do
           run_backup
         end.should == [@expected_backup_file]
+      end
+
+      it "works even if chorus.yml does not exist" do
+        FileUtils.rm Rails.root.join("config/chorus.yml")
+        expect {
+          run_backup
+        }.to_not raise_error
       end
 
       context "when a system command fails" do
@@ -145,38 +152,57 @@ describe 'BackupRestore' do
     end
 
     describe ".restore" do
-      let(:chorus_path) { @tmp_path.join "chorus" }
+      let(:restore_path) { @tmp_path.join "restore" }
       let(:backup_path) { @tmp_path.join "backup" }
       let(:current_version_string) {"0.2.0.0-1d012455"}
       let(:backup_version_string) { current_version_string }
       let(:backup_tar) { backup_path.join "backup.tar" }
+      let(:no_chorus_yml) { false }
 
       around do |example|
         make_tmp_path("rspec_backup_restore") do |tmp_path|
           @tmp_path = tmp_path
 
-          Dir.mkdir chorus_path and Dir.chdir chorus_path do
+          # create a directory to restore to
+          Dir.mkdir restore_path and Dir.chdir restore_path do
             create_version_build(current_version_string)
+            FileUtils.cp_r Rails.root.join("config"), "."
+            FileUtils.rm "config/chorus.yml" if File.exists?("chorus/chorus.yml")
           end
 
+          # create a fake backup in another directory
           Dir.mkdir backup_path and Dir.chdir backup_path do
             create_version_build(backup_version_string)
             system "echo database | gzip > database.sql.gz"
+            touch "chorus.yml" unless no_chorus_yml
             system "tar cf #{backup_tar} version_build database.sql.gz"
           end
 
-          Dir.chdir chorus_path do
+          Dir.chdir restore_path do
             example.call
           end
         end
       end
 
-      xit "restores the backed-up data" do
+      before do
+        # can't put this in around for some unknown reason
+        stub(Rails).root { restore_path }
+      end
+
+      it "restores the backed-up data" do
         BackupRestore.restore backup_tar, true
       end
 
-      xit "works with relative paths" do
+      it "works with relative paths" do
         BackupRestore.restore "../backup/backup.tar", true
+      end
+
+      context "when chorus.yml does not exist" do
+        let(:no_chorus_yml) { true }
+
+        it "works without chorus.yml" do
+          BackupRestore.restore "../backup/backup.tar", true
+        end
       end
 
       context "when the backup file does not exist" do
@@ -191,28 +217,16 @@ describe 'BackupRestore' do
 
       context "when the restore is not run in rails root directory" do
         before do
-          sub_dir = chorus_path.join 'sub_dir'
+          sub_dir = restore_path.join 'sub_dir'
           FileUtils.mkdir_p sub_dir
           Dir.chdir sub_dir
         end
-
-        #it "still unpacks files in the root directory and returns to the starting directory" do
-        #  mock(BackupRestore).system.with_any_args do |*args|
-        #    current_directory_should_be(chorus_dir)
-        #    Kernel.send :system, *args
-        #    true
-        #  end
-        #  stub(Rails).root { Pathname.new chorus_dir }
-        #  expect {
-        #    BackupRestore.restore backup_tar
-        #  }.not_to change(Dir, :pwd)
-        #end
       end
 
       context "when the backup version doesn't match the current version" do
         let(:backup_version_string) { current_version_string + " not!" }
 
-        xit "raises an exception" do
+        it "raises an exception" do
           expect {
             BackupRestore.restore backup_tar, true
           }.to raise_error(/differs from installed chorus version/)
