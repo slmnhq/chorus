@@ -65,7 +65,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
         chorus.styleSelect(this.$("select"));
 
-        var $availableUser = this.$(".ui-selectmenu.users");
+        var $availableUser = this.$(".ui-selectmenu-button");
         this.collection.length == 0 ? $availableUser.addClass("hidden") : $availableUser.removeClass("hidden");
     },
 

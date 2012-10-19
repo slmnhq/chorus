@@ -131,7 +131,7 @@ describe("chorus.views.NotificationRecipient", function() {
                         });
 
                         it("hides the select control", function() {
-                            expect(this.view.$(".ui-selectmenu.users")).toHaveClass("hidden")
+                            expect(this.view.$(".ui-selectmenu-button")).toHaveClass("hidden");
                         });
 
                         context("removing a user", function() {

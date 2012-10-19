@@ -46,7 +46,7 @@ window.Chorus = function chorus$Global() {
         $(window).resize(_.debounce(function() {
             self.page && self.page.trigger && self.page.trigger("resized", $(window).width(), $(window).height());
         }, 100));
-    }
+    };
 
     self.bindModalLaunchingClicks = function() {
         var firstArg = arguments[0];
@@ -78,18 +78,18 @@ window.Chorus = function chorus$Global() {
 
     self.detectFeatures = function() {
         self.features.fileProgress = !$.browser.msie;
-    }
+    };
 
     self.toast = function(message, options) {
         options = options || {};
         var defaultOpts = {sticky: false, life: 5000};
         var toastOpts = _.extend(defaultOpts, options.toastOpts);
         $.jGrowl(t(message, options), toastOpts);
-    }
+    };
 
     self.afterNavigate = function(func) {
         self.cleanupFunctions.push(func);
-    }
+    };
 
     self._navigated = function() {
         self.PageEvents.reset();
@@ -110,7 +110,7 @@ window.Chorus = function chorus$Global() {
             func();
         });
         self.cleanupFunctions = [];
-    }
+    };
 
     self.menu = function(menuElement, options) {
         self.afterNavigate(function() {$(menuElement).remove();});
@@ -168,7 +168,7 @@ window.Chorus = function chorus$Global() {
                         event.stopPropagation();
                         callback(event, api);
                         api.hide();
-                    }
+                    };
                     $(api.elements.content).find(selector).click(wrappedCallback);
                 })
             };
@@ -179,7 +179,7 @@ window.Chorus = function chorus$Global() {
         });
 
         menuElement.qtip(qtipArgs);
-    }
+    };
 
     self.styleSelect = function(element, options) {
         var $element = $(element);
@@ -187,23 +187,22 @@ window.Chorus = function chorus$Global() {
 
         var changeFunction = function() {
             $(element).trigger('change');
-        }
-        var newOptions = _.extend({}, options, {change: changeFunction, positionOptions: {offset: "0 -1"}})
+        };
+        var newOptions = _.extend({}, options, {change: changeFunction, position: {offset: "0 -1"}, open: function(event) {
+            var selectElement = $(event.target);
+            var selectMenu = selectElement.data('selectmenu');
+            _.each(selectElement.find("option"), function(option, i) {
+                selectMenu.menu.find("li").eq(i).prop("title", $(option).attr("title"));
+            });
+        }});
         $element.selectmenu(newOptions);
 
-        var $linkToMenu = $element.next("span").find("a.ui-selectmenu");
-        var id = $linkToMenu.attr("aria-owns");
-        var $selectmenu = $("#"+id);
-
-        _.each($element.find("option"), function(option, i) {
-           $selectmenu.find("li").eq(i).prop("title", $(option).attr("title"));
-        });
-
+        var $linkToMenu = $element.next("span").find("a.ui-button");
         $linkToMenu.attr("title", $element.find("option:selected").attr("title") || $linkToMenu.text());
-        $element.change(function(event) {
+        $element.change(function() {
             $linkToMenu.attr("title", $element.find("option:selected").attr("title"));
         });
-    }
+    };
 
     self.datePicker = function(selectors, options) {
         var formElementParams = {};
@@ -261,8 +260,7 @@ window.Chorus = function chorus$Global() {
             onFilter = options.onFilter,
             afterFilter = options.afterFilter,
             eventName = options.eventName,
-            changedInput = $(e.target),
-            clearLink = changedInput.siblings(".chorus_search_clear");
+            changedInput = $(e.target);
 
         var compare = changedInput.val().toLowerCase();
         list.find("li").each(function() {
@@ -315,16 +313,16 @@ window.Chorus = function chorus$Global() {
         }
 
         return ev;
-    }
+    };
 
     self.triggerHotKey = function(keyChar) {
         $(document).trigger(chorus.hotKeyEvent(keyChar))
-    }
+    };
 
     self.help = function() {
         var helpId = (chorus.page && chorus.page.helpId) || "home";
         FMCOpenHelp(helpId, null, null, null, "/help") ;
-    }
+    };
 
     self.namedConstructor = function(ctor, name) {
         return eval("(function " + name + "() { " +
@@ -360,16 +358,16 @@ window.Chorus = function chorus$Global() {
                 grossHack.groupEnd();
             }
         }
-    }
+    };
 
     self.cachebuster = function() {
         return self._cachebuster;
-    }
+    };
 
     self.updateCachebuster = function() {
         self._cachebuster = $.now();
-    }
-}
+    };
+};
 
 window.chorus = window.chorus || new Chorus();
 

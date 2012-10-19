@@ -124,6 +124,7 @@ describe("chorus.views.DatasetFilter", function() {
                 this.dataset.setDatasetNumber(1);
                 this.view = new chorus.views.DatasetFilter({collection: this.collection, showAliasedName: true});
                 this.view.render();
+                this.view.$(".ui-selectmenu-button .ui-button").click();
             });
 
             it("has the aliased_name options", function() {

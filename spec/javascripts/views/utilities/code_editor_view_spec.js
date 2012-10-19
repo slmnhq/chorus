@@ -2,6 +2,7 @@ describe("chorus.views.CodeEditorView", function() {
     beforeEach(function() {
         this.workfile = new chorus.models.Workfile();
         spyOn(this.workfile, "content").andReturn("");
+        spyOn($.fn, "droppable").andCallThrough();
 
         this.view = new chorus.views.CodeEditorView({
             model: this.workfile,
@@ -26,8 +27,7 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            stubDefer()
-            spyOn($.ui, "droppable");
+            stubDefer();
             this.view.render();
         });
 
@@ -47,7 +47,7 @@ describe("chorus.views.CodeEditorView", function() {
         });
 
         it("prepares the editor for drag/drop events", function() {
-            expect($($.ui.droppable.calls[0].args[1])[0]).toBe(this.view.$(".CodeMirror")[0]);
+            expect($($.fn.droppable.calls[0].object)[0]).toBe(this.view.$(".CodeMirror")[0]);
         });
 
         context("and the user clicks insert on a function", function() {

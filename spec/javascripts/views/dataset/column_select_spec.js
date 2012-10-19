@@ -147,6 +147,7 @@ describe("chorus.views.ColumnSelect", function () {
                 this.dataset.setDatasetNumber(1);
                 this.view.options.showAliasedName = true;
                 this.view.render();
+                this.view.$(".ui-selectmenu-button .ui-button").click();
             });
 
             it("has the aliased_name", function () {
