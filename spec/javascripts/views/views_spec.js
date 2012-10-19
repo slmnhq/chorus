@@ -1324,7 +1324,6 @@ describe("chorus.views.Base", function() {
                 spyOn(this.view, "unbind");
                 spyOn(this.view.bindings, "removeAll");
                 expect(this.view.requiredResources.models.length).toBe(1);
-                spyOn(this.view, "teardownSubviews");
 
                 spyOn(chorus.PageEvents, "broadcast");
 
@@ -1335,7 +1334,6 @@ describe("chorus.views.Base", function() {
                 expect(this.view.unbind).toHaveBeenCalled();
                 expect(this.view.bindings.removeAll).toHaveBeenCalled();
                 expect(_.isEmpty(this.view.requiredResources.models)).toBeTruthy();
-                expect(this.view.teardownSubviews).toHaveBeenCalled();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("destroy:view", this.view);
             });
 
