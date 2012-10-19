@@ -11,7 +11,7 @@ resource "Search" do
 
   get "/search" do
     parameter :query, "Search term"
-    parameter :per_type, "Number of each entity to return"
+    parameter :per_type, "Number of each entity to return. Default is 3."
     pagination
 
     required_parameters :query
@@ -26,7 +26,7 @@ resource "Search" do
 
   get "/search" do
     parameter :query, "Search term"
-    parameter :entity_type, "The type of entity to search for (GpdbInstance, User, Workspace, Workfile)"
+    parameter :entity_type, "The type of entity to search for (e.g. Instance, User, Workspace, Workfile)"
     pagination
 
     required_parameters :query
@@ -41,7 +41,7 @@ resource "Search" do
 
   get "/search/workspaces" do
     parameter :query, "Search term"
-    parameter :per_type, "Number of each entity to return"
+    parameter :per_type, "Number of each entity to return. Default is 3."
     pagination
 
     required_parameters :query
@@ -57,7 +57,7 @@ resource "Search" do
   get "/workspaces/:workspace_id/search" do
     let(:workspace_id) { workspace.id }
     parameter :query, "Search term"
-    parameter :entity_type, "The type of entity to search for (GpdbInstance, User, Workspace, Workfile)"
+    parameter :entity_type, "The type of entity to search for (e.g. Instance, User, Workspace, Workfile)"
     pagination
 
     required_parameters :query
@@ -72,6 +72,7 @@ resource "Search" do
 
   get "/search/type_ahead" do
     parameter :query, "Search term"
+    parameter :per_page, "The number of elements to return.  Default is 3."
 
     required_parameters :query
 

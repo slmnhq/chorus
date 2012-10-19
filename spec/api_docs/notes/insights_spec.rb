@@ -16,7 +16,7 @@ resource "Notes" do
 
     let(:note_id) { note.id }
 
-    example_request "Promote the note to insight" do
+    example_request "Promote a note to insight" do
       status.should == 201
     end
   end
@@ -26,7 +26,7 @@ resource "Notes" do
 
     let(:note_id) {note_on_workspace.id}
 
-    example_request "publish the insight" do
+    example_request "Publish an insight" do
       status.should == 201
     end
   end
@@ -40,7 +40,7 @@ resource "Notes" do
 
     let(:note_id) {note_on_workspace.id}
 
-    example_request "unpublish the insight" do
+    example_request "Unpublish an insight" do
       status.should == 201
     end
   end

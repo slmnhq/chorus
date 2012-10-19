@@ -14,8 +14,8 @@ resource "Tableau" do
 
   post "/workspaces/:workspace_id/datasets/:dataset_id/tableau_workbooks" do
     parameter :name, "Name of the workbook to be created"
-    parameter :dataset_id, "id of the dataset to link to the workbook"
-    parameter :workspace_id, "id of the workspace the dataset is in"
+    parameter :dataset_id, "Id of the dataset to link to the workbook"
+    parameter :workspace_id, "Id of the workspace containing the dataset"
 
     required_parameters :name
     required_parameters :dataset_id

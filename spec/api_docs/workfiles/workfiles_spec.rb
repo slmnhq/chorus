@@ -15,6 +15,10 @@ resource "Workfiles" do
   end
 
   get "/workfiles/:id" do
+    parameter :id, "Id of a workfile"
+
+    required_parameters :id
+
     let(:id) { workfile.to_param }
 
     example_request "Get workfile details" do
@@ -27,7 +31,7 @@ resource "Workfiles" do
       workfile_versions(:public).tap { |v| v.contents = file; v.save! }
     end
 
-    parameter :workfile_id, "Workfile to download"
+    parameter :workfile_id, "Id of a workfile to download"
 
     required_parameters :workfile_id
 
@@ -43,8 +47,8 @@ resource "Workfiles" do
       workfile_versions(:public).tap { |v| v.contents = file; v.save! }
     end
 
-    parameter :workfile_id, "Workfile to copy"
-    parameter :workspace_id, "Workspace to copy to"
+    parameter :workfile_id, "Id of a workfile to copy"
+    parameter :workspace_id, "Id of workspace to copy to"
 
     required_parameters :workfile_id, :workspace_id
 
@@ -57,7 +61,7 @@ resource "Workfiles" do
 
   delete "/workfiles/:id" do
     let(:id) { workfile.to_param }
-    parameter :id, "ID of the workfile to delete"
+    parameter :id, "Id of the workfile to delete"
     required_parameters :id
 
     example_request "Delete a workfile" do
@@ -66,6 +70,10 @@ resource "Workfiles" do
   end
 
   get "/workspaces/:workspace_id/workfiles" do
+    parameter :workspace_id, "Workspace Id"
+
+    required_parameters :workspace_id
+
     let(:workspace_id) { workspace.to_param }
     pagination
 
@@ -77,11 +85,12 @@ resource "Workfiles" do
   post "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
 
-    parameter :owner_id, "Workfile owner"
+    parameter :workspace_id, "Workspace Id"
+    parameter :owner_id, "Id of workfile owner"
     parameter :description, "Workfile description"
     parameter :file_name, "Filename"
 
-    required_parameters :file_name
+    required_parameters :file_name, :workspace_id
 
     let(:owner_id) { owner.to_param }
     let(:description) { "Get off my lawn, you darn kids!" }
@@ -95,8 +104,8 @@ resource "Workfiles" do
   post "/workfiles/:workfile_id/executions" do
     parameter :schema_id, "Schema Id"
     parameter :workfile_id, "Workfile Id"
-    parameter :check_id, "Check Id to cancel the execution"
-    parameter :sql, "Sql to execute"
+    parameter :check_id, "A client-generated identifier which can be used to cancel this execution later"
+    parameter :sql, "SQL to execute"
 
     required_parameters :workfile_id, :schema_id, :check_id
 
@@ -117,7 +126,7 @@ resource "Workfiles" do
   delete "/workfiles/:workfile_id/executions/:id" do
     parameter :schema_id, "Schema ID"
     parameter :workfile_id, "Workfile Id"
-    parameter :id, "Check Id (given when starting the execution)"
+    parameter :id, "A client-generated identifier, previously passed as 'check_id' to workfile execution method to identify a query"
 
     required_parameters :id, :workfile_id, :schema_id
 

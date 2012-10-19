@@ -22,7 +22,7 @@ resource "Workspaces" do
 
   get "/workspaces" do
     parameter :active, "1 if you only want active workspaces, 0 if you want all workspaces. Defaults to all workspaces if the parameter is not provided"
-    parameter :user_id, "If provided, only return workspaces belonging to the specified user"
+    parameter :user_id, "If provided, only return workspaces the specified user is a member of"
     pagination
 
     example_request "Get a list of workspaces" do
@@ -31,18 +31,23 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:id" do
+    parameter :id, "Id of a workspace"
+
+    required_parameters :id
+
     example_request "Get details for a workspace" do
       status.should == 200
     end
   end
 
   put "/workspaces/:id" do
-    parameter :name, "Workspace name"
+    parameter :id, "Id of a workspace"
+    parameter :name, "Name of workspace"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
     parameter :sandbox_id, "Id of the schema to be used as the workspace's sandbox"
     parameter :summary, "Notes about the workspace"
 
-    required_parameters :name
+    required_parameters :name, :id
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
@@ -54,13 +59,12 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:id", :database_integration do
-    parameter :instance_id, "id of instance to create database in"
-    parameter :database_name, "name of a new database"
+    parameter :id, "Id of a workspace"
+    parameter :instance_id, "Id of an instance to create new database in"
+    parameter :database_name, "Name of a new database"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id
-    required_parameters :database_name
-    required_parameters :schema_name
+    required_parameters :instance_id, :database_name, :schema_name, :id
 
     let(:greenplum_instance) { GpdbIntegration.real_gpdb_instance }
     let(:database_name) { "a_new_database_name" }
@@ -79,13 +83,12 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:id", :database_integration do
-    parameter :instance_id, "id of instance to create database in"
-    parameter :database_id, "id of a database"
+    parameter :id, "Id of a workspace"
+    parameter :instance_id, "Id of the instance to create a schema in"
+    parameter :database_id, "Id of the database to create a schema in"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id
-    required_parameters :database_id
-    required_parameters :schema_name
+    required_parameters :instance_id, :database_id, :schema_name, :id
 
     let(:greenplum_instance) { GpdbIntegration.real_gpdb_instance }
     let(:database) { GpdbIntegration.real_database }
@@ -104,9 +107,10 @@ resource "Workspaces" do
   end
 
   put "/workspaces/:id" do
-    parameter :sandbox_id, "id of schema that already exists"
+    parameter :id, "Id of a workspace"
+    parameter :sandbox_id, "Id of the schema to add as a sandbox"
 
-    required_parameters :sandbox_id
+    required_parameters :sandbox_id, :id
 
     example_request "Add a sandbox schema that already exists" do
       status.should == 200
@@ -130,15 +134,10 @@ resource "Workspaces" do
   end
 
   delete "/workspaces/:workspace_id/quickstart" do
+    parameter :workspace_id, "Id of a workspace"
+
+    required_parameters :workspace_id
     example_request "Dismiss the quickstart for a workspace" do
-      status.should == 200
-    end
-  end
-
-  get "/workspaces/:workspace_id/datasets/:id" do
-    let(:id) { dataset_id }
-
-    example_request "Get details for a dataset" do
       status.should == 200
     end
   end
@@ -171,15 +170,6 @@ resource "Workspaces" do
     end
 
     example_request "Create external table from CSV file on hadoop" do
-      status.should == 200
-    end
-  end
-
-  get "/workspaces/:workspace_id/image" do
-    let(:workspace) { workspaces(:image) }
-    parameter :style, "Size of image ( original, icon )"
-
-    example_request "Get the workspace image" do
       status.should == 200
     end
   end

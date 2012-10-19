@@ -16,10 +16,10 @@ resource "Workspaces: imports" do
   post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
     parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
-    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
+    parameter :truncate, "True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
     parameter :is_active, "True/false: if true, import schedule is active"
-    parameter :import_type, "not yet implemented (currently oneTime)"
+    parameter :import_type, "schedule or oneTime"
     parameter :sample_count, "Maximum number of rows to import"
 
     required_parameters :dataset_id, :to_table, :new_table
@@ -50,10 +50,10 @@ resource "Workspaces: imports" do
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
     parameter :to_table, "Table name of the destination table"
-    parameter :truncate, "not implemented yet! True/false: truncate into existing table (only if new_table is false)"
+    parameter :truncate, "True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
     parameter :is_active, "True/false: if true , the schedule is active"
-    parameter :import_type, "not yet implemented (currently oneTime)"
+    parameter :import_type, "schedule or oneTime"
     parameter :sample_count, "Maximum number of rows to import"
 
     required_parameters :dataset_id, :to_table, :new_table
@@ -84,6 +84,8 @@ resource "Workspaces: imports" do
   get "/workspaces/:workspace_id/datasets/:dataset_id/import" do
     parameter :workspace_id, "Id of the workspace that the dataset belongs to"
     parameter :dataset_id, "Id of the dataset"
+
+    required_parameters :dataset_id, :workspace_id
 
     before do
       ImportSchedule.create!(
