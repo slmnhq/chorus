@@ -51,6 +51,26 @@ describe Workfile do
     end
   end
 
+  describe ".validate_name_uniqueness" do
+    let!(:workspace) { FactoryGirl.create(:workspace) }
+    let!(:other_workspace) { FactoryGirl.create(:workspace) }
+    let!(:existing_workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+
+    it "returns false and adds an error to the error list if name in workspace is taken" do
+      new_workfile = Workfile.new :file_name => 'workfile.sql'
+      new_workfile.workspace = workspace
+      new_workfile.validate_name_uniqueness.should be_false
+      new_workfile.errors[:file_name].should_not be_empty
+    end
+
+    it "returns true if there are no conflicts in its own workspace" do
+      new_workfile = Workfile.new :file_name => 'workfile.sql'
+      new_workfile.workspace = other_workspace
+      new_workfile.validate_name_uniqueness.should be_true
+      new_workfile.errors[:file_name].should be_empty
+    end
+  end
+
   describe ".create_from_file_upload" do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }

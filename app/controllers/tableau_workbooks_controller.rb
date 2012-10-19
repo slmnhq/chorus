@@ -8,7 +8,14 @@ class TableauWorkbooksController < ApplicationController
     dataset = Dataset.find(params[:dataset_id])
     workbook = create_new_workbook(dataset, params[:tableau_workbook][:name])
 
-    if workbook.save
+    workfile = nil
+    if params[:tableau_workbook][:create_work_file] == "true"
+      workfile = LinkedTableauWorkfile.new(file_name: "#{params[:tableau_workbook][:name]}.twb")
+      workfile.owner = current_user
+      workfile.workspace = workspace
+    end
+
+    if (!workfile || workfile.validate_name_uniqueness) && workbook.save
       publication = TableauWorkbookPublication.create!(
           :name => params[:tableau_workbook][:name],
           :dataset_id => dataset.id,
@@ -23,11 +30,9 @@ class TableauWorkbooksController < ApplicationController
           :project_name => publication.project_name,
           :project_url => publication.project_url
       )
-      if params[:tableau_workbook][:create_work_file] == "true"
-        workfile = LinkedTableauWorkfile.new(file_name: "#{params[:tableau_workbook][:name]}.twb")
-        workfile.owner = current_user
+      if workfile
         workfile.tableau_workbook_publication = publication
-        publication.workspace.workfiles << workfile
+        workfile.save!
 
         Events::TableauWorkfileCreated.by(current_user).add(
             :dataset => publication.dataset,
@@ -46,8 +51,10 @@ class TableauWorkbooksController < ApplicationController
           }
       }, :status => :created
     else
+      messages = workbook.errors.full_messages
+      messages = messages + workfile.errors.full_messages if workfile
       present_errors({:fields => {:tableau =>
-             { :GENERIC => {:message => workbook.errors.full_messages.join(". ")}}}},
+             { :GENERIC => {:message => messages.join(". ")}}}},
             {:status => :unprocessable_entity})
     end
   end

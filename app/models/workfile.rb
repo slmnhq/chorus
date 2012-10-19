@@ -109,6 +109,16 @@ class Workfile < ActiveRecord::Base
     workspace.public
   end
 
+  def validate_name_uniqueness
+    exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)
+    if exists
+      errors.add(:file_name, "is not unique.")
+      false
+    else
+      true
+    end
+  end
+
   private
   def last_version_number
     latest_workfile_version.try(:version_num) || 0

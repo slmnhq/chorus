@@ -7,14 +7,15 @@ describe TableauWorkbooksController do
   before do
     log_in user
     any_instance_of(TableauWorkbook) do |wb|
-      mock(wb).save { save_status }
+      mock(wb).save.times(any_times) { save_status }
     end
   end
 
   describe "#create" do
     let(:dataset) { datasets(:table) }
     let(:workspace) { workspaces(:public)}
-    let(:params) { extra_options.merge({ :dataset_id => dataset.id, :workspace_id => workspace.id, :name => "myTableauWorkbook" }) }
+    let(:name) { 'myTableauWorkbook' }
+    let(:params) { extra_options.merge({ :dataset_id => dataset.id, :workspace_id => workspace.id, :name => name }) }
     let(:extra_options) { {} }
 
     context 'when the dataset is a table' do
@@ -97,6 +98,16 @@ describe TableauWorkbooksController do
         post :create, params
         publication = TableauWorkbookPublication.find(decoded_response.id)
         LinkedTableauWorkfile.last.tableau_workbook_publication.should == publication
+      end
+
+      context "when the name conflicts with an existing workfile" do
+        it "does not save the workbook to the tableau server and returns 422" do
+          post :create, params
+          response.code.should == '201'
+          post :create, params
+          response.code.should == '422'
+          response.body.should include "File name is not unique"
+        end
       end
 
       it "should add two events, for both publishing the workbook and creating the workfile" do
