@@ -50,8 +50,14 @@ describe "Visualizations", :database_integration do
   describe "Create box plot" do
     let(:chart_type) { 'boxplot' }
     let(:configure_chart) do
-      page.execute_script("$('.value.field select').selectmenu('value', 'column1')")
-      page.execute_script("$('.category.field select').selectmenu('value', 'category')")
+
+      page.execute_script("$('.value.field select').val('column1')")
+      page.execute_script("$('.value.field select').selectmenu('refresh')")
+      page.execute_script("$('.value.field select').change()")
+
+      page.execute_script("$('.category.field select').val('category')")
+      page.execute_script("$('.category.field select').selectmenu('refresh')")
+      page.execute_script("$('.category.field select').change()")
     end
 
     it_behaves_like "a visualization"

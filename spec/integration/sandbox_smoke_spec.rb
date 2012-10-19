@@ -17,16 +17,19 @@ describe "Sandbox", :database_integration do
     wait_for_ajax
 
     #instance
-    page.execute_script("$('select[name=instance]').selectmenu('value', '#{instance.id}')")
-    page.execute_script("$('.instance .select_container select').change();")
+    page.execute_script("$('select[name=instance]').val('#{instance.id}')")
+    page.execute_script("$('select[name=instance]').selectmenu('refresh')")
+    page.execute_script("$('select[name=instance]').change()")
     wait_for_ajax
     #database
-    page.execute_script("$('select[name=database]').selectmenu('value', '#{database.id}')")
-    page.execute_script("$('.database .select_container select').change();")
+    page.execute_script("$('select[name=database]').val('#{database.id}')")
+    page.execute_script("$('select[name=database]').selectmenu('refresh')")
+    page.execute_script("$('select[name=database]').change()")
     wait_for_ajax
     #schema
-    page.execute_script("$('select[name=schema]').selectmenu('value', '#{schema.id}')")
-    page.execute_script("$('.schema .select_container select').change();")
+    page.execute_script("$('select[name=schema]').val('#{schema.id}')")
+    page.execute_script("$('select[name=schema]').selectmenu('refresh')")
+    page.execute_script("$('select[name=schema]').change()")
     click_button "Add Sandbox"
     wait_for_ajax
 
