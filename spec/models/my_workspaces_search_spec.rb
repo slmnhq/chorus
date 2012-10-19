@@ -22,7 +22,7 @@ describe MyWorkspacesSearch do
 
     it "scopes the search to workspaces the user is a member of" do
       search.models
-      Sunspot.session.should have_search_params(:with, :workspace_id, owner.workspaces.map(&:id))
+      Sunspot.session.should have_search_params(:with, :workspace_id, owner.workspace_ids.sort)
     end
   end
 end
