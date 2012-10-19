@@ -17,10 +17,12 @@ resource "Greenplum DB: accounts" do
       log_in owner
     end
 
+    parameter :gpdb_instance_id, "The id of a Greenplum instance"
+
     example_request "Get personal credentials" do
       explanation <<-DESC
         The current user's personal credentials for connecting to this
-        instance.  Does not return a shared account credential's, unless
+        instance.  Does not return a shared account's credentials, unless
         the current user is the instance owner.
       DESC
 
@@ -29,6 +31,7 @@ resource "Greenplum DB: accounts" do
   end
 
   post "/gpdb_instances/:gpdb_instance_id/account" do
+    parameter :gpdb_instance_id, "The id of a Greenplum instance"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -47,6 +50,7 @@ resource "Greenplum DB: accounts" do
   end
 
   put "/gpdb_instances/:gpdb_instance_id/account" do
+    parameter :gpdb_instance_id, "The id of a Greenplum instance"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -68,6 +72,7 @@ resource "Greenplum DB: accounts" do
     before do
       log_in member
     end
+    parameter :gpdb_instance_id, "The id of a Greenplum instance"
 
     example_request "Remove personal credentials" do
       status.should == 200

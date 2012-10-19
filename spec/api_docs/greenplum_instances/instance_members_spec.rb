@@ -15,6 +15,7 @@ resource "Greenplum DB: instance members" do
   end
 
   get "/gpdb_instances/:gpdb_instance_id/members" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
     pagination
 
     example_request "List members with access to instance" do
@@ -31,9 +32,10 @@ resource "Greenplum DB: instance members" do
   end
 
   post "/gpdb_instances/:gpdb_instance_id/members" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
     parameter :owner_id, "User ID of new member"
-    parameter :db_username, "User name for connection"
-    parameter :db_password, "Password for connection"
+    parameter :db_username, "Username for account that connects to instance"
+    parameter :db_password, "Password for account that connects to instance"
 
     let(:owner_id) { non_member.to_param }
     let(:db_username) { "big" }
@@ -41,15 +43,16 @@ resource "Greenplum DB: instance members" do
 
     required_parameters :owner_id, :db_username, :db_password
 
-    example_request "Add account for member" do
+    example_request "Add account for a Chorus user" do
       status.should == 201
     end
   end
 
   put "/gpdb_instances/:gpdb_instance_id/members/:id" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
     parameter :id, "Account ID of member to update"
-    parameter :db_username, "User name for connection"
-    parameter :db_password, "Password for connection"
+    parameter :db_username, "Username for account that connects to instance"
+    parameter :db_password, "Password for account that connects to instance"
 
     let(:id) { member_account.to_param }
     let(:db_username) { "snuffle" }
@@ -63,6 +66,7 @@ resource "Greenplum DB: instance members" do
   end
 
   delete "/gpdb_instances/:gpdb_instance_id/members/:id" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
     parameter :id, "Account ID of member to delete"
 
     let(:id) { member_account.to_param }

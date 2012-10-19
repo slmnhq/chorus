@@ -10,7 +10,7 @@ resource "Greenplum DB: instances" do
   end
 
   put "/gpdb_instances/:gpdb_instance_id/owner" do
-    parameter :gpdb_instance_id, "The id of the Greenplum instance"
+    parameter :gpdb_instance_id, "Greenplum instance id"
     parameter :id, "The new owner's user id"
 
     required_parameters :gpdb_instance_id, :id

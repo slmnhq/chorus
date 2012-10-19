@@ -40,6 +40,8 @@ resource "Gnip instances" do
   end
 
   get "/gnip_instances/:id" do
+    parameter :id, "gnip instance id"
+
     let(:id) { gnip_instances(:default).id }
     example_request "Get a registered Gnip Instance" do
       status.should == 200
@@ -47,11 +49,12 @@ resource "Gnip instances" do
   end
 
   put "/gnip_instances/:id" do
+    parameter :id, "gnip instance id"
     parameter :name, "gnip account name"
     parameter :description, "gnip account description"
     parameter :stream_url, "gnip stream url"
     parameter :username, "gnip account username"
-    parameter :password, "gnip account password"
+    parameter :password, "gnip account password (password is not updated unless this parameter is provided)"
 
     let(:id) { gnip_instance.to_param }
     let(:name) { "example name" }
@@ -72,8 +75,9 @@ resource "Gnip instances" do
       any_instance_of(CsvFile) {|file| stub(file).table_already_exists(anything) { false } }
     end
 
-    parameter :workspace_id, "gnip account name"
-    parameter :to_table, "gnip account name"
+    parameter :gnip_instance_id, "gnip instance id"
+    parameter :workspace_id, "workspace id that will receive the import"
+    parameter :to_table, "new table name in the sandbox"
 
     required_parameters :workspace_id, :to_table
 

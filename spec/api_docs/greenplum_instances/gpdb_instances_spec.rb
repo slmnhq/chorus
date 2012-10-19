@@ -37,6 +37,8 @@ resource "Greenplum DB: instances" do
 
   get "/gpdb_instances" do
     parameter :accessible, "1 to limit the list to instances the current user can access, 0 for all instances"
+    pagination
+
     let(:accessible) { "1" }
 
     example_request "Get a list of registered Greenplum instances" do
@@ -45,6 +47,7 @@ resource "Greenplum DB: instances" do
   end
 
   get "/gpdb_instances/:id" do
+    parameter :id, "Greenplum instance id"
     let(:id) { owned_instance.to_param }
 
     example_request "Get the specific registered Greenplum instance" do
@@ -53,6 +56,7 @@ resource "Greenplum DB: instances" do
   end
 
   put "/gpdb_instances/:id" do
+    parameter :id, "Greenplum instance id"
     parameter :name, "Instance alias"
     parameter :description, "Description"
     parameter :host, "Host IP or address"
@@ -72,6 +76,8 @@ resource "Greenplum DB: instances" do
   end
 
   get "/gpdb_instances/:gpdb_instance_id/activities" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
+
     let(:gpdb_instance_id) { owned_instance.to_param }
 
     example_request "List all activities on an instance" do
@@ -80,6 +86,8 @@ resource "Greenplum DB: instances" do
   end
 
   get "/gpdb_instances/:gpdb_instance_id/workspace_detail" do
+    parameter :gpdb_instance_id, "Greenplum instance id"
+
     let(:gpdb_instance_id) { owned_instance.to_param }
 
     example_request "Get details for workspaces with sandboxes on this instance" do

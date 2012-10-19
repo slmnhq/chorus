@@ -14,7 +14,7 @@ resource "Config" do
   end
 
   get "/VERSION" do
-    example_request "Returns the version of Chorus" do
+    example_request "Get the version of Chorus" do
       status.should == 200
     end
   end

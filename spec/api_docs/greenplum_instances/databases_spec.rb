@@ -17,12 +17,17 @@ resource "Greenplum DB: databases" do
   end
 
   get "/databases/:id" do
+    parameter :id, "The id of a database"
+
     example_request "Get a specific database" do
       status.should == 200
     end
   end
 
   get "/databases/:database_id/schemas" do
+    parameter :database_id, "The id of a database"
+    pagination
+
     example_request "Get the list of schemas for a specific database" do
       status.should == 200
     end

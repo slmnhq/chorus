@@ -22,7 +22,7 @@ resource "Chorus Views" do
     parameter :object_name, "Name of the Chorus View to be created"
     parameter :schema_id, "Id of the schema to run the view in"
     parameter :workspace_id, "Id of the workspace the Chorus View belongs to"
-    parameter :query, "Sql statement of the Chorus View, must start with SELECT or WITH"
+    parameter :query, "SQL statement for the Chorus View, must start with SELECT or WITH"
 
     required_parameters :source_object_id, :source_object_type, :object_name, :schema_id, :workspace_id, :query
 
@@ -46,7 +46,7 @@ resource "Chorus Views" do
     end
 
     parameter :id, "Id of the chorus view to update"
-    parameter :query, "Sql statement of the Chorus View, must start with SELECT or WITH"
+    parameter :query, "New SQL statement for the Chorus View, must start with SELECT or WITH"
 
     required_parameters :id, :query
 
@@ -60,7 +60,7 @@ resource "Chorus Views" do
   end
 
   delete "/chorus_views/:id" do
-    parameter :id, "Id of the chorus view to update"
+    parameter :id, "Id of the chorus view to delete"
 
     required_parameters :id
 
@@ -85,9 +85,9 @@ resource "Chorus Views" do
       mock(SqlExecutor).execute_sql.with_any_args { sql_result }
     end
 
-    parameter :schema_id, "Id of the corresponding schema"
-    parameter :query, "Sql of the chorus view"
-    parameter :check_id, "Unique token"
+    parameter :schema_id, "Id of the schema to use for the SQL command"
+    parameter :query, "SQL to preview before creating a chorus view"
+    parameter :check_id, "A client-generated identifier which can be used to cancel this preview later"
 
     required_parameters :schema_id, :query, :check_id
 
