@@ -15,7 +15,7 @@ module Kaggle
             "gravatar_url" => user_attributes['Gravatar'],
             "full_name" => user_attributes['LegalName'],
             "past_competition_types" => user_attributes['PastCompetitionTypes'],
-            "favorite_techniques" => user_attributes['FavoriteTechniques'],
+            "favorite_technique" => user_attributes['FavoriteTechnique'],
             "favorite_software" => user_attributes['FavoriteSoftware']
         }
       end.sort! { |user1, user2| user1['rank'] <=> user2['rank'] }

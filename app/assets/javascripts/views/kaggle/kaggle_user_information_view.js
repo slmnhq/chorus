@@ -3,10 +3,10 @@ chorus.views.KaggleUserInformation = chorus.views.Base.extend({
     templateName: "kaggle/user_information",
 
     additionalContext: function() {
-        var pastCompetitions = this.model.get('pastCompetitionTypes');
         return {
-            firstPastCompetition: pastCompetitions[0],
-            otherPastCompetitions: _.rest(pastCompetitions)
+            pastCompetitions: this.model.get('pastCompetitionTypes'),
+            favoriteTechnique: this.model.get('favoriteTechnique'),
+            favoriteSoftware: this.model.get('favoriteSoftware')
         }
     }
 });

@@ -1,24 +1,34 @@
-<div class="pairs">
-    <div class="pair rank">
-        <div class="key">{{t "kaggle.information.rank"}}</div>
-        <div class="value" title="{{rank}}">{{rank}}</div>
-    </div>
-    <div class="pair points">
-        <div class="key">{{t "kaggle.information.points"}}</div>
-        <div class="value" title="{{points}}">{{points}}</div>
-    </div>
-    <div class="pair number_of_entered_competitions">
-        <div class="key">{{t "kaggle.information.number_of_entered_competitions"}}</div>
-        <div class="value" title="{{numberOfEnteredCompetitions}}">{{numberOfEnteredCompetitions}}</div>
-    </div>
-    <div class="pair past_competition_types">
-        <div class="key">{{t "kaggle.information.past_competition_types"}}</div>
-        <div class="value" title="{{firstPastCompetition}}">{{firstPastCompetition}}</div>
-    </div>
-    {{#each otherPastCompetitions}}
-        <div class="pair past_competition_types">
-            <div class="key"></div>
-            <div class="value" title="{{this}}">{{this}}</div>
+<div class="kaggle_information">
+    <div class="pairs">
+        <div class="pair rank">
+            <div class="key">{{t "kaggle.information.rank"}}</div>
+            <div class="value" title="{{rank}}">{{rank}}</div>
         </div>
-    {{/each}}
+        <div class="pair points">
+            <div class="key">{{t "kaggle.information.points"}}</div>
+            <div class="value" title="{{points}}">{{points}}</div>
+        </div>
+        <div class="pair number_of_entered_competitions">
+            <div class="key">{{t "kaggle.information.number_of_entered_competitions"}}</div>
+            <div class="value" title="{{numberOfEnteredCompetitions}}">{{numberOfEnteredCompetitions}}</div>
+        </div>
+        <div class="pair past_competition_types">
+            <div class="key">{{t "kaggle.information.past_competition_types"}}</div>
+            {{#each pastCompetitions}}
+                <div class="value" title="{{this}}">{{this}}</div>
+            {{/each}}
+        </div>
+        {{#if favoriteTechnique}}
+            <div class="pair favorite_technique">
+                <div class="key">{{t "kaggle.information.favorite_technique"}}</div>
+                <div class="value" title="{{favoriteTechnique}}">{{favoriteTechnique}}</div>
+            </div>
+            {{/if}}
+        {{#if favoriteSoftware}}
+            <div class="pair favorite_software">
+                <div class="key">{{t "kaggle.information.favorite_software"}}</div>
+                <div class="value" title="{{favoriteSoftware}}">{{favoriteSoftware}}</div>
+            </div>
+        {{/if}}
+    </div>
 </div>

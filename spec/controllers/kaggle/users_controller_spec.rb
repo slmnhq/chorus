@@ -31,7 +31,7 @@ describe Kaggle::UsersController do
       user.should have_key('number_of_entered_competitions')
       user.should have_key('gravatar_url')
       user.should have_key('full_name')
-      user.should have_key('favorite_techniques')
+      user.should have_key('favorite_technique')
       user.should have_key('favorite_software')
     end
 
@@ -48,7 +48,7 @@ describe Kaggle::UsersController do
     end
 
     it "filters the list for competition types" do
-      get:index, :kaggle_user => "[\"past_competition_types|equal|Life Sciences\"]"
+      get :index, :kaggle_user => "[\"past_competition_types|equal|Life Sciences\"]"
       decoded_response.length.should == 2
       user = decoded_response.first
       user['past_competition_types'].map(&:downcase).should include(("Life Sciences").downcase)

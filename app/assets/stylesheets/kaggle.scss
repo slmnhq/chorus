@@ -94,3 +94,26 @@
     }
   }
 }
+
+#sidebar .kaggle_information .pairs {
+  .past_competition_types, .favorite_software, .favorite_technique {
+    .key {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .value {
+      width: 100%;
+      padding-left: 10px;
+      max-width: 230px;
+    }
+  }
+
+  .favorite_software, .favorite_technique {
+    .value {
+        @include not-ellipsis;
+        text-align: left;
+        padding-bottom: 8px;
+    }
+  }
+}
+
