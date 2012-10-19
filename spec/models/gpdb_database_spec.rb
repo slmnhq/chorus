@@ -60,8 +60,8 @@ describe GpdbDatabase do
 
     it "sorts the database by name in ASC order" do
       results = GpdbDatabase.refresh(account)
-      results[0].name.should < results[1].name
-      results[-2].name.should < results[-1].name
+      result_names = results.map { |db| db.name.downcase.gsub(/[^0-9A-Za-z]/, '') }
+      result_names.should == result_names.sort
     end
   end
 
