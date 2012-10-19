@@ -46,8 +46,8 @@ resource "Notes" do
   end
 
   get "/insights" do
-    parameter :entity_id, "Entity Id for filtering insights"
-    parameter :entity_type, "Entity_type (dashboard or workspace)"
+    parameter :entity_id, "For entity_type of 'workspace', the id of the workspace whose activities will be returned"
+    parameter :entity_type, "The type of entity whose activities will be returned, ('dashboard' or 'workspace')"
     pagination
 
     required_parameters :entity_type
@@ -61,8 +61,8 @@ resource "Notes" do
   end
 
   get "/insights/count" do
-    parameter :entity_id, "Entity Id for filtering insights"
-    parameter :entity_type, "Entity_type (dashboard or workspace)"
+    parameter :entity_id, "For entity_type of 'workspace', the id of the workspace whose activities will be returned"
+    parameter :entity_type, "The type of entity whose activities will be returned, ('dashboard' or 'workspace')"
 
     required_parameters :entity_type
 

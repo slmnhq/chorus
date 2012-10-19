@@ -60,7 +60,7 @@ resource "Workfiles" do
     parameter :id, "ID of the workfile to delete"
     required_parameters :id
 
-    example_request "Delete the specified workfile" do
+    example_request "Delete a workfile" do
       status.should == 200
     end
   end

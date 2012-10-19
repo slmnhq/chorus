@@ -21,11 +21,11 @@ resource "Hadoop" do
   end
 
   post "/hadoop_instances" do
-    parameter :name, "Instance alias"
-    parameter :description, "Description"
-    parameter :host, "Host IP or address"
-    parameter :port, "Port"
-    parameter :username, "Username for connection"
+    parameter :name, "Name to show Chorus users for instance"
+    parameter :description, "Description of instance"
+    parameter :host, "Host IP or address of Hadoop instance"
+    parameter :port, "Port of Hadoop instance"
+    parameter :username, "Username for connection to instance"
     parameter :group_list, "Group list for connection"
 
     let(:name) { "Sesame_Street" }
@@ -43,11 +43,12 @@ resource "Hadoop" do
   end
 
   put "/hadoop_instances/:id" do
-    parameter :name, "Instance alias"
-    parameter :description, "Description"
-    parameter :host, "Host IP or address"
-    parameter :port, "Port"
-    parameter :username, "Username for connection"
+    parameter :id, "Hadoop instance id"
+    parameter :name, "Name to show Chorus users for instance"
+    parameter :description, "Description of instance"
+    parameter :host, "Host IP or address of Hadoop instance"
+    parameter :port, "Port of Hadoop instance"
+    parameter :username, "Username for connection to instance"
     parameter :group_list, "Group list for connection"
 
     let(:name) { "22 Duck Street" }
@@ -74,6 +75,8 @@ resource "Hadoop" do
   end
 
   get "/hadoop_instances/:id" do
+    parameter :id, "Hadoop instance id"
+
     let(:id) { instance.to_param }
 
     example_request "Get instance details"  do
@@ -82,12 +85,17 @@ resource "Hadoop" do
   end
 
   get "/hadoop_instances/:hadoop_instance_id/files" do
+    parameter :hadoop_instance_id, "Hadoop instance id"
+
     example_request "Get a list of files for a specific hadoop instance's root directory"  do
       status.should == 200
     end
   end
 
   get "/hadoop_instances/:hadoop_instance_id/files/:id" do
+    parameter :hadoop_instance_id, "Hadoop instance id"
+    parameter :id, "HDFS file id"
+
     let(:id) { dir_entry.id }
 
     example_request "Get a list of files for a subdirectory of a specific hadoop instance"  do

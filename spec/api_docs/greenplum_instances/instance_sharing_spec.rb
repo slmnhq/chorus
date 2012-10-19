@@ -13,7 +13,7 @@ resource "Greenplum DB: instances" do
 
     let(:gpdb_instance) { gpdb_instances(:owners) }
 
-    example_request "Allow individual users to share the instance owner's account" do
+    example_request "Allow individual users to share the account of the owner of an instance" do
       status.should == 201
     end
   end
@@ -23,7 +23,7 @@ resource "Greenplum DB: instances" do
 
     let(:gpdb_instance) { gpdb_instances(:shared) }
 
-    example_request "Require individual accounts to access the instance" do
+    example_request "Require individual accounts to access an instance" do
       status.should == 200
     end
   end

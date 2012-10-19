@@ -8,7 +8,7 @@ resource "Greenplum DB: instances" do
   end
 
   get "/provisioning" do
-    example_request "Returns options for provisioning a Greenplum instance" do
+    example_request "Get options for provisioning a Greenplum instance" do
       status.should == 200
     end
   end

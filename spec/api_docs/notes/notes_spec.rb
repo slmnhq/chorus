@@ -21,21 +21,7 @@ resource "Notes" do
     let(:entity_type) { "greenplum_instance" }
     let(:entity_id) { gpdb_instance.id }
 
-    example_request "Post a new note/insight on a Greenplum instance" do
-      status.should == 201
-    end
-  end
-
-  post "/notes" do
-    parameter :body, "Text body of the note"
-    parameter :entity_type, "Type of object the note is being posted on"
-    parameter :entity_id, "Id of the object the note is being posted on"
-
-    let(:body) { note.body }
-    let(:entity_type) { "hdfs_file" }
-    let(:entity_id) { "#{hdfs_file.hadoop_instance_id}|#{hdfs_file.path}" }
-
-    example_request "Post a new note on a HDFS file" do
+    example_request "Post a new note/insight on an entity" do
       status.should == 201
     end
   end

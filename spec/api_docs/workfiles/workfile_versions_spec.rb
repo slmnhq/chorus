@@ -38,7 +38,7 @@ resource "Workfiles: versions" do
 
     required_parameters :workfile_id, :id
 
-    example_request "Get the specified version of a workfile" do
+    example_request "Get a version of a workfile" do
       status.should == 200
     end
   end

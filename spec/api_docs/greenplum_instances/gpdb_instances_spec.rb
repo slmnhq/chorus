@@ -10,13 +10,13 @@ resource "Greenplum DB: instances" do
   end
 
   post "/gpdb_instances" do
-    parameter :name, "Instance alias"
-    parameter :description, "Description"
-    parameter :host, "Host IP or address"
-    parameter :port, "Port"
-    parameter :maintenance_db, "Database to use for initial connection (usually 'postgres')"
-    parameter :db_username, "User name for connection"
-    parameter :db_password, "Password for connection"
+    parameter :name, "Name to show Chorus users for instance"
+    parameter :description, "Description of instance"
+    parameter :host, "Host IP or address of Greenplum instance"
+    parameter :port, "Port of Greenplum instance"
+    parameter :maintenance_db, "Database on instance to use for initial connection (usually 'postgres')"
+    parameter :db_username, "Username for connection to instance"
+    parameter :db_password, "Password for connection to instance"
     parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
 
     let(:name) { "Sesame_Street" }
@@ -50,18 +50,18 @@ resource "Greenplum DB: instances" do
     parameter :id, "Greenplum instance id"
     let(:id) { owned_instance.to_param }
 
-    example_request "Get the specific registered Greenplum instance" do
+    example_request "Get a registered Greenplum instance" do
       status.should == 200
     end
   end
 
   put "/gpdb_instances/:id" do
     parameter :id, "Greenplum instance id"
-    parameter :name, "Instance alias"
-    parameter :description, "Description"
-    parameter :host, "Host IP or address"
-    parameter :port, "Port"
-    parameter :maintenance_db, "Database to use for initial connection (usually 'postgres')"
+    parameter :name, "Name to show Chorus users for instance"
+    parameter :description, "Description of instance"
+    parameter :host, "Host IP or address of Greenplum instance"
+    parameter :port, "Port of Greenplum instance"
+    parameter :maintenance_db, "Database on instance to use for initial connection (usually 'postgres')"
 
     let(:id) { owned_instance.to_param }
     let(:name) { "Sesame_Street" }
@@ -70,17 +70,7 @@ resource "Greenplum DB: instances" do
     let(:port) { "5432" }
     let(:maintenance_db) { "postgres" }
 
-    example_request "Update an instance" do
-      status.should == 200
-    end
-  end
-
-  get "/gpdb_instances/:gpdb_instance_id/activities" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
-
-    let(:gpdb_instance_id) { owned_instance.to_param }
-
-    example_request "List all activities on an instance" do
+    example_request "Update instance details" do
       status.should == 200
     end
   end

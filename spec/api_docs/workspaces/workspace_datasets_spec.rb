@@ -33,7 +33,7 @@ resource "Workspaces" do
     let(:table) { datasets(:table) }
     let(:dataset_ids) { view.to_param + "," + table.to_param }
 
-    example_request "Associate the specified non-sandbox datasets with the workspace" do
+    example_request "Associate a list of non-sandbox datasets with the workspace" do
       status.should == 201
     end
   end

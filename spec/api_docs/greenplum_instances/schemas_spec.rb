@@ -37,12 +37,14 @@ resource "Greenplum DB: schemas" do
   end
 
   get "/schemas/:id" do
+    parameter :id, "Greenplum schema id"
     example_request "Get a specific schema" do
       status.should == 200
     end
   end
 
   get "/schemas/:schema_id/datasets" do
+    parameter :schema_id, "Greenplum schema id"
     pagination
 
     example_request "Get the list of database objects for a specific schema" do
@@ -51,6 +53,7 @@ resource "Greenplum DB: schemas" do
   end
 
   get "/schemas/:schema_id/functions" do
+    parameter :schema_id, "Greenplum schema id"
     pagination
 
     example_request "List the functions in a schema" do
