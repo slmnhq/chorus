@@ -163,8 +163,7 @@ describe("chorus.views.NotificationList", function() {
             this.view.show();
         });
 
-        //TODO: this test is broken
-        xit("calls show on each activity", function() {
+        it("calls show on each activity", function() {
             _.each(this.view.activities, function(activity) {
                 expect(activity.show).toHaveBeenCalled();
             });

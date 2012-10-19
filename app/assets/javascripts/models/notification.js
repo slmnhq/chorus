@@ -4,9 +4,6 @@ chorus.models.Notification = chorus.models.Base.extend({
 
     activity: function() {
         if (!this._activity) {
-            this.set({ id: this.attributes["event"]["id"] });
-
-            delete(this.attributes["event"]["id"]);
             delete(this.attributes["event"]["timestamp"]);
             var notification_attributes = $.extend(this.attributes, this.attributes["event"]);
 
