@@ -7,7 +7,8 @@ class ChorusConfig
 
   def initialize(root_dir=nil)
     set_root_dir(root_dir)
-    app_config = YAML.load_file(config_file_path)
+    app_config = {}
+    app_config = YAML.load_file(config_file_path) if File.exists?(config_file_path)
     defaults = YAML.load_file(File.join(@root_dir, 'config/chorus.defaults.yml'))
 
     @config = defaults.deep_merge(app_config)
@@ -38,7 +39,7 @@ class ChorusConfig
   end
 
   def kaggle_configured?
-    (self['kaggle.url'] && self['kaggle.token'] && true)
+    (self['kaggle.api_key'] && true)
   end
 
   def self.config_file_path(root_dir=nil)

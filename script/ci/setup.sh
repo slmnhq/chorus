@@ -11,6 +11,6 @@ bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 mkdir -p tmp/pids
 rm tmp/fixture_builder*.yml
 
-cp /var/lib/jenkins/chorus.yml config/chorus.yml
+cp config/chorus.yml.example config/chorus.yml
 
 b/rake db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"

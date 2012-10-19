@@ -18,6 +18,7 @@ describe ChorusConfig do
     stub(File).read(Rails.root.join('config/secret.key').to_s) do
       "secret_key_goes_here\n"
     end
+    stub(File).exists?(Rails.root.join('config/chorus.yml').to_s) { true }
   end
 
   it "reads the chorus.yml file" do
@@ -68,8 +69,7 @@ describe ChorusConfig do
   describe "#kaggle_configured?" do
     let(:kaggle_config) do
       {
-          'url' => 'localhost',
-          'token' => '1234'
+          'api_key' => "kaggle_api_key"
       }
     end
 
