@@ -516,11 +516,9 @@ describe("chorus.views.Base", function() {
 
     describe("before navigating away", function() {
         beforeEach(function() {
-            var navSpy = jasmine.createSpy("teardown");
-            var klass = chorus.views.Base.extend({
-                teardown: navSpy
-            });
-            this.view = new klass();
+            this.view = new chorus.views.Base();
+            spyOn(this.view, "teardown").andCallThrough();
+
             chorus._navigated();
         });
 

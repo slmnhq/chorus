@@ -6,7 +6,7 @@ chorus.views.Bare = Backbone.View.include(
         initialize: function initialize() {
             this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
-
+            //if (this.debug) debugger
             chorus.viewsToTearDown.push(this);
             this.underviews = [];
 
@@ -30,6 +30,8 @@ chorus.views.Bare = Backbone.View.include(
             if (_.indexOf(this.underviews, view) === -1) {
                 this.underviews.push(view);
                 chorus.viewsToTearDown.splice(chorus.viewsToTearDown.indexOf(view), 1);
+
+                view.parentView = this;
             }
         },
 
@@ -38,6 +40,9 @@ chorus.views.Bare = Backbone.View.include(
         },
 
         teardown: function() {
+            var index = chorus.viewsToTearDown.indexOf(this);
+            if(index > -1) chorus.viewsToTearDown.splice(index, 1);
+
             this.unbind();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
@@ -47,6 +52,13 @@ chorus.views.Bare = Backbone.View.include(
             while(!_.isEmpty(this.underviews)) {
                 var underview = this.underviews.pop();
                 underview.teardown();
+            }
+
+            if(this.parentView) {
+                var underviews = this.parentView.underviews;
+                var index = underviews.indexOf(this);
+                if(index > -1) underviews.splice(index, 1);
+                delete this.parentView
             }
 
             chorus.PageEvents.broadcast("destroy:view", this);

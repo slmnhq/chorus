@@ -40,7 +40,11 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         this.collection = this.model.activities();
         this.collection.fetch();
         this.bindings.add(this.collection, "changed", this.render);
+
+        this.tabs.activity && this.tabs.activity.teardown();
         this.tabs.activity = new chorus.views.ActivityList({ collection:this.collection, additionalClass:"sidebar" });
+        this.registerSubView(this.tabs.activity);
+
         this.render();
     }
 });
