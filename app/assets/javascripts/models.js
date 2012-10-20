@@ -138,9 +138,8 @@ chorus.models = {
             }
         },
 
-        requireValidEmailAddress:function (name, newAttrs) {
-
-            this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
+        requireValidEmailAddress:function (name, newAttrs, messageKey) {
+            this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs, messageKey);
         },
 
         requireConfirmation: function(attr, newAttrs, messageKey) {

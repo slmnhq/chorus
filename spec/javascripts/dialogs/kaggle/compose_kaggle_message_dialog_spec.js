@@ -1,76 +1,76 @@
 describe("chorus.dialogs.ComposeKaggleMessage", function () {
     beforeEach(function () {
         this.qtip = stubQtip(".more-info");
-        setLoggedInUser(rspecFixtures.user({email: 'user@chorus.com'}));
-        this.kaggleUser = new chorus.models.KaggleUser({fullName: "Batman"});
+        setLoggedInUser(rspecFixtures.user({email:'user@chorus.com'}));
+        this.kaggleUser = new chorus.models.KaggleUser({fullName:"Batman"});
         this.workspace = rspecFixtures.workspace();
         this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-            recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),
-            workspace: this.workspace
+            recipients:new chorus.collections.KaggleUserSet(this.kaggleUser),
+            workspace:this.workspace
         });
         this.dialog.render();
     });
 
-    describe('#render', function() {
-        it("sets the workspace for the model", function() {
-           expect(this.dialog.model.get('workspace')).toBe(this.workspace);
+    describe('#render', function () {
+        it("sets the workspace for the model", function () {
+            expect(this.dialog.model.get('workspace')).toBe(this.workspace);
         });
 
-        it("sets the default value of the from field to the users email", function() {
-            expect(this.dialog.$('input[name=reply_to]').val()).toBe('user@chorus.com');
+        it("sets the default value of the from field to the users email", function () {
+            expect(this.dialog.$('input[name=replyTo]').val()).toBe('user@chorus.com');
         });
 
-        it("displays the name of the kaggle recipient", function() {
+        it("displays the name of the kaggle recipient", function () {
             expect(this.dialog.$('.kaggle_recipient')).toContainText("Batman");
         });
 
-        context("when more than one recipient", function() {
-            beforeEach(function() {
+        context("when more than one recipient", function () {
+            beforeEach(function () {
                 this.kaggleUsers = new chorus.collections.KaggleUserSet
-                (  [new chorus.models.KaggleUser({fullName: "Batman"}),
-                   new chorus.models.KaggleUser({fullName: "Catwoman"})]
-                );
+                    ([new chorus.models.KaggleUser({fullName:"Batman"}),
+                        new chorus.models.KaggleUser({fullName:"Catwoman"})]
+                    );
                 this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-                    recipients: this.kaggleUsers,
-                    workspace: this.workspace
+                    recipients:this.kaggleUsers,
+                    workspace:this.workspace
                 });
                 this.dialog.render();
             });
 
-            it("displays the name of the kaggle recipient", function() {
+            it("displays the name of the kaggle recipient", function () {
                 expect(this.dialog.$('.kaggle_recipient')).toContainText("Batman, Catwoman");
             });
 
-            context("when the recipient names run over the limit", function() {
-                beforeEach(function() {
+            context("when the recipient names run over the limit", function () {
+                beforeEach(function () {
                     this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-                        recipients: this.kaggleUsers,
-                        workspace: this.workspace,
-                        maxRecipientCharacters: 10
+                        recipients:this.kaggleUsers,
+                        workspace:this.workspace,
+                        maxRecipientCharacters:10
                     });
                     this.dialog.render();
                 });
 
-                it("displays the name of some kaggle recipients, and a more link", function() {
+                it("displays the name of some kaggle recipients, and a more link", function () {
                     expect(this.dialog.$('.kaggle_recipient.full')).toHaveClass("hidden");
                     expect(this.dialog.$('.kaggle_recipient.short')).not.toHaveClass("hidden");
                     expect(this.dialog.$('.kaggle_recipient.full')).toContainText("Batman, Catwoman show less");
                     expect(this.dialog.$('.kaggle_recipient.short')).toContainText("Batman and 1 more");
                 });
 
-                it("shows the remaining names when you click on more", function() {
+                it("shows the remaining names when you click on more", function () {
                     this.dialog.$(".showMore").click();
                     expect(this.dialog.$('.kaggle_recipient.full')).not.toHaveClass("hidden");
                     expect(this.dialog.$('.kaggle_recipient.short')).toHaveClass("hidden");
                 });
 
-                describe("#combineNames", function() {
-                    it("Returns the abbreviated list of recipients with a more link", function() {
+                describe("#combineNames", function () {
+                    it("Returns the abbreviated list of recipients with a more link", function () {
                         expect(this.dialog.combineNames(this.kaggleUsers.models)).toEqual(
                             {
-                                short: "Batman",
-                                full: "Batman, Catwoman",
-                                moreCount: 1
+                                short:"Batman",
+                                full:"Batman, Catwoman",
+                                moreCount:1
                             }
                         );
                     });
@@ -78,43 +78,43 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             });
         });
 
-        it("should have a link to 'insert dataset schema'", function() {
+        it("should have a link to 'insert dataset schema'", function () {
             expect(this.dialog.$("a.insert_dataset_schema")).toContainTranslation("kaggle.compose.insert_schema");
         });
 
-        context("when clicking 'insert dataset schema' link", function() {
+        context("when clicking 'insert dataset schema' link", function () {
             var modalSpy;
-            beforeEach(function() {
+            beforeEach(function () {
                 modalSpy = stubModals();
                 spyOn(chorus.Modal.prototype, 'launchSubModal').andCallThrough();
                 spyOn(this.dialog, "datasetsChosen").andCallThrough();
                 this.dialog.$("a.insert_dataset_schema").click();
             });
 
-            it("should launch the dataset picker dialog", function() {
+            it("should launch the dataset picker dialog", function () {
                 expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
                 expect(modalSpy).toHaveModal(chorus.dialogs.KaggleInsertDatasetSchema);
             });
 
-            it("should not set the pre-selected dataset", function() {
+            it("should not set the pre-selected dataset", function () {
                 expect(chorus.modal.options.defaultSelection).toBeUndefined();
             });
 
-            describe("when a dataset is selected", function() {
+            describe("when a dataset is selected", function () {
                 var datasets;
-                beforeEach(function() {
+                beforeEach(function () {
                     datasets = [
-                        rspecFixtures.workspaceDataset.datasetTable({ objectName: "i_bought_a_zoo" }),
-                        rspecFixtures.workspaceDataset.datasetTable({ objectName: "bourne_identity" })
+                        rspecFixtures.workspaceDataset.datasetTable({ objectName:"i_bought_a_zoo" }),
+                        rspecFixtures.workspaceDataset.datasetTable({ objectName:"bourne_identity" })
                     ];
                     chorus.modal.trigger("datasets:selected", datasets);
                 });
 
-                it("should re-enable the submit button", function() {
+                it("should re-enable the submit button", function () {
                     expect(this.dialog.$("button.submit")).toBeEnabled();
                 });
 
-                it("fetches the columns for each of the selected datasets", function() {
+                it("fetches the columns for each of the selected datasets", function () {
                     _.each(datasets, function (dataset) {
                         expect(dataset.columns()).toHaveBeenFetched();
                     });
@@ -122,17 +122,17 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
                 describe("when the fetches complete successfully", function () {
                     beforeEach(function () {
-                        _.each(datasets, function(dataset, i) {
+                        _.each(datasets, function (dataset, i) {
                             this.server.completeFetchAllFor(dataset.columns(), [
-                                fixtures.databaseColumn({name:"Rhino_" + i, recentComment:"awesome", typeCategory: "STRING" }),
-                                fixtures.databaseColumn({name:"Sloth_" + i, recentComment:"lazy", typeCategory: "WHOLE_NUMBER" })
+                                fixtures.databaseColumn({name:"Rhino_" + i, recentComment:"awesome", typeCategory:"STRING" }),
+                                fixtures.databaseColumn({name:"Sloth_" + i, recentComment:"lazy", typeCategory:"WHOLE_NUMBER" })
                             ]);
-                            this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable({ rows: 11 * (i + 1) }));
+                            this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable({ rows:11 * (i + 1) }));
                         }, this);
                     });
 
                     it("inserts the chosen schemas into the text field", function () {
-                        message = this.dialog.$('textarea[name=html_body]').val();
+                        var message = this.dialog.$('textarea[name=htmlBody]').val();
                         expect(message).toMatch("i_bought_a_zoo");
                         expect(message).toMatch("bourne_identity");
                         expect(message).toMatch(/Rhino_0\s*string/);
@@ -142,13 +142,13 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     });
 
                     it("displays the number of columns and the number of rows next to each table", function () {
-                        message = this.dialog.$('textarea[name=html_body]').val();
+                        var message = this.dialog.$('textarea[name=htmlBody]').val();
                         expect(message).toMatch(/i_bought_a_zoo\s+# of columns: 2, # of rows: 11/);
                         expect(message).toMatch(/bourne_identity\s+# of columns: 2, # of rows: 22/);
                     });
 
-                    describe("when you fetch MORE datasets", function() {
-                        it("doesn't add the old ones again", function() {
+                    describe("when you fetch MORE datasets", function () {
+                        it("doesn't add the old ones again", function () {
                             chorus.modal.trigger("datasets:selected", datasets);
                             expect(this.dialog.requiredDatasets.size()).toBe(datasets.length * 2); // 1 for statistics, 1 for columns
                         });
@@ -158,13 +158,13 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                 describe("when some of the fetches don't complete", function () {
                     beforeEach(function () {
                         this.server.completeFetchAllFor(datasets[0].columns(), [
-                            fixtures.databaseColumn({name:"Rhino_0", recentComment:"awesome", typeCategory: "STRING" }),
-                            fixtures.databaseColumn({name:"Sloth_0", recentComment:"lazy", typeCategory: "WHOLE_NUMBER" })
+                            fixtures.databaseColumn({name:"Rhino_0", recentComment:"awesome", typeCategory:"STRING" }),
+                            fixtures.databaseColumn({name:"Sloth_0", recentComment:"lazy", typeCategory:"WHOLE_NUMBER" })
                         ]);
                     });
 
                     it("doesn't update the message", function () {
-                        message = this.dialog.$('textarea[name=html_body]').val();
+                        var message = this.dialog.$('textarea[name=htmlBody]').val();
                         expect(message).not.toContain("Rhino_0");
                     });
                 });
@@ -178,66 +178,88 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
     });
 
     describe("saving", function () {
-        beforeEach(function () {
-            this.dialog.$('input[name=reply_to]').val('me@somewhere.com');
-            this.dialog.$('input[name=subject]').val('Something cool');
-            this.dialog.$('textarea[name=html_body]').val('Some stuff');
-            spyOn(this.dialog, "clearServerErrors");
+        context("with valid inputs", function () {
+            beforeEach(function () {
+                this.dialog.$('input[name=replyTo]').val('me@somewhere.com');
+                this.dialog.$('input[name=subject]').val('Something cool');
+                this.dialog.$('textarea[name=htmlBody]').val('Some stuff');
 
-            spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
-            spyOn(this.dialog, "closeModal");
-            spyOn(chorus, "toast");
-            this.dialog.$('button.submit').click();
-        });
-
-        it("adds a spinner to the submit button", function () {
-            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-        });
-
-        it("saves the message with the new values", function () {
-            var model = this.dialog.model;
-            expect(model.save).toHaveBeenCalled();
-
-            expect(model.get('replyTo')).toEqual('me@somewhere.com');
-            expect(model.get('subject')).toEqual('Something cool');
-            expect(model.get('htmlBody')).toEqual('Some stuff');
-        });
-
-        it("closes the dialog box if saved successfully", function () {
-            this.dialog.model.trigger("saved");
-            expect(this.dialog.closeModal).toHaveBeenCalled();
-        });
-
-        it("shows a toast message if saved successfully", function() {
-            this.dialog.model.trigger("saved");
-            expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
-        });
-
-        context("when the dialog has errors", function() {
-            it("clears any errors on the model when the dialog is closed", function() {
-                this.dialog.model.serverErrors = { name: "wrong name" };
-                this.dialog.$("button.cancel").click();
-                expect(this.dialog.clearServerErrors).toHaveBeenCalled();
+                spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
+                spyOn(this.dialog, "closeModal");
+                spyOn(chorus, "toast");
+                this.dialog.$('button.submit').click();
             });
 
-            it("clears any errors on the model when the close_errors bar is closed", function() {
-                this.dialog.model.serverErrors = { name: "wrong name" };
-                this.dialog.showErrors();
-                this.dialog.$("a.close_errors").click();
-                expect(this.dialog.clearServerErrors).toHaveBeenCalled();
+            it("adds a spinner to the submit button", function () {
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            });
+
+            it("saves the message with the new values", function () {
+                var model = this.dialog.model;
+                expect(model.save).toHaveBeenCalled();
+
+                expect(model.get('replyTo')).toEqual('me@somewhere.com');
+                expect(model.get('subject')).toEqual('Something cool');
+                expect(model.get('htmlBody')).toEqual('Some stuff');
+            });
+
+            it("closes the dialog box if saved successfully", function () {
+                this.dialog.model.trigger("saved");
+                expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("shows a toast message if saved successfully", function () {
+                this.dialog.model.trigger("saved");
+                expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
+            });
+
+            context("when the dialog has errors", function () {
+                it("clears any errors on the model when the dialog is closed", function () {
+                    this.dialog.model.serverErrors = { name:"wrong name" };
+                    this.dialog.$("button.cancel").click();
+                    expect(_.isEmpty(this.dialog.model.serverErrors)).toBeTruthy();
+                });
+
+                it("clears any errors on the model when the close_errors bar is closed", function () {
+                    this.dialog.model.serverErrors = { name:"wrong name" };
+                    this.dialog.showErrors();
+                    this.dialog.$("a.close_errors").click();
+                    expect(_.isEmpty(this.dialog.model.serverErrors)).toBeTruthy();
+                });
+            });
+
+            describe("when the save fails", function () {
+                beforeEach(function () {
+                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields:{ a:{ BLANK:{} } } });
+                });
+
+                it("displays the errors", function () {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    expect(this.dialog.$(".errors")).toContainText("A can't be blank");
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("kaggle.compose.submit");
+                });
             });
         });
 
-        describe("when the save fails", function() {
-            beforeEach(function() {
-                this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+        context("with invalid inputs", function() {
+            beforeEach(function () {
+                this.dialog.$('input[name=replyTo]').val('AAA');
+                this.dialog.$('input[name=subject]').val('');
+                this.dialog.$('textarea[name=htmlBody]').val('');
+                spyOn(this.dialog, "clearServerErrors");
+                spyOn(chorus.models.KaggleMessage.prototype, "save").andCallThrough();
+                this.dialog.$('button.submit').click();
             });
 
-            it("displays the errors", function() {
-                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                expect(this.dialog.$(".errors")).toContainText("A can't be blank");
-                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                expect(this.dialog.$("button.submit").text()).toMatchTranslation("kaggle.compose.submit");
+            it("marks the inputs invalid", function() {
+               expect(this.dialog.$("input[name=replyTo]")).toHaveClass("has_error");
+               expect(this.dialog.$("input[name=subject]")).toHaveClass("has_error");
+               expect(this.dialog.$("textarea[name=htmlBody]")).toHaveClass("has_error");
+            });
+
+            it("stops the loading spinner", function() {
+               expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
         });
     });

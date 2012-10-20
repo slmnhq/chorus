@@ -4,9 +4,9 @@ chorus.models.KaggleMessage = chorus.models.Base.extend({
     paramsToSave: ['replyTo', 'subject', 'htmlBody', 'recipientIds'],
 
     declareValidations: function(newAttrs) {
-        this.requireValidEmailAddress('replyTo', newAttrs);
-        this.require('subject', newAttrs);
-        this.require('htmlBody', newAttrs);
+        this.requireValidEmailAddress('replyTo', newAttrs, 'validation.required_email');
+        this.require('subject', newAttrs, 'validation.required_field');
+        this.require('htmlBody', newAttrs, 'validation.required_field');
     },
 
     recipientIds: function() {

@@ -2,6 +2,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     constructorName: "ComposeKaggleMessage",
     templateName: "kaggle/compose_kaggle_message_dialog",
     title: t("kaggle.compose.title"),
+    persistent: true,
+
     events: {
         "click button.submit": 'save',
         "click .showMore": 'showMore',
@@ -35,18 +37,19 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.workspace = options.workspace;
         this.maxRecipientCharacters = options.maxRecipientCharacters || 70;
         this.requiredDatasets = new chorus.RequiredResources();
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
         this._super('setup', arguments);
     },
 
     save: function (e) {
         e.preventDefault();
+        this.$("button.submit").startLoading("kaggle.compose.saving");
         this.model.save({
-            replyTo: this.$('input[name=reply_to]').val(),
-            htmlBody: this.$('textarea[name=html_body]').val(),
+            replyTo: this.$('input[name=replyTo]').val(),
+            htmlBody: this.$('textarea[name=htmlBody]').val(),
             subject: this.$('input[name=subject]').val()
         });
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.$("button.submit").startLoading("kaggle.compose.saving");
     },
 
     saveFailed:function () {
@@ -148,7 +151,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         }
 
         var linebreak = "\n";
-        var $message = this.$("textarea[name=html_body]");
+        var $message = this.$("textarea[name=htmlBody]");
         var message = $message.val() + linebreak + linebreak;
 
         _.each(this.datasets, function(dataset) {

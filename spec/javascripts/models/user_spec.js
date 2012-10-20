@@ -157,7 +157,7 @@ describe("chorus.models.User", function() {
 
         it("requires email", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("email", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
+            expect(this.model.requirePattern).toHaveBeenCalledWith("email", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined, undefined);
         });
 
         context("when the user is new", function() {
