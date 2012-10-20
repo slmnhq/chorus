@@ -43,4 +43,8 @@ class HadoopInstance < ActiveRecord::Base
     'Instance'
   end
 
+  def online?
+    state == "online"
+  end
+
 end

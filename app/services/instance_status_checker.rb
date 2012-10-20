@@ -17,12 +17,10 @@ class InstanceStatusChecker
 
   def check
     begin
-      #TODO - rename online in HadoopInstance also to state [#37074871]
+      instance.state = "offline" if state == "online"
       if instance.is_a?(HadoopInstance)
-        instance.online = false
         check_hdfs_instance
       else
-        instance.state = "offline" if state == "online"
         check_gpdb_instance
       end
     rescue => e
@@ -50,7 +48,7 @@ class InstanceStatusChecker
       version = Hdfs::QueryService.instance_version(instance)
       if version
         instance.version = version
-        instance.online = true
+        instance.state = "online"
       end
     end
   end

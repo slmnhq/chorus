@@ -99,9 +99,9 @@ describe InstanceStatusChecker do
   end
 
   describe "Hadoop Instances:" do
-    let(:hadoop_instance1) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
-    let(:hadoop_instance2) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
-    let(:hadoop_instance3) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:hadoop_instance1) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
+    let(:hadoop_instance2) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
+    let(:hadoop_instance3) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
 
     describe ".check_hdfs_instances" do
       before { HadoopInstance.delete_all } # remove fixtures
