@@ -13,6 +13,8 @@ resource "Kaggle", :kaggle_api => true do
     parameter :workspace_id, "Workspace id"
     parameter :'kaggle_user[]', "Array of filters, each with the pipe-separated format: 'filter|comparator|value'"
 
+    let(:'kaggle_user[]') { "rank|greater|1" }
+
     example_request "Get a list of Kaggle users" do
       status.should == 200
     end
@@ -26,7 +28,7 @@ resource "Kaggle", :kaggle_api => true do
     parameter :'recipient_ids[]', "Kaggle user ids of recipients"
 
     let(:reply_to) { "user@chorus.com" }
-    let(:subject) { 'Please analyze my data'}
+    let(:subject) { 'Please analyze my data' }
     let(:html_body) { 'I have a lot of data that needs to be analyzed.' }
     let(:recipient_ids) { ['63766', '63767'] }
 

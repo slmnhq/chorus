@@ -1,6 +1,6 @@
 chorus.views.KaggleUserListContentDetails = chorus.views.Base.extend({
     constructorName: "KaggleUserListContentDetailsView",
-    templateName:"kaggle_user_list_content_details",
+    templateName: "kaggle_user_list_content_details",
 
     events: {
         "click button.search_kaggle_user": "submitSearch"
@@ -20,18 +20,15 @@ chorus.views.KaggleUserListContentDetails = chorus.views.Base.extend({
     },
 
     submitSearch: function() {
-        var paramArray =[]
-        var convertKey = this.convertKey;
-        this.filterWizardView.collection.map(function(model) {
-            paramArray.push(encodeURIComponent(convertKey(model.get("column").get("name"))) + "|" +
-                encodeURIComponent(model.get("comparator")) +"|" + encodeURIComponent((model.get("input").value)))
-        });
-        this.collection.urlParams = {kaggleUser: JSON.stringify(paramArray)};
+        var paramArray = this.filterWizardView.collection.map(_.bind(function(model) {
+            return encodeURIComponent(this.convertKey(model.get("column").get("name"))) + "|" +
+                encodeURIComponent(model.get("comparator")) + "|" + encodeURIComponent((model.get("input").value));
+        }, this));
+        this.collection.urlParams = {'kaggleUser[]': paramArray};
         this.collection.fetch();
     },
 
     convertKey: function(key) {
-
         return key.replace(/ /g, "_").toLowerCase();
     }
 });

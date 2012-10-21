@@ -31,7 +31,8 @@ describe("chorus.views.KaggleUserListContentDetails", function () {
             it("send the params as format filter|comparator|value", function () {
                 this.view.$(".search_kaggle_user").click();
                 expect(this.view.collection).toHaveBeenFetched();
-                expect(this.server.lastFetchFor(this.view.collection).url).toContain(encodeURI(JSON.stringify(encodeURIComponent("column_1") + "|" + encodeURIComponent("greater") + "|" + encodeURIComponent("||123"))))
+                var url = this.server.lastFetchFor(this.view.collection).url;
+                expect(url).toContainQueryParams({'kaggleUser[]':encodeURIComponent("column_1") + "|" + encodeURIComponent("greater") + "|" + encodeURIComponent("||123") });
             });
         });
 

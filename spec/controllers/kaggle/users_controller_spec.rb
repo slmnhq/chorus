@@ -41,17 +41,23 @@ describe Kaggle::UsersController do
     end
 
     it "filters the list" do
-      get :index, :kaggle_user => "[\"rank|greater|10\"]"
+      get :index, :kaggle_user => ["rank|greater|10"]
       decoded_response.length.should == 1
       user = decoded_response.first
       user['rank'].should > 10
     end
 
     it "filters the list for competition types" do
-      get :index, :kaggle_user => "[\"past_competition_types|equal|Life Sciences\"]"
+      get :index, :kaggle_user => ["past_competition_types|equal|Life Sciences"]
       decoded_response.length.should == 2
       user = decoded_response.first
       user['past_competition_types'].map(&:downcase).should include(("Life Sciences").downcase)
+    end
+
+    it "handles blank filter values" do
+      get :index, :kaggle_user => ["rank:greater:|", "past_competition_types|equal|Life Sciences"]
+      response.should be_success
+      decoded_response.length.should == 2
     end
 
     generate_fixture "kaggleUserSet.json" do

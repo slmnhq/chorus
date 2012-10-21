@@ -1,7 +1,6 @@
 module Kaggle
   class UsersController < ApplicationController
     def index
-      kaggle_user_filter = JSON.parse(params[:kaggle_user]) if params[:kaggle_user]
       user_list = JSON.parse(File.read(Rails.root + "kaggleSearchResults.json"))
 
       sorted_user_list = user_list.map do |user_attributes|
@@ -21,7 +20,7 @@ module Kaggle
       end.sort! { |user1, user2| user1['rank'] <=> user2['rank'] }
 
       sorted_user_list.keep_if do |user_attributes|
-        search_through_filter(user_attributes, kaggle_user_filter)
+        search_through_filter(user_attributes, params[:kaggle_user])
       end
 
       render :json => {:response => sorted_user_list}, :status => '200'
@@ -32,6 +31,7 @@ module Kaggle
       return return_val if filters.nil?
       filters.each { |filter|
         key, comparator, value = filter.split("|")
+        next unless value
         value = URI.decode(value)
         value = value.to_i if value.try(:to_i).to_s == value.to_s
         case comparator
