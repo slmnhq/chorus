@@ -1,5 +1,4 @@
 class DatasetImportsController < ApplicationController
-
   def show
     import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
     dataset = Dataset.find(params[:dataset_id])
@@ -60,7 +59,6 @@ class DatasetImportsController < ApplicationController
       import_schedule.destroy
     rescue Exception => e
       raise ApiValidationError.new(:base, :delete_unsuccessful)
-
     end
 
     render :json => {}

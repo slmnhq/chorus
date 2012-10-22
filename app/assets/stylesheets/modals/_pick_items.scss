@@ -1,5 +1,7 @@
 .pick_items {
     width: 500px;
+	height: 800px;
+	overflow: auto;
 
     .sub_header .chorus_search_container {
         margin: 5px 0;
@@ -12,6 +14,8 @@
     .items {
         ul {
             li {
+				vertical-align: middle;
+
                 &:hover {
                     cursor: pointer;
                 }
@@ -27,6 +31,21 @@
                         color: white;
                     }
                 }
+
+				.text {
+					position: absolute;
+					top: 13px;
+					left: 25px;
+					width: 304px;
+				}
+
+				.actions {
+					position: absolute;
+					top: 17px;
+					left: 340px;
+					margin-left: 10px;
+					float: right;
+				}
             }
         }
     }
