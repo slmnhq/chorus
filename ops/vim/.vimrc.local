@@ -9,6 +9,9 @@ set gcr=n:blinkon0
 set number
 set ic
 set hls
+set nobackup
+set nowritebackup
+set noswapfile
 
 set wildignore+=public/system
 set wildignore+=vendor
