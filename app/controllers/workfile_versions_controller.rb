@@ -25,7 +25,7 @@ class WorkfileVersionsController < ApplicationController
     end
 
     workfile.reload
-    present workfile.latest_workfile_version
+    present workfile.latest_workfile_version, :presenter_options => { :contents => true }
   end
 
   def show
