@@ -6,7 +6,6 @@ chorus.views.Bare = Backbone.View.include(
         initialize: function initialize() {
             this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
-            //if (this.debug) debugger
             chorus.viewsToTearDown.push(this);
             this.underviews = [];
 

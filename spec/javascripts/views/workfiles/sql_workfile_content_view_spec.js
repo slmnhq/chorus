@@ -126,6 +126,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
+                            this.spy = jasmine.createSpy()
+                            chorus.PageEvents.subscribe("workfile:executed", this.spy)
                             this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults());
                         });
 
@@ -138,7 +140,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("broadcasts workfile:executed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.view.task.executionSchema());
+                            expect(this.spy).toHaveBeenCalledWith(this.workfile, this.view.task.executionSchema());
                         });
 
                         it("renders the resultsConsole", function() {
@@ -168,6 +170,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
+                            this.spy = jasmine.createSpy()
+                            chorus.PageEvents.subscribe("workfile:executed", this.spy)
                             this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
                                 executionInfo: this.executionInfo
                             });
@@ -182,7 +186,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("broadcasts workfile:executed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
+                            expect(this.spy).toHaveBeenCalledWith(this.workfile, this.executionInfo);
                         })
                     });
 

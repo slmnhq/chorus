@@ -95,7 +95,7 @@ window.Chorus = function chorus$Global() {
         self.PageEvents.reset();
 
         while (!_.isEmpty(self.viewsToTearDown)) {
-            var view = self.viewsToTearDown[0];
+            var view = self.viewsToTearDown.pop();
             view.teardown();
         }
 
