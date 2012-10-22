@@ -12,7 +12,7 @@ chorus.views.KaggleFilterWizard = chorus.views.FilterWizard.extend({
     },
 
     filterView: function(filter) {
-        return new chorus.views.KaggleFilter({model: filter});
+        return new chorus.views.KaggleFilter({model: filter, collection: this.columnSet});
     },
 
     filterModel: function() {

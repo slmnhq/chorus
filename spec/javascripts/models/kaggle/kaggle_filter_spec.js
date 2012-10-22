@@ -66,4 +66,29 @@ describe("chorus.models.KaggleFilter", function () {
             });
         });
     });
+
+    describe("#filterParams", function() {
+        it("pipe-delimits the filter info", function() {
+            this.model.set({column: new chorus.models.KaggleColumn({name: "column_1"}),
+                comparator: "greater",
+                input: { value : "||123"}});
+            expect(this.model.filterParams()).toEqual(encodeURIComponent("column_1") + "|" + encodeURIComponent("greater") + "|" + encodeURIComponent("||123"));
+        });
+
+        context("when the value is null", function() {
+            it("is null", function() {
+                this.model.set({column: new chorus.models.KaggleColumn({name: "column_1"}),
+                    comparator: "greater",
+                    input: null});
+                expect(this.model.filterParams()).toBeFalsy();
+            });
+
+            it("is null", function() {
+                this.model.set({column: new chorus.models.KaggleColumn({name: "column_1"}),
+                    comparator: "greater",
+                    input: {value: ''}});
+                expect(this.model.filterParams()).toBeFalsy();
+            });
+        });
+    });
 });

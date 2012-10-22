@@ -19,5 +19,14 @@ chorus.models.KaggleFilter = chorus.models.Filter.extend({
                 return new chorus.models.KaggleFilterMaps.Other
                 break;
         }
+    },
+
+    filterParams: function() {
+        if (this.get("input") && this.get("input").value) {
+            return encodeURIComponent(_.underscored(this.get("column").get("name"))) + "|" +
+                encodeURIComponent(this.get("comparator")) + "|" + encodeURIComponent((this.get("input").value));
+        } else {
+            return null;
+        }
     }
 });

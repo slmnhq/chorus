@@ -3,7 +3,7 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
     tagName: 'li',
 
     setup: function() {
-        this.collection = new chorus.collections.KaggleColumnSet();
+        this.collection = this.collection || new chorus.collections.KaggleColumnSet();
         this.model = this.model || new chorus.models.KaggleFilter();
         this._super("setup", arguments);
         this.bindings.add(this.columnFilter, "refresh", this.columnSelected);

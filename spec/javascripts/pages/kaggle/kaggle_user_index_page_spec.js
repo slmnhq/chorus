@@ -73,16 +73,18 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         beforeEach(function () {
             this.server.reset();
             var filterCollection = new chorus.collections.KaggleFilterSet([
-                new chorus.models.KaggleFilter({column: new chorus.models.KaggleColumn({name: "column_1"}),
-                                                comparator: "greater",
-                                                input: { value : "||123"}})]);
+                new chorus.models.KaggleFilter(),
+                new chorus.models.KaggleFilter()
+            ]);
+            spyOn(filterCollection.at(1), 'filterParams').andReturn(null);
+            spyOn(filterCollection.at(0), 'filterParams').andReturn("someValue");
             chorus.PageEvents.broadcast("filterKaggleUsers", filterCollection);
         });
 
         it("send the params as format filter|comparator|value", function () {
             expect(this.page.collection).toHaveBeenFetched();
             var url = this.server.lastFetchFor(this.page.collection).url;
-            expect(url).toContainQueryParams({'kaggleUser[]':encodeURIComponent("column_1") + "|" + encodeURIComponent("greater") + "|" + encodeURIComponent("||123") });
+            expect(url).toContainQueryParams({'kaggleUser[]':'someValue'});
         });
     });
 });
