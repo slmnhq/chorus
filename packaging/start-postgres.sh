@@ -16,8 +16,7 @@ if [ -f $POSTGRES_PID_FILE ]; then
     exit 1
   fi
 fi
-
-$CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DATA_DIR/server.log -D $POSTGRES_DATA_DIR -w -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>$POSTGRES_DATA_DIR/pg_ctl.log
+DYLD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib LD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib $CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DATA_DIR/server.log -D $POSTGRES_DATA_DIR -w -o "-p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>$POSTGRES_DATA_DIR/pg_ctl.log
 POSTGRES_START=$?
 
 if [ $POSTGRES_START -eq 0 ]; then
