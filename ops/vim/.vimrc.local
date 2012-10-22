@@ -6,6 +6,9 @@ set shiftwidth=4
 
 " don't blink cursor
 set gcr=n:blinkon0
+set number
+set ic
+set hls
 
 set wildignore+=public/system
 set wildignore+=vendor
@@ -28,6 +31,8 @@ map <D-k> :Gstatus<CR>
 
 map <C-Q> <C-w>o:vsp<CR><C-W>l<D-T>
 map <D-Y> <C-w>o:vsp<CR><C-W>l<D-T>
+
+map <D-F> :Ack<cr>
 
 set nocursorline
 
@@ -53,24 +58,7 @@ endfunction
 map <C-h> :call OpenHandlebars()<CR>
 map <D-H> :sp<CR><C-w>j<C-h>
 
-function! WinMove(key) 
-  let t:curwin = winnr()
-  exec "wincmd ".a:key
-  if (t:curwin == winnr()) "we havent moved
-    if (match(a:key,'[jk]')) "were we going up/down
-      wincmd v
-    else 
-      wincmd s
-    endif
-    exec "wincmd ".a:key
-  endif
-endfunction
-
-map <leader>h              :call WinMove('h')<cr>
-map <leader>k              :call WinMove('k')<cr>
-map <leader>l              :call WinMove('l')<cr>
-map <leader>j              :call WinMove('j')<cr>
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:CommandTMaxFiles = 100000
 colorscheme solarized
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 
