@@ -45,11 +45,14 @@
         color: $color-text2;
     }
 
+    .image {
+        text-align: center;
+        width: 70px;
+    }
+
     img.profile {
-        display: block;
-        float: left;
-        width: 64px;
-        height: 64px;
+        max-width: 64px;
+        max-height: 64px;
     }
 
     .kaggle_rank {
@@ -65,15 +68,14 @@
       margin-top: 28px;
       margin-right: 10px;
     }
+
+    .kaggle_filter {
+        .comparator {
+            width: 215px;
+        }
+    }
 }
 
-.kaggle_user_list {
-  .kaggle_filter {
-    .comparator {
-      width: 215px;
-    }
-  }
-}
 .kaggle_compose_kaggle_message_dialog {
   width: 735px;
   font-size: 13px;
