@@ -329,6 +329,27 @@ describe("backbone_extensions", function() {
         });
     });
 
+    describe("loadUrl", function() {
+        beforeEach(function() {
+            this.newHandler = {
+                route: /users/,
+                callback: function(fragment) {}
+            };
+            spyOn(this.newHandler, "callback");
+            var handlers = [this.newHandler];
+            Backbone.History.prototype.handlers = handlers;
+        });
+
+        afterEach(function(){
+            Backbone.History.prototype.handlers = undefined;
+        });
+
+        it("removes the trailing slash from the end of a URL", function() {
+            Backbone.History.prototype.loadUrl("#/users/");
+            expect(this.newHandler.callback).toHaveBeenCalledWith("/users")
+        });
+    });
+
     describe(".include(*modules)", function() {
         var Klass, module1, module2, module3;
 

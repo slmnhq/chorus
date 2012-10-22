@@ -14,7 +14,6 @@
             ["/invalidRoute", "InvalidRoute"],
             ["/unprocessableEntity", "UnprocessableEntity"],
             ["", "Dashboard"],
-            ["/", "Dashboard"],
             ["/login", "Login"],
             ["/search/:query", "SearchIndex"],
             ["/search/:scope/:entityType/:query", "SearchIndex"],

@@ -42,9 +42,8 @@ Backbone.sync = function(method, model, options) {
         var json = $.parseJSON(string);
         _.each(json, function(property, key) {
             if (property === null) delete json[key]
-        })
+        });
         params.data = $.param(json);
-//      params.data = JSON.stringify(model.toJSON());
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
@@ -100,6 +99,26 @@ Backbone.Events.unbind = function(ev, callback, context) {
         }
     }
     return this;
+}
+
+// This function overrides loadUrl from Backbone to strip off a trailing
+// slash.
+//
+// http://localhost/users/ => http://localhost/users
+// http://localhost/users/1/ => http://localhost/users/1
+//
+Backbone.History.prototype.loadUrl = function(fragmentOverride) {
+    var fragment = this.fragment = this.getFragment(fragmentOverride);
+    if (fragment[fragment.length - 1] == '/') {
+        fragment = fragment.substr(0,fragment.length-1);
+    }
+    var matched = _.any(this.handlers, function(handler) {
+        if (handler.route.test(fragment)) {
+            handler.callback(fragment);
+            return true;
+        }
+    });
+    return matched;
 }
 
 // super function, taken from here:
