@@ -5,24 +5,24 @@ gem 'rails', '3.2.5'
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip', '3.0.4'
-gem 'queue_classic', :github => "pivotal-leopold/queue_classic"
+gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120720'
-gem 'jetpack', :github => "pivotal-leopold/jetpack", :require => false
+gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'sunspot_solr', '2.0.0.pre.120720'
 gem 'quiet_assets'
 gem 'nokogiri'
-gem 'postgresql_cursor', :github => "pivotal-leopold/postgresql_cursor"
+gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
 gem 'attr_encrypted'
 gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
 gem 'turbo-sprockets-rails3'
-gem 'chorusgnip', :github => 'pivotal-leopold/gnip'
+gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
   # Pull request: https://github.com/jruby/activerecord-jdbc-adapter/pull/207
-  gem 'activerecord-jdbcpostgresql-adapter', :github => "pivotal-leopold/activerecord-jdbc-adapter", :branch => "dynamic-schema-search-path"
+  gem 'activerecord-jdbcpostgresql-adapter', :github => "GreenplumChorus/activerecord-jdbc-adapter", :branch => "dynamic-schema-search-path"
 end
 
 group :assets do
@@ -60,7 +60,7 @@ group :test, :development, :integration, :packaging do
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
   gem 'jasmine'
-  gem 'rspec_api_documentation', :github => "pivotal-leopold/rspec_api_documentation"
+  gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder'
@@ -71,6 +71,6 @@ end
 
 group :development do
   gem 'license_finder'
-  gem 'mizuno', :github => "pivotal-leopold/mizuno", :branch => '0.6.4_changes'
+  gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
   gem 'newrelic_rpm'
 end
