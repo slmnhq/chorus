@@ -48,6 +48,7 @@ describe WorkfileVersionsController do
 
       decoded_response[:version_info][:commit_message].should == 'A new version'
       decoded_response[:version_info][:version_num].should == 2
+      decoded_response[:version_info][:content].should == 'New content'
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
