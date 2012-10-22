@@ -16,10 +16,10 @@ class GnipImporter < CsvImporter
         :new_table => true,
         :file_contains_header => false
     )
+    csv_file.user_uploaded = false
     csv_file.user = User.find(user_id)
-    if csv_file.save
-      GnipImporter.import_file(csv_file, event)
-    end
+    csv_file.save!
+    GnipImporter.import_file(csv_file, event)
   rescue Exception => e
     GnipImporter.create_failure_event(e.message, event, table_name)
   end

@@ -104,6 +104,7 @@ describe GnipImporter do
         file.should be_ready_to_import
         file.user.should == user
         file.workspace.should == workspace
+        file.user_uploaded.should be_false
       end
     end
 

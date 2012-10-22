@@ -37,6 +37,14 @@ describe CsvFile do
       c.ready_to_import?.should be_false
     end
 
+    it "does not validate the size of the CSV file if the file is not user uploaded" do
+      any_instance_of(Paperclip::StringioAdapter) do |a|
+        stub(a).size { Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes + 1.megabyte }
+      end
+      c = CsvFile.new(default_params.merge(:user_uploaded => false), :without_protection => true)
+      c.valid?.should be_true
+    end
+
     it { should validate_presence_of(:user) }
     it { should validate_presence_of(:workspace) }
   end
