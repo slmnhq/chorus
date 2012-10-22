@@ -36,9 +36,9 @@ describe("chorus.models.KaggleFilter", function () {
             });
         });
 
-        describe("columns with name 'Favorite Techniques'", function () {
+        describe("columns with name 'Favorite Technique'", function () {
             beforeEach(function () {
-                this.model.get("column").set({name:"Favorite Techniques"});
+                this.model.get("column").set({name:"Favorite Technique"});
             });
 
             it("has an 'string' kaggle filter map", function () {

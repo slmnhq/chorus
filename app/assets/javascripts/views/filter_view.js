@@ -2,9 +2,11 @@ chorus.views.Filter = chorus.views.Base.extend({
     templateName: "dataset_filter",
     tagName: "li",
     persistent: true,
+
     subviews: {
         '.column_filter': 'columnFilter'
     },
+
     events: {
         "click .remove": "removeSelf",
         "change select.comparator": "comparatorSelected",

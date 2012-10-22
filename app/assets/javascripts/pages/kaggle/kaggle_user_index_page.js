@@ -6,7 +6,6 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
     setup: function(workspaceId) {
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({ id: workspaceId });
-        var that = this;
         this.dependOn(this.workspace);
         this.workspace.fetch();
         this.collection = new chorus.collections.KaggleUserSet([], {workspace: this.workspace});
@@ -20,6 +19,8 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.KaggleUserSidebar({workspace: this.workspace});
+
+        chorus.PageEvents.subscribe("filterKaggleUsers", this.filterKaggleUsers, this);
     },
 
     crumbs: function() {
@@ -29,5 +30,14 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
             {label: this.workspace && this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace && this.workspace.showUrl()},
             {label: "Kaggle"}
         ];
+    },
+
+    filterKaggleUsers: function(filterCollection) {
+        var paramArray = filterCollection.map(_.bind(function(model) {
+            return encodeURIComponent(_.underscored(model.get("column").get("name"))) + "|" +
+                encodeURIComponent(model.get("comparator")) + "|" + encodeURIComponent((model.get("input").value));
+        }, this));
+        this.collection.urlParams = {'kaggleUser[]': paramArray};
+        this.collection.fetch();
     }
 });

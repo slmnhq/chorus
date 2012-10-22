@@ -78,17 +78,17 @@ describe("chorus.views.DatabaseColumnList", function() {
             context("with selectMulti false", function() {
                 it("has the first row selected by default", function() {
                     expect(this.view.$("li:eq(0)")).toHaveClass("selected");
-                })
+                });
 
                 context("selecting a column", function() {
                     beforeEach(function() {
                         this.view.$("li:eq(1)").click();
-                    })
+                    });
 
                     it("moves the selected class", function() {
                         expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
                         expect(this.view.$("li:eq(1)")).toHaveClass("selected");
-                    })
+                    });
 
                     it("broadcasts the column:selected page event with the corresponding model as an argument", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));

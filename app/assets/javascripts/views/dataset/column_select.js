@@ -36,8 +36,8 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     },
 
     getSelectedColumn: function() {
-        var selectedCid = this.$('select option:selected').data('cid')
-        return this.collection.getByCid(selectedCid)
+        var selectedCid = this.$('select option:selected').data('cid');
+        return this.collection.getByCid(selectedCid);
     },
 
     selectColumn: function(column) {
@@ -52,12 +52,12 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
 
     refresh: function() {
         this.$('select').selectmenu();
-        this.trigger("refresh") // require otherwise it won't render the first filter comparator in kaggle filter view
+        this.trigger("refresh"); // require otherwise it won't render the first filter comparator in kaggle filter view
     },
 
     columnSelected: function() {
-        this.selectedColumn = this.getSelectedColumn()
-        this.trigger("columnSelected", this.selectedColumn)
+        this.selectedColumn = this.getSelectedColumn();
+        this.trigger("columnSelected", this.selectedColumn);
     },
 
     valid: function() {

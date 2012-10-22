@@ -1,12 +1,13 @@
 chorus.views.FilterWizard = chorus.views.Base.extend({
     templateName: "filter_wizard",
     persistent: true,
+
     events: {
         "click .add_filter": "addFilter"
     },
 
     setup: function() {
-        this.options = this.options || {}
+        this.options = this.options || {};
         this.columnSet = this.options.columnSet;
         this.collection = this.collection || this.filterCollection();
         this.bindings.add(this.columnSet, 'remove', this.removeInvalidFilters);

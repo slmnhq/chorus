@@ -487,11 +487,11 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
             })
         }
     }
-})
+});
 
 chorus.views.MainContentList = chorus.views.MainContentView.extend({
     setup: function(options) {
-        var modelClass = options.modelClass
+        var modelClass = options.modelClass;
         var collection = this.collection;
         this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
 

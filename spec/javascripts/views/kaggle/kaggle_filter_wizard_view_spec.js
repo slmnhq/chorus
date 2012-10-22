@@ -4,20 +4,20 @@ describe("chorus.views.KaggleFilterWizard", function() {
         this.filter = new chorus.models.KaggleFilter({name: "rank"});
     });
 
-    describe("#filterView", function () {
-        it("returns a KaggleFilter view", function () {
+    describe("#filterView", function() {
+        it("returns a KaggleFilter view", function() {
             expect(this.view.filterView()).toBeA(chorus.views.KaggleFilter);
         });
     });
 
-    describe("#filterModel", function () {
-        it("returns a KaggleFilter model", function () {
+    describe("#filterModel", function() {
+        it("returns a KaggleFilter model", function() {
             expect(this.view.filterModel(this.filter)).toBeA(chorus.models.KaggleFilter);
         });
     });
 
-    describe("#filterCollection", function () {
-        it("returns a KaggleFilterSet", function () {
+    describe("#filterCollection", function() {
+        it("returns a KaggleFilterSet", function() {
             expect(this.view.filterCollection()).toBeA(chorus.collections.KaggleFilterSet);
         });
     });
@@ -36,6 +36,17 @@ describe("chorus.views.KaggleFilterWizard", function() {
 
         it("adds the 'last' class to the only li", function() {
             expect(this.view.$("li.kaggle_filter")).toHaveClass("last");
+        });
+
+        describe("click the search kaggle users button", function() {
+            beforeEach(function() {
+                spyOn(chorus.PageEvents, "broadcast");
+                this.view.$("button.search_kaggle_user").click();
+            });
+
+            it("broadcasts the filterKaggleUsers event with the filters", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("filterKaggleUsers", this.view.collection);
+            });
         });
     });
 });

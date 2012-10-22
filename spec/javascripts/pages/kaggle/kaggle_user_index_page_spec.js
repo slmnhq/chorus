@@ -68,4 +68,21 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             expect(this.page.$(".kaggle_user_sidebar")).toExist();
         });
     });
+
+    describe("on filterKaggleUsers page event", function () {
+        beforeEach(function () {
+            this.server.reset();
+            var filterCollection = new chorus.collections.KaggleFilterSet([
+                new chorus.models.KaggleFilter({column: new chorus.models.KaggleColumn({name: "column_1"}),
+                                                comparator: "greater",
+                                                input: { value : "||123"}})]);
+            chorus.PageEvents.broadcast("filterKaggleUsers", filterCollection);
+        });
+
+        it("send the params as format filter|comparator|value", function () {
+            expect(this.page.collection).toHaveBeenFetched();
+            var url = this.server.lastFetchFor(this.page.collection).url;
+            expect(url).toContainQueryParams({'kaggleUser[]':encodeURIComponent("column_1") + "|" + encodeURIComponent("greater") + "|" + encodeURIComponent("||123") });
+        });
+    });
 });

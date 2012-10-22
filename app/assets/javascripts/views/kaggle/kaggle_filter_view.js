@@ -6,7 +6,7 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
         this.collection = new chorus.collections.KaggleColumnSet();
         this.model = this.model || new chorus.models.KaggleFilter();
         this._super("setup", arguments);
-        this.bindings.add(this.columnFilter, "refresh", this.columnSelected)
+        this.bindings.add(this.columnFilter, "refresh", this.columnSelected);
     },
 
     postRender: function() {
@@ -26,9 +26,9 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
             "start-ups", "finance", "credit", "natural language processing", "high dimensionality",
             "unsupervised learning", "supervised learning", "semi-supervised learning", "computer vision",
             "data manipulation", "unstructured", "exploratory", "visualization", "graph", "social",
-            "time series", "binary classification", "multiclass classification", "regression", "ranking", "QSAR"]
+            "time series", "binary classification", "multiclass classification", "regression", "ranking", "QSAR"];
 
-        var $select = this.$(".filter.competition_type select")
+        var $select = this.$(".filter.competition_type select");
         _.each(list, function(name, index) {
             var el = $("<option/>").text(name).attr("value", name);
             $select.append(el);
@@ -36,7 +36,7 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
 
 
         _.defer(function() {
-            chorus.styleSelect($select, { menuWidth: 240 })
+            chorus.styleSelect($select, { menuWidth: 240 });
         });
     }
 });

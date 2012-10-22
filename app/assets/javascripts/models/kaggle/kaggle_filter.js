@@ -3,7 +3,7 @@ chorus.models.KaggleFilter = chorus.models.Filter.extend({
 
     getFilterMap: function() {
         switch (this.has("column") && this.get("column").get("name")) {
-            case "Favorite Techniques":
+            case "Favorite Technique":
             case "Location":
             case "Favorite Software":
                 return new chorus.models.KaggleFilterMaps.String
