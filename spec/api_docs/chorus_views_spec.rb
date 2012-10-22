@@ -100,4 +100,22 @@ resource "Chorus Views" do
       status.should == 200
     end
   end
+
+  post "/chorus_views/:id/convert" do
+    let(:chorus_view) { datasets(:chorus_view) }
+    let(:id) { chorus_view.id }
+
+    parameter :id, "Id of the chorus view to be converted"
+    required_parameters :id
+
+    before do
+      any_instance_of(ChorusView) do |view|
+        mock(view).convert_to_database_view.with_any_args
+      end
+    end
+
+    example_request "Convert a Chorus View to Database view" do
+      status.should == 201
+    end
+  end
 end
