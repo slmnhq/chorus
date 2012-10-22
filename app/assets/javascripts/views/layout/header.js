@@ -94,7 +94,7 @@ chorus.views.Header = chorus.views.Base.extend({
             });
         }
 
-        this.users.onLoaded(addDropdown, this);
+        this.bindings.add(this.users, "loaded", addDropdown);
     },
 
     searchKeyPressed: function(event) {

@@ -73,11 +73,11 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
             var statistics = dataset.statistics();
             statistics.fetchIfNotLoaded();
-            statistics.onLoaded(this.render, this);
+            this.bindings.add(statistics, "loaded", this.render);
 
             if (dataset.canBeImportSourceOrDestination()) {
                 this.importConfiguration = dataset.getImport();
-                this.importConfiguration.onLoaded(this.render, this);
+                this.bindings.add(this.importConfiguration, "loaded", this.render);
                 this.importConfiguration.fetch();
             }
         } else {

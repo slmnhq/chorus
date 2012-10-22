@@ -15,9 +15,10 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
             contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("users.details")})
         });
 
-        this.dependOn(chorus.models.Config.instance());
-        chorus.models.Config.instance().fetch(); // needs to refetch to see ldap #28824949
-        chorus.models.Config.instance().onLoaded(this.configLoaded, this);
+        var config = chorus.models.Config.instance();
+        this.dependOn(config);
+        config.fetch(); // needs to refetch to see ldap #28824949
+        this.bindings.add(config, "loaded", this.configLoaded);
     },
 
     configLoaded: function() {

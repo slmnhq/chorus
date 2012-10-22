@@ -32,11 +32,13 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     fetchInstances: function() {
-        this.instanceSet.onLoaded(this.mergeInstances, this);
+        this.bindings.add(this.instanceSet, "loaded", this.mergeInstances);
         this.instanceSet.fetchAll();
-        this.hadoopInstanceSet.onLoaded(this.mergeInstances, this);
+
+        this.bindings.add(this.hadoopInstanceSet, "loaded", this.mergeInstances);
         this.hadoopInstanceSet.fetchAll();
-        this.gnipInstanceSet.onLoaded(this.mergeInstances, this);
+
+        this.bindings.add(this.gnipInstanceSet, "loaded", this.mergeInstances);
         this.gnipInstanceSet.fetchAll();
     },
 

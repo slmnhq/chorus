@@ -980,6 +980,25 @@ describe("chorus.models.Abstract", function() {
                });
            });
         });
+
+        describe("#shouldTriggerImmediately", function() {
+            context("when the argument is 'loaded'", function() {
+                it("returns true if the model is loaded", function() {
+                    this.model.loaded = true;
+                    expect(this.model.shouldTriggerImmediately("loaded")).toBeTruthy();
+                });
+                it("returns false if the model is NOT loaded", function() {
+                    this.model.loaded = false;
+                    expect(this.model.shouldTriggerImmediately("loaded")).toBeFalsy();
+                });
+            });
+            it("returns false for any other arguments", function() {
+                _.each(["change", "reset", "saveFailed", "validationFailed"], function(eventName) {
+                   expect(this.model.shouldTriggerImmediately(eventName)).toBeFalsy();
+                }, this);
+            });
+
+        });
     });
 
     describe("Collection", function() {
@@ -1333,6 +1352,25 @@ describe("chorus.models.Abstract", function() {
                 fetch3.succeed([], {});
                 expect(foo.x).toBe(3);
             });
+        });
+
+        describe("#shouldTriggerImmediately", function() {
+            context("when the argument is 'loaded'", function() {
+                it("returns true if the model is loaded", function() {
+                    this.collection.loaded = true;
+                    expect(this.collection.shouldTriggerImmediately("loaded")).toBeTruthy();
+                });
+                it("returns false if the model is NOT loaded", function() {
+                    this.collection.loaded = false;
+                    expect(this.collection.shouldTriggerImmediately("loaded")).toBeFalsy();
+                });
+            });
+            it("returns false for any other arguments", function() {
+                _.each(["change", "reset", "saveFailed", "validationFailed"], function(eventName) {
+                    expect(this.collection.shouldTriggerImmediately(eventName)).toBeFalsy();
+                }, this);
+            });
+
         });
     });
 });

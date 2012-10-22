@@ -56,25 +56,23 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         }
     },
 
-    launchCreateHdfsDialog : function() {
+    launchCreateHdfsDialog: function() {
         var hdfsTextFiles = this.hdfsFiles.filesOnly();
 
         if (hdfsTextFiles.length == 0) {
             this.showDialogError(t("hdfs_instance.no_text_files"))
         } else {
             this.externalTableDialog = new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
-            collection: hdfsTextFiles || [],
-            directoryName : this.model.get("name"),
-            workspaceId : this.selectedItem().id,
-            workspaceName: this.selectedItem().get("name")
-        });
+                collection: hdfsTextFiles || [],
+                directoryName: this.model.get("name"),
+                workspaceId: this.selectedItem().id,
+                workspaceName: this.selectedItem().get("name")
+            });
 
-        this.externalTableDialog.model.fetch();
-        this.externalTableDialog.model.onLoaded(function() {
-            this.launchSubModal(this.externalTableDialog);
-        }, this);
-
+            this.externalTableDialog.model.fetch();
+            this.bindings.add(this.externalTableDialog.model, "loaded", function() {
+                this.launchSubModal(this.externalTableDialog);
+            });
         }
-
     }
 });

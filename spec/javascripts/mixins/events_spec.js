@@ -131,58 +131,15 @@ describe("chorus.Mixins.Events", function() {
         }
     });
 
-    describe("onLoaded", function() {
+    describe("shouldTriggerImmediately", function() {
         beforeEach(function() {
-            this.source = {};
+           this.source = {};
             _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
-            this.callback = jasmine.createSpy('callback');
-            spyOn(this.source, 'bind');
-        });
-        context("when object is not loaded", function() {
-            beforeEach(function() {
-                this.source.loaded = false;
-            });
-
-            it("binds the callback to loaded if the object is not yet loaded", function() {
-                var otherContext = {};
-                this.source.onLoaded(this.callback, otherContext);
-                expect(this.callback).not.toHaveBeenCalled();
-                expect(this.source.bind).toHaveBeenCalledWith('loaded', this.callback, otherContext);
-            });
         });
 
-        context("when object is loaded", function() {
-            beforeEach(function() {
-                this.source.loaded = true;
-            });
-
-            it("executes the callback in the context, if the object is already loaded", function() {
-                stubDefer();
-                var otherContext = {};
-                this.source.onLoaded(this.callback, otherContext);
-                waitForCallback(this.callback);
-                expect(this.callback).toHaveBeenCalled();
-                expect(this.callback.mostRecentCall.object).toBe(otherContext);
-            });
-
-            it("defers the execution of the callback so behavior is more consistent", function() {
-                this.source.onLoaded(this.callback);
-                expect(this.callback).not.toHaveBeenCalled();
-                waitForCallback(this.callback);
-                runs(function() { expect(this.callback).toHaveBeenCalled() });
-            });
-
-            it("works when there is no context", function() {
-                stubDefer();
-                this.source.onLoaded(this.callback);
-                expect(this.callback).toHaveBeenCalled();
-            });
-        })
-
+        it("returns false", function() {
+            expect(this.source.shouldTriggerImmediately("foo")).toBe(false);
+        });
     });
-
-    function waitForCallback(callback) {
-        waitsFor(function() { return callback.callCount });
-    }
 });
 

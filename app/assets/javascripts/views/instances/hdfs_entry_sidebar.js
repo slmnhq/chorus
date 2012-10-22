@@ -79,7 +79,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
         hdfsFile.fetch();
 
-        hdfsFile.onLoaded(function(){
+        this.bindings.add(hdfsFile, "loaded", function() {
             var externalTable = new chorus.models.HdfsExternalTable({
                 path: hdfsFile.get('path'),
                 hadoopInstanceId: hadoopInstance.get('id'),

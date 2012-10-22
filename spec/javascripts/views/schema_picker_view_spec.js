@@ -1,6 +1,7 @@
 describe("chorus.views.SchemaPicker", function() {
     describe("#render", function() {
         beforeEach(function() {
+            stubDefer();
             spyOn(chorus, 'styleSelect');
         })
 
@@ -411,6 +412,7 @@ describe("chorus.views.SchemaPicker", function() {
                                             beforeEach(function() {
                                                 var select = this.view.$(".database select");
                                                 select.prop("selectedIndex", 2);
+                                                this.view.schemas.loaded = false;
                                                 select.change();
                                             });
 

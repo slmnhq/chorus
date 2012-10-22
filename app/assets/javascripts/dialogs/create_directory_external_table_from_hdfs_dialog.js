@@ -137,10 +137,10 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
         this.$(".data_table").startLoading();
 
-        this.model.onLoaded(function() {
+        this.bindings.add(this.model, "loaded", function() {
             this.$(".data_table").stopLoading();
             this.render();
             this.setupSelects();
-        }, this)
+        });
     }
 });

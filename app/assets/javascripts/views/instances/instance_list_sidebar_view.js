@@ -77,7 +77,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         var instanceUsage = this.instance.usage();
         if(instanceUsage) {
-            instanceUsage.onLoaded(this.updateWorkspaceUsage, this);
+            this.bindings.add(instanceUsage, "loaded", this.updateWorkspaceUsage);
             this.bindings.add(instanceUsage, "fetchFailed", this.updateWorkspaceUsage, this);
             instanceUsage.fetchIfNotLoaded();
         }

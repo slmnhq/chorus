@@ -26,11 +26,7 @@ chorus.Mixins.Events = {
         }
     },
 
-    onLoaded: function(callback, context) {
-        if (this.loaded) {
-            _.defer(_.bind(callback, context))
-        } else {
-            this.bind('loaded', callback, context)
-        }
+    shouldTriggerImmediately: function(eventName) {
+        return false
     }
 };

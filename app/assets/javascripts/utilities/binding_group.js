@@ -20,6 +20,11 @@ _.extend(chorus.BindingGroup.prototype, {
                 eventSource.bind(eventName, callback, context);
             }
         }, this);
+
+        if(eventSource.shouldTriggerImmediately &&
+            eventSource.shouldTriggerImmediately(eventNameString)) {
+            _.defer(function(){eventSource.trigger(eventNameString)});
+        }
     },
 
     remove: function(eventSource, eventName, callback) {

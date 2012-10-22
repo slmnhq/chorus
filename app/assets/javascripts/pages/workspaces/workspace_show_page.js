@@ -4,8 +4,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     setup: function(workspaceId) {
         this.workspaceId = workspaceId;
         this.model = new chorus.models.Workspace({ id: workspaceId });
-        var that = this;
-        this.model.onLoaded(function() { that.decideIfQuickstart(); });
+        this.bindings.add(this.model, "loaded", this.decideIfQuickstart);
         this.dependOn(this.model);
         this.model.fetch();
 

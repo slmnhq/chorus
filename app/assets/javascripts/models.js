@@ -83,6 +83,14 @@ chorus.models = {
         declareValidations: $.noop,
         beforeSave: $.noop,
 
+        shouldTriggerImmediately: function(eventName) {
+            if (eventName === "loaded") {
+                return this.loaded;
+            }
+
+            return false;
+        },
+
         isValid: function() {
             return _.isEmpty(this.errors);
         },
@@ -331,6 +339,14 @@ chorus.collections = {
         },
 
         isDeleted: function() {
+            return false;
+        },
+
+        shouldTriggerImmediately: function(eventName) {
+            if (eventName === "loaded") {
+                return this.loaded;
+            }
+
             return false;
         },
 

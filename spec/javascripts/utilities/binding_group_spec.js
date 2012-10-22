@@ -13,6 +13,8 @@ describe("chorus.BindingGroup", function() {
         });
 
         this.bindingGroup = new chorus.BindingGroup(this.view1);
+
+        stubDefer();
     });
 
     describe("#add(object, eventName, callback [, context])", function() {
@@ -35,7 +37,33 @@ describe("chorus.BindingGroup", function() {
             it("only binds once", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.callCount).toBe(1);
-            })
+            });
+
+
+        });
+
+        it("does not call the event immediately", function() {
+            var changeSpy = jasmine.createSpy("change");
+            this.model1.bind("change", changeSpy);
+            this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view2);
+            expect(changeSpy).not.toHaveBeenCalled();
+        });
+
+        context("when the event should be triggered immediately", function() {
+            beforeEach(function() {
+                this.changeSpy = jasmine.createSpy("change");
+                this.model1.shouldTriggerImmediately = function(eventName) {
+                    if(eventName === "change") {
+                        return true
+                    }
+                };
+                this.model1.bind("change", this.changeSpy);
+                this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view2);
+            });
+
+            it("triggers the event", function() {
+                expect(this.changeSpy).toHaveBeenCalled();
+            });
         });
 
         context("when different contexts are passed", function() {

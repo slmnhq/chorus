@@ -25,17 +25,26 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     setWorkspace: function(model) {
         this.resource = this.model = model;
 
-        if (model) {
-            var activities = model.activities();
-            activities.fetch();
+        if(this.tabs.activity) {
+            this.tabs.activity.teardown();
+        }
 
-            this.bindings.add(activities, "changed", this.render);
-            this.bindings.add(activities, "reset", this.render);
+        if (model) {
+            if(this.activities) {
+                this.bindings.remove(this.activities);
+            }
+
+            this.activities = model.activities();
+            this.activities.fetch();
+
+            this.bindings.add(this.activities, "changed", this.render);
+            this.bindings.add(this.activities, "reset", this.render);
 
             this.tabs.activity = new chorus.views.ActivityList({
-                collection: activities,
+                collection: this.activities,
                 additionalClass: "sidebar"
             });
+            this.registerSubView(this.tabs.activity);
         } else {
             delete this.tabs.activity;
         }

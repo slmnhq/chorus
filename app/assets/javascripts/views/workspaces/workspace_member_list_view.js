@@ -29,7 +29,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
         this.resource = this.model = workspace;
         if (workspace) {
             workspace.members().fetchAllIfNotLoaded();
-            workspace.members().onLoaded(this.render, this);
+            this.bindings.add(workspace.members(), "loaded", this.render);
         }
         this.render()
     }

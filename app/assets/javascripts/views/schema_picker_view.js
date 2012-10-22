@@ -37,7 +37,7 @@
                 this.setState({ instance: LOADING, database: HIDDEN, schema: HIDDEN });
 
                 this.instances = new chorus.collections.InstanceSet();
-                this.instances.onLoaded(this.instancesLoaded, this);
+                this.bindings.add(this.instances, "loaded", this.instancesLoaded);
                 this.instances.attributes = {accessible: true};
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
@@ -86,7 +86,8 @@
                 this.databases = selectedInstance.databases();
                 this.databases.fetchAllIfNotLoaded();
                 this.bindings.add(this.databases, "fetchFailed", this.databaseFetchFailed);
-                this.databases.onLoaded(this.databasesLoaded, this);
+                this.bindings.add(this.databases, "loaded", this.databasesLoaded);
+
             } else {
                 this.setState({ database: HIDDEN, schema: HIDDEN });
             }
@@ -102,7 +103,7 @@
                 this.schemas = selectedDatabase.schemas();
                 this.schemas.fetchAllIfNotLoaded();
                 this.bindings.add(this.schemas, "fetchFailed", this.schemaFetchFailed);
-                this.schemas.onLoaded(this.schemasLoaded, this);
+                this.bindings.add(this.schemas, "loaded", this.schemasLoaded);
             } else {
                 this.setState({ schema: HIDDEN });
             }
