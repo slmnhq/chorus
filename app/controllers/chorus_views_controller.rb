@@ -50,4 +50,9 @@ class ChorusViewsController < ApplicationController
 
     render :json => {}
   end
+
+  def convert
+    ChorusView.find(params[:id]).convert_to_database_view(params[:object_name], current_user)
+    render :json => {}, :status => 200
+  end
 end

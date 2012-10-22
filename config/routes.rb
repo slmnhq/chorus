@@ -56,7 +56,11 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :chorus_views, :only => [:create, :update, :destroy]
+  resources :chorus_views, :only => [:create, :update, :destroy] do
+    member do
+      post :convert
+    end
+  end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]

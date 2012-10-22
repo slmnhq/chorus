@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
   rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
+  rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
+  rescue_from 'Gpdb::ViewAlreadyExists', :with => :render_query_error
 
   helper_method :current_user
 

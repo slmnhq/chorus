@@ -5,6 +5,7 @@ describe ChorusView do
     let(:database) { GpdbIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('public') }
     let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
 
     it "can be valid" do
       chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;"}, :without_protection => true)
@@ -106,6 +107,62 @@ describe ChorusView do
       it "uses the limit" do
         chorus_view.all_rows_sql(10).should match "LIMIT 10"
       end
+    end
+  end
+
+  describe "#convert_to_database_view", :database_integration => true do
+    let(:chorus_view) do
+      ChorusView.new({:name => "query",
+                      :schema => schema,
+                      :query => "select 1"},
+                     :without_protection => true)
+    end
+    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+    let(:database) { GpdbIntegration.real_database }
+    let(:schema) { database.schemas.find_by_name('test_schema') }
+    let(:account) { gpdb_instance.owner_account }
+    let(:user) { account.owner }
+
+    before do
+      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"henry\"")
+      end
+    end
+
+    it "creates a database view" do
+      expect {
+        chorus_view.convert_to_database_view("henry", user)
+      }.to change(GpdbView, :count).by(1)
+    end
+
+    it "sets the right query" do
+      chorus_view.convert_to_database_view("henry", user)
+      GpdbView.last.query.should == chorus_view.query
+      GpdbView.last.name.should == "henry"
+    end
+
+    it "creates the view in greenplum db" do
+      chorus_view.convert_to_database_view("henry", user)
+      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        connection.exec_query("SELECT viewname FROM pg_views WHERE viewname = 'henry'").should_not be_empty
+      end
+    end
+
+    it "doesn't create the view twice" do
+      chorus_view.convert_to_database_view("henry", user)
+      expect {
+        chorus_view.convert_to_database_view("henry", user)
+      }.to raise_error(Gpdb::ViewAlreadyExists)
+    end
+
+    it "throws an exception if it can't create the view" do
+      any_instance_of(::ActiveRecord::ConnectionAdapters::JdbcAdapter) do |conn|
+        stub(conn).exec_query { raise ActiveRecord::StatementInvalid }
+      end
+
+      expect {
+        chorus_view.convert_to_database_view("henry", user)
+      }.to raise_error(Gpdb::CantCreateView)
     end
   end
 end

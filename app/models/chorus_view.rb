@@ -1,5 +1,11 @@
 require 'dataset'
 
+class Gpdb::CantCreateView < Exception
+end
+
+class Gpdb::ViewAlreadyExists < Exception
+end
+
 class ChorusView < Dataset
   validate :validate_query
 
@@ -49,5 +55,26 @@ class ChorusView < Dataset
     sql = "SELECT * FROM (#{query.gsub(';', '');}) AS cv_query"
     sql += " LIMIT #{limit}" if limit
     sql
+  end
+
+  def convert_to_database_view(name, user)
+    account = account_for_user!(user)
+    with_gpdb_connection(account) do |conn|
+      begin
+        result = conn.exec_query("SELECT viewname FROM pg_views WHERE viewname = '#{name}'")
+        unless result.empty?
+          raise Gpdb::ViewAlreadyExists, "Database View #{name} already exists in schema"
+        end
+        conn.exec_query("CREATE VIEW \"#{schema.name}\".\"#{name}\" AS #{query}")
+      rescue ActiveRecord::StatementInvalid => e
+        raise Gpdb::CantCreateView , e.message
+      end
+    end
+
+    view = GpdbView.new
+    view.name = name
+    view.query = query
+    view.schema = schema
+    view.save!
   end
 end

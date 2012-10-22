@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe ChorusViewsController, :database_integration => true do
-  let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+  let(:account) { gpdb_instance.owner_account }
   let(:user) { account.owner }
-  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)}
+  let(:database) { GpdbIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:public) }
   let(:dataset) { datasets(:table) }
@@ -196,6 +197,76 @@ describe ChorusViewsController, :database_integration => true do
       delete :destroy, :id => chorus_view.to_param
       response.should be_success
       ImportSchedule.find_by_source_dataset_id(chorus_view.id).should be_nil
+    end
+  end
+
+  describe "#convert" do
+    let(:chorus_view) do
+      datasets(:convert_chorus_view)
+    end
+
+    before do
+      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
+      end
+      chorus_view.schema = schema
+      chorus_view.save!
+    end
+
+
+    context "When there is no error in creation" do
+
+      after do
+        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+          connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
+        end
+      end
+
+      it "creates a database view" do
+        expect {
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+        }.to change(GpdbView, :count).by(1)
+
+        response.should be_success
+      end
+    end
+
+    context "when create view statement causes an error" do
+      before do
+        any_instance_of(::ActiveRecord::ConnectionAdapters::JdbcAdapter) do |conn|
+          stub(conn).exec_query { raise ActiveRecord::StatementInvalid }
+        end
+      end
+      it "raises an Error" do
+        expect {
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+        }.to change(GpdbView, :count).by(0)
+
+        response.should_not be_success
+      end
+    end
+
+    context "when database view already exists" do
+      before do
+        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+          connection.exec_query("CREATE VIEW \"test_schema\".\"Gretchen\" AS SELECT 1")
+        end
+      end
+
+      after do
+        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+          connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
+        end
+      end
+
+      it "raises an Error" do
+        expect {
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+        }.to change(GpdbView, :count).by(0)
+
+        response.should_not be_success
+      end
+
     end
   end
 end
