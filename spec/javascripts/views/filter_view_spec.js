@@ -13,7 +13,7 @@ describe("chorus.views.Filter", function() {
             stubDefer();
             this.selectMenuStub = stubSelectMenu();
             spyOn(chorus, "styleSelect").andCallThrough();
-            this.view.render()
+            this.view.render();
         });
 
         context("when the model is filled with valid data", function() {
@@ -136,10 +136,21 @@ describe("chorus.views.Filter", function() {
                         });
                     });
                 });
+
+                context("and a value was already selected", function() {
+                    beforeEach(function() {
+                        this.model.set({input: null});
+                        this.view.$('.filter.default input').val('hello');
+                        this.view.$("select.comparator option[value=not_equal]").prop('selected', true).change();
+                    });
+
+                    it("should clear the value input", function() {
+                        expect(this.view.$('.filter.default input').val()).toBe('');
+                    });
+                });
             });
 
         });
-
 
         describe("clicking on the remove button", function() {
             beforeEach(function() {

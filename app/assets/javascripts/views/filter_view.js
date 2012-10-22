@@ -96,7 +96,12 @@ chorus.views.Filter = chorus.views.Base.extend({
         var comparator = this.map.comparators[this.model.get("comparator")];
         var $filters = this.filtersForComparator(comparator);
         var input = this.model.get("input");
-        if (!input || _.isEmpty($filters)) {return;}
+        if (_.isEmpty($filters)) {
+            return;
+        }
+        if (!input) {
+            input = { value: '' };
+        }
 
         if (this.model.get("column") && (this.model.get("column").get("typeCategory") == "DATE")) {
             $filters.find("input[name='day']").val(input.day);
