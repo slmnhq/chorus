@@ -1,9 +1,4 @@
 GIT
-  remote: git://github.com/GreenplumChorus/gnip.git
-  revision: 3a2a839be84e5cbbfea1e5e42e5f718c4484a7bc
-  specs:
-    chorusgnip (0.0.1)
-
   remote: git://github.com/GreenplumChorus/activerecord-jdbc-adapter.git
   revision: 67b4bf0c62f03feb301cef6e852fc5b70748e322
   branch: dynamic-schema-search-path
@@ -12,9 +7,9 @@ GIT
       activerecord-jdbc-adapter (~> 1.2.2)
       jdbc-postgres (>= 9.0, < 9.2)
 
-
+GIT
   remote: git://github.com/GreenplumChorus/gnip.git
-  revision: e984c45ab3458c3eea64c7b104525ba16bdc65c8
+  revision: 3a2a839be84e5cbbfea1e5e42e5f718c4484a7bc
   specs:
     chorusgnip (0.0.1)
 
