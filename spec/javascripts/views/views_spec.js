@@ -1315,9 +1315,9 @@ describe("chorus.views.Base", function() {
 
                 this.model = new chorus.models.Base();
                 this.view.requiredResources.add(this.model);
-                this.underview = stubView();
-                spyOn(this.underview, "teardown");
-                this.view.registerSubView(this.underview);
+                this.subViewObject = stubView();
+                spyOn(this.subViewObject, "teardown");
+                this.view.registerSubView(this.subViewObject);
 
                 spyOn(this.view, "unbind");
                 spyOn(this.view.bindings, "removeAll");
@@ -1340,24 +1340,24 @@ describe("chorus.views.Base", function() {
             });
 
             it("should tear down registered subviews", function() {
-                expect(this.underview.teardown).toHaveBeenCalled();
+                expect(this.subViewObject.teardown).toHaveBeenCalled();
             });
         });
 
         describe("#registerSubViews", function() {
             beforeEach(function() {
                 this.view = new chorus.views.Bare();
-                this.underview = stubView();
-                this.view.registerSubView(this.underview);
+                this.subViewObject = stubView();
+                this.view.registerSubView(this.subViewObject);
             });
 
-            it("adds the view to the underviews array", function() {
-               expect(this.view.getSubViews()[0]).toBe(this.underview);
+            it("adds the view to the subViewObjects array", function() {
+               expect(this.view.getSubViews()[0]).toBe(this.subViewObject);
             });
 
             it("it doesn't add the same view twice", function() {
-                this.view.registerSubView(this.underview);
-                this.view.registerSubView(this.underview);
+                this.view.registerSubView(this.subViewObject);
+                this.view.registerSubView(this.subViewObject);
                 expect(this.view.getSubViews().length).toBe(1);
             });
         });

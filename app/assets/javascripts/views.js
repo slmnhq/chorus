@@ -7,7 +7,7 @@ chorus.views.Bare = Backbone.View.include(
             this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
             chorus.viewsToTearDown.push(this);
-            this.underviews = [];
+            this.subViewObjects = [];
 
             this.setup.apply(this, arguments);
             this.bindCallbacks();
@@ -26,37 +26,35 @@ chorus.views.Bare = Backbone.View.include(
         displayLoadingSection: $.noop,
 
         registerSubView: function(view) {
-            if (_.indexOf(this.underviews, view) === -1) {
-                this.underviews.push(view);
-                chorus.viewsToTearDown.splice(chorus.viewsToTearDown.indexOf(view), 1);
+            if (_.indexOf(this.subViewObjects, view) === -1) {
+                this.subViewObjects.push(view);
+                chorus.unregisterView(view);
 
                 view.parentView = this;
             }
         },
 
         getSubViews: function() {
-            return this.underviews;
+            return this.subViewObjects;
         },
 
         teardown: function() {
-            var index = chorus.viewsToTearDown.indexOf(this);
-            if(index > -1) chorus.viewsToTearDown.splice(index, 1);
-
+            chorus.unregisterView(this);
             this.unbind();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
             this.requiredResources.cleanUp();
             $(this.el).remove();
 
-            while(!_.isEmpty(this.underviews)) {
-                var underview = this.underviews.pop();
-                underview.teardown();
+            while(!_.isEmpty(this.subViewObjects)) {
+                var subViewObject = this.subViewObjects.pop();
+                subViewObject.teardown();
             }
 
             if(this.parentView) {
-                var underviews = this.parentView.underviews;
-                var index = underviews.indexOf(this);
-                if(index > -1) underviews.splice(index, 1);
+                var subViewObjects = this.parentView.subViewObjects;
+                var index = subViewObjects.indexOf(this);
+                if(index > -1) subViewObjects.splice(index, 1);
                 delete this.parentView
             }
 

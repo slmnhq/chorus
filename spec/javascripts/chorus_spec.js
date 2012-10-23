@@ -102,13 +102,55 @@ describe("chorus global", function() {
 
             expect(this.spy1).not.toHaveBeenCalled();
             expect(this.spy2).not.toHaveBeenCalled();
-        })
+        });
 
         it("calls chorus.PageEvents.reset after the router triggers leaving", function() {
             this.chorus.router.trigger("leaving");
             expect(this.chorus.PageEvents.reset).toHaveBeenCalled();
-        })
-    })
+        });
+    });
+
+    describe("#_navigated", function() {
+        beforeEach(function() {
+            this.chorus.initialize();
+            this.view1 = new chorus.views.Base();
+            this.view2 = new chorus.views.Base();
+            this.chorus.viewsToTearDown.push(this.view1);
+            this.chorus.viewsToTearDown.push(this.view2);
+            expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
+            spyOn(this.view1, "teardown");
+            spyOn(this.view2, "teardown");
+            this.chorus._navigated();
+        });
+
+        it("tears down all global views", function() {
+            expect(this.view1.teardown).toHaveBeenCalled();
+            expect(this.view2.teardown).toHaveBeenCalled();
+            expect(this.chorus.viewsToTearDown.length).toBe(0);
+        });
+    });
+
+    describe("unregisterView", function() {
+       beforeEach(function() {
+           this.chorus.initialize();
+           this.view1 = new chorus.views.Base();
+           this.view2 = new chorus.views.Base();
+           this.view3 = new chorus.views.Base();
+           this.chorus.viewsToTearDown.push(this.view1);
+           this.chorus.viewsToTearDown.push(this.view2);
+           expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
+       });
+
+       it("removes the view from viewsToTearDown if applicable", function() {
+           this.chorus.unregisterView(this.view1);
+           expect(this.chorus.viewsToTearDown).toEqual([this.view2]);
+       });
+
+       it("does nothing if the view is not in viewsToTearDown", function() {
+           this.chorus.unregisterView(this.view3);
+           expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
+       });
+    });
 
     describe("#toast", function() {
         beforeEach(function() {

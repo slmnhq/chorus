@@ -106,6 +106,11 @@ window.Chorus = function chorus$Global() {
         self.cleanupFunctions = [];
     };
 
+    self.unregisterView = function(view) {
+        var index = self.viewsToTearDown.indexOf(view);
+        if(index > -1) self.viewsToTearDown.splice(index, 1);
+    };
+
     self.menu = function(menuElement, options) {
         self.afterNavigate(function() {$(menuElement).remove();});
 
