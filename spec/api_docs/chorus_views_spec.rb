@@ -104,9 +104,11 @@ resource "Chorus Views" do
   post "/chorus_views/:id/convert" do
     let(:chorus_view) { datasets(:chorus_view) }
     let(:id) { chorus_view.id }
+    let(:workspace_id) { workspace.id }
 
     parameter :id, "Id of the chorus view to be converted"
-    required_parameters :id
+    parameter :workspace_id, "Id of workspace"
+    required_parameters :id, :workspace_id
 
     before do
       any_instance_of(ChorusView) do |view|

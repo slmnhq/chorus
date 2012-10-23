@@ -76,6 +76,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     expect(this.view.$("button.submit")).toContainTranslation("actions.creating");
 
                     expect(this.view.model.get("objectName")).toBe("a_name");
+                    expect(this.view.model.get("workspaceId")).toBe("42");
                     expect(this.view.model).toHaveBeenCreated();
                 });
 

@@ -177,7 +177,8 @@ describe EventsController do
         "tableauWorkfileCreated" => Events::TableauWorkfileCreated,
         "gnipStreamImportCreated" => Events::GnipStreamImportCreated,
         "gnipStreamImportSuccess" => Events::GnipStreamImportSuccess,
-        "gnipStreamImportFailed" => Events::GnipStreamImportFailed
+        "gnipStreamImportFailed" => Events::GnipStreamImportFailed,
+        "viewCreated" => Events::ViewCreated
     }
 
     FIXTURE_FILES.each do |filename, event_relation|

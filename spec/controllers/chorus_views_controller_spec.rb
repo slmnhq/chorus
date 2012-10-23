@@ -224,10 +224,20 @@ describe ChorusViewsController, :database_integration => true do
 
       it "creates a database view" do
         expect {
-          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
         }.to change(GpdbView, :count).by(1)
 
         response.should be_success
+      end
+
+      it "creates an event" do
+        post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
+
+        the_event = Events::Base.last
+        the_event.action.should == "ViewCreated"
+        the_event.source_dataset.id.should == chorus_view.id
+        the_event.source_dataset.should be_a(Dataset)
+        the_event.workspace.id.should == workspace.id
       end
     end
 
@@ -239,7 +249,7 @@ describe ChorusViewsController, :database_integration => true do
       end
       it "raises an Error" do
         expect {
-          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
         }.to change(GpdbView, :count).by(0)
 
         response.should_not be_success
@@ -261,7 +271,7 @@ describe ChorusViewsController, :database_integration => true do
 
       it "raises an Error" do
         expect {
-          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen"
+          post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
         }.to change(GpdbView, :count).by(0)
 
         response.should_not be_success

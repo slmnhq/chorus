@@ -117,6 +117,16 @@
         return model;
     };
 
+    function chorusViewModel(self) {
+        var object = self.model.get("sourceDataset");
+        var model;
+
+            model = new chorus.models.WorkspaceDataset(object);
+            var workspace = self.model.workspace();
+            model.set({workspace: workspace});
+        return model;
+    };
+
     var hidden = {
 
         headerParamOptions: {
@@ -280,6 +290,11 @@
                 links: ["actor", "workspace", "dataset"]
             },
 
+            ViewCreated: {
+                links: [ "actor", "workspace", "dataset"],
+                computed: [ "chorusViewLink" ]
+            },
+
             WorkspaceChangeName: {
                 links: ["actor", "workspace"],
                 computed: ["workspaceOldName"]
@@ -431,6 +446,10 @@
 
         chorusViewSourceLink: function(self) {
             return chorusViewSourceModel(self).showLink();
+        },
+
+        chorusViewLink: function(self) {
+            return chorusViewModel(self).showLink();
         },
 
         chorusViewSourceType: function(self) {

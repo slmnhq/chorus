@@ -34,6 +34,22 @@ describe "Event types" do
     it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
   end
 
+  describe "ViewCreated" do
+    subject do
+      Events::ViewCreated.add(
+          :actor => actor,
+          :dataset => dataset,
+          :source_dataset => chorus_view,
+          :workspace => workspace
+      )
+    end
+
+    its(:action) { should == "ViewCreated" }
+    its(:targets) { should == {:dataset => dataset, :source_dataset => chorus_view, :workspace => workspace} }
+
+    it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
+  end
+
   describe "ChorusViewChanged" do
     subject do
       Events::ChorusViewChanged.add(

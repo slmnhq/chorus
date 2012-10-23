@@ -259,6 +259,7 @@ FixtureBuilder.configure do |fbuilder|
 
       Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => public_workfile)
       Events::ChorusViewChanged.by(owner).add(:dataset => chorus_view, :workspace => public_workspace)
+      Events::ViewCreated.by(owner).add(:source_dataset => chorus_view, :workspace => public_workspace, :dataset => source_view)
     end
 
     text_workfile = FactoryGirl.create(:workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace)

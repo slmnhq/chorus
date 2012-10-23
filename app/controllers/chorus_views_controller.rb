@@ -52,7 +52,15 @@ class ChorusViewsController < ApplicationController
   end
 
   def convert
-    ChorusView.find(params[:id]).convert_to_database_view(params[:object_name], current_user)
+    chorus_view = ChorusView.find(params[:id])
+    workspace = Workspace.find(params[:workspace_id]) if params[:workspace_id]
+    raise ApiValidationError.new(:base, :generic, {:message => "Workspace is not provided or present"}) unless workspace
+    database_view = chorus_view.convert_to_database_view(params[:object_name], current_user)
+    Events::ViewCreated.by(current_user).add(
+        :workspace => workspace,
+        :dataset => database_view,
+        :source_dataset => chorus_view
+    )
     render :json => {}, :status => :created
   end
 end

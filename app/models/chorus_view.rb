@@ -76,5 +76,6 @@ class ChorusView < Dataset
     view.query = query
     view.schema = schema
     view.save!
+    view
   end
 end

@@ -1437,6 +1437,43 @@ describe("chorus.presenters.Activity", function() {
 
         itHasTheActorIcon();
     });
+    context("database view created from chorus view", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.viewCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            var chorusView = model.importSource(); // importSource association in activity.js is same as sourceDataset
+
+            this.translation_params = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                chorusViewLink: linkTo(chorusView.showUrl(), chorusView.name())
+            };
+        });
+
+        context("without workspace", function() {
+            it("has the right header html", function() {
+                presenter.options.displayStyle = ["without_workspace"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.ViewCreated.without_workspace", this.translation_params
+                );
+            });
+        });
+
+        context("with workspace", function() {
+            it("has the right header html", function() {
+                presenter.options.displayStyle = ["default"];
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.ViewCreated.default", this.translation_params
+                );
+            });
+        });
+
+        itHasTheActorIcon();
+    });
 
     context("tableau workbook published", function() {
         beforeEach(function() {
