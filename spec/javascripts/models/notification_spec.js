@@ -28,14 +28,14 @@ describe("chorus.models.Notification", function() {
             expect(this.activity.get("action")).toBe("NOTE");
         });
 
+        it("sets the errorModelId", function() {
+            expect(this.activity.get('errorModelId')).toBe(this.oldId);
+        });
+
         it("has the right author data", function() {
             expect(this.activity.get("actor").id).toBe(this.notification.get("actor").id);
             expect(this.activity.get("actor").firstName).toBe(this.notification.get("actor").firstName);
             expect(this.activity.get("actor").lastName).toBe(this.notification.get("actor").lastName);
-        });
-
-        it("has the id of its activity, so it fetches the correct error details", function() {
-            expect(this.activity.id).toBe(this.oldId);
         });
 
         it("has the right timestamp", function() {

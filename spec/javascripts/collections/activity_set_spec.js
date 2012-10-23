@@ -23,6 +23,30 @@ describe("chorus.collections.ActivitySet", function() {
         });
     });
 
+    describe("#setup", function() {
+        it("binds 'reset' to reindexing the errors", function() {
+            spyOn(chorus.collections.ActivitySet.prototype, "reindexErrors");
+            this.collection = new chorus.collections.ActivitySet([]);
+            this.collection.trigger("reset");
+            expect(this.collection.reindexErrors).toHaveBeenCalled()
+        });
+    });
+
+    describe("#reindexErrors", function() {
+        beforeEach(function() {
+            this.activity = {
+                reindexError: function() {}
+            };
+            this.collection = new chorus.collections.ActivitySet([this.activity]);
+            spyOn(this.collection.models[0], "reindexError");
+        });
+
+        it("reindexes the errors", function() {
+            this.collection.reindexErrors();
+            expect(this.collection.models[0].reindexError).toHaveBeenCalled();
+        });
+    });
+
     describe(".forDashboard", function() {
         it("creates an activity set with the entity type for the dashboard", function() {
             var activities = chorus.collections.ActivitySet.forDashboard();

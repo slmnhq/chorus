@@ -250,6 +250,12 @@
 
         promotionTimestamp:function() {
             return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : nil
+        },
+
+        reindexError: function() {
+            if (this.isFailure()) {
+                this.attributes['errorModelId'] = this.get("id");
+            }
         }
     });
 

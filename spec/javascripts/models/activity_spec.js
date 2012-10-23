@@ -595,6 +595,20 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#reindexError", function() {
+        it("sets the errorModelId to be the id of the activity", function() {
+            this.model = rspecFixtures.activity.gnipStreamImportFailed();
+            this.model.reindexError();
+            expect(this.model.get('errorModelId')).toBe(this.model.get('id'));
+        });
+
+        it("does not set the error model id if the activity is not a failure", function() {
+            this.model = rspecFixtures.activity.gnipStreamImportSuccess();
+            this.model.reindexError();
+            expect(this.model.get('errorModelId')).toBeUndefined();
+        });
+    });
+
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({

@@ -2,6 +2,16 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     constructorName: "ActivitySet",
     model: chorus.models.Activity,
 
+    setup: function() {
+        this.bind("reset", this.reindexErrors);
+    },
+
+    reindexErrors: function() {
+        _.each(this.models, function(activity) {
+            activity.reindexError();
+        })
+    },
+
     url: function(options) {
         if (this.attributes.insights) {
             return this.getInsightUrl();
