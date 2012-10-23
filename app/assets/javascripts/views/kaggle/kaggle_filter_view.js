@@ -10,8 +10,8 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
     },
 
     postRender: function() {
-        this._super("postRender", arguments);
         this.populateCompetitionType();
+        this._super("postRender", arguments);
     },
 
     //TODO populate the input values after the render or remove the filters
@@ -34,6 +34,9 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
             $select.append(el);
         }, this);
 
+        if (this.model.get('input')) {
+            this.$(".filter.competition_type select").val(this.model.get('input').value);
+        }
 
         _.defer(function() {
             chorus.styleSelect($select, { menuWidth: 240 });

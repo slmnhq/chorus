@@ -1,6 +1,7 @@
 describe("chorus.views.KaggleFilter", function () {
     beforeEach(function () {
-        this.view = new chorus.views.KaggleFilter({model: new chorus.models.KaggleFilter({name: 'rank'})});
+        this.model = new chorus.models.KaggleFilter({name: 'rank'});
+        this.view = new chorus.views.KaggleFilter({model: this.model});
     });
 
     it("should have kaggle column set as collection", function () {
@@ -16,6 +17,7 @@ describe("chorus.views.KaggleFilter", function () {
             stubDefer();
             this.selectMenuStub = stubSelectMenu();
             spyOn(chorus, "styleSelect").andCallThrough();
+            this.model.set({'input': { value: "QSAR"}});
             this.view.render();
         });
 
@@ -29,7 +31,6 @@ describe("chorus.views.KaggleFilter", function () {
         });
 
         it("populates the competition_type's select options", function() {
-
             var list = ["natural language processing", "high dimensionality", "unsupervised learning",
                 "supervised learning", "semi-supervised learning", "computer vision", "data manipulation",
                 "unstructured", "exploratory", "visualization", "graph", "social", "time series",
@@ -46,6 +47,8 @@ describe("chorus.views.KaggleFilter", function () {
                 var option = view.$(".filter.competition_type select option:eq(" + index + ")");
                 expect(option).toContainText(name);
             }, this);
+            expect(this.view.$(".filter.competition_type select option:selected").length).toBe(1);
+            expect(this.view.$(".filter.competition_type select option:selected").eq(0).attr('value')).toBe('QSAR');
         });
 
         it("does not have the aliased_name", function() {
