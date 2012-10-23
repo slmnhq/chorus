@@ -11,7 +11,13 @@ if [ -e $CHORUS_HOME/current ]; then
     CHORUS_HOME=$CHORUS_HOME/current
 fi
 
-test "$RAILS_ENV" = "" && RAILS_ENV=production
+if [ "$RAILS_ENV" = "" ]; then
+    if [ -f $CHORUS_HOME/.development ]; then
+        RAILS_ENV=development
+    else
+        RAILS_ENV=production
+    fi
+fi
 
 case $RAILS_ENV in
     production )
