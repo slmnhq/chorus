@@ -164,11 +164,9 @@ describe 'BackupRestore' do
           @tmp_path = tmp_path
 
           # create a directory to restore to
-          Dir.mkdir restore_path and Dir.chdir restore_path do
-            create_version_build(current_version_string)
-            FileUtils.cp_r Rails.root.join("config"), "."
-            FileUtils.rm "config/chorus.yml" if File.exists?("chorus/chorus.yml")
-          end
+          Dir.mkdir restore_path
+          populate_fake_chorus_install(restore_path, current_version_string)
+          FileUtils.rm_f restore_path.join("config/chorus.yml")
 
           # create a fake backup in another directory
           Dir.mkdir backup_path and Dir.chdir backup_path do
@@ -270,7 +268,7 @@ describe "Backup and Restore" do
         @restore_path = restore_path
 
         # populate original directory from development tree
-        populate_chorus_install @original_path
+        populate_fake_chorus_install @original_path
 
         # create a fake asset in original
         stub(Rails).root { @original_path }
@@ -280,20 +278,13 @@ describe "Backup and Restore" do
         FileUtils.touch "#{asset_path}/users/asset_file.icon"
 
         # populate restore target with just config directory minus chorus.yml
-        populate_chorus_install @restore_path
+        populate_fake_chorus_install @restore_path
 
         # remove chorus.yml file from restore dir so we can replace it later
-        FileUtils.rm @restore_path.join "config/chorus.yml"
+        FileUtils.rm_f @restore_path.join "config/chorus.yml"
 
         example.call
       end
-    end
-  end
-
-  def populate_chorus_install(install_path)
-    FileUtils.cp_r Rails.root.join("config"), install_path
-    Dir.chdir install_path do
-      create_version_build("0.2.0.0-1d012455")
     end
   end
 
@@ -363,6 +354,13 @@ def all_filesystem_entries(path)
   %w{. **/ **/*}.map do |wildcard|
     Dir.glob path.join wildcard
   end.flatten.sort.uniq
+end
+
+def populate_fake_chorus_install(install_path, version = "0.2.0.0-1d012455")
+  FileUtils.cp_r Rails.root.join("config"), install_path
+  Dir.chdir install_path do
+    create_version_build(version)
+  end
 end
 
 require 'stringio'
