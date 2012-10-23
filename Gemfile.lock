@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/GreenplumChorus/gnip.git
-  revision: 2c75707f8c2a97d245f13e3b1c3757d92fcd252f
+  revision: abc2ca172564e08405e965e980bfec7f5f28e6ee
   specs:
     chorusgnip (0.0.1)
 
