@@ -37,7 +37,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     showAll: function(e) {
         e.preventDefault();
-        this.search.set({entityType: $(e.currentTarget).data("type")})
+        this.search.set({entityType: $(e.currentTarget).data("type")});
+        delete this.search.attributes.workspaceId;
         chorus.router.navigate(this.search.showUrl());
     },
 

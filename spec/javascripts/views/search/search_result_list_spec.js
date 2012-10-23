@@ -92,11 +92,16 @@ describe("chorus.views.SearchResultList", function() {
                     context("clicking the show all link", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
+                            this.view.search.set({ workspaceId: 123 });
                             this.view.$("a.show_all").click();
                         });
 
                         it("should navigate to the appropriate results page", function() {
                             expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl());
+                        });
+
+                        it("no longer scopes to the workspace", function() {
+                            expect(this.view.search.get("workspaceId")).toBeUndefined();
                         });
                     });
                 });
