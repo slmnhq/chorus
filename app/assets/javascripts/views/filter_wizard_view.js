@@ -21,6 +21,10 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
     },
 
     postRender: function() {
+        _.each(this.filterViews, function(filterView) {
+            filterView.teardown();
+        });
+        this.filterViews = [];
         if (!this.collection.length) {
             this.addFilter();
         } else {
@@ -42,6 +46,8 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
         var filterView = this.filterView(filter);
         $ul.append(filterView.render().el);
         this.bindings.add(filterView, "deleted", function() {this.removeFilterView(filterView)}, this);
+        this.filterViews.push(filterView);
+        this.registerSubView(filterView);
     },
 
     addFilter: function(e) {
