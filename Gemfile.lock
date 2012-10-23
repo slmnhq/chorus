@@ -70,12 +70,11 @@ GIT
 
 GIT
   remote: git@github.com:GreenplumChorus/tableau.git
-  revision: 8aac12069137f18f08229cd715a0339bc6e32803
+  revision: c3265db5f057bc966586406f9039866ad1ebce27
   specs:
     tabcmd_gem (0.0.1)
       highline
       hpricot
-      log4r
       rchardet19
 
 GEM
@@ -205,7 +204,6 @@ GEM
       bundler
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
-    log4r (1.1.10)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
