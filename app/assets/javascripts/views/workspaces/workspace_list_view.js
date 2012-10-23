@@ -17,10 +17,16 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
 
     postRender: function() {
         this._super("postRender")
+        _.each(this.summaryViews, function(summaryView) {
+          summaryView.teardown();
+        });
+        this.summaryViews = [];
         this.collection.each(function(model, index) {
             model.loaded = true;
-            this.summaryView = new chorus.views.TruncatedText({model: model, attribute: "summary", attributeIsHtmlSafe: true})
-            this.renderSubview("summaryView", this.$(".summary:eq(" + index + ")"))
+            var summaryView = this["summaryView"+index] = new chorus.views.TruncatedText({model: model, attribute: "summary", attributeIsHtmlSafe: true})
+            this.renderSubview("summaryView"+index, this.$(".summary:eq(" + index + ")"))
+            this.summaryViews.push(summaryView);
+            this.registerSubView(summaryView);
         }, this);
     }
 });

@@ -46,6 +46,11 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     setSchemaToCurrentWorkspace: $.noop,
     fetchResourceAfterSchemaSelected: $.noop,
 
+    teardown: function() {
+        this.$("li").qtip("destroy");
+        this._super("teardown");
+    },
+
     postRender: function() {
         chorus.menu(this.$(".context a"), {
             content: this.$(".schema_menu_container").html(),
@@ -56,6 +61,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         });
 
         this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
+        this.$("li").qtip("destroy");
         this.$("li").qtip({
             content: "<a>" + t('database.sidebar.insert') + "</a>",
             events: {

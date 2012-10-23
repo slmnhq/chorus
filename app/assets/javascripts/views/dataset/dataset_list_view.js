@@ -52,9 +52,16 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
             $list.append(noDatasetEl);
         }
 
+        _.each(this.datasetViews, function(datasetView) {
+            datasetView.teardown();
+        });
+        this.datasetViews = [];
+
         this.collection.each(function(model) {
             var view = new chorus.views.Dataset({ model: model, activeWorkspace: this.options.activeWorkspace, checkable: this.options.checkable });
             $list.append(view.render().el);
+            this.datasetViews.push(view);
+            this.registerSubView(view);
         }, this);
         this._super("postRender", arguments);
 

@@ -29,10 +29,16 @@ chorus.views.CommentList = chorus.views.Base.extend({
 
     postRender: function() {
         var $lis = this.$("li .comment_content .body");
+        _.each(this.commentViews, function(commentView) {
+           commentView.teardown();
+        });
+        this.commentViews = [];
         this.collection.each(function(comment, index) {
             comment.loaded = true;
             var view = new chorus.views.TruncatedText({model: comment, attribute: "text", attributeIsHtmlSafe: true});
             $lis.eq(index).append(view.render().el);
-        });
+            this.registerSubView(view);
+            this.commentViews.push(view);
+        }, this);
     }
 });

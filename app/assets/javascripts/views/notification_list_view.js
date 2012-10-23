@@ -35,6 +35,9 @@ chorus.views.NotificationList = chorus.views.Base.extend({
     postRender: function() {
         var $list = this.$("ul");
 
+        _.each(this.activities, function(activityView) {
+           activityView.teardown();
+        });
         this.activities = [];
         this.collection.each(function(model) {
             try {
@@ -45,6 +48,7 @@ chorus.views.NotificationList = chorus.views.Base.extend({
                 });
                 view.render();
                 this.activities.push(view);
+                this.registerSubView(view);
 
                 if (model.get("unread")) {
                     $(view.el).addClass("unread");

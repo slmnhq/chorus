@@ -6,8 +6,6 @@ describe("chorus.views.WorkspaceList", function() {
             archivedAt: "2011-12-05T13:25:25Z",
             name: "my archived workspace",
             archiver: { firstName: "John", lastName :"Henry"},
-//            archiverFirstName: "John",
-//            archiverLastName: "Henry",
             summary: " this is an archived workspace"
         });
 
