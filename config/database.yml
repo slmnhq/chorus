@@ -1,7 +1,7 @@
 default: &default
   adapter: jdbcpostgresql
   encoding: unicode
-  username: edcadmin
+  username: postgres_chorus
   password:
   port: 8543
   min_messages: warning

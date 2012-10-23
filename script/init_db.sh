@@ -23,10 +23,10 @@ sleep 5
 
 if [ ${CREATED_DB} ];
 then
-    dropuser -h localhost -p 8543 edcadmin
+    dropuser -h localhost -p 8543 postgres_chorus
 fi
 
-createuser -h localhost -p 8543 -sdr edcadmin;
+createuser -h localhost -p 8543 -sdr postgres_chorus;
 
 ${CHORUSDIR}/script/reset_db.sh
 
