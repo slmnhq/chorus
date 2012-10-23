@@ -1332,7 +1332,6 @@ describe("chorus.views.Base", function() {
                 expect(this.view.unbind).toHaveBeenCalled();
                 expect(this.view.bindings.removeAll).toHaveBeenCalled();
                 expect(_.isEmpty(this.view.requiredResources.models)).toBeTruthy();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("destroy:view", this.view);
             });
 
             it("should remove itself from the DOM", function() {

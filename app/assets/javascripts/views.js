@@ -57,8 +57,6 @@ chorus.views.Bare = Backbone.View.include(
                 if(index > -1) subViewObjects.splice(index, 1);
                 delete this.parentView
             }
-
-            chorus.PageEvents.broadcast("destroy:view", this);
         },
 
         bindHotkeys: function() {
